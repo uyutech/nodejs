@@ -2,8 +2,6 @@
  * Created by army8735 on 2017/8/10.
  */
 
-import './index.less';
-
 const TYPE = {
   111: '演唱',
   112: '和声',

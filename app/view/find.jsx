@@ -1,11 +1,14 @@
 /**
- * Created by army8735 on 2017/9/30.
+ * Created by army8735 on 2017/10/1.
  */
 
 'use strict';
 
+import Find from '../assets/m/find/Find.jsx';
+
 export default function(data) {
-  let helper = data.helper;
+  let find = migi.preRender(<Find/>);
+
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -20,11 +23,11 @@ export default function(data) {
   <meta name="format-detection" content="email=no"/>
   <meta name="wap-font-scale" content="no"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-  <link rel="stylesheet" href="${helper.getAssetsUrl('/common.css')}"/>
-  <link rel="stylesheet" href="${helper.getAssetsUrl('/find.css')}"/>
+  <link rel="stylesheet" href="${ data.helper.getAssetsUrl('/common.css') }"/>
+  <link rel="stylesheet" href="${ data.helper.getAssetsUrl('/find.css') }"/>
 </head>
 <body>
-<div id="page"></div>
+<div id="page">${ find }</div>
 <script>
   var $CONFIG = {
     kw: 'kw',
@@ -37,9 +40,8 @@ export default function(data) {
     loginUrl: 'http://circling.cc/oauth/weibo'
   };
 </script>
-<script src="${helper.getAssetsUrl('/common.js')}"></script>
-<script src="${helper.getAssetsUrl('/find.js')}"></script>
+<script src="${ data.helper.getAssetsUrl('/common.js') }"></script>
+<script src="${ data.helper.getAssetsUrl('/find.js') }"></script>
 </body>
-</html>
-`;
+</html>`;
 };

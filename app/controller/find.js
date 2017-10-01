@@ -7,7 +7,7 @@
 module.exports = app => {
   class FindController extends app.Controller {
     * index(ctx) {
-      yield ctx.render('find/index');
+      yield ctx.render('find');
     }
   }
   return FindController;

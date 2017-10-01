@@ -253,9 +253,6 @@ migi.name(Find, "Find");exports.default = Find;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-__webpack_require__(62);
-
 var TYPE = {
   111: '演唱',
   112: '和声',
@@ -936,9 +933,6 @@ var _Find2 = _interopRequireDefault(_Find);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var find = migi.render(migi.createCp(_Find2.default, []), '#page');
-find.load();
-
 /***/ }),
 
 /***/ 48:
@@ -1053,13 +1047,6 @@ exports.default = {
   code2Data: code2Data,
   label2Code: label2Code
 };
-
-/***/ }),
-
-/***/ 62:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 
