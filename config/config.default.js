@@ -1,13 +1,18 @@
 'use strict';
 
 module.exports = appInfo => {
-  const config = exports = {};
+  const config = {};
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1506235742242_7837';
+  config.keys = 'circling_1506760927505_8735';
 
   // add your config here
   config.middleware = [];
+
+  config.view = {
+    defaultViewEngine: 'migi',
+    defaultExtension: '.js',
+  };
 
   return config;
 };

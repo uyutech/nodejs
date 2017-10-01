@@ -4,36 +4,56 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "egg": "^1.8.0",
-    "egg-scripts": "^1.2.0"
+    "egg": "~1.8.0",
+    "egg-scripts": "~1.2.0",
+    "egg-view-migi": "~1.0.2"
   },
   "devDependencies": {
+    "anima-querystring": "^2.0.0",
+    "anima-yocto-ajax": "^2.0.4",
     "autod": "^2.9.0",
     "autod-egg": "^1.0.0",
+    "autoprefixer-loader": "^3.2.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^6.4.1",
+    "bignumber.js": "^4.1.0",
+    "css-loader": "^0.27.3",
     "egg-bin": "^4.3.0",
     "egg-ci": "^1.8.0",
     "egg-mock": "^3.12.0",
     "eslint": "^4.7.0",
     "eslint-config-egg": "^5.1.0",
-    "webstorm-disable-index": "^1.2.0"
+    "extract-text-webpack-plugin": "^2.1.0",
+    "lefty": "^3.8.0",
+    "migi": "~3.8.3",
+    "migi-es6-shim": "^0.34.1",
+    "webstorm-disable-index": "^1.2.0",
+    "file-loader": "^0.10.1",
+    "json-loader": "^0.5.4",
+    "less": "^2.7.2",
+    "less-loader": "^3.0.0",
+    "migi-loader": "^3.8.0",
+    "url-loader": "^0.5.9",
+    "webpack": "^2.2.1"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "start": "egg-scripts start --daemon",
     "stop": "egg-scripts stop",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
-    "test": "npm run lint -- --fix && npm run test-local",
+    "test": "npm run lint --fix && npm run test-local",
     "test-local": "egg-bin test",
     "cov": "egg-bin cov",
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
-    "autod": "autod"
+    "autod": "autod",
+    "webpack": "webpack"
   },
   "ci": {
-    "version": "6, 8"
+    "version": "8"
   },
   "repository": {
     "type": "git",
