@@ -759,11 +759,11 @@ var _Model = __webpack_require__(12);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _Stream = __webpack_require__(21);
+var _Stream = __webpack_require__(22);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _Fastclick = __webpack_require__(20);
+var _Fastclick = __webpack_require__(21);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
@@ -1302,7 +1302,7 @@ var _Cb = __webpack_require__(10);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _range = __webpack_require__(26);
+var _range = __webpack_require__(27);
 
 var _range2 = _interopRequireDefault(_range);
 
@@ -1318,7 +1318,7 @@ var _type = __webpack_require__(17);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _fixEvent = __webpack_require__(24);
+var _fixEvent = __webpack_require__(25);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
@@ -1334,7 +1334,7 @@ var _touch = __webpack_require__(61);
 
 var _touch2 = _interopRequireDefault(_touch);
 
-var _delegate = __webpack_require__(23);
+var _delegate = __webpack_require__(24);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
@@ -3450,6 +3450,36 @@ exports.default = {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -3476,11 +3506,11 @@ var _EventBus = __webpack_require__(11);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Stream = __webpack_require__(21);
+var _Stream = __webpack_require__(22);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _CacheModel = __webpack_require__(19);
+var _CacheModel = __webpack_require__(20);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -3671,7 +3701,7 @@ var CacheComponent = function (_Component) {
 exports.default = CacheComponent;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3687,7 +3717,7 @@ var _Model2 = __webpack_require__(12);
 
 var _Model3 = _interopRequireDefault(_Model2);
 
-var _CacheComponent = __webpack_require__(18);
+var _CacheComponent = __webpack_require__(19);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -3737,7 +3767,7 @@ CacheModel.prototype.__data = _CacheComponent2.default.prototype.__data;
 exports.default = CacheModel;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4585,7 +4615,7 @@ FastClick.attach = function (layer, options) {
 exports.default = FastClick;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4650,7 +4680,7 @@ var Stream = function () {
 exports.default = Stream;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4678,7 +4708,7 @@ var pool = {
 exports.default = pool;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4862,7 +4892,7 @@ function matchSel(i, names, classes, ids, json, virtualDom) {
 exports.default = delegate;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4882,7 +4912,7 @@ exports.default = function (e) {
 ;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4911,7 +4941,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5050,36 +5080,6 @@ exports.default = {
   value: value,
   record: record
 };
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
 
 /***/ }),
 /* 28 */
@@ -5454,7 +5454,7 @@ defineProperties(Number, {
   MAX_SAFE_INTEGER: maxSafeInteger,
   MIN_SAFE_INTEGER: -maxSafeInteger
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ }),
 /* 32 */
@@ -7506,11 +7506,11 @@ var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _range = __webpack_require__(26);
+var _range = __webpack_require__(27);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _cachePool = __webpack_require__(22);
+var _cachePool = __webpack_require__(23);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
@@ -7522,15 +7522,15 @@ var _hash = __webpack_require__(5);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(25);
+var _matchHash = __webpack_require__(26);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
-var _fixEvent = __webpack_require__(24);
+var _fixEvent = __webpack_require__(25);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _delegate = __webpack_require__(23);
+var _delegate = __webpack_require__(24);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
@@ -8303,7 +8303,7 @@ var _hash = __webpack_require__(5);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(25);
+var _matchHash = __webpack_require__(26);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
@@ -8764,7 +8764,7 @@ var _Model = __webpack_require__(12);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _CacheModel = __webpack_require__(19);
+var _CacheModel = __webpack_require__(20);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -8780,7 +8780,7 @@ var _NonVisualComponent = __webpack_require__(54);
 
 var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
 
-var _CacheComponent = __webpack_require__(18);
+var _CacheComponent = __webpack_require__(19);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -8792,7 +8792,7 @@ var _Cb = __webpack_require__(10);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _cachePool = __webpack_require__(22);
+var _cachePool = __webpack_require__(23);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
@@ -8812,7 +8812,7 @@ var _hash = __webpack_require__(5);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _Fastclick = __webpack_require__(20);
+var _Fastclick = __webpack_require__(21);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
@@ -8884,7 +8884,7 @@ if (typeof window != 'undefined') {
 }
 
 exports.default = migi;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ }),
 /* 61 */
