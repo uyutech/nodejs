@@ -4,10 +4,24 @@
 
 'use strict';
 
+import TopNav from '../assets/m/component/topnav/TopNav.jsx';
+import BotNav from '../assets/m/component/botnav/BotNav.jsx';
 import Find from '../assets/m/find/Find.jsx';
 
 export default function(data) {
-  let find = migi.preRender(<Find/>);
+  migi.Element.resetUid();
+  let hotWorkList = data.hotWorkList;
+  let hotAuthorList = data.hotAuthorList;
+  let tags = data.tags;
+  let playList = data.playList;
+
+  let find = migi.preRender(<Find
+    hotWorkList={ hotWorkList }
+    hotAuthorList={ hotAuthorList }
+    tags={ tags }
+    playList={ playList }/>);
+  let topNav = migi.preRender(<TopNav kw={ '' }/>);
+  let botNav = migi.preRender(<BotNav/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -23,25 +37,24 @@ export default function(data) {
   <meta name="format-detection" content="email=no"/>
   <meta name="wap-font-scale" content="no"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-  <link rel="stylesheet" href="${ data.helper.getAssetsUrl('/common.css') }"/>
-  <link rel="stylesheet" href="${ data.helper.getAssetsUrl('/find.css') }"/>
+  <link rel="stylesheet" href="${ data.helper.getAssetUrl('/common.css') }"/>
+  <link rel="stylesheet" href="${ data.helper.getAssetUrl('/find.css') }"/>
 </head>
 <body>
 <div id="page">${ find }</div>
+${ topNav }
+${ botNav }
 <script>
   var $CONFIG = {
-    kw: 'kw',
-    worksID: '2757',
-    authorID: '1',
-    isLogin: 'True',
-    userID: '123456',
-    userName: 'mingzi',
-    userPic: '',
-    loginUrl: 'http://circling.cc/oauth/weibo'
+    kw: '',
+    hotWorkList: ${ JSON.stringify(hotWorkList) },
+    hotAuthorList: ${ JSON.stringify(hotAuthorList) },
+    tags: ${ JSON.stringify(tags) },
+    playList: ${ JSON.stringify(playList) },
   };
 </script>
-<script src="${ data.helper.getAssetsUrl('/common.js') }"></script>
-<script src="${ data.helper.getAssetsUrl('/find.js') }"></script>
+<script src="${ data.helper.getAssetUrl('/common.js') }"></script>
+<script src="${ data.helper.getAssetUrl('/find.js') }"></script>
 </body>
 </html>`;
 };

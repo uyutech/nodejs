@@ -2,9 +2,15 @@
  * Created by army8735 on 2017/8/9.
  */
 
+import util from '../../common/util';
+
 class HotAuthor extends migi.Component {
   constructor(...data) {
     super(...data);
+    this.dataList = this.props.dataList || [];
+    this.on(migi.Event.DOM, function() {
+      this.autoWidth();
+    });
   }
   @bind dataList = []
   autoWidth() {

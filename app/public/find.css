@@ -39,6 +39,9 @@
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
 }
+.cp-hotwork .list .c {
+  width: 999rem;
+}
 .cp-hotwork .list .c .empty {
   width: 0.75rem;
   height: 0.75rem;
@@ -305,6 +308,9 @@
 .cp-hotauthor .list {
   min-height: 0.75rem;
   overflow: auto;
+}
+.cp-hotauthor .list .c {
+  width: 999rem;
 }
 .cp-hotauthor .list .c .empty {
   margin-left: 0.12rem;

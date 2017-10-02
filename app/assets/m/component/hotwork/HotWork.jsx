@@ -2,11 +2,16 @@
  * Created by army8735 on 2017/8/8.
  */
 
+import util from '../../common/util';
 import AuthorType from '../author/AuthorType.jsx';
 
 class HotWork extends migi.Component {
   constructor(...data) {
     super(...data);
+    this.dataList = this.props.dataList || [];
+    this.on(migi.Event.DOM, function() {
+      this.autoWidth();
+    });
   }
   @bind dataList = []
   autoWidth() {

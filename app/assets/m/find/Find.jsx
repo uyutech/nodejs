@@ -1,7 +1,9 @@
 /**
  * Created by army on 2017/6/18.
  */
- 
+
+import util from '../common/util';
+import net from '../common/net';
 import Banner from './Banner.jsx';
 import HotWork from '../component/hotwork/HotWork.jsx';
 import HotCollection from '../component/hotcollection/HotCollection.jsx';
@@ -26,7 +28,7 @@ class Find extends migi.Component {
             ajaxL2.abort();
           }
           doubleCheck.isLoadindL2 = true;
-          util.postJSON('api/find/GetAuthorFilterlevelB', { FilterlevelA: param }, function (res) {
+          net.postJSON('api/find/GetAuthorFilterlevelB', { FilterlevelA: param }, function (res) {
             if(res.success) {
               let data = res.data;
               doubleCheck.tagList2 = data;
@@ -58,21 +60,21 @@ class Find extends migi.Component {
   }
   load() {
     let self = this;
-    util.postJSON('api/find/Hot_works_List', function(res) {
+    net.postJSON('api/find/Hot_works_List', function(res) {
       if(res.success) {
         let data = res.data;
         self.ref.hotWork.dataList = data;
         self.ref.hotWork.autoWidth();
       }
     });
-    util.postJSON('api/find/Hot_Author_List', function(res) {
+    net.postJSON('api/find/Hot_Author_List', function(res) {
       if(res.success) {
         let data = res.data;
         self.ref.hotAuthor.dataList = data;
         self.ref.hotAuthor.autoWidth();
       }
     });
-    util.postJSON('api/find/GetTag', { Skip:0, Take: 10 }, function(res) {
+    net.postJSON('api/find/GetTag', { Skip:0, Take: 10 }, function(res) {
       if(res.success) {
         let data = res.data;
         data.FilterlevelA = [{
@@ -92,7 +94,7 @@ class Find extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    ajax = util.postJSON('api/find/GetFindWorkList', { Parameter, Skip: 1, Take: 10, SortType }, function(res) {
+    ajax = net.postJSON('/api/find/playList', { Parameter, Skip: 1, Take: 10, SortType }, function(res) {
       if(res.success) {
         let data = res.data;
         self.ref.playList.setData(data.data);
@@ -102,11 +104,11 @@ class Find extends migi.Component {
   render() {
     return <div class="find">
       <Banner/>
-      <HotWork ref="hotWork" title="推荐作品"/>
+      <HotWork ref="hotWork" title="推荐作品" dataList={ this.props.hotWorkList }/>
       <HotCollection ref="hotCollection" title="推荐专辑"/>
-      <HotAuthor ref="hotAuthor" title="推荐作者"/>
-      <DoubleCheck ref="doubleCheck"/>
-      <PlayList ref="playList"/>
+      <HotAuthor ref="hotAuthor" title="推荐作者" dataList={ this.props.hotAuthorList }/>
+      <DoubleCheck ref="doubleCheck" tags={ this.props.tags }/>
+      <PlayList ref="playList" dataList={ this.props.playList }/>
     </div>;
   }
 }

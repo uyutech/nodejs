@@ -11,6 +11,13 @@ let cacheL2 = {};
 class DoubleCheck extends migi.Component {
   constructor(...data) {
     super(...data);
+    this.tagList = this.props.tags.FilterlevelA;
+    this.tagList2 = this.props.tags.FilterlevelB;
+    all = this.tagList2;
+    this.on(migi.Event.DOM, function() {
+      this.autoWidth();
+      this.autoWidth2();
+    });
   }
   get tagList() {
     return this._tagList || [];

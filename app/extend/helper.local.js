@@ -5,7 +5,7 @@
 'use strict';
 
 module.exports = {
-  getAssetsUrl(url) {
+  getAssetUrl(url) {
     if(url.indexOf('//') > -1) {
       return url;
     }

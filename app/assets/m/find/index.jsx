@@ -7,8 +7,8 @@ import './index.less';
 
 import Find from './Find.jsx';
 
-// let find = migi.render(
-//   <Find/>,
-//   '#page'
-// );
-// find.load();
+let find = migi.preExist(<Find
+  hotWorkList={ $CONFIG.hotWorkList }
+  hotAuthorList={ $CONFIG.hotAuthorList }
+  tags={ $CONFIG.tags }
+  playList={ $CONFIG.playList }/>);

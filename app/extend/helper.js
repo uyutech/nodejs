@@ -5,10 +5,16 @@
 'use strict';
 
 module.exports = {
-  getAssetsUrl(url) {
+  getAssetUrl(url) {
     if(url.indexOf('//') > -1) {
       return url;
     }
     return url;
   },
+  getRemoteUrl(url) {
+    if(url.indexOf('//') > -1) {
+      return url;
+    }
+    return 'http://test.circling.cc/' + url.replace(/^\//, '');
+  }
 };
