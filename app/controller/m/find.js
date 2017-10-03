@@ -5,7 +5,7 @@
 'use strict';
 
 module.exports = app => {
-  class FindController extends app.Controller {
+  class Controller extends app.Controller {
     * index(ctx) {
       let hotWorkList = [];
       let hotAuthorList = [];
@@ -65,5 +65,5 @@ module.exports = app => {
       });
     }
   }
-  return FindController;
+  return Controller;
 };

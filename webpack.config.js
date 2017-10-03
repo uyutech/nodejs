@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     common: './app/assets/m/common/index.js',
     find: './app/assets/m/find/index.jsx',
+    works: './app/assets/m/works/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

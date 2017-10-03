@@ -1,22 +1,24 @@
 /**
- * Created by army8735 on 2017/10/2.
+ * Created by army8735 on 2017/10/3.
  */
 
 'use strict';
 
 module.exports = app => {
   class Controller extends app.Controller {
-    * playList(ctx) {
+    * commentList(ctx) {
       let query = ctx.request.body;
       let res = {};
       try {
-        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/find/GetFindWorkList'), {
+        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/works/GetToWorkMessage_List'), {
           method: 'POST',
           data: {
-            Parameter: query.Parameter,
-            Skip: 1,
-            Take: 10,
-            SortType: 1,
+            WorkID: query.id,
+            Skip: query.skip,
+            Take: query.take,
+            SortType: query.sortType,
+            MyComment: query.myComment,
+            CurrentCount: query.currentCount,
           },
           dataType: 'json',
           gzip: true,
