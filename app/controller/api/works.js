@@ -13,7 +13,7 @@ module.exports = app => {
         res = yield ctx.curl(ctx.helper.getRemoteUrl('api/works/GetToWorkMessage_List'), {
           method: 'POST',
           data: {
-            WorkID: query.id,
+            WorkID: query.worksID,
             Skip: query.skip,
             Take: query.take,
             SortType: query.sortType,

@@ -6,15 +6,15 @@
 
 import TopNav from '../assets/m/component/topnav/TopNav.jsx';
 import BotNav from '../assets/m/component/botnav/BotNav.jsx';
-import Works from '../assets/m/works/Works.jsx';
+import Author from '../assets/m/author/Author.jsx';
 
 export default function(data) {
   migi.Element.resetUid();
-  let worksID = data.worksID;
-  let worksDetail = data.worksDetail;
-  let commentData = data.commentData;
+  let authorID = data.authorID;
+  let authorDetail = data.authorDetail;
+  let homeDetail = data.homeDetail;
 
-  let works = migi.preRender(<Works worksID={ worksID } worksDetail={ worksDetail } commentData={ commentData }/>);
+  let author = migi.preRender(<Author authorID={ authorID } authorDetail={ authorDetail } homeDetail={ homeDetail }/>);
   let topNav = migi.preRender(<TopNav/>);
   let botNav = migi.preRender(<BotNav/>);
 
@@ -23,7 +23,7 @@ export default function(data) {
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta charset="UTF-8"/>
-  <title>${worksDetail.Title}</title>
+  <title>${authorDetail.AuthorName}</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
   <meta name="renderer" content="webkit"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -33,21 +33,21 @@ export default function(data) {
   <meta name="wap-font-scale" content="no"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/common.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/works.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/author.css')}"/>
 </head>
 <body>
-<div id="page">${works}</div>
+<div id="page">${author}</div>
 ${topNav}
 ${botNav}
 <script>
   var $CONFIG = {
-    worksID: '${worksID}',
-    worksDetail: ${JSON.stringify(worksDetail)},
-    commentData: ${JSON.stringify(commentData)},
+    authorID: '${authorID}',
+    authorDetail: ${JSON.stringify(authorDetail)},
+    homeDetail: ${JSON.stringify(homeDetail)},
   };
 </script>
 <script src="${data.helper.getAssetUrl('/common.js')}"></script>
-<script src="${data.helper.getAssetUrl('/works.js')}"></script>
+<script src="${data.helper.getAssetUrl('/author.js')}"></script>
 </body>
 </html>`;
 };

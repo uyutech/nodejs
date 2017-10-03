@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -407,308 +407,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _Media = __webpack_require__(20);
-
-var _Media2 = _interopRequireDefault(_Media);
-
-var _Intro = __webpack_require__(18);
-
-var _Intro2 = _interopRequireDefault(_Intro);
-
-var _WorkComment = __webpack_require__(22);
-
-var _WorkComment2 = _interopRequireDefault(_WorkComment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ajax = void 0;
-var firstLoadComment = true;
-var barrageTime = 0;
-
-var Works = function (_migi$Component) {
-  _inherits(Works, _migi$Component);
-
-  function Works() {
-    var _ref;
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    _classCallCheck(this, Works);
-
-    var _this = _possibleConstructorReturn(this, (_ref = Works.__proto__ || Object.getPrototypeOf(Works)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.on(migi.Event.DOM, function () {
-      var media = self.ref.media;
-      var intro = self.ref.intro;
-      var workComment = self.ref.workComment;
-      var comment = workComment.ref.comment;
-      media.on('tagChange', function (type) {
-        switch (type) {
-          case '0':
-            workComment.hide();
-            intro.show();
-            break;
-          case '1':
-            intro.hide();
-            workComment.show();
-            if (firstLoadComment) {
-              firstLoadComment = false;
-              workComment.load();
-            }
-            break;
-        }
-      });
-      media.on('switchSubWork', function (data) {
-        self.subWorkID = data[0].ItemID;
-        barrageTime = 0;
-      });
-      media.on('timeupdate', function (data) {
-        barrageTime = data;
-      });
-      comment.on('chooseSubComment', function (rid, cid, name) {
-        self.rootId = rid;
-        self.replayId = cid;
-        self.replayName = name;
-      });
-      comment.on('closeSubComment', function () {
-        self.clickReplay();
-      });
-    });
-    return _this;
-  }
-
-  _createClass(Works, [{
-    key: 'setID',
-    value: function setID(worksID) {
-      var self = this;
-      self.worksID = worksID;
-      var workComment = self.ref.workComment;
-      workComment.worksID = worksID;
-    }
-  }, {
-    key: 'load',
-    value: function load() {
-      var self = this;
-      var media = self.ref.media;
-      var intro = self.ref.intro;
-      if (ajax) {
-        ajax.abort();
-      }
-      ajax = _util2.default.postJSON('api/works/GetWorkDetails', { WorksID: self.worksID }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          document.title = data.Title;
-          media.setCover(data.cover_Pic);
-          media.setWorks(data.Works_Items);
-          media.popular = data.Popular;
-          // intro.tags = data.ReturnTagData || [];
-          $(self.ref.form.element).removeClass('fn-hide');
-        } else {
-          alert(res.message);
-        }
-      });
-      self.ref.workComment.load();
-    }
-  }, {
-    key: 'clickReplay',
-    value: function clickReplay() {
-      this.replayId = null;
-      this.replayName = null;
-      this.rootId = null;
-    }
-  }, {
-    key: 'input',
-    value: function input(e, vd) {
-      if (window.$CONFIG.isLogin !== 'True') {
-        migi.eventBus.emit('NEED_LOGIN');
-        $(vd.element).blur();
-      } else {
-        var v = $(vd.element).val().trim();
-        this.hasContent = v.length > 0;
-      }
-    }
-  }, {
-    key: 'focus',
-    value: function focus(e, vd) {
-      if (window.$CONFIG.isLogin !== 'True') {
-        migi.eventBus.emit('NEED_LOGIN');
-        $(vd.element).blur();
-      }
-    }
-  }, {
-    key: 'click',
-    value: function click(e) {
-      e.preventDefault();
-      var self = this;
-      if (self.hasContent) {
-        var $input = $(this.ref.input.element);
-        var Content = $input.val();
-        var ParentID = self.replayId !== null ? self.replayId : -1;
-        var RootID = self.rootId !== null ? self.rootId : -1;
-        self.loading = true;
-        self.ref.media.switchTo(1);
-        _util2.default.postJSON('api/works/AddComment', {
-          ParentID: ParentID,
-          RootID: RootID,
-          Content: Content,
-          subWorkID: self.subWorkID,
-          BarrageTime: barrageTime
-        }, function (res) {
-          if (res.success) {
-            self.ref.workComment.element.scrollIntoView();
-            $input.val('');
-            self.hasContent = false;
-            if (RootID === -1) {
-              self.ref.workComment.ref.comment.prependData(res.data);
-              self.ref.workComment.ref.comment.message = '';
-            } else {
-              self.ref.workComment.ref.comment.prependChild(res.data);
-            }
-          } else if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          } else {
-            alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-          self.loading = false;
-        }, function (res) {
-          alert(res.message || _util2.default.ERROR_MESSAGE);
-          self.loading = false;
-        });
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "works"]], [migi.createCp(_Media2.default, [["ref", "media"], ["worksDetail", this.props.worksDetail]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["id", this.props.id], ["commentData", this.props.commentData]]), migi.createVd("div", [["class", "form"], ["ref", "form"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("div", [["class", new migi.Obj("replayId", this, function () {
-        return 'reply' + (this.replayId ? '' : ' fn-hide');
-      })], ["onClick", new migi.Cb(this, this.clickReplay)]], [new migi.Obj("replayName", this, function () {
-        return this.replayName;
-      })]), migi.createVd("div", [["class", "inputs"]], [migi.createVd("input", [["ref", "input"], ["type", "text"], ["placeholder", "回复..."], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)], ["class", new migi.Obj(["hasContent", "loading"], this, function () {
-        return this.hasContent && !this.loading ? '' : 'dis';
-      })]], ["确定"])])])]);
-    }
-  }, {
-    key: 'hasContent',
-    set: function set(v) {
-      this.__setBind("hasContent", v);this.__data("hasContent");
-    },
-    get: function get() {
-      return this.__getBind("hasContent");
-    }
-  }, {
-    key: 'loading',
-    set: function set(v) {
-      this.__setBind("loading", v);this.__data("loading");
-    },
-    get: function get() {
-      return this.__getBind("loading");
-    }
-  }, {
-    key: 'rootId',
-    set: function set(v) {
-      this.__setBind("rootId", v);this.__data("rootId");
-    },
-    get: function get() {
-      if (this.__initBind("rootId")) this.__setBind("rootId", null);return this.__getBind("rootId");
-    }
-  }, {
-    key: 'replayId',
-    set: function set(v) {
-      this.__setBind("replayId", v);this.__data("replayId");
-    },
-    get: function get() {
-      if (this.__initBind("replayId")) this.__setBind("replayId", null);return this.__getBind("replayId");
-    }
-  }, {
-    key: 'replayName',
-    set: function set(v) {
-      this.__setBind("replayName", v);this.__data("replayName");
-    },
-    get: function get() {
-      return this.__getBind("replayName");
-    }
-  }, {
-    key: 'worksID',
-    set: function set(v) {
-      this.__setBind("worksID", v);this.__data("worksID");
-    },
-    get: function get() {
-      return this.__getBind("worksID");
-    }
-  }, {
-    key: 'subWorkID',
-    set: function set(v) {
-      this.__setBind("subWorkID", v);this.__data("subWorkID");
-    },
-    get: function get() {
-      return this.__getBind("subWorkID");
-    }
-  }]);
-
-  return Works;
-}(migi.Component);
-
-migi.name(Works, "Works");exports.default = Works;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-/* harmony default export */ __webpack_exports__["default"] = (function(workType) {
-  switch (workType) {
-    case 1111:
-      let weight = [111, 151, 112, 113, 114, 411, 121, 122, 123, 131, 132, 133, 134, 135, 141];
-      return {
-        bigType: 'audio',
-        authorSort: function(a, b) {
-          return weight.indexOf(a.WorksAuthorType) > weight.indexOf(b.WorksAuthorType);
-        }
-      };
-    case 2111:
-      return {
-        bigType: 'video',
-      };
-    default:
-      return {
-
-      }
-  }
-});;
-
-
-/***/ }),
-/* 8 */,
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
@@ -1000,13 +698,324 @@ var Comment = function (_migi$Component) {
 migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
+/* 7 */,
+/* 8 */,
+/* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
 /* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _Media = __webpack_require__(29);
+
+var _Media2 = _interopRequireDefault(_Media);
+
+var _Intro = __webpack_require__(27);
+
+var _Intro2 = _interopRequireDefault(_Intro);
+
+var _WorkComment = __webpack_require__(31);
+
+var _WorkComment2 = _interopRequireDefault(_WorkComment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ajax = void 0;
+var firstLoadComment = true;
+var barrageTime = 0;
+
+var Works = function (_migi$Component) {
+  _inherits(Works, _migi$Component);
+
+  function Works() {
+    var _ref;
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    _classCallCheck(this, Works);
+
+    var _this = _possibleConstructorReturn(this, (_ref = Works.__proto__ || Object.getPrototypeOf(Works)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var media = self.ref.media;
+      var intro = self.ref.intro;
+      var workComment = self.ref.workComment;
+      var comment = workComment.ref.comment;
+      media.on('tagChange', function (type) {
+        switch (type) {
+          case '0':
+            workComment.hide();
+            intro.show();
+            break;
+          case '1':
+            intro.hide();
+            workComment.show();
+            if (firstLoadComment) {
+              firstLoadComment = false;
+              workComment.load();
+            }
+            break;
+        }
+      });
+      media.on('switchSubWork', function (data) {
+        self.subWorkID = data[0].ItemID;
+        barrageTime = 0;
+      });
+      media.on('timeupdate', function (data) {
+        barrageTime = data;
+      });
+      comment.on('chooseSubComment', function (rid, cid, name) {
+        self.rootId = rid;
+        self.replayId = cid;
+        self.replayName = name;
+      });
+      comment.on('closeSubComment', function () {
+        self.clickReplay();
+      });
+    });
+    return _this;
+  }
+
+  _createClass(Works, [{
+    key: 'setID',
+    value: function setID(worksID) {
+      var self = this;
+      self.worksID = worksID;
+      var workComment = self.ref.workComment;
+      workComment.worksID = worksID;
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      var self = this;
+      var media = self.ref.media;
+      var intro = self.ref.intro;
+      if (ajax) {
+        ajax.abort();
+      }
+      ajax = _util2.default.postJSON('api/works/GetWorkDetails', { WorksID: self.worksID }, function (res) {
+        if (res.success) {
+          var data = res.data;
+          document.title = data.Title;
+          media.setCover(data.cover_Pic);
+          media.setWorks(data.Works_Items);
+          media.popular = data.Popular;
+          // intro.tags = data.ReturnTagData || [];
+          $(self.ref.form.element).removeClass('fn-hide');
+        } else {
+          alert(res.message);
+        }
+      });
+      self.ref.workComment.load();
+    }
+  }, {
+    key: 'clickReplay',
+    value: function clickReplay() {
+      this.replayId = null;
+      this.replayName = null;
+      this.rootId = null;
+    }
+  }, {
+    key: 'input',
+    value: function input(e, vd) {
+      if (window.$CONFIG.isLogin !== 'True') {
+        migi.eventBus.emit('NEED_LOGIN');
+        $(vd.element).blur();
+      } else {
+        var v = $(vd.element).val().trim();
+        this.hasContent = v.length > 0;
+      }
+    }
+  }, {
+    key: 'focus',
+    value: function focus(e, vd) {
+      if (window.$CONFIG.isLogin !== 'True') {
+        migi.eventBus.emit('NEED_LOGIN');
+        $(vd.element).blur();
+      }
+    }
+  }, {
+    key: 'click',
+    value: function click(e) {
+      e.preventDefault();
+      var self = this;
+      if (self.hasContent) {
+        var $input = $(this.ref.input.element);
+        var Content = $input.val();
+        var ParentID = self.replayId !== null ? self.replayId : -1;
+        var RootID = self.rootId !== null ? self.rootId : -1;
+        self.loading = true;
+        self.ref.media.switchTo(1);
+        _util2.default.postJSON('api/works/AddComment', {
+          ParentID: ParentID,
+          RootID: RootID,
+          Content: Content,
+          subWorkID: self.subWorkID,
+          BarrageTime: barrageTime
+        }, function (res) {
+          if (res.success) {
+            self.ref.workComment.element.scrollIntoView();
+            $input.val('');
+            self.hasContent = false;
+            if (RootID === -1) {
+              self.ref.workComment.ref.comment.prependData(res.data);
+              self.ref.workComment.ref.comment.message = '';
+            } else {
+              self.ref.workComment.ref.comment.prependChild(res.data);
+            }
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          self.loading = false;
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          self.loading = false;
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "works"]], [migi.createCp(_Media2.default, [["ref", "media"], ["worksDetail", this.props.worksDetail]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["worksID", this.props.worksID], ["commentData", this.props.commentData]]), migi.createVd("div", [["class", "form"], ["ref", "form"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("div", [["class", new migi.Obj("replayId", this, function () {
+        return 'reply' + (this.replayId ? '' : ' fn-hide');
+      })], ["onClick", new migi.Cb(this, this.clickReplay)]], [new migi.Obj("replayName", this, function () {
+        return this.replayName;
+      })]), migi.createVd("div", [["class", "inputs"]], [migi.createVd("input", [["ref", "input"], ["type", "text"], ["placeholder", "回复..."], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)], ["class", new migi.Obj(["hasContent", "loading"], this, function () {
+        return this.hasContent && !this.loading ? '' : 'dis';
+      })]], ["确定"])])])]);
+    }
+  }, {
+    key: 'hasContent',
+    set: function set(v) {
+      this.__setBind("hasContent", v);this.__data("hasContent");
+    },
+    get: function get() {
+      return this.__getBind("hasContent");
+    }
+  }, {
+    key: 'loading',
+    set: function set(v) {
+      this.__setBind("loading", v);this.__data("loading");
+    },
+    get: function get() {
+      return this.__getBind("loading");
+    }
+  }, {
+    key: 'rootId',
+    set: function set(v) {
+      this.__setBind("rootId", v);this.__data("rootId");
+    },
+    get: function get() {
+      if (this.__initBind("rootId")) this.__setBind("rootId", null);return this.__getBind("rootId");
+    }
+  }, {
+    key: 'replayId',
+    set: function set(v) {
+      this.__setBind("replayId", v);this.__data("replayId");
+    },
+    get: function get() {
+      if (this.__initBind("replayId")) this.__setBind("replayId", null);return this.__getBind("replayId");
+    }
+  }, {
+    key: 'replayName',
+    set: function set(v) {
+      this.__setBind("replayName", v);this.__data("replayName");
+    },
+    get: function get() {
+      return this.__getBind("replayName");
+    }
+  }, {
+    key: 'worksID',
+    set: function set(v) {
+      this.__setBind("worksID", v);this.__data("worksID");
+    },
+    get: function get() {
+      return this.__getBind("worksID");
+    }
+  }, {
+    key: 'subWorkID',
+    set: function set(v) {
+      this.__setBind("subWorkID", v);this.__data("subWorkID");
+    },
+    get: function get() {
+      return this.__getBind("subWorkID");
+    }
+  }]);
+
+  return Works;
+}(migi.Component);
+
+migi.name(Works, "Works");exports.default = Works;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = (function(workType) {
+  switch (workType) {
+    case 1111:
+      let weight = [111, 151, 112, 113, 114, 411, 121, 122, 123, 131, 132, 133, 134, 135, 141];
+      return {
+        bigType: 'audio',
+        authorSort: function(a, b) {
+          return weight.indexOf(a.WorksAuthorType) > weight.indexOf(b.WorksAuthorType);
+        }
+      };
+    case 2111:
+      return {
+        bigType: 'video',
+      };
+    default:
+      return {
+
+      }
+  }
+});;
+
+
+/***/ }),
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1026,7 +1035,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _LyricsParser = __webpack_require__(19);
+var _LyricsParser = __webpack_require__(28);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -1374,7 +1383,7 @@ var Audio = function (_migi$Component) {
 migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
-/* 17 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1473,7 +1482,7 @@ var Author = function (_migi$Component) {
 migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
-/* 18 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1551,7 +1560,7 @@ var Intro = function (_migi$Component) {
 migi.name(Intro, "Intro");exports.default = Intro;
 
 /***/ }),
-/* 19 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1587,7 +1596,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 20 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1607,19 +1616,19 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Author = __webpack_require__(17);
+var _Author = __webpack_require__(26);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Audio = __webpack_require__(16);
+var _Audio = __webpack_require__(25);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(21);
+var _Video = __webpack_require__(30);
 
 var _Video2 = _interopRequireDefault(_Video);
 
-var _itemTemplate = __webpack_require__(7);
+var _itemTemplate = __webpack_require__(15);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
@@ -1968,7 +1977,7 @@ var Media = function (_migi$Component) {
 migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
-/* 21 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2286,7 +2295,7 @@ var Video = function (_migi$Component) {
 migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
-/* 22 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2306,7 +2315,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(9);
+var _Comment = __webpack_require__(6);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -2342,7 +2351,7 @@ var WorkComment = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = WorkComment.__proto__ || Object.getPrototypeOf(WorkComment)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    self.id = self.props.id;
+    self.worksID = self.props.worksID;
     var commentData = self.props.commentData;
     currentCount = commentData.Size;
     skip += take;
@@ -2386,7 +2395,7 @@ var WorkComment = function (_migi$Component) {
         ajaxMore.abort();
       }
       self.loading = true;
-      ajax = _net2.default.postJSON('/api/works/commentList', { id: self.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
+      ajax = _net2.default.postJSON('/api/works/commentList', { worksID: self.worksID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
           currentCount = data.Size;
@@ -2422,7 +2431,7 @@ var WorkComment = function (_migi$Component) {
       bool = $window.scrollTop() + HEIGHT + 30 > WIN_HEIGHT;
       if (self.showComment && !self.loading && !loadEnd && bool) {
         self.loading = true;
-        ajaxMore = _net2.default.postJSON('/api/works/commentList', { id: self.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
+        ajaxMore = _net2.default.postJSON('/api/works/commentList', { worksID: self.worksID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
           if (res.success) {
             var data = res.data;
             currentCount = data.Size;
@@ -2543,12 +2552,12 @@ var WorkComment = function (_migi$Component) {
       return this.__getBind("loading");
     }
   }, {
-    key: 'id',
+    key: 'worksID',
     set: function set(v) {
-      this.__setBind("id", v);this.__data("id");
+      this.__setBind("worksID", v);this.__data("worksID");
     },
     get: function get() {
-      return this.__getBind("id");
+      return this.__getBind("worksID");
     }
   }]);
 
@@ -2558,8 +2567,9 @@ var WorkComment = function (_migi$Component) {
 migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
-/* 23 */,
-/* 24 */
+/* 32 */,
+/* 33 */,
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2571,15 +2581,15 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (data) {
   migi.Element.resetUid();
-  var id = data.id;
+  var worksID = data.worksID;
   var worksDetail = data.worksDetail;
   var commentData = data.commentData;
 
-  var works = migi.preRender(migi.createCp(_Works2.default, [["id", id], ["worksDetail", worksDetail], ["commentData", commentData]]));
+  var works = migi.preRender(migi.createCp(_Works2.default, [["worksID", worksID], ["worksDetail", worksDetail], ["commentData", commentData]]));
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, []));
   var botNav = migi.preRender(migi.createCp(_BotNav2.default, []));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n  <meta charset="UTF-8"/>\n  <title>' + worksDetail.Title + '</title>\n  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>\n  <meta name="renderer" content="webkit"/>\n  <meta name="apple-mobile-web-app-capable" content="yes"/>\n  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>\n  <meta name="format-detection" content="telephone=no"/>\n  <meta name="format-detection" content="email=no"/>\n  <meta name="wap-font-scale" content="no"/>\n  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/common.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/works.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  var $CONFIG = {\n    id: \'' + id + '\',\n    worksDetail: ' + JSON.stringify(worksDetail) + ',\n    commentData: ' + JSON.stringify(commentData) + ',\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/common.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/works.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n  <meta charset="UTF-8"/>\n  <title>' + worksDetail.Title + '</title>\n  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>\n  <meta name="renderer" content="webkit"/>\n  <meta name="apple-mobile-web-app-capable" content="yes"/>\n  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>\n  <meta name="format-detection" content="telephone=no"/>\n  <meta name="format-detection" content="email=no"/>\n  <meta name="wap-font-scale" content="no"/>\n  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/common.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/works.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  var $CONFIG = {\n    worksID: \'' + worksID + '\',\n    worksDetail: ' + JSON.stringify(worksDetail) + ',\n    commentData: ' + JSON.stringify(commentData) + ',\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/common.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/works.js') + '"></script>\n</body>\n</html>';
 };
 
 var _TopNav = __webpack_require__(3);
@@ -2590,7 +2600,7 @@ var _BotNav = __webpack_require__(2);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Works = __webpack_require__(6);
+var _Works = __webpack_require__(14);
 
 var _Works2 = _interopRequireDefault(_Works);
 

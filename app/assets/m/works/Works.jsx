@@ -155,7 +155,7 @@ class Works extends migi.Component {
   render() {
     return <div class="works">
       <Media ref="media" worksDetail={ this.props.worksDetail }/>
-      <WorkComment ref="workComment" id={ this.props.id } commentData={ this.props.commentData }/>
+      <WorkComment ref="workComment" worksID={ this.props.worksID } commentData={ this.props.commentData }/>
       <div class="form" ref="form">
         <div class="c">
           <div class={ 'reply' + (this.replayId ? '' : ' fn-hide') } onClick={ this.clickReplay }>{ this.replayName }</div>

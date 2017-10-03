@@ -7,7 +7,7 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
-      let id = ctx.params.id;
+      let worksID = ctx.params.worksID;
       let worksDetail = {};
       let commentData = {};
       try {
@@ -15,7 +15,7 @@ module.exports = app => {
           worksDetail: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetWorkDetails'), {
             method: 'POST',
             data: {
-              WorksID: id,
+              WorksID: worksID,
             },
             dataType: 'json',
             gzip: true,
@@ -23,7 +23,7 @@ module.exports = app => {
           commentData: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetToWorkMessage_List'), {
             method: 'POST',
             data: {
-              WorkID: id,
+              WorkID: worksID,
               Skip: -1,
               Take: 10,
               SortType: 0,
@@ -45,7 +45,7 @@ module.exports = app => {
         ctx.logger.error(e.toString());
       }
       yield ctx.render('works', {
-        id,
+        worksID,
         worksDetail,
         commentData,
       });
