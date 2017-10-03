@@ -34,7 +34,7 @@ class WorkComment extends migi.Component {
       });
     });
   }
-  @bind showComment
+  @bind showComment = true
   @bind rootId = null
   @bind replayId = null
   @bind replayName

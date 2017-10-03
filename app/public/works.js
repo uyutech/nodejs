@@ -2254,7 +2254,7 @@ var WorkComment = function (_migi$Component) {
       this.__setBind("showComment", v);this.__data("showComment");
     },
     get: function get() {
-      return this.__getBind("showComment");
+      if (this.__initBind("showComment")) this.__setBind("showComment", true);return this.__getBind("showComment");
     }
   }, {
     key: 'rootId',
