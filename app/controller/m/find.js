@@ -50,12 +50,19 @@ module.exports = app => {
           tags = res.tags.data.data;
         }
         if(res.playList.data.success) {
-          playList = res.playList.data.data.data;
+          playList = res.playList.data.data;
         }
       }
       catch(e) {
         ctx.logger.error(e.toString());
       }
+      tags.FilterlevelA = [{
+        ID: 0,
+        TagName: '音乐',
+        TagType: 0,
+        TagCount: 3957,
+        Filterlevel: "A",
+      }];
 
       yield ctx.render('find', {
         hotWorkList,

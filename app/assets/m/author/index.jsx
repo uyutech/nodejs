@@ -6,4 +6,10 @@ import './index.less';
 
 import Author from './Author.jsx';
 
-let author = migi.preExist(<Author authorID={ $CONFIG.authorID } authorDetail={ $CONFIG.authorDetail } homeDetail={ $CONFIG.homeDetail }/>);
+let author = migi.preExist(<Author
+  authorID={ $CONFIG.authorID }
+  authorDetail={ $CONFIG.authorDetail }
+  homeDetail={ $CONFIG.homeDetail }
+  tags={ $CONFIG.tags }
+  playList={ $CONFIG.playList }
+  commentData={ $CONFIG.commentData }/>);

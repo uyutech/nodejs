@@ -10,6 +10,9 @@ module.exports = app => {
       let authorID = ctx.params.authorID;
       let authorDetail = {};
       let homeDetail = {};
+      let tags = {};
+      let playList = {};
+      let commentData = [];
       try {
         let res = yield {
           authorDetail: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetAuthorDetails'), {
@@ -28,12 +31,54 @@ module.exports = app => {
             dataType: 'json',
             gzip: true,
           }),
+          tags: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetAuthorWorks'), {
+            method: 'POST',
+            data: {
+              AuthorID: authorID,
+            },
+            dataType: 'json',
+            gzip: true,
+          }),
+          playList: ctx.curl(ctx.helper.getRemoteUrl('api/author/SearchWorks'), {
+            method: 'POST',
+            data: {
+              AuthorID: authorID,
+              Parameter: '',
+              Skip: 1,
+              Take: 10,
+              SortType: 1,
+            },
+            dataType: 'json',
+            gzip: true,
+          }),
+          commentData: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetToAuthorMessage_List'), {
+            method: 'POST',
+            data: {
+              AuthorID: authorID,
+              Skip: -1,
+              Take: 10,
+              SortType: 0,
+              MyComment: 0,
+              CurrentCount: 0,
+            },
+            dataType: 'json',
+            gzip: true,
+          }),
         };
         if(res.authorDetail.data.success) {
           authorDetail = res.authorDetail.data.data;
         }
         if(res.authorDetail.data.success) {
           homeDetail = res.homeDetail.data.data;
+        }
+        if(res.tags.data.success) {
+          tags = res.tags.data.data;
+        }
+        if(res.playList.data.success) {
+          playList = res.playList.data.data;
+        }
+        if(res.commentData.data.success) {
+          commentData = res.commentData.data.data;
         }
       }
       catch(e) {
@@ -43,6 +88,9 @@ module.exports = app => {
         authorID,
         authorDetail,
         homeDetail,
+        tags,
+        playList,
+        commentData,
       });
     }
   }

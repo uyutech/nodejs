@@ -54,6 +54,8 @@ class DoubleCheck extends migi.Component {
     // 只有1个和都没选为全部
     if($allLis.length === 1 || !$lis[0]) {
       this.tagList2 = all;
+      this.checkL2();
+      this.change();
     }
     else {
       let param = [];
@@ -66,9 +68,12 @@ class DoubleCheck extends migi.Component {
       param = JSON.stringify(param);
       if(cacheL2[param]) {
         this.tagList2 = cacheL2[param];
+        this.checkL2();
         this.change();
       }
-      this.emit('changeL1', param);
+      else {
+        this.emit('changeL1', param);
+      }
     }
   }
   clickL2(e, vd, tvd) {
@@ -94,7 +99,6 @@ class DoubleCheck extends migi.Component {
         choosedL2[key] = false;
       }
     });
-    this.change();
   }
   change() {
     let self = this;
@@ -127,14 +131,14 @@ class DoubleCheck extends migi.Component {
   autoWidth() {
     let $li = $(this.ref.l1.element);
     let $c = $li.find('.c');
-    $c.css('width', '9999rem');
+    $c.css('width', '999rem');
     let $ul = $c.find('ul');
     $c.css('width', $ul.width() + 1);
   }
   autoWidth2() {
     let $li = $(this.ref.l2.element);
     let $c = $li.find('.c');
-    $c.css('width', '9999rem');
+    $c.css('width', '999rem');
     let $ul = $c.find('ul');
     $c.css('width', $ul.width() + 1);
   }

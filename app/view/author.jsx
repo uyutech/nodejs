@@ -13,8 +13,17 @@ export default function(data) {
   let authorID = data.authorID;
   let authorDetail = data.authorDetail;
   let homeDetail = data.homeDetail;
+  let tags = data.tags;
+  let playList = data.playList;
+  let commentData = data.commentData;
 
-  let author = migi.preRender(<Author authorID={ authorID } authorDetail={ authorDetail } homeDetail={ homeDetail }/>);
+  let author = migi.preRender(<Author
+    authorID={ authorID }
+    authorDetail={ authorDetail }
+    homeDetail={ homeDetail }
+    tags={ tags }
+    playList={ playList }
+    commentData={ commentData }/>);
   let topNav = migi.preRender(<TopNav/>);
   let botNav = migi.preRender(<BotNav/>);
 
@@ -44,6 +53,9 @@ ${botNav}
     authorID: '${authorID}',
     authorDetail: ${JSON.stringify(authorDetail)},
     homeDetail: ${JSON.stringify(homeDetail)},
+    tags: ${JSON.stringify(tags)},
+    playList: ${JSON.stringify(playList)},
+    commentData: ${JSON.stringify(commentData)},
   };
 </script>
 <script src="${data.helper.getAssetUrl('/common.js')}"></script>

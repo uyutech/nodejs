@@ -23,24 +23,22 @@ class Find extends migi.Component {
     self.on(migi.Event.DOM, function() {
       let doubleCheck = self.ref.doubleCheck;
       doubleCheck.on('changeL1', function(param) {
-        if(param) {
-          if(ajaxL2) {
-            ajaxL2.abort();
-          }
-          doubleCheck.isLoadindL2 = true;
-          net.postJSON('api/find/GetAuthorFilterlevelB', { FilterlevelA: param }, function (res) {
-            if(res.success) {
-              let data = res.data;
-              doubleCheck.tagList2 = data;
-              doubleCheck.autoWidth2();
-              doubleCheck.setCacheL2(param, data);
-              doubleCheck.checkL2();
-            }
-            doubleCheck.isLoadindL2 = false;
-          }, function() {
-            doubleCheck.isLoadindL2 = false;
-          });
+        if(ajaxL2) {
+          ajaxL2.abort();
         }
+        doubleCheck.isLoadindL2 = true;
+        net.postJSON('/api/find/tagB', { tagA: param }, function (res) {
+          if(res.success) {
+            let data = res.data;
+            doubleCheck.tagList2 = data;
+            doubleCheck.autoWidth2();
+            doubleCheck.setCacheL2(param, data);
+            doubleCheck.checkL2();
+          }
+          doubleCheck.isLoadindL2 = false;
+        }, function() {
+          doubleCheck.isLoadindL2 = false;
+        });
       });
       doubleCheck.on('change', function(lA, lB) {
         let temp = lA.concat(lB);
@@ -108,7 +106,7 @@ class Find extends migi.Component {
       <HotCollection ref="hotCollection" title="推荐专辑"/>
       <HotAuthor ref="hotAuthor" title="推荐作者" dataList={ this.props.hotAuthorList }/>
       <DoubleCheck ref="doubleCheck" tags={ this.props.tags }/>
-      <PlayList ref="playList" dataList={ this.props.playList }/>
+      <PlayList ref="playList" dataList={ this.props.playList.data }/>
     </div>;
   }
 }

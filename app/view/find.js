@@ -532,6 +532,8 @@ var DoubleCheck = function (_migi$Component) {
       // 只有1个和都没选为全部
       if ($allLis.length === 1 || !$lis[0]) {
         this.tagList2 = all;
+        this.checkL2();
+        this.change();
       } else {
         var param = [];
         $lis.each(function (index, li) {
@@ -543,9 +545,11 @@ var DoubleCheck = function (_migi$Component) {
         param = JSON.stringify(param);
         if (cacheL2[param]) {
           this.tagList2 = cacheL2[param];
+          this.checkL2();
           this.change();
+        } else {
+          this.emit('changeL1', param);
         }
-        this.emit('changeL1', param);
       }
     }
   }, {
@@ -575,7 +579,6 @@ var DoubleCheck = function (_migi$Component) {
           choosedL2[key] = false;
         }
       });
-      this.change();
     }
   }, {
     key: "change",
@@ -612,7 +615,7 @@ var DoubleCheck = function (_migi$Component) {
     value: function autoWidth() {
       var $li = $(this.ref.l1.element);
       var $c = $li.find('.c');
-      $c.css('width', '9999rem');
+      $c.css('width', '999rem');
       var $ul = $c.find('ul');
       $c.css('width', $ul.width() + 1);
     }
@@ -621,7 +624,7 @@ var DoubleCheck = function (_migi$Component) {
     value: function autoWidth2() {
       var $li = $(this.ref.l2.element);
       var $c = $li.find('.c');
-      $c.css('width', '9999rem');
+      $c.css('width', '999rem');
       var $ul = $c.find('ul');
       $c.css('width', $ul.width() + 1);
     }
@@ -1145,24 +1148,22 @@ var Find = function (_migi$Component) {
     self.on(migi.Event.DOM, function () {
       var doubleCheck = self.ref.doubleCheck;
       doubleCheck.on('changeL1', function (param) {
-        if (param) {
-          if (ajaxL2) {
-            ajaxL2.abort();
-          }
-          doubleCheck.isLoadindL2 = true;
-          _net2.default.postJSON('api/find/GetAuthorFilterlevelB', { FilterlevelA: param }, function (res) {
-            if (res.success) {
-              var _data = res.data;
-              doubleCheck.tagList2 = _data;
-              doubleCheck.autoWidth2();
-              doubleCheck.setCacheL2(param, _data);
-              doubleCheck.checkL2();
-            }
-            doubleCheck.isLoadindL2 = false;
-          }, function () {
-            doubleCheck.isLoadindL2 = false;
-          });
+        if (ajaxL2) {
+          ajaxL2.abort();
         }
+        doubleCheck.isLoadindL2 = true;
+        _net2.default.postJSON('/api/find/tagB', { tagA: param }, function (res) {
+          if (res.success) {
+            var _data = res.data;
+            doubleCheck.tagList2 = _data;
+            doubleCheck.autoWidth2();
+            doubleCheck.setCacheL2(param, _data);
+            doubleCheck.checkL2();
+          }
+          doubleCheck.isLoadindL2 = false;
+        }, function () {
+          doubleCheck.isLoadindL2 = false;
+        });
       });
       doubleCheck.on('change', function (lA, lB) {
         var temp = lA.concat(lB);
@@ -1236,7 +1237,7 @@ var Find = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "推荐作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotCollection2.default, [["ref", "hotCollection"], ["title", "推荐专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "推荐作者"], ["dataList", this.props.hotAuthorList]]), migi.createCp(_DoubleCheck2.default, [["ref", "doubleCheck"], ["tags", this.props.tags]]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["dataList", this.props.playList]])]);
+      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "推荐作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotCollection2.default, [["ref", "hotCollection"], ["title", "推荐专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "推荐作者"], ["dataList", this.props.hotAuthorList]]), migi.createCp(_DoubleCheck2.default, [["ref", "doubleCheck"], ["tags", this.props.tags]]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["dataList", this.props.playList.data]])]);
     }
   }]);
 

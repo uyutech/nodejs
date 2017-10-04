@@ -2,18 +2,21 @@
  * Created by army on 2017/6/24.
  */
 
+import net from '../common/net';
+import util from '../common/util';
 import DoubleCheck from '../component/doublecheck/DoubleCheck.jsx';
 import PlayList from '../component/playlist/PlayList.jsx';
 
 let ajax;
 let SortType = '1';
-let Parameter = '';
+let parameter = '';
 let ajaxL2;
 
-class Works extends migi.Component {
+class Work extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function() {
       let doubleCheck = self.ref.doubleCheck;
       doubleCheck.on('changeL1', function(param) {
@@ -22,13 +25,14 @@ class Works extends migi.Component {
             ajaxL2.abort();
           }
           doubleCheck.isLoadindL2 = true;
-          util.postJSON('api/author/GetAuthorFilterlevelB', { AuthorID: self.authorID, FilterlevelA: param }, function (res) {
+          net.postJSON('/api/author/tagB', { authorID: self.authorID, tagA: param }, function (res) {
             if(res.success) {
               let data = res.data;
               doubleCheck.tagList2 = data;
               doubleCheck.autoWidth2();
               doubleCheck.setCacheL2(param, data);
               doubleCheck.checkL2();
+              doubleCheck.change();
             }
             doubleCheck.isLoadindL2 = false;
           }, function() {
@@ -39,8 +43,8 @@ class Works extends migi.Component {
       doubleCheck.on('change', function(lA, lB) {
         let temp = lA.concat(lB);
         temp = temp.length ? JSON.stringify(temp) : '';
-        if(temp !== Parameter) {
-          Parameter = temp;
+        if(temp !== parameter) {
+          parameter = temp;
           self.loadPlayList();
         }
       });
@@ -49,13 +53,15 @@ class Works extends migi.Component {
   @bind authorID
   show() {
     $(this.element).removeClass('fn-hide');
+    this.ref.doubleCheck.autoWidth();
+    this.ref.doubleCheck.autoWidth2();
   }
   hide() {
     $(this.element).addClass('fn-hide');
   }
   load() {
     let self = this;
-    util.postJSON('api/author/GetAuthorWorks', { AuthorID: self.authorID }, function (res) {
+    net.postJSON('/api/author/GetAuthorWorks', { AuthorID: self.authorID }, function (res) {
       if(res.success) {
         let data = res.data;
         self.ref.doubleCheck.setData(data);
@@ -68,7 +74,7 @@ class Works extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    ajax = util.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, Parameter, Skip: 1, Take: 10, SortType }, function(res) {
+    ajax = net.postJSON('/api/author/playList', { authorID: self.authorID, parameter }, function(res) {
       if(res.success) {
         let data = res.data;
         self.ref.playList.setData(data.data);
@@ -84,7 +90,7 @@ class Works extends migi.Component {
   }
   render() {
     return <div class="works fn-hide">
-      <DoubleCheck ref="doubleCheck"/>
+      <DoubleCheck ref="doubleCheck" tags={ this.props.tags }/>
       <div class="bar fn-hide">
         <ul class="btn fn-clear">
           <li class="all">播放全部</li>
@@ -96,9 +102,9 @@ class Works extends migi.Component {
           <li rel="0">最新</li>
         </ul>
       </div>
-      <PlayList ref="playList"/>
+      <PlayList ref="playList" dataList={ this.props.playList.data }/>
     </div>;
   }
 }
 
-export default Works;
+export default Work;

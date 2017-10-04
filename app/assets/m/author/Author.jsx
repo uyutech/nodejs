@@ -4,7 +4,7 @@
 
 import Nav from './Nav.jsx';
 import Home from './Home.jsx';
-import Works from './Works.jsx';
+import Work from './Work.jsx';
 import AuthorComment from './AuthorComment.jsx';
 
 class Author extends migi.Component {
@@ -16,36 +16,20 @@ class Author extends migi.Component {
       let nav = self.ref.nav;
       let tags = nav.ref.tags;
       let home = self.ref.home;
-      let works;
-      let authorComment;
+      let work = self.ref.work;
+      let authorComment = self.ref.authorComment;
       tags.on('change', function(i) {
         home && home.hide();
-        works && works.hide();
+        work && work.hide();
         authorComment && authorComment.hide();
         switch (i) {
           case '0':
             home.show();
             break;
           case '1':
-            if(!works) {
-              works = migi.render(
-                <Works/>,
-                self.element
-              );
-              works.authorID = self.authorID;
-              works.load();
-            }
-            works.show();
+            work.show();
             break;
           case '2':
-            if(!authorComment) {
-              authorComment = migi.render(
-                <AuthorComment/>,
-                self.element
-              );
-              authorComment.authorID = self.authorID;
-              authorComment.load();
-            }
             authorComment.show();
             break;
         }
@@ -98,6 +82,8 @@ class Author extends migi.Component {
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
       <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }/>
+      <Work ref="work" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList}/>
+      <AuthorComment ref="authorComment" authorID={ this.props.authorID } commentData={ this.props.commentData }/>
     </div>;
   }
 }

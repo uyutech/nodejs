@@ -6,6 +6,8 @@
 
 module.exports = app => {
   class Controller extends app.Controller {
+    * tagB(ctx) {
+    }
     * playList(ctx) {
       let query = ctx.request.body;
       let res = {};
