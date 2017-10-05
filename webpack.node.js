@@ -3,6 +3,7 @@ module.exports = {
     find: './app/view/find.jsx',
     works: './app/view/works.jsx',
     author: './app/view/author.jsx',
+    search: './app/view/search.jsx',
   },
   output: {
     path: __dirname + '/app/view',

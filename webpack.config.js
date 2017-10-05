@@ -8,6 +8,7 @@ module.exports = {
     find: './app/assets/m/find/index.jsx',
     works: './app/assets/m/works/index.jsx',
     author: './app/assets/m/author/index.jsx',
+    search: './app/assets/m/search/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

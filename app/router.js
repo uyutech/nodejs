@@ -7,6 +7,7 @@ module.exports = app => {
   app.get('/m/find', 'm.find.index');
   app.get('/m/works/:worksID', 'm.works.index');
   app.get('/m/author/:authorID', 'm.author.index');
+  app.get('/m/search/:kw', 'm.search.index');
 
   app.post('/api/find/tagB', 'api.find.tagB');
   app.post('/api/find/playList', 'api.find.playList');

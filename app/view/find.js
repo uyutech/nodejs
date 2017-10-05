@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 33);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1093,7 +1093,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(24);
+var _Banner = __webpack_require__(25);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -1257,7 +1257,8 @@ migi.name(Find, "Find");exports.default = Find;
 /* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1303,7 +1304,6 @@ var Banner = function (_migi$Component) {
 migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
-/* 25 */,
 /* 26 */,
 /* 27 */,
 /* 28 */,
@@ -1311,7 +1311,8 @@ migi.name(Banner, "Banner");exports.default = Banner;
 /* 30 */,
 /* 31 */,
 /* 32 */,
-/* 33 */
+/* 33 */,
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
