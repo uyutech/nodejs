@@ -12,6 +12,7 @@ module.exports = {
     dcommon: './app/assets/d/common/index.js',
     dfind: './app/assets/d/find/index.jsx',
     dworks: './app/assets/d/works/index.jsx',
+    dauthor: './app/assets/d/author/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',
