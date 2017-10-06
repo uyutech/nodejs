@@ -15,4 +15,7 @@ module.exports = app => {
   app.post('/api/author/tagB', 'api.author.tagB');
   app.post('/api/author/playList', 'api.author.playList');
   app.post('/api/author/commentList', 'api.author.commentList');
+
+  app.get('/h5/version', 'h5.version.index');
+  app.post('/h5/version', 'h5.version.index');
 };

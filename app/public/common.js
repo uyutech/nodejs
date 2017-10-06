@@ -581,6 +581,9 @@ var Element = function (_Event) {
       }
     }
   }, {
+    key: 'preString',
+    value: function preString() {}
+  }, {
     key: '__onDom',
     value: function __onDom() {
       this.__dom = true;
@@ -761,11 +764,11 @@ var _Model = __webpack_require__(22);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _Stream = __webpack_require__(32);
+var _Stream = __webpack_require__(31);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _Fastclick = __webpack_require__(31);
+var _Fastclick = __webpack_require__(30);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
@@ -871,6 +874,13 @@ var Component = function (_Element) {
         this.__virtualDom.style = this.__style;
       }
       return this.__virtualDom.toString();
+    }
+    //@override
+
+  }, {
+    key: 'preString',
+    value: function preString() {
+      this.toString();
     }
   }, {
     key: 'findChild',
@@ -1304,7 +1314,7 @@ var _Cb = __webpack_require__(20);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _range = __webpack_require__(37);
+var _range = __webpack_require__(36);
 
 var _range2 = _interopRequireDefault(_range);
 
@@ -1320,7 +1330,7 @@ var _type = __webpack_require__(27);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _fixEvent = __webpack_require__(35);
+var _fixEvent = __webpack_require__(34);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
@@ -1336,7 +1346,7 @@ var _touch = __webpack_require__(88);
 
 var _touch2 = _interopRequireDefault(_touch);
 
-var _delegate = __webpack_require__(34);
+var _delegate = __webpack_require__(33);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
@@ -1519,6 +1529,26 @@ var VirtualDom = function (_Element) {
       res += self.__renderChildren();
       res += '</' + self.name + '>';
       return res;
+    }
+    //@override
+
+  }, {
+    key: 'preString',
+    value: function preString() {
+      var self = this;
+      //处理属性
+      for (var i = 0, len = self.__props.length; i < len; i++) {
+        var item = self.__props[i];
+        self.__renderProp(item[0], item[1]);
+      }
+      //使用jaw内联css需解析
+      if (self.__style) {
+        self.__match(true);
+      }
+      //:input要侦听数据绑定
+      self.__checkListener();
+      //渲染children
+      self.__renderChildren();
     }
 
     //始终以缓存的props属性为准，哪怕更改了真实DOM的属性
@@ -3460,36 +3490,6 @@ exports.default = {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -3516,11 +3516,11 @@ var _EventBus = __webpack_require__(21);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Stream = __webpack_require__(32);
+var _Stream = __webpack_require__(31);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _CacheModel = __webpack_require__(30);
+var _CacheModel = __webpack_require__(29);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -3711,7 +3711,7 @@ var CacheComponent = function (_Component) {
 exports.default = CacheComponent;
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3727,7 +3727,7 @@ var _Model2 = __webpack_require__(22);
 
 var _Model3 = _interopRequireDefault(_Model2);
 
-var _CacheComponent = __webpack_require__(29);
+var _CacheComponent = __webpack_require__(28);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -3777,7 +3777,7 @@ CacheModel.prototype.__data = _CacheComponent2.default.prototype.__data;
 exports.default = CacheModel;
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4625,7 +4625,7 @@ FastClick.attach = function (layer, options) {
 exports.default = FastClick;
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4690,7 +4690,7 @@ var Stream = function () {
 exports.default = Stream;
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4718,7 +4718,7 @@ var pool = {
 exports.default = pool;
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4902,7 +4902,7 @@ function matchSel(i, names, classes, ids, json, virtualDom) {
 exports.default = delegate;
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4922,7 +4922,7 @@ exports.default = function (e) {
 ;
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4951,7 +4951,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5092,6 +5092,36 @@ exports.default = {
 };
 
 /***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
 /* 38 */,
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -5150,6 +5180,15 @@ module.exports = ajax;
 
 /***/ }),
 /* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = __webpack_require__(87)['default'];
+
+/***/ }),
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5467,16 +5506,7 @@ defineProperties(Number, {
   MAX_SAFE_INTEGER: maxSafeInteger,
   MIN_SAFE_INTEGER: -maxSafeInteger
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = __webpack_require__(87)['default'];
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
 
 /***/ }),
 /* 46 */,
@@ -5704,9 +5734,9 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 "use strict";
 
 
-__webpack_require__(44);
-
 __webpack_require__(45);
+
+__webpack_require__(44);
 
 var _animaYoctoAjax = __webpack_require__(43);
 
@@ -7533,11 +7563,11 @@ var _browser = __webpack_require__(24);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _range = __webpack_require__(37);
+var _range = __webpack_require__(36);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _cachePool = __webpack_require__(33);
+var _cachePool = __webpack_require__(32);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
@@ -7549,15 +7579,15 @@ var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(36);
+var _matchHash = __webpack_require__(35);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
-var _fixEvent = __webpack_require__(35);
+var _fixEvent = __webpack_require__(34);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _delegate = __webpack_require__(34);
+var _delegate = __webpack_require__(33);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
@@ -8330,7 +8360,7 @@ var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(36);
+var _matchHash = __webpack_require__(35);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
@@ -8791,7 +8821,7 @@ var _Model = __webpack_require__(22);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _CacheModel = __webpack_require__(30);
+var _CacheModel = __webpack_require__(29);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -8807,7 +8837,7 @@ var _NonVisualComponent = __webpack_require__(81);
 
 var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
 
-var _CacheComponent = __webpack_require__(29);
+var _CacheComponent = __webpack_require__(28);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -8819,7 +8849,7 @@ var _Cb = __webpack_require__(20);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _cachePool = __webpack_require__(33);
+var _cachePool = __webpack_require__(32);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
@@ -8839,7 +8869,7 @@ var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _Fastclick = __webpack_require__(31);
+var _Fastclick = __webpack_require__(30);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
@@ -8860,7 +8890,7 @@ var migi = {
     return element.toString();
   },
   preExist: function preExist(element) {
-    element.toString();
+    element.preString();
     return element.emit(_Event2.default.DOM);
   },
   createCp: function createCp(cp, props, children) {
@@ -8911,7 +8941,7 @@ if (typeof window != 'undefined') {
 }
 
 exports.default = migi;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
 
 /***/ }),
 /* 88 */
