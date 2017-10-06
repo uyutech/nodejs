@@ -5,6 +5,7 @@ module.exports = app => {
 
   app.get('/d', 'd.index.index');
   app.get('/d/find', 'd.find.index');
+  app.get('/d/works/:worksID', 'd.works.index');
 
   app.get('/m', 'm.index.index');
   app.get('/m/find', 'm.find.index');

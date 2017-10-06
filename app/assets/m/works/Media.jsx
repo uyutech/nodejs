@@ -149,20 +149,12 @@ class Media extends migi.Component {
     });
     self.authorList = authorList;
 
-    let hasAudio = false;
-    let hasVideo = false;
     workList.forEach(function(item) {
       if(item.bigType === 'audio') {
-        // audio.setData(item.value);
-        // hasAudio = true;
-        // $(self.ref.type.element).find('.audio').removeClass('fn-hide');
         self.hasAudio = true;
         self.audioData = item.value;
       }
       else if(item.bigType === 'video') {
-        // video.setData(item.value);
-        // hasVideo = true;
-        // $(self.ref.type.element).find('.video').removeClass('fn-hide');
         self.hasVideo = true;
         self.videoData = item.value;
       }
@@ -173,18 +165,6 @@ class Media extends migi.Component {
     else if(self.hasVideo) {
       first = 'video';
     }
-    // if(hasAudio) {
-    //   last = audio;
-    //   $(self.ref.type.element).find('.audio').addClass('cur');
-    // }
-    // else if(hasVideo) {
-    //   last = video;
-    //   $(self.ref.type.element).find('.video').addClass('cur');
-    // }
-    // if(last) {
-    //   last.show();
-    //   this.emit('switchSubWork', last.data);
-    // }
   }
   clickTag(e, vd, tvd) {
     let $ul = $(vd.element);
@@ -287,7 +267,7 @@ class Media extends migi.Component {
     $(this.ref.tags.element).find('li').eq(index).click();
   }
   render() {
-    return <div class="media" style={ `background-image:url(${this.props.worksDetail.cover_Pic})` }>
+    return <div class="media" style={ `background-image:url(${this.props.worksDetail.cover_Pic || '//zhuanquan.xin/img/blank.png'})` }>
       <Author ref="author" authorList={ this.authorList }/>
       <div class="c" ref="c">
         <Audio ref="audio" data={ this.audioData } show={ first === 'audio' }/>

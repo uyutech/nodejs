@@ -11,6 +11,7 @@ module.exports = {
     msearch: './app/assets/m/search/index.jsx',
     dcommon: './app/assets/d/common/index.js',
     dfind: './app/assets/d/find/index.jsx',
+    dworks: './app/assets/d/works/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

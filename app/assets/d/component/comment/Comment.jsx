@@ -37,6 +37,15 @@ class Comment extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    let html = '';
+    self.props.data.forEach(function(item) {
+      html += self.genComment(item);
+    });
+    self.html = html;
+    if(!html) {
+      self.message = '暂无评论';
+    }
+
     self.on(migi.Event.DOM, function() {
       let $root = $(self.element);
       $root.on('click', '.zan', function() {
@@ -278,7 +287,7 @@ class Comment extends migi.Component {
   }
   render() {
     return <div class="cp-comment">
-      <ul class="list" ref="list"/>
+      <ul class="list" ref="list" dangerouslySetInnerHTML={ this.html }/>
       <p class={ 'message' + (this.message ? '' : ' fn-hide') }>{ this.message }</p>
     </div>;
   }
