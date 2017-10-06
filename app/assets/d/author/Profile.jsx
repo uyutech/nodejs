@@ -22,7 +22,7 @@ class Profile extends migi.Component {
   @bind headUrl
   @bind fansNumber
   @bind isLike
-  @bind loading = true
+  @bind loading = false
   set type(v) {
     v = v || [];
     let hash = {};

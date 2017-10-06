@@ -1,4 +1,4 @@
-/******/ (function(modules) { // webpackBootstrap
+(function(e, a) { for(var i in a) e[i] = a[i]; }(exports, /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -63,250 +63,154 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 120);
+/******/ 	return __webpack_require__(__webpack_require__.s = 67);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 6:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army on 2017/5/20.
- */
-
-var util = {
-  isIPhone: function isIPhone() {
-    return navigator.appVersion.match(/iphone/gi);
-  },
-  goto: function goto(url) {
-    location.href = url;
-  },
-  img150_150: function img150_150(url) {
-    return url ? url + '-150_150' : url;
-  },
-  img100_100: function img100_100(url) {
-    return url ? url + '-100_100' : url;
-  },
-  img90_90: function img90_90(url) {
-    return url ? url + '-90_90' : url;
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-exports.default = util;
-
-/***/ }),
-
-/***/ 10:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /**
  * Created by army8735 on 2017/8/13.
  */
 
-var code2Data = {
+let code2Data = {
   '901': {
     name: '出品',
     display: '出品',
-    css: 'producer'
+    css: 'producer',
   },
   '111': {
     name: '演唱',
     display: '演唱',
-    css: 'singer'
+    css: 'singer',
   },
   '112': {
     name: '和声',
     display: '和声',
-    css: 'singer'
+    css: 'singer',
   },
   '121': {
     name: '作曲',
     display: '作曲',
-    css: 'musician'
+    css: 'musician',
   },
   '122': {
     name: '编曲',
     display: '编曲',
-    css: 'musician'
+    css: 'musician',
   },
   '131': {
     name: '混音',
     display: '混音',
-    css: 'mixer'
+    css: 'mixer',
   },
   '134': {
     name: '修音',
     display: '修音',
-    css: 'mixer'
+    css: 'mixer',
   },
   '141': {
     name: '演奏',
     display: '', //直接显示乐器名。
-    css: 'instrumental'
+    css: 'instrumental',
   },
   '211': {
     name: '视频',
     display: '视频',
-    css: 'video'
+    css: 'video',
   },
   '311': {
     name: '立绘',
     display: '立绘',
-    css: 'painter'
+    css: 'painter',
   },
   '312': {
     name: 'CG',
     display: 'CG',
-    css: 'painter'
+    css: 'painter',
   },
   '313': {
     name: '场景',
     display: '场景',
-    css: 'painter'
+    css: 'painter',
   },
   '331': {
     name: '设计',
     display: '设计',
-    css: 'designer'
+    css: 'designer',
   },
   '332': {
     name: '海报',
     display: '海报',
-    css: 'designer'
+    css: 'designer',
   },
   '351': {
     name: '书法',
     display: '书法',
-    css: 'handwriting'
+    css: 'handwriting',
   },
   '411': {
     name: '作词',
     display: '作词',
-    css: 'writer'
+    css: 'writer',
   },
   '421': {
     name: '文案',
     display: '文案',
-    css: 'writer'
-  }
+    css: 'writer',
+  },
 };
 
-var label2Code = {};
-Object.keys(code2Data).forEach(function (k) {
-  var v = code2Data[k];
+let label2Code = {};
+Object.keys(code2Data).forEach(function(k) {
+  let v = code2Data[k];
   label2Code[v.css] = label2Code[v.css] || [];
   label2Code[v.css].push(k);
 });
 
-exports.default = {
-  code2Data: code2Data,
-  label2Code: label2Code
-};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  code2Data,
+  label2Code,
+});
+
 
 /***/ }),
 
-/***/ 120:
+/***/ 67:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(81);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var _Search = __webpack_require__(68);
+exports.default = function (data) {
+  migi.Element.resetUid();
+  var kw = data.kw;
+  var datas = data.datas;
+
+  var search = migi.preRender(migi.createCp(_Search2.default, [["datas", datas]]));
+
+  return '<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n  <meta charset="UTF-8"/>\n  <title>' + kw + '</title>\n  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>\n  <meta name="renderer" content="webkit"/>\n  <meta name="apple-mobile-web-app-capable" content="yes"/>\n  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>\n  <meta name="format-detection" content="telephone=no"/>\n  <meta name="format-detection" content="email=no"/>\n  <meta name="wap-font-scale" content="no"/>\n  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dsearch.css') + '"/>\n</head>\n<body>\n<div id="page">' + search + '</div>\n<div class="g-botnav">All Rights Reserved \u8F6C\u5708circling \u6D59ICP\u590717029501\u53F7-2</div>\n<script>\n  var $CONFIG = {\n    kw: ' + JSON.stringify(kw) + ',\n    datas: ' + JSON.stringify(datas) + ',\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dsearch.js') + '"></script>\n</body>\n</html>';
+};
+
+var _Search = __webpack_require__(73);
 
 var _Search2 = _interopRequireDefault(_Search);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var search = migi.preExist(migi.createCp(_Search2.default, [["kw", $CONFIG.kw], ["datas", $CONFIG.datas]]));
+;
 
 /***/ }),
 
-/***/ 3:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Created by army8735 on 2017/10/2.
- */
-
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var net = {
-  ajax: function ajax(url, data, _success, _error, type) {
-    var csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function beforeSend(xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function success(data, state, xhr) {
-          _success(data, state, xhr);
-        },
-        error: function error(data) {
-          if (!_error.__hasExec) {
-            _error.__hasExec = true;
-            _error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function getJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function postJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error, 'post');
-  }
-};
-
-exports.default = net;
-
-/***/ }),
-
-/***/ 68:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -318,15 +222,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(3);
-
-var _net2 = _interopRequireDefault(_net);
-
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _authorTemplate = __webpack_require__(10);
+var _authorTemplate = __webpack_require__(6);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -397,7 +293,7 @@ var Search = function (_migi$Component) {
     value: function load(kw) {
       var self = this;
       self.kw = kw;
-      _net2.default.postJSON('api/search/Homesearch', { Parameter: kw }, function (res) {
+      util.postJSON('api/search/Homesearch', { Parameter: kw }, function (res) {
         if (res.success) {
           var data = res.data;
           var list = [];
@@ -457,7 +353,7 @@ var Search = function (_migi$Component) {
               hash[css] = true;
             });
             var authorType = Object.keys(hash);
-            return migi.createVd("li", [["class", "author"]], [migi.createVd("a", [["href", '/author/' + value.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", value.Head_url || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])]), migi.createVd("div", [["class", "info"]], [migi.createVd("a", [["href", '/author/' + value.AuthorID], ["class", "name"]], [migi.createVd("h4", [["dangerouslySetInnerHTML", name]]), authorType.map(function (item) {
+            return migi.createVd("li", [["class", "author fn-clear"]], [migi.createVd("a", [["href", '/author/' + value.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", value.Head_url || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])]), migi.createVd("div", [["class", "info"]], [migi.createVd("a", [["href", '/author/' + value.AuthorID], ["class", "name"]], [migi.createVd("h4", [["dangerouslySetInnerHTML", name]]), authorType.map(function (item) {
               return migi.createVd("span", [["class", 'cp-author-type-' + item]]);
             })]), migi.createVd("p", [], ["粉丝：", value.FansNumber])])]);
           } else if (key === 'audio') {
@@ -468,7 +364,7 @@ var Search = function (_migi$Component) {
             } else {
               _name = migi.util.encodeHtml(_name);
             }
-            return migi.createVd("li", [["class", "audio"]], [migi.createVd("a", [["href", '/works/' + value.workID], ["class", "pic"]], [migi.createVd("img", [["src", value.CoverPic || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("div", [["class", "info"]], [migi.createVd("a", [["href", '/works/' + value.workID], ["class", "name"], ["dangerouslySetInnerHTML", _name]])])]);
+            return migi.createVd("li", [["class", "audio fn-clear"]], [migi.createVd("a", [["href", '/works/' + value.workID], ["class", "pic"]], [migi.createVd("img", [["src", value.CoverPic || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("div", [["class", "info"]], [migi.createVd("a", [["href", '/works/' + value.workID], ["class", "name"], ["dangerouslySetInnerHTML", _name]])])]);
           }
         });
       })]), migi.createVd("div", [["class", new migi.Obj("list", this, function () {
@@ -508,13 +404,6 @@ var Search = function (_migi$Component) {
 
 migi.name(Search, "Search");exports.default = Search;
 
-/***/ }),
-
-/***/ 81:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
 /***/ })
 
-/******/ });
+/******/ })));

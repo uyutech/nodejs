@@ -13,6 +13,7 @@ module.exports = {
     dfind: './app/assets/d/find/index.jsx',
     dworks: './app/assets/d/works/index.jsx',
     dauthor: './app/assets/d/author/index.jsx',
+    dsearch: './app/assets/d/search/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

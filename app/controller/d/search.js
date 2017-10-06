@@ -7,7 +7,30 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
-      yield ctx.render('dsearch');
+      let kw = ctx.params.kw;
+      let datas = {};
+      try {
+        let res = yield {
+          datas: ctx.curl(ctx.helper.getRemoteUrl('api/search/Homesearch'), {
+            method: 'POST',
+            data: {
+              Parameter: kw,
+            },
+            dataType: 'json',
+            gzip: true,
+          }),
+        }
+        if(res.datas.data.success) {
+          datas = res.datas.data;
+        }
+      }
+      catch(e) {
+        ctx.logger.error(e.toString());
+      }
+      yield ctx.render('dsearch', {
+        kw,
+        datas,
+      });
     }
   }
   return Controller;

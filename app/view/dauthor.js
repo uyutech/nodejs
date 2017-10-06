@@ -2193,7 +2193,7 @@ var Profile = function (_migi$Component) {
       this.__setBind("loading", v);this.__data("loading");
     },
     get: function get() {
-      if (this.__initBind("loading")) this.__setBind("loading", true);return this.__getBind("loading");
+      if (this.__initBind("loading")) this.__setBind("loading", false);return this.__getBind("loading");
     }
   }, {
     key: "type",
