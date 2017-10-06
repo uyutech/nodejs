@@ -24,7 +24,7 @@ module.exports = app => {
             method: 'POST',
             data: {
               WorkID: worksID,
-              Skip: -1,
+              Skip: 0,
               Take: 10,
               SortType: 0,
               MyComment: 0,
@@ -44,7 +44,7 @@ module.exports = app => {
       catch(e) {
         ctx.logger.error(e.toString());
       }
-      yield ctx.render('works', {
+      yield ctx.render('mworks', {
         worksID,
         worksDetail,
         commentData,

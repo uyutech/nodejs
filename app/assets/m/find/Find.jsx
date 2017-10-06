@@ -92,7 +92,7 @@ class Find extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    ajax = net.postJSON('/api/find/playList', { Parameter, Skip: 1, Take: 10, SortType }, function(res) {
+    ajax = net.postJSON('/api/find/playList', { Parameter, Skip: 0, Take: 10, SortType }, function(res) {
       if(res.success) {
         let data = res.data;
         self.ref.playList.setData(data.data);

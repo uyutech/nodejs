@@ -27,7 +27,7 @@ module.exports = app => {
       catch(e) {
         ctx.logger.error(e.toString());
       }
-      yield ctx.render('search', {
+      yield ctx.render('msearch', {
         kw,
         datas,
       });

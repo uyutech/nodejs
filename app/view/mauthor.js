@@ -1,4 +1,4 @@
-/******/ (function(modules) { // webpackBootstrap
+(function(e, a) { for(var i in a) e[i] = a[i]; }(exports, /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -63,61 +63,56 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 58);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /**
  * Created by army on 2017/5/20.
  */
 
-var util = {
-  isIPhone: function isIPhone() {
+let util = {
+  isIPhone: function(){
     return navigator.appVersion.match(/iphone/gi);
   },
-  goto: function goto(url) {
+  goto: function(url) {
     location.href = url;
   },
-  img150_150: function img150_150(url) {
+  img150_150: function(url) {
     return url ? url + '-150_150' : url;
   },
-  img100_100: function img100_100(url) {
+  img100_100: function(url) {
     return url ? url + '-100_100' : url;
   },
-  img90_90: function img90_90(url) {
+  img90_90: function(url) {
     return url ? url + '-90_90' : url;
   },
   ERROR_MESSAGE: '人气大爆发，请稍后再试。'
 };
 
-exports.default = util;
+/* harmony default export */ __webpack_exports__["default"] = (util);
+
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /**
  * Created by army8735 on 2017/10/2.
  */
 
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var net = {
-  ajax: function ajax(url, data, _success, _error, type) {
-    var csrfToken = $.cookie('csrfToken');
+let net = {
+  ajax: function(url, data, success, error, type) {
+    let csrfToken = $.cookie('csrfToken');
     function load() {
       return $.ajax({
         url: url,
@@ -128,51 +123,50 @@ var net = {
         timeout: 6000,
         type: type || 'get',
         headers: {
-          'x-csrf-token': csrfToken
+          'x-csrf-token': csrfToken,
         },
         // ajax 跨域设置必须加上
-        beforeSend: function beforeSend(xhr) {
+        beforeSend: function (xhr) {
           xhr.withCredentials = true;
         },
-        success: function success(data, state, xhr) {
-          _success(data, state, xhr);
+        success: function (data, state, xhr) {
+          success(data, state, xhr);
         },
-        error: function error(data) {
-          if (!_error.__hasExec) {
-            _error.__hasExec = true;
-            _error(data || {});
+        error: function (data) {
+          if(!error.__hasExec) {
+            error.__hasExec = true;
+            error(data || {});
           }
         }
       });
     }
     return load();
   },
-  getJSON: function getJSON(url, data, success, error) {
-    if (typeof data === 'function') {
+  getJSON: function(url, data, success, error) {
+    if(typeof data === 'function') {
       error = success;
       success = data;
       data = {};
     }
-    error = error || function () {};
+    error = error || function() {};
     return net.ajax(url, data, success, error);
   },
-  postJSON: function postJSON(url, data, success, error) {
-    if (typeof data === 'function') {
+  postJSON: function(url, data, success, error) {
+    if(typeof data === 'function') {
       error = success;
       success = data;
       data = {};
     }
-    error = error || function () {};
+    error = error || function() {};
     return net.ajax(url, data, success, error, 'post');
-  }
+  },
 };
 
-exports.default = net;
+/* harmony default export */ __webpack_exports__["default"] = (net);
+
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -181,118 +175,226 @@ exports.default = net;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BotNav = function (_migi$Component) {
+  _inherits(BotNav, _migi$Component);
+
+  function BotNav() {
+    var _ref;
+
+    _classCallCheck(this, BotNav);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = BotNav.__proto__ || Object.getPrototypeOf(BotNav)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(BotNav, [{
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-botnav"]], ["All Rights Reserved 转圈circling 浙ICP备17029501号-2"]);
+    }
+  }]);
+
+  return BotNav;
+}(migi.Component);
+
+migi.name(BotNav, "BotNav");exports.default = BotNav;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TopNav = function (_migi$Component) {
+  _inherits(TopNav, _migi$Component);
+
+  function TopNav() {
+    var _ref;
+
+    _classCallCheck(this, TopNav);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(TopNav, [{
+    key: 'focus',
+    value: function focus() {
+      this.emit('focus');
+    }
+  }, {
+    key: 'click',
+    value: function click() {
+      this.submit();
+    }
+  }, {
+    key: 'submit',
+    value: function submit(e) {
+      e && e.preventDefault();
+      var v = this.ref.input.element.value;
+      this.emit('search', v);
+    }
+  }, {
+    key: 'clickUser',
+    value: function clickUser(e) {
+      if ($CONFIG.isLogin !== 'True') {
+        e.preventDefault();
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "top-nav"]], [migi.createVd("a", [["href", "/"], ["class", "logo"]]), migi.createVd("form", [["class", "form"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["action", "/search/"]], [migi.createVd("input", [["ref", "input"], ["type", "text"], ["maxlength", "16"], ["placeholder", "新歌《燃尽人间色发布》"], ["value", this.props.kw || ''], ["onFocus", new migi.Cb(this, this.focus)]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)]], ["确认"]), migi.createVd("a", [["href", "/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.clickUser)]], [migi.createVd("img", [["src", this.props.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])])]);
+    }
+  }]);
+
+  return TopNav;
+}(migi.Component);
+
+migi.name(TopNav, "TopNav");exports.default = TopNav;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /**
  * Created by army8735 on 2017/8/13.
  */
 
-var code2Data = {
+let code2Data = {
   '901': {
     name: '出品',
     display: '出品',
-    css: 'producer'
+    css: 'producer',
   },
   '111': {
     name: '演唱',
     display: '演唱',
-    css: 'singer'
+    css: 'singer',
   },
   '112': {
     name: '和声',
     display: '和声',
-    css: 'singer'
+    css: 'singer',
   },
   '121': {
     name: '作曲',
     display: '作曲',
-    css: 'musician'
+    css: 'musician',
   },
   '122': {
     name: '编曲',
     display: '编曲',
-    css: 'musician'
+    css: 'musician',
   },
   '131': {
     name: '混音',
     display: '混音',
-    css: 'mixer'
+    css: 'mixer',
   },
   '134': {
     name: '修音',
     display: '修音',
-    css: 'mixer'
+    css: 'mixer',
   },
   '141': {
     name: '演奏',
     display: '', //直接显示乐器名。
-    css: 'instrumental'
+    css: 'instrumental',
   },
   '211': {
     name: '视频',
     display: '视频',
-    css: 'video'
+    css: 'video',
   },
   '311': {
     name: '立绘',
     display: '立绘',
-    css: 'painter'
+    css: 'painter',
   },
   '312': {
     name: 'CG',
     display: 'CG',
-    css: 'painter'
+    css: 'painter',
   },
   '313': {
     name: '场景',
     display: '场景',
-    css: 'painter'
+    css: 'painter',
   },
   '331': {
     name: '设计',
     display: '设计',
-    css: 'designer'
+    css: 'designer',
   },
   '332': {
     name: '海报',
     display: '海报',
-    css: 'designer'
+    css: 'designer',
   },
   '351': {
     name: '书法',
     display: '书法',
-    css: 'handwriting'
+    css: 'handwriting',
   },
   '411': {
     name: '作词',
     display: '作词',
-    css: 'writer'
+    css: 'writer',
   },
   '421': {
     name: '文案',
     display: '文案',
-    css: 'writer'
-  }
+    css: 'writer',
+  },
 };
 
-var label2Code = {};
-Object.keys(code2Data).forEach(function (k) {
-  var v = code2Data[k];
+let label2Code = {};
+Object.keys(code2Data).forEach(function(k) {
+  let v = code2Data[k];
   label2Code[v.css] = label2Code[v.css] || [];
   label2Code[v.css].push(k);
 });
 
-exports.default = {
-  code2Data: code2Data,
-  label2Code: label2Code
-};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  code2Data,
+  label2Code,
+});
+
 
 /***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -351,7 +453,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 12 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -542,7 +644,7 @@ var Comment = function (_migi$Component) {
         } else {
           $list2.css('height', 'auto');
           subLoadHash[rid] = IS_LOADING;
-          ajax = _net2.default.postJSON(self.props.subUrl, { RootID: rid, Skip: -1, Take: Take }, function (res) {
+          ajax = _net2.default.postJSON(self.props.subUrl, { RootID: rid, Skip: 0, Take: Take }, function (res) {
             if (res.success) {
               subLoadHash[rid] = HAS_LOADED;
               var s = '';
@@ -654,7 +756,7 @@ var Comment = function (_migi$Component) {
 migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
-/* 13 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -879,7 +981,7 @@ var DoubleCheck = function (_migi$Component) {
 migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
-/* 14 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -969,7 +1071,7 @@ var HotAuthor = function (_migi$Component) {
 migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
-/* 15 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1039,7 +1141,7 @@ var HotCollection = function (_migi$Component) {
 migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
-/* 16 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1055,7 +1157,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(11);
+var _AuthorType = __webpack_require__(5);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -1169,7 +1271,7 @@ var HotWork = function (_migi$Component) {
 migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
-/* 17 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1272,27 +1374,7 @@ var PlayList = function (_migi$Component) {
 migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1304,19 +1386,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Nav = __webpack_require__(54);
+var _Nav = __webpack_require__(20);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(52);
+var _Home = __webpack_require__(18);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Work = __webpack_require__(57);
+var _Work = __webpack_require__(23);
 
 var _Work2 = _interopRequireDefault(_Work);
 
-var _AuthorComment = __webpack_require__(51);
+var _AuthorComment = __webpack_require__(17);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
@@ -1435,24 +1517,11 @@ var Author = function (_migi$Component) {
 migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1472,7 +1541,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(12);
+var _Comment = __webpack_require__(6);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -1804,7 +1873,7 @@ var AuthorComment = function (_migi$Component) {
 migi.name(AuthorComment, "AuthorComment");exports.default = AuthorComment;
 
 /***/ }),
-/* 52 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1824,19 +1893,19 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _HotWork = __webpack_require__(16);
+var _HotWork = __webpack_require__(10);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotCollection = __webpack_require__(15);
+var _HotCollection = __webpack_require__(9);
 
 var _HotCollection2 = _interopRequireDefault(_HotCollection);
 
-var _HotAuthor = __webpack_require__(14);
+var _HotAuthor = __webpack_require__(8);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(60);
+var _Dynamic = __webpack_require__(24);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -1906,7 +1975,7 @@ var Home = function (_migi$Component) {
 migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
-/* 53 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2032,7 +2101,7 @@ var Link = function (_migi$Component) {
 migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
-/* 54 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2044,15 +2113,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(55);
+var _Profile = __webpack_require__(21);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(53);
+var _Link = __webpack_require__(19);
 
 var _Link2 = _interopRequireDefault(_Link);
 
-var _Tags = __webpack_require__(56);
+var _Tags = __webpack_require__(22);
 
 var _Tags2 = _interopRequireDefault(_Tags);
 
@@ -2092,7 +2161,7 @@ var Nav = function (_migi$Component) {
 migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
-/* 55 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2296,7 +2365,7 @@ var Profile = function (_migi$Component) {
 migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
-/* 56 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2354,7 +2423,7 @@ var Tags = function (_migi$Component) {
 migi.name(Tags, "Tags");exports.default = Tags;
 
 /***/ }),
-/* 57 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2374,11 +2443,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _DoubleCheck = __webpack_require__(13);
+var _DoubleCheck = __webpack_require__(7);
 
 var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
 
-var _PlayList = __webpack_require__(17);
+var _PlayList = __webpack_require__(11);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -2514,25 +2583,7 @@ var Work = function (_migi$Component) {
 migi.name(Work, "Work");exports.default = Work;
 
 /***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(46);
-
-var _Author = __webpack_require__(38);
-
-var _Author2 = _interopRequireDefault(_Author);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var author = migi.preExist(migi.createCp(_Author2.default, [["authorID", $CONFIG.authorID], ["authorDetail", $CONFIG.authorDetail], ["homeDetail", $CONFIG.homeDetail], ["tags", $CONFIG.tags], ["playList", $CONFIG.playList], ["commentData", $CONFIG.commentData]]));
-
-/***/ }),
-/* 59 */,
-/* 60 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2610,5 +2661,56 @@ var Dynamics = function (_migi$Component) {
 
 migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
+/***/ }),
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (data) {
+  migi.Element.resetUid();
+  var authorID = data.authorID;
+  var authorDetail = data.authorDetail;
+  var homeDetail = data.homeDetail;
+  var tags = data.tags;
+  var playList = data.playList;
+  var commentData = data.commentData;
+
+  var author = migi.preRender(migi.createCp(_Author2.default, [["authorID", authorID], ["authorDetail", authorDetail], ["homeDetail", homeDetail], ["tags", tags], ["playList", playList], ["commentData", commentData]]));
+  var topNav = migi.preRender(migi.createCp(_TopNav2.default, []));
+  var botNav = migi.preRender(migi.createCp(_BotNav2.default, []));
+
+  return '<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n  <meta charset="UTF-8"/>\n  <title>' + authorDetail.AuthorName + '</title>\n  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>\n  <meta name="renderer" content="webkit"/>\n  <meta name="apple-mobile-web-app-capable" content="yes"/>\n  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>\n  <meta name="format-detection" content="telephone=no"/>\n  <meta name="format-detection" content="email=no"/>\n  <meta name="wap-font-scale" content="no"/>\n  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mauthor.css') + '"/>\n</head>\n<body>\n<div id="page">' + author + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  var $CONFIG = {\n    authorID: \'' + authorID + '\',\n    authorDetail: ' + JSON.stringify(authorDetail) + ',\n    homeDetail: ' + JSON.stringify(homeDetail) + ',\n    tags: ' + JSON.stringify(tags) + ',\n    playList: ' + JSON.stringify(playList) + ',\n    commentData: ' + JSON.stringify(commentData) + ',\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mauthor.js') + '"></script>\n</body>\n</html>';
+};
+
+var _TopNav = __webpack_require__(3);
+
+var _TopNav2 = _interopRequireDefault(_TopNav);
+
+var _BotNav = __webpack_require__(2);
+
+var _BotNav2 = _interopRequireDefault(_BotNav);
+
+var _Author = __webpack_require__(12);
+
+var _Author2 = _interopRequireDefault(_Author);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+;
+
 /***/ })
-/******/ ]);
+/******/ ])));

@@ -4,9 +4,9 @@
 
 'use strict';
 
-import TopNav from '../assets/m/component/topnav/TopNav.jsx';
-import BotNav from '../assets/m/component/botnav/BotNav.jsx';
-import Search from '../assets/m/search/Search.jsx';
+import TopNav from '../../assets/m/component/topnav/TopNav.jsx';
+import BotNav from '../../assets/m/component/botnav/BotNav.jsx';
+import Search from '../../assets/m/search/Search.jsx';
 
 export default function(data) {
   migi.Element.resetUid();
@@ -31,8 +31,8 @@ export default function(data) {
   <meta name="format-detection" content="email=no"/>
   <meta name="wap-font-scale" content="no"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/common.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/search.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/msearch.css')}"/>
 </head>
 <body>
 <div id="page">${ search }</div>
@@ -44,8 +44,8 @@ ${ botNav }
     datas: ${JSON.stringify(datas)},
   };
 </script>
-<script src="${data.helper.getAssetUrl('/common.js')}"></script>
-<script src="${data.helper.getAssetUrl('/search.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
+<script src="${data.helper.getAssetUrl('/msearch.js')}"></script>
 </body>
 </html>`;
 };

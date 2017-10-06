@@ -16,7 +16,7 @@ module.exports = app => {
           method: 'POST',
           data: {
             Parameter: query.Parameter,
-            Skip: 1,
+            Skip: 0,
             Take: 10,
             SortType: 1,
           },

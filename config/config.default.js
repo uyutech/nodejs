@@ -6,6 +6,11 @@ module.exports = appInfo => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = 'circling_1506760927505_8735';
 
+  config.session = {
+    key: 'sessionid',
+    maxAge: 30 * 24 * 3600 * 1000,
+  };
+
   // add your config here
   config.middleware = [];
 

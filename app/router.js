@@ -3,6 +3,9 @@
 module.exports = app => {
   app.get('/404.html', 'error.c404');
 
+  app.get('/d', 'd.index.index');
+  app.get('/d/find', 'd.find.index');
+
   app.get('/m', 'm.index.index');
   app.get('/m/find', 'm.find.index');
   app.get('/m/works/:worksID', 'm.works.index');

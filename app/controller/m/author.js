@@ -44,7 +44,7 @@ module.exports = app => {
             data: {
               AuthorID: authorID,
               Parameter: '',
-              Skip: 1,
+              Skip: 0,
               Take: 10,
               SortType: 1,
             },
@@ -55,7 +55,7 @@ module.exports = app => {
             method: 'POST',
             data: {
               AuthorID: authorID,
-              Skip: -1,
+              Skip: 0,
               Take: 10,
               SortType: 0,
               MyComment: 0,
@@ -84,7 +84,7 @@ module.exports = app => {
       catch(e) {
         ctx.logger.error(e.toString());
       }
-      yield ctx.render('author', {
+      yield ctx.render('mauthor', {
         authorID,
         authorDetail,
         homeDetail,

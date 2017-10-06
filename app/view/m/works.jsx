@@ -4,9 +4,9 @@
 
 'use strict';
 
-import TopNav from '../assets/m/component/topnav/TopNav.jsx';
-import BotNav from '../assets/m/component/botnav/BotNav.jsx';
-import Works from '../assets/m/works/Works.jsx';
+import TopNav from '../../assets/m/component/topnav/TopNav.jsx';
+import BotNav from '../../assets/m/component/botnav/BotNav.jsx';
+import Works from '../../assets/m/works/Works.jsx';
 
 export default function(data) {
   migi.Element.resetUid();
@@ -32,8 +32,8 @@ export default function(data) {
   <meta name="format-detection" content="email=no"/>
   <meta name="wap-font-scale" content="no"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/common.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/works.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/mworks.css')}"/>
 </head>
 <body>
 <div id="page">${works}</div>
@@ -46,8 +46,8 @@ ${botNav}
     commentData: ${JSON.stringify(commentData)},
   };
 </script>
-<script src="${data.helper.getAssetUrl('/common.js')}"></script>
-<script src="${data.helper.getAssetUrl('/works.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mworks.js')}"></script>
 </body>
 </html>`;
 };

@@ -32,7 +32,7 @@ module.exports = app => {
             method: 'POST',
             data: {
               Parameter: '',
-              Skip: 1,
+              Skip: 0,
               Take: 10,
               SortType: 1,
             },
@@ -64,7 +64,7 @@ module.exports = app => {
         Filterlevel: "A",
       }];
 
-      yield ctx.render('find', {
+      yield ctx.render('mfind', {
         hotWorkList,
         hotAuthorList,
         tags,

@@ -34,7 +34,7 @@ module.exports = app => {
           data: {
             AuthorID: query.authorID,
             Parameter: query.parameter,
-            Skip: 1,
+            Skip: 0,
             Take: 10,
             SortType: 1,
           },

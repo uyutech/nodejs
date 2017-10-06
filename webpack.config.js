@@ -4,11 +4,11 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: {
-    common: './app/assets/m/common/index.js',
-    find: './app/assets/m/find/index.jsx',
-    works: './app/assets/m/works/index.jsx',
-    author: './app/assets/m/author/index.jsx',
-    search: './app/assets/m/search/index.jsx',
+    mcommon: './app/assets/m/common/index.js',
+    mfind: './app/assets/m/find/index.jsx',
+    mworks: './app/assets/m/works/index.jsx',
+    mauthor: './app/assets/m/author/index.jsx',
+    msearch: './app/assets/m/search/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',
