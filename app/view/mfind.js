@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 70);
+/******/ 	return __webpack_require__(__webpack_require__.s = 73);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -241,7 +241,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(5);
+var _authorTemplate = __webpack_require__(6);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -816,7 +816,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
 
-/***/ 27:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -836,7 +836,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(57);
+var _Banner = __webpack_require__(59);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -1110,7 +1110,54 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 5:
+/***/ 59:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Banner = function (_migi$Component) {
+  _inherits(Banner, _migi$Component);
+
+  function Banner() {
+    var _ref;
+
+    _classCallCheck(this, Banner);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = Banner.__proto__ || Object.getPrototypeOf(Banner)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(Banner, [{
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "banner"], ["style", "background-image:url(http://zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_)"]], [migi.createVd("a", [["href", "/works/2015000000000001"]], [migi.createVd("img", [["src", "http://zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_"]])])]);
+    }
+  }]);
+
+  return Banner;
+}(migi.Component);
+
+migi.name(Banner, "Banner");exports.default = Banner;
+
+/***/ }),
+
+/***/ 6:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1222,54 +1269,7 @@ Object.keys(code2Data).forEach(function(k) {
 
 /***/ }),
 
-/***/ 57:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Banner = function (_migi$Component) {
-  _inherits(Banner, _migi$Component);
-
-  function Banner() {
-    var _ref;
-
-    _classCallCheck(this, Banner);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = Banner.__proto__ || Object.getPrototypeOf(Banner)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(Banner, [{
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "banner"], ["style", "background-image:url(http://zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_)"]], [migi.createVd("a", [["href", "/works/2015000000000001"]], [migi.createVd("img", [["src", "http://zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_"]])])]);
-    }
-  }]);
-
-  return Banner;
-}(migi.Component);
-
-migi.name(Banner, "Banner");exports.default = Banner;
-
-/***/ }),
-
-/***/ 70:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1301,7 +1301,7 @@ var _BotNav = __webpack_require__(3);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Find = __webpack_require__(27);
+var _Find = __webpack_require__(29);
 
 var _Find2 = _interopRequireDefault(_Find);
 

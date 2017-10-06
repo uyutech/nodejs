@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 130);
+/******/ 	return __webpack_require__(__webpack_require__.s = 135);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -729,11 +729,11 @@ var _Model = __webpack_require__(13);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _Stream = __webpack_require__(22);
+var _Stream = __webpack_require__(23);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _Fastclick = __webpack_require__(21);
+var _Fastclick = __webpack_require__(22);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
@@ -1269,7 +1269,7 @@ var _Cb = __webpack_require__(11);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _range = __webpack_require__(27);
+var _range = __webpack_require__(28);
 
 var _range2 = _interopRequireDefault(_range);
 
@@ -1285,7 +1285,7 @@ var _type = __webpack_require__(18);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _fixEvent = __webpack_require__(25);
+var _fixEvent = __webpack_require__(26);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
@@ -1301,7 +1301,7 @@ var _touch = __webpack_require__(58);
 
 var _touch2 = _interopRequireDefault(_touch);
 
-var _delegate = __webpack_require__(24);
+var _delegate = __webpack_require__(25);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
@@ -3382,7 +3382,8 @@ exports.default = {
 };
 
 /***/ }),
-/* 19 */
+/* 19 */,
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3416,11 +3417,11 @@ var _EventBus = __webpack_require__(12);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Stream = __webpack_require__(22);
+var _Stream = __webpack_require__(23);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _CacheModel = __webpack_require__(20);
+var _CacheModel = __webpack_require__(21);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -3611,7 +3612,7 @@ var CacheComponent = function (_Component) {
 exports.default = CacheComponent;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3627,7 +3628,7 @@ var _Model2 = __webpack_require__(13);
 
 var _Model3 = _interopRequireDefault(_Model2);
 
-var _CacheComponent = __webpack_require__(19);
+var _CacheComponent = __webpack_require__(20);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -3677,7 +3678,7 @@ CacheModel.prototype.__data = _CacheComponent2.default.prototype.__data;
 exports.default = CacheModel;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4525,7 +4526,7 @@ FastClick.attach = function (layer, options) {
 exports.default = FastClick;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4590,7 +4591,7 @@ var Stream = function () {
 exports.default = Stream;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4618,7 +4619,7 @@ var pool = {
 exports.default = pool;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4802,7 +4803,7 @@ function matchSel(i, names, classes, ids, json, virtualDom) {
 exports.default = delegate;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4822,7 +4823,7 @@ exports.default = function (e) {
 ;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4851,7 +4852,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4992,7 +4993,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5022,7 +5023,6 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 29 */,
 /* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5350,7 +5350,7 @@ defineProperties(Number, {
   MAX_SAFE_INTEGER: maxSafeInteger,
   MIN_SAFE_INTEGER: -maxSafeInteger
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29)))
 
 /***/ }),
 /* 32 */,
@@ -5721,11 +5721,11 @@ var _browser = __webpack_require__(15);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _range = __webpack_require__(27);
+var _range = __webpack_require__(28);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _cachePool = __webpack_require__(23);
+var _cachePool = __webpack_require__(24);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
@@ -5737,15 +5737,15 @@ var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(26);
+var _matchHash = __webpack_require__(27);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
-var _fixEvent = __webpack_require__(25);
+var _fixEvent = __webpack_require__(26);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _delegate = __webpack_require__(24);
+var _delegate = __webpack_require__(25);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
@@ -6518,7 +6518,7 @@ var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(26);
+var _matchHash = __webpack_require__(27);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
@@ -6979,7 +6979,7 @@ var _Model = __webpack_require__(13);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _CacheModel = __webpack_require__(20);
+var _CacheModel = __webpack_require__(21);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -6995,7 +6995,7 @@ var _NonVisualComponent = __webpack_require__(51);
 
 var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
 
-var _CacheComponent = __webpack_require__(19);
+var _CacheComponent = __webpack_require__(20);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -7007,7 +7007,7 @@ var _Cb = __webpack_require__(11);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _cachePool = __webpack_require__(23);
+var _cachePool = __webpack_require__(24);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
@@ -7027,7 +7027,7 @@ var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _Fastclick = __webpack_require__(21);
+var _Fastclick = __webpack_require__(22);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
@@ -7099,7 +7099,7 @@ if (typeof window != 'undefined') {
 }
 
 exports.default = migi;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29)))
 
 /***/ }),
 /* 58 */
@@ -7287,13 +7287,13 @@ function onTouchEnd(e) {
 "use strict";
 
 
-__webpack_require__(129);
+__webpack_require__(134);
 
-var _MLogin = __webpack_require__(92);
+var _MLogin = __webpack_require__(96);
 
 var _MLogin2 = _interopRequireDefault(_MLogin);
 
-var _Share = __webpack_require__(93);
+var _Share = __webpack_require__(97);
 
 var _Share2 = _interopRequireDefault(_Share);
 
@@ -7325,7 +7325,10 @@ migi.eventBus.on('SHARE', function (url) {
 /* 67 */,
 /* 68 */,
 /* 69 */,
-/* 70 */
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7431,7 +7434,7 @@ exports.default = function ($) {
 };
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17264,20 +17267,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(139)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(144)(module)))
 
 /***/ }),
-/* 72 */,
-/* 73 */,
-/* 74 */
+/* 75 */,
+/* 76 */,
+/* 77 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 75 */,
-/* 76 */,
-/* 77 */,
 /* 78 */,
 /* 79 */,
 /* 80 */,
@@ -17292,7 +17292,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /* 89 */,
 /* 90 */,
 /* 91 */,
-/* 92 */
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17373,7 +17377,7 @@ var NeedLogin = function (_migi$Component) {
 migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
 
 /***/ }),
-/* 93 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17452,10 +17456,6 @@ var Share = function (_migi$Component) {
 migi.name(Share, "Share");exports.default = Share;
 
 /***/ }),
-/* 94 */,
-/* 95 */,
-/* 96 */,
-/* 97 */,
 /* 98 */,
 /* 99 */,
 /* 100 */,
@@ -17487,7 +17487,12 @@ migi.name(Share, "Share");exports.default = Share;
 /* 126 */,
 /* 127 */,
 /* 128 */,
-/* 129 */
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */,
+/* 133 */,
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17544,7 +17549,7 @@ if (parent !== window) {
 }
 
 /***/ }),
-/* 130 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17554,17 +17559,17 @@ __webpack_require__(31);
 
 __webpack_require__(30);
 
-var _jquery = __webpack_require__(71);
+var _jquery = __webpack_require__(74);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _cookie = __webpack_require__(70);
+var _cookie = __webpack_require__(73);
 
 var _cookie2 = _interopRequireDefault(_cookie);
 
 __webpack_require__(61);
 
-__webpack_require__(74);
+__webpack_require__(77);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17584,15 +17589,15 @@ window.requestAnimationFrame = function () {
 window.$ = _jquery2.default;
 
 /***/ }),
-/* 131 */,
-/* 132 */,
-/* 133 */,
-/* 134 */,
-/* 135 */,
 /* 136 */,
 /* 137 */,
 /* 138 */,
-/* 139 */
+/* 139 */,
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */,
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

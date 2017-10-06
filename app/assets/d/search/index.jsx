@@ -6,4 +6,4 @@ import './index.less';
 
 import Search from './Search.jsx';
 
-let search = migi.preExist(<Search/>);
+let search = migi.preExist(<Search kw={ $CONFIG.kw } datas={ $CONFIG.datas }/>);

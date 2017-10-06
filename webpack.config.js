@@ -10,6 +10,7 @@ module.exports = {
     mauthor: './app/assets/m/author/index.jsx',
     msearch: './app/assets/m/search/index.jsx',
     dcommon: './app/assets/d/common/index.js',
+    dindex: './app/assets/d/index/index.jsx',
     dfind: './app/assets/d/find/index.jsx',
     dworks: './app/assets/d/works/index.jsx',
     dauthor: './app/assets/d/author/index.jsx',

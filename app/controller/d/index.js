@@ -7,7 +7,7 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
-
+      yield ctx.render('dindex');
     }
   }
   return Controller;

@@ -63,12 +63,560 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 105);
+/******/ 	return __webpack_require__(__webpack_require__.s = 110);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 100:
+/***/ 102:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _util = __webpack_require__(6);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _LyricsParser = __webpack_require__(105);
+
+var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var lyricsIndex = -1;
+var lyricsHeight = [];
+var $lyricsRoll = void 0;
+
+var Audio = function (_migi$Component) {
+  _inherits(Audio, _migi$Component);
+
+  function Audio() {
+    var _ref;
+
+    _classCallCheck(this, Audio);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Audio.__proto__ || Object.getPrototypeOf(Audio)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    if (self.props.data) {
+      self.setData(self.props.data);
+    }
+    return _this;
+  }
+
+  _createClass(Audio, [{
+    key: 'setData',
+    value: function setData(data) {
+      var self = this;
+      self.data = data;
+      self.isLike = data[0].ISLike;
+      self.isFavor = data[0].ISFavor;
+      self.fileUrl = data[0].FileUrl;
+      data.forEach(function (item) {
+        var l = {};
+        if (_LyricsParser2.default.isLyrics(item.lrc)) {
+          l.is = true;
+          l.txt = _LyricsParser2.default.getTxt(item.lrc);
+          l.data = _LyricsParser2.default.parse(item.lrc);
+        } else {
+          l.is = false;
+          l.txt = item.lrc;
+        }
+        item.formatLyrics = l;
+      });
+      self.rollLyrics = data[0].formatLyrics.data;
+      self.on(migi.Event.DOM, function () {
+        var count = 0;
+        $lyricsRoll = $(self.ref.lyricsRoll.element);
+        $lyricsRoll.find('pre').each(function () {
+          lyricsHeight.push(count);
+          count += 20;
+        });
+      });
+      return this;
+    }
+  }, {
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+      return this;
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+      return this;
+    }
+  }, {
+    key: 'timeupdate',
+    value: function timeupdate(e) {
+      var currentTime = e.target.currentTime;
+      // console.log(currentTime);
+      var item = this.data[this.workIndex];
+      var formatLyrics = item.formatLyrics;
+      var formatLyricsData = formatLyrics.data;
+      if (formatLyrics.is && formatLyricsData.length) {
+        var tempIndex = lyricsIndex;
+        for (var i = 0, len = formatLyricsData.length; i < len; i++) {
+          if (currentTime * 1000 >= formatLyricsData[i].timestamp) {
+            tempIndex = i;
+          } else {
+            break;
+          }
+        }
+        if (tempIndex !== lyricsIndex) {
+          // console.log(lyricsIndex, tempIndex);
+          lyricsIndex = tempIndex;
+          this.lineLyrics = formatLyricsData[lyricsIndex].txt;
+          $lyricsRoll.find('.cur').removeClass('cur');
+          $lyricsRoll.find('pre').eq(lyricsIndex).addClass('cur');
+          $lyricsRoll.css('-webkit-transform', 'translate3d(0,' + -lyricsHeight[lyricsIndex] + 'px,0)');
+          $lyricsRoll.css('transform', 'translate3d(0,' + -lyricsHeight[lyricsIndex] + 'px,0)');
+        }
+      }
+      this.emit('timeupdate', currentTime);
+    }
+  }, {
+    key: 'loadedmetadata',
+    value: function loadedmetadata(e) {
+      var duration = this.duration = e.target.duration;
+      this.hasLoaded = true;
+      this.emit('loadedmetadata', {
+        duration: duration
+      });
+    }
+  }, {
+    key: 'playing',
+    value: function playing(e) {
+      var duration = this.duration = e.target.duration;
+      this.emit('playing', {
+        duration: duration
+      });
+    }
+  }, {
+    key: 'play',
+    value: function play() {
+      this.ref.audio.element.play();
+      this.showLyrics = true;
+      return this;
+    }
+  }, {
+    key: 'pause',
+    value: function pause() {
+      this.ref.audio.element.pause();
+      return this;
+    }
+  }, {
+    key: 'currentTime',
+    value: function currentTime(t) {
+      this.ref.audio.element.currentTime = t;
+      return this;
+    }
+  }, {
+    key: 'clickLike',
+    value: function clickLike(e, vd) {
+      var self = this;
+      var $vd = $(vd.element);
+      if (!$vd.hasClass('loading')) {
+        $vd.addClass('loading');
+        _util2.default.postJSON('api/works/AddLikeBehavior', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
+          if (res.success) {
+            self.isLike = res.data === 211;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      }
+    }
+  }, {
+    key: 'clickFavor',
+    value: function clickFavor(e, vd) {
+      var self = this;
+      var $vd = $(vd.element);
+      if ($vd.hasClass('loading')) {
+        //
+      } else if ($vd.hasClass('has')) {
+        _util2.default.postJSON('api/works/RemoveCollection', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
+          if (res.success) {
+            self.isFavor = false;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      } else {
+        _util2.default.postJSON('api/works/AddCollection', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
+          if (res.success) {
+            self.isFavor = true;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      }
+    }
+  }, {
+    key: 'clickDownload',
+    value: function clickDownload(e) {
+      if (window.$CONFIG.isLogin !== 'True') {
+        e.preventDefault();
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+    }
+  }, {
+    key: 'altLyrics',
+    value: function altLyrics() {
+      this.showLyricsMode = !this.showLyricsMode;
+    }
+  }, {
+    key: 'clickShare',
+    value: function clickShare() {
+      migi.eventBus.emit('SHARE', location.href);
+    }
+  }, {
+    key: 'clear',
+    value: function clear() {
+      this.duration = 0;
+      this.fileUrl = '';
+      this.lineLyrics = '';
+      this.rollLyrics = [];
+      this.hasLoaded = false;
+      return this;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", 'audio' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("audio", [["ref", "audio"], ["onTimeupdate", new migi.Cb(this, this.timeupdate)], ["onLoadedmetadata", new migi.Cb(this, this.loadedmetadata)], ["onPlaying", new migi.Cb(this, this.playing)], ["preload", "meta"], ["src", new migi.Obj("fileUrl", this, function () {
+        return this.fileUrl;
+      })]], ["\n\
+        your browser does not support the audio tag\n\
+      "]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj("isLike", this, function () {
+        return 'like' + (this.isLike ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj("isFavor", this, function () {
+        return 'favor' + (this.isFavor ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("fileUrl", this, function () {
+        return this.fileUrl;
+      })], ["download", new migi.Obj("fileUrl", this, function () {
+        return this.fileUrl;
+      })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])]), migi.createVd("div", [["class", new migi.Obj("showLyrics", this, function () {
+        return 'lyrics-con' + (this.showLyrics ? '' : ' fn-hide');
+      })]], [migi.createVd("div", [["class", new migi.Obj("showLyricsMode", this, function () {
+        return 'lyrics-roll' + (!this.showLyricsMode ? '' : ' fn-hide');
+      })]], [migi.createVd("div", [["class", "c"], ["ref", "lyricsRoll"]], [new migi.Obj("rollLyrics", this, function () {
+        return (this.rollLyrics || []).map(function (item) {
+          return migi.createVd("pre", [], [item.txt || '&nbsp;']);
+        });
+      })])]), migi.createVd("pre", [["class", new migi.Obj("showLyricsMode", this, function () {
+        return 'lyrics-line' + (this.showLyricsMode ? '' : ' fn-hide');
+      })]], [new migi.Obj("lineLyrics", this, function () {
+        return this.lineLyrics;
+      })]), migi.createVd("span", [["class", new migi.Obj("showLyricsMode", this, function () {
+        return 'lyrics' + (this.showLyricsMode ? '' : ' alt');
+      })], ["onClick", new migi.Cb(this, this.altLyrics)]])])]);
+    }
+  }, {
+    key: 'fileUrl',
+    set: function set(v) {
+      this.__setBind("fileUrl", v);this.__data("fileUrl");
+    },
+    get: function get() {
+      return this.__getBind("fileUrl");
+    }
+  }, {
+    key: 'isLike',
+    set: function set(v) {
+      this.__setBind("isLike", v);this.__data("isLike");
+    },
+    get: function get() {
+      return this.__getBind("isLike");
+    }
+  }, {
+    key: 'isFavor',
+    set: function set(v) {
+      this.__setBind("isFavor", v);this.__data("isFavor");
+    },
+    get: function get() {
+      return this.__getBind("isFavor");
+    }
+  }, {
+    key: 'workIndex',
+    set: function set(v) {
+      this.__setBind("workIndex", v);this.__data("workIndex");
+    },
+    get: function get() {
+      if (this.__initBind("workIndex")) this.__setBind("workIndex", 0);return this.__getBind("workIndex");
+    }
+  }, {
+    key: 'lineLyrics',
+    set: function set(v) {
+      this.__setBind("lineLyrics", v);this.__data("lineLyrics");
+    },
+    get: function get() {
+      return this.__getBind("lineLyrics");
+    }
+  }, {
+    key: 'rollLyrics',
+    set: function set(v) {
+      this.__setBind("rollLyrics", v);this.__data("rollLyrics");
+    },
+    get: function get() {
+      if (this.__initBind("rollLyrics")) this.__setBind("rollLyrics", []);return this.__getBind("rollLyrics");
+    }
+  }, {
+    key: 'showLyricsMode',
+    set: function set(v) {
+      this.__setBind("showLyricsMode", v);this.__data("showLyricsMode");
+    },
+    get: function get() {
+      return this.__getBind("showLyricsMode");
+    }
+  }, {
+    key: 'duration',
+    set: function set(v) {
+      this.__setBind("duration", v);this.__data("duration");
+    },
+    get: function get() {
+      return this.__getBind("duration");
+    }
+  }, {
+    key: 'hasLoaded',
+    set: function set(v) {
+      this.__setBind("hasLoaded", v);this.__data("hasLoaded");
+    },
+    get: function get() {
+      return this.__getBind("hasLoaded");
+    }
+  }, {
+    key: 'showLyrics',
+    set: function set(v) {
+      this.__setBind("showLyrics", v);this.__data("showLyrics");
+    },
+    get: function get() {
+      return this.__getBind("showLyrics");
+    }
+  }]);
+
+  return Audio;
+}(migi.Component);
+
+migi.name(Audio, "Audio");exports.default = Audio;
+
+/***/ }),
+
+/***/ 103:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _authorTemplate = __webpack_require__(9);
+
+var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Author = function (_migi$Component) {
+  _inherits(Author, _migi$Component);
+
+  function Author() {
+    var _ref;
+
+    _classCallCheck(this, Author);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Author.__proto__ || Object.getPrototypeOf(Author)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.setAuthor(self.props.authorList);
+    return _this;
+  }
+
+  _createClass(Author, [{
+    key: "setAuthor",
+    value: function setAuthor(data) {
+      var list = [];
+      data.forEach(function (item) {
+        var temp = [];
+        var last = -1;
+        var lastTips = '';
+        item.forEach(function (item) {
+          if (item.WorksAuthorType !== last || item.Tips !== lastTips) {
+            var type = _authorTemplate2.default.code2Data[item.WorksAuthorType];
+            var label = item.Tips || type.display;
+            temp.push(migi.createVd("li", [["class", "label"]], [label]));
+          }
+          last = item.WorksAuthorType;
+          lastTips = item.Tips;
+          temp.push(migi.createVd("li", [["class", "item"], ["id", item.ID]], [migi.createVd("a", [["href", "/author/" + item.ID]], [item.AuthName])]));
+        });
+        list.push(temp);
+      });
+      this.list = list;
+    }
+  }, {
+    key: "clickPrev",
+    value: function clickPrev(e) {
+      e.preventDefault();
+    }
+  }, {
+    key: "clickNext",
+    value: function clickNext(e) {
+      e.preventDefault();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "author"]], [migi.createVd("div", [["class", "fn fn-clear fn-hide"]], [migi.createVd("a", [["class", "prev"], ["href", "#"], ["onClick", new migi.Cb(this, this.clickPrev)]], ["查看上页"]), migi.createVd("a", [["class", "next"], ["href", "#"], ["onClick", new migi.Cb(this, this.clickNext)]], ["查看下页"])]), migi.createVd("div", [["class", "c"], ["ref", "c"]], [new migi.Obj("list", this, function () {
+        return this.list.map(function (item) {
+          return migi.createVd("ul", [], [item]);
+        });
+      })])]);
+    }
+  }, {
+    key: "list",
+    set: function set(v) {
+      this.__setBind("list", v);this.__data("list");
+    },
+    get: function get() {
+      if (this.__initBind("list")) this.__setBind("list", []);return this.__getBind("list");
+    }
+  }]);
+
+  return Author;
+}(migi.Component);
+
+migi.name(Author, "Author");exports.default = Author;
+
+/***/ }),
+
+/***/ 104:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var hash = {
+  '2757': '<p>\u5F53\u9762\u7EB1\u63ED\u5F00\uFF0C\u5F53\u5149\u8292\u95EA\u73B0\uFF0C\u4ECE\u5F02\u4E16\u5230\u73B0\u4E16\uFF0C\u4ECE\u6211\u5230\u4F60\uFF0C\u8FD9\u662F\u4E00\u573A\u547D\u4E2D\u6CE8\u5B9A\u7684\u76F8\u9047\uFF0C\u6545\u4E8B\u7531\u6B64\u800C\u751F\u3002</p>\n        <p><br/>\u51FA\u54C1\uFF1A<a href="http://weibo.com/u/6276065571" target="_blank">\u7ED3\u68A6\u539F\u521B\u97F3\u4E50\u56E2\u961F</a></p>\n        <p>\u6F14\u5531\uFF1A<a href="http://weibo.com/740120222" target="_blank">\u6155\u5BD2</a>&nbsp;\n          <a href="http://weibo.com/arielmelody" target="_blank">\u53F8\u590F</a>&nbsp;\n          <a href="http://weibo.com/u/1750157883" target="_blank">\u6CB3\u56FE</a>&nbsp;\n          <a href="http://weibo.com/ichigolily" target="_blank">Midaho</a></p>\n        <p>\u4F5C\u66F2\uFF1A<a href="http://weibo.com/u/2423021884" target="_blank">\u6708\u5343\u5BB8</a>&nbsp;\n        \u7F16\u66F2\uFF1A<a href="http://weibo.com/litterzy" target="_blank">Litterzy</a>&nbsp;\n        \u4F5C\u8BCD\uFF1A<a href="http://weibo.com/tingyugelouyinyueshe" target="_blank">\u6C88\u884C\u4E4B</a></p>\n        <p>\u7B1B\u8427\uFF1A<a href="http://weibo.com/ellen0411" target="_blank">\u6C34\u73A5\u513F</a>&nbsp;\n        \u53E4\u7B5D\uFF1A<a href="http://weibo.com/u/2616755905" target="_blank">\u58A8\u97F5\u968F\u6B65\u6447</a>&nbsp;\n        \u7435\u7436\uFF1A<a href="http://weibo.com/zycq" target="_blank">\u4E4D\u96E8\u521D\u6674</a>&nbsp;\n        \u7535\u5409\u4ED6\uFF1A<a href="http://weibo.com/litterzy" target="_blank">Litterzy</a></p>\n        <p>\u4FEE\u97F3\uFF1A<a href="http://weibo.com/yaolaoso" target="_blank">\u5E7A\u5520</a>&nbsp;\n        \u6DF7\u97F3\uFF1A<a href="http://weibo.com/princesscuttlefish" target="_blank">CuTTleFish</a>&nbsp;\n        <a href="http://weibo.com/u/3222735190" target="_blank">\u5C11\u5E74E</a></p>\n        <p>PV\uFF1A<a href="http://weibo.com/moirajia" target="_blank">\u51B0\u9547\u751C\u8C46\u6D46</a></p>\n        <p>\u7ACB\u7ED8\uFF1A<a href="http://weibo.com/yukiart" target="_blank">\u6728\u7F8E\u4EBA</a>&nbsp;\n        \u573A\u666F\uFF1A<a href="http://weibo.com/u/5190275328" target="_blank">_LEOX</a>&nbsp;\n        CG\uFF1A<a href="http://weibo.com/muweiervv" target="_blank">VV\u4E36SAMA</a></p>\n        <p>\u6D77\u62A5\uFF1A<a href="http://weibo.com/seoyutsuki" target="_blank">\u9752\u51CC</a>&nbsp;\n        \u7F8E\u672F\u8BBE\u8BA1\uFF1A<a href="http://weibo.com/520snc" target="_blank">\u5FF5\u6148</a></p>\n        <pre>\n\n\u6155\u5BD2\uFF1A\u4E16\u95F4\u6D6E\u751F\u82E6\u5C81\u66AE \u65E5\u6708\u5316\u6211\u68A6\u6D6E\u751F\n\u95FB\u957F\u6B4C \u98D2\u6C93\u7A7F\u6797\u8FC7 \u5FFD\u73B0\u8703\u697C\u6CA7\u6D77\n\u53F8\u590F\uFF1A\u6211\u6B4C\u6C34\u5929\u63A5\u4E00\u8272 \u4E07\u8C61\u67AF\u8363\u5F39\u6307\u95F4\n\u5929\u5730\u4E3A\u5BB4 \u6CB3\u9152\u6D77\u7A96 \u6070\u662F\u6B64\u65F6\u5F00\n\n\u6CB3\u56FE\uFF1A\u676F\u9152\u8D50\u4EBA\u95F4 \u7B11\u4F17\u751F \u4E0D\u66FE\u8BC6\u84EC\u83B1\n\u4F59\u4E0B\u5165\u6211\u8896 \u62AB\u7D20\u6656 \u9080\u53CB\u5929\u9645\u6765\nmidaho\uFF1A\u9B13\u8FB9\u6CBE\u4E91\u8272 \u7545\u5FEB\u996E\u7F62 \u6708\u534E\u6EE1\u676F\u76CF\n\u6B64\u65E5\u5374\u70E6\u5FE7 \u9169\u914A\u4E00\u9189 \u5929\u5730\u4E5F\u5FEB\u54C9\n\n\u5408\uFF1A\u5FEB\u54C9\u610F \u5FEB\u54C9\u610F \u6D41\u5149\u7167\u5F7B\u4E7E\u5764\u6765\n\u6D69\u7136\u6C14 \u6D69\u7136\u6C14 \u4E58\u98CE\u7834\u6D6A\u5929\u5730\u5F00\n\u6B64\u65F6\u751F \u5F7C\u65F6\u706D \u5DDD\u6D88\u5C71\u957F\u6709\u65F6\u8870\n\u70B9\u5FC3\u706B \u71C3\u5C3D\u4EBA\u95F4\u8272 \u4E0D\u591C\u661F\u5929\u5916\n\nmidaho\uFF1A\u662F\u4F55\u4EBA\u8C13\u6211 \u5982\u8709\u8763 \u672A\u6562\u8D8A\u4E1C\u5CB1\n\u53F8\u590F\uFF1A\u7B11\u6211\u6CA7\u6D77\u4E2D \u4F3C\u4E00\u7C9F \u65E0\u529B\u6392\u4E91\u5F00\n\u6CB3\u56FE\uFF1A\u600E\u77E5\u4ED6\u4E0D\u8FC7 \u5C0F\u5352\u5C14\u5C14 \u6070\u5165\u6211\u68A6\u6765\n\u6155\u5BD2\uFF1A\u6F0F\u591C\u4E00\u7167\u9762 \u5BE5\u5BE5\u6170\u6211 \u5B64\u8EAB\u5728\u9AD8\u53F0\n\n\u6155\u5BD2\u6CB3\u56FE\uFF1A\u4E14\u884C\u4E50 \u4E14\u884C\u4E50 \u4E07\u5343\u98CE\u7269\u5165\u6211\u6000\n\u53F8\u590FMidaho:\u82B1\u582A\u6298 \u82B1\u582A\u6298 \u7C2A\u82B1\u5BF9\u955C\u77E5\u5DF1\u62DC\n\u5408\uFF1A\u5317\u95FB\u7B11 \u5357\u4F20\u54ED \u6211\u81EA\u900D\u9065\u8EAB\u81EA\u5728\n\u541B\u53EF\u77E5 \u98CE\u6708\u4E89\u76F8\u6765 \u4EBA\u95F4\u6211\u68A6\u88C1\n\n\u6CB3\u56FE\uFF1A\u5FEB\u54C9\u610F \u5FEB\u54C9\u610F \u6D41\u5149\u7167\u5F7B\u4E7E\u5764\u6765\n\u6155\u5BD2\uFF1A\u6D69\u7136\u6C14 \u6D69\u7136\u6C14 \u4E58\u98CE\u7834\u6D6A\u5929\u5730\u5F00\n\u5408\uFF1A\u6B64\u65F6\u751F \u5F7C\u65F6\u706D \u5DDD\u6D88\u5C71\u957F\u6709\u65F6\u8870\n\u70B9\u5FC3\u706B \u71C3\u5C3D\u4EBA\u95F4\u8272 \u4E0D\u591C\u661F\u5929\u5916\n\n\u4E14\u884C\u4E50 \u4E14\u884C\u4E50 \u4E07\u5343\u98CE\u7269\u5165\u6211\u6000\n\u82B1\u582A\u6298 \u82B1\u582A\u6298 \u7C2A\u82B1\u5BF9\u955C\u77E5\u5DF1\u62DC\n\u5317\u95FB\u7B11 \u5357\u4F20\u54ED \u6211\u81EA\u900D\u9065\u8EAB\u81EA\u5728\n\u541B\u53EF\u77E5 \u98CE\u6708\u4E89\u76F8\u6765 \u4EBA\u95F4\u6211\u68A6\u88C1\n\n\u53F8\u590F\uFF1A\u5374\u4E0D\u77E5 \u4EBA\u95F4\u68A6\u6211 \u6211\u68A6\u4EBA\u95F4\u88C1</pre>',
+  '2758': '<p>\u539F\u6765\u6700\u6C38\u6052\u7684\u70ED\u5FF1\uFF0C\u6700\u5E94\u8BE5\u7559\u5728\u521D\u89C1\u65F6\u5206\uFF1B<br/>\u539F\u6765\u770B\u4F3C\u6700\u67D4\u8F6F\u7684\u65F6\u5149\uFF0C\u6700\u64C5\u957F\u5C06\u6E29\u5B58\u9605\u540E\u5373\u711A\uFF1B<br/>\u539F\u6765\u6700\u75AF\u72C2\u60C5\u6D53\u7684\u68A6\uFF0C\u6700\u77ED\u6682\u5982\u6D6E\u6CAB\u76F8\u9022\u3002</p>\n        <p><br/>\u51FA\u54C1\uFF1A<a href="http://weibo.com/u/6276065571" target="_blank">\u7ED3\u68A6\u539F\u521B\u97F3\u4E50\u56E2\u961F</a></p>\n        <p>\u6F14\u5531\uFF1A<a href="http://weibo.com/arielmelody" target="_blank">\u53F8\u590F</a></p>\n        <p>\u4F5C\u66F2\uFF1A<a href="http://weibo.com/menghunxiaoxiang" target="_blank">\u6F47\u68A6\u4E34</a>&nbsp;\n        \u7F16\u66F2\uFF1A<a href="http://weibo.com/chenpengjie" target="_blank">\u9648\u9E4F\u6770</a>&nbsp;\n        \u4F5C\u8BCD\uFF1A<a href="http://weibo.com/mercuryco" target="_blank">Vagary </a></p>\n        <p>\u8427\uFF1A<a href="http://weibo.com/ellen0411" target="_blank">\u6C34\u73A5\u513F</a>&nbsp;\n        \u53E4\u7B5D\uFF1A<a href="http://weibo.com/u/2420864952" target="_blank">\u7389\u9762\u5C0F\u5AE3\u7136</a>&nbsp;\n        \u5409\u4ED6\uFF1A<a href="http://weibo.com/chenpengjie" target="_blank">\u9648\u9E4F\u6770</a></p>\n        <p>\u4FEE\u97F3\uFF1A<a href="http://weibo.com/yaolaoso" target="_blank">\u5E7A\u5520</a>&nbsp;\n        \u6DF7\u97F3\uFF1A<a href="http://weibo.com/princesscuttlefish" target="_blank">CuTTleFish</a></p>\n        <p>PV\uFF1A<a href="http://weibo.com/moirajia" target="_blank">\u51B0\u9547\u751C\u8C46\u6D46</a></p>\n        <p>\u66F2\u7ED8\uFF1A<a href="http://weibo.com/pudding131" target="_blank">\u9ED1\u8272\u5E03\u4E01_\u9171</a>&nbsp;\n        <a href="http://weibo.com/muweiervv" target="_blank">VV\u4E36SAMA</a></p>\n        <pre>\n\n\u4E0D\u6DE1\u4E0D\u6DF1 \u4E0D\u5F03\u4E0D\u73CD\n\u78A7\u6D77\u768E\u6708 \u770B\u8001\u826F\u8FB0\n\u4E0D\u5BD2\u4E0D\u6696 \u4E0D\u6B3A\u4E0D\u95EE\n\u6211\u4E3A\u8C01\u4FEF\u9996\u79F0\u81E3\n\n\u4E0D\u601D\u4E0D\u5FD8 \u4E0D\u805A\u4E0D\u5206\n\u5343\u5C81\u767D\u6C99 \u4E00\u626B\u7EA2\u5C18\n\u4E0D\u7559\u4E0D\u820D \u4E0D\u601C\u4E0D\u8BA4\n\u7231\u662F\u6700\u6E29\u5B58\u7684\u6068\n\n\u4F60\u8BF4\u68A6\u4F1A\u751F\u6839 \u60C5\u4F1A\u8FD8\u9B42\n\u4F20\u5947\u662F\u4F60\u6211\u8303\u672C\n\u8BA9\u8FD9\u706F\u524D\u7EA2\u8896 \u96EA\u4E0B\u9752\u887F \u5165\u5F97\u620F\u6587\n\n\u53EF\u7B11\u6851\u7530\u8015\u8FC7\u51E0\u8F6E \u6CA7\u6D77\u9189\u8FC7\u51E0\u6A3D\n\u81EA\u8D4F\u5B64\u82B3\u53C8\u51E0\u4E2A\u9EC4\u660F\n\u6709\u4F20\u5947\u5531\u904D\u4E09\u6625 \u4E3B\u89D2\u4E0D\u662F\u6211\u4EEC\n\u7D6E\u7D6E\u7740\u4F60\u548C\u53E6\u4E00\u4E2A\u4EBA\n\n\u96BE\u9053\u75DB\u695A\u624D\u6709\u8BD7\u97F5 \u7EDD\u671B\u624D\u914D\u60C5\u6DF1\n\u6240\u6709\u575A\u5F3A\u90FD\u4E00\u8BED\u6210\u8C36\n\u800C\u6545\u4E8B\u4ECE\u672A\u653E\u8FC7 \u7901\u77F3\u4E0A\u7684\u6CEA\u75D5\n\u8D8A\u662F\u5BBD\u5BB9\u7684\u4EBA \u8D8A\u662F \u65E0\u5904\u5BB9\u8EAB\n\n\u4F60\u8BF4\u9047\u4E0A\u4E86\u6211 \u624D\u61C2\u9752\u6625\n\u4E00\u751F\u53EA\u591F\u7231\u4E00\u4E2A\u4EBA\n\u5018\u82E5\u6628\u65E5\u91CD\u6E29 \u613F\u4F60\u65E0\u8A00 \u514D\u6211\u8BA4\u771F\n\n\u53EF\u7B11\u6851\u7530\u8015\u8FC7\u51E0\u8F6E \u6CA7\u6D77\u9189\u8FC7\u51E0\u6A3D\n\u81EA\u8D4F\u5B64\u82B3\u53C8\u51E0\u4E2A\u9EC4\u660F\n\u6709\u4F20\u5947\u5531\u904D\u4E09\u6625 \u4E3B\u89D2\u4E0D\u662F\u6211\u4EEC\n\u7D6E\u7D6E\u7740\u4F60\u548C\u53E6\u4E00\u4E2A\u4EBA\n\n\u96BE\u9053\u75DB\u695A\u624D\u6709\u8BD7\u97F5 \u7EDD\u671B\u624D\u914D\u60C5\u6DF1\n\u6211\u7684\u6C89\u9ED8\u5C31\u4E0D\u7B97\u4F24\u75D5\n\u800C\u6545\u4E8B\u4ECE\u672A\u63D0\u5230 \u6708\u5149\u4E0B\u7684\u6211\u4EEC\n\u8D8A\u60F3\u9000\u6B65\u62BD\u8EAB \u8D8A\u4F1A \u5F04\u5047\u6210\u771F\n\n\u5355\u7EAF\u8C62\u517B\u6B8B\u5FCD \u9A84\u50B2\u6210\u5168\u81EA\u5C0A\n\u65F6\u5149\u6700\u64C5\u957F\u9605\u540E\u5373\u711A\n\n\u8C01\u8BF4\u955C\u4E2D\u7684\u82B1\u4E0D\u771F \u6C34\u5E95\u7684\u6708\u4E0D\u6E29\n\u7F8E\u5230\u6DF1\u5904\u600E\u4F1A\u6CA1\u6709\u7075\u9B42\n\u53EF\u6545\u4E8B\u7EC8\u5C06\u820D\u5F03 \u6700\u6C38\u6052\u7684\u70ED\u5FF1\n\u53EA\u5269\u6D77\u98CE\u4E00\u77AC \u4E0D\u614E \u88AB\u8C01\u542C\u95FB\n\u6211\u66FE\u8DEF\u8FC7\u4E86 \u4F60\u7684\u9752\u6625\n</pre>'
+};
+
+var Intro = function (_migi$Component) {
+  _inherits(Intro, _migi$Component);
+
+  function Intro() {
+    var _ref;
+
+    _classCallCheck(this, Intro);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = Intro.__proto__ || Object.getPrototypeOf(Intro)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(Intro, [{
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'setId',
+    value: function setId(id) {
+      this.ref.inspiration.element.innerHTML = hash[id] || '';
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "intro"]], [migi.createVd("h3", [], ["简介"]), migi.createVd("b", [["class", "line"]]), migi.createVd("div", [["class", "tag"]], [migi.createVd("ul", [["class", "fn-clear"]], [new migi.Obj("tags", this, function () {
+        return (this.tags || []).map(function (item) {
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '#' + item.Tag_ID]], [item.Tag_Name])]);
+        });
+      })])]), migi.createVd("div", [["class", "inspiration"], ["ref", "inspiration"]])]);
+    }
+  }, {
+    key: 'tags',
+    set: function set(v) {
+      this.__setBind("tags", v);this.__data("tags");
+    },
+    get: function get() {
+      if (this.__initBind("tags")) this.__setBind("tags", []);return this.__getBind("tags");
+    }
+  }]);
+
+  return Intro;
+}(migi.Component);
+
+migi.name(Intro, "Intro");exports.default = Intro;
+
+/***/ }),
+
+/***/ 105:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -105,7 +653,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 101:
+/***/ 106:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117,11 +665,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Audio = __webpack_require__(97);
+var _Audio = __webpack_require__(102);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(103);
+var _Video = __webpack_require__(108);
 
 var _Video2 = _interopRequireDefault(_Video);
 
@@ -377,7 +925,7 @@ migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
 
-/***/ 102:
+/***/ 107:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -448,7 +996,7 @@ migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
 
-/***/ 103:
+/***/ 108:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -761,7 +1309,7 @@ migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
 
-/***/ 104:
+/***/ 109:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1118,15 +1666,15 @@ migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
 
-/***/ 105:
+/***/ 110:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(77);
+__webpack_require__(81);
 
-var _Works = __webpack_require__(64);
+var _Works = __webpack_require__(67);
 
 var _Works2 = _interopRequireDefault(_Works);
 
@@ -1136,7 +1684,7 @@ var works = migi.preExist(migi.createCp(_Works2.default, [["worksID", $CONFIG.wo
 
 /***/ }),
 
-/***/ 131:
+/***/ 136:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1742,7 +2290,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 64:
+/***/ 67:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1754,27 +2302,27 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(102);
+var _Title = __webpack_require__(107);
 
 var _Title2 = _interopRequireDefault(_Title);
 
-var _Author = __webpack_require__(98);
+var _Author = __webpack_require__(103);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Media = __webpack_require__(101);
+var _Media = __webpack_require__(106);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _itemTemplate = __webpack_require__(131);
+var _itemTemplate = __webpack_require__(136);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
-var _Intro = __webpack_require__(99);
+var _Intro = __webpack_require__(104);
 
 var _Intro2 = _interopRequireDefault(_Intro);
 
-var _WorkComment = __webpack_require__(104);
+var _WorkComment = __webpack_require__(109);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
@@ -2082,7 +2630,7 @@ migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
 
-/***/ 77:
+/***/ 81:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -2201,554 +2749,6 @@ exports.default = {
   code2Data: code2Data,
   label2Code: label2Code
 };
-
-/***/ }),
-
-/***/ 97:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _util = __webpack_require__(6);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _LyricsParser = __webpack_require__(100);
-
-var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var lyricsIndex = -1;
-var lyricsHeight = [];
-var $lyricsRoll = void 0;
-
-var Audio = function (_migi$Component) {
-  _inherits(Audio, _migi$Component);
-
-  function Audio() {
-    var _ref;
-
-    _classCallCheck(this, Audio);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Audio.__proto__ || Object.getPrototypeOf(Audio)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    if (self.props.data) {
-      self.setData(self.props.data);
-    }
-    return _this;
-  }
-
-  _createClass(Audio, [{
-    key: 'setData',
-    value: function setData(data) {
-      var self = this;
-      self.data = data;
-      self.isLike = data[0].ISLike;
-      self.isFavor = data[0].ISFavor;
-      self.fileUrl = data[0].FileUrl;
-      data.forEach(function (item) {
-        var l = {};
-        if (_LyricsParser2.default.isLyrics(item.lrc)) {
-          l.is = true;
-          l.txt = _LyricsParser2.default.getTxt(item.lrc);
-          l.data = _LyricsParser2.default.parse(item.lrc);
-        } else {
-          l.is = false;
-          l.txt = item.lrc;
-        }
-        item.formatLyrics = l;
-      });
-      self.rollLyrics = data[0].formatLyrics.data;
-      self.on(migi.Event.DOM, function () {
-        var count = 0;
-        $lyricsRoll = $(self.ref.lyricsRoll.element);
-        $lyricsRoll.find('pre').each(function () {
-          lyricsHeight.push(count);
-          count += 20;
-        });
-      });
-      return this;
-    }
-  }, {
-    key: 'show',
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-      return this;
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-      return this;
-    }
-  }, {
-    key: 'timeupdate',
-    value: function timeupdate(e) {
-      var currentTime = e.target.currentTime;
-      // console.log(currentTime);
-      var item = this.data[this.workIndex];
-      var formatLyrics = item.formatLyrics;
-      var formatLyricsData = formatLyrics.data;
-      if (formatLyrics.is && formatLyricsData.length) {
-        var tempIndex = lyricsIndex;
-        for (var i = 0, len = formatLyricsData.length; i < len; i++) {
-          if (currentTime * 1000 >= formatLyricsData[i].timestamp) {
-            tempIndex = i;
-          } else {
-            break;
-          }
-        }
-        if (tempIndex !== lyricsIndex) {
-          // console.log(lyricsIndex, tempIndex);
-          lyricsIndex = tempIndex;
-          this.lineLyrics = formatLyricsData[lyricsIndex].txt;
-          $lyricsRoll.find('.cur').removeClass('cur');
-          $lyricsRoll.find('pre').eq(lyricsIndex).addClass('cur');
-          $lyricsRoll.css('-webkit-transform', 'translate3d(0,' + -lyricsHeight[lyricsIndex] + 'px,0)');
-          $lyricsRoll.css('transform', 'translate3d(0,' + -lyricsHeight[lyricsIndex] + 'px,0)');
-        }
-      }
-      this.emit('timeupdate', currentTime);
-    }
-  }, {
-    key: 'loadedmetadata',
-    value: function loadedmetadata(e) {
-      var duration = this.duration = e.target.duration;
-      this.hasLoaded = true;
-      this.emit('loadedmetadata', {
-        duration: duration
-      });
-    }
-  }, {
-    key: 'playing',
-    value: function playing(e) {
-      var duration = this.duration = e.target.duration;
-      this.emit('playing', {
-        duration: duration
-      });
-    }
-  }, {
-    key: 'play',
-    value: function play() {
-      this.ref.audio.element.play();
-      this.showLyrics = true;
-      return this;
-    }
-  }, {
-    key: 'pause',
-    value: function pause() {
-      this.ref.audio.element.pause();
-      return this;
-    }
-  }, {
-    key: 'currentTime',
-    value: function currentTime(t) {
-      this.ref.audio.element.currentTime = t;
-      return this;
-    }
-  }, {
-    key: 'clickLike',
-    value: function clickLike(e, vd) {
-      var self = this;
-      var $vd = $(vd.element);
-      if (!$vd.hasClass('loading')) {
-        $vd.addClass('loading');
-        _util2.default.postJSON('api/works/AddLikeBehavior', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
-          if (res.success) {
-            self.isLike = res.data === 211;
-          } else if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          } else {
-            alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-          $vd.removeClass('loading');
-        }, function () {
-          alert(res.message || _util2.default.ERROR_MESSAGE);
-          $vd.removeClass('loading');
-        });
-      }
-    }
-  }, {
-    key: 'clickFavor',
-    value: function clickFavor(e, vd) {
-      var self = this;
-      var $vd = $(vd.element);
-      if ($vd.hasClass('loading')) {
-        //
-      } else if ($vd.hasClass('has')) {
-        _util2.default.postJSON('api/works/RemoveCollection', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
-          if (res.success) {
-            self.isFavor = false;
-          } else if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          } else {
-            alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-          $vd.removeClass('loading');
-        }, function () {
-          alert(res.message || _util2.default.ERROR_MESSAGE);
-          $vd.removeClass('loading');
-        });
-      } else {
-        _util2.default.postJSON('api/works/AddCollection', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
-          if (res.success) {
-            self.isFavor = true;
-          } else if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          } else {
-            alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-          $vd.removeClass('loading');
-        }, function () {
-          alert(res.message || _util2.default.ERROR_MESSAGE);
-          $vd.removeClass('loading');
-        });
-      }
-    }
-  }, {
-    key: 'clickDownload',
-    value: function clickDownload(e) {
-      if (window.$CONFIG.isLogin !== 'True') {
-        e.preventDefault();
-        migi.eventBus.emit('NEED_LOGIN');
-      }
-    }
-  }, {
-    key: 'altLyrics',
-    value: function altLyrics() {
-      this.showLyricsMode = !this.showLyricsMode;
-    }
-  }, {
-    key: 'clickShare',
-    value: function clickShare() {
-      migi.eventBus.emit('SHARE', location.href);
-    }
-  }, {
-    key: 'clear',
-    value: function clear() {
-      this.duration = 0;
-      this.fileUrl = '';
-      this.lineLyrics = '';
-      this.rollLyrics = [];
-      this.hasLoaded = false;
-      return this;
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", 'audio' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("audio", [["ref", "audio"], ["onTimeupdate", new migi.Cb(this, this.timeupdate)], ["onLoadedmetadata", new migi.Cb(this, this.loadedmetadata)], ["onPlaying", new migi.Cb(this, this.playing)], ["preload", "meta"], ["src", new migi.Obj("fileUrl", this, function () {
-        return this.fileUrl;
-      })]], ["\n\
-        your browser does not support the audio tag\n\
-      "]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj("isLike", this, function () {
-        return 'like' + (this.isLike ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj("isFavor", this, function () {
-        return 'favor' + (this.isFavor ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("fileUrl", this, function () {
-        return this.fileUrl;
-      })], ["download", new migi.Obj("fileUrl", this, function () {
-        return this.fileUrl;
-      })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])]), migi.createVd("div", [["class", new migi.Obj("showLyrics", this, function () {
-        return 'lyrics-con' + (this.showLyrics ? '' : ' fn-hide');
-      })]], [migi.createVd("div", [["class", new migi.Obj("showLyricsMode", this, function () {
-        return 'lyrics-roll' + (!this.showLyricsMode ? '' : ' fn-hide');
-      })]], [migi.createVd("div", [["class", "c"], ["ref", "lyricsRoll"]], [new migi.Obj("rollLyrics", this, function () {
-        return (this.rollLyrics || []).map(function (item) {
-          return migi.createVd("pre", [], [item.txt || '&nbsp;']);
-        });
-      })])]), migi.createVd("pre", [["class", new migi.Obj("showLyricsMode", this, function () {
-        return 'lyrics-line' + (this.showLyricsMode ? '' : ' fn-hide');
-      })]], [new migi.Obj("lineLyrics", this, function () {
-        return this.lineLyrics;
-      })]), migi.createVd("span", [["class", new migi.Obj("showLyricsMode", this, function () {
-        return 'lyrics' + (this.showLyricsMode ? '' : ' alt');
-      })], ["onClick", new migi.Cb(this, this.altLyrics)]])])]);
-    }
-  }, {
-    key: 'fileUrl',
-    set: function set(v) {
-      this.__setBind("fileUrl", v);this.__data("fileUrl");
-    },
-    get: function get() {
-      return this.__getBind("fileUrl");
-    }
-  }, {
-    key: 'isLike',
-    set: function set(v) {
-      this.__setBind("isLike", v);this.__data("isLike");
-    },
-    get: function get() {
-      return this.__getBind("isLike");
-    }
-  }, {
-    key: 'isFavor',
-    set: function set(v) {
-      this.__setBind("isFavor", v);this.__data("isFavor");
-    },
-    get: function get() {
-      return this.__getBind("isFavor");
-    }
-  }, {
-    key: 'workIndex',
-    set: function set(v) {
-      this.__setBind("workIndex", v);this.__data("workIndex");
-    },
-    get: function get() {
-      if (this.__initBind("workIndex")) this.__setBind("workIndex", 0);return this.__getBind("workIndex");
-    }
-  }, {
-    key: 'lineLyrics',
-    set: function set(v) {
-      this.__setBind("lineLyrics", v);this.__data("lineLyrics");
-    },
-    get: function get() {
-      return this.__getBind("lineLyrics");
-    }
-  }, {
-    key: 'rollLyrics',
-    set: function set(v) {
-      this.__setBind("rollLyrics", v);this.__data("rollLyrics");
-    },
-    get: function get() {
-      if (this.__initBind("rollLyrics")) this.__setBind("rollLyrics", []);return this.__getBind("rollLyrics");
-    }
-  }, {
-    key: 'showLyricsMode',
-    set: function set(v) {
-      this.__setBind("showLyricsMode", v);this.__data("showLyricsMode");
-    },
-    get: function get() {
-      return this.__getBind("showLyricsMode");
-    }
-  }, {
-    key: 'duration',
-    set: function set(v) {
-      this.__setBind("duration", v);this.__data("duration");
-    },
-    get: function get() {
-      return this.__getBind("duration");
-    }
-  }, {
-    key: 'hasLoaded',
-    set: function set(v) {
-      this.__setBind("hasLoaded", v);this.__data("hasLoaded");
-    },
-    get: function get() {
-      return this.__getBind("hasLoaded");
-    }
-  }, {
-    key: 'showLyrics',
-    set: function set(v) {
-      this.__setBind("showLyrics", v);this.__data("showLyrics");
-    },
-    get: function get() {
-      return this.__getBind("showLyrics");
-    }
-  }]);
-
-  return Audio;
-}(migi.Component);
-
-migi.name(Audio, "Audio");exports.default = Audio;
-
-/***/ }),
-
-/***/ 98:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _authorTemplate = __webpack_require__(9);
-
-var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Author = function (_migi$Component) {
-  _inherits(Author, _migi$Component);
-
-  function Author() {
-    var _ref;
-
-    _classCallCheck(this, Author);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Author.__proto__ || Object.getPrototypeOf(Author)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.setAuthor(self.props.authorList);
-    return _this;
-  }
-
-  _createClass(Author, [{
-    key: "setAuthor",
-    value: function setAuthor(data) {
-      var list = [];
-      data.forEach(function (item) {
-        var temp = [];
-        var last = -1;
-        var lastTips = '';
-        item.forEach(function (item) {
-          if (item.WorksAuthorType !== last || item.Tips !== lastTips) {
-            var type = _authorTemplate2.default.code2Data[item.WorksAuthorType];
-            var label = item.Tips || type.display;
-            temp.push(migi.createVd("li", [["class", "label"]], [label]));
-          }
-          last = item.WorksAuthorType;
-          lastTips = item.Tips;
-          temp.push(migi.createVd("li", [["class", "item"], ["id", item.ID]], [migi.createVd("a", [["href", "/author/" + item.ID]], [item.AuthName])]));
-        });
-        list.push(temp);
-      });
-      this.list = list;
-    }
-  }, {
-    key: "clickPrev",
-    value: function clickPrev(e) {
-      e.preventDefault();
-    }
-  }, {
-    key: "clickNext",
-    value: function clickNext(e) {
-      e.preventDefault();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "author"]], [migi.createVd("div", [["class", "fn fn-clear fn-hide"]], [migi.createVd("a", [["class", "prev"], ["href", "#"], ["onClick", new migi.Cb(this, this.clickPrev)]], ["查看上页"]), migi.createVd("a", [["class", "next"], ["href", "#"], ["onClick", new migi.Cb(this, this.clickNext)]], ["查看下页"])]), migi.createVd("div", [["class", "c"], ["ref", "c"]], [new migi.Obj("list", this, function () {
-        return this.list.map(function (item) {
-          return migi.createVd("ul", [], [item]);
-        });
-      })])]);
-    }
-  }, {
-    key: "list",
-    set: function set(v) {
-      this.__setBind("list", v);this.__data("list");
-    },
-    get: function get() {
-      if (this.__initBind("list")) this.__setBind("list", []);return this.__getBind("list");
-    }
-  }]);
-
-  return Author;
-}(migi.Component);
-
-migi.name(Author, "Author");exports.default = Author;
-
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var hash = {
-  '2757': '<p>\u5F53\u9762\u7EB1\u63ED\u5F00\uFF0C\u5F53\u5149\u8292\u95EA\u73B0\uFF0C\u4ECE\u5F02\u4E16\u5230\u73B0\u4E16\uFF0C\u4ECE\u6211\u5230\u4F60\uFF0C\u8FD9\u662F\u4E00\u573A\u547D\u4E2D\u6CE8\u5B9A\u7684\u76F8\u9047\uFF0C\u6545\u4E8B\u7531\u6B64\u800C\u751F\u3002</p>\n        <p><br/>\u51FA\u54C1\uFF1A<a href="http://weibo.com/u/6276065571" target="_blank">\u7ED3\u68A6\u539F\u521B\u97F3\u4E50\u56E2\u961F</a></p>\n        <p>\u6F14\u5531\uFF1A<a href="http://weibo.com/740120222" target="_blank">\u6155\u5BD2</a>&nbsp;\n          <a href="http://weibo.com/arielmelody" target="_blank">\u53F8\u590F</a>&nbsp;\n          <a href="http://weibo.com/u/1750157883" target="_blank">\u6CB3\u56FE</a>&nbsp;\n          <a href="http://weibo.com/ichigolily" target="_blank">Midaho</a></p>\n        <p>\u4F5C\u66F2\uFF1A<a href="http://weibo.com/u/2423021884" target="_blank">\u6708\u5343\u5BB8</a>&nbsp;\n        \u7F16\u66F2\uFF1A<a href="http://weibo.com/litterzy" target="_blank">Litterzy</a>&nbsp;\n        \u4F5C\u8BCD\uFF1A<a href="http://weibo.com/tingyugelouyinyueshe" target="_blank">\u6C88\u884C\u4E4B</a></p>\n        <p>\u7B1B\u8427\uFF1A<a href="http://weibo.com/ellen0411" target="_blank">\u6C34\u73A5\u513F</a>&nbsp;\n        \u53E4\u7B5D\uFF1A<a href="http://weibo.com/u/2616755905" target="_blank">\u58A8\u97F5\u968F\u6B65\u6447</a>&nbsp;\n        \u7435\u7436\uFF1A<a href="http://weibo.com/zycq" target="_blank">\u4E4D\u96E8\u521D\u6674</a>&nbsp;\n        \u7535\u5409\u4ED6\uFF1A<a href="http://weibo.com/litterzy" target="_blank">Litterzy</a></p>\n        <p>\u4FEE\u97F3\uFF1A<a href="http://weibo.com/yaolaoso" target="_blank">\u5E7A\u5520</a>&nbsp;\n        \u6DF7\u97F3\uFF1A<a href="http://weibo.com/princesscuttlefish" target="_blank">CuTTleFish</a>&nbsp;\n        <a href="http://weibo.com/u/3222735190" target="_blank">\u5C11\u5E74E</a></p>\n        <p>PV\uFF1A<a href="http://weibo.com/moirajia" target="_blank">\u51B0\u9547\u751C\u8C46\u6D46</a></p>\n        <p>\u7ACB\u7ED8\uFF1A<a href="http://weibo.com/yukiart" target="_blank">\u6728\u7F8E\u4EBA</a>&nbsp;\n        \u573A\u666F\uFF1A<a href="http://weibo.com/u/5190275328" target="_blank">_LEOX</a>&nbsp;\n        CG\uFF1A<a href="http://weibo.com/muweiervv" target="_blank">VV\u4E36SAMA</a></p>\n        <p>\u6D77\u62A5\uFF1A<a href="http://weibo.com/seoyutsuki" target="_blank">\u9752\u51CC</a>&nbsp;\n        \u7F8E\u672F\u8BBE\u8BA1\uFF1A<a href="http://weibo.com/520snc" target="_blank">\u5FF5\u6148</a></p>\n        <pre>\n\n\u6155\u5BD2\uFF1A\u4E16\u95F4\u6D6E\u751F\u82E6\u5C81\u66AE \u65E5\u6708\u5316\u6211\u68A6\u6D6E\u751F\n\u95FB\u957F\u6B4C \u98D2\u6C93\u7A7F\u6797\u8FC7 \u5FFD\u73B0\u8703\u697C\u6CA7\u6D77\n\u53F8\u590F\uFF1A\u6211\u6B4C\u6C34\u5929\u63A5\u4E00\u8272 \u4E07\u8C61\u67AF\u8363\u5F39\u6307\u95F4\n\u5929\u5730\u4E3A\u5BB4 \u6CB3\u9152\u6D77\u7A96 \u6070\u662F\u6B64\u65F6\u5F00\n\n\u6CB3\u56FE\uFF1A\u676F\u9152\u8D50\u4EBA\u95F4 \u7B11\u4F17\u751F \u4E0D\u66FE\u8BC6\u84EC\u83B1\n\u4F59\u4E0B\u5165\u6211\u8896 \u62AB\u7D20\u6656 \u9080\u53CB\u5929\u9645\u6765\nmidaho\uFF1A\u9B13\u8FB9\u6CBE\u4E91\u8272 \u7545\u5FEB\u996E\u7F62 \u6708\u534E\u6EE1\u676F\u76CF\n\u6B64\u65E5\u5374\u70E6\u5FE7 \u9169\u914A\u4E00\u9189 \u5929\u5730\u4E5F\u5FEB\u54C9\n\n\u5408\uFF1A\u5FEB\u54C9\u610F \u5FEB\u54C9\u610F \u6D41\u5149\u7167\u5F7B\u4E7E\u5764\u6765\n\u6D69\u7136\u6C14 \u6D69\u7136\u6C14 \u4E58\u98CE\u7834\u6D6A\u5929\u5730\u5F00\n\u6B64\u65F6\u751F \u5F7C\u65F6\u706D \u5DDD\u6D88\u5C71\u957F\u6709\u65F6\u8870\n\u70B9\u5FC3\u706B \u71C3\u5C3D\u4EBA\u95F4\u8272 \u4E0D\u591C\u661F\u5929\u5916\n\nmidaho\uFF1A\u662F\u4F55\u4EBA\u8C13\u6211 \u5982\u8709\u8763 \u672A\u6562\u8D8A\u4E1C\u5CB1\n\u53F8\u590F\uFF1A\u7B11\u6211\u6CA7\u6D77\u4E2D \u4F3C\u4E00\u7C9F \u65E0\u529B\u6392\u4E91\u5F00\n\u6CB3\u56FE\uFF1A\u600E\u77E5\u4ED6\u4E0D\u8FC7 \u5C0F\u5352\u5C14\u5C14 \u6070\u5165\u6211\u68A6\u6765\n\u6155\u5BD2\uFF1A\u6F0F\u591C\u4E00\u7167\u9762 \u5BE5\u5BE5\u6170\u6211 \u5B64\u8EAB\u5728\u9AD8\u53F0\n\n\u6155\u5BD2\u6CB3\u56FE\uFF1A\u4E14\u884C\u4E50 \u4E14\u884C\u4E50 \u4E07\u5343\u98CE\u7269\u5165\u6211\u6000\n\u53F8\u590FMidaho:\u82B1\u582A\u6298 \u82B1\u582A\u6298 \u7C2A\u82B1\u5BF9\u955C\u77E5\u5DF1\u62DC\n\u5408\uFF1A\u5317\u95FB\u7B11 \u5357\u4F20\u54ED \u6211\u81EA\u900D\u9065\u8EAB\u81EA\u5728\n\u541B\u53EF\u77E5 \u98CE\u6708\u4E89\u76F8\u6765 \u4EBA\u95F4\u6211\u68A6\u88C1\n\n\u6CB3\u56FE\uFF1A\u5FEB\u54C9\u610F \u5FEB\u54C9\u610F \u6D41\u5149\u7167\u5F7B\u4E7E\u5764\u6765\n\u6155\u5BD2\uFF1A\u6D69\u7136\u6C14 \u6D69\u7136\u6C14 \u4E58\u98CE\u7834\u6D6A\u5929\u5730\u5F00\n\u5408\uFF1A\u6B64\u65F6\u751F \u5F7C\u65F6\u706D \u5DDD\u6D88\u5C71\u957F\u6709\u65F6\u8870\n\u70B9\u5FC3\u706B \u71C3\u5C3D\u4EBA\u95F4\u8272 \u4E0D\u591C\u661F\u5929\u5916\n\n\u4E14\u884C\u4E50 \u4E14\u884C\u4E50 \u4E07\u5343\u98CE\u7269\u5165\u6211\u6000\n\u82B1\u582A\u6298 \u82B1\u582A\u6298 \u7C2A\u82B1\u5BF9\u955C\u77E5\u5DF1\u62DC\n\u5317\u95FB\u7B11 \u5357\u4F20\u54ED \u6211\u81EA\u900D\u9065\u8EAB\u81EA\u5728\n\u541B\u53EF\u77E5 \u98CE\u6708\u4E89\u76F8\u6765 \u4EBA\u95F4\u6211\u68A6\u88C1\n\n\u53F8\u590F\uFF1A\u5374\u4E0D\u77E5 \u4EBA\u95F4\u68A6\u6211 \u6211\u68A6\u4EBA\u95F4\u88C1</pre>',
-  '2758': '<p>\u539F\u6765\u6700\u6C38\u6052\u7684\u70ED\u5FF1\uFF0C\u6700\u5E94\u8BE5\u7559\u5728\u521D\u89C1\u65F6\u5206\uFF1B<br/>\u539F\u6765\u770B\u4F3C\u6700\u67D4\u8F6F\u7684\u65F6\u5149\uFF0C\u6700\u64C5\u957F\u5C06\u6E29\u5B58\u9605\u540E\u5373\u711A\uFF1B<br/>\u539F\u6765\u6700\u75AF\u72C2\u60C5\u6D53\u7684\u68A6\uFF0C\u6700\u77ED\u6682\u5982\u6D6E\u6CAB\u76F8\u9022\u3002</p>\n        <p><br/>\u51FA\u54C1\uFF1A<a href="http://weibo.com/u/6276065571" target="_blank">\u7ED3\u68A6\u539F\u521B\u97F3\u4E50\u56E2\u961F</a></p>\n        <p>\u6F14\u5531\uFF1A<a href="http://weibo.com/arielmelody" target="_blank">\u53F8\u590F</a></p>\n        <p>\u4F5C\u66F2\uFF1A<a href="http://weibo.com/menghunxiaoxiang" target="_blank">\u6F47\u68A6\u4E34</a>&nbsp;\n        \u7F16\u66F2\uFF1A<a href="http://weibo.com/chenpengjie" target="_blank">\u9648\u9E4F\u6770</a>&nbsp;\n        \u4F5C\u8BCD\uFF1A<a href="http://weibo.com/mercuryco" target="_blank">Vagary </a></p>\n        <p>\u8427\uFF1A<a href="http://weibo.com/ellen0411" target="_blank">\u6C34\u73A5\u513F</a>&nbsp;\n        \u53E4\u7B5D\uFF1A<a href="http://weibo.com/u/2420864952" target="_blank">\u7389\u9762\u5C0F\u5AE3\u7136</a>&nbsp;\n        \u5409\u4ED6\uFF1A<a href="http://weibo.com/chenpengjie" target="_blank">\u9648\u9E4F\u6770</a></p>\n        <p>\u4FEE\u97F3\uFF1A<a href="http://weibo.com/yaolaoso" target="_blank">\u5E7A\u5520</a>&nbsp;\n        \u6DF7\u97F3\uFF1A<a href="http://weibo.com/princesscuttlefish" target="_blank">CuTTleFish</a></p>\n        <p>PV\uFF1A<a href="http://weibo.com/moirajia" target="_blank">\u51B0\u9547\u751C\u8C46\u6D46</a></p>\n        <p>\u66F2\u7ED8\uFF1A<a href="http://weibo.com/pudding131" target="_blank">\u9ED1\u8272\u5E03\u4E01_\u9171</a>&nbsp;\n        <a href="http://weibo.com/muweiervv" target="_blank">VV\u4E36SAMA</a></p>\n        <pre>\n\n\u4E0D\u6DE1\u4E0D\u6DF1 \u4E0D\u5F03\u4E0D\u73CD\n\u78A7\u6D77\u768E\u6708 \u770B\u8001\u826F\u8FB0\n\u4E0D\u5BD2\u4E0D\u6696 \u4E0D\u6B3A\u4E0D\u95EE\n\u6211\u4E3A\u8C01\u4FEF\u9996\u79F0\u81E3\n\n\u4E0D\u601D\u4E0D\u5FD8 \u4E0D\u805A\u4E0D\u5206\n\u5343\u5C81\u767D\u6C99 \u4E00\u626B\u7EA2\u5C18\n\u4E0D\u7559\u4E0D\u820D \u4E0D\u601C\u4E0D\u8BA4\n\u7231\u662F\u6700\u6E29\u5B58\u7684\u6068\n\n\u4F60\u8BF4\u68A6\u4F1A\u751F\u6839 \u60C5\u4F1A\u8FD8\u9B42\n\u4F20\u5947\u662F\u4F60\u6211\u8303\u672C\n\u8BA9\u8FD9\u706F\u524D\u7EA2\u8896 \u96EA\u4E0B\u9752\u887F \u5165\u5F97\u620F\u6587\n\n\u53EF\u7B11\u6851\u7530\u8015\u8FC7\u51E0\u8F6E \u6CA7\u6D77\u9189\u8FC7\u51E0\u6A3D\n\u81EA\u8D4F\u5B64\u82B3\u53C8\u51E0\u4E2A\u9EC4\u660F\n\u6709\u4F20\u5947\u5531\u904D\u4E09\u6625 \u4E3B\u89D2\u4E0D\u662F\u6211\u4EEC\n\u7D6E\u7D6E\u7740\u4F60\u548C\u53E6\u4E00\u4E2A\u4EBA\n\n\u96BE\u9053\u75DB\u695A\u624D\u6709\u8BD7\u97F5 \u7EDD\u671B\u624D\u914D\u60C5\u6DF1\n\u6240\u6709\u575A\u5F3A\u90FD\u4E00\u8BED\u6210\u8C36\n\u800C\u6545\u4E8B\u4ECE\u672A\u653E\u8FC7 \u7901\u77F3\u4E0A\u7684\u6CEA\u75D5\n\u8D8A\u662F\u5BBD\u5BB9\u7684\u4EBA \u8D8A\u662F \u65E0\u5904\u5BB9\u8EAB\n\n\u4F60\u8BF4\u9047\u4E0A\u4E86\u6211 \u624D\u61C2\u9752\u6625\n\u4E00\u751F\u53EA\u591F\u7231\u4E00\u4E2A\u4EBA\n\u5018\u82E5\u6628\u65E5\u91CD\u6E29 \u613F\u4F60\u65E0\u8A00 \u514D\u6211\u8BA4\u771F\n\n\u53EF\u7B11\u6851\u7530\u8015\u8FC7\u51E0\u8F6E \u6CA7\u6D77\u9189\u8FC7\u51E0\u6A3D\n\u81EA\u8D4F\u5B64\u82B3\u53C8\u51E0\u4E2A\u9EC4\u660F\n\u6709\u4F20\u5947\u5531\u904D\u4E09\u6625 \u4E3B\u89D2\u4E0D\u662F\u6211\u4EEC\n\u7D6E\u7D6E\u7740\u4F60\u548C\u53E6\u4E00\u4E2A\u4EBA\n\n\u96BE\u9053\u75DB\u695A\u624D\u6709\u8BD7\u97F5 \u7EDD\u671B\u624D\u914D\u60C5\u6DF1\n\u6211\u7684\u6C89\u9ED8\u5C31\u4E0D\u7B97\u4F24\u75D5\n\u800C\u6545\u4E8B\u4ECE\u672A\u63D0\u5230 \u6708\u5149\u4E0B\u7684\u6211\u4EEC\n\u8D8A\u60F3\u9000\u6B65\u62BD\u8EAB \u8D8A\u4F1A \u5F04\u5047\u6210\u771F\n\n\u5355\u7EAF\u8C62\u517B\u6B8B\u5FCD \u9A84\u50B2\u6210\u5168\u81EA\u5C0A\n\u65F6\u5149\u6700\u64C5\u957F\u9605\u540E\u5373\u711A\n\n\u8C01\u8BF4\u955C\u4E2D\u7684\u82B1\u4E0D\u771F \u6C34\u5E95\u7684\u6708\u4E0D\u6E29\n\u7F8E\u5230\u6DF1\u5904\u600E\u4F1A\u6CA1\u6709\u7075\u9B42\n\u53EF\u6545\u4E8B\u7EC8\u5C06\u820D\u5F03 \u6700\u6C38\u6052\u7684\u70ED\u5FF1\n\u53EA\u5269\u6D77\u98CE\u4E00\u77AC \u4E0D\u614E \u88AB\u8C01\u542C\u95FB\n\u6211\u66FE\u8DEF\u8FC7\u4E86 \u4F60\u7684\u9752\u6625\n</pre>'
-};
-
-var Intro = function (_migi$Component) {
-  _inherits(Intro, _migi$Component);
-
-  function Intro() {
-    var _ref;
-
-    _classCallCheck(this, Intro);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = Intro.__proto__ || Object.getPrototypeOf(Intro)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(Intro, [{
-    key: 'show',
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-    }
-  }, {
-    key: 'setId',
-    value: function setId(id) {
-      this.ref.inspiration.element.innerHTML = hash[id] || '';
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "intro"]], [migi.createVd("h3", [], ["简介"]), migi.createVd("b", [["class", "line"]]), migi.createVd("div", [["class", "tag"]], [migi.createVd("ul", [["class", "fn-clear"]], [new migi.Obj("tags", this, function () {
-        return (this.tags || []).map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '#' + item.Tag_ID]], [item.Tag_Name])]);
-        });
-      })])]), migi.createVd("div", [["class", "inspiration"], ["ref", "inspiration"]])]);
-    }
-  }, {
-    key: 'tags',
-    set: function set(v) {
-      this.__setBind("tags", v);this.__data("tags");
-    },
-    get: function get() {
-      if (this.__initBind("tags")) this.__setBind("tags", []);return this.__getBind("tags");
-    }
-  }]);
-
-  return Intro;
-}(migi.Component);
-
-migi.name(Intro, "Intro");exports.default = Intro;
 
 /***/ })
 

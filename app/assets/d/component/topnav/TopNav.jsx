@@ -22,7 +22,7 @@ class TopNav extends migi.Component {
     }
   }
   click(e) {
-    if(window.$CONFIG.isLogin !== 'True') {
+    if(!window.$CONFIG.isLogin) {
       e.preventDefault();
       migi.eventBus.emit('NEED_LOGIN');
     }
@@ -34,8 +34,8 @@ class TopNav extends migi.Component {
         <input type="text" ref="input" maxlength="16" placeholder="弱弱的初级搜索功能QAQ"/>
       </form>
       <a href="#/my" class="user" onClick={ this.click }>
-        <span>{ window.$CONFIG.userName || '登陆/注册' }</span>
-        <img src={ window.$CONFIG.userPic || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
+        <span>{ '登陆/注册' }</span>
+        <img src={ '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
       </a>
     </div>;
   }
