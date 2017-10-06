@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 35);
+/******/ 	return __webpack_require__(__webpack_require__.s = 46);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -169,7 +169,7 @@ let net = {
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -492,46 +492,6 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 35:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (data) {
-  migi.Element.resetUid();
-  var kw = data.kw;
-  var datas = data.datas;
-
-  var search = migi.preRender(migi.createCp(_Search2.default, [["kw", kw], ["datas", datas]]));
-  var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["kw", kw]]));
-  var botNav = migi.preRender(migi.createCp(_BotNav2.default, []));
-
-  return '<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n  <meta charset="UTF-8"/>\n  <title>' + kw + '</title>\n  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>\n  <meta name="renderer" content="webkit"/>\n  <meta name="apple-mobile-web-app-capable" content="yes"/>\n  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>\n  <meta name="format-detection" content="telephone=no"/>\n  <meta name="format-detection" content="email=no"/>\n  <meta name="wap-font-scale" content="no"/>\n  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/msearch.css') + '"/>\n</head>\n<body>\n<div id="page">' + search + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  var $CONFIG = {\n    kw: ' + JSON.stringify(kw) + ',\n    datas: ' + JSON.stringify(datas) + ',\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/msearch.js') + '"></script>\n</body>\n</html>';
-};
-
-var _TopNav = __webpack_require__(3);
-
-var _TopNav2 = _interopRequireDefault(_TopNav);
-
-var _BotNav = __webpack_require__(2);
-
-var _BotNav2 = _interopRequireDefault(_BotNav);
-
-var _Search = __webpack_require__(14);
-
-var _Search2 = _interopRequireDefault(_Search);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-;
-
-/***/ }),
-
 /***/ 4:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -641,6 +601,46 @@ Object.keys(code2Data).forEach(function(k) {
   label2Code,
 });
 
+
+/***/ }),
+
+/***/ 46:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (data) {
+  migi.Element.resetUid();
+  var kw = data.kw;
+  var datas = data.datas;
+
+  var search = migi.preRender(migi.createCp(_Search2.default, [["kw", kw], ["datas", datas]]));
+  var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["kw", kw]]));
+  var botNav = migi.preRender(migi.createCp(_BotNav2.default, []));
+
+  return '<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n  <meta charset="UTF-8"/>\n  <title>' + kw + '</title>\n  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>\n  <meta name="renderer" content="webkit"/>\n  <meta name="apple-mobile-web-app-capable" content="yes"/>\n  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>\n  <meta name="format-detection" content="telephone=no"/>\n  <meta name="format-detection" content="email=no"/>\n  <meta name="wap-font-scale" content="no"/>\n  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/msearch.css') + '"/>\n</head>\n<body>\n<div id="page">' + search + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  var $CONFIG = {\n    kw: ' + JSON.stringify(kw) + ',\n    datas: ' + JSON.stringify(datas) + ',\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/msearch.js') + '"></script>\n</body>\n</html>';
+};
+
+var _TopNav = __webpack_require__(3);
+
+var _TopNav2 = _interopRequireDefault(_TopNav);
+
+var _BotNav = __webpack_require__(2);
+
+var _BotNav2 = _interopRequireDefault(_BotNav);
+
+var _Search = __webpack_require__(15);
+
+var _Search2 = _interopRequireDefault(_Search);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+;
 
 /***/ })
 

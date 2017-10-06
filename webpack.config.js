@@ -9,6 +9,8 @@ module.exports = {
     mworks: './app/assets/m/works/index.jsx',
     mauthor: './app/assets/m/author/index.jsx',
     msearch: './app/assets/m/search/index.jsx',
+    dcommon: './app/assets/d/common/index.js',
+    dfind: './app/assets/d/find/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

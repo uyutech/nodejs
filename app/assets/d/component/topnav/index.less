@@ -1,0 +1,73 @@
+/**
+ * Created by army8735 on 2017/9/20.
+ */
+
+@import '../../common/var.less';
+
+.cp-topnav{
+  position:relative;
+  box-sizing:border-box;
+  height:0.72rem;
+  line-height:0.72rem;
+  background:@bgLinearGradientTopLeft;
+  //background-size:0.89rem auto;
+  z-index:999;
+  box-shadow:0 0 0.1rem rgba(0,0,0,0.2);
+  .logo{
+    display:block;
+    padding-left:3.8rem;
+    width:4rem;
+    height:100%;
+    background:url(logo-beta-white-slogan.png) no-repeat 0.4rem center;
+    background-size:3.13rem auto;
+    color:#ebf2f6;
+    font-size:0.14rem;
+    font-weight:400;
+  }
+  .search{
+    position:absolute;
+    top:0.2rem;
+    right:2rem;
+    padding:0 0.1rem 0 0.2rem;
+    box-sizing:border-box;
+    width:3.2rem;
+    height:0.32rem;
+    border:1px solid #ebf2f6;
+    border-radius:0.32rem;
+    line-height:1;
+    background:url(search.png) no-repeat 0.08rem center;
+    background-size:0.19rem auto;
+    input{
+      display:block;
+      margin:0;
+      padding:0 0.1rem;
+      border:none;
+      width:2.8rem;
+      height:0.3rem;
+      border-radius:0.3rem;
+      background:transparent;
+      color:#ebf2f6;
+      font-size:0.12rem;
+      &::-webkit-input-placeholder{
+        color:#ebf2f6;
+      }
+    }
+  }
+  .user{
+    position:absolute;
+    top:0;
+    right:0.5rem;
+    display:block;
+    font-size:0.14rem;
+    color:#fff;
+    img{
+      display:inline-block;
+      margin-left:0.1rem;
+      width:0.36rem;
+      height:0.36rem;
+      background:#F1F6F9;
+      border-radius:100%;
+      vertical-align:middle;
+    }
+  }
+}

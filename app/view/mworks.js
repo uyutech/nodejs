@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 36);
+/******/ 	return __webpack_require__(__webpack_require__.s = 47);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -706,7 +706,8 @@ migi.name(Comment, "Comment");exports.default = Comment;
 /* 12 */,
 /* 13 */,
 /* 14 */,
-/* 15 */
+/* 15 */,
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -722,15 +723,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Media = __webpack_require__(30);
+var _Media = __webpack_require__(40);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _Intro = __webpack_require__(28);
+var _Intro = __webpack_require__(38);
 
 var _Intro2 = _interopRequireDefault(_Intro);
 
-var _WorkComment = __webpack_require__(32);
+var _WorkComment = __webpack_require__(42);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
@@ -975,7 +976,9 @@ var Works = function (_migi$Component) {
 migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
-/* 16 */
+/* 17 */,
+/* 18 */,
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1007,16 +1010,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 17 */,
-/* 18 */,
-/* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
 /* 23 */,
 /* 24 */,
 /* 25 */,
-/* 26 */
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1036,7 +1046,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _LyricsParser = __webpack_require__(29);
+var _LyricsParser = __webpack_require__(39);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -1384,7 +1394,7 @@ var Audio = function (_migi$Component) {
 migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
-/* 27 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1483,7 +1493,7 @@ var Author = function (_migi$Component) {
 migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
-/* 28 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1561,7 +1571,7 @@ var Intro = function (_migi$Component) {
 migi.name(Intro, "Intro");exports.default = Intro;
 
 /***/ }),
-/* 29 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1597,7 +1607,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 30 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1617,19 +1627,19 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Author = __webpack_require__(27);
+var _Author = __webpack_require__(37);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Audio = __webpack_require__(26);
+var _Audio = __webpack_require__(36);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(31);
+var _Video = __webpack_require__(41);
 
 var _Video2 = _interopRequireDefault(_Video);
 
-var _itemTemplate = __webpack_require__(16);
+var _itemTemplate = __webpack_require__(19);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
@@ -1978,7 +1988,7 @@ var Media = function (_migi$Component) {
 migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
-/* 31 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2296,7 +2306,7 @@ var Video = function (_migi$Component) {
 migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
-/* 32 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2568,10 +2578,11 @@ var WorkComment = function (_migi$Component) {
 migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2602,7 +2613,7 @@ var _BotNav = __webpack_require__(2);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Works = __webpack_require__(15);
+var _Works = __webpack_require__(16);
 
 var _Works2 = _interopRequireDefault(_Works);
 

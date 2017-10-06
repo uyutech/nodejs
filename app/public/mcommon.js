@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 74);
+/******/ 	return __webpack_require__(__webpack_require__.s = 104);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -102,8 +102,7 @@ var util = {
 exports.default = util;
 
 /***/ }),
-/* 1 */,
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -260,7 +259,7 @@ Event.DATA = 'DATA';
 exports.default = Event;
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -270,7 +269,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Element = __webpack_require__(5);
+var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
@@ -424,8 +423,8 @@ var util = {
 exports.default = util;
 
 /***/ }),
-/* 4 */,
-/* 5 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -447,11 +446,11 @@ var _createClass = function () {
   };
 }();
 
-var _Event2 = __webpack_require__(2);
+var _Event2 = __webpack_require__(1);
 
 var _Event3 = _interopRequireDefault(_Event2);
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -702,7 +701,7 @@ var Element = function (_Event) {
 exports.default = Element;
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -740,39 +739,39 @@ var _get = function get(object, property, receiver) {
   }
 };
 
-var _Event = __webpack_require__(2);
+var _Event = __webpack_require__(1);
 
 var _Event2 = _interopRequireDefault(_Event);
 
-var _Element2 = __webpack_require__(5);
+var _Element2 = __webpack_require__(4);
 
 var _Element3 = _interopRequireDefault(_Element2);
 
-var _VirtualDom = __webpack_require__(9);
+var _VirtualDom = __webpack_require__(7);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _EventBus = __webpack_require__(21);
+var _EventBus = __webpack_require__(10);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(22);
+var _Model = __webpack_require__(11);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _Stream = __webpack_require__(31);
+var _Stream = __webpack_require__(20);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _Fastclick = __webpack_require__(30);
+var _Fastclick = __webpack_require__(19);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
-var _array = __webpack_require__(82);
+var _array = __webpack_require__(41);
 
 var _array2 = _interopRequireDefault(_array);
 
@@ -1219,7 +1218,7 @@ var Component = function (_Element) {
 exports.default = Component;
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1241,18 +1240,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var core = __webpack_require__(79);
-
-module.exports = core;
-
-/***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1290,71 +1278,71 @@ var _get = function get(object, property, receiver) {
   }
 };
 
-var _Event = __webpack_require__(2);
+var _Event = __webpack_require__(1);
 
 var _Event2 = _interopRequireDefault(_Event);
 
-var _Element2 = __webpack_require__(5);
+var _Element2 = __webpack_require__(4);
 
 var _Element3 = _interopRequireDefault(_Element2);
 
-var _Component = __webpack_require__(6);
+var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Obj = __webpack_require__(23);
+var _Obj = __webpack_require__(12);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(20);
+var _Cb = __webpack_require__(9);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _range = __webpack_require__(36);
+var _range = __webpack_require__(25);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _match = __webpack_require__(86);
+var _match = __webpack_require__(45);
 
 var _match2 = _interopRequireDefault(_match);
 
-var _domDiff = __webpack_require__(84);
+var _domDiff = __webpack_require__(43);
 
 var _domDiff2 = _interopRequireDefault(_domDiff);
 
-var _type = __webpack_require__(27);
+var _type = __webpack_require__(16);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _fixEvent = __webpack_require__(34);
+var _fixEvent = __webpack_require__(23);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _attr = __webpack_require__(83);
+var _attr = __webpack_require__(42);
 
 var _attr2 = _interopRequireDefault(_attr);
 
-var _hash = __webpack_require__(7);
+var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _touch = __webpack_require__(88);
+var _touch = __webpack_require__(47);
 
 var _touch2 = _interopRequireDefault(_touch);
 
-var _delegate = __webpack_require__(33);
+var _delegate = __webpack_require__(22);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
-var _matchUtil = __webpack_require__(25);
+var _matchUtil = __webpack_require__(14);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
-var _eventCaseName = __webpack_require__(85);
+var _eventCaseName = __webpack_require__(44);
 
 var _eventCaseName2 = _interopRequireDefault(_eventCaseName);
 
@@ -2544,64 +2532,8 @@ function allChildren(child) {
 exports.default = VirtualDom;
 
 /***/ }),
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// triggers an extra global event "ajaxBeforeSend" that's like "ajaxSend" but cancelable
-function ajaxBeforeSend(xhr, settings) {
-  var context = settings.context;
-  if (settings.beforeSend && settings.beforeSend.call(context, xhr, settings) === false) return false;
-}
-function ajaxSuccess(data, xhr, settings, deferred) {
-  var context = settings.context,
-      status = 'success';
-  settings.success && settings.success.call(context, data, status, xhr);
-  if (deferred) deferred.resolveWith(context, [data, status, xhr]);
-  ajaxComplete(status, xhr, settings);
-}
-// type: "timeout", "error", "abort", "parsererror"
-function ajaxError(error, type, xhr, settings, deferred) {
-  var context = settings.context;
-  settings.error && settings.error.call(context, xhr, type, error);
-  if (deferred) deferred.rejectWith(context, [xhr, type, error]);
-  ajaxComplete(type, xhr, settings);
-}
-// status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
-function ajaxComplete(status, xhr, settings) {
-  var context = settings.context;
-  settings.complete && settings.complete.call(context, xhr, status);
-}
-
-module.exports = {
-  ajaxBeforeSend: ajaxBeforeSend,
-  ajaxSuccess: ajaxSuccess,
-  ajaxError: ajaxError
-};
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var event = __webpack_require__(80);
-
-module.exports = event;
-
-/***/ }),
-/* 20 */
+/* 8 */,
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2627,7 +2559,7 @@ var Cb = function Cb(context, cb) {
 exports.default = Cb;
 
 /***/ }),
-/* 21 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2649,11 +2581,11 @@ var _createClass = function () {
   };
 }();
 
-var _Event2 = __webpack_require__(2);
+var _Event2 = __webpack_require__(1);
 
 var _Event3 = _interopRequireDefault(_Event2);
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -2835,7 +2767,7 @@ var EventBus = function (_Event) {
 exports.default = EventBus;
 
 /***/ }),
-/* 22 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2857,11 +2789,11 @@ var _createClass = function () {
   };
 }();
 
-var _Event2 = __webpack_require__(2);
+var _Event2 = __webpack_require__(1);
 
 var _Event3 = _interopRequireDefault(_Event2);
 
-var _Component = __webpack_require__(6);
+var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
@@ -2956,7 +2888,7 @@ var Model = function (_Event) {
 exports.default = Model;
 
 /***/ }),
-/* 23 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2976,11 +2908,11 @@ var _createClass = function () {
   };
 }();
 
-var _Element = __webpack_require__(5);
+var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -3049,7 +2981,7 @@ var Obj = function () {
 exports.default = Obj;
 
 /***/ }),
-/* 24 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3101,7 +3033,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 25 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3111,7 +3043,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(26);
+var _sort = __webpack_require__(15);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3401,7 +3333,7 @@ function nth(idx, n) {
 }
 
 /***/ }),
-/* 26 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3467,7 +3399,7 @@ function swap(arr, a, b) {
 ;
 
 /***/ }),
-/* 27 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3482,7 +3414,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 28 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3504,23 +3436,23 @@ var _createClass = function () {
   };
 }();
 
-var _Event = __webpack_require__(2);
+var _Event = __webpack_require__(1);
 
 var _Event2 = _interopRequireDefault(_Event);
 
-var _Component2 = __webpack_require__(6);
+var _Component2 = __webpack_require__(5);
 
 var _Component3 = _interopRequireDefault(_Component2);
 
-var _EventBus = __webpack_require__(21);
+var _EventBus = __webpack_require__(10);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Stream = __webpack_require__(31);
+var _Stream = __webpack_require__(20);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _CacheModel = __webpack_require__(29);
+var _CacheModel = __webpack_require__(18);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -3711,7 +3643,7 @@ var CacheComponent = function (_Component) {
 exports.default = CacheComponent;
 
 /***/ }),
-/* 29 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3723,11 +3655,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Model2 = __webpack_require__(22);
+var _Model2 = __webpack_require__(11);
 
 var _Model3 = _interopRequireDefault(_Model2);
 
-var _CacheComponent = __webpack_require__(28);
+var _CacheComponent = __webpack_require__(17);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -3777,7 +3709,7 @@ CacheModel.prototype.__data = _CacheComponent2.default.prototype.__data;
 exports.default = CacheModel;
 
 /***/ }),
-/* 30 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4625,7 +4557,7 @@ FastClick.attach = function (layer, options) {
 exports.default = FastClick;
 
 /***/ }),
-/* 31 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4690,7 +4622,7 @@ var Stream = function () {
 exports.default = Stream;
 
 /***/ }),
-/* 32 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4718,7 +4650,7 @@ var pool = {
 exports.default = pool;
 
 /***/ }),
-/* 33 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4728,11 +4660,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _hash = __webpack_require__(7);
+var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchUtil = __webpack_require__(25);
+var _matchUtil = __webpack_require__(14);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
@@ -4902,7 +4834,7 @@ function matchSel(i, names, classes, ids, json, virtualDom) {
 exports.default = delegate;
 
 /***/ }),
-/* 34 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4922,7 +4854,7 @@ exports.default = function (e) {
 ;
 
 /***/ }),
-/* 35 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4951,7 +4883,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 36 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4961,27 +4893,27 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Element = __webpack_require__(5);
+var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _VirtualDom = __webpack_require__(9);
+var _VirtualDom = __webpack_require__(7);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _Obj = __webpack_require__(23);
+var _Obj = __webpack_require__(12);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _util = __webpack_require__(3);
+var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(24);
+var _browser = __webpack_require__(13);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _type = __webpack_require__(27);
+var _type = __webpack_require__(16);
 
 var _type2 = _interopRequireDefault(_type);
 
@@ -5092,7 +5024,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 37 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5122,73 +5054,16 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 38 */,
-/* 39 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _TopNav = __webpack_require__(62);
-
-var _TopNav2 = _interopRequireDefault(_TopNav);
-
-var _BotNav = __webpack_require__(59);
-
-var _BotNav2 = _interopRequireDefault(_BotNav);
-
-var _MLogin = __webpack_require__(61);
-
-var _MLogin2 = _interopRequireDefault(_MLogin);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-document.addEventListener('DOMContentLoaded', function () {
-  var topNav = migi.preExist(migi.createCp(_TopNav2.default, []));
-  topNav.on('search', function (kw) {
-    _util2.default.goto('/search/' + kw);
-  });
-  migi.preExist(migi.createCp(_BotNav2.default, []));
-
-  var mlogin = void 0;
-
-  migi.eventBus.on('NEED_LOGIN', function () {
-    if (!mlogin) {
-      mlogin = migi.render(migi.createCp(_MLogin2.default, []), document.body);
-    }
-    mlogin.show();
-  });
-});
+module.exports = __webpack_require__(46)['default'];
 
 /***/ }),
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var ajax = __webpack_require__(76);
-
-module.exports = ajax;
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = __webpack_require__(87)['default'];
-
-/***/ }),
-/* 45 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5506,21 +5381,2030 @@ defineProperties(Number, {
   MAX_SAFE_INTEGER: maxSafeInteger,
   MIN_SAFE_INTEGER: -maxSafeInteger
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
 
 /***/ }),
-/* 46 */,
-/* 47 */
-/***/ (function(module, exports) {
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
 
-// removed by extract-text-webpack-plugin
+"use strict";
+
+
+var core = __webpack_require__(109);
+
+module.exports = core;
+
+/***/ }),
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// triggers an extra global event "ajaxBeforeSend" that's like "ajaxSend" but cancelable
+function ajaxBeforeSend(xhr, settings) {
+  var context = settings.context;
+  if (settings.beforeSend && settings.beforeSend.call(context, xhr, settings) === false) return false;
+}
+function ajaxSuccess(data, xhr, settings, deferred) {
+  var context = settings.context,
+      status = 'success';
+  settings.success && settings.success.call(context, data, status, xhr);
+  if (deferred) deferred.resolveWith(context, [data, status, xhr]);
+  ajaxComplete(status, xhr, settings);
+}
+// type: "timeout", "error", "abort", "parsererror"
+function ajaxError(error, type, xhr, settings, deferred) {
+  var context = settings.context;
+  settings.error && settings.error.call(context, xhr, type, error);
+  if (deferred) deferred.rejectWith(context, [xhr, type, error]);
+  ajaxComplete(type, xhr, settings);
+}
+// status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
+function ajaxComplete(status, xhr, settings) {
+  var context = settings.context;
+  settings.complete && settings.complete.call(context, xhr, status);
+}
+
+module.exports = {
+  ajaxBeforeSend: ajaxBeforeSend,
+  ajaxSuccess: ajaxSuccess,
+  ajaxError: ajaxError
+};
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var event = __webpack_require__(110);
+
+module.exports = event;
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+var _Component2 = __webpack_require__(5);
+
+var _Component3 = _interopRequireDefault(_Component2);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var NonVisualComponent = function (_Component) {
+  _inherits(NonVisualComponent, _Component);
+
+  function NonVisualComponent() {
+    var _ref;
+
+    _classCallCheck(this, NonVisualComponent);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = NonVisualComponent.__proto__ || Object.getPrototypeOf(NonVisualComponent)).call.apply(_ref, [this].concat(data)));
+  }
+
+  //非可视为空
+  //@overwrite
+
+
+  _createClass(NonVisualComponent, [{
+    key: 'toString',
+    value: function toString() {
+      return '';
+    }
+
+    //没有dom
+    //@overwrite
+
+  }, {
+    key: '__onDom',
+    value: function __onDom() {
+      this.__dom = true;
+      _Component3.default.fakeDom(this.children);
+    }
+  }]);
+
+  return NonVisualComponent;
+}(_Component3.default);
+
+exports.default = NonVisualComponent;
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var arrayProto = Array.prototype;
+var arrayMethods = Object.create(arrayProto);
+
+['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
+  var original = arrayProto[method];
+  Object.defineProperty(arrayMethods, method, {
+    value: function value() {
+      var i = arguments.length;
+      var args = new Array(i);
+      while (i--) {
+        args[i] = arguments[i];
+      }
+      var result = original.apply(this, args);
+      if (Array.isArray(this.__cb__)) {
+        this.__cb__.forEach(function (cb) {
+          cb();
+        });
+      }
+      return result;
+    }
+  });
+});
+
+exports.default = arrayMethods;
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _util = __webpack_require__(2);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var NUM = 0;
+var STR = 1;
+var BOOL = 2;
+
+var RENDER_EXIST = 1;
+var RENDER_DOM = 2;
+
+var SPECIALS = {
+  button: {
+    disabled: RENDER_EXIST
+  },
+  input: {
+    autofocus: RENDER_EXIST,
+    checked: RENDER_EXIST,
+    defaultChecked: RENDER_DOM,
+    defaultchecked: RENDER_DOM,
+    defaultValue: RENDER_DOM,
+    defaultvalue: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    multiple: RENDER_EXIST,
+    readOnly: RENDER_EXIST,
+    readonly: RENDER_EXIST,
+    required: RENDER_EXIST
+  },
+  link: {
+    disabled: RENDER_EXIST
+  },
+  option: {
+    defaultSelected: RENDER_DOM,
+    defaultselected: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    selected: RENDER_EXIST,
+    text: RENDER_DOM
+  },
+  select: {
+    autofocus: RENDER_EXIST,
+    disabled: RENDER_EXIST,
+    multiple: RENDER_EXIST,
+    selectedIndex: RENDER_DOM,
+    selectedindex: RENDER_DOM
+  },
+  textarea: {
+    autofocus: RENDER_EXIST,
+    defaultValue: RENDER_DOM,
+    defaultvalue: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    readOnly: RENDER_EXIST,
+    readonly: RENDER_EXIST
+  }
+};
+
+var SETS = {
+  button: {
+    disabled: BOOL
+  },
+  input: {
+    autofocus: BOOL,
+    checked: BOOL,
+    defaultChecked: BOOL,
+    defaultchecked: BOOL,
+    defaultValue: STR,
+    defaultvalue: STR,
+    disabled: BOOL,
+    readOnly: BOOL,
+    readonly: BOOL,
+    required: BOOL,
+    value: STR
+  },
+  link: {
+    checked: BOOL
+  },
+  option: {
+    defaultSelected: BOOL,
+    defaultselected: BOOL,
+    disabled: BOOL,
+    selected: BOOL,
+    text: STR
+  },
+  select: {
+    autofocus: BOOL,
+    disabled: BOOL,
+    required: BOOL,
+    selectedIndex: NUM,
+    selectedindex: NUM,
+    value: STR
+  },
+  textarea: {
+    autofocus: BOOL,
+    defaultValue: STR,
+    defaultvalue: STR,
+    disabled: BOOL,
+    readOnly: BOOL,
+    readonly: BOOL,
+    required: BOOL,
+    value: STR
+  }
+};
+
+var lowerCase = {
+  defaultchecked: 'defaultChecked',
+  defaultselected: 'defaultSelected',
+  defaultvalue: 'defautlValue',
+  readonly: 'readOnly',
+  selectindex: 'selectIndex'
+};
+
+exports.default = {
+  RENDER_EXIST: RENDER_EXIST,
+  RENDER_DOM: RENDER_DOM,
+  special: function special(name, prop) {
+    if (SPECIALS.hasOwnProperty(name)) {
+      var o = SPECIALS[name];
+      if (o.hasOwnProperty(prop)) {
+        return o[prop];
+      }
+    }
+  },
+  update: function update(name, element, k, v, jaw) {
+    //特殊对待的prop，用js赋值
+    if (SETS.hasOwnProperty(name)) {
+      var o = SETS[name];
+      if (o.hasOwnProperty(k)) {
+        o = o[k];
+        k = lowerCase[k] || k;
+        switch (o) {
+          case NUM:
+            v = parseInt(v);
+            element[k] = v || 0;
+            break;
+          case STR:
+            v = _util2.default.stringify(v);
+            element[k] = v;
+            break;
+          case BOOL:
+            v = !!v;
+            element[k] = v;
+            break;
+        }
+        return;
+      }
+    }
+    //普通的setAttribute
+    switch (k) {
+      case 'className':
+        k = 'class';
+        break;
+      case 'htmlFor':
+        k = 'for';
+        break;
+    }
+    //jaw导入style时改写migi-前缀
+    if (jaw) {
+      switch (k) {
+        case 'id':
+        case 'class':
+          k = 'migi-' + k;
+          break;
+      }
+    }
+    if (v === null || v === void 0) {
+      element.removeAttribute(k);
+    } else if (k == 'id') {
+      element[k] = v;
+    } else if (k == 'class') {
+      element.className = v;
+    } else {
+      element.setAttribute(k, v);
+    }
+  }
+};
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Event = __webpack_require__(1);
+
+var _Event2 = _interopRequireDefault(_Event);
+
+var _Element = __webpack_require__(4);
+
+var _Element2 = _interopRequireDefault(_Element);
+
+var _Component = __webpack_require__(5);
+
+var _Component2 = _interopRequireDefault(_Component);
+
+var _Cb = __webpack_require__(9);
+
+var _Cb2 = _interopRequireDefault(_Cb);
+
+var _util = __webpack_require__(2);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _browser = __webpack_require__(13);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _range = __webpack_require__(25);
+
+var _range2 = _interopRequireDefault(_range);
+
+var _cachePool = __webpack_require__(21);
+
+var _cachePool2 = _interopRequireDefault(_cachePool);
+
+var _type = __webpack_require__(16);
+
+var _type2 = _interopRequireDefault(_type);
+
+var _hash = __webpack_require__(6);
+
+var _hash2 = _interopRequireDefault(_hash);
+
+var _matchHash = __webpack_require__(24);
+
+var _matchHash2 = _interopRequireDefault(_matchHash);
+
+var _fixEvent = __webpack_require__(23);
+
+var _fixEvent2 = _interopRequireDefault(_fixEvent);
+
+var _delegate = __webpack_require__(22);
+
+var _delegate2 = _interopRequireDefault(_delegate);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var DOM_TO_TEXT = 0;
+var DOM_TO_DOM = 1;
+var TEXT_TO_DOM = 2;
+var TEXT_TO_TEXT = 3;
+
+function replaceWith(elem, cns, index, vd, isText) {
+  //insertAdjacentHTML在插入text时浏览器行为表现不一致，ff会合并相邻text，chrome则不会
+  //因此DOM使用insertAdjacentHTML，text则用textNode
+  var target;
+  if (isText) {
+    var s = _util2.default.stringify(vd);
+    target = document.createTextNode(s || '');
+    if (index >= cns.length) {
+      elem.appendChild(target);
+    } else {
+      elem.replaceChild(target, cns[index]);
+    }
+    if (vd instanceof migi.NonVisualComponent) {
+      vd.emit(_Event2.default.DOM);
+    }
+  } else {
+    target = vd.toString();
+    if (index >= cns.length) {
+      elem.insertAdjacentHTML('beforeend', target);
+    } else {
+      //textNode没有insertAdjacentHTML方法，必须使用replaceChild
+      if (cns[index].nodeType == 1) {
+        cns[index].insertAdjacentHTML('afterend', target);
+        elem.removeChild(cns[index]);
+      } else {
+        var node = _browser2.default.getParent(vd.name);
+        node.innerHTML = target;
+        elem.replaceChild(node.firstChild, cns[index]);
+      }
+    }
+    //别忘了触发DOM事件
+    vd.emit(_Event2.default.DOM);
+  }
+}
+function insertAt(elem, cns, index, vd, isText) {
+  var target;
+  if (isText) {
+    var s = _util2.default.stringify(vd);
+    target = document.createTextNode(s || '');
+    if (index >= cns.length) {
+      elem.appendChild(target);
+    } else {
+      elem.insertBefore(target, cns[index]);
+    }
+    if (vd instanceof migi.NonVisualComponent) {
+      vd.emit(_Event2.default.DOM);
+    }
+  } else {
+    target = vd.toString();
+    if (index >= cns.length) {
+      elem.insertAdjacentHTML('beforeend', target);
+    } else {
+      if (cns[index].nodeType == 1) {
+        cns[index].insertAdjacentHTML('beforebegin', target);
+      } else {
+        var node = _browser2.default.getParent(vd.name);
+        node.innerHTML = target;
+        elem.insertBefore(node.firstChild, cns[index]);
+      }
+    }
+    //别忘了触发DOM事件
+    vd.emit(_Event2.default.DOM);
+  }
+}
+
+function add(elem, vd, ranges, option, history, temp, last, parent) {
+  if (Array.isArray(vd)) {
+    history.push(0);
+    //防止空数组跳过的情况
+    for (var i = 0, len = Math.max(vd.length, 1); i < len; i++) {
+      var item = vd[i];
+      history[history.length - 1] = i;
+      add(elem, item, ranges, option, history, temp, last && i == len - 1, parent);
+    }
+    history.pop();
+  } else if (vd instanceof _Element2.default && !(vd instanceof migi.NonVisualComponent)) {
+    vd.__parent = parent;
+    vd.__top = parent.top;
+    vd.style = parent.style;
+    _hash2.default.set(vd);
+    if (temp.hasOwnProperty('prev')) {
+      if (option.prev == _type2.default.TEXT) {
+        option.start++;
+      }
+      insertAt(elem, elem.childNodes, option.start++, vd);
+      if (last) {
+        //根据add之前最后一次情况决定下次text判断的特殊逻辑
+        switch (temp.state) {
+          case TEXT_TO_TEXT:
+          case DOM_TO_TEXT:
+            option.t2d = true;
+            break;
+          default:
+            delete option.d2t;
+        }
+      }
+    } else {
+      temp.state = option.state;
+      switch (option.state) {
+        case DOM_TO_TEXT:
+          option.start++;
+          //d(t) -> td(t)
+          break;
+        case TEXT_TO_TEXT:
+          addRange(ranges, option);
+          option.start++;
+          //t(t) -> td(t)
+          option.t2d = true;
+          break;
+        case TEXT_TO_DOM:
+          //t(t) -> dd(t)
+          option.t2d = true;
+          break;
+        //case DOM_TO_DOM:
+        //d(t) -> dd(t)
+      }
+      insertAt(elem, elem.childNodes, option.start++, vd);
+    }
+    temp.d = true;
+    temp.prev = option.prev = _type2.default.DOM;
+    option.state = DOM_TO_DOM;
+  } else {
+    if (temp.hasOwnProperty('prev')) {
+      if (option.prev == _type2.default.DOM) {
+        _range2.default.record(history, option);
+        insertAt(elem, elem.childNodes, option.start, vd, true);
+      } else {
+        addRange(ranges, option);
+      }
+      //不仅last，还要判断是否插入过d的情况
+      if (last && temp.d) {
+        addRange(ranges, option);
+        //根据add之前最后一次情况决定下次text判断的特殊逻辑
+        switch (temp.state) {
+          case DOM_TO_DOM:
+          case TEXT_TO_DOM:
+            delete option.t2d;
+            break;
+          default:
+            delete option.d2t;
+        }
+      }
+    } else {
+      check(option, elem, vd, ranges, history);
+      temp.state = option.state;
+      switch (option.state) {
+        case DOM_TO_TEXT:
+          //d(t) -> tt(t)
+          option.d2t = true;
+        case TEXT_TO_TEXT:
+          addRange(ranges, option);
+          //t(t) -> tt(t)
+          break;
+        case TEXT_TO_DOM:
+          _range2.default.record(history, option);
+          insertAt(elem, elem.childNodes, option.start, vd, true);
+          addRange(ranges, option);
+          //t(t) -> dt(t)
+          break;
+        case DOM_TO_DOM:
+          _range2.default.record(history, option);
+          insertAt(elem, elem.childNodes, option.start, vd, true);
+          //d(t) -> dt(t)
+          option.d2t = true;
+          break;
+      }
+    }
+    temp.prev = option.prev = _type2.default.TEXT;
+    option.state = TEXT_TO_TEXT;
+  }
+}
+function del(elem, vd, ranges, option, temp, last) {
+  if (Array.isArray(vd)) {
+    for (var i = 0, len = vd.length; i < len; i++) {
+      del(elem, vd[i], ranges, option, temp, last && i == len - 1);
+    }
+  } else if (vd instanceof _Element2.default && !(vd instanceof migi.NonVisualComponent)) {
+    if (temp.hasOwnProperty('prev')) {
+      //刚删过t的话再d索引+1，并且还删过d则连带中间多余的t一并删除
+      if (temp.prev == _type2.default.TEXT) {
+        if (temp.d) {
+          removeAt(elem, option.start + 1);
+        }
+        removeAt(elem, option.start + 1);
+      }
+      //刚删过d的话，检查之前最后的节点状态判别索引是否要+1
+      else {
+          if (option.prev == _type2.default.TEXT) {
+            removeAt(elem, option.start + 1);
+          } else {
+            removeAt(elem, option.start);
+          }
+        }
+      if (last) {
+        //根据del之前最后一次情况决定下次text判断的特殊逻辑
+        switch (option.state) {
+          case TEXT_TO_TEXT:
+          case DOM_TO_TEXT:
+            option.d2t = true;
+            break;
+          default:
+            delete option.t2d;
+            break;
+        }
+      }
+    } else {
+      switch (option.state) {
+        case DOM_TO_TEXT:
+          removeAt(elem, option.start + 1);
+          option.state = TEXT_TO_TEXT;
+          option.prev = _type2.default.TEXT;
+          //dd(t) -> t(t)
+          option.d2t = true;
+          break;
+        case TEXT_TO_TEXT:
+          removeAt(elem, option.start + 1);
+          option.prev = _type2.default.TEXT;
+          //td(t) -> t(t)
+          option.d2t = true;
+          break;
+        case TEXT_TO_DOM:
+          removeAt(elem, option.start);
+          option.state = DOM_TO_DOM;
+          option.prev = _type2.default.DOM;
+          //td(t) -> d(t)
+          break;
+        case DOM_TO_DOM:
+          removeAt(elem, option.start);
+          option.prev = _type2.default.DOM;
+          //dd(t) -> d(t)
+          break;
+      }
+    }
+    temp.d = true;
+    temp.prev = _type2.default.DOM;
+    //缓存对象池
+    _cachePool2.default.add(vd.__destroy());
+  } else {
+    if (temp.hasOwnProperty('prev')) {
+      if (temp.prev == _type2.default.DOM) {
+        addRange(ranges, option);
+      }
+      //不仅last，还要判断是否删除过d的情况
+      if (last && temp.d) {
+        removeAt(elem, option.start + 1);
+        //根据del之前最后一次情况决定下次text判断的特殊逻辑
+        switch (option.state) {
+          case DOM_TO_DOM:
+          case TEXT_TO_DOM:
+            option.t2d = true;
+            break;
+          default:
+            delete option.d2t;
+        }
+      }
+    } else {
+      switch (option.state) {
+        case DOM_TO_TEXT:
+          removeAt(elem, option.start + 1);
+          addRange(ranges, option);
+          option.state = TEXT_TO_TEXT;
+          option.prev = _type2.default.TEXT;
+          //dt(t) -> t(t)
+          break;
+        case TEXT_TO_TEXT:
+          addRange(ranges, option);
+          option.prev = _type2.default.TEXT;
+          //tt(t) -> t(t)
+          break;
+        case DOM_TO_DOM:
+          removeAt(elem, option.start);
+          option.state = DOM_TO_DOM;
+          option.prev = _type2.default.DOM;
+          //dt(t) -> d(t)
+          option.t2d = true;
+          break;
+        case TEXT_TO_DOM:
+          option.prev = _type2.default.DOM;
+          //tt(t) -> d(t)
+          option.t2d = true;
+          break;
+      }
+    }
+    temp.prev = _type2.default.TEXT;
+  }
+}
+function removeAt(elem, start) {
+  // 当table省略tbody直接写tr时，浏览器可能会自动生成tbody节点，diff时不在对比内会造成bug，提前判断下
+  if (elem.childNodes[start]) {
+    elem.removeChild(elem.childNodes[start]);
+  }
+}
+
+function equalText(a, b) {
+  if (a === void 0 || a === null) {
+    a = '';
+  }
+  if (b === void 0 || b === null) {
+    b = '';
+  }
+  return a.toString() == b.toString();
+}
+
+function addRange(ranges, option) {
+  var len = ranges.length;
+  if (!len || ranges[len - 1].start < option.start) {
+    ranges.push({ start: option.start, index: option.record.slice() });
+  }
+}
+
+function diffVd(ovd, nvd) {
+  //相同引用说明没发生变更，在一些使用常量、变量未变的情况下会如此
+  if (ovd == nvd) {
+    return;
+  }
+  //特殊的uid，以及一些引用赋给新vd
+  var elem = ovd.element;
+  var props = ['uid', '__element', '__parent', '__top', '__style', '__dom', '__names'];
+  var i = props.length - 1;
+  for (; i >= 0; i--) {
+    var k = props[i];
+    nvd[k] = ovd[k];
+  }
+  //vd记录更新uid引用
+  _hash2.default.set(nvd);
+  //记录对比过的prop
+  var temp = {};
+  for (i = ovd.__props.length - 1; i >= 0; i--) {
+    var item = ovd.__props[i];
+    var k = item[0];
+    var v = item[1];
+    //只检查普通属性，onXXX事件由__listener中的引用移除
+    if (k.indexOf('on') != 0 || k == 'on') {
+      temp[k] = true;
+      //对比老属性，多余删除，相同无需更新
+      if (nvd.props.hasOwnProperty(k)) {
+        var nv = nvd.props[k];
+        if (nv !== v) {
+          nvd.__updateAttr(k, nv);
+        }
+        nvd.__cache[k] = nv;
+      } else {
+        nvd.__updateAttr(k, null);
+        delete nvd.__cache[k];
+      }
+    }
+  }
+  //移除__listener记录的引用
+  ovd.__removeListener();
+  //添加新vd的属性
+  var len = nvd.__props.length;
+
+  var _loop = function _loop() {
+    item = nvd.__props[i];
+    k = item[0];
+
+    var v = item[1];
+    //事件和属性区分对待
+    if (k.indexOf('on') == 0 && k != 'on') {
+      name = k.slice(2).toLowerCase();
+
+      nvd.__addListener(name, function (e) {
+        e = e || window.event;
+        (0, _fixEvent2.default)(e);
+        var target = e.target;
+        var uid = target.getAttribute('migi-uid');
+        var tvd = _hash2.default.get(uid);
+        if (v instanceof _Cb2.default) {
+          v.cb.call(v.context, e, nvd, tvd);
+        } else if (_util2.default.isFunction(v)) {
+          v(e, nvd, tvd);
+        } else if (Array.isArray(v)) {
+          v.forEach(function (item) {
+            var cb = item[1];
+            if ((0, _delegate2.default)(e, item[0], nvd)) {
+              if (cb instanceof _Cb2.default) {
+                cb.cb.call(cb.context, e, nvd, tvd);
+              } else if (_util2.default.isFunction(cb)) {
+                cb(e, nvd, tvd);
+              }
+            }
+          });
+        }
+      });
+    } else if (!temp.hasOwnProperty(k)) {
+      nvd.__updateAttr(k, v);
+    }
+  };
+
+  for (i = 0; i < len; i++) {
+    var item;
+    var k;
+    var name;
+
+    _loop();
+  }
+  if (nvd.__style) {
+    nvd.__updateStyle(true);
+  }
+  var ranges = [];
+  diffChild(elem, ovd.children, nvd.children, ranges, { start: 0, record: [], first: true }, [], nvd);
+  if (ranges.length) {
+    //textarea特殊判断
+    if (nvd.name == 'textarea') {
+      nvd.__updateAttr('value', _range2.default.value(ranges[0], nvd.children));
+      return;
+    }
+    for (i = ranges.length - 1; i >= 0; i--) {
+      _range2.default.update(ranges[i], nvd.children, elem);
+    }
+  }
+  //缓存对象池
+  _cachePool2.default.add(ovd.__destroy());
+}
+
+function diff(elem, ov, nv, ranges, option, history, parent) {
+  //hack之前的状态，非Obj其实没有发生变更，假设自己变自己的状态
+  if (!option.first) {
+    if (option.prev == _type2.default.TEXT) {
+      option.state = TEXT_TO_TEXT;
+    } else {
+      option.state = DOM_TO_DOM;
+    }
+  }
+  diffChild(elem, ov, nv, ranges, option, history, parent);
+  //当最后一次对比是类型变换时记录，因为随后的text可能要更新
+  if (!option.t2d && !option.d2t) {
+    if (option.state == TEXT_TO_DOM) {
+      option.t2d = true;
+    } else if (option.state == DOM_TO_TEXT) {
+      option.d2t = true;
+    }
+  }
+}
+
+function diffChild(elem, ovd, nvd, ranges, option, history, parent) {
+  //新老值是否是数组处理方式不同
+  var oa = Array.isArray(ovd);
+  var na = Array.isArray(nvd);
+  //都是数组时，还要检查二者长度
+  if (oa && na) {
+    var ol = ovd.length;
+    var nl = nvd.length;
+    var os = ol ? 1 : 0;
+    var ns = nl ? 2 : 0;
+    history.push(0);
+    if (option.first) {
+      _range2.default.record(history, option);
+    }
+    switch (os + ns) {
+      //都是空数组
+      case 0:
+        option.state = TEXT_TO_TEXT;
+        option.prev = _type2.default.TEXT;
+        break;
+      //有内容的数组变为空数组
+      case 1:
+        diffChild(elem, ovd[0], nvd[0], ranges, option, history, parent);
+        var temp = {};
+        for (var i = 1; i < ol; i++) {
+          del(elem, ovd[i], ranges, option, temp, i == ol - 1);
+        }
+        break;
+      //空数组变为有内容
+      case 2:
+        diffChild(elem, ovd[0], nvd[0], ranges, option, history, parent);
+        var temp = {};
+        for (var i = 1; i < nl; i++) {
+          history[history.length - 1] = i;
+          add(elem, nvd[i], ranges, option, history, temp, i == nl - 1, parent);
+        }
+        break;
+      //都有内容
+      case 3:
+        for (var i = 0, len = Math.min(ol, nl); i < len; i++) {
+          history[history.length - 1] = i;
+          diffChild(elem, ovd[i], nvd[i], ranges, option, history, parent);
+        }
+        var temp = {};
+        //老的多余的删除
+        if (i < ol) {
+          for (; i < ol; i++) {
+            del(elem, ovd[i], ranges, option, temp, i == ol - 1);
+          }
+        }
+        //新的多余的插入
+        else if (i < nl) {
+            for (; i < nl; i++) {
+              history[history.length - 1] = i;
+              add(elem, nvd[i], ranges, option, history, temp, i == nl - 1, parent);
+            }
+          }
+        break;
+    }
+    history.pop();
+  }
+  //老的是数组新的不是
+  else if (oa) {
+      //将老的第1个和新的相比，注意老的第一个可能还是个数组，递归下去
+      diffChild(elem, ovd[0], nvd, ranges, option, history, parent);
+      //移除剩余的老的
+      var temp = {};
+      for (var i = 1, len = ovd.length; i < len; i++) {
+        del(elem, ovd[i], ranges, option, temp, i == len - 1);
+      }
+    }
+    //新的是数组老的不是
+    else if (na) {
+        history.push(0);
+        //将新的第1个和老的相比，注意新的第一个可能还是个数组，递归下去
+        diffChild(elem, ovd, nvd[0], ranges, option, history, parent);
+        var temp = {};
+        //增加剩余的新的
+        for (var i = 1, len = nvd.length; i < len; i++) {
+          history[history.length - 1] = i;
+          add(elem, nvd[i], ranges, option, history, temp, i == len - 1, parent);
+        }
+        history.pop();
+      }
+      //都不是数组
+      else {
+          var oe = ovd instanceof _Element2.default && !(ovd instanceof migi.NonVisualComponent) ? 1 : 0;
+          var ne = nvd instanceof _Element2.default && !(nvd instanceof migi.NonVisualComponent) ? 2 : 0;
+          //新老值是否为DOM或TEXT分4种情况
+          switch (oe + ne) {
+            //都是text时，根据上个节点类型和history设置range
+            case 0:
+              if (!option.first) {
+                check(option, elem, nvd, ranges, history);
+              }
+              _range2.default.record(history, option);
+              var cns = elem.childNodes;
+              if (option.first) {
+                if (!equalText(ovd, nvd)) {
+                  addRange(ranges, option);
+                }
+              } else if (!equalText(ovd, nvd)) {
+                switch (option.state) {
+                  case DOM_TO_TEXT:
+                    addRange(ranges, option);
+                    elem.removeChild(cns[option.start + 1]);
+                    break;
+                  case TEXT_TO_DOM:
+                    addRange(ranges, option);
+                    insertAt(elem, cns, option.start, nvd, true);
+                    break;
+                  case DOM_TO_DOM:
+                    _range2.default.record(history, option);
+                  case TEXT_TO_TEXT:
+                    if (!equalText(ovd, nvd)) {
+                      addRange(ranges, option);
+                    }
+                    break;
+                }
+              }
+              //不是第一个但text内容不变时，需根据之前的状态判断处理
+              else {
+                  switch (option.state) {
+                    case DOM_TO_TEXT:
+                      addRange(ranges, option);
+                      elem.removeChild(cns[option.start + 1]);
+                      break;
+                    case TEXT_TO_DOM:
+                      addRange(ranges, option);
+                      insertAt(elem, cns, option.start, nvd, true);
+                      break;
+                  }
+                }
+              option.state = TEXT_TO_TEXT;
+              option.prev = _type2.default.TEXT;
+              break;
+            //DOM变TEXT
+            case 1:
+              _range2.default.record(history, option);
+              var cns = elem.childNodes;
+              //本身就是第1个，直接替换
+              if (option.first) {
+                replaceWith(elem, cns, option.start, nvd, true);
+              } else {
+                switch (option.state) {
+                  case DOM_TO_TEXT:
+                  case TEXT_TO_TEXT:
+                    addRange(ranges, option);
+                    elem.removeChild(cns[option.start + 1]);
+                    break;
+                  case TEXT_TO_DOM:
+                    replaceWith(elem, cns, option.start++, nvd, true);
+                    break;
+                  case DOM_TO_DOM:
+                    replaceWith(elem, cns, option.start, nvd, true);
+                    break;
+                }
+              }
+              //缓存对象池
+              _cachePool2.default.add(ovd.__destroy());
+              option.state = DOM_TO_TEXT;
+              option.prev = _type2.default.TEXT;
+              break;
+            //TEXT变DOM
+            case 2:
+              //这种情况下相当于add新vd，无parent和style引用
+              nvd.__parent = parent;
+              nvd.__top = parent.top;
+              nvd.style = parent.style;
+              _hash2.default.set(nvd);
+              var cns = elem.childNodes;
+              if (option.first) {
+                replaceWith(elem, cns, option.start++, nvd);
+              } else {
+                switch (option.state) {
+                  case DOM_TO_TEXT:
+                    option.start++;
+                  case DOM_TO_DOM:
+                    replaceWith(elem, cns, option.start++, nvd);
+                    break;
+                  case TEXT_TO_DOM:
+                    insertAt(elem, cns, option.start++, nvd);
+                    break;
+                  case TEXT_TO_TEXT:
+                    addRange(ranges, option);
+                    insertAt(elem, cns, ++option.start, nvd);
+                    option.start++;
+                    break;
+                }
+              }
+              option.state = TEXT_TO_DOM;
+              option.prev = _type2.default.DOM;
+              break;
+            //DOM变DOM
+            case 3:
+              if (!option.first) {
+                switch (option.state) {
+                  case DOM_TO_TEXT:
+                  case TEXT_TO_TEXT:
+                    option.start++;
+                    break;
+                }
+                delete option.t2d;
+                delete option.d2t;
+              }
+              var ocp = ovd instanceof _Component2.default ? 1 : 0;
+              var ncp = nvd instanceof _Component2.default ? 2 : 0;
+              switch (ocp + ncp) {
+                //DOM名没变递归diff，否则重绘
+                case 0:
+                  if (ovd.name == nvd.name) {
+                    ovd.__parent = parent;
+                    ovd.__top = parent.top;
+                    diffVd(ovd, nvd);
+                  } else {
+                    nvd.__parent = parent;
+                    nvd.__top = parent.top;
+                    nvd.style = parent.style;
+                    elem = ovd.element;
+                    elem.insertAdjacentHTML('afterend', nvd.toString());
+                    elem.parentNode.removeChild(elem);
+                    nvd.emit(_Event2.default.DOM);
+                    _matchHash2.default.del(ovd.uid);
+                    _hash2.default.set(nvd);
+                    //缓存对象池
+                    _cachePool2.default.add(ovd.__destroy());
+                  }
+                  break;
+                //Component和VirtualDom变化则直接重绘
+                default:
+                  elem = ovd.element;
+                  elem.insertAdjacentHTML('afterend', nvd.toString());
+                  elem.parentNode.removeChild(elem);
+                  nvd.__parent = parent;
+                  nvd.__top = parent.top;
+                  //match中为模拟style的:active伪类注册了window的一些事件，需检查移除
+                  if (ncp) {
+                    _matchHash2.default.del(ovd.virtualDom.uid);
+                  } else {
+                    _matchHash2.default.del(ovd.uid);
+                    nvd.style = parent.style;
+                  }
+                  nvd.emit(_Event2.default.DOM);
+                  _hash2.default.set(nvd);
+                  //缓存对象池
+                  _cachePool2.default.add(ovd.__destroy());
+                  break;
+              }
+              option.state = DOM_TO_DOM;
+              option.prev = _type2.default.DOM;
+              option.start++;
+              break;
+          }
+          //非可视组件被当作空字符串处理，连同其他组件，不要忘了DOM事件
+          if (nvd instanceof migi.NonVisualComponent) {
+            nvd.emit(_Event2.default.DOM);
+          }
+        }
+  option.first = false;
+}
+
+function check(option, elem, vd, ranges, history) {
+  if (option.t2d) {
+    delete option.t2d;
+    _range2.default.record(history, option);
+    insertAt(elem, elem.childNodes, option.start, vd, true);
+  } else if (option.d2t) {
+    delete option.d2t;
+    addRange(ranges, option);
+    removeAt(elem, option.start + 1);
+  }
+}
+
+exports.default = {
+  diff: diff,
+  check: check
+};
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  domactivate: 'DOMActivate',
+  domfocusin: 'DOMFocusIn',
+  msgestureend: 'MSGestureEnd',
+  mspointerdown: 'MSPointerDown',
+  mspointermove: 'MSPointerMove',
+  mspointerup: 'MSPointerUp',
+  mspointercancel: 'MSPointerCancel'
+};
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VirtualDom = __webpack_require__(7);
+
+var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
+
+var _Event = __webpack_require__(1);
+
+var _Event2 = _interopRequireDefault(_Event);
+
+var _sort = __webpack_require__(15);
+
+var _sort2 = _interopRequireDefault(_sort);
+
+var _hash = __webpack_require__(6);
+
+var _hash2 = _interopRequireDefault(_hash);
+
+var _matchHash = __webpack_require__(24);
+
+var _matchHash2 = _interopRequireDefault(_matchHash);
+
+var _matchUtil = __webpack_require__(14);
+
+var _matchUtil2 = _interopRequireDefault(_matchUtil);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+//names,classes,ids为从当前节点开始往上的列表
+//style为jaw传入的总样式对象
+//virtualDom当前传入的VirtualDom对象
+//first为初始化时第一次
+function match(names, classes, ids, style, virtualDom, first) {
+  var res = [];
+  matchSel(names.length - 1, names, classes, ids, style.default, virtualDom, res, first);
+  //如果有media query
+  if (style.media) {
+    style.media.forEach(function (media) {
+      var match = false;
+      media.query.forEach(function (qlist) {
+        //中一个即命中不再往下匹配
+        if (match) {
+          return;
+        }
+        for (var i = 0, len = qlist.length; i < len; i++) {
+          var item = qlist[i];
+          //Array/String类型标明是否有值，目前只支持Array
+          if (Array.isArray(item)) {
+            var k = item[0].replace(/^-[a-z]+-/i, '').replace(/^mso-/i, '').toLowerCase();
+            var v = item[1];
+            //只支持px单位
+            if (/(px|\d)$/.test(v)) {
+              v = v.replace(/px$/, '');
+              switch (k) {
+                case 'width':
+                case 'height':
+                  var cur = getCur(k);
+                  if (cur == v) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                    return;
+                  }
+                  break;
+                case 'min-width':
+                case 'max-width':
+                case 'min-height':
+                case 'max-height':
+                  var cur = getCur(k.slice(4));
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+                case 'device-width':
+                case 'device-height':
+                  var cur = window.screen[k.slice(7)];
+                  if (cur == v) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                  }
+                  break;
+                case 'min-device-width':
+                case 'min-device-height':
+                case 'max-device-width':
+                case 'max-device-height':
+                  var cur = window.screen[k.slice(11)];
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+                case 'aspect-ratio':
+                  var w = getCur('width');
+                  var h = getCur('height');
+                  var cur = w / h;
+                  var val = v.split('/');
+                  val = val[0] / val[1];
+                  if (cur == val) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                    return;
+                  }
+                  break;
+                case 'min-aspect-ratio':
+                case 'max-aspect-ratio':
+                  var w = getCur('width');
+                  var h = getCur('height');
+                  var cur = w / h;
+                  var val = v.split('/');
+                  val = val[0] / val[1];
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+                case 'device-aspect-ratio':
+                  var w = window.screen.width;
+                  var h = window.screen.height;
+                  var cur = w / h;
+                  var val = v.split('/');
+                  val = val[0] / val[1];
+                  if (cur == val) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                    return;
+                  }
+                  break;
+                case 'min-device-aspect-ratio':
+                case 'max-device-aspect-ratio':
+                  var w = window.screen.width;
+                  var h = window.screen.height;
+                  var cur = w / h;
+                  var val = v.split('/');
+                  val = val[0] / val[1];
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+                case 'device-pixel-ratio':
+                  var cur = window.devicePixelRatio;
+                  if (cur == v) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                    return;
+                  }
+                  break;
+                case 'min-device-pixel-ratio':
+                case 'max-device-pixel-ratio':
+                  var cur = window.devicePixelRatio;
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+              }
+            }
+          }
+        }
+      });
+    });
+    //窗口resize时重新匹配@media query
+    if (first) {
+      var resize = function resize() {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+        timeout = setTimeout(function () {
+          _hash2.default.get(virtualDom.uid).__updateStyle();
+        }, 100);
+      };
+
+      var timeout;
+
+      window.addEventListener('resize', resize);
+      _matchHash2.default.add(virtualDom.uid, resize);
+    }
+  }
+  (0, _sort2.default)(res, function (a, b) {
+    var pa = a[2];
+    var pb = b[2];
+    //引用相等比较出现顺序
+    if (pa == pb) {
+      return a[0] > b[0];
+    }
+    //优先级不相等
+    for (var i = 0; i < 3; i++) {
+      if (pa[i] != pb[i]) {
+        return pa[i] > pb[i];
+      }
+    }
+    //优先级相等比较出现顺序
+    return a[0] > b[0];
+  });
+  var s = '';
+  res.forEach(function (item) {
+    s += item[1] + ';';
+  });
+  return s;
+}
+//从底部往上匹配，即.a .b这样的选择器是.b->.a逆序对比
+//过程中只要不匹配就跳出，i从最大到0
+function matchSel(i, names, classes, ids, style, virtualDom, res, first, isChild) {
+  var combo = _matchUtil2.default.combo(classes[i], names[i], ids[i], style);
+  for (var j = 0, len = combo.length; j < len; j++) {
+    var k = combo[j];
+    if (style.hasOwnProperty(k)) {
+      var item = style[k];
+      //还未到根节点继续匹配
+      if (i) {
+        matchSel(i - 1, names, classes, ids, item, virtualDom.parent, res, first);
+        //多层级时需递归所有层级组合，如<div><p><span>对应div span{}的样式时，并非一一对应
+        if (!isChild) {
+          for (var l = i - 2; l >= 0; l--) {
+            matchSel(l, names, classes, ids, item, virtualDom.parent, res, first);
+          }
+        }
+      }
+      //将当前层次的值存入
+      if (item.hasOwnProperty('_v')) {
+        dealStyle(res, item);
+      }
+      //首次进入处理:伪类
+      if (first && item.hasOwnProperty('_:')) {
+        item['_:'].forEach(function (pseudoItem) {
+          pseudoItem[0].forEach(function (pseudo) {
+            var uid = virtualDom.uid;
+            switch (pseudo) {
+              case 'hover':
+                var onHover = function onHover() {
+                  //因为vd可能destroy导致被回收，所以每次动态从hash中取当前的vd
+                  _hash2.default.get(uid).__hover = true;
+                  _hash2.default.get(uid).__updateStyle();
+                };
+
+                var outHover = function outHover() {
+                  _hash2.default.get(uid).__hover = false;
+                  _hash2.default.get(uid).__updateStyle();
+                };
+
+                var cb = function cb() {
+                  virtualDom.element.addEventListener('mouseenter', onHover);
+                  virtualDom.element.addEventListener('mouseleave', outHover);
+                };
+                //可能由DOMDiff发起，此时已经在DOM上了
+
+
+                if (virtualDom.__dom) {
+                  cb();
+                } else {
+                  virtualDom.once(_Event2.default.DOM, cb);
+                }
+                //记录缓存当destryo时移除
+                virtualDom.__onHover = onHover;
+                virtualDom.__outHover = outHover;
+                break;
+              case 'active':
+                var onActive = function onActive() {
+                  //因为vd可能destroy导致被回收，所以每次动态从hash中取当前的vd
+                  _hash2.default.get(uid).__active = true;
+                  _hash2.default.get(uid).__updateStyle();
+                };
+
+                var outActive = function outActive() {
+                  _hash2.default.get(uid).__active = false;
+                  _hash2.default.get(uid).__updateStyle();
+                };
+
+                var cb2 = function cb2() {
+                  virtualDom.element.addEventListener('mousedown', onActive);
+                  //鼠标弹起捕获body，因为可能会移出元素后再弹起，且事件被shadow化阻止冒泡了
+                  window.addEventListener('mouseup', outActive, true);
+                  //touchend也失焦
+                  window.addEventListener('touchend', outActive, true);
+                  //touchcancel也失焦
+                  window.addEventListener('touchcancel', outActive, true);
+                  //window失焦时也需判断
+                  window.addEventListener('blur', outActive);
+                  //drag结束时也需判断
+                  window.addEventListener('dragend', outActive);
+                };
+                //可能由DOMDiff发起，此时已经在DOM上了
+
+
+                if (virtualDom.__dom) {
+                  cb2();
+                } else {
+                  virtualDom.once(_Event2.default.DOM, cb2);
+                }
+                //对window的侦听需要在destroy后移除，先记录下来
+                _matchHash2.default.add(uid, outActive);
+                break;
+            }
+          });
+        });
+      }
+      //:和[可能同时存在，也可能分开
+      if (item.hasOwnProperty('_:') || item.hasOwnProperty('_[')) {
+        //有:[属性时，检查是否满足伪类情况，全部满足后追加样式
+        var inAttr = function inAttr(item) {
+          if (item && item.hasOwnProperty('_[')) {
+            var item2 = item['_['];
+            item2.forEach(function (attrItem) {
+              var isMatch = _matchUtil2.default.attr(attrItem[0], virtualDom);
+              if (isMatch) {
+                item2 = attrItem[1];
+                //同普通匹配一样
+                if (i) {
+                  matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, first);
+                }
+                if (item2.hasOwnProperty('_v')) {
+                  dealStyle(res, item2);
+                }
+              }
+            });
+          }
+        };
+
+        var item2;
+        //有:伪类时，检查是否满足伪类情况，全部满足后追加样式
+        if (item.hasOwnProperty('_:')) {
+          item2 = item['_:'];
+          item2.forEach(function (pseudoItem) {
+            var isMatch = _matchUtil2.default.pseudo(pseudoItem[0], virtualDom, k);
+            if (isMatch) {
+              item2 = pseudoItem[1];
+              //同普通匹配一样
+              if (i) {
+                matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, first);
+              }
+              if (item2.hasOwnProperty('_v')) {
+                dealStyle(res, item2);
+              }
+            }
+          });
+        }
+        inAttr(item);
+        inAttr(item2);
+      }
+      //父子选择器
+      if (item.hasOwnProperty('_>')) {
+        var item2 = item['_>'];
+        matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, false, isChild);
+      }
+      //相邻兄弟选择器
+      if (item.hasOwnProperty('_+')) {
+        var item2 = item['_+'];
+        var prev = virtualDom.prev();
+        if (prev) {
+          Object.keys(item2).forEach(function (k) {
+            if (_matchUtil2.default.nci(k, prev)) {
+              return;
+            }
+            //将当前层次的值存入
+            if (item2[k].hasOwnProperty('_v')) {
+              dealStyle(res, item2[k]);
+            }
+            matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent, res, false, isChild);
+          });
+        }
+      }
+      //兄弟选择器
+      if (item.hasOwnProperty('_~')) {
+        var item2 = item['_~'];
+        var prevAll = virtualDom.prevAll();
+        if (prevAll.length) {
+          var hasSibiling = false;
+          for (var j = prevAll.length - 1; j >= 0; j--) {
+            var prev = prevAll[j];
+            Object.keys(item2).forEach(function (k) {
+              if (_matchUtil2.default.nci(k, prev)) {
+                return;
+              }
+              //将当前层次的值存入
+              if (item2[k].hasOwnProperty('_v')) {
+                dealStyle(res, item2[k]);
+              }
+              hasSibiling = true;
+              matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent, res, false, isChild);
+            });
+            //一旦前方出现一次，即说明命中兄弟选择器，可以跳出继续判断下去的循环
+            if (hasSibiling) {
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+function dealStyle(res, item) {
+  item._v.forEach(function (style) {
+    style[2] = item._p;
+    res.push(style);
+  });
+}
+
+function getCur(k) {
+  var key = k.charAt(0).toUpperCase() + k.slice(1);
+  return window['inner' + key] || document.documentElement['client' + key] || document.body['client' + key];
+}
+
+exports.default = match;
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Event = __webpack_require__(1);
+
+var _Event2 = _interopRequireDefault(_Event);
+
+var _Element = __webpack_require__(4);
+
+var _Element2 = _interopRequireDefault(_Element);
+
+var _EventBus = __webpack_require__(10);
+
+var _EventBus2 = _interopRequireDefault(_EventBus);
+
+var _Model = __webpack_require__(11);
+
+var _Model2 = _interopRequireDefault(_Model);
+
+var _CacheModel = __webpack_require__(18);
+
+var _CacheModel2 = _interopRequireDefault(_CacheModel);
+
+var _Component = __webpack_require__(5);
+
+var _Component2 = _interopRequireDefault(_Component);
+
+var _VirtualDom = __webpack_require__(7);
+
+var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
+
+var _NonVisualComponent = __webpack_require__(40);
+
+var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
+
+var _CacheComponent = __webpack_require__(17);
+
+var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
+
+var _Obj = __webpack_require__(12);
+
+var _Obj2 = _interopRequireDefault(_Obj);
+
+var _Cb = __webpack_require__(9);
+
+var _Cb2 = _interopRequireDefault(_Cb);
+
+var _cachePool = __webpack_require__(21);
+
+var _cachePool2 = _interopRequireDefault(_cachePool);
+
+var _util = __webpack_require__(2);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _browser = __webpack_require__(13);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _sort = __webpack_require__(15);
+
+var _sort2 = _interopRequireDefault(_sort);
+
+var _hash = __webpack_require__(6);
+
+var _hash2 = _interopRequireDefault(_hash);
+
+var _Fastclick = __webpack_require__(19);
+
+var _Fastclick2 = _interopRequireDefault(_Fastclick);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var migi = {
+  render: function render(element, dom) {
+    if (dom) {
+      element.appendTo(dom);
+    }
+    return element;
+  },
+
+  // 提前或服务器端渲染，仅输出，不触发DOM事件
+  preRender: function preRender(element) {
+    return element.toString();
+  },
+  preExist: function preExist(element) {
+    element.preString();
+    return element.emit(_Event2.default.DOM);
+  },
+  createCp: function createCp(cp, props, children) {
+    return _hash2.default.set(new cp(props, children));
+  },
+  createVd: function createVd(name, props, children) {
+    if (name == 'style' || name == 'script') {
+      throw new Error('can not create VirtualDom of: ' + name);
+    }
+    return _hash2.default.set(_cachePool2.default.index ? _cachePool2.default.get().__reset(name, props, children) : new _VirtualDom2.default(name, props, children));
+  },
+
+  Event: _Event2.default,
+  Model: _Model2.default,
+  CacheModel: _CacheModel2.default,
+  EventBus: _EventBus2.default,
+  eventBus: new _EventBus2.default(),
+  Element: _Element2.default,
+  Component: _Component2.default,
+  NonVisualComponent: _NonVisualComponent2.default,
+  CacheComponent: _CacheComponent2.default,
+  VirtualDom: _VirtualDom2.default,
+  Obj: _Obj2.default,
+  Cb: _Cb2.default,
+  util: _util2.default,
+  browser: _browser2.default,
+  sort: _sort2.default,
+  hash: _hash2.default,
+  Fastclick: _Fastclick2.default,
+  name: function name(Class, _name) {
+    if (_Component2.default.prototype.isPrototypeOf(Class.prototype)) {
+      Class.__migiName = _name;
+    }
+  }
+};
+
+if (typeof window != 'undefined') {
+  window.migi = migi;
+  if (document.body) {
+    _Fastclick2.default.attach(document.body);
+  } else {
+    document.addEventListener('DOMContentLoaded', function () {
+      _Fastclick2.default.attach(document.body);
+    });
+  }
+} else if (typeof global != 'undefined') {
+  global.migi = migi;
+}
+
+exports.default = migi;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (vd, name, cb, listener) {
+  if (!hasInitGlobal) {
+    hasInitGlobal = true;
+    initGlobal();
+  }
+  listener.push(['touchstart', onTouchStart]);
+
+  var elem = vd.element;
+
+  elem.addEventListener('touchstart', onTouchStart);
+
+  function onTouchStart(e) {
+    //有可能组件内父子多个使用了手势，冒泡触发了多个
+    if (touch.first) {
+      touchList.push({
+        vd: vd,
+        name: name,
+        cb: cb
+      });
+      return;
+    }
+
+    firstTouch = e.touches[0];
+    if (e.touches && e.touches.length === 1 && touch.x2) {
+      // Clear out touch movement data if we have it sticking around
+      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
+      touch.x2 = undefined;
+      touch.y2 = undefined;
+    }
+
+    touch = {
+      vd: vd,
+      name: name,
+      cb: cb,
+      first: true,
+      x1: firstTouch.pageX,
+      y1: firstTouch.pageY
+    };
+    lastTouch = touch;
+
+    now = Date.now();
+    delta = now - lastTime;
+    lastTime = now;
+    if (delta > 0 && delta < 250) {
+      touch.isDoubleTap = true;
+    }
+  }
+};
+
+/**
+ * Thanks to zepto-touch.js
+ * https://github.com/madrobby/zepto/blob/master/src/touch.js
+ */
+
+var touchList = [];
+var touch = {};
+var lastTouch;
+var tapTimeout;
+var swipeTimeout;
+var longTapDelay = 750;
+var lastTime = 0;
+var now;
+var delta;
+var deltaX = 0;
+var deltaY = 0;
+var firstTouch;
+
+function swipeDirection(x1, x2, y1, y2) {
+  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
+}
+
+function cancelAll() {
+  if (tapTimeout) {
+    clearTimeout(tapTimeout);
+  }
+  if (swipeTimeout) {
+    clearTimeout(swipeTimeout);
+  }
+  tapTimeout = swipeTimeout = null;
+  touch = {};
+  touchList = [];
+}
+
+var hasInitGlobal;
+
+function initGlobal() {
+  document.addEventListener('touchmove', onTouchMove, true);
+  document.addEventListener('touchend', onTouchEnd, true);
+  document.addEventListener('touchcancel', cancelAll, true);
+
+  window.addEventListener('scroll', cancelAll);
+  window.addEventListener('blur', cancelAll);
+}
+
+function onTouchMove(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  firstTouch = e.touches[0];
+  touch.x2 = firstTouch.pageX;
+  touch.y2 = firstTouch.pageY;
+
+  deltaX += Math.abs(touch.x1 - touch.x2);
+  deltaY += Math.abs(touch.y1 - touch.y2);
+}
+
+function onTouchEnd(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  // swipe
+  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
+    swipeTimeout = setTimeout(function () {
+      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
+      if (touch.name == 'swipe' || touch.name == type) {
+        touch.cb(e);
+      }
+      touchList.forEach(function (touch) {
+        if (touch.name == 'swipe' || touch.name == type) {
+          touch.cb(e);
+        }
+      });
+      touch = {};
+      touchList = [];
+    }, 0);
+  }
+  // don't fire tap when delta position changed by more than 30 pixels,
+  // for instance when moving to a point and back to origin
+  else if (deltaX < 30 && deltaY < 30) {
+      tapTimeout = setTimeout(function () {
+        var isLongTap = Date.now() - lastTime > longTapDelay;
+        if (isLongTap) {
+          if (touch.name == 'longtap') {
+            touch.cb(e);
+          }
+          touchList.forEach(function (touch) {
+            if (touch.name == 'longtap') {
+              touch.cb(e);
+            }
+          });
+        }
+        // trigger double tap immediately
+        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
+            if (touch.name == 'doubletap') {
+              touch.cb(e);
+            }
+            touchList.forEach(function (touch) {
+              if (touch.name == 'doubletap') {
+                touch.cb(e);
+              }
+            });
+          }
+        touch = {};
+        touchList = [];
+      }, 0);
+    } else {
+      touch = {};
+      touchList = [];
+    }
+  deltaX = deltaY = 0;
+}
+
+;
 
 /***/ }),
 /* 48 */,
 /* 49 */,
 /* 50 */,
 /* 51 */,
-/* 52 */,
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _TopNav = __webpack_require__(88);
+
+var _TopNav2 = _interopRequireDefault(_TopNav);
+
+var _BotNav = __webpack_require__(85);
+
+var _BotNav2 = _interopRequireDefault(_BotNav);
+
+var _MLogin = __webpack_require__(87);
+
+var _MLogin2 = _interopRequireDefault(_MLogin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.addEventListener('DOMContentLoaded', function () {
+  var topNav = migi.preExist(migi.createCp(_TopNav2.default, []));
+  topNav.on('search', function (kw) {
+    _util2.default.goto('/search/' + kw);
+  });
+  migi.preExist(migi.createCp(_BotNav2.default, []));
+
+  var mlogin = void 0;
+
+  migi.eventBus.on('NEED_LOGIN', function () {
+    if (!mlogin) {
+      mlogin = migi.render(migi.createCp(_MLogin2.default, []), document.body);
+    }
+    mlogin.show();
+  });
+});
+
+/***/ }),
 /* 53 */,
 /* 54 */,
 /* 55 */,
@@ -5528,6 +7412,47 @@ defineProperties(Number, {
 /* 57 */,
 /* 58 */,
 /* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var ajax = __webpack_require__(106);
+
+module.exports = ajax;
+
+/***/ }),
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5573,8 +7498,8 @@ var BotNav = function (_migi$Component) {
 migi.name(BotNav, "BotNav");exports.default = BotNav;
 
 /***/ }),
-/* 60 */,
-/* 61 */
+/* 86 */,
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5646,7 +7571,7 @@ var NeedLogin = function (_migi$Component) {
 migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
 
 /***/ }),
-/* 62 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5717,34 +7642,38 @@ var TopNav = function (_migi$Component) {
 migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(45);
+__webpack_require__(28);
 
-__webpack_require__(44);
+__webpack_require__(27);
 
-var _animaYoctoAjax = __webpack_require__(43);
+var _animaYoctoAjax = __webpack_require__(59);
 
 var _animaYoctoAjax2 = _interopRequireDefault(_animaYoctoAjax);
 
-__webpack_require__(39);
+__webpack_require__(52);
 
-__webpack_require__(47);
+__webpack_require__(63);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5799,35 +7728,35 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 75 */,
-/* 76 */
+/* 105 */,
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var $ = __webpack_require__(8),
-    util = __webpack_require__(18);
+var $ = __webpack_require__(29),
+    util = __webpack_require__(38);
 
-__webpack_require__(19);
+__webpack_require__(39);
 
-__webpack_require__(77);
+__webpack_require__(107);
 
-__webpack_require__(78);
+__webpack_require__(108);
 
 module.exports = $;
 
 /***/ }),
-/* 77 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var $ = __webpack_require__(8),
-    util = __webpack_require__(18);
+var $ = __webpack_require__(29),
+    util = __webpack_require__(38);
 
-__webpack_require__(19);
+__webpack_require__(39);
 
 var jsonpID = Date.now(),
     document = window.document,
@@ -5889,16 +7818,16 @@ $.ajaxJSONP = function (options, deferred) {
 module.exports = $;
 
 /***/ }),
-/* 78 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var $ = __webpack_require__(8),
-    util = __webpack_require__(18);
+var $ = __webpack_require__(29),
+    util = __webpack_require__(38);
 
-__webpack_require__(19);
+__webpack_require__(39);
 
 var key,
     name,
@@ -6138,7 +8067,7 @@ $.param = function (obj, traditional) {
 module.exports = $;
 
 /***/ }),
-/* 79 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6949,13 +8878,13 @@ var Yocto = function () {
 module.exports = Yocto;
 
 /***/ }),
-/* 80 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var $ = __webpack_require__(8);
+var $ = __webpack_require__(29);
 
 // Event Module
 var _zid = 1,
@@ -7212,1913 +9141,6 @@ $.Event = function (type, props) {
 };
 
 module.exports = $;
-
-/***/ }),
-/* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-var _Component2 = __webpack_require__(6);
-
-var _Component3 = _interopRequireDefault(_Component2);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
-
-var NonVisualComponent = function (_Component) {
-  _inherits(NonVisualComponent, _Component);
-
-  function NonVisualComponent() {
-    var _ref;
-
-    _classCallCheck(this, NonVisualComponent);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = NonVisualComponent.__proto__ || Object.getPrototypeOf(NonVisualComponent)).call.apply(_ref, [this].concat(data)));
-  }
-
-  //非可视为空
-  //@overwrite
-
-
-  _createClass(NonVisualComponent, [{
-    key: 'toString',
-    value: function toString() {
-      return '';
-    }
-
-    //没有dom
-    //@overwrite
-
-  }, {
-    key: '__onDom',
-    value: function __onDom() {
-      this.__dom = true;
-      _Component3.default.fakeDom(this.children);
-    }
-  }]);
-
-  return NonVisualComponent;
-}(_Component3.default);
-
-exports.default = NonVisualComponent;
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var arrayProto = Array.prototype;
-var arrayMethods = Object.create(arrayProto);
-
-['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
-  var original = arrayProto[method];
-  Object.defineProperty(arrayMethods, method, {
-    value: function value() {
-      var i = arguments.length;
-      var args = new Array(i);
-      while (i--) {
-        args[i] = arguments[i];
-      }
-      var result = original.apply(this, args);
-      if (Array.isArray(this.__cb__)) {
-        this.__cb__.forEach(function (cb) {
-          cb();
-        });
-      }
-      return result;
-    }
-  });
-});
-
-exports.default = arrayMethods;
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _util = __webpack_require__(3);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var NUM = 0;
-var STR = 1;
-var BOOL = 2;
-
-var RENDER_EXIST = 1;
-var RENDER_DOM = 2;
-
-var SPECIALS = {
-  button: {
-    disabled: RENDER_EXIST
-  },
-  input: {
-    autofocus: RENDER_EXIST,
-    checked: RENDER_EXIST,
-    defaultChecked: RENDER_DOM,
-    defaultchecked: RENDER_DOM,
-    defaultValue: RENDER_DOM,
-    defaultvalue: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    multiple: RENDER_EXIST,
-    readOnly: RENDER_EXIST,
-    readonly: RENDER_EXIST,
-    required: RENDER_EXIST
-  },
-  link: {
-    disabled: RENDER_EXIST
-  },
-  option: {
-    defaultSelected: RENDER_DOM,
-    defaultselected: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    selected: RENDER_EXIST,
-    text: RENDER_DOM
-  },
-  select: {
-    autofocus: RENDER_EXIST,
-    disabled: RENDER_EXIST,
-    multiple: RENDER_EXIST,
-    selectedIndex: RENDER_DOM,
-    selectedindex: RENDER_DOM
-  },
-  textarea: {
-    autofocus: RENDER_EXIST,
-    defaultValue: RENDER_DOM,
-    defaultvalue: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    readOnly: RENDER_EXIST,
-    readonly: RENDER_EXIST
-  }
-};
-
-var SETS = {
-  button: {
-    disabled: BOOL
-  },
-  input: {
-    autofocus: BOOL,
-    checked: BOOL,
-    defaultChecked: BOOL,
-    defaultchecked: BOOL,
-    defaultValue: STR,
-    defaultvalue: STR,
-    disabled: BOOL,
-    readOnly: BOOL,
-    readonly: BOOL,
-    required: BOOL,
-    value: STR
-  },
-  link: {
-    checked: BOOL
-  },
-  option: {
-    defaultSelected: BOOL,
-    defaultselected: BOOL,
-    disabled: BOOL,
-    selected: BOOL,
-    text: STR
-  },
-  select: {
-    autofocus: BOOL,
-    disabled: BOOL,
-    required: BOOL,
-    selectedIndex: NUM,
-    selectedindex: NUM,
-    value: STR
-  },
-  textarea: {
-    autofocus: BOOL,
-    defaultValue: STR,
-    defaultvalue: STR,
-    disabled: BOOL,
-    readOnly: BOOL,
-    readonly: BOOL,
-    required: BOOL,
-    value: STR
-  }
-};
-
-var lowerCase = {
-  defaultchecked: 'defaultChecked',
-  defaultselected: 'defaultSelected',
-  defaultvalue: 'defautlValue',
-  readonly: 'readOnly',
-  selectindex: 'selectIndex'
-};
-
-exports.default = {
-  RENDER_EXIST: RENDER_EXIST,
-  RENDER_DOM: RENDER_DOM,
-  special: function special(name, prop) {
-    if (SPECIALS.hasOwnProperty(name)) {
-      var o = SPECIALS[name];
-      if (o.hasOwnProperty(prop)) {
-        return o[prop];
-      }
-    }
-  },
-  update: function update(name, element, k, v, jaw) {
-    //特殊对待的prop，用js赋值
-    if (SETS.hasOwnProperty(name)) {
-      var o = SETS[name];
-      if (o.hasOwnProperty(k)) {
-        o = o[k];
-        k = lowerCase[k] || k;
-        switch (o) {
-          case NUM:
-            v = parseInt(v);
-            element[k] = v || 0;
-            break;
-          case STR:
-            v = _util2.default.stringify(v);
-            element[k] = v;
-            break;
-          case BOOL:
-            v = !!v;
-            element[k] = v;
-            break;
-        }
-        return;
-      }
-    }
-    //普通的setAttribute
-    switch (k) {
-      case 'className':
-        k = 'class';
-        break;
-      case 'htmlFor':
-        k = 'for';
-        break;
-    }
-    //jaw导入style时改写migi-前缀
-    if (jaw) {
-      switch (k) {
-        case 'id':
-        case 'class':
-          k = 'migi-' + k;
-          break;
-      }
-    }
-    if (v === null || v === void 0) {
-      element.removeAttribute(k);
-    } else if (k == 'id') {
-      element[k] = v;
-    } else if (k == 'class') {
-      element.className = v;
-    } else {
-      element.setAttribute(k, v);
-    }
-  }
-};
-
-/***/ }),
-/* 84 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Event = __webpack_require__(2);
-
-var _Event2 = _interopRequireDefault(_Event);
-
-var _Element = __webpack_require__(5);
-
-var _Element2 = _interopRequireDefault(_Element);
-
-var _Component = __webpack_require__(6);
-
-var _Component2 = _interopRequireDefault(_Component);
-
-var _Cb = __webpack_require__(20);
-
-var _Cb2 = _interopRequireDefault(_Cb);
-
-var _util = __webpack_require__(3);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _browser = __webpack_require__(24);
-
-var _browser2 = _interopRequireDefault(_browser);
-
-var _range = __webpack_require__(36);
-
-var _range2 = _interopRequireDefault(_range);
-
-var _cachePool = __webpack_require__(32);
-
-var _cachePool2 = _interopRequireDefault(_cachePool);
-
-var _type = __webpack_require__(27);
-
-var _type2 = _interopRequireDefault(_type);
-
-var _hash = __webpack_require__(7);
-
-var _hash2 = _interopRequireDefault(_hash);
-
-var _matchHash = __webpack_require__(35);
-
-var _matchHash2 = _interopRequireDefault(_matchHash);
-
-var _fixEvent = __webpack_require__(34);
-
-var _fixEvent2 = _interopRequireDefault(_fixEvent);
-
-var _delegate = __webpack_require__(33);
-
-var _delegate2 = _interopRequireDefault(_delegate);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var DOM_TO_TEXT = 0;
-var DOM_TO_DOM = 1;
-var TEXT_TO_DOM = 2;
-var TEXT_TO_TEXT = 3;
-
-function replaceWith(elem, cns, index, vd, isText) {
-  //insertAdjacentHTML在插入text时浏览器行为表现不一致，ff会合并相邻text，chrome则不会
-  //因此DOM使用insertAdjacentHTML，text则用textNode
-  var target;
-  if (isText) {
-    var s = _util2.default.stringify(vd);
-    target = document.createTextNode(s || '');
-    if (index >= cns.length) {
-      elem.appendChild(target);
-    } else {
-      elem.replaceChild(target, cns[index]);
-    }
-    if (vd instanceof migi.NonVisualComponent) {
-      vd.emit(_Event2.default.DOM);
-    }
-  } else {
-    target = vd.toString();
-    if (index >= cns.length) {
-      elem.insertAdjacentHTML('beforeend', target);
-    } else {
-      //textNode没有insertAdjacentHTML方法，必须使用replaceChild
-      if (cns[index].nodeType == 1) {
-        cns[index].insertAdjacentHTML('afterend', target);
-        elem.removeChild(cns[index]);
-      } else {
-        var node = _browser2.default.getParent(vd.name);
-        node.innerHTML = target;
-        elem.replaceChild(node.firstChild, cns[index]);
-      }
-    }
-    //别忘了触发DOM事件
-    vd.emit(_Event2.default.DOM);
-  }
-}
-function insertAt(elem, cns, index, vd, isText) {
-  var target;
-  if (isText) {
-    var s = _util2.default.stringify(vd);
-    target = document.createTextNode(s || '');
-    if (index >= cns.length) {
-      elem.appendChild(target);
-    } else {
-      elem.insertBefore(target, cns[index]);
-    }
-    if (vd instanceof migi.NonVisualComponent) {
-      vd.emit(_Event2.default.DOM);
-    }
-  } else {
-    target = vd.toString();
-    if (index >= cns.length) {
-      elem.insertAdjacentHTML('beforeend', target);
-    } else {
-      if (cns[index].nodeType == 1) {
-        cns[index].insertAdjacentHTML('beforebegin', target);
-      } else {
-        var node = _browser2.default.getParent(vd.name);
-        node.innerHTML = target;
-        elem.insertBefore(node.firstChild, cns[index]);
-      }
-    }
-    //别忘了触发DOM事件
-    vd.emit(_Event2.default.DOM);
-  }
-}
-
-function add(elem, vd, ranges, option, history, temp, last, parent) {
-  if (Array.isArray(vd)) {
-    history.push(0);
-    //防止空数组跳过的情况
-    for (var i = 0, len = Math.max(vd.length, 1); i < len; i++) {
-      var item = vd[i];
-      history[history.length - 1] = i;
-      add(elem, item, ranges, option, history, temp, last && i == len - 1, parent);
-    }
-    history.pop();
-  } else if (vd instanceof _Element2.default && !(vd instanceof migi.NonVisualComponent)) {
-    vd.__parent = parent;
-    vd.__top = parent.top;
-    vd.style = parent.style;
-    _hash2.default.set(vd);
-    if (temp.hasOwnProperty('prev')) {
-      if (option.prev == _type2.default.TEXT) {
-        option.start++;
-      }
-      insertAt(elem, elem.childNodes, option.start++, vd);
-      if (last) {
-        //根据add之前最后一次情况决定下次text判断的特殊逻辑
-        switch (temp.state) {
-          case TEXT_TO_TEXT:
-          case DOM_TO_TEXT:
-            option.t2d = true;
-            break;
-          default:
-            delete option.d2t;
-        }
-      }
-    } else {
-      temp.state = option.state;
-      switch (option.state) {
-        case DOM_TO_TEXT:
-          option.start++;
-          //d(t) -> td(t)
-          break;
-        case TEXT_TO_TEXT:
-          addRange(ranges, option);
-          option.start++;
-          //t(t) -> td(t)
-          option.t2d = true;
-          break;
-        case TEXT_TO_DOM:
-          //t(t) -> dd(t)
-          option.t2d = true;
-          break;
-        //case DOM_TO_DOM:
-        //d(t) -> dd(t)
-      }
-      insertAt(elem, elem.childNodes, option.start++, vd);
-    }
-    temp.d = true;
-    temp.prev = option.prev = _type2.default.DOM;
-    option.state = DOM_TO_DOM;
-  } else {
-    if (temp.hasOwnProperty('prev')) {
-      if (option.prev == _type2.default.DOM) {
-        _range2.default.record(history, option);
-        insertAt(elem, elem.childNodes, option.start, vd, true);
-      } else {
-        addRange(ranges, option);
-      }
-      //不仅last，还要判断是否插入过d的情况
-      if (last && temp.d) {
-        addRange(ranges, option);
-        //根据add之前最后一次情况决定下次text判断的特殊逻辑
-        switch (temp.state) {
-          case DOM_TO_DOM:
-          case TEXT_TO_DOM:
-            delete option.t2d;
-            break;
-          default:
-            delete option.d2t;
-        }
-      }
-    } else {
-      check(option, elem, vd, ranges, history);
-      temp.state = option.state;
-      switch (option.state) {
-        case DOM_TO_TEXT:
-          //d(t) -> tt(t)
-          option.d2t = true;
-        case TEXT_TO_TEXT:
-          addRange(ranges, option);
-          //t(t) -> tt(t)
-          break;
-        case TEXT_TO_DOM:
-          _range2.default.record(history, option);
-          insertAt(elem, elem.childNodes, option.start, vd, true);
-          addRange(ranges, option);
-          //t(t) -> dt(t)
-          break;
-        case DOM_TO_DOM:
-          _range2.default.record(history, option);
-          insertAt(elem, elem.childNodes, option.start, vd, true);
-          //d(t) -> dt(t)
-          option.d2t = true;
-          break;
-      }
-    }
-    temp.prev = option.prev = _type2.default.TEXT;
-    option.state = TEXT_TO_TEXT;
-  }
-}
-function del(elem, vd, ranges, option, temp, last) {
-  if (Array.isArray(vd)) {
-    for (var i = 0, len = vd.length; i < len; i++) {
-      del(elem, vd[i], ranges, option, temp, last && i == len - 1);
-    }
-  } else if (vd instanceof _Element2.default && !(vd instanceof migi.NonVisualComponent)) {
-    if (temp.hasOwnProperty('prev')) {
-      //刚删过t的话再d索引+1，并且还删过d则连带中间多余的t一并删除
-      if (temp.prev == _type2.default.TEXT) {
-        if (temp.d) {
-          removeAt(elem, option.start + 1);
-        }
-        removeAt(elem, option.start + 1);
-      }
-      //刚删过d的话，检查之前最后的节点状态判别索引是否要+1
-      else {
-          if (option.prev == _type2.default.TEXT) {
-            removeAt(elem, option.start + 1);
-          } else {
-            removeAt(elem, option.start);
-          }
-        }
-      if (last) {
-        //根据del之前最后一次情况决定下次text判断的特殊逻辑
-        switch (option.state) {
-          case TEXT_TO_TEXT:
-          case DOM_TO_TEXT:
-            option.d2t = true;
-            break;
-          default:
-            delete option.t2d;
-            break;
-        }
-      }
-    } else {
-      switch (option.state) {
-        case DOM_TO_TEXT:
-          removeAt(elem, option.start + 1);
-          option.state = TEXT_TO_TEXT;
-          option.prev = _type2.default.TEXT;
-          //dd(t) -> t(t)
-          option.d2t = true;
-          break;
-        case TEXT_TO_TEXT:
-          removeAt(elem, option.start + 1);
-          option.prev = _type2.default.TEXT;
-          //td(t) -> t(t)
-          option.d2t = true;
-          break;
-        case TEXT_TO_DOM:
-          removeAt(elem, option.start);
-          option.state = DOM_TO_DOM;
-          option.prev = _type2.default.DOM;
-          //td(t) -> d(t)
-          break;
-        case DOM_TO_DOM:
-          removeAt(elem, option.start);
-          option.prev = _type2.default.DOM;
-          //dd(t) -> d(t)
-          break;
-      }
-    }
-    temp.d = true;
-    temp.prev = _type2.default.DOM;
-    //缓存对象池
-    _cachePool2.default.add(vd.__destroy());
-  } else {
-    if (temp.hasOwnProperty('prev')) {
-      if (temp.prev == _type2.default.DOM) {
-        addRange(ranges, option);
-      }
-      //不仅last，还要判断是否删除过d的情况
-      if (last && temp.d) {
-        removeAt(elem, option.start + 1);
-        //根据del之前最后一次情况决定下次text判断的特殊逻辑
-        switch (option.state) {
-          case DOM_TO_DOM:
-          case TEXT_TO_DOM:
-            option.t2d = true;
-            break;
-          default:
-            delete option.d2t;
-        }
-      }
-    } else {
-      switch (option.state) {
-        case DOM_TO_TEXT:
-          removeAt(elem, option.start + 1);
-          addRange(ranges, option);
-          option.state = TEXT_TO_TEXT;
-          option.prev = _type2.default.TEXT;
-          //dt(t) -> t(t)
-          break;
-        case TEXT_TO_TEXT:
-          addRange(ranges, option);
-          option.prev = _type2.default.TEXT;
-          //tt(t) -> t(t)
-          break;
-        case DOM_TO_DOM:
-          removeAt(elem, option.start);
-          option.state = DOM_TO_DOM;
-          option.prev = _type2.default.DOM;
-          //dt(t) -> d(t)
-          option.t2d = true;
-          break;
-        case TEXT_TO_DOM:
-          option.prev = _type2.default.DOM;
-          //tt(t) -> d(t)
-          option.t2d = true;
-          break;
-      }
-    }
-    temp.prev = _type2.default.TEXT;
-  }
-}
-function removeAt(elem, start) {
-  // 当table省略tbody直接写tr时，浏览器可能会自动生成tbody节点，diff时不在对比内会造成bug，提前判断下
-  if (elem.childNodes[start]) {
-    elem.removeChild(elem.childNodes[start]);
-  }
-}
-
-function equalText(a, b) {
-  if (a === void 0 || a === null) {
-    a = '';
-  }
-  if (b === void 0 || b === null) {
-    b = '';
-  }
-  return a.toString() == b.toString();
-}
-
-function addRange(ranges, option) {
-  var len = ranges.length;
-  if (!len || ranges[len - 1].start < option.start) {
-    ranges.push({ start: option.start, index: option.record.slice() });
-  }
-}
-
-function diffVd(ovd, nvd) {
-  //相同引用说明没发生变更，在一些使用常量、变量未变的情况下会如此
-  if (ovd == nvd) {
-    return;
-  }
-  //特殊的uid，以及一些引用赋给新vd
-  var elem = ovd.element;
-  var props = ['uid', '__element', '__parent', '__top', '__style', '__dom', '__names'];
-  var i = props.length - 1;
-  for (; i >= 0; i--) {
-    var k = props[i];
-    nvd[k] = ovd[k];
-  }
-  //vd记录更新uid引用
-  _hash2.default.set(nvd);
-  //记录对比过的prop
-  var temp = {};
-  for (i = ovd.__props.length - 1; i >= 0; i--) {
-    var item = ovd.__props[i];
-    var k = item[0];
-    var v = item[1];
-    //只检查普通属性，onXXX事件由__listener中的引用移除
-    if (k.indexOf('on') != 0 || k == 'on') {
-      temp[k] = true;
-      //对比老属性，多余删除，相同无需更新
-      if (nvd.props.hasOwnProperty(k)) {
-        var nv = nvd.props[k];
-        if (nv !== v) {
-          nvd.__updateAttr(k, nv);
-        }
-        nvd.__cache[k] = nv;
-      } else {
-        nvd.__updateAttr(k, null);
-        delete nvd.__cache[k];
-      }
-    }
-  }
-  //移除__listener记录的引用
-  ovd.__removeListener();
-  //添加新vd的属性
-  var len = nvd.__props.length;
-
-  var _loop = function _loop() {
-    item = nvd.__props[i];
-    k = item[0];
-
-    var v = item[1];
-    //事件和属性区分对待
-    if (k.indexOf('on') == 0 && k != 'on') {
-      name = k.slice(2).toLowerCase();
-
-      nvd.__addListener(name, function (e) {
-        e = e || window.event;
-        (0, _fixEvent2.default)(e);
-        var target = e.target;
-        var uid = target.getAttribute('migi-uid');
-        var tvd = _hash2.default.get(uid);
-        if (v instanceof _Cb2.default) {
-          v.cb.call(v.context, e, nvd, tvd);
-        } else if (_util2.default.isFunction(v)) {
-          v(e, nvd, tvd);
-        } else if (Array.isArray(v)) {
-          v.forEach(function (item) {
-            var cb = item[1];
-            if ((0, _delegate2.default)(e, item[0], nvd)) {
-              if (cb instanceof _Cb2.default) {
-                cb.cb.call(cb.context, e, nvd, tvd);
-              } else if (_util2.default.isFunction(cb)) {
-                cb(e, nvd, tvd);
-              }
-            }
-          });
-        }
-      });
-    } else if (!temp.hasOwnProperty(k)) {
-      nvd.__updateAttr(k, v);
-    }
-  };
-
-  for (i = 0; i < len; i++) {
-    var item;
-    var k;
-    var name;
-
-    _loop();
-  }
-  if (nvd.__style) {
-    nvd.__updateStyle(true);
-  }
-  var ranges = [];
-  diffChild(elem, ovd.children, nvd.children, ranges, { start: 0, record: [], first: true }, [], nvd);
-  if (ranges.length) {
-    //textarea特殊判断
-    if (nvd.name == 'textarea') {
-      nvd.__updateAttr('value', _range2.default.value(ranges[0], nvd.children));
-      return;
-    }
-    for (i = ranges.length - 1; i >= 0; i--) {
-      _range2.default.update(ranges[i], nvd.children, elem);
-    }
-  }
-  //缓存对象池
-  _cachePool2.default.add(ovd.__destroy());
-}
-
-function diff(elem, ov, nv, ranges, option, history, parent) {
-  //hack之前的状态，非Obj其实没有发生变更，假设自己变自己的状态
-  if (!option.first) {
-    if (option.prev == _type2.default.TEXT) {
-      option.state = TEXT_TO_TEXT;
-    } else {
-      option.state = DOM_TO_DOM;
-    }
-  }
-  diffChild(elem, ov, nv, ranges, option, history, parent);
-  //当最后一次对比是类型变换时记录，因为随后的text可能要更新
-  if (!option.t2d && !option.d2t) {
-    if (option.state == TEXT_TO_DOM) {
-      option.t2d = true;
-    } else if (option.state == DOM_TO_TEXT) {
-      option.d2t = true;
-    }
-  }
-}
-
-function diffChild(elem, ovd, nvd, ranges, option, history, parent) {
-  //新老值是否是数组处理方式不同
-  var oa = Array.isArray(ovd);
-  var na = Array.isArray(nvd);
-  //都是数组时，还要检查二者长度
-  if (oa && na) {
-    var ol = ovd.length;
-    var nl = nvd.length;
-    var os = ol ? 1 : 0;
-    var ns = nl ? 2 : 0;
-    history.push(0);
-    if (option.first) {
-      _range2.default.record(history, option);
-    }
-    switch (os + ns) {
-      //都是空数组
-      case 0:
-        option.state = TEXT_TO_TEXT;
-        option.prev = _type2.default.TEXT;
-        break;
-      //有内容的数组变为空数组
-      case 1:
-        diffChild(elem, ovd[0], nvd[0], ranges, option, history, parent);
-        var temp = {};
-        for (var i = 1; i < ol; i++) {
-          del(elem, ovd[i], ranges, option, temp, i == ol - 1);
-        }
-        break;
-      //空数组变为有内容
-      case 2:
-        diffChild(elem, ovd[0], nvd[0], ranges, option, history, parent);
-        var temp = {};
-        for (var i = 1; i < nl; i++) {
-          history[history.length - 1] = i;
-          add(elem, nvd[i], ranges, option, history, temp, i == nl - 1, parent);
-        }
-        break;
-      //都有内容
-      case 3:
-        for (var i = 0, len = Math.min(ol, nl); i < len; i++) {
-          history[history.length - 1] = i;
-          diffChild(elem, ovd[i], nvd[i], ranges, option, history, parent);
-        }
-        var temp = {};
-        //老的多余的删除
-        if (i < ol) {
-          for (; i < ol; i++) {
-            del(elem, ovd[i], ranges, option, temp, i == ol - 1);
-          }
-        }
-        //新的多余的插入
-        else if (i < nl) {
-            for (; i < nl; i++) {
-              history[history.length - 1] = i;
-              add(elem, nvd[i], ranges, option, history, temp, i == nl - 1, parent);
-            }
-          }
-        break;
-    }
-    history.pop();
-  }
-  //老的是数组新的不是
-  else if (oa) {
-      //将老的第1个和新的相比，注意老的第一个可能还是个数组，递归下去
-      diffChild(elem, ovd[0], nvd, ranges, option, history, parent);
-      //移除剩余的老的
-      var temp = {};
-      for (var i = 1, len = ovd.length; i < len; i++) {
-        del(elem, ovd[i], ranges, option, temp, i == len - 1);
-      }
-    }
-    //新的是数组老的不是
-    else if (na) {
-        history.push(0);
-        //将新的第1个和老的相比，注意新的第一个可能还是个数组，递归下去
-        diffChild(elem, ovd, nvd[0], ranges, option, history, parent);
-        var temp = {};
-        //增加剩余的新的
-        for (var i = 1, len = nvd.length; i < len; i++) {
-          history[history.length - 1] = i;
-          add(elem, nvd[i], ranges, option, history, temp, i == len - 1, parent);
-        }
-        history.pop();
-      }
-      //都不是数组
-      else {
-          var oe = ovd instanceof _Element2.default && !(ovd instanceof migi.NonVisualComponent) ? 1 : 0;
-          var ne = nvd instanceof _Element2.default && !(nvd instanceof migi.NonVisualComponent) ? 2 : 0;
-          //新老值是否为DOM或TEXT分4种情况
-          switch (oe + ne) {
-            //都是text时，根据上个节点类型和history设置range
-            case 0:
-              if (!option.first) {
-                check(option, elem, nvd, ranges, history);
-              }
-              _range2.default.record(history, option);
-              var cns = elem.childNodes;
-              if (option.first) {
-                if (!equalText(ovd, nvd)) {
-                  addRange(ranges, option);
-                }
-              } else if (!equalText(ovd, nvd)) {
-                switch (option.state) {
-                  case DOM_TO_TEXT:
-                    addRange(ranges, option);
-                    elem.removeChild(cns[option.start + 1]);
-                    break;
-                  case TEXT_TO_DOM:
-                    addRange(ranges, option);
-                    insertAt(elem, cns, option.start, nvd, true);
-                    break;
-                  case DOM_TO_DOM:
-                    _range2.default.record(history, option);
-                  case TEXT_TO_TEXT:
-                    if (!equalText(ovd, nvd)) {
-                      addRange(ranges, option);
-                    }
-                    break;
-                }
-              }
-              //不是第一个但text内容不变时，需根据之前的状态判断处理
-              else {
-                  switch (option.state) {
-                    case DOM_TO_TEXT:
-                      addRange(ranges, option);
-                      elem.removeChild(cns[option.start + 1]);
-                      break;
-                    case TEXT_TO_DOM:
-                      addRange(ranges, option);
-                      insertAt(elem, cns, option.start, nvd, true);
-                      break;
-                  }
-                }
-              option.state = TEXT_TO_TEXT;
-              option.prev = _type2.default.TEXT;
-              break;
-            //DOM变TEXT
-            case 1:
-              _range2.default.record(history, option);
-              var cns = elem.childNodes;
-              //本身就是第1个，直接替换
-              if (option.first) {
-                replaceWith(elem, cns, option.start, nvd, true);
-              } else {
-                switch (option.state) {
-                  case DOM_TO_TEXT:
-                  case TEXT_TO_TEXT:
-                    addRange(ranges, option);
-                    elem.removeChild(cns[option.start + 1]);
-                    break;
-                  case TEXT_TO_DOM:
-                    replaceWith(elem, cns, option.start++, nvd, true);
-                    break;
-                  case DOM_TO_DOM:
-                    replaceWith(elem, cns, option.start, nvd, true);
-                    break;
-                }
-              }
-              //缓存对象池
-              _cachePool2.default.add(ovd.__destroy());
-              option.state = DOM_TO_TEXT;
-              option.prev = _type2.default.TEXT;
-              break;
-            //TEXT变DOM
-            case 2:
-              //这种情况下相当于add新vd，无parent和style引用
-              nvd.__parent = parent;
-              nvd.__top = parent.top;
-              nvd.style = parent.style;
-              _hash2.default.set(nvd);
-              var cns = elem.childNodes;
-              if (option.first) {
-                replaceWith(elem, cns, option.start++, nvd);
-              } else {
-                switch (option.state) {
-                  case DOM_TO_TEXT:
-                    option.start++;
-                  case DOM_TO_DOM:
-                    replaceWith(elem, cns, option.start++, nvd);
-                    break;
-                  case TEXT_TO_DOM:
-                    insertAt(elem, cns, option.start++, nvd);
-                    break;
-                  case TEXT_TO_TEXT:
-                    addRange(ranges, option);
-                    insertAt(elem, cns, ++option.start, nvd);
-                    option.start++;
-                    break;
-                }
-              }
-              option.state = TEXT_TO_DOM;
-              option.prev = _type2.default.DOM;
-              break;
-            //DOM变DOM
-            case 3:
-              if (!option.first) {
-                switch (option.state) {
-                  case DOM_TO_TEXT:
-                  case TEXT_TO_TEXT:
-                    option.start++;
-                    break;
-                }
-                delete option.t2d;
-                delete option.d2t;
-              }
-              var ocp = ovd instanceof _Component2.default ? 1 : 0;
-              var ncp = nvd instanceof _Component2.default ? 2 : 0;
-              switch (ocp + ncp) {
-                //DOM名没变递归diff，否则重绘
-                case 0:
-                  if (ovd.name == nvd.name) {
-                    ovd.__parent = parent;
-                    ovd.__top = parent.top;
-                    diffVd(ovd, nvd);
-                  } else {
-                    nvd.__parent = parent;
-                    nvd.__top = parent.top;
-                    nvd.style = parent.style;
-                    elem = ovd.element;
-                    elem.insertAdjacentHTML('afterend', nvd.toString());
-                    elem.parentNode.removeChild(elem);
-                    nvd.emit(_Event2.default.DOM);
-                    _matchHash2.default.del(ovd.uid);
-                    _hash2.default.set(nvd);
-                    //缓存对象池
-                    _cachePool2.default.add(ovd.__destroy());
-                  }
-                  break;
-                //Component和VirtualDom变化则直接重绘
-                default:
-                  elem = ovd.element;
-                  elem.insertAdjacentHTML('afterend', nvd.toString());
-                  elem.parentNode.removeChild(elem);
-                  nvd.__parent = parent;
-                  nvd.__top = parent.top;
-                  //match中为模拟style的:active伪类注册了window的一些事件，需检查移除
-                  if (ncp) {
-                    _matchHash2.default.del(ovd.virtualDom.uid);
-                  } else {
-                    _matchHash2.default.del(ovd.uid);
-                    nvd.style = parent.style;
-                  }
-                  nvd.emit(_Event2.default.DOM);
-                  _hash2.default.set(nvd);
-                  //缓存对象池
-                  _cachePool2.default.add(ovd.__destroy());
-                  break;
-              }
-              option.state = DOM_TO_DOM;
-              option.prev = _type2.default.DOM;
-              option.start++;
-              break;
-          }
-          //非可视组件被当作空字符串处理，连同其他组件，不要忘了DOM事件
-          if (nvd instanceof migi.NonVisualComponent) {
-            nvd.emit(_Event2.default.DOM);
-          }
-        }
-  option.first = false;
-}
-
-function check(option, elem, vd, ranges, history) {
-  if (option.t2d) {
-    delete option.t2d;
-    _range2.default.record(history, option);
-    insertAt(elem, elem.childNodes, option.start, vd, true);
-  } else if (option.d2t) {
-    delete option.d2t;
-    addRange(ranges, option);
-    removeAt(elem, option.start + 1);
-  }
-}
-
-exports.default = {
-  diff: diff,
-  check: check
-};
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  domactivate: 'DOMActivate',
-  domfocusin: 'DOMFocusIn',
-  msgestureend: 'MSGestureEnd',
-  mspointerdown: 'MSPointerDown',
-  mspointermove: 'MSPointerMove',
-  mspointerup: 'MSPointerUp',
-  mspointercancel: 'MSPointerCancel'
-};
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _VirtualDom = __webpack_require__(9);
-
-var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
-
-var _Event = __webpack_require__(2);
-
-var _Event2 = _interopRequireDefault(_Event);
-
-var _sort = __webpack_require__(26);
-
-var _sort2 = _interopRequireDefault(_sort);
-
-var _hash = __webpack_require__(7);
-
-var _hash2 = _interopRequireDefault(_hash);
-
-var _matchHash = __webpack_require__(35);
-
-var _matchHash2 = _interopRequireDefault(_matchHash);
-
-var _matchUtil = __webpack_require__(25);
-
-var _matchUtil2 = _interopRequireDefault(_matchUtil);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-//names,classes,ids为从当前节点开始往上的列表
-//style为jaw传入的总样式对象
-//virtualDom当前传入的VirtualDom对象
-//first为初始化时第一次
-function match(names, classes, ids, style, virtualDom, first) {
-  var res = [];
-  matchSel(names.length - 1, names, classes, ids, style.default, virtualDom, res, first);
-  //如果有media query
-  if (style.media) {
-    style.media.forEach(function (media) {
-      var match = false;
-      media.query.forEach(function (qlist) {
-        //中一个即命中不再往下匹配
-        if (match) {
-          return;
-        }
-        for (var i = 0, len = qlist.length; i < len; i++) {
-          var item = qlist[i];
-          //Array/String类型标明是否有值，目前只支持Array
-          if (Array.isArray(item)) {
-            var k = item[0].replace(/^-[a-z]+-/i, '').replace(/^mso-/i, '').toLowerCase();
-            var v = item[1];
-            //只支持px单位
-            if (/(px|\d)$/.test(v)) {
-              v = v.replace(/px$/, '');
-              switch (k) {
-                case 'width':
-                case 'height':
-                  var cur = getCur(k);
-                  if (cur == v) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                    return;
-                  }
-                  break;
-                case 'min-width':
-                case 'max-width':
-                case 'min-height':
-                case 'max-height':
-                  var cur = getCur(k.slice(4));
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-                case 'device-width':
-                case 'device-height':
-                  var cur = window.screen[k.slice(7)];
-                  if (cur == v) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                  }
-                  break;
-                case 'min-device-width':
-                case 'min-device-height':
-                case 'max-device-width':
-                case 'max-device-height':
-                  var cur = window.screen[k.slice(11)];
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-                case 'aspect-ratio':
-                  var w = getCur('width');
-                  var h = getCur('height');
-                  var cur = w / h;
-                  var val = v.split('/');
-                  val = val[0] / val[1];
-                  if (cur == val) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                    return;
-                  }
-                  break;
-                case 'min-aspect-ratio':
-                case 'max-aspect-ratio':
-                  var w = getCur('width');
-                  var h = getCur('height');
-                  var cur = w / h;
-                  var val = v.split('/');
-                  val = val[0] / val[1];
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-                case 'device-aspect-ratio':
-                  var w = window.screen.width;
-                  var h = window.screen.height;
-                  var cur = w / h;
-                  var val = v.split('/');
-                  val = val[0] / val[1];
-                  if (cur == val) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                    return;
-                  }
-                  break;
-                case 'min-device-aspect-ratio':
-                case 'max-device-aspect-ratio':
-                  var w = window.screen.width;
-                  var h = window.screen.height;
-                  var cur = w / h;
-                  var val = v.split('/');
-                  val = val[0] / val[1];
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-                case 'device-pixel-ratio':
-                  var cur = window.devicePixelRatio;
-                  if (cur == v) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                    return;
-                  }
-                  break;
-                case 'min-device-pixel-ratio':
-                case 'max-device-pixel-ratio':
-                  var cur = window.devicePixelRatio;
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-              }
-            }
-          }
-        }
-      });
-    });
-    //窗口resize时重新匹配@media query
-    if (first) {
-      var resize = function resize() {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-        timeout = setTimeout(function () {
-          _hash2.default.get(virtualDom.uid).__updateStyle();
-        }, 100);
-      };
-
-      var timeout;
-
-      window.addEventListener('resize', resize);
-      _matchHash2.default.add(virtualDom.uid, resize);
-    }
-  }
-  (0, _sort2.default)(res, function (a, b) {
-    var pa = a[2];
-    var pb = b[2];
-    //引用相等比较出现顺序
-    if (pa == pb) {
-      return a[0] > b[0];
-    }
-    //优先级不相等
-    for (var i = 0; i < 3; i++) {
-      if (pa[i] != pb[i]) {
-        return pa[i] > pb[i];
-      }
-    }
-    //优先级相等比较出现顺序
-    return a[0] > b[0];
-  });
-  var s = '';
-  res.forEach(function (item) {
-    s += item[1] + ';';
-  });
-  return s;
-}
-//从底部往上匹配，即.a .b这样的选择器是.b->.a逆序对比
-//过程中只要不匹配就跳出，i从最大到0
-function matchSel(i, names, classes, ids, style, virtualDom, res, first, isChild) {
-  var combo = _matchUtil2.default.combo(classes[i], names[i], ids[i], style);
-  for (var j = 0, len = combo.length; j < len; j++) {
-    var k = combo[j];
-    if (style.hasOwnProperty(k)) {
-      var item = style[k];
-      //还未到根节点继续匹配
-      if (i) {
-        matchSel(i - 1, names, classes, ids, item, virtualDom.parent, res, first);
-        //多层级时需递归所有层级组合，如<div><p><span>对应div span{}的样式时，并非一一对应
-        if (!isChild) {
-          for (var l = i - 2; l >= 0; l--) {
-            matchSel(l, names, classes, ids, item, virtualDom.parent, res, first);
-          }
-        }
-      }
-      //将当前层次的值存入
-      if (item.hasOwnProperty('_v')) {
-        dealStyle(res, item);
-      }
-      //首次进入处理:伪类
-      if (first && item.hasOwnProperty('_:')) {
-        item['_:'].forEach(function (pseudoItem) {
-          pseudoItem[0].forEach(function (pseudo) {
-            var uid = virtualDom.uid;
-            switch (pseudo) {
-              case 'hover':
-                var onHover = function onHover() {
-                  //因为vd可能destroy导致被回收，所以每次动态从hash中取当前的vd
-                  _hash2.default.get(uid).__hover = true;
-                  _hash2.default.get(uid).__updateStyle();
-                };
-
-                var outHover = function outHover() {
-                  _hash2.default.get(uid).__hover = false;
-                  _hash2.default.get(uid).__updateStyle();
-                };
-
-                var cb = function cb() {
-                  virtualDom.element.addEventListener('mouseenter', onHover);
-                  virtualDom.element.addEventListener('mouseleave', outHover);
-                };
-                //可能由DOMDiff发起，此时已经在DOM上了
-
-
-                if (virtualDom.__dom) {
-                  cb();
-                } else {
-                  virtualDom.once(_Event2.default.DOM, cb);
-                }
-                //记录缓存当destryo时移除
-                virtualDom.__onHover = onHover;
-                virtualDom.__outHover = outHover;
-                break;
-              case 'active':
-                var onActive = function onActive() {
-                  //因为vd可能destroy导致被回收，所以每次动态从hash中取当前的vd
-                  _hash2.default.get(uid).__active = true;
-                  _hash2.default.get(uid).__updateStyle();
-                };
-
-                var outActive = function outActive() {
-                  _hash2.default.get(uid).__active = false;
-                  _hash2.default.get(uid).__updateStyle();
-                };
-
-                var cb2 = function cb2() {
-                  virtualDom.element.addEventListener('mousedown', onActive);
-                  //鼠标弹起捕获body，因为可能会移出元素后再弹起，且事件被shadow化阻止冒泡了
-                  window.addEventListener('mouseup', outActive, true);
-                  //touchend也失焦
-                  window.addEventListener('touchend', outActive, true);
-                  //touchcancel也失焦
-                  window.addEventListener('touchcancel', outActive, true);
-                  //window失焦时也需判断
-                  window.addEventListener('blur', outActive);
-                  //drag结束时也需判断
-                  window.addEventListener('dragend', outActive);
-                };
-                //可能由DOMDiff发起，此时已经在DOM上了
-
-
-                if (virtualDom.__dom) {
-                  cb2();
-                } else {
-                  virtualDom.once(_Event2.default.DOM, cb2);
-                }
-                //对window的侦听需要在destroy后移除，先记录下来
-                _matchHash2.default.add(uid, outActive);
-                break;
-            }
-          });
-        });
-      }
-      //:和[可能同时存在，也可能分开
-      if (item.hasOwnProperty('_:') || item.hasOwnProperty('_[')) {
-        //有:[属性时，检查是否满足伪类情况，全部满足后追加样式
-        var inAttr = function inAttr(item) {
-          if (item && item.hasOwnProperty('_[')) {
-            var item2 = item['_['];
-            item2.forEach(function (attrItem) {
-              var isMatch = _matchUtil2.default.attr(attrItem[0], virtualDom);
-              if (isMatch) {
-                item2 = attrItem[1];
-                //同普通匹配一样
-                if (i) {
-                  matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, first);
-                }
-                if (item2.hasOwnProperty('_v')) {
-                  dealStyle(res, item2);
-                }
-              }
-            });
-          }
-        };
-
-        var item2;
-        //有:伪类时，检查是否满足伪类情况，全部满足后追加样式
-        if (item.hasOwnProperty('_:')) {
-          item2 = item['_:'];
-          item2.forEach(function (pseudoItem) {
-            var isMatch = _matchUtil2.default.pseudo(pseudoItem[0], virtualDom, k);
-            if (isMatch) {
-              item2 = pseudoItem[1];
-              //同普通匹配一样
-              if (i) {
-                matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, first);
-              }
-              if (item2.hasOwnProperty('_v')) {
-                dealStyle(res, item2);
-              }
-            }
-          });
-        }
-        inAttr(item);
-        inAttr(item2);
-      }
-      //父子选择器
-      if (item.hasOwnProperty('_>')) {
-        var item2 = item['_>'];
-        matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, false, isChild);
-      }
-      //相邻兄弟选择器
-      if (item.hasOwnProperty('_+')) {
-        var item2 = item['_+'];
-        var prev = virtualDom.prev();
-        if (prev) {
-          Object.keys(item2).forEach(function (k) {
-            if (_matchUtil2.default.nci(k, prev)) {
-              return;
-            }
-            //将当前层次的值存入
-            if (item2[k].hasOwnProperty('_v')) {
-              dealStyle(res, item2[k]);
-            }
-            matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent, res, false, isChild);
-          });
-        }
-      }
-      //兄弟选择器
-      if (item.hasOwnProperty('_~')) {
-        var item2 = item['_~'];
-        var prevAll = virtualDom.prevAll();
-        if (prevAll.length) {
-          var hasSibiling = false;
-          for (var j = prevAll.length - 1; j >= 0; j--) {
-            var prev = prevAll[j];
-            Object.keys(item2).forEach(function (k) {
-              if (_matchUtil2.default.nci(k, prev)) {
-                return;
-              }
-              //将当前层次的值存入
-              if (item2[k].hasOwnProperty('_v')) {
-                dealStyle(res, item2[k]);
-              }
-              hasSibiling = true;
-              matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent, res, false, isChild);
-            });
-            //一旦前方出现一次，即说明命中兄弟选择器，可以跳出继续判断下去的循环
-            if (hasSibiling) {
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-function dealStyle(res, item) {
-  item._v.forEach(function (style) {
-    style[2] = item._p;
-    res.push(style);
-  });
-}
-
-function getCur(k) {
-  var key = k.charAt(0).toUpperCase() + k.slice(1);
-  return window['inner' + key] || document.documentElement['client' + key] || document.body['client' + key];
-}
-
-exports.default = match;
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Event = __webpack_require__(2);
-
-var _Event2 = _interopRequireDefault(_Event);
-
-var _Element = __webpack_require__(5);
-
-var _Element2 = _interopRequireDefault(_Element);
-
-var _EventBus = __webpack_require__(21);
-
-var _EventBus2 = _interopRequireDefault(_EventBus);
-
-var _Model = __webpack_require__(22);
-
-var _Model2 = _interopRequireDefault(_Model);
-
-var _CacheModel = __webpack_require__(29);
-
-var _CacheModel2 = _interopRequireDefault(_CacheModel);
-
-var _Component = __webpack_require__(6);
-
-var _Component2 = _interopRequireDefault(_Component);
-
-var _VirtualDom = __webpack_require__(9);
-
-var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
-
-var _NonVisualComponent = __webpack_require__(81);
-
-var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
-
-var _CacheComponent = __webpack_require__(28);
-
-var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
-
-var _Obj = __webpack_require__(23);
-
-var _Obj2 = _interopRequireDefault(_Obj);
-
-var _Cb = __webpack_require__(20);
-
-var _Cb2 = _interopRequireDefault(_Cb);
-
-var _cachePool = __webpack_require__(32);
-
-var _cachePool2 = _interopRequireDefault(_cachePool);
-
-var _util = __webpack_require__(3);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _browser = __webpack_require__(24);
-
-var _browser2 = _interopRequireDefault(_browser);
-
-var _sort = __webpack_require__(26);
-
-var _sort2 = _interopRequireDefault(_sort);
-
-var _hash = __webpack_require__(7);
-
-var _hash2 = _interopRequireDefault(_hash);
-
-var _Fastclick = __webpack_require__(30);
-
-var _Fastclick2 = _interopRequireDefault(_Fastclick);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var migi = {
-  render: function render(element, dom) {
-    if (dom) {
-      element.appendTo(dom);
-    }
-    return element;
-  },
-
-  // 提前或服务器端渲染，仅输出，不触发DOM事件
-  preRender: function preRender(element) {
-    return element.toString();
-  },
-  preExist: function preExist(element) {
-    element.preString();
-    return element.emit(_Event2.default.DOM);
-  },
-  createCp: function createCp(cp, props, children) {
-    return _hash2.default.set(new cp(props, children));
-  },
-  createVd: function createVd(name, props, children) {
-    if (name == 'style' || name == 'script') {
-      throw new Error('can not create VirtualDom of: ' + name);
-    }
-    return _hash2.default.set(_cachePool2.default.index ? _cachePool2.default.get().__reset(name, props, children) : new _VirtualDom2.default(name, props, children));
-  },
-
-  Event: _Event2.default,
-  Model: _Model2.default,
-  CacheModel: _CacheModel2.default,
-  EventBus: _EventBus2.default,
-  eventBus: new _EventBus2.default(),
-  Element: _Element2.default,
-  Component: _Component2.default,
-  NonVisualComponent: _NonVisualComponent2.default,
-  CacheComponent: _CacheComponent2.default,
-  VirtualDom: _VirtualDom2.default,
-  Obj: _Obj2.default,
-  Cb: _Cb2.default,
-  util: _util2.default,
-  browser: _browser2.default,
-  sort: _sort2.default,
-  hash: _hash2.default,
-  Fastclick: _Fastclick2.default,
-  name: function name(Class, _name) {
-    if (_Component2.default.prototype.isPrototypeOf(Class.prototype)) {
-      Class.__migiName = _name;
-    }
-  }
-};
-
-if (typeof window != 'undefined') {
-  window.migi = migi;
-  if (document.body) {
-    _Fastclick2.default.attach(document.body);
-  } else {
-    document.addEventListener('DOMContentLoaded', function () {
-      _Fastclick2.default.attach(document.body);
-    });
-  }
-} else if (typeof global != 'undefined') {
-  global.migi = migi;
-}
-
-exports.default = migi;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
-
-/***/ }),
-/* 88 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (vd, name, cb, listener) {
-  if (!hasInitGlobal) {
-    hasInitGlobal = true;
-    initGlobal();
-  }
-  listener.push(['touchstart', onTouchStart]);
-
-  var elem = vd.element;
-
-  elem.addEventListener('touchstart', onTouchStart);
-
-  function onTouchStart(e) {
-    //有可能组件内父子多个使用了手势，冒泡触发了多个
-    if (touch.first) {
-      touchList.push({
-        vd: vd,
-        name: name,
-        cb: cb
-      });
-      return;
-    }
-
-    firstTouch = e.touches[0];
-    if (e.touches && e.touches.length === 1 && touch.x2) {
-      // Clear out touch movement data if we have it sticking around
-      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
-      touch.x2 = undefined;
-      touch.y2 = undefined;
-    }
-
-    touch = {
-      vd: vd,
-      name: name,
-      cb: cb,
-      first: true,
-      x1: firstTouch.pageX,
-      y1: firstTouch.pageY
-    };
-    lastTouch = touch;
-
-    now = Date.now();
-    delta = now - lastTime;
-    lastTime = now;
-    if (delta > 0 && delta < 250) {
-      touch.isDoubleTap = true;
-    }
-  }
-};
-
-/**
- * Thanks to zepto-touch.js
- * https://github.com/madrobby/zepto/blob/master/src/touch.js
- */
-
-var touchList = [];
-var touch = {};
-var lastTouch;
-var tapTimeout;
-var swipeTimeout;
-var longTapDelay = 750;
-var lastTime = 0;
-var now;
-var delta;
-var deltaX = 0;
-var deltaY = 0;
-var firstTouch;
-
-function swipeDirection(x1, x2, y1, y2) {
-  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
-}
-
-function cancelAll() {
-  if (tapTimeout) {
-    clearTimeout(tapTimeout);
-  }
-  if (swipeTimeout) {
-    clearTimeout(swipeTimeout);
-  }
-  tapTimeout = swipeTimeout = null;
-  touch = {};
-  touchList = [];
-}
-
-var hasInitGlobal;
-
-function initGlobal() {
-  document.addEventListener('touchmove', onTouchMove, true);
-  document.addEventListener('touchend', onTouchEnd, true);
-  document.addEventListener('touchcancel', cancelAll, true);
-
-  window.addEventListener('scroll', cancelAll);
-  window.addEventListener('blur', cancelAll);
-}
-
-function onTouchMove(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  firstTouch = e.touches[0];
-  touch.x2 = firstTouch.pageX;
-  touch.y2 = firstTouch.pageY;
-
-  deltaX += Math.abs(touch.x1 - touch.x2);
-  deltaY += Math.abs(touch.y1 - touch.y2);
-}
-
-function onTouchEnd(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  // swipe
-  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
-    swipeTimeout = setTimeout(function () {
-      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
-      if (touch.name == 'swipe' || touch.name == type) {
-        touch.cb(e);
-      }
-      touchList.forEach(function (touch) {
-        if (touch.name == 'swipe' || touch.name == type) {
-          touch.cb(e);
-        }
-      });
-      touch = {};
-      touchList = [];
-    }, 0);
-  }
-  // don't fire tap when delta position changed by more than 30 pixels,
-  // for instance when moving to a point and back to origin
-  else if (deltaX < 30 && deltaY < 30) {
-      tapTimeout = setTimeout(function () {
-        var isLongTap = Date.now() - lastTime > longTapDelay;
-        if (isLongTap) {
-          if (touch.name == 'longtap') {
-            touch.cb(e);
-          }
-          touchList.forEach(function (touch) {
-            if (touch.name == 'longtap') {
-              touch.cb(e);
-            }
-          });
-        }
-        // trigger double tap immediately
-        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
-            if (touch.name == 'doubletap') {
-              touch.cb(e);
-            }
-            touchList.forEach(function (touch) {
-              if (touch.name == 'doubletap') {
-                touch.cb(e);
-              }
-            });
-          }
-        touch = {};
-        touchList = [];
-      }, 0);
-    } else {
-      touch = {};
-      touchList = [];
-    }
-  deltaX = deltaY = 0;
-}
-
-;
 
 /***/ })
 /******/ ]);

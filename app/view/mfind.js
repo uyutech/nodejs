@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 34);
+/******/ 	return __webpack_require__(__webpack_require__.s = 45);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1012,42 +1012,6 @@ var PlayList = function (_migi$Component) {
   }
 
   _createClass(PlayList, [{
-    key: "setData",
-    value: function setData(data) {
-      var self = this;
-      var s = '';
-      (data || []).forEach(function (item) {
-        s += self.genItem(item);
-      });
-      $(self.ref.list.element).html(s);
-    }
-  }, {
-    key: "appendData",
-    value: function appendData(data) {
-      var self = this;
-      var s = '';
-      (data || []).forEach(function (item) {
-        s += self.genItem(item);
-      });
-      $(self.ref.list.element).append(s);
-    }
-  }, {
-    key: "genItem",
-    value: function genItem(item) {
-      return migi.createVd("li", [], [migi.createVd("a", [["href", "/works/" + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.img100_100(item.cover_Pic) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("div", [["class", "txt"], ["worksId", item.WorksID || item.WorkID]], [migi.createVd("a", [["href", "/works/" + item.WorksID], ["class", "name"]], [item.Title]), migi.createVd("p", [["class", "intro"]], [item.sub_Title])])]);
-      //{
-      // item.type.map(function(item2) {
-      //   return <b class={ item2 }/>;
-      // })
-      //}
-    }
-  }, {
-    key: "click",
-    value: function click(e, vd, tvd) {
-      var id = tvd.props.worksId;
-      _util2.default.goto("/works/" + id);
-    }
-  }, {
     key: "render",
     value: function render() {
       return migi.createVd("div", [["class", "cp-playlist"]], [migi.createVd("ul", [["class", "list"], ["ref", "list"]], [new migi.Obj("dataList", this, function () {
@@ -1073,7 +1037,8 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1093,7 +1058,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(25);
+var _Banner = __webpack_require__(35);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -1247,7 +1212,6 @@ var Find = function (_migi$Component) {
 migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
-/* 14 */,
 /* 15 */,
 /* 16 */,
 /* 17 */,
@@ -1258,7 +1222,17 @@ migi.name(Find, "Find");exports.default = Find;
 /* 22 */,
 /* 23 */,
 /* 24 */,
-/* 25 */
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1304,15 +1278,16 @@ var Banner = function (_migi$Component) {
 migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1344,7 +1319,7 @@ var _BotNav = __webpack_require__(2);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Find = __webpack_require__(13);
+var _Find = __webpack_require__(14);
 
 var _Find2 = _interopRequireDefault(_Find);
 

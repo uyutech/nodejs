@@ -15,6 +15,6 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return 'http://test.circling.cc/' + url.replace(/^\//, '');
-  }
+    return 'http://172.19.118.93/' + url.replace(/^\//, '');
+  },
 };

@@ -4,6 +4,7 @@ module.exports = {
     mworks: './app/view/m/works.jsx',
     mauthor: './app/view/m/author.jsx',
     msearch: './app/view/m/search.jsx',
+    dfind: './app/view/d/find.jsx',
   },
   output: {
     path: __dirname + '/app/view',

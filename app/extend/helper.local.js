@@ -11,4 +11,10 @@ module.exports = {
     }
     return '/public' + url;
   },
+  getRemoteUrl(url) {
+    if(url.indexOf('//') > -1) {
+      return url;
+    }
+    return 'http://192.168.0.3/' + url.replace(/^\//, '');
+  },
 };
