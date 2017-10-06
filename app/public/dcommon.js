@@ -17503,6 +17503,7 @@ migi.name(Share, "Share");exports.default = Share;
  */
 
 var parent = window.parent;
+
 if (parent !== window) {
   var hostname = parent.location.hostname;
   if (hostname.indexOf('circling.cc') === -1) {
@@ -17544,8 +17545,13 @@ if (parent !== window) {
       parent.setWidth(document.documentElement.clientWidth);
     });
   }
+} else if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+  var hash = location.hash;
+  hash = hash || '#/find';
+  hash = hash.replace(/^#/, '').replace(/^\//, '');
+  location.replace('//m.' + location.host + '/' + hash);
 } else if (location.pathname !== '/') {
-  // location.href = '/#' + location.pathname;
+  location.href = '/#' + location.pathname;
 }
 
 /***/ }),
