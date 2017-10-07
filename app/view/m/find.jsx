@@ -35,12 +35,12 @@ export default function(data) {
 ${ topNav }
 ${ botNav }
 <script>
-  var $CONFIG = {
-    hotWorkList: ${JSON.stringify(hotWorkList)},
-    hotAuthorList: ${JSON.stringify(hotAuthorList)},
-    tags: ${JSON.stringify(tags)},
-    playList: ${JSON.stringify(playList)},
-  };
+  ${data.helper.$CONFIG}
+  $CONFIG.hotWorkList = ${JSON.stringify(hotWorkList)};
+  $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
+  $CONFIG.tags = ${JSON.stringify(tags)};
+  $CONFIG.playList = ${JSON.stringify(playList)};
+  $CONFIG.playList2 = ${JSON.stringify(playList2)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mfind.js')}"></script>

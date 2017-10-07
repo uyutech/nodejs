@@ -2560,7 +2560,7 @@ exports.default = function (data) {
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, []));
   var botNav = migi.preRender(migi.createCp(_BotNav2.default, []));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMTopNav({ title: worksDetail.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  var $CONFIG = {\n    worksID: \'' + worksID + '\',\n    worksDetail: ' + JSON.stringify(worksDetail) + ',\n    commentData: ' + JSON.stringify(commentData) + ',\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mworks.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMTopNav({ title: worksDetail.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mworks.js') + '"></script>\n</body>\n</html>';
 };
 
 var _TopNav = __webpack_require__(4);

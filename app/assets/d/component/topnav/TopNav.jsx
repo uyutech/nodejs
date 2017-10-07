@@ -28,16 +28,17 @@ class TopNav extends migi.Component {
     }
   }
   render() {
+    let userInfo = this.props.userInfo || {};
     return <div class="cp-topnav">
       <div class="c">
         <a class="logo" href="#/">转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！</a>
         <form class="search" onSubmit={ this.submit }>
           <input type="text" ref="input" maxlength="16" placeholder="弱弱的初级搜索功能QAQ"/>
         </form>
-        <a href="#/my" class="user" onClick={ this.click }>
-          <span>{ '登陆/注册' }</span>
-          <img src={ '//zhuanquan.xyz/img/blank.png' }/>
-        </a>
+        <div class="user" onClick={ this.click }>
+          <span>{ userInfo.NickName || '登陆/注册' }</span>
+          <img src={ userInfo.Head_Url || '//zhuanquan.xyz/img/blank.png' }/>
+        </div>
       </div>
     </div>;
   }

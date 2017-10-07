@@ -12,12 +12,26 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['d2m', 'm2d'];
+  config.middleware = ['d2m', 'm2d', 'user'];
   config.d2m = {
     match: '/d',
   };
   config.m2d = {
     match: '/m',
+  };
+  config.user = {
+    match: function(ctx) {
+      if(ctx.request.path.startsWith('/m/')) {
+        return true;
+      }
+      if(ctx.request.path.startsWith('/d/')) {
+        return true;
+      }
+      if(ctx.request.path.startsWith('/api/')) {
+        return true;
+      }
+      return false;
+    },
   };
 
   config.view = {

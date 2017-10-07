@@ -28,11 +28,10 @@ export default function(data) {
 <div id="page">${works}</div>
 ${data.helper.getDBotNav()}
 <script>
-  var $CONFIG = {
-    worksID: ${JSON.stringify(worksID)},
-    worksDetail: ${JSON.stringify(worksDetail)},
-    commentData: ${JSON.stringify(commentData)},
-  };
+  ${data.helper.$CONFIG}
+  $CONFIG.worksID = ${JSON.stringify(worksID)};
+  $CONFIG.worksDetail = ${JSON.stringify(worksDetail)};
+  $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dworks.js')}"></script>

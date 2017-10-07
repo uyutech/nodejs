@@ -15,6 +15,9 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return 'http://test.circling.cc/' + url.replace(/^\//, '');
+    return 'http://192.168.0.3/' + url.replace(/^\//, '');
   },
+  weiboAppKey: '1987340303',
+  weiboAppSecret: 'ae82c745736d8dc78230d96388790b22',
+  weiboRedirect: 'http://dev.circling.cc/oauth/login',
 };

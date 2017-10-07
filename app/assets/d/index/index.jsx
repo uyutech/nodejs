@@ -8,7 +8,7 @@ import TopNav from '../component/topnav/TopNav.jsx';
 import CIframe from '../component/ciframe/CIframe.jsx';
 import QuanNiang from './QuanNiang.jsx';
 
-let topNav = migi.preExist(<TopNav/>);
+let topNav = migi.preExist(<TopNav userInfo={ $CONFIG.userInfo }/>);
 
 let cIframe;
 

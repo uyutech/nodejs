@@ -30,11 +30,10 @@ export default function(data) {
 ${topNav}
 ${botNav}
 <script>
-  var $CONFIG = {
-    worksID: '${worksID}',
-    worksDetail: ${JSON.stringify(worksDetail)},
-    commentData: ${JSON.stringify(commentData)},
-  };
+  ${data.helper.$CONFIG}
+  $CONFIG.worksID = ${JSON.stringify(worksID)};
+  $CONFIG.worksDetail = ${JSON.stringify(worksDetail)};
+  $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mworks.js')}"></script>

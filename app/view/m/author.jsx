@@ -39,14 +39,13 @@ export default function(data) {
 ${topNav}
 ${botNav}
 <script>
-  var $CONFIG = {
-    authorID: '${authorID}',
-    authorDetail: ${JSON.stringify(authorDetail)},
-    homeDetail: ${JSON.stringify(homeDetail)},
-    tags: ${JSON.stringify(tags)},
-    playList: ${JSON.stringify(playList)},
-    commentData: ${JSON.stringify(commentData)},
-  };
+  ${data.helper.$CONFIG}
+  $CONFIG.authorID = ${JSON.stringify(authorID)};
+  $CONFIG.authorDetail = ${JSON.stringify(authorDetail)};
+  $CONFIG.homeDetail = ${JSON.stringify(homeDetail)};
+  $CONFIG.tags = ${JSON.stringify(tags)};
+  $CONFIG.playList = ${JSON.stringify(playList)};
+  $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mauthor.js')}"></script>

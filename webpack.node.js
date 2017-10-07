@@ -1,6 +1,5 @@
 module.exports = {
   entry: {
-    weibo: './app/view/oauth/weibo.jsx',
     mfind: './app/view/m/find.jsx',
     mworks: './app/view/m/works.jsx',
     mauthor: './app/view/m/author.jsx',

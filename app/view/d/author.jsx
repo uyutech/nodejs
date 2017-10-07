@@ -36,15 +36,14 @@ export default function(data) {
 <div id="page">${author}</div>
 ${data.helper.getDBotNav()}
 <script>
-  var $CONFIG = {
-    authorID: ${JSON.stringify(authorID)},
-    authorDetail: ${JSON.stringify(authorDetail)},
-    homeDetail: ${JSON.stringify(homeDetail)},
-    tags: ${JSON.stringify(tags)},
-    playList: ${JSON.stringify(playList)},
-    playList2: ${JSON.stringify(playList2)},
-    commentData: ${JSON.stringify(commentData)},
-  };
+  ${data.helper.$CONFIG}
+  $CONFIG.authorID = ${JSON.stringify(authorID)};
+  $CONFIG.authorDetail = ${JSON.stringify(authorDetail)};
+  $CONFIG.homeDetail = ${JSON.stringify(homeDetail)};
+  $CONFIG.tags = ${JSON.stringify(tags)};
+  $CONFIG.playList = ${JSON.stringify(playList)};
+  $CONFIG.playList2 = ${JSON.stringify(playList2)};
+  $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dauthor.js')}"></script>

@@ -3,6 +3,7 @@
 module.exports = app => {
   app.get('/404.html', 'error.c404');
   app.get('/oauth/weibo', 'oauth.weibo');
+  app.get('/oauth/login', 'oauth.login');
 
   app.get('/d', 'd.index.index');
   app.get('/d/find', 'd.find.index');

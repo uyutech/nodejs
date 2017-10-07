@@ -133,7 +133,8 @@ var TopNav = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]), migi.createVd("form", [["class", "search"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["ref", "input"], ["maxlength", "16"], ["placeholder", "弱弱的初级搜索功能QAQ"]])]), migi.createVd("a", [["href", "#/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], ['登陆/注册']), migi.createVd("img", [["src", '//zhuanquan.xyz/img/blank.png']])])])]);
+      var userInfo = this.props.userInfo || {};
+      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]), migi.createVd("form", [["class", "search"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["ref", "input"], ["maxlength", "16"], ["placeholder", "弱弱的初级搜索功能QAQ"]])]), migi.createVd("div", [["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], [userInfo.NickName || '登陆/注册']), migi.createVd("img", [["src", userInfo.Head_Url || '//zhuanquan.xyz/img/blank.png']])])])]);
     }
   }]);
 
@@ -156,9 +157,11 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (data) {
   migi.Element.resetUid();
-  var topNav = migi.preRender(migi.createCp(_TopNav2.default, []));
+  var userInfo = data.userInfo;
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dindex.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<script>\n  var $CONFIG = {\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dindex.js') + '"></script>\n</body>\n</html>';
+  var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo]]));
+
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dindex.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dindex.js') + '"></script>\n</body>\n</html>';
 };
 
 var _TopNav = __webpack_require__(24);

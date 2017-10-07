@@ -90,7 +90,7 @@ var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var topNav = migi.preExist(migi.createCp(_TopNav2.default, []));
+var topNav = migi.preExist(migi.createCp(_TopNav2.default, [["userInfo", $CONFIG.userInfo]]));
 
 var cIframe = void 0;
 
@@ -251,7 +251,8 @@ var TopNav = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]), migi.createVd("form", [["class", "search"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["ref", "input"], ["maxlength", "16"], ["placeholder", "弱弱的初级搜索功能QAQ"]])]), migi.createVd("a", [["href", "#/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], ['登陆/注册']), migi.createVd("img", [["src", '//zhuanquan.xyz/img/blank.png']])])])]);
+      var userInfo = this.props.userInfo || {};
+      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]), migi.createVd("form", [["class", "search"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["ref", "input"], ["maxlength", "16"], ["placeholder", "弱弱的初级搜索功能QAQ"]])]), migi.createVd("div", [["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], [userInfo.NickName || '登陆/注册']), migi.createVd("img", [["src", userInfo.Head_Url || '//zhuanquan.xyz/img/blank.png']])])])]);
     }
   }]);
 

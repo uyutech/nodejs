@@ -8,7 +8,9 @@ import TopNav from '../../assets/d/component/topnav/TopNav.jsx';
 
 export default function(data) {
   migi.Element.resetUid();
-  let topNav = migi.preRender(<TopNav/>);
+  let userInfo = data.userInfo;
+
+  let topNav = migi.preRender(<TopNav userInfo={ userInfo }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -20,8 +22,8 @@ export default function(data) {
 <body>
 ${topNav}
 <script>
-  var $CONFIG = {
-  };
+  ${data.helper.$CONFIG}
+  $CONFIG.userInfo = ${JSON.stringify(userInfo)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dindex.js')}"></script>

@@ -623,7 +623,7 @@ exports.default = function (data) {
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["kw", kw]]));
   var botNav = migi.preRender(migi.createCp(_BotNav2.default, []));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMTopNav({ title: kw }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/msearch.css') + '"/>\n</head>\n<body>\n<div id="page">' + search + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  var $CONFIG = {\n    kw: ' + JSON.stringify(kw) + ',\n    datas: ' + JSON.stringify(datas) + ',\n  };\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/msearch.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMTopNav({ title: kw }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/msearch.css') + '"/>\n</head>\n<body>\n<div id="page">' + search + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.kw = ' + JSON.stringify(kw) + ';\n  $CONFIG.datas = ' + JSON.stringify(datas) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/msearch.js') + '"></script>\n</body>\n</html>';
 };
 
 var _TopNav = __webpack_require__(4);

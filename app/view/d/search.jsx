@@ -24,10 +24,9 @@ export default function(data) {
 <div id="page">${ search }</div>
 ${data.helper.getDBotNav()}
 <script>
-  var $CONFIG = {
-    kw: ${JSON.stringify(kw)},
-    datas: ${JSON.stringify(datas)},
-  };
+  ${data.helper.$CONFIG}
+  $CONFIG.kw = ${JSON.stringify(kw)};
+  $CONFIG.datas = ${JSON.stringify(datas)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dsearch.js')}"></script>

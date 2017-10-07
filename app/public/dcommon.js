@@ -17348,9 +17348,9 @@ var NeedLogin = function (_migi$Component) {
   }, {
     key: "clickWeibo",
     value: function clickWeibo(e) {
+      e.preventDefault();
       var parent = window.parent;
       if (parent !== window) {
-        e.preventDefault();
         parent.goto && parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
       } else {
         window.goto && window.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
