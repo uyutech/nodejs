@@ -251,7 +251,7 @@ var TopNav = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]), migi.createVd("form", [["class", "search"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["ref", "input"], ["maxlength", "16"], ["placeholder", "弱弱的初级搜索功能QAQ"]])]), migi.createVd("a", [["href", "#/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], ['登陆/注册']), migi.createVd("img", [["src", '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])])]);
+      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]), migi.createVd("form", [["class", "search"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["ref", "input"], ["maxlength", "16"], ["placeholder", "弱弱的初级搜索功能QAQ"]])]), migi.createVd("a", [["href", "#/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], ['登陆/注册']), migi.createVd("img", [["src", '//zhuanquan.xyz/img/blank.png']])])])]);
     }
   }]);
 

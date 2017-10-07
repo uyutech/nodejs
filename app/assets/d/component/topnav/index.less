@@ -6,28 +6,34 @@
 
 .cp-topnav{
   position:relative;
-  box-sizing:border-box;
-  height:0.72rem;
-  line-height:0.72rem;
-  background:@bgLinearGradientTopLeft;
+  height:0.85rem;
+  background:url(bg.png) repeat-x center 0;
+  background-size:auto 0.85rem;
   //background-size:0.89rem auto;
   z-index:999;
-  box-shadow:0 0 0.1rem rgba(0,0,0,0.2);
+  //box-shadow:0 0 0.1rem rgba(0,0,0,0.2);
+  .c{
+    position:relative;
+    margin:0 auto;
+    width:10rem;
+    height:100%;
+    line-height:0.7rem;
+  }
   .logo{
     display:block;
-    padding-left:3.8rem;
+    padding-left:1.5rem;
     width:4rem;
-    height:100%;
-    background:url(logo-beta-white-slogan.png) no-repeat 0.4rem center;
-    background-size:3.13rem auto;
+    height:0.7rem;
+    background:url(logo-beta-white.png) no-repeat 0 center;
+    background-size:1.34rem auto;
     color:#ebf2f6;
-    font-size:0.14rem;
+    font-size:0.12rem;
     font-weight:400;
   }
   .search{
     position:absolute;
     top:0.2rem;
-    right:2rem;
+    left:5rem;
     padding:0 0.1rem 0 0.2rem;
     box-sizing:border-box;
     width:3.2rem;
@@ -56,15 +62,25 @@
   .user{
     position:absolute;
     top:0;
-    right:0.5rem;
+    right:-0.05rem;
     display:block;
+    height:100%;
     font-size:0.14rem;
     color:#fff;
+    span{
+      position:absolute;
+      right:0.9rem;
+      white-space:nowrap;
+    }
     img{
-      display:inline-block;
-      margin-left:0.1rem;
-      width:0.36rem;
-      height:0.36rem;
+      position:absolute;
+      bottom:0;
+      right:0;
+      display:block;
+      box-sizing:border-box;
+      border:1px solid #4E8EB0;
+      width:0.8rem;
+      height:0.8rem;
       background:#F1F6F9;
       border-radius:100%;
       vertical-align:middle;
