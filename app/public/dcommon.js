@@ -17351,7 +17351,9 @@ var NeedLogin = function (_migi$Component) {
       var parent = window.parent;
       if (parent !== window) {
         e.preventDefault();
-        parent.goto && parent.goto(window.$CONFIG.loginUrl);
+        parent.goto && parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
+      } else {
+        window.goto && window.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
       }
     }
   }, {
@@ -17359,7 +17361,7 @@ var NeedLogin = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "cp-mlogin fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("h3", [], ["您尚未登录..."]), migi.createVd("p", [], [new migi.Obj("message", this, function () {
         return this.message || '登录后即可进行相关操作~';
-      })]), migi.createVd("a", [["href", window.$CONFIG.loginUrl], ["class", "weibo"], ["onClick", new migi.Cb(this, this.clickWeibo)]], ["微博登录"]), migi.createVd("a", [["href", "#"], ["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
+      })]), migi.createVd("a", [["href", "/oauth/weibo"], ["class", "weibo"], ["onClick", new migi.Cb(this, this.clickWeibo)]], ["微博登录"]), migi.createVd("a", [["href", "#"], ["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
     }
   }, {
     key: "message",
@@ -17545,11 +17547,6 @@ if (parent !== window) {
       parent.setWidth(document.documentElement.clientWidth);
     });
   }
-} else if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
-  var hash = location.hash;
-  hash = hash || '#/find';
-  hash = hash.replace(/^#/, '').replace(/^\//, '');
-  location.replace('//m.' + location.host + '/' + hash);
 } else if (location.pathname !== '/') {
   location.href = '/#' + location.pathname;
 }

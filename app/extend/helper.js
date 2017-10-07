@@ -22,6 +22,7 @@ module.exports = {
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
       <title>${data.title || '转圈'}</title>
+      <link rel="icon" href="//zhuanquan.xyz/img/aede5930c001d6ed888ce4186a86502b.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>
       <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -46,6 +47,7 @@ module.exports = {
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
       <title>${data.title || '转圈'}</title>
+      <link rel="icon" href="//zhuanquan.xyz/img/aede5930c001d6ed888ce4186a86502b.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>
       <meta name="apple-mobile-web-app-capable" content="yes"/>

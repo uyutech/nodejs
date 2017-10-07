@@ -47,12 +47,6 @@ if(parent !== window) {
     });
   }
 }
-else if(navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
-  let hash = location.hash;
-  hash = hash || '#/find';
-  hash = hash.replace(/^#/, '').replace(/^\//, '');
-  location.replace('//m.' + location.host + '/' + hash);
-}
 else if(location.pathname !== '/') {
   location.href = '/#' + location.pathname;
 }

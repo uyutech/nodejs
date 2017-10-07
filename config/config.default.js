@@ -12,7 +12,13 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = [];
+  config.middleware = ['d2m', 'm2d'];
+  config.d2m = {
+    match: '/d',
+  };
+  config.m2d = {
+    match: '/m',
+  };
 
   config.view = {
     defaultViewEngine: 'migi',
