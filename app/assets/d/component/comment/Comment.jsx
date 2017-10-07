@@ -2,13 +2,16 @@
  * Created by army8735 on 2017/8/26.
  */
 
+import net from '../../common/net';
+import util from '../../common/util';
+
 const NOT_LOADED = 0;
 const IS_LOADING = 1;
 const HAS_LOADED = 2;
 let subLoadHash = {};
 let subSkipHash = {};
 let $lastSlide;
-let Take = 10;
+let take = 10;
 let ajax;
 
 function formatTime(time) {
@@ -50,8 +53,8 @@ class Comment extends migi.Component {
       let $root = $(self.element);
       $root.on('click', '.zan', function() {
         let $span = $(this);
-        let CommentID = $span.attr('cid');
-        util.postJSON(self.props.zanUrl, { CommentID }, function(res) {
+        let commentID = $span.attr('cid');
+        net.postJSON(self.props.zanUrl, { commentID }, function(res) {
           if(res.success) {
             let data = res.data;
             if(data.State === 'likeWordsUser') {
@@ -77,7 +80,7 @@ class Comment extends migi.Component {
         let $message = $(this);
         let rid = $message.attr('rid');
         $message.removeClass('more').text('读取中...');
-        ajax = util.postJSON(self.props.subUrl, { RootID: rid, Skip: subSkipHash[rid], Take }, function(res) {
+        ajax = net.postJSON(self.props.subUrl, { rootID: rid, skip: subSkipHash[rid], take }, function(res) {
           if(res.success) {
             let data = res.data;
             if(data.data.length) {
@@ -88,7 +91,7 @@ class Comment extends migi.Component {
               });
               let $ul = $message.prev();
               $ul.append(s);
-              if(data.data.length < Take) {
+              if(data.data.length < take) {
                 $message.addClass('fn-hide');
               }
               else {
@@ -112,7 +115,7 @@ class Comment extends migi.Component {
       $root.on('click', '.remove', function() {
         let $btn = $(this);
         let cid = $btn.attr('cid');
-        util.postJSON(self.props.delUrl, { CommentID: cid }, function(res) {
+        net.postJSON(self.props.delUrl, { commentID: cid }, function(res) {
           if(res.success) {
             $btn.closest('li').remove();
           }
@@ -161,7 +164,7 @@ class Comment extends migi.Component {
       else {
         $list2.css('height', 'auto');
         subLoadHash[rid] = IS_LOADING;
-        ajax = util.postJSON(self.props.subUrl, { RootID: rid, Skip: -1, Take }, function(res) {
+        ajax = net.postJSON(self.props.subUrl, { rootID: rid, skip: -1, take }, function(res) {
           if(res.success) {
             subLoadHash[rid] = HAS_LOADED;
             let s = '';

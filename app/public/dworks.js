@@ -68,6 +68,121 @@
 /************************************************************************/
 /******/ ({
 
+/***/ 10:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+var code2Data = {
+  '901': {
+    name: '出品',
+    display: '出品',
+    css: 'producer'
+  },
+  '111': {
+    name: '演唱',
+    display: '演唱',
+    css: 'singer'
+  },
+  '112': {
+    name: '和声',
+    display: '和声',
+    css: 'singer'
+  },
+  '121': {
+    name: '作曲',
+    display: '作曲',
+    css: 'musician'
+  },
+  '122': {
+    name: '编曲',
+    display: '编曲',
+    css: 'musician'
+  },
+  '131': {
+    name: '混音',
+    display: '混音',
+    css: 'mixer'
+  },
+  '134': {
+    name: '修音',
+    display: '修音',
+    css: 'mixer'
+  },
+  '141': {
+    name: '演奏',
+    display: '', //直接显示乐器名。
+    css: 'instrumental'
+  },
+  '211': {
+    name: '视频',
+    display: '视频',
+    css: 'video'
+  },
+  '311': {
+    name: '立绘',
+    display: '立绘',
+    css: 'painter'
+  },
+  '312': {
+    name: 'CG',
+    display: 'CG',
+    css: 'painter'
+  },
+  '313': {
+    name: '场景',
+    display: '场景',
+    css: 'painter'
+  },
+  '331': {
+    name: '设计',
+    display: '设计',
+    css: 'designer'
+  },
+  '332': {
+    name: '海报',
+    display: '海报',
+    css: 'designer'
+  },
+  '351': {
+    name: '书法',
+    display: '书法',
+    css: 'handwriting'
+  },
+  '411': {
+    name: '作词',
+    display: '作词',
+    css: 'writer'
+  },
+  '421': {
+    name: '文案',
+    display: '文案',
+    css: 'writer'
+  }
+};
+
+var label2Code = {};
+Object.keys(code2Data).forEach(function (k) {
+  var v = code2Data[k];
+  label2Code[v.css] = label2Code[v.css] || [];
+  label2Code[v.css].push(k);
+});
+
+exports.default = {
+  code2Data: code2Data,
+  label2Code: label2Code
+};
+
+/***/ }),
+
 /***/ 102:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -80,7 +195,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(6);
+var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -448,7 +563,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(9);
+var _authorTemplate = __webpack_require__(10);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -965,11 +1080,13 @@ var Title = function (_migi$Component) {
   _createClass(Title, [{
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "title"]], [migi.createVd("h1", [], [new migi.Obj("title", this, function () {
+      return migi.createVd("div", [["class", "title"]], [migi.createVd("div", [["class", "t"]], [migi.createVd("span", [], ["类型"]), migi.createVd("h1", [], [new migi.Obj("title", this, function () {
         return this.title;
-      })]), migi.createVd("h2", [], [new migi.Obj("subTitle", this, function () {
+      })]), migi.createVd("h2", [["class", new migi.Obj("subTitle", this, function () {
+        return this.subTitle ? '' : 'fn-hide';
+      })]], [new migi.Obj("subTitle", this, function () {
         return this.subTitle;
-      })])]);
+      })])]), migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [["class", "tags fn-clear"]], [migi.createVd("li", [], ["标签"])]), migi.createVd("ul", [["class", "authors fn-clear"]], [migi.createVd("li", [], ["标签"])])])]);
     }
   }, {
     key: "title",
@@ -1008,11 +1125,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(6);
+var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _net = __webpack_require__(59);
+var _net = __webpack_require__(8);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -1321,19 +1438,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(59);
+var _net = __webpack_require__(8);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(6);
+var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(35);
+var _Comment = __webpack_require__(36);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(40);
+var _Page = __webpack_require__(41);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -1719,7 +1836,40 @@ exports.default = function (workType) {
 
 /***/ }),
 
-/***/ 35:
+/***/ 3:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army on 2017/5/20.
+ */
+
+var util = {
+  goto: function goto(url) {
+    location.href = url;
+  },
+  img192_192: function img192_192(url) {
+    return url ? url + '-192_192' : url;
+  },
+  img144_144: function img144_144(url) {
+    return url ? url + '-144_144' : url;
+  },
+  img100_100: function img100_100(url) {
+    return url ? url + '-100_100' : url;
+  },
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+};
+
+exports.default = util;
+
+/***/ }),
+
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1730,6 +1880,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _net = __webpack_require__(8);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(3);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1743,7 +1903,7 @@ var HAS_LOADED = 2;
 var subLoadHash = {};
 var subSkipHash = {};
 var $lastSlide = void 0;
-var Take = 10;
+var take = 10;
 var ajax = void 0;
 
 function formatTime(time) {
@@ -1796,8 +1956,8 @@ var Comment = function (_migi$Component) {
       var $root = $(self.element);
       $root.on('click', '.zan', function () {
         var $span = $(this);
-        var CommentID = $span.attr('cid');
-        util.postJSON(self.props.zanUrl, { CommentID: CommentID }, function (res) {
+        var commentID = $span.attr('cid');
+        _net2.default.postJSON(self.props.zanUrl, { commentID: commentID }, function (res) {
           if (res.success) {
             var _data = res.data;
             if (_data.State === 'likeWordsUser') {
@@ -1809,7 +1969,7 @@ var Comment = function (_migi$Component) {
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
-            alert(res.message || util.ERROR_MESSAGE);
+            alert(res.message || _util2.default.ERROR_MESSAGE);
           }
         });
       });
@@ -1820,7 +1980,7 @@ var Comment = function (_migi$Component) {
         var $message = $(this);
         var rid = $message.attr('rid');
         $message.removeClass('more').text('读取中...');
-        ajax = util.postJSON(self.props.subUrl, { RootID: rid, Skip: subSkipHash[rid], Take: Take }, function (res) {
+        ajax = _net2.default.postJSON(self.props.subUrl, { rootID: rid, skip: subSkipHash[rid], take: take }, function (res) {
           if (res.success) {
             var _data2 = res.data;
             if (_data2.data.length) {
@@ -1831,7 +1991,7 @@ var Comment = function (_migi$Component) {
               });
               var $ul = $message.prev();
               $ul.append(s);
-              if (_data2.data.length < Take) {
+              if (_data2.data.length < take) {
                 $message.addClass('fn-hide');
               } else {
                 $message.addClass('more').text('点击加载更多');
@@ -1840,10 +2000,10 @@ var Comment = function (_migi$Component) {
               $message.addClass('fn-hide');
             }
           } else {
-            $message.addClass('more').text(res.message || util.ERROR_MESSAGE);
+            $message.addClass('more').text(res.message || _util2.default.ERROR_MESSAGE);
           }
         }, function (res) {
-          $message.addClass('more').text(res.message || util.ERROR_MESSAGE);
+          $message.addClass('more').text(res.message || _util2.default.ERROR_MESSAGE);
         });
       });
       $root.on('click', '.share', function (e) {
@@ -1852,13 +2012,13 @@ var Comment = function (_migi$Component) {
       $root.on('click', '.remove', function () {
         var $btn = $(this);
         var cid = $btn.attr('cid');
-        util.postJSON(self.props.delUrl, { CommentID: cid }, function (res) {
+        _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
           if (res.success) {
             $btn.closest('li').remove();
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
-            alert(res.message || util.ERROR_MESSAGE);
+            alert(res.message || _util2.default.ERROR_MESSAGE);
           }
         });
       });
@@ -1900,7 +2060,7 @@ var Comment = function (_migi$Component) {
         } else {
           $list2.css('height', 'auto');
           subLoadHash[rid] = IS_LOADING;
-          ajax = util.postJSON(self.props.subUrl, { RootID: rid, Skip: -1, Take: Take }, function (res) {
+          ajax = _net2.default.postJSON(self.props.subUrl, { rootID: rid, skip: -1, take: take }, function (res) {
             if (res.success) {
               subLoadHash[rid] = HAS_LOADED;
               var s = '';
@@ -1919,11 +2079,11 @@ var Comment = function (_migi$Component) {
               $list2.css('height', 'auto');
             } else {
               subLoadHash[rid] = NOT_LOADED;
-              $message.text(res.message || util.ERROR_MESSAGE);
+              $message.text(res.message || _util2.default.ERROR_MESSAGE);
             }
           }, function (res) {
             subLoadHash[rid] = NOT_LOADED;
-            $message.text(res.message || util.ERROR_MESSAGE);
+            $message.text(res.message || _util2.default.ERROR_MESSAGE);
           });
         }
       }
@@ -2013,7 +2173,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 40:
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2185,108 +2345,6 @@ var Page = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Page, "Page");exports.default = Page;
-
-/***/ }),
-
-/***/ 59:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Created by army8735 on 2017/10/6.
- */
-
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var net = {
-  ajax: function ajax(url, data, _success, _error, type) {
-    var csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function beforeSend(xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function success(data, state, xhr) {
-          _success(data, state, xhr);
-        },
-        error: function error(data) {
-          if (!_error.__hasExec) {
-            _error.__hasExec = true;
-            _error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function getJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function postJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error, 'post');
-  }
-};
-
-exports.default = net;
-
-/***/ }),
-
-/***/ 6:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army on 2017/5/20.
- */
-
-var util = {
-  goto: function goto(url) {
-    location.href = url;
-  },
-  img192_192: function img192_192(url) {
-    return url ? url + '-192_192' : url;
-  },
-  img144_144: function img144_144(url) {
-    return url ? url + '-144_144' : url;
-  },
-  img100_100: function img100_100(url) {
-    return url ? url + '-100_100' : url;
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-exports.default = util;
 
 /***/ }),
 
@@ -2630,125 +2688,79 @@ migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
 
-/***/ 81:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 9:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/**
+ * Created by army8735 on 2017/10/6.
+ */
+
 
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-var code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer'
+var net = {
+  ajax: function ajax(url, data, _success, _error, type) {
+    var csrfToken = $.cookie('csrfToken');
+    function load() {
+      return $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        crossDomain: true,
+        timeout: 6000,
+        type: type || 'get',
+        headers: {
+          'x-csrf-token': csrfToken
+        },
+        // ajax 跨域设置必须加上
+        beforeSend: function beforeSend(xhr) {
+          xhr.withCredentials = true;
+        },
+        success: function success(data, state, xhr) {
+          _success(data, state, xhr);
+        },
+        error: function error(data) {
+          if (!_error.__hasExec) {
+            _error.__hasExec = true;
+            _error(data || {});
+          }
+        }
+      });
+    }
+    return load();
   },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer'
+  getJSON: function getJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function () {};
+    return net.ajax(url, data, success, error);
   },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer'
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician'
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician'
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer'
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer'
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental'
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video'
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter'
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter'
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter'
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer'
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer'
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting'
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer'
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer'
+  postJSON: function postJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function () {};
+    return net.ajax(url, data, success, error, 'post');
   }
 };
 
-var label2Code = {};
-Object.keys(code2Data).forEach(function (k) {
-  var v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
+exports.default = net;
 
-exports.default = {
-  code2Data: code2Data,
-  label2Code: label2Code
-};
+/***/ }),
+
+/***/ 81:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 

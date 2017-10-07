@@ -2,6 +2,8 @@
  * Created by army8735 on 2017/8/8.
  */
 
+import net from '../common/net';
+import util from '../common/util';
 import authorTemplate from '../component/author/authorTemplate';
 
 class Profile extends migi.Component {
@@ -37,7 +39,7 @@ class Profile extends migi.Component {
     let self = this;
     self.loading = true;
     if(self.isLike) {
-      util.postJSON('api/author/RemoveAuthorToUser', { Author: self.authorID }, function(res) {
+      net.postJSON('/api/author/unFollow', { authorID: self.authorID }, function(res) {
         if(res.success) {
           self.isLike = false;
           self.fansNumber = res.data.followCount;
@@ -56,7 +58,7 @@ class Profile extends migi.Component {
       });
     }
     else {
-      util.postJSON('api/author/SaveAuthorToUser', { Author: self.authorID }, function(res) {
+      net.postJSON('/api/author/follow', { authorID: self.authorID } , function(res) {
         if(res.success) {
           self.isLike = true;
           self.fansNumber = res.data.followCount;

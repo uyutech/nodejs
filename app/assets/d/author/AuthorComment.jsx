@@ -2,14 +2,16 @@
  * Created by army8735 on 2017/9/19.
  */
 
+import net from '../common/net';
+import util from '../common/util';
 import Comment from '../component/comment/Comment.jsx';
 import Page from '../component/page/Page.jsx';
 
-let Skip = 0;
-let Take = 10;
-let SortType = 0;
-let MyComment = 0;
-let CurrentCount = 0;
+let skip = 0;
+let take = 10;
+let sortType = 0;
+let myComment = 0;
+let currentCount = 0;
 let ajax;
 let loadEnd;
 
@@ -17,10 +19,11 @@ class AuthorComment extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function() {
       let page = self.ref.page;
       page.on('page', function(i) {
-        Skip = (i - 1) * Take;
+        skip = (i - 1) * take;
         self.loadPage();
       });
       let comment = self.ref.comment;
@@ -50,7 +53,7 @@ class AuthorComment extends migi.Component {
     let self = this;
     $(self.element).addClass('fn-hide');
     self.showComment = false;
-    Skip = 0;
+    skip = 0;
   }
   load() {
     let self = this;
@@ -62,15 +65,15 @@ class AuthorComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = util.postJSON('api/author/GetToAuthorMessage_List', { AuthorID: self.authorID , Skip, Take, SortType, MyComment, CurrentCount }, function(res) {
+    ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        CurrentCount = data.Size;
-        Skip += Take;
+        currentCount = data.Size;
+        skip += take;
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
-          page.total = Math.ceil(CurrentCount / Take);
+          page.total = Math.ceil(currentCount / take);
         }
         else {
           comment.appendData(res.data.data);
@@ -99,11 +102,11 @@ class AuthorComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = util.postJSON('api/author/GetToAuthorMessage_List', { AuthorID: self.authorID , Skip, Take, SortType, MyComment, CurrentCount }, function(res) {
+    ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        CurrentCount = data.Size;
-        Skip += Take;
+        currentCount = data.Size;
+        skip += take;
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
@@ -131,9 +134,9 @@ class AuthorComment extends migi.Component {
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    CurrentCount = 0;
-    SortType = rel;
-    Skip = 0;
+    currentCount = 0;
+    sortType = rel;
+    skip = 0;
     if(ajax) {
       ajax.abort();
     }
@@ -147,9 +150,9 @@ class AuthorComment extends migi.Component {
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    CurrentCount = 0;
-    MyComment = rel;
-    Skip = 0;
+    currentCount = 0;
+    myComment = rel;
+    skip = 0;
     if(ajax) {
       ajax.abort();
     }
@@ -164,7 +167,7 @@ class AuthorComment extends migi.Component {
     this.rootId = null;
   }
   input(e, vd) {
-    if(window.$CONFIG.isLogin !== 'True') {
+    if(!window.$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
     }
     else {
@@ -173,7 +176,7 @@ class AuthorComment extends migi.Component {
     }
   }
   focus(e, vd) {
-    if(window.$CONFIG.isLogin !== 'True') {
+    if(!window.$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
     }
   }
@@ -182,15 +185,15 @@ class AuthorComment extends migi.Component {
     let self = this;
     if(self.hasContent) {
       let $input = $(this.ref.input.element);
-      let Content = $input.val();
-      let ParentID = self.replayId !== null ? self.replayId : -1;
-      let RootID = self.rootId !== null ? self.rootId : -1;
+      let content = $input.val();
+      let parentID = self.replayId !== null ? self.replayId : -1;
+      let rootID = self.rootId !== null ? self.rootId : -1;
       self.loading = true;
-      util.postJSON('api/author/AddComment', {
-        ParentID,
-        RootID,
-        Content,
-        AuthorCommentID: self.authorID,
+      net.postJSON('/api/author/addComment', {
+        authorID: self.authorID,
+        parentID,
+        rootID,
+        content,
       }, function(res) {
         if(res.success) {
           $input.val('');
@@ -231,12 +234,12 @@ class AuthorComment extends migi.Component {
         <input type="text" class="text" ref="input" placeholder="请输入评论内容" onInput={ this.input } onFocus={ this.focus }/>
         <input type="submit" class={ 'submit' + (this.hasContent && !this.loading ? '' : ' dis') } value="发布评论"/>
       </form>
-      <Page ref="page"/>
+      <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <Comment
         ref="comment"
-        zanUrl="api/author/AddWorkCommentLike"
-        subUrl="api/author/GetTocomment_T_List"
-        delUrl="api/author/DeleteCommentByID"
+        zanUrl="/api/author/likeComment"
+        subUrl="/api/author/subCommentList"
+        delUrl="/api/author/delComment"
         data={ this.props.commentData.data }/>
     </div>;
   }

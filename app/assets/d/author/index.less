@@ -300,6 +300,7 @@
       position:relative;
       display:inline-block;
       margin-right:2rem;
+      cursor:pointer;
       &:last-child{
         margin:0;
       }
@@ -312,13 +313,14 @@
         border-radius:0.24rem;
         line-height:0.22rem;
         box-sizing:border-box;
-        cursor:pointer;
+      }
+      &.cur{
+        cursor:default;
       }
       &.cur span{
         border:none;
         color:#fff;
         background:@bgLinearGradient;
-        cursor:default;
         line-height:0.24rem;
       }
       &:before{
@@ -646,6 +648,12 @@
           cursor:pointer;
         }
       }
+    }
+    .reply{
+      margin:0.05rem 0;
+      padding-left:0.1rem;
+      font-size:0.12rem;
+      color:#999;
     }
     .form{
       position:relative;

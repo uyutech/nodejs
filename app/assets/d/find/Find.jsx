@@ -2,6 +2,8 @@
  * Created by army8735 on 2017/9/21.
  */
 
+import net from '../common/net';
+import util from '../common/util';
 import Banner from './Banner.jsx';
 import HotWork from '../component/hotwork/HotWork.jsx';
 import HotCollection from '../component/hotcollection/HotCollection.jsx';
@@ -26,7 +28,7 @@ class Find extends migi.Component {
             ajaxL2.abort();
           }
           doubleCheck.isLoadindL2 = true;
-          util.postJSON('api/find/GetAuthorFilterlevelB', { FilterlevelA: param }, function (res) {
+          net.postJSON('api/find/GetAuthorFilterlevelB', { FilterlevelA: param }, function (res) {
             if(res.success) {
               let data = res.data;
               doubleCheck.tagList2 = data;
@@ -50,7 +52,7 @@ class Find extends migi.Component {
       });
       let hotWork = self.ref.hotWork;
       hotWork.on('change', function() {
-        util.postJSON('api/find/Hot_works_List', function(res) {
+        net.postJSON('/api/find/hotWorkList', function(res) {
           if(res.success) {
             let data = res.data;
             hotWork.dataList = data;
@@ -61,19 +63,19 @@ class Find extends migi.Component {
   }
   load() {
     let self = this;
-    util.postJSON('api/find/Hot_works_List', function(res) {
+    net.postJSON('api/find/Hot_works_List', function(res) {
       if(res.success) {
         let data = res.data;
         self.ref.hotWork.dataList = data;
       }
     });
-    util.postJSON('api/find/Hot_Author_List', function(res) {
+    net.postJSON('api/find/Hot_Author_List', function(res) {
       if(res.success) {
         let data = res.data;
         self.ref.hotAuthor.dataList = data;
       }
     });
-    util.postJSON('api/find/GetTag', { Skip:0, Take: 10 }, function(res) {
+    net.postJSON('api/find/GetTag', { Skip:0, Take: 10 }, function(res) {
       if(res.success) {
         let data = res.data;
         data.FilterlevelA = [{
@@ -93,10 +95,11 @@ class Find extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    ajax = util.postJSON('api/find/GetFindWorkList', { Parameter, Skip: 0, Take: 10, SortType }, function(res) {
+    ajax = net.postJSON('/api/find/playList', { Parameter, Skip: 0, Take: 10, SortType }, function(res) {
       if(res.success) {
         let data = res.data;
-        self.ref.playList.setData(data.data);
+        self.ref.playList.dataList = data.playList;
+        self.ref.playList.dataList2 = data.playList2;
       }
     });
   }

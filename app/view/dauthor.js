@@ -68,8 +68,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */,
-/* 1 */,
-/* 2 */
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -98,9 +97,77 @@ let util = {
 
 
 /***/ }),
+/* 2 */,
 /* 3 */,
 /* 4 */,
 /* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army8735 on 2017/10/6.
+ */
+
+
+
+let net = {
+  ajax: function(url, data, success, error, type) {
+    let csrfToken = $.cookie('csrfToken');
+    function load() {
+      return $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        crossDomain: true,
+        timeout: 6000,
+        type: type || 'get',
+        headers: {
+          'x-csrf-token': csrfToken,
+        },
+        // ajax 跨域设置必须加上
+        beforeSend: function (xhr) {
+          xhr.withCredentials = true;
+        },
+        success: function (data, state, xhr) {
+          success(data, state, xhr);
+        },
+        error: function (data) {
+          if(!error.__hasExec) {
+            error.__hasExec = true;
+            error(data || {});
+          }
+        }
+      });
+    }
+    return load();
+  },
+  getJSON: function(url, data, success, error) {
+    if(typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function() {};
+    return net.ajax(url, data, success, error);
+  },
+  postJSON: function(url, data, success, error) {
+    if(typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function() {};
+    return net.ajax(url, data, success, error, 'post');
+  },
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (net);
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -211,8 +278,8 @@ Object.keys(code2Data).forEach(function(k) {
 
 
 /***/ }),
-/* 6 */,
-/* 7 */
+/* 7 */,
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -271,7 +338,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -282,6 +349,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _net = __webpack_require__(5);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(1);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -295,7 +372,7 @@ var HAS_LOADED = 2;
 var subLoadHash = {};
 var subSkipHash = {};
 var $lastSlide = void 0;
-var Take = 10;
+var take = 10;
 var ajax = void 0;
 
 function formatTime(time) {
@@ -348,8 +425,8 @@ var Comment = function (_migi$Component) {
       var $root = $(self.element);
       $root.on('click', '.zan', function () {
         var $span = $(this);
-        var CommentID = $span.attr('cid');
-        util.postJSON(self.props.zanUrl, { CommentID: CommentID }, function (res) {
+        var commentID = $span.attr('cid');
+        _net2.default.postJSON(self.props.zanUrl, { commentID: commentID }, function (res) {
           if (res.success) {
             var _data = res.data;
             if (_data.State === 'likeWordsUser') {
@@ -361,7 +438,7 @@ var Comment = function (_migi$Component) {
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
-            alert(res.message || util.ERROR_MESSAGE);
+            alert(res.message || _util2.default.ERROR_MESSAGE);
           }
         });
       });
@@ -372,7 +449,7 @@ var Comment = function (_migi$Component) {
         var $message = $(this);
         var rid = $message.attr('rid');
         $message.removeClass('more').text('读取中...');
-        ajax = util.postJSON(self.props.subUrl, { RootID: rid, Skip: subSkipHash[rid], Take: Take }, function (res) {
+        ajax = _net2.default.postJSON(self.props.subUrl, { rootID: rid, skip: subSkipHash[rid], take: take }, function (res) {
           if (res.success) {
             var _data2 = res.data;
             if (_data2.data.length) {
@@ -383,7 +460,7 @@ var Comment = function (_migi$Component) {
               });
               var $ul = $message.prev();
               $ul.append(s);
-              if (_data2.data.length < Take) {
+              if (_data2.data.length < take) {
                 $message.addClass('fn-hide');
               } else {
                 $message.addClass('more').text('点击加载更多');
@@ -392,10 +469,10 @@ var Comment = function (_migi$Component) {
               $message.addClass('fn-hide');
             }
           } else {
-            $message.addClass('more').text(res.message || util.ERROR_MESSAGE);
+            $message.addClass('more').text(res.message || _util2.default.ERROR_MESSAGE);
           }
         }, function (res) {
-          $message.addClass('more').text(res.message || util.ERROR_MESSAGE);
+          $message.addClass('more').text(res.message || _util2.default.ERROR_MESSAGE);
         });
       });
       $root.on('click', '.share', function (e) {
@@ -404,13 +481,13 @@ var Comment = function (_migi$Component) {
       $root.on('click', '.remove', function () {
         var $btn = $(this);
         var cid = $btn.attr('cid');
-        util.postJSON(self.props.delUrl, { CommentID: cid }, function (res) {
+        _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
           if (res.success) {
             $btn.closest('li').remove();
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
-            alert(res.message || util.ERROR_MESSAGE);
+            alert(res.message || _util2.default.ERROR_MESSAGE);
           }
         });
       });
@@ -452,7 +529,7 @@ var Comment = function (_migi$Component) {
         } else {
           $list2.css('height', 'auto');
           subLoadHash[rid] = IS_LOADING;
-          ajax = util.postJSON(self.props.subUrl, { RootID: rid, Skip: -1, Take: Take }, function (res) {
+          ajax = _net2.default.postJSON(self.props.subUrl, { rootID: rid, skip: -1, take: take }, function (res) {
             if (res.success) {
               subLoadHash[rid] = HAS_LOADED;
               var s = '';
@@ -471,11 +548,11 @@ var Comment = function (_migi$Component) {
               $list2.css('height', 'auto');
             } else {
               subLoadHash[rid] = NOT_LOADED;
-              $message.text(res.message || util.ERROR_MESSAGE);
+              $message.text(res.message || _util2.default.ERROR_MESSAGE);
             }
           }, function (res) {
             subLoadHash[rid] = NOT_LOADED;
-            $message.text(res.message || util.ERROR_MESSAGE);
+            $message.text(res.message || _util2.default.ERROR_MESSAGE);
           });
         }
       }
@@ -564,7 +641,7 @@ var Comment = function (_migi$Component) {
 migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -576,7 +653,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(5);
+var _authorTemplate = __webpack_require__(6);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -787,7 +864,7 @@ var DoubleCheck = function (_migi$Component) {
 migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -799,7 +876,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -867,7 +944,7 @@ var HotAuthor = function (_migi$Component) {
 migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -931,7 +1008,7 @@ var HotCollection = function (_migi$Component) {
 migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -943,11 +1020,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(7);
+var _AuthorType = __webpack_require__(8);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -1019,7 +1096,7 @@ var HotWork = function (_migi$Component) {
 migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1193,7 +1270,7 @@ var Page = function (_migi$Component) {
 migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1205,7 +1282,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -1273,7 +1350,6 @@ var PlayList = function (_migi$Component) {
 migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
-/* 15 */,
 /* 16 */,
 /* 17 */,
 /* 18 */,
@@ -1442,11 +1518,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Comment = __webpack_require__(8);
+var _net = __webpack_require__(5);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(1);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _Comment = __webpack_require__(9);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(13);
+var _Page = __webpack_require__(14);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -1458,11 +1542,11 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Skip = 0;
-var Take = 10;
-var SortType = 0;
-var MyComment = 0;
-var CurrentCount = 0;
+var skip = 0;
+var take = 10;
+var sortType = 0;
+var myComment = 0;
+var currentCount = 0;
 var ajax = void 0;
 var loadEnd = void 0;
 
@@ -1481,10 +1565,11 @@ var AuthorComment = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = AuthorComment.__proto__ || Object.getPrototypeOf(AuthorComment)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
+    self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function () {
       var page = self.ref.page;
       page.on('page', function (i) {
-        Skip = (i - 1) * Take;
+        skip = (i - 1) * take;
         self.loadPage();
       });
       var comment = self.ref.comment;
@@ -1513,7 +1598,7 @@ var AuthorComment = function (_migi$Component) {
       var self = this;
       $(self.element).addClass('fn-hide');
       self.showComment = false;
-      Skip = 0;
+      skip = 0;
     }
   }, {
     key: 'load',
@@ -1527,15 +1612,15 @@ var AuthorComment = function (_migi$Component) {
         ajax.abort();
       }
       self.loading = true;
-      ajax = util.postJSON('api/author/GetToAuthorMessage_List', { AuthorID: self.authorID, Skip: Skip, Take: Take, SortType: SortType, MyComment: MyComment, CurrentCount: CurrentCount }, function (res) {
+      ajax = _net2.default.postJSON('/api/author/commentList', { authorID: self.authorID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          CurrentCount = data.Size;
-          Skip += Take;
+          currentCount = data.Size;
+          skip += take;
           if (data.data.length) {
             comment.message = '';
             comment.appendData(res.data.data);
-            page.total = Math.ceil(CurrentCount / Take);
+            page.total = Math.ceil(currentCount / take);
           } else {
             comment.appendData(res.data.data);
             comment.message = '暂无评论';
@@ -1545,11 +1630,11 @@ var AuthorComment = function (_migi$Component) {
           if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           }
-          comment.message = res.message || util.ERROR_MESSAGE;
+          comment.message = res.message || _util2.default.ERROR_MESSAGE;
         }
         self.loading = false;
       }, function (res) {
-        comment.message = res.message || util.ERROR_MESSAGE;
+        comment.message = res.message || _util2.default.ERROR_MESSAGE;
         self.loading = false;
       });
     }
@@ -1564,11 +1649,11 @@ var AuthorComment = function (_migi$Component) {
         ajax.abort();
       }
       self.loading = true;
-      ajax = util.postJSON('api/author/GetToAuthorMessage_List', { AuthorID: self.authorID, Skip: Skip, Take: Take, SortType: SortType, MyComment: MyComment, CurrentCount: CurrentCount }, function (res) {
+      ajax = _net2.default.postJSON('/api/author/commentList', { authorID: self.authorID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          CurrentCount = data.Size;
-          Skip += Take;
+          currentCount = data.Size;
+          skip += take;
           if (data.data.length) {
             comment.message = '';
             comment.appendData(res.data.data);
@@ -1581,11 +1666,11 @@ var AuthorComment = function (_migi$Component) {
           if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           }
-          comment.message = res.message || util.ERROR_MESSAGE;
+          comment.message = res.message || _util2.default.ERROR_MESSAGE;
         }
         self.loading = false;
       }, function (res) {
-        comment.message = res.message || util.ERROR_MESSAGE;
+        comment.message = res.message || _util2.default.ERROR_MESSAGE;
         self.loading = false;
       });
     }
@@ -1596,9 +1681,9 @@ var AuthorComment = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      CurrentCount = 0;
-      SortType = rel;
-      Skip = 0;
+      currentCount = 0;
+      sortType = rel;
+      skip = 0;
       if (ajax) {
         ajax.abort();
       }
@@ -1614,9 +1699,9 @@ var AuthorComment = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      CurrentCount = 0;
-      MyComment = rel;
-      Skip = 0;
+      currentCount = 0;
+      myComment = rel;
+      skip = 0;
       if (ajax) {
         ajax.abort();
       }
@@ -1635,7 +1720,7 @@ var AuthorComment = function (_migi$Component) {
   }, {
     key: 'input',
     value: function input(e, vd) {
-      if (window.$CONFIG.isLogin !== 'True') {
+      if (!window.$CONFIG.isLogin) {
         migi.eventBus.emit('NEED_LOGIN');
       } else {
         var v = $(vd.element).val().trim();
@@ -1645,7 +1730,7 @@ var AuthorComment = function (_migi$Component) {
   }, {
     key: 'focus',
     value: function focus(e, vd) {
-      if (window.$CONFIG.isLogin !== 'True') {
+      if (!window.$CONFIG.isLogin) {
         migi.eventBus.emit('NEED_LOGIN');
       }
     }
@@ -1656,15 +1741,15 @@ var AuthorComment = function (_migi$Component) {
       var self = this;
       if (self.hasContent) {
         var $input = $(this.ref.input.element);
-        var Content = $input.val();
-        var ParentID = self.replayId !== null ? self.replayId : -1;
-        var RootID = self.rootId !== null ? self.rootId : -1;
+        var content = $input.val();
+        var parentID = self.replayId !== null ? self.replayId : -1;
+        var rootID = self.rootId !== null ? self.rootId : -1;
         self.loading = true;
-        util.postJSON('api/author/AddComment', {
-          ParentID: ParentID,
-          RootID: RootID,
-          Content: Content,
-          AuthorCommentID: self.authorID
+        _net2.default.postJSON('/api/author/addComment', {
+          authorID: self.authorID,
+          parentID: parentID,
+          rootID: rootID,
+          content: content
         }, function (res) {
           if (res.success) {
             $input.val('');
@@ -1678,11 +1763,11 @@ var AuthorComment = function (_migi$Component) {
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
-            alert(res.message || util.ERROR_MESSAGE);
+            alert(res.message || _util2.default.ERROR_MESSAGE);
           }
           self.loading = false;
         }, function (res) {
-          alert(res.message || util.ERROR_MESSAGE);
+          alert(res.message || _util2.default.ERROR_MESSAGE);
           self.loading = false;
         });
       }
@@ -1696,7 +1781,7 @@ var AuthorComment = function (_migi$Component) {
         return this.replayName;
       })]), migi.createVd("form", [["class", "form"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", "请输入评论内容"], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj(["hasContent", "loading"], this, function () {
         return 'submit' + (this.hasContent && !this.loading ? '' : ' dis');
-      })], ["value", "发布评论"]])]), migi.createCp(_Page2.default, [["ref", "page"]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "api/author/AddWorkCommentLike"], ["subUrl", "api/author/GetTocomment_T_List"], ["delUrl", "api/author/DeleteCommentByID"], ["data", this.props.commentData.data]])]);
+      })], ["value", "发布评论"]])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / take)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/author/likeComment"], ["subUrl", "/api/author/subCommentList"], ["delUrl", "/api/author/delComment"], ["data", this.props.commentData.data]])]);
     }
   }, {
     key: 'showComment',
@@ -1774,15 +1859,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _HotWork = __webpack_require__(12);
+var _HotWork = __webpack_require__(13);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotCollection = __webpack_require__(11);
+var _HotCollection = __webpack_require__(12);
 
 var _HotCollection2 = _interopRequireDefault(_HotCollection);
 
-var _HotAuthor = __webpack_require__(10);
+var _HotAuthor = __webpack_require__(11);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
@@ -2036,7 +2121,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(5);
+var _net = __webpack_require__(5);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(1);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _authorTemplate = __webpack_require__(6);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -2073,13 +2166,13 @@ var Profile = function (_migi$Component) {
   }
 
   _createClass(Profile, [{
-    key: "click",
+    key: 'click',
     value: function click(e) {
       e.preventDefault();
       var self = this;
       self.loading = true;
       if (self.isLike) {
-        util.postJSON('api/author/RemoveAuthorToUser', { Author: self.authorID }, function (res) {
+        _net2.default.postJSON('/api/author/unFollow', { authorID: self.authorID }, function (res) {
           if (res.success) {
             self.isLike = false;
             self.fansNumber = res.data.followCount;
@@ -2087,15 +2180,15 @@ var Profile = function (_migi$Component) {
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
-            alert(res.message || util.ERROR_MESSAGE);
+            alert(res.message || _util2.default.ERROR_MESSAGE);
           }
           self.loading = false;
         }, function (res) {
-          alert(res.message || util.ERROR_MESSAGE);
+          alert(res.message || _util2.default.ERROR_MESSAGE);
           self.loading = false;
         });
       } else {
-        util.postJSON('api/author/SaveAuthorToUser', { Author: self.authorID }, function (res) {
+        _net2.default.postJSON('/api/author/follow', { authorID: self.authorID }, function (res) {
           if (res.success) {
             self.isLike = true;
             self.fansNumber = res.data.followCount;
@@ -2103,17 +2196,17 @@ var Profile = function (_migi$Component) {
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
-            alert(res.message || util.ERROR_MESSAGE);
+            alert(res.message || _util2.default.ERROR_MESSAGE);
           }
           self.loading = false;
         }, function (res) {
-          alert(res.message || util.ERROR_MESSAGE);
+          alert(res.message || _util2.default.ERROR_MESSAGE);
           self.loading = false;
         });
       }
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("headUrl", this, function () {
         return this.headUrl || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png';
@@ -2121,7 +2214,7 @@ var Profile = function (_migi$Component) {
         return this.authorName || '&nbsp;';
       })]), new migi.Obj("authorType", this, function () {
         return this.authorType.map(function (item) {
-          return migi.createVd("span", [["class", "cp-author-type-" + item]]);
+          return migi.createVd("span", [["class", 'cp-author-type-' + item]]);
         });
       })]), migi.createVd("p", [["class", "intro"]], [new migi.Obj("sign", this, function () {
         return this.sign || '&nbsp;';
@@ -2134,7 +2227,7 @@ var Profile = function (_migi$Component) {
       })])])])]);
     }
   }, {
-    key: "authorID",
+    key: 'authorID',
     set: function set(v) {
       this.__setBind("authorID", v);this.__data("authorID");
     },
@@ -2142,7 +2235,7 @@ var Profile = function (_migi$Component) {
       return this.__getBind("authorID");
     }
   }, {
-    key: "authorName",
+    key: 'authorName',
     set: function set(v) {
       this.__setBind("authorName", v);this.__data("authorName");
     },
@@ -2150,7 +2243,7 @@ var Profile = function (_migi$Component) {
       return this.__getBind("authorName");
     }
   }, {
-    key: "sign",
+    key: 'sign',
     set: function set(v) {
       this.__setBind("sign", v);this.__data("sign");
     },
@@ -2158,7 +2251,7 @@ var Profile = function (_migi$Component) {
       return this.__getBind("sign");
     }
   }, {
-    key: "authorType",
+    key: 'authorType',
     set: function set(v) {
       this.__setBind("authorType", v);this.__data("authorType");
     },
@@ -2166,7 +2259,7 @@ var Profile = function (_migi$Component) {
       if (this.__initBind("authorType")) this.__setBind("authorType", []);return this.__getBind("authorType");
     }
   }, {
-    key: "headUrl",
+    key: 'headUrl',
     set: function set(v) {
       this.__setBind("headUrl", v);this.__data("headUrl");
     },
@@ -2174,7 +2267,7 @@ var Profile = function (_migi$Component) {
       return this.__getBind("headUrl");
     }
   }, {
-    key: "fansNumber",
+    key: 'fansNumber',
     set: function set(v) {
       this.__setBind("fansNumber", v);this.__data("fansNumber");
     },
@@ -2182,7 +2275,7 @@ var Profile = function (_migi$Component) {
       return this.__getBind("fansNumber");
     }
   }, {
-    key: "isLike",
+    key: 'isLike',
     set: function set(v) {
       this.__setBind("isLike", v);this.__data("isLike");
     },
@@ -2190,7 +2283,7 @@ var Profile = function (_migi$Component) {
       return this.__getBind("isLike");
     }
   }, {
-    key: "loading",
+    key: 'loading',
     set: function set(v) {
       this.__setBind("loading", v);this.__data("loading");
     },
@@ -2198,7 +2291,7 @@ var Profile = function (_migi$Component) {
       if (this.__initBind("loading")) this.__setBind("loading", false);return this.__getBind("loading");
     }
   }, {
-    key: "type",
+    key: 'type',
     set: function set(v) {
       v = v || [];
       var hash = {};
@@ -2286,11 +2379,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _DoubleCheck = __webpack_require__(9);
+var _DoubleCheck = __webpack_require__(10);
 
 var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
 
-var _PlayList = __webpack_require__(14);
+var _PlayList = __webpack_require__(15);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 

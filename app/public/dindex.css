@@ -35,10 +35,10 @@
 .cp-topnav .search {
   position: absolute;
   top: 0.2rem;
-  left: 5rem;
+  right: 2.5rem;
   padding: 0 0.1rem 0 0.2rem;
   box-sizing: border-box;
-  width: 3.2rem;
+  width: 2.5rem;
   height: 0.32rem;
   border: 1px solid #ebf2f6;
   border-radius: 0.32rem;

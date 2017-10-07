@@ -12,8 +12,19 @@ class Title extends migi.Component {
   @bind subTitle
   render() {
     return <div class="title">
-      <h1>{ this.title}</h1>
-      <h2>{ this.subTitle }</h2>
+      <div class="t">
+        <span>类型</span>
+        <h1>{ this.title }</h1>
+        <h2 class={ this.subTitle ? '' : 'fn-hide' }>{ this.subTitle }</h2>
+      </div>
+      <div class="c">
+        <ul class="tags fn-clear">
+          <li>标签</li>
+        </ul>
+        <ul class="authors fn-clear">
+          <li>标签</li>
+        </ul>
+      </div>
     </div>;
   }
 }

@@ -1669,6 +1669,7 @@
   position: relative;
   display: inline-block;
   margin-right: 2rem;
+  cursor: pointer;
 }
 .author > .tags li:last-child {
   margin: 0;
@@ -1682,13 +1683,14 @@
   border-radius: 0.24rem;
   line-height: 0.22rem;
   box-sizing: border-box;
-  cursor: pointer;
+}
+.author > .tags li.cur {
+  cursor: default;
 }
 .author > .tags li.cur span {
   border: none;
   color: #fff;
   background: linear-gradient(#A4D2DF, #7EB4CA);
-  cursor: default;
   line-height: 0.24rem;
 }
 .author > .tags li:before {
@@ -2028,6 +2030,12 @@
 .author > .comments .type2 li.cur {
   color: #4C8DAF;
   cursor: pointer;
+}
+.author > .comments .reply {
+  margin: 0.05rem 0;
+  padding-left: 0.1rem;
+  font-size: 0.12rem;
+  color: #999;
 }
 .author > .comments .form {
   position: relative;

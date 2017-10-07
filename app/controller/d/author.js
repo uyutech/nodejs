@@ -7,6 +7,7 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
+      let uid = ctx.session.uid;
       let authorID = ctx.params.authorID;
       let authorDetail = {};
       let homeDetail = {};
@@ -19,6 +20,7 @@ module.exports = app => {
           authorDetail: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetAuthorDetails'), {
             method: 'POST',
             data: {
+              uid,
               AuthorID: authorID,
             },
             dataType: 'json',
@@ -67,6 +69,7 @@ module.exports = app => {
           commentData: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetToAuthorMessage_List'), {
             method: 'POST',
             data: {
+              uid,
               AuthorID: authorID,
               Skip: 0,
               Take: 10,
