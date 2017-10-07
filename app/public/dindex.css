@@ -88,6 +88,38 @@
   border-radius: 100%;
   vertical-align: middle;
 }
+@media screen and (min-width: 1260px) {
+  .cp-topnav .c {
+    width: 12rem;
+  }
+  .cp-topnav .c .user {
+    right: -0.2rem;
+  }
+}
+@media screen and (min-width: 1380px) {
+  .cp-topnav .c {
+    width: 13rem;
+  }
+  .cp-topnav .c .user {
+    right: -0.28rem;
+  }
+}
+@media screen and (min-width: 1580px) {
+  .cp-topnav .c {
+    width: 15rem;
+  }
+  .cp-topnav .c .user {
+    right: 0.14rem;
+  }
+}
+@media screen and (min-width: 1900px) {
+  .cp-topnav .c {
+    width: 18rem;
+  }
+  .cp-topnav .c .user {
+    right: 0.48rem;
+  }
+}
 /**
  * Created by army8735 on 2017/9/20.
  */
