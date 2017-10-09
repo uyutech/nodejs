@@ -7,6 +7,7 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
+      let uid = ctx.session.uid;
       let worksID = ctx.params.worksID;
       let worksDetail = {};
       let commentData = {};
@@ -15,6 +16,7 @@ module.exports = app => {
           worksDetail: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetWorkDetails'), {
             method: 'POST',
             data: {
+              uid,
               WorksID: worksID,
             },
             dataType: 'json',
@@ -23,6 +25,7 @@ module.exports = app => {
           commentData: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetToWorkMessage_List'), {
             method: 'POST',
             data: {
+              uid,
               WorkID: worksID,
               Skip: 0,
               Take: 10,

@@ -12,14 +12,14 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['d2m', 'm2d', 'user'];
+  config.middleware = ['d2m', 'm2d', 'jsConfig'];
   config.d2m = {
     match: '/d',
   };
   config.m2d = {
     match: '/m',
   };
-  config.user = {
+  config.jsConfig = {
     match: function(ctx) {
       if(ctx.request.path.startsWith('/m/')) {
         return true;

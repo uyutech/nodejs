@@ -17353,7 +17353,7 @@ var NeedLogin = function (_migi$Component) {
       if (parent !== window) {
         parent.goto && parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
       } else {
-        window.goto && window.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
+        location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);
       }
     }
   }, {
@@ -17547,8 +17547,8 @@ if (parent !== window) {
       parent.setWidth(document.documentElement.clientWidth);
     });
   }
-} else if (location.pathname !== '/') {
-  // location.href = '/#' + location.pathname;
+} else if (location.pathname !== '/' && !/__unembed/.test(location.search)) {
+  location.href = '/#' + location.pathname;
 }
 
 /***/ }),

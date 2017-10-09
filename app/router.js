@@ -21,15 +21,18 @@ module.exports = app => {
   app.post('/api/find/tagB', 'api.find.tagB');
   app.post('/api/find/playList', 'api.find.playList');
   app.post('/api/works/commentList', 'api.works.commentList');
+  app.post('/api/works/likeWork', 'api.works.likeWork');
+  app.post('/api/works/favorWork', 'api.works.favorWork');
+  app.post('/api/works/unFavorWork', 'api.works.unFavorWork');
   app.post('/api/author/tagB', 'api.author.tagB');
   app.post('/api/author/playList', 'api.author.playList');
   app.post('/api/author/commentList', 'api.author.commentList');
-  app.post('/api/author/follow', 'api.author.follow');
-  app.post('/api/author/unFollow', 'api.author.unFollow');
-  app.post('/api/author/addComment', 'api.author.addComment');
-  app.post('/api/author/likeComment', 'api.author.likeComment');
+  app.post('/api/author/follow', app.middlewares.needLoginJson(), 'api.author.follow');
+  app.post('/api/author/unFollow', app.middlewares.needLoginJson(), 'api.author.unFollow');
+  app.post('/api/author/addComment', 'api.author.addComment', app.middlewares.needLoginJson());
+  app.post('/api/author/likeComment', app.middlewares.needLoginJson(), 'api.author.likeComment');
   app.post('/api/author/subCommentList', 'api.author.subCommentList');
-  app.post('/api/author/delComment', 'api.author.delComment');
+  app.post('/api/author/delComment', app.middlewares.needLoginJson(), 'api.author.delComment');
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');

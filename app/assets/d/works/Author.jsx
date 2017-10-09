@@ -31,25 +31,13 @@ class Author extends migi.Component {
     });
     this.list = list;
   }
-  clickPrev(e) {
-    e.preventDefault();
-  }
-  clickNext(e) {
-    e.preventDefault();
-  }
   render() {
-    return <div class="author">
-      <div class="fn fn-clear fn-hide">
-        <a class="prev" href="#" onClick={ this.clickPrev }>查看上页</a>
-        <a class="next" href="#" onClick={ this.clickNext }>查看下页</a>
-      </div>
-      <div class="c" ref="c">
-        {
-          this.list.map(function(item) {
-            return <ul>{ item }</ul>;
-          })
-        }
-      </div>
+    return <div class="authors">
+      {
+        this.list.map(function(item) {
+          return <ul>{ item }</ul>;
+        })
+      }
     </div>;
   }
 }

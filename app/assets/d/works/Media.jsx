@@ -20,7 +20,7 @@ class Media extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.on(migi.Event.DOM, function () {
+    self.on(migi.Event.DOM, function () {return;
       let $play = $(this.ref.play.element);
       audio = self.ref.audio;
       video = self.ref.video;
@@ -193,22 +193,9 @@ class Media extends migi.Component {
     this.emit('switchSubWork', last.data);
   }
   render() {
-    return <div class="media" style={ `background-image:url(${this.props.worksDetail.cover_Pic || '//zhuanquan.xin/img/blank.png'})` }>
-      <div class="c" ref="c">
-        <Audio ref="audio" data={ this.props.audioData } show={ this.props.first === 'audio' }/>
-        <Video ref="video" data={ this.props.videoData } show={ this.props.first === 'video' }/>
-      </div>
-      <div class={ 'progress' + (this.canControl ? '' : ' dis') } onClick={ this.clickProgress } ref="progress">
-        <div class="has" ref="has"/>
-        <div class="pbg" ref="pgb">
-          <div class="point" ref="point" onMouseDown={ this.down }/>
-        </div>
-      </div>
-      <div class="bar">
-        <div class="prev dis"/>
-        <div class="play" ref="play" onClick={ this.clickPlay }/>
-        <div class="next dis"/>
-      </div>
+    return <div class="media">
+      <Audio ref="audio" data={ this.props.audioData } show={ this.props.first === 'audio' }/>
+      <Video ref="video" data={ this.props.videoData } show={ this.props.first === 'video' }/>
     </div>;
   }
 }

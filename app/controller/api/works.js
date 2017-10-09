@@ -29,6 +29,66 @@ module.exports = app => {
       }
       ctx.body = res.data;
     }
+    * likeWork(ctx) {
+      let uid = ctx.session.uid;
+      let query = ctx.request.body;
+      let res = {};
+      try {
+        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/works/AddLikeBehavior'), {
+          method: 'POST',
+          data: {
+            uid,
+            WorkItemsID: query.workID,
+          },
+          dataType: 'json',
+          gzip: true,
+        });
+      }
+      catch(e) {
+        ctx.logger.error(e.toString());
+      }
+      ctx.body = res.data;
+    }
+    * favorWork(ctx) {
+      let uid = ctx.session.uid;
+      let query = ctx.request.body;
+      let res = {};
+      try {
+        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/works/AddCollection'), {
+          method: 'POST',
+          data: {
+            uid,
+            WorkItemsID: query.workID,
+          },
+          dataType: 'json',
+          gzip: true,
+        });
+      }
+      catch(e) {
+        ctx.logger.error(e.toString());
+      }
+      ctx.body = res.data;
+    }
+    * unFavorWork(ctx) {
+      let uid = ctx.session.uid;
+      let query = ctx.request.body;
+      let res = {};
+      try {
+        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/works/RemoveCollection'), {
+          method: 'POST',
+          data: {
+            uid,
+            WorkItemsID: query.workID,
+          },
+          dataType: 'json',
+          gzip: true,
+        });
+      }
+      catch(e) {
+        ctx.logger.error(e.toString());
+      }
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

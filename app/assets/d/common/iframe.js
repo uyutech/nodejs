@@ -47,6 +47,6 @@ if(parent !== window) {
     });
   }
 }
-else if(location.pathname !== '/') {
-  // location.href = '/#' + location.pathname;
+else if(location.pathname !== '/' && !/__unembed/.test(location.search)) {
+  location.href = '/#' + location.pathname;
 }

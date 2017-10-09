@@ -222,23 +222,16 @@ class WorkComment extends migi.Component {
   }
   render() {
     return <div class="comments">
-      <h3>评论<small>之后还会增加简介、歌词、翻唱等多种功能，敬请期待-3-</small></h3>
-      <b class="line"/>
-      <div class="fn fn-clear">
-        <ul class="type2 fn-clear" onClick={ { li: this.switchType2 } }>
-          <li class="cur" rel="0">全部</li>
+      <div class="fn">
+        <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
+          <li class="cur" rel="0">全部评论</li>
           <li rel="1">我的</li>
         </ul>
-        <ul class="type fn-clear" onClick={ { li: this.switchType } }>
+        <ul class="type2 fn-clear" onClick={ { li: this.switchType } }>
           <li class="cur" rel="0">最新</li>
           <li rel="1">最热</li>
         </ul>
       </div>
-      <div class={ 'reply' + (this.replayId ? '' : ' fn-hidden') } onClick={ this.clickReplay }>回复：{ this.replayName }</div>
-      <form class="form" ref="form" onSubmit={ this.submit }>
-        <input type="text" class="text" ref="input" placeholder="请输入评论内容" onInput={ this.input } onFocus={ this.focus }/>
-        <input type="submit" class={ 'submit' + (this.hasContent && !this.loading ? '' : ' dis') } value="发布评论"/>
-      </form>
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / 10) }/>
       <Comment ref="comment"
                zanUrl="api/works/AddWorkCommentLike"

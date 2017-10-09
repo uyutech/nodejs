@@ -24,7 +24,7 @@ class NeedLogin extends migi.Component {
       parent.goto && parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
     }
     else {
-      window.goto && window.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
+      location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);
     }
   }
   render() {

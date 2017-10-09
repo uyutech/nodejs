@@ -3,12 +3,10 @@
  */
 
 import Title from './Title.jsx';
-import Author from './Author.jsx';
 import Media from './Media.jsx';
 import itemTemplate from './itemTemplate';
 import Intro from './Intro.jsx';
 import WorkComment from './WorkComment.jsx';
-
 
 let first;
 
@@ -39,28 +37,25 @@ class Works extends migi.Component {
     let authorList = [];
     let authorHash = {};
     works.forEach(function(item) {
-      // 先按每个小作品类型排序其作者
-      migi.sort(item.Works_Item_Author, itemTemplate(item.ItemType).authorSort || function() {});
       // 将每个小作品根据小类型映射到大类型上，再归类
       let bigType = itemTemplate(item.ItemType).bigType;
-      workHash[bigType] = workHash[bigType] || [];
-      workHash[bigType].push(item);
-      item.Works_Item_Author.forEach(function(item) {
-        authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
-        if(!authorHash[item.WorksAuthorType][item.ID]) {
-          authorHash[item.WorksAuthorType][item.ID] = true;
-          authorList.push(item);
-        }
-      });
+      if(bigType) {
+        workHash[bigType] = workHash[bigType] || [];
+        workHash[bigType].push(item);
+        item.Works_Item_Author.forEach(function (item) {
+          authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
+          if(!authorHash[item.WorksAuthorType][item.ID]) {
+            authorHash[item.WorksAuthorType][item.ID] = true;
+            authorList.push(item);
+          }
+        });
+      }
     });
     Object.keys(workHash).forEach(function(k) {
       workList.push({
         bigType: k,
         value: workHash[k],
       });
-    });
-    migi.sort(workList, function(a, b) {
-      return a.bigType > b.bigType;
     });
     authorHash = {};
     let tempHash = {
@@ -264,18 +259,42 @@ class Works extends migi.Component {
   }
   render() {
     return <div class="works fn-clear">
-      <Title ref="title" worksDetail={ this.props.worksDetail }/>
-      <div class="temp fn-clear">
-        <ul class="type" ref="type" onClick={ { li: this.clickType } }>
+      <Title ref="title"
+             worksDetail={ this.props.worksDetail }
+             authorList={ this.authorList }/>
+      <div class="main">
+        <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
           <li class={ 'audio' + (this.hasAudio ? '' : ' fn-hide') + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
           <li class={ 'video' + (this.hasVideo ? '' : ' fn-hide') + (first ==='video' ? ' cur' : '') } rel="video">视频</li>
         </ul>
-        <Author ref="author" authorList={ this.authorList }/>
         <Media ref="media"
                worksDetail={ this.props.worksDetail }
-               audioData={ this.audioData } videoData={ this.videoData } first={ first }/>
+               audioData={ this.audioData }
+               videoData={ this.videoData }
+               first={ first }/>
+        <WorkComment ref="workComment" worksID={ this.props.worksID } commentData={ this.props.commentData }/>
       </div>
-      <WorkComment ref="workComment" worksID={ this.props.worksID } commentData={ this.props.commentData }/>
+      <div class="side">
+        <ul class="sel fn-clear" ref="sel">
+          <li class="cur">简介</li>
+          <li>站外链接</li>
+        </ul>
+        <div class="info">
+          <h4>文案</h4>
+          <div class="intro">
+            <pre>拉开手机发送；的随碟附送\n上来看对方是否</pre>
+            <small class="time">2017.12.12</small>
+          </div>
+          <h4>创作灵感</h4>
+        </div>
+      </div>
+      <div class="form">
+        <form class="fn-clear" ref="form" onSubmit={ this.submit }>
+          <input type="text" class="text" ref="input" placeholder="夸夸这个作品吧"
+                 onInput={ this.input } onFocus={ this.focus } maxlength="120"/>
+          <input type="submit" class={ 'submit' + (this.hasContent && !this.loading ? '' : ' dis') } value="发布评论"/>
+        </form>
+      </div>
     </div>;
   }
 }

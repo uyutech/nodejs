@@ -60,5 +60,5 @@ module.exports = {
   weiboAppKey: '2345825162',
   weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
   weiboRedirect: 'http://circling.cc/oauth/login',
-  $CONFIG: 'var $CONFIG = {};',
+  $CONFIG: 'var $CONFIG = {}; $CONFIG.startTime = Date.now();',
 };
