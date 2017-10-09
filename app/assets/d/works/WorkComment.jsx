@@ -239,9 +239,9 @@ class WorkComment extends migi.Component {
       </div>
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / 10) }/>
       <Comment ref="comment"
-               zanUrl="api/works/AddWorkCommentLike"
-               subUrl="api/works/GetTocomment_T_List"
-               delUrl="api/works/DeleteCommentByID"
+               zanUrl="/api/works/likeComment"
+               subUrl="/api/works/subCommentList"
+               delUrl="/api/works/delComment"
                data={ this.props.commentData.data }/>
     </div>;
   }

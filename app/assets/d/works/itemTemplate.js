@@ -5,20 +5,27 @@
 export default function(workType) {
   switch (workType) {
     case 1111:
-      let weight = [111, 151, 112, 113, 114, 411, 121, 122, 123, 131, 132, 133, 134, 135, 141];
       return {
         bigType: 'audio',
-        authorSort: function(a, b) {
-          return weight.indexOf(a.WorksAuthorType) > weight.indexOf(b.WorksAuthorType);
-        }
+        typeName: '原创音乐',
+      };
+    case 1131:
+      return {
+        bigType: 'audio',
+        typeName: '原创伴奏',
       };
     case 2111:
       return {
         bigType: 'video',
+        typeName: '原创视频',
+      };
+    case 4110:
+      return {
+        bigType: 'text',
+        typeName: '文案',
       };
     default:
       return {
-
-      }
+      };
   }
 };

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 72);
+/******/ 	return __webpack_require__(__webpack_require__.s = 73);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -836,7 +836,7 @@ var _net = __webpack_require__(2);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(58);
+var _Banner = __webpack_require__(59);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -991,7 +991,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1038,7 +1038,7 @@ migi.name(BotNav, "BotNav");exports.default = BotNav;
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1110,7 +1110,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 58:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1269,7 +1269,7 @@ Object.keys(code2Data).forEach(function(k) {
 
 /***/ }),
 
-/***/ 72:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1293,11 +1293,11 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMTopNav({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n  $CONFIG.playList2 = ' + JSON.stringify(playList2) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mfind.js') + '"></script>\n</body>\n</html>';
 };
 
-var _TopNav = __webpack_require__(4);
+var _TopNav = __webpack_require__(5);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _BotNav = __webpack_require__(3);
+var _BotNav = __webpack_require__(4);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 

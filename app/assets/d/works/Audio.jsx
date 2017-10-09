@@ -6,18 +6,17 @@ import net from '../common/net';
 import util from '../common/util';
 import LyricsParser from './LyricsParser.jsx';
 
-let lyricsIndex = -1;
-let lyricsHeight = [];
-let $lyricsRoll;
-
+let isVStart;
+let vOffsetX;
+let isStart;
 let offsetX;
 
 class Audio extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.data) {
-      self.setData(self.props.data);
+    if(self.props.datas) {
+      self.setData(self.props.datas);
       if(self.props.show) {
         self.on(migi.Event.DOM, function() {
           let uid = window.$CONFIG ? $CONFIG.uid : '';
@@ -27,21 +26,32 @@ class Audio extends migi.Component {
           $(self.ref.fn.element).removeClass('fn-hidden');
         });
       }
+      self.on(migi.Event.DOM, function() {
+        $(document).on('mousemove', this.mousemove.bind(this));
+        $(document).on('mouseup', this.mouseup.bind(this));
+        $(document).on('mousemove', this.vmousemove.bind(this));
+        $(document).on('mouseup', this.vmouseup.bind(this));
+      });
     }
   }
-  @bind fileUrl
-  @bind isLike
-  @bind isFavor
+  @bind datas = []
+  @bind index = 0
   @bind isPlaying
-  @bind workIndex = 0
-  @bind lineLyrics
-  @bind rollLyrics = []
   @bind showLyricsMode
-  @bind currentTime
+  @bind lyricsIndex = 0
   @bind duration
-  @bind title
   @bind canControl
   @bind muted
+  get currentTime() {
+    return this._currentTime || 0;
+  }
+  @bind
+  set currentTime(v) {
+    this._currentTime = v;
+    if(this.audio && v !== this.audio.element.currentTime) {
+      this.audio.element.currentTime = v;
+    }
+  }
   get volume() {
     return this._volume || 0.5;
   }
@@ -53,17 +63,10 @@ class Audio extends migi.Component {
       this.audio.element.volume = v;
     }
   }
-  setData(data) {
+  setData(datas) {
     let self = this;
-    self.data = data;
-    self.isLike = data[0].ISLike;
-    self.isFavor = data[0].ISFavor;
-    self.fileUrl = data[0].FileUrl;
-    self.title = data[0].ItemName;
-    self.tips = data.map(function(item) {
-      return item.Tips || '普通版';
-    });
-    data.forEach(function(item) {
+    self.datas = datas;
+    datas.forEach(function(item) {
       let l = {};
       if(LyricsParser.isLyrics(item.lrc)) {
         l.is = true;
@@ -76,20 +79,10 @@ class Audio extends migi.Component {
       }
       item.formatLyrics = l;
     });
-    self.rollLyrics = data[0].formatLyrics.data;
-    self.lineLyrics = data[0].formatLyrics.txt;
-    self.on(migi.Event.DOM, function() {
-      let count = 0;
-      $lyricsRoll = $(self.ref.lyricsRoll.element);
-      $lyricsRoll.find('pre').each(function () {
-        lyricsHeight.push(count);
-        count += 20;
-      });
-    });
     return this;
   }
   addMedia() {
-    let audio = <audio src={ this.fileUrl }
+    let audio = <audio src={ this.datas[0].FileUrl }
                        onTimeupdate={ this.onTimeupdate.bind(this) }
                        onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
                        onPlaying={ this.onPlaying.bind(this) }
@@ -117,12 +110,12 @@ class Audio extends migi.Component {
     return this;
   }
   onTimeupdate(e) {
-    let currentTime = e.target.currentTime;
-    let item = this.data[this.workIndex];
+    let currentTime = this.currentTime = e.target.currentTime;
+    let item = this.datas[this.index];
     let formatLyrics = item.formatLyrics;
     let formatLyricsData = formatLyrics.data;
     if(formatLyrics.is && formatLyricsData.length) {
-      let tempIndex = lyricsIndex;
+      let tempIndex = this.lyricsIndex;
       for (let i = 0, len = formatLyricsData.length; i < len; i++) {
         if(currentTime * 1000 >= formatLyricsData[i].timestamp) {
           tempIndex = i;
@@ -131,14 +124,8 @@ class Audio extends migi.Component {
           break;
         }
       }
-      if(tempIndex !== lyricsIndex) {
-        // console.log(lyricsIndex, tempIndex);
-        lyricsIndex = tempIndex;
-        this.lineLyrics = formatLyricsData[lyricsIndex].txt;
-        $lyricsRoll.find('.cur').removeClass('cur');
-        $lyricsRoll.find('pre').eq(lyricsIndex).addClass('cur');
-        $lyricsRoll.css('-webkit-transform', `translate3d(0,${-lyricsHeight[lyricsIndex]}px,0)`);
-        $lyricsRoll.css('transform', `translate3d(0,${-lyricsHeight[lyricsIndex]}px,0)`);
+      if(tempIndex !== this.lyricsIndex) {
+        this.lyricsIndex = tempIndex;
       }
     }
     let percent = currentTime / this.duration;
@@ -165,12 +152,32 @@ class Audio extends migi.Component {
     this.isPlaying = false;
     return this;
   }
-  currentTime(t) {
-    this.audio.element.currentTime = t;
-    return this;
+  clickType(e, vd, tvd) {
+    this.index = tvd.props.rel;
+    this.audio.element.src = this.datas[this.index].FileUrl;
   }
   altLyrics() {
     this.showLyricsMode = !this.showLyricsMode;
+  }
+  vmousedown(e) {
+    e.preventDefault();
+    isVStart = true;
+    vOffsetX = $(this.ref.volume.element).offset().left;
+  }
+  vmousemove(e) {
+    if(isVStart) {
+      e.preventDefault();
+      let x = e.pageX;
+      let diff = x - vOffsetX;
+      let width = $(this.ref.volume.element).width();
+      diff = Math.max(0, diff);
+      diff = Math.min(width, diff);
+      let percent = diff / width;
+      this.volume = percent;
+    }
+  }
+  vmouseup() {
+    isVStart = false;
   }
   clickVolume(e) {
     let cn = e.target.className;
@@ -191,6 +198,30 @@ class Audio extends migi.Component {
       this.audio.element.volume = this.volume;
     }
   }
+  mousedown(e) {
+    e.preventDefault();
+    if(this.canControl) {
+      isStart = true;
+      offsetX = $(this.ref.progress.element).offset().left;
+      this.pause();
+    }
+  }
+  mousemove(e) {
+    if(isStart) {
+      e.preventDefault();
+      let x = e.pageX;
+      let diff = x - offsetX;
+      let width = $(this.ref.progress.element).width();
+      diff = Math.max(0, diff);
+      diff = Math.min(width, diff);
+      let percent = diff / width;
+      this.setBarPercent(percent);
+      this.currentTime = Math.floor(this.duration * percent);
+    }
+  }
+  mouseup() {
+    isStart = false;
+  }
   clickProgress(e) {
     if(this.canControl && e.target.className !== 'p') {
       let $progress = $(this.ref.progress.element);
@@ -198,7 +229,7 @@ class Audio extends migi.Component {
       let x = e.pageX - left;
       let percent = x / $progress.width();
       let currentTime = Math.floor(this.duration * percent);
-      this.currentTime(currentTime);
+      this.currentTime = currentTime;
     }
   }
   setBarPercent(percent) {
@@ -219,9 +250,10 @@ class Audio extends migi.Component {
     let $vd = $(vd.element);
     if(!$vd.hasClass('loading')) {
       $vd.addClass('loading');
-      net.postJSON('/api/works/likeWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+      let data = self.datas[self.index];
+      net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
-          self.isLike = res.data === 211;
+          data.ISLike = res.data === 211;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -243,13 +275,14 @@ class Audio extends migi.Component {
     }
     let self = this;
     let $vd = $(vd.element);
+    let data = self.datas[self.index];
     if($vd.hasClass('loading')) {
       //
     }
     else if($vd.hasClass('has')) {
-      net.postJSON('/api/works/unFavorWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+      net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
-          self.isFavor = false;
+          data.ISFavor = false;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -264,9 +297,9 @@ class Audio extends migi.Component {
       });
     }
     else {
-      net.postJSON('/api/works/favorWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+      net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
-          self.isFavor = true;
+          data.ISFavor = true;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -290,37 +323,30 @@ class Audio extends migi.Component {
   clickShare() {
     migi.eventBus.emit('SHARE', location.href);
   }
-  clear() {
-    this.duration = 0;
-    this.fileUrl = '';
-    this.lineLyrics = '';
-    this.rollLyrics = [];
-    return this;
-  }
   render() {
     return <div class={ 'audio' + (this.props.show ? '' : ' fn-hide') }>
-      <ul class="type fn-clear">
+      <ul class="type fn-clear" onClick={ this.clickType }>
         {
-          (this.tips || []).map(function(item, index) {
-            if(index === 0) {
-              return <li class="cur">{ item }</li>;
-            }
-            return <li>{ item }</li>;
-          })
+          (this.index, this.datas || []).map(function(item, index) {
+            return <li class={ this.index === index ? 'cur' : '' } rel={ index }>{ item.Tips || '普通版' }</li>;
+          }.bind(this))
         }
       </ul>
-      <h3>{ this.title }</h3>
-      <div class={ 'lyrics' }>
+      <h3>{ this.datas[this.index].ItemName }</h3>
+      <div class="num">
+        <small class="play">{ this.datas[this.index].PlayHis || 0 }</small>
+      </div>
+      <div class={ 'lyrics' } ref="lyrics">
         <div class={ 'roll' + (!this.showLyricsMode ? '' : ' fn-hide') }>
-          <div class="c" ref="lyricsRoll">
+          <div class="c" ref="lyricsRoll" style={ 'transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
             {
-              (this.rollLyrics || []).map(function(item) {
+              (this.datas[this.index].formatLyrics.data || []).map(function(item) {
                 return <pre>{ item.txt || '&nbsp;' }</pre>
               })
             }
           </div>
         </div>
-        <pre class={ 'line' + (this.showLyricsMode ? '' : ' fn-hide') }>{ this.lineLyrics }</pre>
+        <pre class={ 'line' + (this.showLyricsMode ? '' : ' fn-hide') }>{ this.datas[this.index].formatLyrics.txt }</pre>
       </div>
       <div class="fn fn-hidden" ref="fn">
         <div class="control">
@@ -328,7 +354,9 @@ class Audio extends migi.Component {
           <div class="volume" ref="volume" onClick={ this.clickVolume }>
             <b class={ 'icon' + (this.muted ? ' muted' : '') } onClick={ this.clickMute }/>
             <b class="vol" style={ 'width:' + this.volume * 100 + '%' }/>
-            <b class="p" style={ 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
+            <b class="p"
+               onMouseDown={ this.vmousedown }
+               style={ 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
           </div>
         </div>
         <div class="bar">
@@ -338,13 +366,17 @@ class Audio extends migi.Component {
           <div class="progress" ref="progress" onClick={ this.clickProgress }>
             <b class="load"/>
             <b class="vol" ref="vol"/>
-            <b class="p" ref="p"/>
+            <b class="p" ref="p" onMouseDown={ this.mousedown }/>
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }/>
-          <li class="download"><a href={ this.fileUrl } download={ this.fileUrl } onClick={ this.clickDownload }/></li>
+          <li class={ 'like' + (this.datas[this.index].ISLike ? ' has' : '') } onClick={ this.clickLike }/>
+          <li class={ 'favor' + (this.datas[this.index].ISFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class="download">
+            <a href={ this.datas[this.index].FileUrl }
+               download={ this.datas[this.index].FileUrl }
+               onClick={ this.clickDownload }/>
+          </li>
           <li class="share" onClick={ this.clickShare }/>
         </ul>
       </div>

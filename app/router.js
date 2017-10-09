@@ -24,6 +24,10 @@ module.exports = app => {
   app.post('/api/works/likeWork', 'api.works.likeWork');
   app.post('/api/works/favorWork', 'api.works.favorWork');
   app.post('/api/works/unFavorWork', 'api.works.unFavorWork');
+  app.post('/api/works/addComment', app.middlewares.needLoginJson(), 'api.works.addComment');
+  app.post('/api/works/likeComment', app.middlewares.needLoginJson(), 'api.works.likeComment');
+  app.post('/api/works/subCommentList', 'api.works.subCommentList');
+  app.post('/api/works/delComment', app.middlewares.needLoginJson(), 'api.works.delComment');
   app.post('/api/author/tagB', 'api.author.tagB');
   app.post('/api/author/playList', 'api.author.playList');
   app.post('/api/author/commentList', 'api.author.commentList');

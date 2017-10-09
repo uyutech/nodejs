@@ -2,10 +2,13 @@
  * Created by army8735 on 2017/9/21.
  */
 
+import net from '../common/net';
+import util from '../common/util';
 import Title from './Title.jsx';
 import Media from './Media.jsx';
 import WorkComment from './WorkComment.jsx';
-import WorkType from './WorkType';
+import itemTemplate from './itemTemplate';
+import InspComment from './InspComment.jsx';
 
 let first;
 
@@ -13,22 +16,17 @@ class Works extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    self.worksID = self.props.worksID;
     self.setWorks(self.props.worksDetail.Works_Items);
-    self.on(migi.Event.DOM, function() {
-      let media = self.ref.media;
-      let workComment = self.ref.workComment;
-      media.on('switchSubWork', function(data) {
-        self.subWorkID = data[0].ItemID;
-        workComment.subWorkID = self.subWorkID;
-        workComment.barrageTime = 0;
-      });
-      media.on('timeupdate', function(data) {
-        workComment.barrageTime = data;
-      });
-    })
   }
   @bind worksID
-  @bind subWorkID
+  @bind workID
+  @bind rootID = -1
+  @bind parentID = -1
+  @bind content
+  @bind barrageTime = 0
+  @bind hasCommentContent
+  @bind isCommentSending
   setWorks(works) {
     let self = this;
     let workHash = {};
@@ -37,10 +35,10 @@ class Works extends migi.Component {
     let authorHash = {};
     works.forEach(function(item) {
       // 将每个小作品根据小类型映射到大类型上，再归类
-      let workType = item.ItemType;
-      if(workType) {
-        workHash[workType] = workHash[workType] || [];
-        workHash[workType].push(item);
+      let bigType = itemTemplate(item.ItemType).bigType;
+      if(bigType) {
+        workHash[bigType] = workHash[bigType] || [];
+        workHash[bigType].push(item);
         item.Works_Item_Author.forEach(function (item) {
           authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
           if(!authorHash[item.WorksAuthorType][item.ID]) {
@@ -52,7 +50,7 @@ class Works extends migi.Component {
     });
     Object.keys(workHash).forEach(function(k) {
       workList.push({
-        workType: parseInt(k),
+        bigType: k,
         value: workHash[k],
       });
     });
@@ -106,29 +104,27 @@ class Works extends migi.Component {
     self.authorList = authorList;
 
     workList.forEach(function(item) {
-      if(item.workType === WorkType.AUDIO) {
+      if(item.bigType === 'audio') {
         self.hasAudio = true;
         self.audioData = item.value;
       }
-      else if(item.workType === WorkType.VIDEO) {
+      else if(item.bigType === 'video') {
         self.hasVideo = true;
         self.videoData = item.value;
       }
-      else if(item.workType === WorkType.TEXT) {
+      else if(item.bigType === 'text') {
         self.hasText = true;
         self.textData = item.value;
       }
     });
     if(self.hasAudio) {
       first = 'audio';
+      self.workID = self.audioData[0].ItemID;
     }
     else if(self.hasVideo) {
       first = 'video';
+      self.workID = self.videoData[0].ItemID;
     }
-  }
-  setID(worksID) {
-    this.worksID = worksID;
-    this.ref.workComment.worksID = worksID;
   }
   clickType(e, vd, tvd) {
     let $li = $(tvd.element);
@@ -137,6 +133,59 @@ class Works extends migi.Component {
       $li.addClass('cur');
       let type = tvd.props.rel;
       this.ref.media.switchType(type);
+    }
+  }
+  input(e, vd) {
+    if(!window.$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+    }
+    else {
+      let v = $(vd.element).val().trim();
+      this.hasCommentContent = v.length > 0;
+    }
+  }
+  focus(e, vd) {
+    if(!window.$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+    }
+  }
+  submit(e) {
+    e.preventDefault();
+    let self = this;
+    if(self.hasCommentContent) {
+      let $input = $(this.ref.input.element);
+      let rootID = self.rootID;
+      self.isCommentSending = true;
+      net.postJSON('/api/works/addComment', {
+        parentID: self.parentID,
+        rootID,
+        content: $input.val(),
+        worksID: self.worksID,
+        workID: self.workID,
+        barrageTime: self.barrageTime,
+      }, function(res) {
+        if(res.success) {
+          $input.val('');
+          self.hasCommentContent = false;
+          if(rootID === -1) {
+            self.ref.workComment.ref.comment.prependData(res.data);
+            self.ref.workComment.ref.comment.message = '';
+          }
+          else {
+            self.ref.workComment.ref.comment.prependChild(res.data);
+          }
+        }
+        else if(res.code === 1000) {
+          migi.eventBus.emit('NEED_LOGIN');
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        self.isCommentSending = false;
+      }, function(res) {
+        alert(res.message || util.ERROR_MESSAGE);
+        self.isCommentSending = false;
+      });
     }
   }
   render() {
@@ -173,24 +222,24 @@ class Works extends migi.Component {
         </ul>
         <div class="info">
           <h4>文案</h4>
-          <div class="intro">
-            <pre>
+          <pre class="intro">
               {
                 (this.textData || []).map(function(item) {
                   return item.Text;
                 })
               }
             </pre>
-            <small class="time">2017.12.12</small>
-          </div>
           <h4>创作灵感</h4>
+          <InspComment ref="inspComment"
+                       worksID={ this.props.worksID }
+                       commentData={ this.props.worksDetail.WorksAuthorComment }/>
         </div>
       </div>
       <div class="form">
         <form class="fn-clear" ref="form" onSubmit={ this.submit }>
           <input type="text" class="text" ref="input" placeholder="夸夸这个作品吧"
                  onInput={ this.input } onFocus={ this.focus } maxlength="120"/>
-          <input type="submit" class={ 'submit' + (this.hasContent && !this.loading ? '' : ' dis') } value="发布评论"/>
+          <input type="submit" class={ 'submit' + (this.hasCommentContent && !this.isCommentSending ? '' : ' dis') } value="发布评论"/>
         </form>
       </div>
     </div>;

@@ -905,7 +905,7 @@
  * Created by army8735 on 2017/8/26.
  */
 .cp-comment {
-  min-height: 2rem;
+  min-height: 1rem;
 }
 .cp-comment .copy {
   position: fixed;
@@ -960,12 +960,6 @@
 .cp-comment .bar .type li.cur {
   color: #4C8DAF;
   cursor: pointer;
-}
-.cp-comment .list {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  overflow: hidden;
 }
 .cp-comment .list > li {
   padding: 0 0.05rem;

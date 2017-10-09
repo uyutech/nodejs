@@ -10,10 +10,12 @@ class Title extends migi.Component {
     this.title = this.props.worksDetail.Title;
     this.subTitle = this.props.worksDetail.sub_Title;
     this.tags = this.props.worksDetail.ReturnTagData;
+    this.timeLine = this.props.worksDetail.WorkTimeLine;
   }
   @bind title
   @bind subTitle
   @bind tags
+  @bind timeLine
   render() {
     return <div class="title">
       <div class="t">
@@ -30,6 +32,13 @@ class Title extends migi.Component {
           }
         </ul>
         <Author ref="author" authorList={ this.props.authorList }/>
+        <ul class="timeline">
+          {
+            (this.timeLine || []).map(function(item) {
+              return <li>{ item.LineDate + ' ' + item.Describe }</li>;
+            })
+          }
+        </ul>
       </div>
     </div>;
   }

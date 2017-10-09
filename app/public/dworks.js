@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 109);
+/******/ 	return __webpack_require__(__webpack_require__.s = 110);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -195,7 +195,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(8);
+var _net = __webpack_require__(7);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -203,7 +203,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _LyricsParser = __webpack_require__(104);
+var _LyricsParser = __webpack_require__(105);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -215,10 +215,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var lyricsIndex = -1;
-var lyricsHeight = [];
-var $lyricsRoll = void 0;
-
+var isVStart = void 0;
+var vOffsetX = void 0;
+var isStart = void 0;
 var offsetX = void 0;
 
 var Audio = function (_migi$Component) {
@@ -236,8 +235,8 @@ var Audio = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = Audio.__proto__ || Object.getPrototypeOf(Audio)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    if (self.props.data) {
-      self.setData(self.props.data);
+    if (self.props.datas) {
+      self.setData(self.props.datas);
       if (self.props.show) {
         self.on(migi.Event.DOM, function () {
           var uid = window.$CONFIG ? $CONFIG.uid : '';
@@ -247,23 +246,22 @@ var Audio = function (_migi$Component) {
           $(self.ref.fn.element).removeClass('fn-hidden');
         });
       }
+      self.on(migi.Event.DOM, function () {
+        $(document).on('mousemove', this.mousemove.bind(this));
+        $(document).on('mouseup', this.mouseup.bind(this));
+        $(document).on('mousemove', this.vmousemove.bind(this));
+        $(document).on('mouseup', this.vmouseup.bind(this));
+      });
     }
     return _this;
   }
 
   _createClass(Audio, [{
     key: 'setData',
-    value: function setData(data) {
+    value: function setData(datas) {
       var self = this;
-      self.data = data;
-      self.isLike = data[0].ISLike;
-      self.isFavor = data[0].ISFavor;
-      self.fileUrl = data[0].FileUrl;
-      self.title = data[0].ItemName;
-      self.tips = data.map(function (item) {
-        return item.Tips || '普通版';
-      });
-      data.forEach(function (item) {
+      self.datas = datas;
+      datas.forEach(function (item) {
         var l = {};
         if (_LyricsParser2.default.isLyrics(item.lrc)) {
           l.is = true;
@@ -275,22 +273,12 @@ var Audio = function (_migi$Component) {
         }
         item.formatLyrics = l;
       });
-      self.rollLyrics = data[0].formatLyrics.data;
-      self.lineLyrics = data[0].formatLyrics.txt;
-      self.on(migi.Event.DOM, function () {
-        var count = 0;
-        $lyricsRoll = $(self.ref.lyricsRoll.element);
-        $lyricsRoll.find('pre').each(function () {
-          lyricsHeight.push(count);
-          count += 20;
-        });
-      });
       return this;
     }
   }, {
     key: 'addMedia',
     value: function addMedia() {
-      var audio = migi.createVd("audio", [["src", this.fileUrl], ["onTimeupdate", this.onTimeupdate.bind(this)], ["onLoadedmetadata", this.onLoadedmetadata.bind(this)], ["onPlaying", this.onPlaying.bind(this)], ["onPause", this.onPause.bind(this)], ["onProgress", this.onProgress.bind(this)], ["preload", "meta"]], ["\n\
+      var audio = migi.createVd("audio", [["src", this.datas[0].FileUrl], ["onTimeupdate", this.onTimeupdate.bind(this)], ["onLoadedmetadata", this.onLoadedmetadata.bind(this)], ["onPlaying", this.onPlaying.bind(this)], ["onPause", this.onPause.bind(this)], ["onProgress", this.onProgress.bind(this)], ["preload", "meta"]], ["\n\
         your browser does not support the audio tag\n\
       "]);
       this.audio = audio;
@@ -318,12 +306,12 @@ var Audio = function (_migi$Component) {
   }, {
     key: 'onTimeupdate',
     value: function onTimeupdate(e) {
-      var currentTime = e.target.currentTime;
-      var item = this.data[this.workIndex];
+      var currentTime = this.currentTime = e.target.currentTime;
+      var item = this.datas[this.index];
       var formatLyrics = item.formatLyrics;
       var formatLyricsData = formatLyrics.data;
       if (formatLyrics.is && formatLyricsData.length) {
-        var tempIndex = lyricsIndex;
+        var tempIndex = this.lyricsIndex;
         for (var i = 0, len = formatLyricsData.length; i < len; i++) {
           if (currentTime * 1000 >= formatLyricsData[i].timestamp) {
             tempIndex = i;
@@ -331,14 +319,8 @@ var Audio = function (_migi$Component) {
             break;
           }
         }
-        if (tempIndex !== lyricsIndex) {
-          // console.log(lyricsIndex, tempIndex);
-          lyricsIndex = tempIndex;
-          this.lineLyrics = formatLyricsData[lyricsIndex].txt;
-          $lyricsRoll.find('.cur').removeClass('cur');
-          $lyricsRoll.find('pre').eq(lyricsIndex).addClass('cur');
-          $lyricsRoll.css('-webkit-transform', 'translate3d(0,' + -lyricsHeight[lyricsIndex] + 'px,0)');
-          $lyricsRoll.css('transform', 'translate3d(0,' + -lyricsHeight[lyricsIndex] + 'px,0)');
+        if (tempIndex !== this.lyricsIndex) {
+          this.lyricsIndex = tempIndex;
         }
       }
       var percent = currentTime / this.duration;
@@ -376,15 +358,41 @@ var Audio = function (_migi$Component) {
       return this;
     }
   }, {
-    key: 'currentTime',
-    value: function currentTime(t) {
-      this.audio.element.currentTime = t;
-      return this;
+    key: 'clickType',
+    value: function clickType(e, vd, tvd) {
+      this.index = tvd.props.rel;
+      this.audio.element.src = this.datas[this.index].FileUrl;
     }
   }, {
     key: 'altLyrics',
     value: function altLyrics() {
       this.showLyricsMode = !this.showLyricsMode;
+    }
+  }, {
+    key: 'vmousedown',
+    value: function vmousedown(e) {
+      e.preventDefault();
+      isVStart = true;
+      vOffsetX = $(this.ref.volume.element).offset().left;
+    }
+  }, {
+    key: 'vmousemove',
+    value: function vmousemove(e) {
+      if (isVStart) {
+        e.preventDefault();
+        var x = e.pageX;
+        var diff = x - vOffsetX;
+        var width = $(this.ref.volume.element).width();
+        diff = Math.max(0, diff);
+        diff = Math.min(width, diff);
+        var percent = diff / width;
+        this.volume = percent;
+      }
+    }
+  }, {
+    key: 'vmouseup',
+    value: function vmouseup() {
+      isVStart = false;
     }
   }, {
     key: 'clickVolume',
@@ -409,6 +417,36 @@ var Audio = function (_migi$Component) {
       }
     }
   }, {
+    key: 'mousedown',
+    value: function mousedown(e) {
+      e.preventDefault();
+      if (this.canControl) {
+        isStart = true;
+        offsetX = $(this.ref.progress.element).offset().left;
+        this.pause();
+      }
+    }
+  }, {
+    key: 'mousemove',
+    value: function mousemove(e) {
+      if (isStart) {
+        e.preventDefault();
+        var x = e.pageX;
+        var diff = x - offsetX;
+        var width = $(this.ref.progress.element).width();
+        diff = Math.max(0, diff);
+        diff = Math.min(width, diff);
+        var percent = diff / width;
+        this.setBarPercent(percent);
+        this.currentTime = Math.floor(this.duration * percent);
+      }
+    }
+  }, {
+    key: 'mouseup',
+    value: function mouseup() {
+      isStart = false;
+    }
+  }, {
     key: 'clickProgress',
     value: function clickProgress(e) {
       if (this.canControl && e.target.className !== 'p') {
@@ -417,7 +455,7 @@ var Audio = function (_migi$Component) {
         var x = e.pageX - left;
         var percent = x / $progress.width();
         var currentTime = Math.floor(this.duration * percent);
-        this.currentTime(currentTime);
+        this.currentTime = currentTime;
       }
     }
   }, {
@@ -444,9 +482,10 @@ var Audio = function (_migi$Component) {
       var $vd = $(vd.element);
       if (!$vd.hasClass('loading')) {
         $vd.addClass('loading');
-        _net2.default.postJSON('/api/works/likeWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+        var data = self.datas[self.index];
+        _net2.default.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
-            self.isLike = res.data === 211;
+            data.ISLike = res.data === 211;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -468,12 +507,13 @@ var Audio = function (_migi$Component) {
       }
       var self = this;
       var $vd = $(vd.element);
+      var data = self.datas[self.index];
       if ($vd.hasClass('loading')) {
         //
       } else if ($vd.hasClass('has')) {
-        _net2.default.postJSON('/api/works/unFavorWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+        _net2.default.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
-            self.isFavor = false;
+            data.ISFavor = false;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -485,9 +525,9 @@ var Audio = function (_migi$Component) {
           $vd.removeClass('loading');
         });
       } else {
-        _net2.default.postJSON('/api/works/favorWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+        _net2.default.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
-            self.isFavor = true;
+            data.ISFavor = true;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -514,39 +554,33 @@ var Audio = function (_migi$Component) {
       migi.eventBus.emit('SHARE', location.href);
     }
   }, {
-    key: 'clear',
-    value: function clear() {
-      this.duration = 0;
-      this.fileUrl = '';
-      this.lineLyrics = '';
-      this.rollLyrics = [];
-      return this;
-    }
-  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", 'audio' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("ul", [["class", "type fn-clear"]], [(this.tips || []).map(function (item, index) {
-        if (index === 0) {
-          return migi.createVd("li", [["class", "cur"]], [item]);
-        }
-        return migi.createVd("li", [], [item]);
-      })]), migi.createVd("h3", [], [new migi.Obj("title", this, function () {
-        return this.title;
-      })]), migi.createVd("div", [["class", 'lyrics']], [migi.createVd("div", [["class", new migi.Obj("showLyricsMode", this, function () {
+      return migi.createVd("div", [["class", 'audio' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", new migi.Cb(this, this.clickType)]], [new migi.Obj(["index", "datas"], this, function () {
+        return (this.index, this.datas || []).map(function (item, index) {
+          return migi.createVd("li", [["class", this.index === index ? 'cur' : ''], ["rel", index]], [item.Tips || '普通版']);
+        }.bind(this));
+      })]), migi.createVd("h3", [], [new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].ItemName;
+      })]), migi.createVd("div", [["class", "num"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].PlayHis || 0;
+      })])]), migi.createVd("div", [["class", 'lyrics'], ["ref", "lyrics"]], [migi.createVd("div", [["class", new migi.Obj("showLyricsMode", this, function () {
         return 'roll' + (!this.showLyricsMode ? '' : ' fn-hide');
-      })]], [migi.createVd("div", [["class", "c"], ["ref", "lyricsRoll"]], [new migi.Obj("rollLyrics", this, function () {
-        return (this.rollLyrics || []).map(function (item) {
+      })]], [migi.createVd("div", [["class", "c"], ["ref", "lyricsRoll"], ["style", new migi.Obj("lyricsIndex", this, function () {
+        return 'transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)';
+      })]], [new migi.Obj(["datas", "index"], this, function () {
+        return (this.datas[this.index].formatLyrics.data || []).map(function (item) {
           return migi.createVd("pre", [], [item.txt || '&nbsp;']);
         });
       })])]), migi.createVd("pre", [["class", new migi.Obj("showLyricsMode", this, function () {
         return 'line' + (this.showLyricsMode ? '' : ' fn-hide');
-      })]], [new migi.Obj("lineLyrics", this, function () {
-        return this.lineLyrics;
+      })]], [new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].formatLyrics.txt;
       })])]), migi.createVd("div", [["class", "fn fn-hidden"], ["ref", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "lyrics"], ["onClick", new migi.Cb(this, this.altLyrics)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
         return 'icon' + (this.muted ? ' muted' : '');
       })], ["onClick", new migi.Cb(this, this.clickMute)]]), migi.createVd("b", [["class", "vol"], ["style", new migi.Obj("volume", this, function () {
         return 'width:' + this.volume * 100 + '%';
-      })]]), migi.createVd("b", [["class", "p"], ["style", new migi.Obj("volume", this, function () {
+      })]]), migi.createVd("b", [["class", "p"], ["onMouseDown", new migi.Cb(this, this.vmousedown)], ["style", new migi.Obj("volume", this, function () {
         return 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)';
       })]])])]), migi.createVd("div", [["class", "bar"]], [migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
         return 'play' + (this.isPlaying ? ' pause' : '');
@@ -554,39 +588,31 @@ var Audio = function (_migi$Component) {
         return _util2.default.formatTime(this.currentTime * 1000);
       })]), migi.createVd("small", [["class", "time end"]], [new migi.Obj("duration", this, function () {
         return _util2.default.formatTime(this.duration * 1000);
-      })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj("isLike", this, function () {
-        return 'like' + (this.isLike ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj("isFavor", this, function () {
-        return 'favor' + (this.isFavor ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("fileUrl", this, function () {
-        return this.fileUrl;
-      })], ["download", new migi.Obj("fileUrl", this, function () {
-        return this.fileUrl;
+      })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"], ["onMouseDown", new migi.Cb(this, this.mousedown)]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj(["datas", "index"], this, function () {
+        return 'like' + (this.datas[this.index].ISLike ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj(["datas", "index"], this, function () {
+        return 'favor' + (this.datas[this.index].ISFavor ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].FileUrl;
+      })], ["download", new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].FileUrl;
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
-    key: 'fileUrl',
+    key: 'datas',
     set: function set(v) {
-      this.__setBind("fileUrl", v);this.__data("fileUrl");
+      this.__setBind("datas", v);this.__data("datas");
     },
     get: function get() {
-      return this.__getBind("fileUrl");
+      if (this.__initBind("datas")) this.__setBind("datas", []);return this.__getBind("datas");
     }
   }, {
-    key: 'isLike',
+    key: 'index',
     set: function set(v) {
-      this.__setBind("isLike", v);this.__data("isLike");
+      this.__setBind("index", v);this.__data("index");
     },
     get: function get() {
-      return this.__getBind("isLike");
-    }
-  }, {
-    key: 'isFavor',
-    set: function set(v) {
-      this.__setBind("isFavor", v);this.__data("isFavor");
-    },
-    get: function get() {
-      return this.__getBind("isFavor");
+      if (this.__initBind("index")) this.__setBind("index", 0);return this.__getBind("index");
     }
   }, {
     key: 'isPlaying',
@@ -597,30 +623,6 @@ var Audio = function (_migi$Component) {
       return this.__getBind("isPlaying");
     }
   }, {
-    key: 'workIndex',
-    set: function set(v) {
-      this.__setBind("workIndex", v);this.__data("workIndex");
-    },
-    get: function get() {
-      if (this.__initBind("workIndex")) this.__setBind("workIndex", 0);return this.__getBind("workIndex");
-    }
-  }, {
-    key: 'lineLyrics',
-    set: function set(v) {
-      this.__setBind("lineLyrics", v);this.__data("lineLyrics");
-    },
-    get: function get() {
-      return this.__getBind("lineLyrics");
-    }
-  }, {
-    key: 'rollLyrics',
-    set: function set(v) {
-      this.__setBind("rollLyrics", v);this.__data("rollLyrics");
-    },
-    get: function get() {
-      if (this.__initBind("rollLyrics")) this.__setBind("rollLyrics", []);return this.__getBind("rollLyrics");
-    }
-  }, {
     key: 'showLyricsMode',
     set: function set(v) {
       this.__setBind("showLyricsMode", v);this.__data("showLyricsMode");
@@ -629,12 +631,12 @@ var Audio = function (_migi$Component) {
       return this.__getBind("showLyricsMode");
     }
   }, {
-    key: 'currentTime',
+    key: 'lyricsIndex',
     set: function set(v) {
-      this.__setBind("currentTime", v);this.__data("currentTime");
+      this.__setBind("lyricsIndex", v);this.__data("lyricsIndex");
     },
     get: function get() {
-      return this.__getBind("currentTime");
+      if (this.__initBind("lyricsIndex")) this.__setBind("lyricsIndex", 0);return this.__getBind("lyricsIndex");
     }
   }, {
     key: 'duration',
@@ -643,14 +645,6 @@ var Audio = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("duration");
-    }
-  }, {
-    key: 'title',
-    set: function set(v) {
-      this.__setBind("title", v);this.__data("title");
-    },
-    get: function get() {
-      return this.__getBind("title");
     }
   }, {
     key: 'canControl',
@@ -667,6 +661,18 @@ var Audio = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("muted");
+    }
+  }, {
+    key: 'currentTime',
+    get: function get() {
+      return this._currentTime || 0;
+    },
+    set: function set(v) {
+      this._currentTime = v;
+      if (this.audio && v !== this.audio.element.currentTime) {
+        this.audio.element.currentTime = v;
+      }
+      ;this.__array("currentTime", v);this.__data("currentTime");
     }
   }, {
     key: 'volume',
@@ -790,6 +796,61 @@ migi.name(Author, "Author");exports.default = Author;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _util = __webpack_require__(3);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var InspComment = function (_migi$Component) {
+  _inherits(InspComment, _migi$Component);
+
+  function InspComment() {
+    var _ref;
+
+    _classCallCheck(this, InspComment);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = InspComment.__proto__ || Object.getPrototypeOf(InspComment)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(InspComment, [{
+    key: 'render',
+    value: function render() {
+      return migi.createVd("ul", [["class", "insp"]], [(this.props.commentData || []).map(function (item) {
+        return migi.createVd("li", [], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Head_Url || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.AuthorName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.LineDate)])]), migi.createVd("p", [], [item.sign])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Content, migi.createVd("span", [["class", "placeholder"]])])])]);
+      })]);
+    }
+  }]);
+
+  return InspComment;
+}(migi.Component);
+
+migi.name(InspComment, "InspComment");exports.default = InspComment;
+
+/***/ }),
+
+/***/ 105:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.default = {
   isLyrics: function isLyrics(s) {
     return (/\[\d{2,}:\d{2}\.\d{2,3}]/.test(s)
@@ -818,7 +879,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 105:
+/***/ 106:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -834,7 +895,7 @@ var _Audio = __webpack_require__(102);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(107);
+var _Video = __webpack_require__(108);
 
 var _Video2 = _interopRequireDefault(_Video);
 
@@ -846,176 +907,25 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var WIDTH = 500;
-var currentTime = 0;
-var duration = 0;
-
-var isStart = void 0;
-var offsetX = void 0;
-
-var audio = void 0;
-var video = void 0;
-var last = void 0;
-
 var Media = function (_migi$Component) {
   _inherits(Media, _migi$Component);
 
   function Media() {
     var _ref;
 
+    _classCallCheck(this, Media);
+
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
 
-    _classCallCheck(this, Media);
-
     var _this = _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    self.on(migi.Event.DOM, function () {
-      return;
-      var $play = $(this.ref.play.element);
-      audio = self.ref.audio;
-      video = self.ref.video;
-      if (self.props.first === 'audio') {
-        last = audio;
-      } else if (self.props.first === 'video') {
-        last = video;
-      }
-      audio.on('timeupdate', function (data) {
-        currentTime = data;
-        var percent = currentTime / duration;
-        self.setBarPercent(percent);
-        self.emit('timeupdate', Math.floor(currentTime * 1000));
-        if (last === audio) {
-          self.canControl = true;
-        }
-      });
-      audio.on('loadedmetadata', function (data) {
-        duration = data.duration;
-        if (last === audio) {
-          self.canControl = true;
-        }
-      });
-      audio.on('playing', function (data) {
-        duration = data.duration;
-      });
-      audio.on('play', function () {
-        $play.addClass('pause');
-      });
-      audio.on('pause', function () {
-        $play.removeClass('pause');
-      });
-      video.on('timeupdate', function (data) {
-        currentTime = data;
-        var percent = currentTime / duration;
-        self.setBarPercent(percent);
-        self.emit('timeupdate', Math.floor(currentTime * 1000));
-        if (last === video) {
-          self.canControl = true;
-        }
-      });
-      video.on('loadedmetadata', function (data) {
-        duration = data.duration;
-        if (last === video) {
-          self.canControl = true;
-        }
-      });
-      video.on('playing', function (data) {
-        duration = data.duration;
-      });
-      video.on('play', function () {
-        $play.addClass('pause');
-      });
-      video.on('pause', function () {
-        $play.removeClass('pause');
-      });
-
-      $(document).on('mousemove', this.move2.bind(this));
-      $(document).on('mouseup', this.up.bind(this));
-    });
     return _this;
   }
 
   _createClass(Media, [{
-    key: 'setCover',
-    value: function setCover(url) {
-      if (url) {
-        $(this.element).css('background-image', 'url(' + url + ')');
-      } else {
-        $(this.element).removeAttr('style');
-      }
-    }
-  }, {
-    key: 'clickTag',
-    value: function clickTag(e, vd, tvd) {
-      var $ul = $(vd.element);
-      var $li = $(tvd.element);
-      if (!$li.hasClass('cur')) {
-        $ul.find('.cur').removeClass('cur');
-        $li.addClass('cur');
-        this.emit('tagChange', tvd.props.rel);
-      }
-    }
-  }, {
-    key: 'clickPlay',
-    value: function clickPlay(e, vd) {
-      var $play = $(vd.element);
-      if ($play.hasClass('pause')) {
-        last.pause();
-      } else {
-        last.play();
-      }
-      $play.toggleClass('pause');
-    }
-  }, {
-    key: 'clickProgress',
-    value: function clickProgress(e) {
-      if (this.canControl && e.target.className !== 'point') {
-        offsetX = $(this.ref.progress.element).offset().left;
-        var x = e.pageX - offsetX;
-        var percent = x / WIDTH;
-        var _currentTime = Math.floor(duration * percent);
-        last.currentTime(_currentTime);
-      }
-    }
-  }, {
-    key: 'down',
-    value: function down(e) {
-      e.preventDefault();
-      if (this.canControl) {
-        isStart = true;
-        offsetX = $(this.ref.progress.element).offset().left;
-      }
-    }
-  }, {
-    key: 'move2',
-    value: function move2(e) {
-      if (isStart) {
-        e.preventDefault();
-        var x = e.pageX;
-        var diff = x - offsetX;
-        diff = Math.max(0, diff);
-        diff = Math.min(WIDTH, diff);
-        var percent = diff / WIDTH;
-        this.setBarPercent(percent);
-        currentTime = Math.floor(duration * percent);
-      }
-    }
-  }, {
-    key: 'up',
-    value: function up() {
-      isStart = false;
-    }
-  }, {
-    key: 'setBarPercent',
-    value: function setBarPercent(percent) {
-      percent *= 100;
-      $(this.ref.has.element).css('width', percent + '%');
-      $(this.ref.pgb.element).css('-webkit-transform', 'translate3d(' + percent + '%,0,0)');
-      $(this.ref.pgb.element).css('transform', 'translate3d(' + percent + '%,0,0)');
-    }
-  }, {
     key: 'switchType',
     value: function switchType(type) {
       if (type === 'audio') {
@@ -1029,23 +939,7 @@ var Media = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "media"]], [migi.createCp(_Audio2.default, [["ref", "audio"], ["data", this.props.audioData], ["show", this.props.first === 'audio']]), migi.createCp(_Video2.default, [["ref", "video"], ["data", this.props.videoData], ["show", this.props.first === 'video']])]);
-    }
-  }, {
-    key: 'popular',
-    set: function set(v) {
-      this.__setBind("popular", v);this.__data("popular");
-    },
-    get: function get() {
-      if (this.__initBind("popular")) this.__setBind("popular", 0);return this.__getBind("popular");
-    }
-  }, {
-    key: 'canControl',
-    set: function set(v) {
-      this.__setBind("canControl", v);this.__data("canControl");
-    },
-    get: function get() {
-      return this.__getBind("canControl");
+      return migi.createVd("div", [["class", "media"]], [this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '']);
     }
   }]);
 
@@ -1056,7 +950,7 @@ migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
 
-/***/ 106:
+/***/ 107:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1097,6 +991,7 @@ var Title = function (_migi$Component) {
     _this.title = _this.props.worksDetail.Title;
     _this.subTitle = _this.props.worksDetail.sub_Title;
     _this.tags = _this.props.worksDetail.ReturnTagData;
+    _this.timeLine = _this.props.worksDetail.WorkTimeLine;
     return _this;
   }
 
@@ -1115,7 +1010,11 @@ var Title = function (_migi$Component) {
         return (this.tags || []).map(function (item) {
           return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
         });
-      })]), migi.createCp(_Author2.default, [["ref", "author"], ["authorList", this.props.authorList]])])]);
+      })]), migi.createCp(_Author2.default, [["ref", "author"], ["authorList", this.props.authorList]]), migi.createVd("ul", [["class", "timeline"]], [new migi.Obj("timeLine", this, function () {
+        return (this.timeLine || []).map(function (item) {
+          return migi.createVd("li", [], [item.LineDate + ' ' + item.Describe]);
+        });
+      })])])]);
     }
   }, {
     key: "title",
@@ -1141,6 +1040,14 @@ var Title = function (_migi$Component) {
     get: function get() {
       return this.__getBind("tags");
     }
+  }, {
+    key: "timeLine",
+    set: function set(v) {
+      this.__setBind("timeLine", v);this.__data("timeLine");
+    },
+    get: function get() {
+      return this.__getBind("timeLine");
+    }
   }]);
 
   return Title;
@@ -1150,7 +1057,7 @@ migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
 
-/***/ 107:
+/***/ 108:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1166,7 +1073,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _net = __webpack_require__(8);
+var _net = __webpack_require__(7);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -1178,6 +1085,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var isVStart = void 0;
+var vOffsetX = void 0;
+var isStart = void 0;
 var offsetX = void 0;
 
 var Video = function (_migi$Component) {
@@ -1195,8 +1105,8 @@ var Video = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = Video.__proto__ || Object.getPrototypeOf(Video)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    if (self.props.data) {
-      self.setData(self.props.data);
+    if (self.props.datas) {
+      self.setData(self.props.datas);
       if (self.props.show) {
         self.on(migi.Event.DOM, function () {
           var uid = window.$CONFIG ? $CONFIG.uid : '';
@@ -1206,33 +1116,31 @@ var Video = function (_migi$Component) {
           $(self.ref.fn.element).removeClass('fn-hidden');
         });
       }
+      self.on(migi.Event.DOM, function () {
+        $(document).on('mousemove', this.mousemove.bind(this));
+        $(document).on('mouseup', this.mouseup.bind(this));
+        $(document).on('mousemove', this.vmousemove.bind(this));
+        $(document).on('mouseup', this.vmouseup.bind(this));
+      });
     }
     return _this;
   }
 
   _createClass(Video, [{
     key: 'setData',
-    value: function setData(data) {
+    value: function setData(datas) {
       var self = this;
-      self.data = data;
-      self.isLike = data[0].ISLike;
-      self.isFavor = data[0].ISFavor;
-      self.fileUrl = data[0].FileUrl;
-      self.cover = data[0].VideoCoverPic;
-      self.title = data[0].ItemName;
-      self.tips = data.map(function (item) {
-        return item.Tips || '普通版';
-      });
+      self.datas = datas;
       return this;
     }
   }, {
     key: 'addMedia',
     value: function addMedia() {
-      var video = migi.createVd("video", [["ref", "video"], ["poster", this.cover], ["onClick", this.clickPlay.bind(this)], ["onTimeupdate", this.onTimeupdate.bind(this)], ["onLoadedmetadata", this.onLoadedmetadata.bind(this)], ["onPause", this.onPause.bind(this)], ["onPlaying", this.onPlaying.bind(this)], ["preload", "meta"], ["playsinline", "true"], ["webkit-playsinline", "true"], ["src", this.fileUrl]], ["\n\
+      var video = migi.createVd("video", [["ref", "video"], ["poster", this.datas[this.index].VideoCoverPic], ["onClick", this.clickPlay.bind(this)], ["onTimeupdate", this.onTimeupdate.bind(this)], ["onLoadedmetadata", this.onLoadedmetadata.bind(this)], ["onPause", this.onPause.bind(this)], ["onPlaying", this.onPlaying.bind(this)], ["preload", "meta"], ["playsinline", "true"], ["webkit-playsinline", "true"], ["src", this.fileUrl]], ["\n\
       your browser does not support the video tag\n\
     "]);
       this.video = video;
-      video.after(this.ref.title.element);
+      video.before(this.ref.fn.element);
       this.volume = this.volume;
     }
   }, {
@@ -1245,6 +1153,7 @@ var Video = function (_migi$Component) {
       if (!this.video) {
         this.addMedia();
       }
+      $(this.ref.fn.element).removeClass('fn-hidden');
       return this;
     }
   }, {
@@ -1256,7 +1165,7 @@ var Video = function (_migi$Component) {
   }, {
     key: 'onTimeupdate',
     value: function onTimeupdate(e) {
-      var currentTime = e.target.currentTime;
+      var currentTime = this.currentTime = e.target.currentTime;
       var percent = currentTime / this.duration;
       this.setBarPercent(percent);
     }
@@ -1292,26 +1201,36 @@ var Video = function (_migi$Component) {
       return this;
     }
   }, {
-    key: 'currentTime',
-    value: function currentTime(t) {
-      this.video.element.currentTime = t;
-      return this;
+    key: 'clickType',
+    value: function clickType(e, vd, tvd) {
+      this.index = tvd.props.rel;
+      this.video.element.src = this.datas[this.index].FileUrl;
     }
   }, {
-    key: 'clickScreen',
-    value: function clickScreen() {
-      var video = this.video.element;
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.mozRequestFullscreen) {
-        video.mozRequestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
-      } else if (video.webkitEnterFullScreen) {
-        video.webkitEnterFullScreen();
+    key: 'vmousedown',
+    value: function vmousedown(e) {
+      e.preventDefault();
+      isVStart = true;
+      vOffsetX = $(this.ref.volume.element).offset().left;
+    }
+  }, {
+    key: 'vmousemove',
+    value: function vmousemove(e) {
+      if (isVStart) {
+        e.preventDefault();
+        var x = e.pageX;
+        var diff = x - vOffsetX;
+        var width = $(this.ref.volume.element).width();
+        diff = Math.max(0, diff);
+        diff = Math.min(width, diff);
+        var percent = diff / width;
+        this.volume = percent;
       }
+    }
+  }, {
+    key: 'vmouseup',
+    value: function vmouseup() {
+      isVStart = false;
     }
   }, {
     key: 'clickVolume',
@@ -1334,6 +1253,52 @@ var Video = function (_migi$Component) {
       } else {
         this.video.element.volume = this.volume;
       }
+    }
+  }, {
+    key: 'clickScreen',
+    value: function clickScreen() {
+      var video = this.video.element;
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.mozRequestFullscreen) {
+        video.mozRequestFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      } else if (video.webkitEnterFullScreen) {
+        video.webkitEnterFullScreen();
+      }
+    }
+  }, {
+    key: 'mousedown',
+    value: function mousedown(e) {
+      e.preventDefault();
+      if (this.canControl) {
+        isStart = true;
+        offsetX = $(this.ref.progress.element).offset().left;
+        this.pause();
+      }
+    }
+  }, {
+    key: 'mousemove',
+    value: function mousemove(e) {
+      if (isStart) {
+        e.preventDefault();
+        var x = e.pageX;
+        var diff = x - offsetX;
+        var width = $(this.ref.progress.element).width();
+        diff = Math.max(0, diff);
+        diff = Math.min(width, diff);
+        var percent = diff / width;
+        this.setBarPercent(percent);
+        this.currentTime = Math.floor(this.duration * percent);
+      }
+    }
+  }, {
+    key: 'mouseup',
+    value: function mouseup() {
+      isStart = false;
     }
   }, {
     key: 'clickProgress',
@@ -1371,9 +1336,10 @@ var Video = function (_migi$Component) {
       var $vd = $(vd.element);
       if (!$vd.hasClass('loading')) {
         $vd.addClass('loading');
-        _net2.default.postJSON('/api/works/likeWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+        var data = self.datas[self.index];
+        _net2.default.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
-            self.isLike = res.data === 211;
+            data.ISLike = res.data === 211;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -1395,12 +1361,13 @@ var Video = function (_migi$Component) {
       }
       var self = this;
       var $vd = $(vd.element);
+      var data = self.datas[self.index];
       if ($vd.hasClass('loading')) {
         //
       } else if ($vd.hasClass('has')) {
-        _net2.default.postJSON('/api/works/unFavorWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+        _net2.default.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
-            self.isFavor = false;
+            data.ISFavor = false;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -1412,9 +1379,9 @@ var Video = function (_migi$Component) {
           $vd.removeClass('loading');
         });
       } else {
-        _net2.default.postJSON('/api/works/favorWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
+        _net2.default.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
-            self.isFavor = true;
+            data.ISFavor = true;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -1441,73 +1408,53 @@ var Video = function (_migi$Component) {
       migi.eventBus.emit('SHARE', location.href);
     }
   }, {
-    key: 'clear',
-    value: function clear() {
-      this.duration = 0;
-      this.fileUrl = '';
-      this.lineLyrics = '';
-      this.rollLyrics = [];
-      return this;
-    }
-  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", 'video' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("ul", [["class", "type fn-clear"]], [(this.tips || []).map(function (item, index) {
-        if (index === 0) {
-          return migi.createVd("li", [["class", "cur"]], [item]);
-        }
-        return migi.createVd("li", [], [item]);
-      })]), migi.createVd("h3", [["ref", "title"]], [this.title]), migi.createVd("div", [["class", "fn fn-hidden"], ["ref", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "full"], ["onClick", new migi.Cb(this, this.clickScreen)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
+      return migi.createVd("div", [["class", 'video' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", new migi.Cb(this, this.clickType)]], [new migi.Obj(["index", "datas"], this, function () {
+        return (this.index, this.datas || []).map(function (item, index) {
+          return migi.createVd("li", [["class", this.index === index ? 'cur' : ''], ["rel", index]], [item.Tips || '普通版']);
+        }.bind(this));
+      })]), migi.createVd("h3", [["ref", "title"]], [new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].ItemName;
+      })]), migi.createVd("div", [["class", "num"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].PlayHis || 0;
+      })])]), migi.createVd("div", [["class", "fn fn-hidden"], ["ref", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "full"], ["onClick", new migi.Cb(this, this.clickScreen)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
         return 'icon' + (this.muted ? ' muted' : '');
       })], ["onClick", new migi.Cb(this, this.clickMute)]]), migi.createVd("b", [["class", "vol"], ["style", new migi.Obj("volume", this, function () {
         return 'width:' + this.volume * 100 + '%';
-      })]]), migi.createVd("b", [["class", "p"], ["style", new migi.Obj("volume", this, function () {
+      })]]), migi.createVd("b", [["class", "p"], ["onMouseDown", new migi.Cb(this, this.vmousedown)], ["style", new migi.Obj("volume", this, function () {
         return 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)';
       })]])])]), migi.createVd("div", [["class", "bar"]], [migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
         return 'play' + (this.isPlaying ? ' pause' : '');
-      })], ["onClick", new migi.Cb(this, this.clickPlay)]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatTime(this.currentTime * 1000)]), migi.createVd("small", [["class", "time end"]], [new migi.Obj("duration", this, function () {
+      })], ["onClick", new migi.Cb(this, this.clickPlay)]]), migi.createVd("small", [["class", "time"]], [new migi.Obj("currentTime", this, function () {
+        return _util2.default.formatTime(this.currentTime * 1000);
+      })]), migi.createVd("small", [["class", "time end"]], [new migi.Obj("duration", this, function () {
         return _util2.default.formatTime(this.duration * 1000);
-      })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj("isLike", this, function () {
-        return 'like' + (this.isLike ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj("isFavor", this, function () {
-        return 'favor' + (this.isFavor ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("fileUrl", this, function () {
-        return this.fileUrl;
-      })], ["download", new migi.Obj("fileUrl", this, function () {
-        return this.fileUrl;
+      })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"], ["onMouseDown", new migi.Cb(this, this.mousedown)]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj(["datas", "index"], this, function () {
+        return 'like' + (this.datas[this.index].ISLike ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj(["datas", "index"], this, function () {
+        return 'favor' + (this.datas[this.index].ISFavor ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].FileUrl;
+      })], ["download", new migi.Obj(["datas", "index"], this, function () {
+        return this.datas[this.index].FileUrl;
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
-    key: 'cover',
+    key: 'datas',
     set: function set(v) {
-      this.__setBind("cover", v);this.__data("cover");
+      this.__setBind("datas", v);this.__data("datas");
     },
     get: function get() {
-      return this.__getBind("cover");
+      if (this.__initBind("datas")) this.__setBind("datas", []);return this.__getBind("datas");
     }
   }, {
-    key: 'fileUrl',
+    key: 'index',
     set: function set(v) {
-      this.__setBind("fileUrl", v);this.__data("fileUrl");
+      this.__setBind("index", v);this.__data("index");
     },
     get: function get() {
-      return this.__getBind("fileUrl");
-    }
-  }, {
-    key: 'isLike',
-    set: function set(v) {
-      this.__setBind("isLike", v);this.__data("isLike");
-    },
-    get: function get() {
-      return this.__getBind("isLike");
-    }
-  }, {
-    key: 'isFavor',
-    set: function set(v) {
-      this.__setBind("isFavor", v);this.__data("isFavor");
-    },
-    get: function get() {
-      return this.__getBind("isFavor");
+      if (this.__initBind("index")) this.__setBind("index", 0);return this.__getBind("index");
     }
   }, {
     key: 'isPlaying',
@@ -1542,6 +1489,18 @@ var Video = function (_migi$Component) {
       return this.__getBind("muted");
     }
   }, {
+    key: 'currentTime',
+    get: function get() {
+      return this._currentTime || 0;
+    },
+    set: function set(v) {
+      this._currentTime = v;
+      if (this.video && v !== this.video.element.currentTime) {
+        this.video.element.currentTime = v;
+      }
+      ;this.__array("currentTime", v);this.__data("currentTime");
+    }
+  }, {
     key: 'volume',
     get: function get() {
       return this._volume || 0.5;
@@ -1563,7 +1522,7 @@ migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
 
-/***/ 108:
+/***/ 109:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1575,7 +1534,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(8);
+var _net = __webpack_require__(7);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -1832,7 +1791,7 @@ var WorkComment = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "comments"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论"]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / 10)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "api/works/AddWorkCommentLike"], ["subUrl", "api/works/GetTocomment_T_List"], ["delUrl", "api/works/DeleteCommentByID"], ["data", this.props.commentData.data]])]);
+      return migi.createVd("div", [["class", "comments"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论"]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / 10)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/works/likeComment"], ["subUrl", "/api/works/subCommentList"], ["delUrl", "/api/works/delComment"], ["data", this.props.commentData.data]])]);
     }
   }, {
     key: 'showComment',
@@ -1915,7 +1874,7 @@ migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
 
-/***/ 109:
+/***/ 110:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1933,24 +1892,46 @@ var works = migi.preExist(migi.createCp(_Works2.default, [["isLogin", $CONFIG.is
 
 /***/ }),
 
-/***/ 135:
+/***/ 136:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/**
- * Created by army8735 on 2017/10/9.
- */
-
 
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = {
-  AUDIO: 1111,
-  VIDEO: 2111,
-  TEXT: 4110
+
+exports.default = function (workType) {
+  switch (workType) {
+    case 1111:
+      return {
+        bigType: 'audio',
+        typeName: '原创音乐'
+      };
+    case 1131:
+      return {
+        bigType: 'audio',
+        typeName: '原创伴奏'
+      };
+    case 2111:
+      return {
+        bigType: 'video',
+        typeName: '原创视频'
+      };
+    case 4110:
+      return {
+        bigType: 'text',
+        typeName: '文案'
+      };
+    default:
+      return {};
+  }
 };
+
+; /**
+   * Created by army8735 on 2017/8/13.
+   */
 
 /***/ }),
 
@@ -2007,6 +1988,27 @@ var util = {
     res += second;
     return res;
   },
+  formatDate: function formatDate(time) {
+    time = new Date(time);
+    var now = Date.now();
+    var diff = now - time;
+    if (diff >= 1000 * 60 * 60 * 24 * 365) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24 * 30) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
+    }
+    if (diff >= 1000 * 60 * 60) {
+      return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
+    }
+    if (diff >= 1000 * 60) {
+      return Math.floor(diff / (1000 * 60)) + '分钟前';
+    }
+    return '刚刚';
+  },
   ERROR_MESSAGE: '人气大爆发，请稍后再试。'
 };
 
@@ -2026,7 +2028,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(8);
+var _net = __webpack_require__(7);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -2050,28 +2052,6 @@ var subSkipHash = {};
 var $lastSlide = void 0;
 var take = 10;
 var ajax = void 0;
-
-function formatTime(time) {
-  time = new Date(time);
-  var now = Date.now();
-  var diff = now - time;
-  if (diff >= 1000 * 60 * 60 * 24 * 365) {
-    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
-  }
-  if (diff >= 1000 * 60 * 60 * 24 * 30) {
-    return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
-  }
-  if (diff >= 1000 * 60 * 60 * 24) {
-    return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
-  }
-  if (diff >= 1000 * 60 * 60) {
-    return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
-  }
-  if (diff >= 1000 * 60) {
-    return Math.floor(diff / (1000 * 60)) + '分钟前';
-  }
-  return '刚刚';
-}
 
 var Comment = function (_migi$Component) {
   _inherits(Comment, _migi$Component);
@@ -2205,7 +2185,7 @@ var Comment = function (_migi$Component) {
         } else {
           $list2.css('height', 'auto');
           subLoadHash[rid] = IS_LOADING;
-          ajax = _net2.default.postJSON(self.props.subUrl, { rootID: rid, skip: -1, take: take }, function (res) {
+          ajax = _net2.default.postJSON(self.props.subUrl, { rootID: rid, skip: 0, take: take }, function (res) {
             if (res.success) {
               subLoadHash[rid] = HAS_LOADED;
               var s = '';
@@ -2285,12 +2265,12 @@ var Comment = function (_migi$Component) {
   }, {
     key: 'genComment',
     value: function genComment(item) {
-      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"]], [formatTime(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [migi.createVd("span", [["cid", item.Send_ID], ["class", 'zan' + (item.IsLike ? ' has' : '')]], [migi.createVd("small", [], [item.LikeCount])]), migi.createVd("a", [["class", "share"], ["href", '/?cid=' + item.Send_ID], ["target", "_blank"]], ["分享"]), item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [], [item.sub_Count]), migi.createVd("span", [], ["收起"])])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [migi.createVd("span", [["cid", item.Send_ID], ["class", 'zan' + (item.IsLike ? ' has' : '')]], [migi.createVd("small", [], [item.LikeCount])]), migi.createVd("a", [["class", "share"], ["href", '/?cid=' + item.Send_ID], ["target", "_blank"]], ["分享"]), item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [], [item.sub_Count]), migi.createVd("span", [], ["收起"])])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
     }
   }, {
     key: 'genChildComment',
     value: function genChildComment(item) {
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name2 fn-hide"]], [item.Send_ToUserName]), migi.createVd("b", [["class", "arrow fn-hide"]]), migi.createVd("small", [["class", "time"]], [formatTime(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [migi.createVd("span", [["cid", item.Send_ID], ["class", 'zan' + (item.IsLike ? ' has' : '')]], [migi.createVd("small", [], [item.LikeCount])]), item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content])])]);
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name2 fn-hide"]], [item.Send_ToUserName]), migi.createVd("b", [["class", "arrow fn-hide"]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [migi.createVd("span", [["cid", item.Send_ID], ["class", 'zan' + (item.IsLike ? ' has' : '')]], [migi.createVd("small", [], [item.LikeCount])]), item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content])])]);
     }
   }, {
     key: 'render',
@@ -2505,21 +2485,33 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(106);
+var _net = __webpack_require__(7);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(3);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _Title = __webpack_require__(107);
 
 var _Title2 = _interopRequireDefault(_Title);
 
-var _Media = __webpack_require__(105);
+var _Media = __webpack_require__(106);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _WorkComment = __webpack_require__(108);
+var _WorkComment = __webpack_require__(109);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
-var _WorkType = __webpack_require__(135);
+var _itemTemplate = __webpack_require__(136);
 
-var _WorkType2 = _interopRequireDefault(_WorkType);
+var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
+
+var _InspComment = __webpack_require__(104);
+
+var _InspComment2 = _interopRequireDefault(_InspComment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2537,28 +2529,17 @@ var Works = function (_migi$Component) {
   function Works() {
     var _ref;
 
+    _classCallCheck(this, Works);
+
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
 
-    _classCallCheck(this, Works);
-
     var _this = _possibleConstructorReturn(this, (_ref = Works.__proto__ || Object.getPrototypeOf(Works)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
+    self.worksID = self.props.worksID;
     self.setWorks(self.props.worksDetail.Works_Items);
-    self.on(migi.Event.DOM, function () {
-      var media = self.ref.media;
-      var workComment = self.ref.workComment;
-      media.on('switchSubWork', function (data) {
-        self.subWorkID = data[0].ItemID;
-        workComment.subWorkID = self.subWorkID;
-        workComment.barrageTime = 0;
-      });
-      media.on('timeupdate', function (data) {
-        workComment.barrageTime = data;
-      });
-    });
     return _this;
   }
 
@@ -2572,10 +2553,10 @@ var Works = function (_migi$Component) {
       var authorHash = {};
       works.forEach(function (item) {
         // 将每个小作品根据小类型映射到大类型上，再归类
-        var workType = item.ItemType;
-        if (workType) {
-          workHash[workType] = workHash[workType] || [];
-          workHash[workType].push(item);
+        var bigType = (0, _itemTemplate2.default)(item.ItemType).bigType;
+        if (bigType) {
+          workHash[bigType] = workHash[bigType] || [];
+          workHash[bigType].push(item);
           item.Works_Item_Author.forEach(function (item) {
             authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
             if (!authorHash[item.WorksAuthorType][item.ID]) {
@@ -2587,7 +2568,7 @@ var Works = function (_migi$Component) {
       });
       Object.keys(workHash).forEach(function (k) {
         workList.push({
-          workType: parseInt(k),
+          bigType: k,
           value: workHash[k]
         });
       });
@@ -2641,28 +2622,24 @@ var Works = function (_migi$Component) {
       self.authorList = authorList;
 
       workList.forEach(function (item) {
-        if (item.workType === _WorkType2.default.AUDIO) {
+        if (item.bigType === 'audio') {
           self.hasAudio = true;
           self.audioData = item.value;
-        } else if (item.workType === _WorkType2.default.VIDEO) {
+        } else if (item.bigType === 'video') {
           self.hasVideo = true;
           self.videoData = item.value;
-        } else if (item.workType === _WorkType2.default.TEXT) {
+        } else if (item.bigType === 'text') {
           self.hasText = true;
           self.textData = item.value;
         }
       });
       if (self.hasAudio) {
         first = 'audio';
+        self.workID = self.audioData[0].ItemID;
       } else if (self.hasVideo) {
         first = 'video';
+        self.workID = self.videoData[0].ItemID;
       }
-    }
-  }, {
-    key: 'setID',
-    value: function setID(worksID) {
-      this.worksID = worksID;
-      this.ref.workComment.worksID = worksID;
     }
   }, {
     key: 'clickType',
@@ -2676,11 +2653,68 @@ var Works = function (_migi$Component) {
       }
     }
   }, {
+    key: 'input',
+    value: function input(e, vd) {
+      if (!window.$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+      } else {
+        var v = $(vd.element).val().trim();
+        this.hasCommentContent = v.length > 0;
+      }
+    }
+  }, {
+    key: 'focus',
+    value: function focus(e, vd) {
+      if (!window.$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+    }
+  }, {
+    key: 'submit',
+    value: function submit(e) {
+      e.preventDefault();
+      var self = this;
+      if (self.hasCommentContent) {
+        var $input = $(this.ref.input.element);
+        var rootID = self.rootID;
+        self.isCommentSending = true;
+        _net2.default.postJSON('/api/works/addComment', {
+          parentID: self.parentID,
+          rootID: rootID,
+          content: $input.val(),
+          worksID: self.worksID,
+          workID: self.workID,
+          barrageTime: self.barrageTime
+        }, function (res) {
+          if (res.success) {
+            $input.val('');
+            self.hasCommentContent = false;
+            if (rootID === -1) {
+              self.ref.workComment.ref.comment.prependData(res.data);
+              self.ref.workComment.ref.comment.message = '';
+            } else {
+              self.ref.workComment.ref.comment.prependChild(res.data);
+            }
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          self.isCommentSending = false;
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          self.isCommentSending = false;
+        });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "works fn-clear"]], [migi.createCp(_Title2.default, [["ref", "title"], ["worksDetail", this.props.worksDetail], ["authorList", this.authorList]]), migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.hasAudio ? migi.createVd("li", [["class", 'audio' + (first === 'audio' ? ' cur' : '')], ["rel", "audio"]], ["音频"]) : '', this.hasVideo ? migi.createVd("li", [["class", 'video' + (first === 'video' ? ' cur' : '')], ["rel", "video"]], ["视频"]) : '']), migi.createCp(_Media2.default, [["ref", "media"], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", this.props.worksID], ["commentData", this.props.commentData]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["简介"]), migi.createVd("li", [], ["站外链接"])]), migi.createVd("div", [["class", "info"]], [migi.createVd("h4", [], ["文案"]), migi.createVd("div", [["class", "intro"]], [migi.createVd("pre", [], [(this.textData || []).map(function (item) {
+      return migi.createVd("div", [["class", "works fn-clear"]], [migi.createCp(_Title2.default, [["ref", "title"], ["worksDetail", this.props.worksDetail], ["authorList", this.authorList]]), migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.hasAudio ? migi.createVd("li", [["class", 'audio' + (first === 'audio' ? ' cur' : '')], ["rel", "audio"]], ["音频"]) : '', this.hasVideo ? migi.createVd("li", [["class", 'video' + (first === 'video' ? ' cur' : '')], ["rel", "video"]], ["视频"]) : '']), migi.createCp(_Media2.default, [["ref", "media"], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", this.props.worksID], ["commentData", this.props.commentData]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["简介"]), migi.createVd("li", [], ["站外链接"])]), migi.createVd("div", [["class", "info"]], [migi.createVd("h4", [], ["文案"]), migi.createVd("pre", [["class", "intro"]], [(this.textData || []).map(function (item) {
         return item.Text;
-      })]), migi.createVd("small", [["class", "time"]], ["2017.12.12"])]), migi.createVd("h4", [], ["创作灵感"])])]), migi.createVd("div", [["class", "form"]], [migi.createVd("form", [["class", "fn-clear"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", "夸夸这个作品吧"], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", "120"]]), migi.createVd("input", [["type", "submit"], ["class", 'submit' + (this.hasContent && !this.loading ? '' : ' dis')], ["value", "发布评论"]])])])]);
+      })]), migi.createVd("h4", [], ["创作灵感"]), migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["worksID", this.props.worksID], ["commentData", this.props.worksDetail.WorksAuthorComment]])])]), migi.createVd("div", [["class", "form"]], [migi.createVd("form", [["class", "fn-clear"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", "夸夸这个作品吧"], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", "120"]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj(["hasCommentContent", "isCommentSending"], this, function () {
+        return 'submit' + (this.hasCommentContent && !this.isCommentSending ? '' : ' dis');
+      })], ["value", "发布评论"]])])])]);
     }
   }, {
     key: 'worksID',
@@ -2691,12 +2725,60 @@ var Works = function (_migi$Component) {
       return this.__getBind("worksID");
     }
   }, {
-    key: 'subWorkID',
+    key: 'workID',
     set: function set(v) {
-      this.__setBind("subWorkID", v);this.__data("subWorkID");
+      this.__setBind("workID", v);this.__data("workID");
     },
     get: function get() {
-      return this.__getBind("subWorkID");
+      return this.__getBind("workID");
+    }
+  }, {
+    key: 'rootID',
+    set: function set(v) {
+      this.__setBind("rootID", v);this.__data("rootID");
+    },
+    get: function get() {
+      if (this.__initBind("rootID")) this.__setBind("rootID", -1);return this.__getBind("rootID");
+    }
+  }, {
+    key: 'parentID',
+    set: function set(v) {
+      this.__setBind("parentID", v);this.__data("parentID");
+    },
+    get: function get() {
+      if (this.__initBind("parentID")) this.__setBind("parentID", -1);return this.__getBind("parentID");
+    }
+  }, {
+    key: 'content',
+    set: function set(v) {
+      this.__setBind("content", v);this.__data("content");
+    },
+    get: function get() {
+      return this.__getBind("content");
+    }
+  }, {
+    key: 'barrageTime',
+    set: function set(v) {
+      this.__setBind("barrageTime", v);this.__data("barrageTime");
+    },
+    get: function get() {
+      if (this.__initBind("barrageTime")) this.__setBind("barrageTime", 0);return this.__getBind("barrageTime");
+    }
+  }, {
+    key: 'hasCommentContent',
+    set: function set(v) {
+      this.__setBind("hasCommentContent", v);this.__data("hasCommentContent");
+    },
+    get: function get() {
+      return this.__getBind("hasCommentContent");
+    }
+  }, {
+    key: 'isCommentSending',
+    set: function set(v) {
+      this.__setBind("isCommentSending", v);this.__data("isCommentSending");
+    },
+    get: function get() {
+      return this.__getBind("isCommentSending");
     }
   }]);
 
@@ -2707,7 +2789,7 @@ migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
 
-/***/ 8:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -14,28 +14,6 @@ let $lastSlide;
 let take = 10;
 let ajax;
 
-function formatTime(time) {
-  time = new Date(time);
-  let now = Date.now();
-  let diff = now - time;
-  if(diff >= 1000 * 60 * 60 * 24 * 365) {
-    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
-  }
-  if(diff >= 1000 * 60 * 60 * 24 * 30) {
-    return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
-  }
-  if(diff >= 1000 * 60 * 60 * 24) {
-    return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
-  }
-  if(diff >= 1000 * 60 * 60) {
-    return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
-  }
-  if(diff >= 1000 * 60) {
-    return Math.floor(diff / (1000 * 60)) + '分钟前';
-  }
-  return '刚刚';
-}
-
 class Comment extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -164,7 +142,7 @@ class Comment extends migi.Component {
       else {
         $list2.css('height', 'auto');
         subLoadHash[rid] = IS_LOADING;
-        ajax = net.postJSON(self.props.subUrl, { rootID: rid, skip: -1, take }, function(res) {
+        ajax = net.postJSON(self.props.subUrl, { rootID: rid, skip: 0, take }, function(res) {
           if(res.success) {
             subLoadHash[rid] = HAS_LOADED;
             let s = '';
@@ -241,7 +219,7 @@ class Comment extends migi.Component {
           <div class="txt">
             <div>
               <span class="name">{ item.Send_UserName }</span>
-              <small class="time">{ formatTime(item.Send_Time) }</small>
+              <small class="time">{ util.formatDate(item.Send_Time) }</small>
             </div>
             <p>{ item.sign }</p>
           </div>
@@ -272,7 +250,7 @@ class Comment extends migi.Component {
         <div class="profile fn-clear" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>
           <img class="pic" src={ item.Send_UserHeadUrl || '//zhuanquan.xin/img/blank.png' }/>
           <div class="txt">
-            <div><span class="name2 fn-hide">{ item.Send_ToUserName }</span><b class="arrow fn-hide"/><small class="time">{ formatTime(item.Send_Time) }</small><span class="name">{ item.Send_UserName }</span></div>
+            <div><span class="name2 fn-hide">{ item.Send_ToUserName }</span><b class="arrow fn-hide"/><small class="time">{ util.formatDate(item.Send_Time) }</small><span class="name">{ item.Send_UserName }</span></div>
             <p>{ item.sign }</p>
           </div>
         </div>

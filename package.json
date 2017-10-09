@@ -28,7 +28,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.1",
     "json-loader": "^0.5.4",
-    "lefty": "^3.8.0",
+    "lefty": "^3.8.1",
     "less": "^2.7.2",
     "less-loader": "^3.0.0",
     "migi-es6-shim": "^0.34.1",
