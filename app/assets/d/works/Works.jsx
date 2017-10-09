@@ -264,8 +264,16 @@ class Works extends migi.Component {
              authorList={ this.authorList }/>
       <div class="main">
         <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
-          <li class={ 'audio' + (this.hasAudio ? '' : ' fn-hide') + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
-          <li class={ 'video' + (this.hasVideo ? '' : ' fn-hide') + (first ==='video' ? ' cur' : '') } rel="video">视频</li>
+          {
+            this.hasAudio
+              ? <li class={ 'audio' + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
+              : ''
+          }
+          {
+            this.hasVideo
+              ? <li class={ 'video' + (first ==='video' ? ' cur' : '') } rel="video">视频</li>
+              : ''
+          }
         </ul>
         <Media ref="media"
                worksDetail={ this.props.worksDetail }

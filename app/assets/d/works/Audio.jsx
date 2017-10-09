@@ -34,7 +34,6 @@ class Audio extends migi.Component {
   @bind showLyricsMode
   @bind currentTime
   @bind duration
-  @bind hasLoaded
   @bind showLyrics
   @bind title
   @bind canControl
@@ -62,6 +61,7 @@ class Audio extends migi.Component {
       item.formatLyrics = l;
     });
     self.rollLyrics = data[0].formatLyrics.data;
+    self.lineLyrics = data[0].formatLyrics.txt;
     self.on(migi.Event.DOM, function() {
       let count = 0;
       $lyricsRoll = $(self.ref.lyricsRoll.element);
@@ -74,11 +74,12 @@ class Audio extends migi.Component {
   }
   addMedia() {
     let audio = <audio src={ this.fileUrl }
-        onTimeupdate={ this.timeupdate.bind(this) }
-        onLoadedmetadata={ this.loadedmetadata.bind(this) }
-        onPlaying={ this.playing.bind(this) }
-        onprogress={ this.progress.bind(this) }
-        preload="meta">
+                       onTimeupdate={ this.onTimeupdate.bind(this) }
+                       onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
+                       onPlaying={ this.onPlaying.bind(this) }
+                       onPause={ this.onPause.bind(this) }
+                       onProgress={ this.onProgress.bind(this) }
+                       preload="meta">
         your browser does not support the audio tag
       </audio>;
     this.audio = audio;
@@ -86,15 +87,17 @@ class Audio extends migi.Component {
   }
   show() {
     $(this.element).removeClass('fn-hide');
+    if(!this.audio) {
+      this.addMedia();
+    }
     return this;
   }
   hide() {
     $(this.element).addClass('fn-hide');
     return this;
   }
-  timeupdate(e) {
+  onTimeupdate(e) {
     let currentTime = e.target.currentTime;
-    // console.log(currentTime);
     let item = this.data[this.workIndex];
     let formatLyrics = item.formatLyrics;
     let formatLyricsData = formatLyrics.data;
@@ -121,36 +124,39 @@ class Audio extends migi.Component {
     let percent = currentTime / this.duration;
     this.setBarPercent(percent);
   }
-  progress(e) {
+  onProgress(e) {
   }
-  loadedmetadata(e) {
+  onLoadedmetadata(e) {
     this.duration = e.target.duration;
-    this.hasLoaded = true;
     this.canControl = true;
   }
-  playing(e) {
+  onPlaying(e) {
     this.duration = e.target.duration;
   }
+  onPause(e) {}
   play() {
-    this.ref.audio.element.play();
+    this.audio.element.play();
     this.showLyrics = true;
     return this;
   }
   pause() {
-    this.ref.audio.element.pause();
+    this.audio.element.pause();
     return this;
   }
   currentTime(t) {
-    this.ref.audio.element.currentTime = t;
+    this.audio.element.currentTime = t;
     return this;
+  }
+  altLyrics() {
+    this.showLyricsMode = !this.showLyricsMode;
   }
   clickPlay(e, vd) {
     let $play = $(vd.element);
     if($play.hasClass('pause')) {
-      this.audio.element.pause();
+      this.pause();
     }
     else {
-      this.audio.element.play();
+      this.play();
     }
     $play.toggleClass('pause');
   }
@@ -231,29 +237,18 @@ class Audio extends migi.Component {
       migi.eventBus.emit('NEED_LOGIN');
     }
   }
-  altLyrics() {
-    this.showLyricsMode = !this.showLyricsMode;
-  }
   clickShare() {
     migi.eventBus.emit('SHARE', location.href);
   }
   clickProgress(e) {
     if(this.canControl && e.target.className !== 'p') {
-      let $progress = $(this.ref.progress.element);
+      let $progress = $(this.ref.onProgress.element);
       offsetX = $progress.offset().left;
       let x = e.pageX - offsetX;
       let percent = x / $progress.width();
       let currentTime = Math.floor(this.duration * percent);
-      this.audio.element.currentTime = currentTime;
+      this.currentTime(currentTime);
     }
-  }
-  clear() {
-    this.duration = 0;
-    this.fileUrl = '';
-    this.lineLyrics = '';
-    this.rollLyrics = [];
-    this.hasLoaded = false;
-    return this;
   }
   setBarPercent(percent) {
     percent *= 100;
@@ -261,11 +256,18 @@ class Audio extends migi.Component {
     $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('transform', `translateX(${percent}%)`);
   }
+  clear() {
+    this.duration = 0;
+    this.fileUrl = '';
+    this.lineLyrics = '';
+    this.rollLyrics = [];
+    return this;
+  }
   render() {
     return <div class={ 'audio' + (this.props.show ? '' : ' fn-hide') }>
       <ul class="type fn-clear">
         {
-          this.tips.map(function(item, index) {
+          (this.tips || []).map(function(item, index) {
             if(index === 0) {
               return <li class="cur">{ item }</li>;
             }
@@ -274,8 +276,8 @@ class Audio extends migi.Component {
         }
       </ul>
       <h3>{ this.title }</h3>
-      <div class={ 'lyrics-con' }>
-        <div class={ 'lyrics-roll' + (!this.showLyricsMode ? '' : ' fn-hide') }>
+      <div class={ 'lyrics' }>
+        <div class={ 'roll' + (!this.showLyricsMode ? '' : ' fn-hide') }>
           <div class="c" ref="lyricsRoll">
             {
               (this.rollLyrics || []).map(function(item) {
@@ -284,13 +286,11 @@ class Audio extends migi.Component {
             }
           </div>
         </div>
-        <pre class={ 'lyrics-line' + (this.showLyricsMode ? '' : ' fn-hide') }>{ this.lineLyrics }</pre>
-        <span class={ 'lyrics' + (this.showLyricsMode ? '' : ' alt') } onClick={ this.altLyrics }/>
+        <pre class={ 'line' + (this.showLyricsMode ? '' : ' fn-hide') }>{ this.lineLyrics }</pre>
       </div>
       <div class="fn">
         <div class="control">
-          <b class="lyrics"/>
-          <b class="full"/>
+          <b class="lyrics" onClick={ this.altLyrics }/>
           <div class="volume">
             <b class="icon"/>
             <b class="vol"/>

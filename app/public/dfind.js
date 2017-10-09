@@ -214,12 +214,12 @@ var util = {
       return '00:00';
     }
     var res = '';
-    if (time > 1000 * 60 * 60) {
+    if (time >= 1000 * 60 * 60) {
       var hour = Math.floor(time / (1000 * 60 * 60));
       time -= 1000 * 60 * 60 * hour;
       res += hour + ':';
     }
-    if (time > 1000 * 60) {
+    if (time >= 1000 * 60) {
       var minute = Math.floor(time / (1000 * 60));
       time -= 1000 * 60 * minute;
       if (minute < 10) {
@@ -229,7 +229,7 @@ var util = {
     } else {
       res += '00:';
     }
-    var second = Math.ceil(time / 1000);
+    var second = Math.floor(time / 1000);
     if (second < 10) {
       second = '0' + second;
     }

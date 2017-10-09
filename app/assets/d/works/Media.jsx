@@ -180,17 +180,19 @@ class Media extends migi.Component {
   }
   switchType(type) {
     if(type === 'audio') {
-      video.pause().hide();
-      last = audio.show().currentTime(0);
+      this.ref.video.pause().hide();
+      this.ref.audio.show();
+      // last = audio.show().currentTime(0);
     }
     else if(type === 'video') {
-      audio.pause().hide();
-      last = video.show().currentTime(0);
+      this.ref.audio.pause().hide();
+      this.ref.video.show();
+      // last = video.show().currentTime(0);
     }
-    this.canControl = last.hasLoaded;
-    duration = last.duration;
-    $(this.ref.play.element).removeClass('pause');
-    this.emit('switchSubWork', last.data);
+    // this.canControl = last.hasLoaded;
+    // duration = last.duration;
+    // $(this.ref.play.element).removeClass('pause');
+    // this.emit('switchSubWork', last.data);
   }
   render() {
     return <div class="media">

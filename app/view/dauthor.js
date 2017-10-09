@@ -95,12 +95,12 @@ let util = {
       return '00:00';
     }
     let res = '';
-    if(time > 1000 * 60 * 60) {
+    if(time >= 1000 * 60 * 60) {
       let hour = Math.floor(time / (1000 * 60 * 60));
       time -= 1000 * 60 * 60 * hour;
       res += hour + ':';
     }
-    if(time > 1000 * 60) {
+    if(time >= 1000 * 60) {
       let minute = Math.floor(time / (1000 * 60));
       time -= 1000 * 60 * minute;
       if(minute < 10) {
@@ -111,7 +111,7 @@ let util = {
     else {
       res += '00:';
     }
-    let second = Math.ceil(time / 1000);
+    let second = Math.floor(time / 1000);
     if(second < 10) {
       second = '0' + second;
     }
