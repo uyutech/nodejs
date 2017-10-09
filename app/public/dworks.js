@@ -240,6 +240,9 @@ var Audio = function (_migi$Component) {
       self.setData(self.props.data);
       if (self.props.show) {
         self.on(migi.Event.DOM, function () {
+          var uid = window.$CONFIG ? $CONFIG.uid : '';
+          var key = uid + 'volume';
+          self.volume = localStorage[key];
           self.addMedia();
         });
       }
@@ -291,11 +294,15 @@ var Audio = function (_migi$Component) {
       "]);
       this.audio = audio;
       audio.appendTo(this.element);
+      this.volume = this.volume;
     }
   }, {
     key: 'show',
     value: function show() {
       $(this.element).removeClass('fn-hide');
+      var uid = window.$CONFIG ? $CONFIG.uid : '';
+      var key = uid + 'volume';
+      this.volume = localStorage[key];
       if (!this.audio) {
         this.addMedia();
       }
@@ -357,13 +364,14 @@ var Audio = function (_migi$Component) {
     key: 'play',
     value: function play() {
       this.audio.element.play();
-      this.showLyrics = true;
+      this.isPlaying = true;
       return this;
     }
   }, {
     key: 'pause',
     value: function pause() {
       this.audio.element.pause();
+      this.isPlaying = false;
       return this;
     }
   }, {
@@ -378,15 +386,51 @@ var Audio = function (_migi$Component) {
       this.showLyricsMode = !this.showLyricsMode;
     }
   }, {
-    key: 'clickPlay',
-    value: function clickPlay(e, vd) {
-      var $play = $(vd.element);
-      if ($play.hasClass('pause')) {
-        this.pause();
-      } else {
-        this.play();
+    key: 'clickVolume',
+    value: function clickVolume(e) {
+      var cn = e.target.className;
+      if (cn !== 'p' && cn.indexOf('icon') === -1) {
+        var $volume = $(this.ref.volume.element);
+        var left = $volume.offset().left;
+        var x = e.pageX - left;
+        var percent = x / $volume.width();
+        this.volume = percent;
       }
-      $play.toggleClass('pause');
+    }
+  }, {
+    key: 'clickMute',
+    value: function clickMute(e) {
+      this.muted = !this.muted;
+      if (this.muted) {
+        this.audio.element.volume = 0;
+      } else {
+        this.audio.element.volume = this.volume;
+      }
+    }
+  }, {
+    key: 'clickProgress',
+    value: function clickProgress(e) {
+      if (this.canControl && e.target.className !== 'p') {
+        var $progress = $(this.ref.progress.element);
+        var left = $progress.offset().left;
+        var x = e.pageX - left;
+        var percent = x / $progress.width();
+        var currentTime = Math.floor(this.duration * percent);
+        this.currentTime(currentTime);
+      }
+    }
+  }, {
+    key: 'setBarPercent',
+    value: function setBarPercent(percent) {
+      percent *= 100;
+      $(this.ref.vol.element).css('width', percent + '%');
+      $(this.ref.p.element).css('-webkit-transform', 'translateX(' + percent + '%)');
+      $(this.ref.p.element).css('transform', 'translateX(' + percent + '%)');
+    }
+  }, {
+    key: 'clickPlay',
+    value: function clickPlay(e) {
+      this.isPlaying ? this.pause() : this.play();
     }
   }, {
     key: 'clickLike',
@@ -469,26 +513,6 @@ var Audio = function (_migi$Component) {
       migi.eventBus.emit('SHARE', location.href);
     }
   }, {
-    key: 'clickProgress',
-    value: function clickProgress(e) {
-      if (this.canControl && e.target.className !== 'p') {
-        var $progress = $(this.ref.onProgress.element);
-        offsetX = $progress.offset().left;
-        var x = e.pageX - offsetX;
-        var percent = x / $progress.width();
-        var currentTime = Math.floor(this.duration * percent);
-        this.currentTime(currentTime);
-      }
-    }
-  }, {
-    key: 'setBarPercent',
-    value: function setBarPercent(percent) {
-      percent *= 100;
-      $(this.ref.vol.element).css('width', percent + '%');
-      $(this.ref.p.element).css('-webkit-transform', 'translateX(' + percent + '%)');
-      $(this.ref.p.element).css('transform', 'translateX(' + percent + '%)');
-    }
-  }, {
     key: 'clear',
     value: function clear() {
       this.duration = 0;
@@ -517,7 +541,15 @@ var Audio = function (_migi$Component) {
         return 'line' + (this.showLyricsMode ? '' : ' fn-hide');
       })]], [new migi.Obj("lineLyrics", this, function () {
         return this.lineLyrics;
-      })])]), migi.createVd("div", [["class", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "lyrics"], ["onClick", new migi.Cb(this, this.altLyrics)]]), migi.createVd("div", [["class", "volume"]], [migi.createVd("b", [["class", "icon"]]), migi.createVd("b", [["class", "vol"]]), migi.createVd("b", [["class", "p"]])])]), migi.createVd("div", [["class", "bar"]], [migi.createVd("b", [["class", "play"], ["onClick", new migi.Cb(this, this.clickPlay)]]), migi.createVd("small", [["class", "time"]], [new migi.Obj("currentTime", this, function () {
+      })])]), migi.createVd("div", [["class", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "lyrics"], ["onClick", new migi.Cb(this, this.altLyrics)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
+        return 'icon' + (this.muted ? ' muted' : '');
+      })], ["onClick", new migi.Cb(this, this.clickMute)]]), migi.createVd("b", [["class", "vol"], ["style", new migi.Obj("volume", this, function () {
+        return 'width:' + this.volume * 100 + '%';
+      })]]), migi.createVd("b", [["class", "p"], ["style", new migi.Obj("volume", this, function () {
+        return 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)';
+      })]])])]), migi.createVd("div", [["class", "bar"]], [migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
+        return 'play' + (this.isPlaying ? ' pause' : '');
+      })], ["onClick", new migi.Cb(this, this.clickPlay)]]), migi.createVd("small", [["class", "time"]], [new migi.Obj("currentTime", this, function () {
         return _util2.default.formatTime(this.currentTime * 1000);
       })]), migi.createVd("small", [["class", "time end"]], [new migi.Obj("duration", this, function () {
         return _util2.default.formatTime(this.duration * 1000);
@@ -554,6 +586,14 @@ var Audio = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("isFavor");
+    }
+  }, {
+    key: 'isPlaying',
+    set: function set(v) {
+      this.__setBind("isPlaying", v);this.__data("isPlaying");
+    },
+    get: function get() {
+      return this.__getBind("isPlaying");
     }
   }, {
     key: 'workIndex',
@@ -604,14 +644,6 @@ var Audio = function (_migi$Component) {
       return this.__getBind("duration");
     }
   }, {
-    key: 'showLyrics',
-    set: function set(v) {
-      this.__setBind("showLyrics", v);this.__data("showLyrics");
-    },
-    get: function get() {
-      return this.__getBind("showLyrics");
-    }
-  }, {
     key: 'title',
     set: function set(v) {
       this.__setBind("title", v);this.__data("title");
@@ -626,6 +658,27 @@ var Audio = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("canControl");
+    }
+  }, {
+    key: 'muted',
+    set: function set(v) {
+      this.__setBind("muted", v);this.__data("muted");
+    },
+    get: function get() {
+      return this.__getBind("muted");
+    }
+  }, {
+    key: 'volume',
+    get: function get() {
+      return this._volume || 0.5;
+    },
+    set: function set(v) {
+      this._volume = v;
+      migi.eventBus.emit('SET_VOLUME', v);
+      if (this.audio) {
+        this.audio.element.volume = v;
+      }
+      ;this.__array("volume", v);this.__data("volume");
     }
   }]);
 
@@ -1259,6 +1312,9 @@ var Video = function (_migi$Component) {
       self.setData(self.props.data);
       if (self.props.show) {
         self.on(migi.Event.DOM, function () {
+          var uid = window.$CONFIG ? $CONFIG.uid : '';
+          var key = uid + 'volume';
+          self.volume = localStorage[key];
           self.addMedia();
         });
       }
@@ -1284,16 +1340,20 @@ var Video = function (_migi$Component) {
   }, {
     key: 'addMedia',
     value: function addMedia() {
-      var video = migi.createVd("video", [["ref", "video"], ["poster", this.cover], ["onTimeupdate", this.onTimeupdate.bind(this)], ["onLoadedmetadata", this.onLoadedmetadata.bind(this)], ["onPause", this.onPause.bind(this)], ["onPlaying", this.onPlaying.bind(this)], ["preload", "meta"], ["playsinline", "true"], ["webkit-playsinline", "true"], ["src", this.fileUrl]], ["\n\
+      var video = migi.createVd("video", [["ref", "video"], ["poster", this.cover], ["onClick", this.clickPlay.bind(this)], ["onTimeupdate", this.onTimeupdate.bind(this)], ["onLoadedmetadata", this.onLoadedmetadata.bind(this)], ["onPause", this.onPause.bind(this)], ["onPlaying", this.onPlaying.bind(this)], ["preload", "meta"], ["playsinline", "true"], ["webkit-playsinline", "true"], ["src", this.fileUrl]], ["\n\
       your browser does not support the video tag\n\
     "]);
       this.video = video;
       video.after(this.ref.title.element);
+      this.volume = this.volume;
     }
   }, {
     key: 'show',
     value: function show() {
       $(this.element).removeClass('fn-hide');
+      var uid = window.$CONFIG ? $CONFIG.uid : '';
+      var key = uid + 'volume';
+      this.volume = localStorage[key];
       if (!this.video) {
         this.addMedia();
       }
@@ -1313,8 +1373,8 @@ var Video = function (_migi$Component) {
       this.setBarPercent(percent);
     }
   }, {
-    key: 'progress',
-    value: function progress(e) {}
+    key: 'onProgress',
+    value: function onProgress(e) {}
   }, {
     key: 'onLoadedmetadata',
     value: function onLoadedmetadata(e) {
@@ -1333,12 +1393,14 @@ var Video = function (_migi$Component) {
     key: 'play',
     value: function play() {
       this.video.element.play();
+      this.isPlaying = true;
       return this;
     }
   }, {
     key: 'pause',
     value: function pause() {
       this.video.element.pause();
+      this.isPlaying = false;
       return this;
     }
   }, {
@@ -1364,15 +1426,51 @@ var Video = function (_migi$Component) {
       }
     }
   }, {
-    key: 'clickPlay',
-    value: function clickPlay(e, vd) {
-      var $play = $(vd.element);
-      if ($play.hasClass('pause')) {
-        this.pause();
-      } else {
-        this.play();
+    key: 'clickVolume',
+    value: function clickVolume(e) {
+      var cn = e.target.className;
+      if (cn !== 'p' && cn.indexOf('icon') === -1) {
+        var $volume = $(this.ref.volume.element);
+        var left = $volume.offset().left;
+        var x = e.pageX - left;
+        var percent = x / $volume.width();
+        this.volume = percent;
       }
-      $play.toggleClass('pause');
+    }
+  }, {
+    key: 'clickMute',
+    value: function clickMute(e) {
+      this.muted = !this.muted;
+      if (this.muted) {
+        this.video.element.volume = 0;
+      } else {
+        this.video.element.volume = this.volume;
+      }
+    }
+  }, {
+    key: 'clickProgress',
+    value: function clickProgress(e) {
+      if (this.canControl && e.target.className !== 'p') {
+        var $progress = $(this.ref.progress.element);
+        var left = $progress.offset().left;
+        var x = e.pageX - left;
+        var percent = x / $progress.width();
+        var currentTime = Math.floor(this.duration * percent);
+        this.currentTime(currentTime);
+      }
+    }
+  }, {
+    key: 'setBarPercent',
+    value: function setBarPercent(percent) {
+      percent *= 100;
+      $(this.ref.vol.element).css('width', percent + '%');
+      $(this.ref.p.element).css('-webkit-transform', 'translateX(' + percent + '%)');
+      $(this.ref.p.element).css('transform', 'translateX(' + percent + '%)');
+    }
+  }, {
+    key: 'clickPlay',
+    value: function clickPlay(e) {
+      this.isPlaying ? this.pause() : this.play();
     }
   }, {
     key: 'clickLike',
@@ -1455,26 +1553,6 @@ var Video = function (_migi$Component) {
       migi.eventBus.emit('SHARE', location.href);
     }
   }, {
-    key: 'clickProgress',
-    value: function clickProgress(e) {
-      if (this.canControl && e.target.className !== 'p') {
-        var $progress = $(this.ref.progress.element);
-        offsetX = $progress.offset().left;
-        var x = e.pageX - offsetX;
-        var percent = x / $progress.width();
-        var currentTime = Math.floor(this.duration * percent);
-        this.currentTime(currentTime);
-      }
-    }
-  }, {
-    key: 'setBarPercent',
-    value: function setBarPercent(percent) {
-      percent *= 100;
-      $(this.ref.vol.element).css('width', percent + '%');
-      $(this.ref.p.element).css('-webkit-transform', 'translateX(' + percent + '%)');
-      $(this.ref.p.element).css('transform', 'translateX(' + percent + '%)');
-    }
-  }, {
     key: 'clear',
     value: function clear() {
       this.duration = 0;
@@ -1491,7 +1569,15 @@ var Video = function (_migi$Component) {
           return migi.createVd("li", [["class", "cur"]], [item]);
         }
         return migi.createVd("li", [], [item]);
-      })]), migi.createVd("h3", [["ref", "title"]], [this.title]), migi.createVd("div", [["class", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "full"]]), migi.createVd("div", [["class", "volume"]], [migi.createVd("b", [["class", "icon"]]), migi.createVd("b", [["class", "vol"]]), migi.createVd("b", [["class", "p"]])])]), migi.createVd("div", [["class", "bar"]], [migi.createVd("b", [["class", "play"], ["onClick", new migi.Cb(this, this.clickPlay)]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatTime(this.currentTime * 1000)]), migi.createVd("small", [["class", "time end"]], [new migi.Obj("duration", this, function () {
+      })]), migi.createVd("h3", [["ref", "title"]], [this.title]), migi.createVd("div", [["class", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "full"], ["onClick", new migi.Cb(this, this.clickScreen)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
+        return 'icon' + (this.muted ? ' muted' : '');
+      })], ["onClick", new migi.Cb(this, this.clickMute)]]), migi.createVd("b", [["class", "vol"], ["style", new migi.Obj("volume", this, function () {
+        return 'width:' + this.volume * 100 + '%';
+      })]]), migi.createVd("b", [["class", "p"], ["style", new migi.Obj("volume", this, function () {
+        return 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)';
+      })]])])]), migi.createVd("div", [["class", "bar"]], [migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
+        return 'play' + (this.isPlaying ? ' pause' : '');
+      })], ["onClick", new migi.Cb(this, this.clickPlay)]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatTime(this.currentTime * 1000)]), migi.createVd("small", [["class", "time end"]], [new migi.Obj("duration", this, function () {
         return _util2.default.formatTime(this.duration * 1000);
       })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj("isLike", this, function () {
         return 'like' + (this.isLike ? ' has' : '');
@@ -1536,6 +1622,14 @@ var Video = function (_migi$Component) {
       return this.__getBind("isFavor");
     }
   }, {
+    key: 'isPlaying',
+    set: function set(v) {
+      this.__setBind("isPlaying", v);this.__data("isPlaying");
+    },
+    get: function get() {
+      return this.__getBind("isPlaying");
+    }
+  }, {
     key: 'workIndex',
     set: function set(v) {
       this.__setBind("workIndex", v);this.__data("workIndex");
@@ -1550,6 +1644,27 @@ var Video = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("duration");
+    }
+  }, {
+    key: 'muted',
+    set: function set(v) {
+      this.__setBind("muted", v);this.__data("muted");
+    },
+    get: function get() {
+      return this.__getBind("muted");
+    }
+  }, {
+    key: 'volume',
+    get: function get() {
+      return this._volume || 0.5;
+    },
+    set: function set(v) {
+      this._volume = v;
+      migi.eventBus.emit('SET_VOLUME', v);
+      if (this.video) {
+        this.video.element.volume = v;
+      }
+      ;this.__array("volume", v);this.__data("volume");
     }
   }]);
 

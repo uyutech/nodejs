@@ -7316,6 +7316,12 @@ migi.eventBus.on('SHARE', function (url) {
   share.show();
 });
 
+migi.eventBus.on('SET_VOLUME', function (v) {
+  var uid = window.$CONFIG ? $CONFIG.uid : '';
+  var key = uid + 'volume';
+  localStorage[key] = v;
+});
+
 /***/ }),
 /* 62 */,
 /* 63 */,

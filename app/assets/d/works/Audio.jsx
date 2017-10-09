@@ -20,6 +20,9 @@ class Audio extends migi.Component {
       self.setData(self.props.data);
       if(self.props.show) {
         self.on(migi.Event.DOM, function() {
+          let uid = window.$CONFIG ? $CONFIG.uid : '';
+          let key = uid + 'volume';
+          self.volume = localStorage[key];
           self.addMedia();
         });
       }
@@ -28,15 +31,27 @@ class Audio extends migi.Component {
   @bind fileUrl
   @bind isLike
   @bind isFavor
+  @bind isPlaying
   @bind workIndex = 0
   @bind lineLyrics
   @bind rollLyrics = []
   @bind showLyricsMode
   @bind currentTime
   @bind duration
-  @bind showLyrics
   @bind title
   @bind canControl
+  @bind muted
+  get volume() {
+    return this._volume || 0.5;
+  }
+  @bind
+  set volume(v) {
+    this._volume = v;
+    migi.eventBus.emit('SET_VOLUME', v);
+    if(this.audio) {
+      this.audio.element.volume = v;
+    }
+  }
   setData(data) {
     let self = this;
     self.data = data;
@@ -84,9 +99,13 @@ class Audio extends migi.Component {
       </audio>;
     this.audio = audio;
     audio.appendTo(this.element);
+    this.volume = this.volume;
   }
   show() {
     $(this.element).removeClass('fn-hide');
+    let uid = window.$CONFIG ? $CONFIG.uid : '';
+    let key = uid + 'volume';
+    this.volume = localStorage[key];
     if(!this.audio) {
       this.addMedia();
     }
@@ -133,14 +152,16 @@ class Audio extends migi.Component {
   onPlaying(e) {
     this.duration = e.target.duration;
   }
-  onPause(e) {}
+  onPause(e) {
+  }
   play() {
     this.audio.element.play();
-    this.showLyrics = true;
+    this.isPlaying = true;
     return this;
   }
   pause() {
     this.audio.element.pause();
+    this.isPlaying = false;
     return this;
   }
   currentTime(t) {
@@ -150,15 +171,43 @@ class Audio extends migi.Component {
   altLyrics() {
     this.showLyricsMode = !this.showLyricsMode;
   }
-  clickPlay(e, vd) {
-    let $play = $(vd.element);
-    if($play.hasClass('pause')) {
-      this.pause();
+  clickVolume(e) {
+    let cn = e.target.className;
+    if(cn !== 'p' && cn.indexOf('icon') === -1) {
+      let $volume = $(this.ref.volume.element);
+      let left = $volume.offset().left;
+      let x = e.pageX - left;
+      let percent = x / $volume.width();
+      this.volume = percent;
+    }
+  }
+  clickMute(e) {
+    this.muted = !this.muted;
+    if(this.muted) {
+      this.audio.element.volume = 0;
     }
     else {
-      this.play();
+      this.audio.element.volume = this.volume;
     }
-    $play.toggleClass('pause');
+  }
+  clickProgress(e) {
+    if(this.canControl && e.target.className !== 'p') {
+      let $progress = $(this.ref.progress.element);
+      let left = $progress.offset().left;
+      let x = e.pageX - left;
+      let percent = x / $progress.width();
+      let currentTime = Math.floor(this.duration * percent);
+      this.currentTime(currentTime);
+    }
+  }
+  setBarPercent(percent) {
+    percent *= 100;
+    $(this.ref.vol.element).css('width', percent + '%');
+    $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
+    $(this.ref.p.element).css('transform', `translateX(${percent}%)`);
+  }
+  clickPlay(e) {
+    this.isPlaying ? this.pause() : this.play();
   }
   clickLike(e, vd) {
     if(!$CONFIG.isLogin) {
@@ -240,22 +289,6 @@ class Audio extends migi.Component {
   clickShare() {
     migi.eventBus.emit('SHARE', location.href);
   }
-  clickProgress(e) {
-    if(this.canControl && e.target.className !== 'p') {
-      let $progress = $(this.ref.onProgress.element);
-      offsetX = $progress.offset().left;
-      let x = e.pageX - offsetX;
-      let percent = x / $progress.width();
-      let currentTime = Math.floor(this.duration * percent);
-      this.currentTime(currentTime);
-    }
-  }
-  setBarPercent(percent) {
-    percent *= 100;
-    $(this.ref.vol.element).css('width', percent + '%');
-    $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
-    $(this.ref.p.element).css('transform', `translateX(${percent}%)`);
-  }
   clear() {
     this.duration = 0;
     this.fileUrl = '';
@@ -291,14 +324,14 @@ class Audio extends migi.Component {
       <div class="fn">
         <div class="control">
           <b class="lyrics" onClick={ this.altLyrics }/>
-          <div class="volume">
-            <b class="icon"/>
-            <b class="vol"/>
-            <b class="p"/>
+          <div class="volume" ref="volume" onClick={ this.clickVolume }>
+            <b class={ 'icon' + (this.muted ? ' muted' : '') } onClick={ this.clickMute }/>
+            <b class="vol" style={ 'width:' + this.volume * 100 + '%' }/>
+            <b class="p" style={ 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
           </div>
         </div>
         <div class="bar">
-          <b class="play" onClick={ this.clickPlay }/>
+          <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
           <small class="time">{ util.formatTime(this.currentTime * 1000) }</small>
           <small class="time end">{ util.formatTime(this.duration * 1000) }</small>
           <div class="progress" ref="progress" onClick={ this.clickProgress }>

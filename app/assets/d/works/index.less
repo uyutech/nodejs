@@ -274,7 +274,7 @@
             display:block;
             width:0.24rem;
             height:0.24rem;
-            background:url(lyrics.png) no-repeat;
+            background:url(lyrics.png) no-repeat center;
             background-size:contain;
             cursor:pointer;
             &:hover{
@@ -294,7 +294,7 @@
             display:block;
             width:0.24rem;
             height:0.24rem;
-            background:url(fullscreen.png) no-repeat;
+            background:url(fullscreen.png) no-repeat center;
             background-size:contain;
             cursor:pointer;
           }
@@ -318,6 +318,12 @@
               &:hover{
                 background-image:url(volume-hover.png);
               }
+              &.muted{
+                background-image:url(volume-mute.png);
+                &:hover{
+                  background-image:url(volume-mute-hover.png);
+                }
+              }
             }
             .vol{
               position:absolute;
@@ -333,15 +339,21 @@
               position:absolute;
               left:0;
               top:-0.04rem;
-              display:block;
-              width:0.12rem;
-              height:0.12rem;
-              border:1px solid #4E8EB0;
-              border-radius:100%;
-              box-sizing:border-box;
-              background:#fff;
-              transform:translateX(-0.06rem);
-              cursor:move;
+              width:100%;
+              &:before{
+                position:absolute;
+                left:-0.06rem;
+                top:0;
+                display:block;
+                width:0.12rem;
+                height:0.12rem;
+                border:1px solid #4E8EB0;
+                border-radius:100%;
+                box-sizing:border-box;
+                background:#fff;
+                content:' ';
+                cursor:move;
+              }
             }
           }
         }
@@ -352,7 +364,7 @@
             display:block;
             width:0.24rem;
             height:0.24rem;
-            background:url(play.png) no-repeat;
+            background:url(play.png) no-repeat center;
             background-size:contain;
             cursor:pointer;
             &:hover{

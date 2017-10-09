@@ -28,3 +28,9 @@ migi.eventBus.on('SHARE', function(url) {
   share.url = url;
   share.show();
 });
+
+migi.eventBus.on('SET_VOLUME', function(v) {
+  let uid = window.$CONFIG ? $CONFIG.uid : '';
+  let key = uid + 'volume';
+  localStorage[key] = v;
+});
