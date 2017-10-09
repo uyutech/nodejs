@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 71);
+/******/ 	return __webpack_require__(__webpack_require__.s = 70);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -313,25 +313,21 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(48);
+var _Title = __webpack_require__(47);
 
 var _Title2 = _interopRequireDefault(_Title);
 
-var _Media = __webpack_require__(47);
+var _Media = __webpack_require__(46);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _itemTemplate = __webpack_require__(32);
-
-var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
-
-var _Intro = __webpack_require__(45);
-
-var _Intro2 = _interopRequireDefault(_Intro);
-
-var _WorkComment = __webpack_require__(50);
+var _WorkComment = __webpack_require__(49);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
+
+var _WorkType = __webpack_require__(32);
+
+var _WorkType2 = _interopRequireDefault(_WorkType);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -384,10 +380,10 @@ var Works = function (_migi$Component) {
       var authorHash = {};
       works.forEach(function (item) {
         // 将每个小作品根据小类型映射到大类型上，再归类
-        var bigType = (0, _itemTemplate2.default)(item.ItemType).bigType;
-        if (bigType) {
-          workHash[bigType] = workHash[bigType] || [];
-          workHash[bigType].push(item);
+        var workType = item.ItemType;
+        if (workType) {
+          workHash[workType] = workHash[workType] || [];
+          workHash[workType].push(item);
           item.Works_Item_Author.forEach(function (item) {
             authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
             if (!authorHash[item.WorksAuthorType][item.ID]) {
@@ -399,7 +395,7 @@ var Works = function (_migi$Component) {
       });
       Object.keys(workHash).forEach(function (k) {
         workList.push({
-          bigType: k,
+          workType: parseInt(k),
           value: workHash[k]
         });
       });
@@ -453,12 +449,15 @@ var Works = function (_migi$Component) {
       self.authorList = authorList;
 
       workList.forEach(function (item) {
-        if (item.bigType === 'audio') {
+        if (item.workType === _WorkType2.default.AUDIO) {
           self.hasAudio = true;
           self.audioData = item.value;
-        } else if (item.bigType === 'video') {
+        } else if (item.workType === _WorkType2.default.VIDEO) {
           self.hasVideo = true;
           self.videoData = item.value;
+        } else if (item.workType === _WorkType2.default.TEXT) {
+          self.hasText = true;
+          self.textData = item.value;
         }
       });
       if (self.hasAudio) {
@@ -466,132 +465,12 @@ var Works = function (_migi$Component) {
       } else if (self.hasVideo) {
         first = 'video';
       }
-      self.workList = workList;
     }
   }, {
     key: 'setID',
     value: function setID(worksID) {
       this.worksID = worksID;
       this.ref.workComment.worksID = worksID;
-    }
-  }, {
-    key: 'load',
-    value: function load() {
-      var self = this;
-      var title = self.ref.title;
-      var media = self.ref.media;
-      var workComment = self.ref.workComment;
-      workComment.load();
-      util.postJSON('api/works/GetWorkDetails', { WorksID: self.worksID }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          title.title = data.Title;
-          title.subTitle = data.sub_Title;
-          media.setCover(data.cover_Pic);
-
-          var works = data.Works_Items;
-          var workHash = {};
-          var workList = [];
-          var authorList = [];
-          var authorHash = {};
-          works.forEach(function (item) {
-            // 先按每个小作品类型排序其作者
-            util.sort(item.Works_Item_Author, (0, _itemTemplate2.default)(item.ItemType).authorSort || function () {});
-            // 将每个小作品根据小类型映射到大类型上，再归类
-            var bigType = (0, _itemTemplate2.default)(item.ItemType).bigType;
-            workHash[bigType] = workHash[bigType] || [];
-            workHash[bigType].push(item);
-            item.Works_Item_Author.forEach(function (item) {
-              authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
-              if (!authorHash[item.WorksAuthorType][item.ID]) {
-                authorHash[item.WorksAuthorType][item.ID] = true;
-                authorList.push(item);
-              }
-            });
-          });
-          Object.keys(workHash).forEach(function (k) {
-            workList.push({
-              bigType: k,
-              value: workHash[k]
-            });
-          });
-          util.sort(workList, function (a, b) {
-            return a.bigType > b.bigType;
-          });
-          authorHash = {};
-          var tempHash = {
-            901: 1,
-            111: 1,
-            112: 1,
-            121: 2,
-            122: 2,
-            411: 2,
-            421: 2,
-            131: 2,
-            134: 2,
-            141: 2,
-            211: 3,
-            312: 3,
-            311: 3,
-            313: 3,
-            351: 3,
-            331: 3,
-            332: 3
-          };
-          authorList.forEach(function (item) {
-            var type = tempHash[item.WorksAuthorType] || 3;
-            authorHash[type] = authorHash[type] || [];
-            authorHash[type].push(item);
-          });
-          authorList = [];
-          if (authorHash[1]) {
-            var seq = [901, 111, 112];
-            util.sort(authorHash[1], function (a, b) {
-              return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
-            });
-            authorList.push(authorHash[1]);
-          }
-          if (authorHash[2]) {
-            var _seq3 = [121, 122, 411, 421, 131, 134, 141];
-            util.sort(authorHash[2], function (a, b) {
-              return _seq3.indexOf(a.WorksAuthorType) > _seq3.indexOf(b.WorksAuthorType);
-            });
-            authorList.push(authorHash[2]);
-          }
-          if (authorHash[3]) {
-            var _seq4 = [211, 312, 311, 313, 351, 331, 332];
-            util.sort(authorHash[3], function (a, b) {
-              return _seq4.indexOf(a.WorksAuthorType) > _seq4.indexOf(b.WorksAuthorType);
-            });
-            authorList.push(authorHash[3]);
-          }
-          self.ref.author.setAuthor(authorList);
-
-          media.setWorks(workList);
-
-          var hasAudio = false;
-          var hasVideo = false;
-          workList.forEach(function (item) {
-            if (item.bigType === 'audio') {
-              hasAudio = true;
-              $(self.ref.type.element).find('.audio').removeClass('fn-hide');
-            } else if (item.bigType === 'video') {
-              hasVideo = true;
-              $(self.ref.type.element).find('.video').removeClass('fn-hide');
-            }
-          });
-          if (hasAudio) {
-            $(self.ref.type.element).find('.audio').addClass('cur');
-          } else if (hasVideo) {
-            $(self.ref.type.element).find('.video').addClass('cur');
-          }
-          // media.popular = data.Popular;
-          // intro.tags = data.ReturnTagData || [];
-          // $(self.ref.form.element).removeClass('fn-hide');
-        } else {
-          alert(res.message);
-        }
-      });
     }
   }, {
     key: 'clickType',
@@ -607,7 +486,9 @@ var Works = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "works fn-clear"]], [migi.createCp(_Title2.default, [["ref", "title"], ["worksDetail", this.props.worksDetail], ["authorList", this.authorList]]), migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.hasAudio ? migi.createVd("li", [["class", 'audio' + (first === 'audio' ? ' cur' : '')], ["rel", "audio"]], ["音频"]) : '', this.hasVideo ? migi.createVd("li", [["class", 'video' + (first === 'video' ? ' cur' : '')], ["rel", "video"]], ["视频"]) : '']), migi.createCp(_Media2.default, [["ref", "media"], ["worksDetail", this.props.worksDetail], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["worksID", this.props.worksID], ["commentData", this.props.commentData]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["简介"]), migi.createVd("li", [], ["站外链接"])]), migi.createVd("div", [["class", "info"]], [migi.createVd("h4", [], ["文案"]), migi.createVd("div", [["class", "intro"]], [migi.createVd("pre", [], ["拉开手机发送；的随碟附送\n上来看对方是否"]), migi.createVd("small", [["class", "time"]], ["2017.12.12"])]), migi.createVd("h4", [], ["创作灵感"])])]), migi.createVd("div", [["class", "form"]], [migi.createVd("form", [["class", "fn-clear"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", "夸夸这个作品吧"], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", "120"]]), migi.createVd("input", [["type", "submit"], ["class", 'submit' + (this.hasContent && !this.loading ? '' : ' dis')], ["value", "发布评论"]])])])]);
+      return migi.createVd("div", [["class", "works fn-clear"]], [migi.createCp(_Title2.default, [["ref", "title"], ["worksDetail", this.props.worksDetail], ["authorList", this.authorList]]), migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.hasAudio ? migi.createVd("li", [["class", 'audio' + (first === 'audio' ? ' cur' : '')], ["rel", "audio"]], ["音频"]) : '', this.hasVideo ? migi.createVd("li", [["class", 'video' + (first === 'video' ? ' cur' : '')], ["rel", "video"]], ["视频"]) : '']), migi.createCp(_Media2.default, [["ref", "media"], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", this.props.worksID], ["commentData", this.props.commentData]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["简介"]), migi.createVd("li", [], ["站外链接"])]), migi.createVd("div", [["class", "info"]], [migi.createVd("h4", [], ["文案"]), migi.createVd("div", [["class", "intro"]], [migi.createVd("pre", [], [(this.textData || []).map(function (item) {
+        return item.Text;
+      })]), migi.createVd("small", [["class", "time"]], ["2017.12.12"])]), migi.createVd("h4", [], ["创作灵感"])])]), migi.createVd("div", [["class", "form"]], [migi.createVd("form", [["class", "fn-clear"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", "夸夸这个作品吧"], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", "120"]]), migi.createVd("input", [["type", "submit"], ["class", 'submit' + (this.hasContent && !this.loading ? '' : ' dis')], ["value", "发布评论"]])])])]);
     }
   }, {
     key: 'worksID',
@@ -640,29 +521,16 @@ migi.name(Works, "Works");exports.default = Works;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /**
- * Created by army8735 on 2017/8/13.
+ * Created by army8735 on 2017/10/9.
  */
 
-/* harmony default export */ __webpack_exports__["default"] = (function(workType) {
-  switch (workType) {
-    case 1111:
-      let weight = [111, 151, 112, 113, 114, 411, 121, 122, 123, 131, 132, 133, 134, 135, 141];
-      return {
-        bigType: 'audio',
-        authorSort: function(a, b) {
-          return weight.indexOf(a.WorksAuthorType) > weight.indexOf(b.WorksAuthorType);
-        }
-      };
-    case 2111:
-      return {
-        bigType: 'video',
-      };
-    default:
-      return {
 
-      }
-  }
-});;
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  AUDIO: 1111,
+  VIDEO: 2111,
+  TEXT: 4110,
+});
 
 
 /***/ }),
@@ -687,7 +555,7 @@ var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _LyricsParser = __webpack_require__(46);
+var _LyricsParser = __webpack_require__(45);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -728,6 +596,7 @@ var Audio = function (_migi$Component) {
           var key = uid + 'volume';
           self.volume = localStorage[key];
           self.addMedia();
+          $(self.ref.fn.element).removeClass('fn-hidden');
         });
       }
     }
@@ -1025,7 +894,7 @@ var Audio = function (_migi$Component) {
         return 'line' + (this.showLyricsMode ? '' : ' fn-hide');
       })]], [new migi.Obj("lineLyrics", this, function () {
         return this.lineLyrics;
-      })])]), migi.createVd("div", [["class", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "lyrics"], ["onClick", new migi.Cb(this, this.altLyrics)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
+      })])]), migi.createVd("div", [["class", "fn fn-hidden"], ["ref", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "lyrics"], ["onClick", new migi.Cb(this, this.altLyrics)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
         return 'icon' + (this.muted ? ' muted' : '');
       })], ["onClick", new migi.Cb(this, this.clickMute)]]), migi.createVd("b", [["class", "vol"], ["style", new migi.Obj("volume", this, function () {
         return 'width:' + this.volume * 100 + '%';
@@ -1273,85 +1142,6 @@ migi.name(Author, "Author");exports.default = Author;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var hash = {
-  '2757': '<p>\u5F53\u9762\u7EB1\u63ED\u5F00\uFF0C\u5F53\u5149\u8292\u95EA\u73B0\uFF0C\u4ECE\u5F02\u4E16\u5230\u73B0\u4E16\uFF0C\u4ECE\u6211\u5230\u4F60\uFF0C\u8FD9\u662F\u4E00\u573A\u547D\u4E2D\u6CE8\u5B9A\u7684\u76F8\u9047\uFF0C\u6545\u4E8B\u7531\u6B64\u800C\u751F\u3002</p>\n        <p><br/>\u51FA\u54C1\uFF1A<a href="http://weibo.com/u/6276065571" target="_blank">\u7ED3\u68A6\u539F\u521B\u97F3\u4E50\u56E2\u961F</a></p>\n        <p>\u6F14\u5531\uFF1A<a href="http://weibo.com/740120222" target="_blank">\u6155\u5BD2</a>&nbsp;\n          <a href="http://weibo.com/arielmelody" target="_blank">\u53F8\u590F</a>&nbsp;\n          <a href="http://weibo.com/u/1750157883" target="_blank">\u6CB3\u56FE</a>&nbsp;\n          <a href="http://weibo.com/ichigolily" target="_blank">Midaho</a></p>\n        <p>\u4F5C\u66F2\uFF1A<a href="http://weibo.com/u/2423021884" target="_blank">\u6708\u5343\u5BB8</a>&nbsp;\n        \u7F16\u66F2\uFF1A<a href="http://weibo.com/litterzy" target="_blank">Litterzy</a>&nbsp;\n        \u4F5C\u8BCD\uFF1A<a href="http://weibo.com/tingyugelouyinyueshe" target="_blank">\u6C88\u884C\u4E4B</a></p>\n        <p>\u7B1B\u8427\uFF1A<a href="http://weibo.com/ellen0411" target="_blank">\u6C34\u73A5\u513F</a>&nbsp;\n        \u53E4\u7B5D\uFF1A<a href="http://weibo.com/u/2616755905" target="_blank">\u58A8\u97F5\u968F\u6B65\u6447</a>&nbsp;\n        \u7435\u7436\uFF1A<a href="http://weibo.com/zycq" target="_blank">\u4E4D\u96E8\u521D\u6674</a>&nbsp;\n        \u7535\u5409\u4ED6\uFF1A<a href="http://weibo.com/litterzy" target="_blank">Litterzy</a></p>\n        <p>\u4FEE\u97F3\uFF1A<a href="http://weibo.com/yaolaoso" target="_blank">\u5E7A\u5520</a>&nbsp;\n        \u6DF7\u97F3\uFF1A<a href="http://weibo.com/princesscuttlefish" target="_blank">CuTTleFish</a>&nbsp;\n        <a href="http://weibo.com/u/3222735190" target="_blank">\u5C11\u5E74E</a></p>\n        <p>PV\uFF1A<a href="http://weibo.com/moirajia" target="_blank">\u51B0\u9547\u751C\u8C46\u6D46</a></p>\n        <p>\u7ACB\u7ED8\uFF1A<a href="http://weibo.com/yukiart" target="_blank">\u6728\u7F8E\u4EBA</a>&nbsp;\n        \u573A\u666F\uFF1A<a href="http://weibo.com/u/5190275328" target="_blank">_LEOX</a>&nbsp;\n        CG\uFF1A<a href="http://weibo.com/muweiervv" target="_blank">VV\u4E36SAMA</a></p>\n        <p>\u6D77\u62A5\uFF1A<a href="http://weibo.com/seoyutsuki" target="_blank">\u9752\u51CC</a>&nbsp;\n        \u7F8E\u672F\u8BBE\u8BA1\uFF1A<a href="http://weibo.com/520snc" target="_blank">\u5FF5\u6148</a></p>\n        <pre>\n\n\u6155\u5BD2\uFF1A\u4E16\u95F4\u6D6E\u751F\u82E6\u5C81\u66AE \u65E5\u6708\u5316\u6211\u68A6\u6D6E\u751F\n\u95FB\u957F\u6B4C \u98D2\u6C93\u7A7F\u6797\u8FC7 \u5FFD\u73B0\u8703\u697C\u6CA7\u6D77\n\u53F8\u590F\uFF1A\u6211\u6B4C\u6C34\u5929\u63A5\u4E00\u8272 \u4E07\u8C61\u67AF\u8363\u5F39\u6307\u95F4\n\u5929\u5730\u4E3A\u5BB4 \u6CB3\u9152\u6D77\u7A96 \u6070\u662F\u6B64\u65F6\u5F00\n\n\u6CB3\u56FE\uFF1A\u676F\u9152\u8D50\u4EBA\u95F4 \u7B11\u4F17\u751F \u4E0D\u66FE\u8BC6\u84EC\u83B1\n\u4F59\u4E0B\u5165\u6211\u8896 \u62AB\u7D20\u6656 \u9080\u53CB\u5929\u9645\u6765\nmidaho\uFF1A\u9B13\u8FB9\u6CBE\u4E91\u8272 \u7545\u5FEB\u996E\u7F62 \u6708\u534E\u6EE1\u676F\u76CF\n\u6B64\u65E5\u5374\u70E6\u5FE7 \u9169\u914A\u4E00\u9189 \u5929\u5730\u4E5F\u5FEB\u54C9\n\n\u5408\uFF1A\u5FEB\u54C9\u610F \u5FEB\u54C9\u610F \u6D41\u5149\u7167\u5F7B\u4E7E\u5764\u6765\n\u6D69\u7136\u6C14 \u6D69\u7136\u6C14 \u4E58\u98CE\u7834\u6D6A\u5929\u5730\u5F00\n\u6B64\u65F6\u751F \u5F7C\u65F6\u706D \u5DDD\u6D88\u5C71\u957F\u6709\u65F6\u8870\n\u70B9\u5FC3\u706B \u71C3\u5C3D\u4EBA\u95F4\u8272 \u4E0D\u591C\u661F\u5929\u5916\n\nmidaho\uFF1A\u662F\u4F55\u4EBA\u8C13\u6211 \u5982\u8709\u8763 \u672A\u6562\u8D8A\u4E1C\u5CB1\n\u53F8\u590F\uFF1A\u7B11\u6211\u6CA7\u6D77\u4E2D \u4F3C\u4E00\u7C9F \u65E0\u529B\u6392\u4E91\u5F00\n\u6CB3\u56FE\uFF1A\u600E\u77E5\u4ED6\u4E0D\u8FC7 \u5C0F\u5352\u5C14\u5C14 \u6070\u5165\u6211\u68A6\u6765\n\u6155\u5BD2\uFF1A\u6F0F\u591C\u4E00\u7167\u9762 \u5BE5\u5BE5\u6170\u6211 \u5B64\u8EAB\u5728\u9AD8\u53F0\n\n\u6155\u5BD2\u6CB3\u56FE\uFF1A\u4E14\u884C\u4E50 \u4E14\u884C\u4E50 \u4E07\u5343\u98CE\u7269\u5165\u6211\u6000\n\u53F8\u590FMidaho:\u82B1\u582A\u6298 \u82B1\u582A\u6298 \u7C2A\u82B1\u5BF9\u955C\u77E5\u5DF1\u62DC\n\u5408\uFF1A\u5317\u95FB\u7B11 \u5357\u4F20\u54ED \u6211\u81EA\u900D\u9065\u8EAB\u81EA\u5728\n\u541B\u53EF\u77E5 \u98CE\u6708\u4E89\u76F8\u6765 \u4EBA\u95F4\u6211\u68A6\u88C1\n\n\u6CB3\u56FE\uFF1A\u5FEB\u54C9\u610F \u5FEB\u54C9\u610F \u6D41\u5149\u7167\u5F7B\u4E7E\u5764\u6765\n\u6155\u5BD2\uFF1A\u6D69\u7136\u6C14 \u6D69\u7136\u6C14 \u4E58\u98CE\u7834\u6D6A\u5929\u5730\u5F00\n\u5408\uFF1A\u6B64\u65F6\u751F \u5F7C\u65F6\u706D \u5DDD\u6D88\u5C71\u957F\u6709\u65F6\u8870\n\u70B9\u5FC3\u706B \u71C3\u5C3D\u4EBA\u95F4\u8272 \u4E0D\u591C\u661F\u5929\u5916\n\n\u4E14\u884C\u4E50 \u4E14\u884C\u4E50 \u4E07\u5343\u98CE\u7269\u5165\u6211\u6000\n\u82B1\u582A\u6298 \u82B1\u582A\u6298 \u7C2A\u82B1\u5BF9\u955C\u77E5\u5DF1\u62DC\n\u5317\u95FB\u7B11 \u5357\u4F20\u54ED \u6211\u81EA\u900D\u9065\u8EAB\u81EA\u5728\n\u541B\u53EF\u77E5 \u98CE\u6708\u4E89\u76F8\u6765 \u4EBA\u95F4\u6211\u68A6\u88C1\n\n\u53F8\u590F\uFF1A\u5374\u4E0D\u77E5 \u4EBA\u95F4\u68A6\u6211 \u6211\u68A6\u4EBA\u95F4\u88C1</pre>',
-  '2758': '<p>\u539F\u6765\u6700\u6C38\u6052\u7684\u70ED\u5FF1\uFF0C\u6700\u5E94\u8BE5\u7559\u5728\u521D\u89C1\u65F6\u5206\uFF1B<br/>\u539F\u6765\u770B\u4F3C\u6700\u67D4\u8F6F\u7684\u65F6\u5149\uFF0C\u6700\u64C5\u957F\u5C06\u6E29\u5B58\u9605\u540E\u5373\u711A\uFF1B<br/>\u539F\u6765\u6700\u75AF\u72C2\u60C5\u6D53\u7684\u68A6\uFF0C\u6700\u77ED\u6682\u5982\u6D6E\u6CAB\u76F8\u9022\u3002</p>\n        <p><br/>\u51FA\u54C1\uFF1A<a href="http://weibo.com/u/6276065571" target="_blank">\u7ED3\u68A6\u539F\u521B\u97F3\u4E50\u56E2\u961F</a></p>\n        <p>\u6F14\u5531\uFF1A<a href="http://weibo.com/arielmelody" target="_blank">\u53F8\u590F</a></p>\n        <p>\u4F5C\u66F2\uFF1A<a href="http://weibo.com/menghunxiaoxiang" target="_blank">\u6F47\u68A6\u4E34</a>&nbsp;\n        \u7F16\u66F2\uFF1A<a href="http://weibo.com/chenpengjie" target="_blank">\u9648\u9E4F\u6770</a>&nbsp;\n        \u4F5C\u8BCD\uFF1A<a href="http://weibo.com/mercuryco" target="_blank">Vagary </a></p>\n        <p>\u8427\uFF1A<a href="http://weibo.com/ellen0411" target="_blank">\u6C34\u73A5\u513F</a>&nbsp;\n        \u53E4\u7B5D\uFF1A<a href="http://weibo.com/u/2420864952" target="_blank">\u7389\u9762\u5C0F\u5AE3\u7136</a>&nbsp;\n        \u5409\u4ED6\uFF1A<a href="http://weibo.com/chenpengjie" target="_blank">\u9648\u9E4F\u6770</a></p>\n        <p>\u4FEE\u97F3\uFF1A<a href="http://weibo.com/yaolaoso" target="_blank">\u5E7A\u5520</a>&nbsp;\n        \u6DF7\u97F3\uFF1A<a href="http://weibo.com/princesscuttlefish" target="_blank">CuTTleFish</a></p>\n        <p>PV\uFF1A<a href="http://weibo.com/moirajia" target="_blank">\u51B0\u9547\u751C\u8C46\u6D46</a></p>\n        <p>\u66F2\u7ED8\uFF1A<a href="http://weibo.com/pudding131" target="_blank">\u9ED1\u8272\u5E03\u4E01_\u9171</a>&nbsp;\n        <a href="http://weibo.com/muweiervv" target="_blank">VV\u4E36SAMA</a></p>\n        <pre>\n\n\u4E0D\u6DE1\u4E0D\u6DF1 \u4E0D\u5F03\u4E0D\u73CD\n\u78A7\u6D77\u768E\u6708 \u770B\u8001\u826F\u8FB0\n\u4E0D\u5BD2\u4E0D\u6696 \u4E0D\u6B3A\u4E0D\u95EE\n\u6211\u4E3A\u8C01\u4FEF\u9996\u79F0\u81E3\n\n\u4E0D\u601D\u4E0D\u5FD8 \u4E0D\u805A\u4E0D\u5206\n\u5343\u5C81\u767D\u6C99 \u4E00\u626B\u7EA2\u5C18\n\u4E0D\u7559\u4E0D\u820D \u4E0D\u601C\u4E0D\u8BA4\n\u7231\u662F\u6700\u6E29\u5B58\u7684\u6068\n\n\u4F60\u8BF4\u68A6\u4F1A\u751F\u6839 \u60C5\u4F1A\u8FD8\u9B42\n\u4F20\u5947\u662F\u4F60\u6211\u8303\u672C\n\u8BA9\u8FD9\u706F\u524D\u7EA2\u8896 \u96EA\u4E0B\u9752\u887F \u5165\u5F97\u620F\u6587\n\n\u53EF\u7B11\u6851\u7530\u8015\u8FC7\u51E0\u8F6E \u6CA7\u6D77\u9189\u8FC7\u51E0\u6A3D\n\u81EA\u8D4F\u5B64\u82B3\u53C8\u51E0\u4E2A\u9EC4\u660F\n\u6709\u4F20\u5947\u5531\u904D\u4E09\u6625 \u4E3B\u89D2\u4E0D\u662F\u6211\u4EEC\n\u7D6E\u7D6E\u7740\u4F60\u548C\u53E6\u4E00\u4E2A\u4EBA\n\n\u96BE\u9053\u75DB\u695A\u624D\u6709\u8BD7\u97F5 \u7EDD\u671B\u624D\u914D\u60C5\u6DF1\n\u6240\u6709\u575A\u5F3A\u90FD\u4E00\u8BED\u6210\u8C36\n\u800C\u6545\u4E8B\u4ECE\u672A\u653E\u8FC7 \u7901\u77F3\u4E0A\u7684\u6CEA\u75D5\n\u8D8A\u662F\u5BBD\u5BB9\u7684\u4EBA \u8D8A\u662F \u65E0\u5904\u5BB9\u8EAB\n\n\u4F60\u8BF4\u9047\u4E0A\u4E86\u6211 \u624D\u61C2\u9752\u6625\n\u4E00\u751F\u53EA\u591F\u7231\u4E00\u4E2A\u4EBA\n\u5018\u82E5\u6628\u65E5\u91CD\u6E29 \u613F\u4F60\u65E0\u8A00 \u514D\u6211\u8BA4\u771F\n\n\u53EF\u7B11\u6851\u7530\u8015\u8FC7\u51E0\u8F6E \u6CA7\u6D77\u9189\u8FC7\u51E0\u6A3D\n\u81EA\u8D4F\u5B64\u82B3\u53C8\u51E0\u4E2A\u9EC4\u660F\n\u6709\u4F20\u5947\u5531\u904D\u4E09\u6625 \u4E3B\u89D2\u4E0D\u662F\u6211\u4EEC\n\u7D6E\u7D6E\u7740\u4F60\u548C\u53E6\u4E00\u4E2A\u4EBA\n\n\u96BE\u9053\u75DB\u695A\u624D\u6709\u8BD7\u97F5 \u7EDD\u671B\u624D\u914D\u60C5\u6DF1\n\u6211\u7684\u6C89\u9ED8\u5C31\u4E0D\u7B97\u4F24\u75D5\n\u800C\u6545\u4E8B\u4ECE\u672A\u63D0\u5230 \u6708\u5149\u4E0B\u7684\u6211\u4EEC\n\u8D8A\u60F3\u9000\u6B65\u62BD\u8EAB \u8D8A\u4F1A \u5F04\u5047\u6210\u771F\n\n\u5355\u7EAF\u8C62\u517B\u6B8B\u5FCD \u9A84\u50B2\u6210\u5168\u81EA\u5C0A\n\u65F6\u5149\u6700\u64C5\u957F\u9605\u540E\u5373\u711A\n\n\u8C01\u8BF4\u955C\u4E2D\u7684\u82B1\u4E0D\u771F \u6C34\u5E95\u7684\u6708\u4E0D\u6E29\n\u7F8E\u5230\u6DF1\u5904\u600E\u4F1A\u6CA1\u6709\u7075\u9B42\n\u53EF\u6545\u4E8B\u7EC8\u5C06\u820D\u5F03 \u6700\u6C38\u6052\u7684\u70ED\u5FF1\n\u53EA\u5269\u6D77\u98CE\u4E00\u77AC \u4E0D\u614E \u88AB\u8C01\u542C\u95FB\n\u6211\u66FE\u8DEF\u8FC7\u4E86 \u4F60\u7684\u9752\u6625\n</pre>'
-};
-
-var Intro = function (_migi$Component) {
-  _inherits(Intro, _migi$Component);
-
-  function Intro() {
-    var _ref;
-
-    _classCallCheck(this, Intro);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = Intro.__proto__ || Object.getPrototypeOf(Intro)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(Intro, [{
-    key: 'show',
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-    }
-  }, {
-    key: 'setId',
-    value: function setId(id) {
-      this.ref.inspiration.element.innerHTML = hash[id] || '';
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "intro"]], [migi.createVd("h3", [], ["简介"]), migi.createVd("b", [["class", "line"]]), migi.createVd("div", [["class", "tag"]], [migi.createVd("ul", [["class", "fn-clear"]], [new migi.Obj("tags", this, function () {
-        return (this.tags || []).map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '#' + item.Tag_ID]], [item.Tag_Name])]);
-        });
-      })])]), migi.createVd("div", [["class", "inspiration"], ["ref", "inspiration"]])]);
-    }
-  }, {
-    key: 'tags',
-    set: function set(v) {
-      this.__setBind("tags", v);this.__data("tags");
-    },
-    get: function get() {
-      if (this.__initBind("tags")) this.__setBind("tags", []);return this.__getBind("tags");
-    }
-  }]);
-
-  return Intro;
-}(migi.Component);
-
-migi.name(Intro, "Intro");exports.default = Intro;
-
-/***/ }),
-
-/***/ 46:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.default = {
   isLyrics: function isLyrics(s) {
     return (/\[\d{2,}:\d{2}\.\d{2,3}]/.test(s)
@@ -1380,7 +1170,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 47:
+/***/ 46:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1396,7 +1186,7 @@ var _Audio = __webpack_require__(43);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(49);
+var _Video = __webpack_require__(48);
 
 var _Video2 = _interopRequireDefault(_Video);
 
@@ -1509,35 +1299,6 @@ var Media = function (_migi$Component) {
       }
     }
   }, {
-    key: 'setWorks',
-    value: function setWorks(workList) {
-      var self = this;
-      var hasAudio = false;
-      var hasVideo = false;
-      workList.forEach(function (item) {
-        if (item.bigType === 'audio') {
-          audio.setData(item.value);
-          hasAudio = true;
-          // $(self.ref.type.element).find('.audio').removeClass('fn-hide');
-        } else if (item.bigType === 'video') {
-          video.setData(item.value);
-          hasVideo = true;
-          // $(self.ref.type.element).find('.video').removeClass('fn-hide');
-        }
-      });
-      if (hasAudio) {
-        last = audio;
-        // $(self.ref.type.element).find('.audio').addClass('cur');
-      } else if (hasVideo) {
-        last = video;
-        // $(self.ref.type.element).find('.video').addClass('cur');
-      }
-      if (last) {
-        last.show();
-        this.emit('switchSubWork', last.data);
-      }
-    }
-  }, {
     key: 'clickTag',
     value: function clickTag(e, vd, tvd) {
       var $ul = $(vd.element);
@@ -1612,16 +1373,10 @@ var Media = function (_migi$Component) {
       if (type === 'audio') {
         this.ref.video.pause().hide();
         this.ref.audio.show();
-        // last = audio.show().currentTime(0);
       } else if (type === 'video') {
         this.ref.audio.pause().hide();
         this.ref.video.show();
-        // last = video.show().currentTime(0);
       }
-      // this.canControl = last.hasLoaded;
-      // duration = last.duration;
-      // $(this.ref.play.element).removeClass('pause');
-      // this.emit('switchSubWork', last.data);
     }
   }, {
     key: 'render',
@@ -1653,7 +1408,7 @@ migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
 
-/***/ 48:
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1747,7 +1502,7 @@ migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
 
-/***/ 49:
+/***/ 48:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1800,6 +1555,7 @@ var Video = function (_migi$Component) {
           var key = uid + 'volume';
           self.volume = localStorage[key];
           self.addMedia();
+          $(self.ref.fn.element).removeClass('fn-hidden');
         });
       }
     }
@@ -2053,7 +1809,7 @@ var Video = function (_migi$Component) {
           return migi.createVd("li", [["class", "cur"]], [item]);
         }
         return migi.createVd("li", [], [item]);
-      })]), migi.createVd("h3", [["ref", "title"]], [this.title]), migi.createVd("div", [["class", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "full"], ["onClick", new migi.Cb(this, this.clickScreen)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
+      })]), migi.createVd("h3", [["ref", "title"]], [this.title]), migi.createVd("div", [["class", "fn fn-hidden"], ["ref", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "full"], ["onClick", new migi.Cb(this, this.clickScreen)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
         return 'icon' + (this.muted ? ' muted' : '');
       })], ["onClick", new migi.Cb(this, this.clickMute)]]), migi.createVd("b", [["class", "vol"], ["style", new migi.Obj("volume", this, function () {
         return 'width:' + this.volume * 100 + '%';
@@ -2159,75 +1915,7 @@ migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
 
-/***/ 5:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/10/6.
- */
-
-
-
-let net = {
-  ajax: function(url, data, success, error, type) {
-    let csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken,
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function (xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function (data, state, xhr) {
-          success(data, state, xhr);
-        },
-        error: function (data) {
-          if(!error.__hasExec) {
-            error.__hasExec = true;
-            error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function(url, data, success, error) {
-    if(typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function() {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function(url, data, success, error) {
-    if(typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function() {};
-    return net.ajax(url, data, success, error, 'post');
-  },
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (net);
-
-
-/***/ }),
-
-/***/ 50:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2263,11 +1951,11 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Skip = 0;
-var Take = 10;
-var SortType = 0;
-var MyComment = 0;
-var CurrentCount = 0;
+var skip = 0;
+var take = 10;
+var sortType = 0;
+var myComment = 0;
+var currentCount = 0;
 var ajax = void 0;
 var loadEnd = void 0;
 
@@ -2286,10 +1974,11 @@ var WorkComment = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = WorkComment.__proto__ || Object.getPrototypeOf(WorkComment)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
+    self.worksID = self.props.worksID;
     self.on(migi.Event.DOM, function () {
       var page = self.ref.page;
       page.on('page', function (i) {
-        Skip = (i - 1) * Take;
+        skip = (i - 1) * take;
         self.loadPage();
       });
       var comment = self.ref.comment;
@@ -2318,7 +2007,7 @@ var WorkComment = function (_migi$Component) {
       var self = this;
       $(self.element).addClass('fn-hide');
       self.showComment = false;
-      Skip = 0;
+      skip = 0;
     }
   }, {
     key: 'load',
@@ -2332,15 +2021,15 @@ var WorkComment = function (_migi$Component) {
         ajax.abort();
       }
       self.loading = true;
-      ajax = _net2.default.postJSON('api/works/GetToWorkMessage_List', { WorkID: self.worksID, Skip: Skip, Take: Take, SortType: SortType, MyComment: MyComment, CurrentCount: CurrentCount }, function (res) {
+      ajax = _net2.default.postJSON('/api/works/commentList', { worksID: self.worksID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          CurrentCount = data.Size;
-          Skip += Take;
+          currentCount = data.Size;
+          skip += take;
           if (data.data.length) {
             comment.message = '';
             comment.appendData(res.data.data);
-            page.total = Math.ceil(CurrentCount / Take);
+            page.total = Math.ceil(currentCount / take);
           } else {
             comment.appendData(res.data.data);
             comment.message = '暂无评论';
@@ -2369,10 +2058,10 @@ var WorkComment = function (_migi$Component) {
         ajax.abort();
       }
       self.loading = true;
-      ajax = _net2.default.postJSON('api/works/GetToWorkMessage_List', { WorkID: self.worksID, Skip: Skip, Take: Take, SortType: SortType, MyComment: MyComment, CurrentCount: 0 }, function (res) {
+      ajax = _net2.default.postJSON('/api/works/commentList', { worksID: self.worksID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          Skip += Take;
+          skip += take;
           if (data.data.length) {
             comment.message = '';
             comment.appendData(res.data.data);
@@ -2400,9 +2089,9 @@ var WorkComment = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      CurrentCount = 0;
-      SortType = rel;
-      Skip = 0;
+      currentCount = 0;
+      sortType = rel;
+      skip = 0;
       if (ajax) {
         ajax.abort();
       }
@@ -2418,9 +2107,9 @@ var WorkComment = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      CurrentCount = 0;
-      MyComment = rel;
-      Skip = 0;
+      currentCount = 0;
+      myComment = rel;
+      skip = 0;
       if (ajax) {
         ajax.abort();
       }
@@ -2495,7 +2184,7 @@ var WorkComment = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "comments"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论"]), migi.createVd("li", [["rel", "1"]], ["我的"])]), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / 10)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "api/works/AddWorkCommentLike"], ["subUrl", "api/works/GetTocomment_T_List"], ["delUrl", "api/works/DeleteCommentByID"], ["data", this.props.commentData.data]])]);
+      return migi.createVd("div", [["class", "comments"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论"]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / 10)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "api/works/AddWorkCommentLike"], ["subUrl", "api/works/GetTocomment_T_List"], ["delUrl", "api/works/DeleteCommentByID"], ["data", this.props.commentData.data]])]);
     }
   }, {
     key: 'showComment',
@@ -2575,6 +2264,74 @@ var WorkComment = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army8735 on 2017/10/6.
+ */
+
+
+
+let net = {
+  ajax: function(url, data, success, error, type) {
+    let csrfToken = $.cookie('csrfToken');
+    function load() {
+      return $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        crossDomain: true,
+        timeout: 6000,
+        type: type || 'get',
+        headers: {
+          'x-csrf-token': csrfToken,
+        },
+        // ajax 跨域设置必须加上
+        beforeSend: function (xhr) {
+          xhr.withCredentials = true;
+        },
+        success: function (data, state, xhr) {
+          success(data, state, xhr);
+        },
+        error: function (data) {
+          if(!error.__hasExec) {
+            error.__hasExec = true;
+            error(data || {});
+          }
+        }
+      });
+    }
+    return load();
+  },
+  getJSON: function(url, data, success, error) {
+    if(typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function() {};
+    return net.ajax(url, data, success, error);
+  },
+  postJSON: function(url, data, success, error) {
+    if(typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function() {};
+    return net.ajax(url, data, success, error, 'post');
+  },
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (net);
+
 
 /***/ }),
 
@@ -2690,7 +2447,7 @@ Object.keys(code2Data).forEach(function(k) {
 
 /***/ }),
 
-/***/ 71:
+/***/ 70:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2702,11 +2459,12 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (data) {
   migi.Element.resetUid();
+  var isLogin = !!data.ctx.session.uid;
   var worksID = data.worksID;
   var worksDetail = data.worksDetail;
   var commentData = data.commentData;
 
-  var works = migi.preRender(migi.createCp(_Works2.default, [["worksID", worksID], ["worksDetail", worksDetail], ["commentData", commentData]]));
+  var works = migi.preRender(migi.createCp(_Works2.default, [["isLogin", isLogin], ["worksID", worksID], ["worksDetail", worksDetail], ["commentData", commentData]]));
 
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dworks.js') + '"></script>\n</body>\n</html>';
 };

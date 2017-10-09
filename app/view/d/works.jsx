@@ -8,11 +8,13 @@ import Works from '../../assets/d/works/Works.jsx';
 
 export default function(data) {
   migi.Element.resetUid();
+  let isLogin = !!data.ctx.session.uid;
   let worksID = data.worksID;
   let worksDetail = data.worksDetail;
   let commentData = data.commentData;
 
   let works = migi.preRender(<Works
+    isLogin={ isLogin }
     worksID={ worksID }
     worksDetail={ worksDetail }
     commentData={ commentData }/>);

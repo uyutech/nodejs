@@ -93,35 +93,6 @@ class Media extends migi.Component {
       $(this.element).removeAttr('style');
     }
   }
-  setWorks(workList) {
-    let self = this;
-    let hasAudio = false;
-    let hasVideo = false;
-    workList.forEach(function(item) {
-      if(item.bigType === 'audio') {
-        audio.setData(item.value);
-        hasAudio = true;
-        // $(self.ref.type.element).find('.audio').removeClass('fn-hide');
-      }
-      else if(item.bigType === 'video') {
-        video.setData(item.value);
-        hasVideo = true;
-        // $(self.ref.type.element).find('.video').removeClass('fn-hide');
-      }
-    });
-    if(hasAudio) {
-      last = audio;
-      // $(self.ref.type.element).find('.audio').addClass('cur');
-    }
-    else if(hasVideo) {
-      last = video;
-      // $(self.ref.type.element).find('.video').addClass('cur');
-    }
-    if(last) {
-      last.show();
-      this.emit('switchSubWork', last.data);
-    }
-  }
   clickTag(e, vd, tvd) {
     let $ul = $(vd.element);
     let $li = $(tvd.element);
@@ -182,17 +153,11 @@ class Media extends migi.Component {
     if(type === 'audio') {
       this.ref.video.pause().hide();
       this.ref.audio.show();
-      // last = audio.show().currentTime(0);
     }
     else if(type === 'video') {
       this.ref.audio.pause().hide();
       this.ref.video.show();
-      // last = video.show().currentTime(0);
     }
-    // this.canControl = last.hasLoaded;
-    // duration = last.duration;
-    // $(this.ref.play.element).removeClass('pause');
-    // this.emit('switchSubWork', last.data);
   }
   render() {
     return <div class="media">

@@ -25,6 +25,7 @@ module.exports = app => {
           method: 'POST',
           data: {
             uid,
+            WorksID: worksID,
             WorkID: worksID,
             Skip: 0,
             Take: 10,

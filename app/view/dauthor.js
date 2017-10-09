@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 67);
+/******/ 	return __webpack_require__(__webpack_require__.s = 66);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1680,7 +1680,6 @@ var AuthorComment = function (_migi$Component) {
       ajax = _net2.default.postJSON('/api/author/commentList', { authorID: self.authorID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          currentCount = data.Size;
           skip += take;
           if (data.data.length) {
             comment.message = '';
@@ -2653,8 +2652,7 @@ migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 /* 63 */,
 /* 64 */,
 /* 65 */,
-/* 66 */,
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -8,43 +8,31 @@ module.exports = app => {
   class Controller extends app.Controller {
     * tagB(ctx) {
       let query = ctx.request.body;
-      let res = {};
-      try {
-        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/author/GetAuthorFilterlevelB'), {
-          method: 'POST',
-          data: {
-            AuthorID: query.authorID,
-            FilterlevelA: query.tagA,
-          },
-          dataType: 'json',
-          gzip: true,
-        });
-      }
-      catch(e) {
-        ctx.logger.error(e.toString());
-      }
+      let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/author/GetAuthorFilterlevelB'), {
+        method: 'POST',
+        data: {
+          AuthorID: query.authorID,
+          FilterlevelA: query.tagA,
+        },
+        dataType: 'json',
+        gzip: true,
+      });
       ctx.body = res.data;
     }
     * playList(ctx) {
       let query = ctx.request.body;
-      let res = {};
-      try {
-        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/author/SearchWorks'), {
-          method: 'POST',
-          data: {
-            AuthorID: query.authorID,
-            Parameter: query.parameter,
-            Skip: 0,
-            Take: 10,
-            SortType: 1,
-          },
-          dataType: 'json',
-          gzip: true,
-        });
-      }
-      catch(e) {
-        ctx.logger.error(e.toString());
-      }
+      let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/author/SearchWorks'), {
+        method: 'POST',
+        data: {
+          AuthorID: query.authorID,
+          Parameter: query.parameter,
+          Skip: 0,
+          Take: 10,
+          SortType: 1,
+        },
+        dataType: 'json',
+        gzip: true,
+      });
       ctx.body = res.data;
     }
     * follow(ctx) {
@@ -78,26 +66,20 @@ module.exports = app => {
     * commentList(ctx) {
       let uid = ctx.session.uid;
       const body = ctx.request.body;
-      let res = {};
-      try {
-        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/author/GetToAuthorMessage_List'), {
-          method: 'POST',
-          data: {
-            uid,
-            AuthorID: body.authorID,
-            Skip: body.skip,
-            Take: body.take,
-            SortType: body.sortType,
-            MyComment: body.myComment,
-            CurrentCount: body.currentCount,
-          },
-          dataType: 'json',
-          gzip: true,
-        });
-      }
-      catch(e) {
-        ctx.logger.error(e.toString());
-      }
+      let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/author/GetToAuthorMessage_List'), {
+        method: 'POST',
+        data: {
+          uid,
+          AuthorID: body.authorID,
+          Skip: body.skip,
+          Take: body.take,
+          SortType: body.sortType,
+          MyComment: body.myComment,
+          CurrentCount: body.currentCount,
+        },
+        dataType: 'json',
+        gzip: true,
+      });
       ctx.body = res.data;
     }
     * addComment(ctx) {
@@ -148,23 +130,17 @@ module.exports = app => {
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
       const body = ctx.request.body;
-      let res = {};
-      try {
-        res = yield ctx.curl(ctx.helper.getRemoteUrl('api/author/GetTocomment_T_List'), {
-          method: 'POST',
-          data: {
-            uid,
-            RootID: body.rootID,
-            Skip: body.skip,
-            Take: body.take,
-          },
-          dataType: 'json',
-          gzip: true,
-        });
-      }
-      catch(e) {
-        ctx.logger.error(e.toString());
-      }
+      let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/author/GetTocomment_T_List'), {
+        method: 'POST',
+        data: {
+          uid,
+          RootID: body.rootID,
+          Skip: body.skip,
+          Take: body.take,
+        },
+        dataType: 'json',
+        gzip: true,
+      });
       ctx.body = res.data;
     }
   }

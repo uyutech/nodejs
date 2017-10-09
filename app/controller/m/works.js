@@ -10,39 +10,34 @@ module.exports = app => {
       let worksID = ctx.params.worksID;
       let worksDetail = {};
       let commentData = {};
-      try {
-        let res = yield {
-          worksDetail: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetWorkDetails'), {
-            method: 'POST',
-            data: {
-              WorksID: worksID,
-            },
-            dataType: 'json',
-            gzip: true,
-          }),
-          commentData: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetToWorkMessage_List'), {
-            method: 'POST',
-            data: {
-              WorkID: worksID,
-              Skip: 0,
-              Take: 10,
-              SortType: 0,
-              MyComment: 0,
-              CurrentCount: 0,
-            },
-            dataType: 'json',
-            gzip: true,
-          }),
-        };
-        if(res.worksDetail.data.success) {
-          worksDetail = res.worksDetail.data.data;
-        }
-        if(res.commentData.data.success) {
-          commentData = res.commentData.data.data;
-        }
+      let res = yield {
+        worksDetail: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetWorkDetails'), {
+          method: 'POST',
+          data: {
+            WorksID: worksID,
+          },
+          dataType: 'json',
+          gzip: true,
+        }),
+        commentData: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetToWorkMessage_List'), {
+          method: 'POST',
+          data: {
+            WorkID: worksID,
+            Skip: 0,
+            Take: 10,
+            SortType: 0,
+            MyComment: 0,
+            CurrentCount: 0,
+          },
+          dataType: 'json',
+          gzip: true,
+        }),
+      };
+      if(res.worksDetail.data.success) {
+        worksDetail = res.worksDetail.data.data;
       }
-      catch(e) {
-        ctx.logger.error(e.toString());
+      if(res.commentData.data.success) {
+        commentData = res.commentData.data.data;
       }
       yield ctx.render('mworks', {
         worksID,

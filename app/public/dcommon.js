@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 135);
+/******/ 	return __webpack_require__(__webpack_require__.s = 134);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7287,7 +7287,7 @@ function onTouchEnd(e) {
 "use strict";
 
 
-__webpack_require__(134);
+__webpack_require__(133);
 
 var _MLogin = __webpack_require__(96);
 
@@ -17273,7 +17273,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(144)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(143)(module)))
 
 /***/ }),
 /* 75 */,
@@ -17499,8 +17499,7 @@ migi.name(Share, "Share");exports.default = Share;
 /* 130 */,
 /* 131 */,
 /* 132 */,
-/* 133 */,
-/* 134 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17558,7 +17557,7 @@ if (parent !== window) {
 }
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17598,6 +17597,7 @@ window.requestAnimationFrame = function () {
 window.$ = _jquery2.default;
 
 /***/ }),
+/* 135 */,
 /* 136 */,
 /* 137 */,
 /* 138 */,
@@ -17605,8 +17605,7 @@ window.$ = _jquery2.default;
 /* 140 */,
 /* 141 */,
 /* 142 */,
-/* 143 */,
-/* 144 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

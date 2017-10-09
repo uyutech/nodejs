@@ -24,6 +24,7 @@ class Audio extends migi.Component {
           let key = uid + 'volume';
           self.volume = localStorage[key];
           self.addMedia();
+          $(self.ref.fn.element).removeClass('fn-hidden');
         });
       }
     }
@@ -321,7 +322,7 @@ class Audio extends migi.Component {
         </div>
         <pre class={ 'line' + (this.showLyricsMode ? '' : ' fn-hide') }>{ this.lineLyrics }</pre>
       </div>
-      <div class="fn">
+      <div class="fn fn-hidden" ref="fn">
         <div class="control">
           <b class="lyrics" onClick={ this.altLyrics }/>
           <div class="volume" ref="volume" onClick={ this.clickVolume }>

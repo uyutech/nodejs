@@ -7,11 +7,11 @@ import util from '../common/util';
 import Comment from '../component/comment/Comment.jsx';
 import Page from '../component/page/Page.jsx';
 
-let Skip = 0;
-let Take = 10;
-let SortType = 0;
-let MyComment = 0;
-let CurrentCount = 0;
+let skip = 0;
+let take = 10;
+let sortType = 0;
+let myComment = 0;
+let currentCount = 0;
 let ajax;
 let loadEnd;
 
@@ -19,10 +19,11 @@ class WorkComment extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    self.worksID = self.props.worksID;
     self.on(migi.Event.DOM, function() {
       let page = self.ref.page;
       page.on('page', function(i) {
-        Skip = (i - 1) * Take;
+        skip = (i - 1) * take;
         self.loadPage();
       });
       let comment = self.ref.comment;
@@ -54,7 +55,7 @@ class WorkComment extends migi.Component {
     let self = this;
     $(self.element).addClass('fn-hide');
     self.showComment = false;
-    Skip = 0;
+    skip = 0;
   }
   load() {
     let self = this;
@@ -66,15 +67,15 @@ class WorkComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = net.postJSON('api/works/GetToWorkMessage_List', { WorkID: self.worksID , Skip, Take, SortType, MyComment, CurrentCount }, function(res) {
+    ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        CurrentCount = data.Size;
-        Skip += Take;
+        currentCount = data.Size;
+        skip += take;
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
-          page.total = Math.ceil(CurrentCount / Take);
+          page.total = Math.ceil(currentCount / take);
         }
         else {
           comment.appendData(res.data.data);
@@ -103,10 +104,10 @@ class WorkComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = net.postJSON('api/works/GetToWorkMessage_List', { WorkID: self.worksID , Skip, Take, SortType, MyComment, CurrentCount: 0 }, function(res) {
+    ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        Skip += Take;
+        skip += take;
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
@@ -134,9 +135,9 @@ class WorkComment extends migi.Component {
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    CurrentCount = 0;
-    SortType = rel;
-    Skip = 0;
+    currentCount = 0;
+    sortType = rel;
+    skip = 0;
     if(ajax) {
       ajax.abort();
     }
@@ -150,9 +151,9 @@ class WorkComment extends migi.Component {
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    CurrentCount = 0;
-    MyComment = rel;
-    Skip = 0;
+    currentCount = 0;
+    myComment = rel;
+    skip = 0;
     if(ajax) {
       ajax.abort();
     }
@@ -225,7 +226,11 @@ class WorkComment extends migi.Component {
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="0">全部评论</li>
-          <li rel="1">我的</li>
+          {
+            this.props.isLogin
+              ? <li rel="1">我的</li>
+              : ''
+          }
         </ul>
         <ul class="type2 fn-clear" onClick={ { li: this.switchType } }>
           <li class="cur" rel="0">最新</li>

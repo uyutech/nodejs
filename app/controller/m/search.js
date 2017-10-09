@@ -9,23 +9,18 @@ module.exports = app => {
     * index(ctx) {
       let kw = ctx.params.kw;
       let datas = {};
-      try {
-        let res = yield {
-          datas: ctx.curl(ctx.helper.getRemoteUrl('api/search/Homesearch'), {
-            method: 'POST',
-            data: {
-              Parameter: kw,
-            },
-            dataType: 'json',
-            gzip: true,
-          }),
-        }
-        if(res.datas.data.success) {
-          datas = res.datas.data;
-        }
-      }
-      catch(e) {
-        ctx.logger.error(e.toString());
+      let res = yield {
+        datas: ctx.curl(ctx.helper.getRemoteUrl('api/search/Homesearch'), {
+          method: 'POST',
+          data: {
+            Parameter: kw,
+          },
+          dataType: 'json',
+          gzip: true,
+        }),
+      };
+      if(res.datas.data.success) {
+        datas = res.datas.data;
       }
       yield ctx.render('msearch', {
         kw,

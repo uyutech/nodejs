@@ -19,6 +19,7 @@ class Video extends migi.Component {
           let key = uid + 'volume';
           self.volume = localStorage[key];
           self.addMedia();
+          $(self.ref.fn.element).removeClass('fn-hidden');
         });
       }
     }
@@ -273,7 +274,7 @@ class Video extends migi.Component {
         }
       </ul>
       <h3 ref="title">{ this.title }</h3>
-      <div class="fn">
+      <div class="fn fn-hidden" ref="fn">
         <div class="control">
           <b class="full" onClick={ this.clickScreen }/>
           <div class="volume" ref="volume" onClick={ this.clickVolume }>
