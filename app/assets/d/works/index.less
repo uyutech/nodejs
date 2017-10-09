@@ -179,7 +179,7 @@
       background:#B1C0C9;
       background-size:cover;
       background-repeat:no-repeat;
-      background-position:center;
+      background-position:center 0.35rem;
       border-top-right-radius:0.1rem;
       border-bottom-left-radius:0.1rem;
       border-bottom-right-radius:0.1rem;
@@ -225,19 +225,22 @@
         }
       }
       h3{
-        padding:0.1rem 0 0.2rem;
         text-align:center;
-        color:#2D4D67;
+        color:#fff;
         font-size:0.18rem;
         font-weight:400;
-        background:linear-gradient(rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 70%, rgba(255, 255, 255, 0) 100%);
+        line-height:0.6rem;
+        background:linear-gradient(rgba(255, 255, 255, 0.7) 0, rgba(255, 255, 255, 0) 100%);
+        text-shadow:0 0 2px rgba(0,0,0,1);
       }
       .num{
         height:0;
         position:relative;
-        top:-0.5rem;
-        color:#2D4D67;
+        top:-0.6rem;
+        color:#fff;
         font-size:0.12rem;
+        line-height:0.5rem;
+        text-shadow:0 0 2px rgba(0,0,0,1);
         .play{
           position:absolute;
           right:0.1rem;
@@ -247,11 +250,24 @@
           background-size:auto 0.12rem;
         }
       }
+      .start{
+        position:absolute;
+        left:50%;
+        top:45%;
+        display:block;
+        width:0.96rem;
+        height:0.96rem;
+        background:url(start.png) no-repeat center;
+        background-size:contain;
+        transform:translateX(-50%) translateY(-50%);
+        cursor:pointer;
+      }
       .lyrics{
         position:relative;
-        height:4.88rem;
+        height:3.66rem;
         overflow:hidden;
         color:#FFF;
+        text-shadow:0 0 2px rgba(0, 0, 0, 0.7);
         .roll{
           position:absolute;
           left:0;
@@ -260,14 +276,13 @@
           width:100%;
           height:100%;
           transform:translateY(-0.1rem);
-          text-shadow:0 0 1px rgba(0, 0, 0, 0.5);
           &:before{
             position:absolute;
             left:0;
             top:50%;
             width:100%;
             height:0.2rem;
-            background:linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+            background:linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
             content:' ';
           }
           .c{
@@ -306,7 +321,7 @@
       }
       .fn{
         padding:0.2rem;
-        background:linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 20%, rgba(255, 255, 255, 0.7) 100%);
+        background:linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 40%, rgba(255, 255, 255, 0.7) 100%);
         border-bottom-left-radius:0.1rem;
         border-bottom-right-radius:0.1rem;
         .control{
@@ -355,6 +370,8 @@
             height:0.05rem;
             background:#FFF;
             border-radius:0.05rem;
+            border:1px solid rgba(78,142,176,0.6);
+            box-sizing:border-box;
             .icon{
               position:absolute;
               left:-0.35rem;
@@ -379,7 +396,7 @@
               left:0;
               top:0;
               display:block;
-              width:0%;
+              width:0;
               height:100%;
               background:#9ECDDB;
               border-radius:0.04rem;
@@ -446,12 +463,14 @@
             height:0.07rem;
             background:#FFF;
             border-radius:0.07rem;
+            border:1px solid rgba(78,142,176,0.5);
+            box-sizing:border-box;
             .load{
               position:absolute;
               left:0;
               top:1px;
               display:block;
-              width:0%;
+              width:0;
               height:0.05rem;
               background:#B1C0C9;
               border-radius:0.05rem;
@@ -464,7 +483,7 @@
               left:0;
               top:1px;
               display:block;
-              width:0%;
+              width:0;
               height:0.05rem;
               background:#9ECDDB;
               border-radius:0.05rem;
@@ -475,7 +494,7 @@
             .p{
               position:absolute;
               left:0;
-              top:-0.03rem;
+              top:-0.04rem;
               width:100%;
               &:before{
                 position:absolute;
@@ -550,12 +569,18 @@
         }
       }
       .audio, .video{
+        position:relative;
         width:100%;
       }
-      video{
+      .c{
         width:100%;
-        height:4.88rem;
-        cursor:pointer;
+        height:3.66rem;
+        video{
+          display:block;
+          width:100%;
+          height:100%;
+          cursor:pointer;
+        }
       }
     }
     > .comments{
@@ -709,15 +734,13 @@
         }
       }
       .intro{
-        padding:0.15rem;
+        margin:0;
+        padding:0.1rem;
         background:#FFF;
-        pre{
-          margin:0;
-          color:#2D4D67;
-        }
+        color:#2D4D67;
       }
       .insp{
-        padding:0.15rem;
+        padding:0.1rem;
         background:#FFF;
         > li{
           padding:0 0.05rem;

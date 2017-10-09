@@ -636,7 +636,7 @@
   background: #B1C0C9;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center 0.35rem;
   border-top-right-radius: 0.1rem;
   border-bottom-left-radius: 0.1rem;
   border-bottom-right-radius: 0.1rem;
@@ -683,19 +683,22 @@
   text-decoration: none;
 }
 .works > .main > .media h3 {
-  padding: 0.1rem 0 0.2rem;
   text-align: center;
-  color: #2D4D67;
+  color: #fff;
   font-size: 0.18rem;
   font-weight: 400;
-  background: linear-gradient(rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 70%, rgba(255, 255, 255, 0) 100%);
+  line-height: 0.6rem;
+  background: linear-gradient(rgba(255, 255, 255, 0.7) 0, rgba(255, 255, 255, 0) 100%);
+  text-shadow: 0 0 2px #000000;
 }
 .works > .main > .media .num {
   height: 0;
   position: relative;
-  top: -0.5rem;
-  color: #2D4D67;
+  top: -0.6rem;
+  color: #fff;
   font-size: 0.12rem;
+  line-height: 0.5rem;
+  text-shadow: 0 0 2px #000000;
 }
 .works > .main > .media .num .play {
   position: absolute;
@@ -705,11 +708,25 @@
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAUVBMVEUAAABOj7FOj7FPj7FVk7tol7pOjrFPj7FPj7FQkLJTkrVPjrBPj7BPj7BPj7BOj7FPkLFOj7FRkbFOkLFPkbROkrFRlLVRl7lOjrFPj7BOjrD0FADfAAAAGnRSTlMA9+hwDwfWs5lVHe3fzL+mfGJIPjoxJhaMi/DXSVwAAACMSURBVEjH7dVZDoMwDEXRxiFp0wE6UIa3/4WC5BVcCf9x/48URY5zOUPlXBhIqj8EtHfrIJA1ALzrHQKlDID3+gPgrQUCPb8AeMMMgR4fALx+gkDpXRiQ6oiAjxcEsoaAjxcEsg6D0CNZC73WOoaORj+Fjvcwhz7RpUSumZRDV6U1uu7hh4K/rLOD2gDX5TV6kR52oAAAAABJRU5ErkJggg==) no-repeat 0 center;
   background-size: auto 0.12rem;
 }
+.works > .main > .media .start {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  display: block;
+  width: 0.96rem;
+  height: 0.96rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAilBMVEUAAAD9/f3////9/f3////////9/f3////9/f3////8/Pz9/f38/Pz8/Pz////////9/f3////9/f39/f3////9/f3////9/f39/f39/f39/f39/f39/f38/Pz////////////9/f38/Pz9/f39/f38/Pz9/f38/Pz9/f39/f3////////8/Pz9/f1JO/iFAAAALXRSTlMA+jvTIQXsDpA0WvXIr08T3wLcokupEIOY0Ih3bGFGLRvWwX9WY51kz+YJJr5svfebAAAEKElEQVRo3qyXi3KqMBCGNxDkKqAo4t1qrfack/d/vTO7raQZgU0s33SYzhSy+Xc3/6ZgRxgnq2XmlxMhJqWfLVdJHMJYhIvorjq4R4sRgoS3s1C9iPPtdzEWy1QxpMsFvMgs8VXL23Sz946yCIJCHr39ZvqmWvxk9sry13m7QJTX8ESdR+0G5lfnEN768e1FQi/y8tjF2gMXig9FiIr9zquEIj4KsCafKEQ0EiyQzVeISQ52BJEiqhNYcqoUEQVWG8oU4ntOJfMVkllIjik9YhuAE8FWUJpiYDjQySpjcCYu6dwdYJCE9jGt4QXqKWlPBtdXyApeZKWQgQgH2v8OXmZHGnqzFKf453f4Be8C69BTQUn9w6zPRqBekp2NljH5cchS1tXkEVNfp0pHHf5D/QkjQN2aP/knFqCsYQTqEstQgAn6s4hhFGKB7g0GHsrawkhscTXPmI9r9M+gc+6X9z04Evg442aguRohDfDd819wgxJy/SEAJ2sFnZB7iIuje1c4zWeGx4me+fW4tnjgwkmg6xlpaKA/ANE49XCDRW3riAJkfwChKE+fLjYl8ZMFfLGkCjAKkOnJrQpLIMKUWmhAQasi3c1cGikNAblhxWFQgVAPsiNYgp15A+SslLoAo4CeJGXzB6y44AGiDOFnklMgtI7yYFdm/CL87iEfeAVKJ6sqwAL/u48img+MAvrROia8PemF0edyXoF+Ev9Ye6IRdgcI8fWaVYAY1U7Zy2WNL4cQo9EAq4BW1b9bXY/xv6wYEj2KeQXmQzUhO5wTugRsWAW6wkaMzxwG2OA1hYxob6OAMEMw9rQnO8oMI+JOMqnQyw/bk4fWQsfhyCsQSmNkbcCejnSESzQKToGOIox+GrYnib4CeOEqeAWGhKcQ8057KvDM01APLBVoEcaU6LtTBfjG/2bNZkWBIAbC27u4KujoQQ/exB9w9P3fT+YgRaHtR1qC48GhL/2TTqcqlcACdAItMq8sgCbS9Nq/ptd/VzERXrJt2ga20t+1csnopu44PtBnuaq6KT8037QGupm+qz80DhUONbKMTDabvgsVHOzc9MXvoChqV4IdhWt3/+LWEu5UwzUDjv3MWmVATgIchExDfAeeAfsZMn8uCPruPs5eGPSZtshtdLcKcEhbmHg9b10hGokXU8fnrRcDGaSOTn75BAaTTH6ZvushK/DsQ/SdExB/AP0ploBwCuV442SLUyhOAjV3UTYbSQI5jRV/P07CaSwn4jrC4RZOxFlKEHX8P8elBBZD5EXbVVgMYTlHJlpvGuUcFqT6YYXZtUGQIklN7rCYt0tqLApOut82UTBb1swWZtOl5WxxPFvezy5QZJdYsotE2WWu7ELd90uNnxVLx1HubS5Yj6nk3tA0ML62h0DjxphbTx7NM7tXs+8CzTOJ7T93+ypeYEPAJp8AAAAASUVORK5CYII=) no-repeat center;
+  background-size: contain;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  cursor: pointer;
+}
 .works > .main > .media .lyrics {
   position: relative;
-  height: 4.88rem;
+  height: 3.66rem;
   overflow: hidden;
   color: #FFF;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
 }
 .works > .main > .media .lyrics .roll {
   position: absolute;
@@ -720,7 +737,6 @@
   height: 100%;
   -webkit-transform: translateY(-0.1rem);
           transform: translateY(-0.1rem);
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }
 .works > .main > .media .lyrics .roll:before {
   position: absolute;
@@ -728,7 +744,7 @@
   top: 50%;
   width: 100%;
   height: 0.2rem;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
   content: ' ';
 }
 .works > .main > .media .lyrics .roll .c {
@@ -767,7 +783,7 @@
 }
 .works > .main > .media .fn {
   padding: 0.2rem;
-  background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 20%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 40%, rgba(255, 255, 255, 0.7) 100%);
   border-bottom-left-radius: 0.1rem;
   border-bottom-right-radius: 0.1rem;
 }
@@ -818,6 +834,8 @@
   height: 0.05rem;
   background: #FFF;
   border-radius: 0.05rem;
+  border: 1px solid rgba(78, 142, 176, 0.6);
+  box-sizing: border-box;
 }
 .works > .main > .media .fn .control .volume .icon {
   position: absolute;
@@ -843,7 +861,7 @@
   left: 0;
   top: 0;
   display: block;
-  width: 0%;
+  width: 0;
   height: 100%;
   background: #9ECDDB;
   border-radius: 0.04rem;
@@ -909,13 +927,15 @@
   height: 0.07rem;
   background: #FFF;
   border-radius: 0.07rem;
+  border: 1px solid rgba(78, 142, 176, 0.5);
+  box-sizing: border-box;
 }
 .works > .main > .media .fn .bar .progress .load {
   position: absolute;
   left: 0;
   top: 1px;
   display: block;
-  width: 0%;
+  width: 0;
   height: 0.05rem;
   background: #B1C0C9;
   border-radius: 0.05rem;
@@ -928,7 +948,7 @@
   left: 0;
   top: 1px;
   display: block;
-  width: 0%;
+  width: 0;
   height: 0.05rem;
   background: #9ECDDB;
   border-radius: 0.05rem;
@@ -939,7 +959,7 @@
 .works > .main > .media .fn .bar .progress .p {
   position: absolute;
   left: 0;
-  top: -0.03rem;
+  top: -0.04rem;
   width: 100%;
 }
 .works > .main > .media .fn .bar .progress .p:before {
@@ -1012,11 +1032,17 @@
 }
 .works > .main > .media .audio,
 .works > .main > .media .video {
+  position: relative;
   width: 100%;
 }
-.works > .main > .media video {
+.works > .main > .media .c {
   width: 100%;
-  height: 4.88rem;
+  height: 3.66rem;
+}
+.works > .main > .media .c video {
+  display: block;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
 }
 .works > .main > .comments {
@@ -1174,15 +1200,13 @@
   padding-bottom: 0.05rem;
 }
 .works > .side > .info .intro {
-  padding: 0.15rem;
-  background: #FFF;
-}
-.works > .side > .info .intro pre {
   margin: 0;
+  padding: 0.1rem;
+  background: #FFF;
   color: #2D4D67;
 }
 .works > .side > .info .insp {
-  padding: 0.15rem;
+  padding: 0.1rem;
   background: #FFF;
 }
 .works > .side > .info .insp > li {

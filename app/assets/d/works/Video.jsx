@@ -36,9 +36,11 @@ class Video extends migi.Component {
   @bind datas = []
   @bind index = 0
   @bind isPlaying
+  @bind hasStart
   @bind workIndex = 0
   @bind duration
   @bind muted
+  @bind fn
   get currentTime() {
     return this._currentTime || 0;
   }
@@ -67,7 +69,6 @@ class Video extends migi.Component {
   }
   addMedia() {
     let video = <video ref="video"
-                       poster={ this.datas[this.index].VideoCoverPic }
                        onClick={ this.clickPlay.bind(this) }
                        onTimeupdate={ this.onTimeupdate.bind(this) }
                        onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
@@ -76,11 +77,11 @@ class Video extends migi.Component {
                        preload="meta"
                        playsinline="true"
                        webkit-playsinline="true"
-                       src={ this.fileUrl }>
+                       src={ this.datas[this.index].FileUrl }>
       your browser does not support the video tag
     </video>;
     this.video = video;
-    video.before(this.ref.fn.element);
+    video.inTo(this.ref.c.element);
     this.volume = this.volume;
   }
   show() {
@@ -117,6 +118,7 @@ class Video extends migi.Component {
   play() {
     this.video.element.play();
     this.isPlaying = true;
+    this.hasStart = true;
     return this;
   }
   pause() {
@@ -125,8 +127,10 @@ class Video extends migi.Component {
     return this;
   }
   clickType(e, vd, tvd) {
-    this.index = tvd.props.rel;
-    this.video.element.src = this.datas[this.index].FileUrl;
+    if(this.index !== tvd.props.rel) {
+      this.index = tvd.props.rel;
+      this.video.element.src = this.datas[this.index].FileUrl;
+    }
   }
   vmousedown(e) {
     e.preventDefault();
@@ -147,6 +151,9 @@ class Video extends migi.Component {
   }
   vmouseup() {
     isVStart = false;
+  }
+  clickStart(e) {
+    this.play();
   }
   clickVolume(e) {
     let cn = e.target.className;
@@ -216,7 +223,7 @@ class Video extends migi.Component {
       let x = e.pageX - left;
       let percent = x / $progress.width();
       let currentTime = Math.floor(this.duration * percent);
-      this.currentTime(currentTime);
+      this.currentTime = currentTime;
     }
   }
   setBarPercent(percent) {
@@ -241,6 +248,7 @@ class Video extends migi.Component {
       net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
           data.ISLike = res.data === 211;
+          self.fn = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -270,6 +278,7 @@ class Video extends migi.Component {
       net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
           data.ISFavor = false;
+          self.fn = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -323,6 +332,7 @@ class Video extends migi.Component {
       <div class="num">
         <small class="play">{ this.datas[this.index].PlayHis || 0 }</small>
       </div>
+      <div class="c" ref="c" style={ this.isPlaying ? '' : 'opacity:0.75' }></div>
       <div class="fn fn-hidden" ref="fn">
         <div class="control">
           <b class="full" onClick={ this.clickScreen }/>
@@ -345,8 +355,8 @@ class Video extends migi.Component {
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.datas[this.index].ISLike ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.datas[this.index].ISFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class={ 'like' + (this.datas[this.index].ISLike || this.fn ? ' has' : '') } onClick={ this.clickLike }/>
+          <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fn ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.datas[this.index].FileUrl }
                download={ this.datas[this.index].FileUrl }
@@ -355,6 +365,7 @@ class Video extends migi.Component {
           <li class="share" onClick={ this.clickShare }/>
         </ul>
       </div>
+      <b class={ 'start' + (this.hasStart ? ' fn-hide' : '') } onClick={ this.clickStart }/>
     </div>;
   }
 }

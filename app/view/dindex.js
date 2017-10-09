@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 69);
+/******/ 	return __webpack_require__(__webpack_require__.s = 73);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -128,6 +128,8 @@ var TopNav = function (_migi$Component) {
       if (!window.$CONFIG.isLogin) {
         e.preventDefault();
         migi.eventBus.emit('NEED_LOGIN');
+      } else {
+        location.hash = '/my';
       }
     }
   }, {
@@ -145,7 +147,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 69:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

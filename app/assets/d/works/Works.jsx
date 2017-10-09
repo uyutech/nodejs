@@ -207,6 +207,7 @@ class Works extends migi.Component {
           }
         </ul>
         <Media ref="media"
+               cover={ this.props.worksDetail.cover_Pic }
                audioData={ this.audioData }
                videoData={ this.videoData }
                first={ first }/>

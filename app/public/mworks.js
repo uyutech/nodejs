@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 133);
+/******/ 	return __webpack_require__(__webpack_require__.s = 139);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -219,7 +219,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 126:
+/***/ 132:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -239,7 +239,7 @@ var _net = __webpack_require__(4);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _LyricsParser = __webpack_require__(129);
+var _LyricsParser = __webpack_require__(135);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -588,7 +588,7 @@ migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
 
-/***/ 127:
+/***/ 133:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -682,7 +682,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 128:
+/***/ 134:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -761,7 +761,7 @@ migi.name(Intro, "Intro");exports.default = Intro;
 
 /***/ }),
 
-/***/ 129:
+/***/ 135:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -798,7 +798,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 130:
+/***/ 136:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -818,19 +818,19 @@ var _net = __webpack_require__(4);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Author = __webpack_require__(127);
+var _Author = __webpack_require__(133);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Audio = __webpack_require__(126);
+var _Audio = __webpack_require__(132);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(131);
+var _Video = __webpack_require__(137);
 
 var _Video2 = _interopRequireDefault(_Video);
 
-var _itemTemplate = __webpack_require__(138);
+var _itemTemplate = __webpack_require__(144);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
@@ -1160,7 +1160,7 @@ migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
 
-/***/ 131:
+/***/ 137:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1479,7 +1479,7 @@ migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
 
-/***/ 132:
+/***/ 138:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1752,15 +1752,15 @@ migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
 
-/***/ 133:
+/***/ 139:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(86);
+__webpack_require__(88);
 
-var _Works = __webpack_require__(72);
+var _Works = __webpack_require__(73);
 
 var _Works2 = _interopRequireDefault(_Works);
 
@@ -1770,7 +1770,7 @@ var works = migi.preExist(migi.createCp(_Works2.default, [["worksID", $CONFIG.wo
 
 /***/ }),
 
-/***/ 138:
+/***/ 144:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2178,7 +2178,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 72:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2194,15 +2194,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Media = __webpack_require__(130);
+var _Media = __webpack_require__(136);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _Intro = __webpack_require__(128);
+var _Intro = __webpack_require__(134);
 
 var _Intro2 = _interopRequireDefault(_Intro);
 
-var _WorkComment = __webpack_require__(132);
+var _WorkComment = __webpack_require__(138);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
@@ -2448,7 +2448,7 @@ migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
 
-/***/ 86:
+/***/ 88:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -37,11 +37,13 @@ class Audio extends migi.Component {
   @bind datas = []
   @bind index = 0
   @bind isPlaying
+  @bind hasStart
   @bind showLyricsMode
   @bind lyricsIndex = 0
   @bind duration
   @bind canControl
   @bind muted
+  @bind fn
   get currentTime() {
     return this._currentTime || 0;
   }
@@ -145,6 +147,7 @@ class Audio extends migi.Component {
   play() {
     this.audio.element.play();
     this.isPlaying = true;
+    this.hasStart = true;
     return this;
   }
   pause() {
@@ -153,8 +156,10 @@ class Audio extends migi.Component {
     return this;
   }
   clickType(e, vd, tvd) {
-    this.index = tvd.props.rel;
-    this.audio.element.src = this.datas[this.index].FileUrl;
+    if(this.index !== tvd.props.rel) {
+      this.index = tvd.props.rel;
+      this.audio.element.src = this.datas[this.index].FileUrl;
+    }
   }
   altLyrics() {
     this.showLyricsMode = !this.showLyricsMode;
@@ -178,6 +183,9 @@ class Audio extends migi.Component {
   }
   vmouseup() {
     isVStart = false;
+  }
+  clickStart(e) {
+    this.play();
   }
   clickVolume(e) {
     let cn = e.target.className;
@@ -235,6 +243,7 @@ class Audio extends migi.Component {
   setBarPercent(percent) {
     percent *= 100;
     $(this.ref.vol.element).css('width', percent + '%');
+    $(this.ref.p.element).css('-moz-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('transform', `translateX(${percent}%)`);
   }
@@ -254,6 +263,7 @@ class Audio extends migi.Component {
       net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
           data.ISLike = res.data === 211;
+          self.fn = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -283,6 +293,7 @@ class Audio extends migi.Component {
       net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
           data.ISFavor = false;
+          self.fn = true;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -300,6 +311,7 @@ class Audio extends migi.Component {
       net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
           data.ISFavor = true;
+          self.fn = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -336,9 +348,9 @@ class Audio extends migi.Component {
       <div class="num">
         <small class="play">{ this.datas[this.index].PlayHis || 0 }</small>
       </div>
-      <div class={ 'lyrics' } ref="lyrics">
+      <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
         <div class={ 'roll' + (!this.showLyricsMode ? '' : ' fn-hide') }>
-          <div class="c" ref="lyricsRoll" style={ 'transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
+          <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.volume * 100 + '%);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
             {
               (this.datas[this.index].formatLyrics.data || []).map(function(item) {
                 return <pre>{ item.txt || '&nbsp;' }</pre>
@@ -356,7 +368,7 @@ class Audio extends migi.Component {
             <b class="vol" style={ 'width:' + this.volume * 100 + '%' }/>
             <b class="p"
                onMouseDown={ this.vmousedown }
-               style={ 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
+               style={ '-moz-transform:translateX(' + this.volume * 100 + '%);-webkit-transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
           </div>
         </div>
         <div class="bar">
@@ -370,8 +382,8 @@ class Audio extends migi.Component {
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.datas[this.index].ISLike ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.datas[this.index].ISFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class={ 'like' + (this.datas[this.index].ISLike || this.fn ? ' has' : '') } onClick={ this.clickLike }/>
+          <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fn ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.datas[this.index].FileUrl }
                download={ this.datas[this.index].FileUrl }
@@ -380,6 +392,7 @@ class Audio extends migi.Component {
           <li class="share" onClick={ this.clickShare }/>
         </ul>
       </div>
+      <b class={ 'start' + (this.hasStart ? ' fn-hide' : '') } onClick={ this.clickStart }/>
     </div>;
   }
 }

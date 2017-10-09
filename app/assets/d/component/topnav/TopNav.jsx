@@ -26,6 +26,9 @@ class TopNav extends migi.Component {
       e.preventDefault();
       migi.eventBus.emit('NEED_LOGIN');
     }
+    else {
+      location.hash = '/my';
+    }
   }
   render() {
     let userInfo = this.props.userInfo || {};

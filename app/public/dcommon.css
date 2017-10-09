@@ -107,6 +107,7 @@ a {
 }
 a:hover {
   color: #0AE;
+  text-decoration: underline;
 }
 .fn-clear:after {
   visibility: hidden;

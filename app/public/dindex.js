@@ -63,18 +63,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 100);
+/******/ 	return __webpack_require__(__webpack_require__.s = 102);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 100:
+/***/ 102:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(79);
+__webpack_require__(80);
 
 var _TopNav = __webpack_require__(63);
 
@@ -246,6 +246,8 @@ var TopNav = function (_migi$Component) {
       if (!window.$CONFIG.isLogin) {
         e.preventDefault();
         migi.eventBus.emit('NEED_LOGIN');
+      } else {
+        location.hash = '/my';
       }
     }
   }, {
@@ -328,7 +330,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 79:
+/***/ 80:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

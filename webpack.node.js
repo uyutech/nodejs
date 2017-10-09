@@ -9,6 +9,7 @@ module.exports = {
     dworks: './app/view/d/works.jsx',
     dauthor: './app/view/d/author.jsx',
     dsearch: './app/view/d/search.jsx',
+    dmy: './app/view/d/my.jsx',
   },
   output: {
     path: __dirname + '/app/view',

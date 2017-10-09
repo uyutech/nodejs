@@ -15,6 +15,7 @@ module.exports = {
     dworks: './app/assets/d/works/index.jsx',
     dauthor: './app/assets/d/author/index.jsx',
     dsearch: './app/assets/d/search/index.jsx',
+    dmy: './app/assets/d/my/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

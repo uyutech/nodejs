@@ -2,6 +2,7 @@
 
 module.exports = app => {
   app.get('/404.html', 'error.c404');
+  app.post('/api/login/loginOut', 'api.login.loginOut');
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
 
@@ -10,6 +11,7 @@ module.exports = app => {
   app.get('/d/works/:worksID', 'd.works.index');
   app.get('/d/author/:authorID', 'd.author.index');
   app.get('/d/search/:kw', 'd.search.index');
+  app.get('/d/my', app.middlewares.needLogin(), 'd.my.index');
 
   app.get('/m', 'm.index.index');
   app.get('/m/find', 'm.find.index');
@@ -33,7 +35,7 @@ module.exports = app => {
   app.post('/api/author/commentList', 'api.author.commentList');
   app.post('/api/author/follow', app.middlewares.needLoginJson(), 'api.author.follow');
   app.post('/api/author/unFollow', app.middlewares.needLoginJson(), 'api.author.unFollow');
-  app.post('/api/author/addComment', 'api.author.addComment', app.middlewares.needLoginJson());
+  app.post('/api/author/addComment', app.middlewares.needLoginJson(), 'api.author.addComment');
   app.post('/api/author/likeComment', app.middlewares.needLoginJson(), 'api.author.likeComment');
   app.post('/api/author/subCommentList', 'api.author.subCommentList');
   app.post('/api/author/delComment', app.middlewares.needLoginJson(), 'api.author.delComment');

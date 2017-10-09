@@ -8,7 +8,7 @@ module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
       if(ctx.session.uid) {
-        let uid = ctx.session.uid;console.log(uid);
+        let uid = ctx.session.uid;
         let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/users/GetUserInfo'), {
           method: 'POST',
           data: {

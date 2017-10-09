@@ -1,0 +1,296 @@
+/**
+ * Created by army8735 on 2017/9/21.
+ */
+/**
+ * Created by army8735 on 2017/9/1.
+ */
+.my {
+  padding-top: 0.2rem;
+}
+.my > .profile .pic {
+  float: left;
+  margin-left: 0.3rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 100%;
+  background: #F1F6F9;
+  overflow: hidden;
+}
+.my > .profile .pic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.my > .profile .txt {
+  float: left;
+  margin-left: 0.3rem;
+  line-height: 1.1rem;
+}
+.my > .profile .txt strong {
+  font-size: 0.18rem;
+  font-weight: 400;
+}
+.my > .profile .txt .edit {
+  display: inline-block;
+  margin-left: 0.1rem;
+  width: 0.2rem;
+  height: 0.2rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAOVBMVEUAAABtkrZPjrBTjrJOj7FPjrFOj7BPj7NPj7BPj7JOj7FPj7BOj7JOj7FOj7FPkbRSlLNiibFOjrBxHPmDAAAAEnRSTlMAB+ortrT7SuSCpuzazYY6Mg3KTV+QAAAAq0lEQVQ4y83P2wqDMBCE4Zi4OXioOu//sE2hMEhwN0gL/tcfO6z7YVvoYoMArx43Yo6UmvMhRVjrR67OhRmbcW9BTC54iLkbkZPHOFjO79X2uOD2iNzjgsdydDnuCsDk2jmcYesIjV1CwxEajtB2hAJAFNdAxXG6cSoUOhUmOh0WFDoNTpgKnfL1ippUZ8G8TiU1hPDcg6BIJwRuQMFFcg9q/RWafaHYTj7uDaz+Fh3uQPLUAAAAAElFTkSuQmCC) no-repeat center;
+  background-size: contain;
+  text-indent: 999rem;
+  overflow: hidden;
+}
+.my > .follow {
+  position: relative;
+  margin-top: 0.2rem;
+}
+.my > .follow h3 {
+  color: #4E8EB0;
+  font-size: 0.2rem;
+  padding-left: 0.3rem;
+  line-height: 0.32rem;
+  font-weight: 400;
+}
+.my > .follow .fn {
+  position: absolute;
+  top: 0;
+  right: 0.3rem;
+}
+.my > .follow .fn .prev {
+  float: left;
+  position: relative;
+  padding: 0 0.15rem 0 0.3rem;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  border: 1px solid #4E8EB0;
+  border-radius: 0.3rem;
+}
+.my > .follow .fn .prev:before {
+  position: absolute;
+  left: 0.15rem;
+  top: 50%;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  border-top: 1px solid #4E8EB0;
+  border-left: 1px solid #4E8EB0;
+  -webkit-transform: translateY(-50%) rotateZ(-45deg);
+          transform: translateY(-50%) rotateZ(-45deg);
+  content: ' ';
+}
+.my > .follow .fn .next {
+  float: left;
+  position: relative;
+  margin-left: 0.2rem;
+  padding: 0 0.3rem 0 0.15rem;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  border: 1px solid #4E8EB0;
+  border-radius: 0.3rem;
+}
+.my > .follow .fn .next:before {
+  position: absolute;
+  right: 0.15rem;
+  top: 50%;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  border-top: 1px solid #4E8EB0;
+  border-right: 1px solid #4E8EB0;
+  -webkit-transform: translateY(-50%) rotateZ(45deg);
+          transform: translateY(-50%) rotateZ(45deg);
+  content: ' ';
+}
+.my > .follow .line {
+  display: block;
+  margin-top: 0.1rem;
+  height: 0.02rem;
+  background: linear-gradient(90deg, #A4D2DF, #7EB4CA);
+}
+.my > .follow .list {
+  margin-top: 0.2rem;
+  margin-right: -0.72rem;
+}
+.my > .follow .list li {
+  float: left;
+  margin-right: 0.3rem;
+  width: 0.72rem;
+  text-align: center;
+}
+.my > .follow .list li .pic {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 0.72rem;
+}
+.my > .follow .list li .pic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #F1F6F9;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.my > .follow .list li .txt {
+  display: block;
+  margin-top: 0.05rem;
+  width: 100%;
+  font-size: 0.14rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.my > .follow .list li .info {
+  display: block;
+  font-size: 0.12rem;
+  width: 100%;
+  color: #999;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.my > .favor {
+  position: relative;
+  margin-top: 0.2rem;
+}
+.my > .favor h3 {
+  color: #4E8EB0;
+  font-size: 0.2rem;
+  padding-left: 0.3rem;
+  line-height: 0.32rem;
+  font-weight: 400;
+}
+.my > .favor .fn {
+  position: absolute;
+  top: 0;
+  right: 0.3rem;
+}
+.my > .favor .fn .prev {
+  float: left;
+  position: relative;
+  padding: 0 0.15rem 0 0.3rem;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  border: 1px solid #4E8EB0;
+  border-radius: 0.3rem;
+}
+.my > .favor .fn .prev:before {
+  position: absolute;
+  left: 0.15rem;
+  top: 50%;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  border-top: 1px solid #4E8EB0;
+  border-left: 1px solid #4E8EB0;
+  -webkit-transform: translateY(-50%) rotateZ(-45deg);
+          transform: translateY(-50%) rotateZ(-45deg);
+  content: ' ';
+}
+.my > .favor .fn .next {
+  float: left;
+  position: relative;
+  margin-left: 0.2rem;
+  padding: 0 0.3rem 0 0.15rem;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  border: 1px solid #4E8EB0;
+  border-radius: 0.3rem;
+}
+.my > .favor .fn .next:before {
+  position: absolute;
+  right: 0.15rem;
+  top: 50%;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  border-top: 1px solid #4E8EB0;
+  border-right: 1px solid #4E8EB0;
+  -webkit-transform: translateY(-50%) rotateZ(45deg);
+          transform: translateY(-50%) rotateZ(45deg);
+  content: ' ';
+}
+.my > .favor .line {
+  display: block;
+  margin-top: 0.1rem;
+  height: 0.02rem;
+  background: linear-gradient(90deg, #A4D2DF, #7EB4CA);
+}
+.my > .favor .list {
+  margin-top: 0.2rem;
+  margin-right: -1.44rem;
+}
+.my > .favor .list li {
+  float: left;
+  margin-right: 0.7rem;
+  margin-bottom: 0.2rem;
+  width: 1.44rem;
+  font-size: 0.12rem;
+}
+.my > .favor .list li .pic {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1.44rem;
+  border-radius: 0.1rem;
+  color: #fff;
+}
+.my > .favor .list li .pic:hover {
+  box-shadow: 0 0 0.1rem #4E8EB0;
+}
+.my > .favor .list li .pic:before {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0.6rem;
+  background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 20%, rgba(0, 0, 0, 0.7) 100%);
+  border-bottom-left-radius: 0.1rem;
+  border-bottom-right-radius: 0.1rem;
+  z-index: 2;
+}
+.my > .favor .list li .pic img {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.1rem;
+  z-index: 1;
+}
+.my > .favor .list li .pic .num {
+  position: absolute;
+  left: 0.1rem;
+  bottom: 0.25rem;
+  padding-left: 0.24rem;
+  line-height: 0.24rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAS1BMVEUAAAD5+fn5+fn6+vr6+vr////////5+fn6+vr5+fn6+vr7+/v////6+vr6+vr6+vr7+/v6+vr8/Pz7+/v////////6+vr6+vr5+fmCsmCjAAAAGHRSTlMA5oj6vQ8F59e2aTkL88WQfVxRQCYcoqGFSuSvAAAA+ElEQVRIx+2S2W6EMAwAAwnkIFyF3Z3//9JWK1EVk0PtQ6WVdt5iZxTHtnrzN7r1Ydw4OvNYO1Xnw2i+0eZDlRkm0D5se4z7FryGaVB5+hls6H5UFyzMfbZ4g17iORYXjeky9x12SFRpcUmjN7hbKnFzmFRVM/a4Lw3LnHgZPWR7p7nmJhaVZWG6zAsb80K0yAkagioQMKKlWovWVfIrXhXxrKfznVAWAnfxha0sbOITjr0s7LjTeSSWhch4OoOqAK8g9G3TtGLxj2hSaAFaKRzRhNAANFI4ogmBJ1LgySsI3teErxvpVD7670JlcFcqq3GlsnxvfsUnpCsZz12aH0kAAAAASUVORK5CYII=) no-repeat -0.03rem center;
+  background-size: 0.24rem auto;
+  z-index: 3;
+}
+.my > .favor .list li .pic .ath {
+  position: absolute;
+  left: 0.1rem;
+  bottom: 0.05rem;
+  z-index: 3;
+}
+.my > .favor .list li .txt {
+  display: block;
+  margin-top: 0.05rem;
+  font-size: 0.14rem;
+  padding: 0 0.1rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.my > .loginout {
+  display: block;
+  margin: 0.2rem auto;
+  width: 1.5rem;
+  line-height: 0.42rem;
+  color: #fff;
+  border-radius: 0.12rem;
+  background: #B65A58;
+  text-align: center;
+}
+.my > .loginout:hover {
+  color: #0AE;
+}

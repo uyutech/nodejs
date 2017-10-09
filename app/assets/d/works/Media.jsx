@@ -8,7 +8,6 @@ import Video from './Video.jsx';
 class Media extends migi.Component {
   constructor(...data) {
     super(...data);
-    let self = this;
   }
   switchType(type) {
     if(type === 'audio') {
@@ -21,7 +20,7 @@ class Media extends migi.Component {
     }
   }
   render() {
-    return <div class="media">
+    return <div class="media" style={ `background-image:url(${this.props.cover})`}>
       {
         this.props.audioData
           ? <Audio ref="audio" datas={ this.props.audioData } show={ this.props.first === 'audio' }/>
