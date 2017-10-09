@@ -36,7 +36,6 @@ class Video extends migi.Component {
   @bind datas = []
   @bind index = 0
   @bind isPlaying
-  @bind hasStart
   @bind workIndex = 0
   @bind duration
   @bind muted
@@ -118,7 +117,6 @@ class Video extends migi.Component {
   play() {
     this.video.element.play();
     this.isPlaying = true;
-    this.hasStart = true;
     return this;
   }
   pause() {
@@ -365,7 +363,7 @@ class Video extends migi.Component {
           <li class="share" onClick={ this.clickShare }/>
         </ul>
       </div>
-      <b class={ 'start' + (this.hasStart ? ' fn-hide' : '') } onClick={ this.clickStart }/>
+      <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
     </div>;
   }
 }

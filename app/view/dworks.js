@@ -1783,7 +1783,6 @@ var Video = function (_migi$Component) {
     value: function play() {
       this.video.element.play();
       this.isPlaying = true;
-      this.hasStart = true;
       return this;
     }
   }, {
@@ -2042,8 +2041,8 @@ var Video = function (_migi$Component) {
         return this.datas[this.index].FileUrl;
       })], ["download", new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].FileUrl;
-      })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])]), migi.createVd("b", [["class", new migi.Obj("hasStart", this, function () {
-        return 'start' + (this.hasStart ? ' fn-hide' : '');
+      })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])]), migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
+        return 'start' + (this.isPlaying ? ' fn-hide' : '');
       })], ["onClick", new migi.Cb(this, this.clickStart)]])]);
     }
   }, {
@@ -2069,14 +2068,6 @@ var Video = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("isPlaying");
-    }
-  }, {
-    key: 'hasStart',
-    set: function set(v) {
-      this.__setBind("hasStart", v);this.__data("hasStart");
-    },
-    get: function get() {
-      return this.__getBind("hasStart");
     }
   }, {
     key: 'workIndex',
