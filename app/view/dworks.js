@@ -1097,7 +1097,7 @@ var Audio = function (_migi$Component) {
         _net2.default.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
             data.ISLike = res.data === 211;
-            self.fn = null;
+            self.fnLike = null;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -1126,7 +1126,7 @@ var Audio = function (_migi$Component) {
         _net2.default.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
             data.ISFavor = false;
-            self.fn = true;
+            self.fnFavor = null;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -1141,7 +1141,7 @@ var Audio = function (_migi$Component) {
         _net2.default.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
             data.ISFavor = true;
-            self.fn = null;
+            self.fnFavor = null;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -1212,10 +1212,10 @@ var Audio = function (_migi$Component) {
         return _util2.default.formatTime(this.currentTime * 1000);
       })]), migi.createVd("small", [["class", "time end"]], [new migi.Obj("duration", this, function () {
         return _util2.default.formatTime(this.duration * 1000);
-      })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"], ["onMouseDown", new migi.Cb(this, this.mousedown)]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj(["datas", "index", "fn"], this, function () {
-        return 'like' + (this.datas[this.index].ISLike || this.fn ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj(["datas", "index", "fn"], this, function () {
-        return 'favor' + (this.datas[this.index].ISFavor || this.fn ? ' has' : '');
+      })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"], ["onMouseDown", new migi.Cb(this, this.mousedown)]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj(["datas", "index", "fnLike"], this, function () {
+        return 'like' + (this.datas[this.index].ISLike || this.fnLike ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj(["datas", "index", "fnFavor"], this, function () {
+        return 'favor' + (this.datas[this.index].ISFavor || this.fnFavor ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].FileUrl;
       })], ["download", new migi.Obj(["datas", "index"], this, function () {
@@ -1295,12 +1295,20 @@ var Audio = function (_migi$Component) {
       return this.__getBind("muted");
     }
   }, {
-    key: 'fn',
+    key: 'fnLike',
     set: function set(v) {
-      this.__setBind("fn", v);this.__data("fn");
+      this.__setBind("fnLike", v);this.__data("fnLike");
     },
     get: function get() {
-      return this.__getBind("fn");
+      return this.__getBind("fnLike");
+    }
+  }, {
+    key: 'fnFavor',
+    set: function set(v) {
+      this.__setBind("fnFavor", v);this.__data("fnFavor");
+    },
+    get: function get() {
+      return this.__getBind("fnFavor");
     }
   }, {
     key: 'currentTime',
@@ -2191,7 +2199,7 @@ var Video = function (_migi$Component) {
         _net2.default.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
             data.ISLike = res.data === 211;
-            self.fn = null;
+            self.fnLike = null;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -2220,7 +2228,7 @@ var Video = function (_migi$Component) {
         _net2.default.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
             data.ISFavor = false;
-            self.fn = null;
+            self.fnFavor = null;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -2235,6 +2243,7 @@ var Video = function (_migi$Component) {
         _net2.default.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
           if (res.success) {
             data.ISFavor = true;
+            self.fnFavor = null;
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           } else {
@@ -2289,10 +2298,10 @@ var Video = function (_migi$Component) {
         return _util2.default.formatTime(this.currentTime * 1000);
       })]), migi.createVd("small", [["class", "time end"]], [new migi.Obj("duration", this, function () {
         return _util2.default.formatTime(this.duration * 1000);
-      })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"], ["onMouseDown", new migi.Cb(this, this.mousedown)]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj(["datas", "index", "fn"], this, function () {
-        return 'like' + (this.datas[this.index].ISLike || this.fn ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj(["datas", "index", "fn"], this, function () {
-        return 'favor' + (this.datas[this.index].ISFavor || this.fn ? ' has' : '');
+      })]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"], ["onMouseDown", new migi.Cb(this, this.mousedown)]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj(["datas", "index", "fnLike"], this, function () {
+        return 'like' + (this.datas[this.index].ISLike || this.fnLike ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj(["datas", "index", "fnFavor"], this, function () {
+        return 'favor' + (this.datas[this.index].ISFavor || this.fnFavor ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].FileUrl;
       })], ["download", new migi.Obj(["datas", "index"], this, function () {
@@ -2348,12 +2357,20 @@ var Video = function (_migi$Component) {
       return this.__getBind("muted");
     }
   }, {
-    key: 'fn',
+    key: 'fnFavor',
     set: function set(v) {
-      this.__setBind("fn", v);this.__data("fn");
+      this.__setBind("fnFavor", v);this.__data("fnFavor");
     },
     get: function get() {
-      return this.__getBind("fn");
+      return this.__getBind("fnFavor");
+    }
+  }, {
+    key: 'fnLike',
+    set: function set(v) {
+      this.__setBind("fnLike", v);this.__data("fnLike");
+    },
+    get: function get() {
+      return this.__getBind("fnLike");
     }
   }, {
     key: 'currentTime',

@@ -282,6 +282,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var interval = void 0;
+
 var Banner = function (_migi$Component) {
   _inherits(Banner, _migi$Component);
 
@@ -296,25 +298,70 @@ var Banner = function (_migi$Component) {
 
     var _this = _possibleConstructorReturn(this, (_ref = Banner.__proto__ || Object.getPrototypeOf(Banner)).call.apply(_ref, [this].concat(data)));
 
-    var datas = [{
-      url: '/works/2015000000000001',
-      pic: '//zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg'
-    }, {
-      url: '/works/2015000000000002',
-      pic: '//zhuanquan.xin/pic/b1284084f38e8cac0c35eddd60948af1.jpg'
-    }, {
-      url: '//rhymesland.com/',
-      pic: '//zhuanquan.xin/pic/7dc30aca98d4975fd6c3a5b23d1abf8d.jpg'
-    }];
-    var n = Math.floor(Math.random() * 3);
-    _this.data = datas[n];
+    _this.on(migi.Event.DOM, function () {
+      this.addInterval();
+    });
     return _this;
   }
 
   _createClass(Banner, [{
-    key: 'render',
+    key: "clickTag",
+    value: function clickTag(e, vd, tvd) {
+      this.index = tvd.props.rel;
+      this.setOffset(Math.floor(this.index * 1000));
+      this.addInterval();
+    }
+  }, {
+    key: "setOffset",
+    value: function setOffset(x) {
+      var $list = $(this.ref.list.element);
+      $list.css('-moz-transform', 'translateX(-' + x + 'px)');
+      $list.css('-webkit-transform', 'translateX(-' + x + 'px)');
+      $list.css('transform', 'translateX(-' + x + 'px)');
+    }
+  }, {
+    key: "addInterval",
+    value: function addInterval() {
+      if (interval) {
+        clearInterval(interval);
+      }
+      var self = this;
+      interval = setInterval(function () {
+        self.index++;
+        if (self.index >= 3) {
+          self.index = 0;
+        }
+        self.setOffset(self.index * 1000);
+      }, 5000);
+    }
+  }, {
+    key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "banner"]], [migi.createVd("a", [["href", this.data.url], ["target", "_blank"]], [migi.createVd("img", [["src", this.data.pic]])])]);
+      var datas = [{
+        url: '/works/2015000000000001',
+        pic: '//zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg'
+      }, {
+        url: '/works/2015000000000002',
+        pic: '//zhuanquan.xin/pic/b1284084f38e8cac0c35eddd60948af1.jpg'
+      }, {
+        url: '//rhymesland.com/',
+        pic: '//zhuanquan.xin/pic/7dc30aca98d4975fd6c3a5b23d1abf8d.jpg'
+      }];
+      return migi.createVd("div", [["class", "banner"]], [migi.createVd("ul", [["class", "list fn-clear"], ["ref", "list"]], [datas.map(function (item) {
+        return migi.createVd("li", [], [migi.createVd("a", [["href", item.url], ["target", "_blank"]], [migi.createVd("img", [["src", item.pic]])])]);
+      })]), migi.createVd("ul", [["class", "tags"], ["ref", "tags"], ["onClick", new migi.Cb(this, this.clickTag)]], [new migi.Obj("index", this, function () {
+        return (this.index, datas).map(function (item, index) {
+          return migi.createVd("li", [["class", index === this.index ? 'cur' : ''], ["rel", index]], [index + 1]);
+        }.bind(this));
+      })])]);
+    }
+  }, {
+    key: "index",
+    set: function set(v) {
+      this.__setBind("index", v);this.__data("index");
+    },
+    get: function get() {
+      if (this.__initBind("index")) this.__setBind("index", 0);return this.__getBind("index");
     }
   }]);
 

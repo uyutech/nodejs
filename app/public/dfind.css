@@ -666,11 +666,48 @@
   height: 3rem;
   overflow: hidden;
 }
-.find > .banner img {
+.find > .banner .list {
+  width: 300%;
+  height: 100%;
+  transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s;
+}
+.find > .banner .list li {
+  float: left;
+  width: 10rem;
+  height: 100%;
+}
+.find > .banner .list li img {
   display: block;
   width: 100%;
-  height: 3rem;
+  height: 100%;
   border-radius: 0.1rem;
+}
+.find > .banner .tags {
+  position: absolute;
+  left: 0;
+  bottom: 0.1rem;
+  width: 100%;
+  text-align: center;
+}
+.find > .banner .tags li {
+  display: inline-block;
+  margin: 0 0.1rem;
+  width: 0.1rem;
+  height: 0.1rem;
+  border: 1px solid #B1C0C9;
+  background: #fff;
+  border-radius: 100%;
+  text-indent: 99rem;
+  overflow: hidden;
+  opacity: 0.8;
+}
+.find > .banner .tags li.cur {
+  background: #9ECDDB;
+}
+.find > .banner .tags li:hover {
+  opacity: 1;
 }
 .find > .cp-hotwork {
   margin-top: 0.2rem;

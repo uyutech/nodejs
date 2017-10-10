@@ -11,7 +11,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url;
+    return '/public' + url + '?0';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
