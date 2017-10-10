@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 80);
+/******/ 	return __webpack_require__(__webpack_require__.s = 84);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -836,7 +836,7 @@ var _net = __webpack_require__(2);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(64);
+var _Banner = __webpack_require__(68);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -1110,7 +1110,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 64:
+/***/ 68:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1269,7 +1269,7 @@ Object.keys(code2Data).forEach(function(k) {
 
 /***/ }),
 
-/***/ 80:
+/***/ 84:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
