@@ -7,7 +7,7 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * loginOut(ctx) {
-      ctx.session.uid = null;
+      ctx.session = null;
       ctx.body = {
         success: true,
       };

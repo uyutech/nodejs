@@ -36,11 +36,23 @@ module.exports = app => {
       let access_token = data.access_token;
       let weiboUid = data.uid;
       if(access_token && weiboUid) {
+        let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
+          data: {
+            uid: weiboUid,
+            access_token,
+          },
+          dataType: 'json',
+          gzip: true,
+        });
+        userInfo = userInfo.data;
+        let name = userInfo.screen_name || userInfo.name;
+        let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
         let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/users/WeibouidToUid'), {
           method: 'POST',
           data: {
             openid: weiboUid,
             Token: access_token,
+            Head_Url: head,
           },
           dataType: 'json',
           gzip: true,
@@ -50,17 +62,34 @@ module.exports = app => {
           let uid = data.data;
           ctx.session.uid = uid;
         }
-        else {
-          let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
+        else if(data.code === 1002) {
+          // let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
+          //   data: {
+          //     uid: weiboUid,
+          //     access_token,
+          //   },
+          //   dataType: 'json',
+          //   gzip: true,
+          // });
+          // userInfo = userInfo.data;
+          // let name = userInfo.screen_name || userInfo.name;
+          // let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
+          let create = yield ctx.curl(ctx.helper.getRemoteUrl('api/users/CreateWeiboUser'), {
+            method: 'POST',
             data: {
-              uid: weiboUid,
-              access_token,
+              openid: weiboUid,
+              Token: access_token,
+              Head_Url: head,
+              NickName: name,
             },
             dataType: 'json',
             gzip: true,
           });
-          let info = userInfo.data;
-          ctx.body = info;
+          create = create.data;
+          if(create && create.success) {
+            let uid = create.data;
+            ctx.session.uid = uid;
+          }
         }
       }
       ctx.redirect(ctx.session.goto || '/');

@@ -43,7 +43,8 @@ class Audio extends migi.Component {
   @bind duration
   @bind canControl
   @bind muted
-  @bind fn
+  @bind fnLike
+  @bind fnFavor
   get currentTime() {
     return this._currentTime || 0;
   }
@@ -264,7 +265,7 @@ class Audio extends migi.Component {
       net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
           data.ISLike = res.data === 211;
-          self.fn = null;
+          self.fnLike = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -294,7 +295,7 @@ class Audio extends migi.Component {
       net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
           data.ISFavor = false;
-          self.fn = true;
+          self.fnFavor = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -312,7 +313,7 @@ class Audio extends migi.Component {
       net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
           data.ISFavor = true;
-          self.fn = null;
+          self.fnFavor = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -388,8 +389,8 @@ class Audio extends migi.Component {
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.datas[this.index].ISLike || this.fn ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fn ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class={ 'like' + (this.datas[this.index].ISLike || this.fnLike ? ' has' : '') } onClick={ this.clickLike }/>
+          <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.datas[this.index].FileUrl }
                download={ this.datas[this.index].FileUrl }
