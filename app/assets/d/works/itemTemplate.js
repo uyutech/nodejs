@@ -7,22 +7,33 @@ export default function(workType) {
     case 1111:
       return {
         bigType: 'audio',
-        typeName: '原创音乐',
+        name: '原创音乐',
       };
     case 1131:
       return {
         bigType: 'audio',
-        typeName: '原创伴奏',
+        name: '原创伴奏',
       };
     case 2111:
       return {
         bigType: 'video',
-        typeName: '原创视频',
+        name: '原创视频',
+      };
+    case 3120:
+      return {
+        bigType: 'poster',
+        name: '海报',
       };
     case 4110:
       return {
         bigType: 'text',
-        typeName: '文案',
+        name: '文案',
+      };
+    case 4211:
+      return {
+        bigType: 'lyric',
+        name: '原创歌词',
+        display: '歌词',
       };
     default:
       return {

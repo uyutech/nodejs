@@ -6,9 +6,14 @@ import net from '../common/net';
 import util from '../common/util';
 import Title from './Title.jsx';
 import Media from './Media.jsx';
-import WorkComment from './WorkComment.jsx';
 import itemTemplate from './itemTemplate';
+import Author from './Author.jsx';
+import Text from './Text.jsx';
+import Lyric from './Lyric.jsx';
+import Poster from './Poster.jsx';
+import Timeline from './Timeline.jsx';
 import InspComment from './InspComment.jsx';
+import WorkComment from './WorkComment.jsx';
 
 let first;
 
@@ -35,10 +40,15 @@ class Works extends migi.Component {
     let authorHash = {};
     works.forEach(function(item) {
       // 将每个小作品根据小类型映射到大类型上，再归类
-      let bigType = itemTemplate(item.ItemType).bigType;
+      let type = itemTemplate(item.ItemType);
+      let bigType = type.bigType;
+      let name = type.display || type.name;
       if(bigType) {
-        workHash[bigType] = workHash[bigType] || [];
-        workHash[bigType].push(item);
+        workHash[bigType] = workHash[bigType] || {
+          name,
+          value: [],
+        };
+        workHash[bigType].value.push(item);
         item.Works_Item_Author.forEach(function (item) {
           authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
           if(!authorHash[item.WorksAuthorType][item.ID]) {
@@ -51,9 +61,11 @@ class Works extends migi.Component {
     Object.keys(workHash).forEach(function(k) {
       workList.push({
         bigType: k,
-        value: workHash[k],
+        name: workHash[k].name,
+        value: workHash[k].value,
       });
     });
+
     authorHash = {};
     let tempHash = {
       901: 1,
@@ -105,25 +117,29 @@ class Works extends migi.Component {
 
     workList.forEach(function(item) {
       if(item.bigType === 'audio') {
-        self.hasAudio = true;
         self.audioData = item.value;
       }
       else if(item.bigType === 'video') {
-        self.hasVideo = true;
         self.videoData = item.value;
       }
       else if(item.bigType === 'text') {
-        self.hasText = true;
-        self.textData = item.value;
+        self.textData = item;
+      }
+      else if(item.bigType === 'poster') {
+        self.posterData = item;
+      }
+      else if(item.bigType === 'lyric') {
+        self.lyricData = item;
       }
     });
-    if(self.hasAudio) {
-      first = 'audio';
-      self.workID = self.audioData[0].ItemID;
-    }
-    else if(self.hasVideo) {
+
+    if(self.videoData) {
       first = 'video';
       self.workID = self.videoData[0].ItemID;
+    }
+    else if(self.audioData) {
+      first = 'audio';
+      self.workID = self.audioData[0].ItemID;
     }
   }
   clickType(e, vd, tvd) {
@@ -196,13 +212,13 @@ class Works extends migi.Component {
       <div class="main">
         <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
           {
-            this.hasAudio
-              ? <li class={ 'audio' + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
+            this.videoData
+              ? <li class={ 'video' + (first ==='video' ? ' cur' : '') } rel="video">视频</li>
               : ''
           }
           {
-            this.hasVideo
-              ? <li class={ 'video' + (first ==='video' ? ' cur' : '') } rel="video">视频</li>
+            this.audioData
+              ? <li class={ 'audio' + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
               : ''
           }
         </ul>
@@ -222,18 +238,26 @@ class Works extends migi.Component {
           <li>站外链接</li>
         </ul>
         <div class="info">
-          <h4>文案</h4>
-          <pre class="intro">
-              {
-                (this.textData || []).map(function(item) {
-                  return item.Text;
-                })
-              }
-            </pre>
-          <h4>创作灵感</h4>
+          <Author authorList={ this.authorList }/>
+          <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+          {
+            this.textData
+              ? <Text datas={ this.textData }/>
+              : ''
+          }
+          {
+            this.lyricData
+              ? <Lyric datas={ this.lyricData }/>
+              : ''
+          }
           <InspComment ref="inspComment"
                        worksID={ this.props.worksID }
                        commentData={ this.props.worksDetail.WorksAuthorComment }/>
+          {
+            this.posterData
+              ? <Poster datas={ this.posterData }/>
+              : ''
+          }
         </div>
       </div>
       <div class="form">

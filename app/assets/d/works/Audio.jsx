@@ -105,6 +105,7 @@ class Audio extends migi.Component {
     if(!this.audio) {
       this.addMedia();
     }
+    $(this.ref.fn.element).removeClass('fn-hidden');
     return this;
   }
   hide() {
@@ -337,7 +338,7 @@ class Audio extends migi.Component {
   }
   render() {
     return <div class={ 'audio' + (this.props.show ? '' : ' fn-hide') }>
-      <ul class="type fn-clear" onClick={ this.clickType }>
+      <ul class={ 'type fn-clear' + ((this.index, this.datas || []).length === 1 ? ' single' : '') } onClick={ this.clickType }>
         {
           (this.index, this.datas || []).map(function(item, index) {
             return <li class={ this.index === index ? 'cur' : '' } rel={ index }>{ item.Tips || '普通版' }</li>;
@@ -348,21 +349,26 @@ class Audio extends migi.Component {
       <div class="num">
         <small class="play">{ this.datas[this.index].PlayHis || 0 }</small>
       </div>
-      <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
-        <div class={ 'roll' + (!this.showLyricsMode ? '' : ' fn-hide') }>
-          <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.volume * 100 + '%);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
-            {
-              (this.datas[this.index].formatLyrics.data || []).map(function(item) {
-                return <pre>{ item.txt || '&nbsp;' }</pre>
-              })
-            }
+      <div class="c">
+        <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
+          <div class={ 'roll' + (!this.showLyricsMode && this.datas[this.index].formatLyrics.data ? '' : ' fn-hide') }>
+            <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
+              {
+                (this.datas[this.index].formatLyrics.data || []).map(function(item) {
+                  return <pre>{ item.txt || '&nbsp;' }</pre>
+                })
+              }
+            </div>
+          </div>
+          <div class={ 'line' + (this.showLyricsMode && this.datas[this.index].formatLyrics.txt ? '' : ' fn-hide') }>
+            <pre style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>{ this.datas[this.index].formatLyrics.txt }</pre>
           </div>
         </div>
-        <pre class={ 'line' + (this.showLyricsMode ? '' : ' fn-hide') }>{ this.datas[this.index].formatLyrics.txt }</pre>
+        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
       </div>
       <div class="fn fn-hidden" ref="fn">
         <div class="control">
-          <b class="lyrics" onClick={ this.altLyrics }/>
+          <b class={ 'lyrics' + (this.showLyricsMode ? '' : ' roll') } onClick={ this.altLyrics }/>
           <div class="volume" ref="volume" onClick={ this.clickVolume }>
             <b class={ 'icon' + (this.muted ? ' muted' : '') } onClick={ this.clickMute }/>
             <b class="vol" style={ 'width:' + this.volume * 100 + '%' }/>
@@ -392,7 +398,6 @@ class Audio extends migi.Component {
           <li class="share" onClick={ this.clickShare }/>
         </ul>
       </div>
-      <b class={ 'start' + (this.hasStart ? ' fn-hide' : '') } onClick={ this.clickStart }/>
     </div>;
   }
 }

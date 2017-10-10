@@ -233,10 +233,12 @@ class Comment extends migi.Component {
         </div>
       </div>
       <div class="c">
-          <pre>{ item.Send_Content }<span class="placeholder"/></pre>
+        <pre>{ item.Send_Content }<span class="placeholder"/></pre>
         <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_UserName }>
           <small>{ item.sub_Count }</small>
-          <span>收起</span></div>
+          <span>收起</span>
+        </div>
+        <b class="arrow"/>
       </div>
       <div class="list2">
         <ul class="fn-hide"/>

@@ -11,29 +11,33 @@ class InspComment extends migi.Component {
     super(...data);
   }
   render() {
-    return <ul class="insp">
-      {
-        (this.props.commentData || []).map(function(item) {
-          return <li>
-            <div class="t">
-              <div class="profile fn-clear">
-                <img class="pic" src={ item.Head_Url || '//zhuanquan.xin/img/blank.png' }/>
-                <div class="txt">
-                  <div>
-                    <span class="name">{ item.AuthorName }</span>
-                    <small class="time">{ util.formatDate(item.LineDate) }</small>
+    return <div class="mod insp">
+      <h4>创作灵感</h4>
+      <ul class="c">
+        {
+          (this.props.commentData || []).map(function(item) {
+            return <li>
+              <div class="t">
+                <div class="profile fn-clear">
+                  <img class="pic" src={ item.Head_Url || '//zhuanquan.xin/img/blank.png' }/>
+                  <div class="txt">
+                    <div>
+                      <span class="name">{ item.AuthorName }</span>
+                      <small class="time">{ util.formatDate(item.LineDate) }</small>
+                    </div>
+                    <p>{ item.sign }</p>
                   </div>
-                  <p>{ item.sign }</p>
                 </div>
               </div>
-            </div>
-            <div class="c">
-              <pre>{ item.Content }<span class="placeholder"/></pre>
-            </div>
-          </li>;
-        })
-      }
-    </ul>;
+              <div class="c">
+                <pre>{ item.Content }<span class="placeholder"/></pre>
+                <b class="arrow"/>
+              </div>
+            </li>;
+          })
+        }
+      </ul>
+    </div>;
   }
 }
 

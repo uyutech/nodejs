@@ -83,7 +83,7 @@ body{
   flex-direction:column;
   margin:0;
   padding:0;
-  padding-top:0.9rem;
+  padding-top:0.73rem;
   //user-select:none;
   box-sizing:border-box;
   background:transparent;
@@ -100,8 +100,9 @@ body,
 button,
 input,
 select,
-textarea{
-  font-size:0.16rem;
+textarea,
+pre{
+  font-size:0.12rem;
   line-height:1.5;
   font-family:
     // System Font            // https://www.webkit.org/blog/3709/using-the-system-font-in-web-content/
@@ -128,16 +129,19 @@ textarea{
     SimSun,                   // Win old              中易宋体
     sans-serif;               // System Fallback
 }
+body,button,input,select,textarea{
+  color:@mainTextColor;
+}
 
 input{
   line-height:normal;
 }
 
 a{
-  color:#555;
+  color:@mainLinkColor;
   text-decoration:none;
   &:hover{
-    color:#0AE;
+    color:@mainHoverColor;
     text-decoration:underline;
   }
 }
@@ -170,7 +174,7 @@ a{
 #page{
   margin:0 auto;
   flex:1;
-  width:10rem;
+  width:10.08rem;
 }
 
 .cp-botnav{
@@ -196,7 +200,7 @@ a{
       position:absolute;
       top:0.18rem;
       right:0;
-      color:#555;
+      color:@mainLinkColor;
       li{
         float:left;
         width:0.6rem;

@@ -20,15 +20,15 @@ class Media extends migi.Component {
     }
   }
   render() {
-    return <div class="media" style={ `background-image:url(${this.props.cover})`}>
+    return <div class="media" style={ `background-image:url(${this.props.cover})` }>
       {
         this.props.audioData
-          ? <Audio ref="audio" datas={ this.props.audioData } show={ this.props.first === 'audio' }/>
+          ? <Audio ref="audio" cover={ this.props.cover } datas={ this.props.audioData } show={ this.props.first === 'audio' }/>
           : ''
       }
       {
         this.props.videoData
-          ? <Video ref="video" datas={ this.props.videoData } show={ this.props.first === 'video' }/>
+          ? <Video ref="video" cover={ this.props.cover } datas={ this.props.videoData } show={ this.props.first === 'video' }/>
           : ''
       }
     </div>;

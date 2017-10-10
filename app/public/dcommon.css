@@ -79,7 +79,7 @@ body {
           flex-direction: column;
   margin: 0;
   padding: 0;
-  padding-top: 0.9rem;
+  padding-top: 0.73rem;
   box-sizing: border-box;
   background: transparent;
   width: 100%;
@@ -93,10 +93,18 @@ body,
 button,
 input,
 select,
-textarea {
-  font-size: 0.16rem;
+textarea,
+pre {
+  font-size: 0.12rem;
   line-height: 1.5;
   font-family: -apple-system, "Helvetica Neue", "Arial", "PingFang SC", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, sans-serif;
+}
+body,
+button,
+input,
+select,
+textarea {
+  color: #2D4D67;
 }
 input {
   line-height: normal;
@@ -253,7 +261,7 @@ a:hover {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
-  width: 10rem;
+  width: 10.08rem;
 }
 .cp-botnav {
   margin-top: 0.2rem;

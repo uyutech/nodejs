@@ -11,7 +11,7 @@ class Author extends migi.Component {
     self.setAuthor(self.props.authorList);
   }
   @bind list = []
-  setAuthor(data) {
+  setAuthor(data) {console.log(data);
     let list = [];
     data.forEach(function(item) {
       let temp = [];
@@ -25,19 +25,27 @@ class Author extends migi.Component {
         }
         last = item.WorksAuthorType;
         lastTips = item.Tips;
-        temp.push(<li class="item" id={ item.ID }><a href={ `/author/${item.ID}` }>{ item.AuthName }</a></li>);
+        temp.push(<li class="item" id={ item.ID }>
+          <a href={ `/author/${item.ID}` }>
+            <img src={ item.HeadUrl }/>
+            <span>{ item.AuthName }</span>
+          </a>
+        </li>);
       });
       list.push(temp);
     });
     this.list = list;
   }
   render() {
-    return <div class="authors">
-      {
-        this.list.map(function(item) {
-          return <ul>{ item }</ul>;
-        })
-      }
+    return <div class="mod authors">
+      <h4>作者</h4>
+      <div class="c">
+        {
+          this.list.map(function(item) {
+            return <ul>{ item }</ul>;
+          })
+        }
+      </div>
     </div>;
   }
 }

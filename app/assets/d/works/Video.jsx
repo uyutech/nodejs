@@ -80,7 +80,7 @@ class Video extends migi.Component {
       your browser does not support the video tag
     </video>;
     this.video = video;
-    video.inTo(this.ref.c.element);
+    video.prependTo(this.ref.c.element);
     this.volume = this.volume;
   }
   show() {
@@ -319,7 +319,7 @@ class Video extends migi.Component {
   }
   render() {
     return <div class={ 'video' + (this.props.show ? '' : ' fn-hide') }>
-      <ul class="type fn-clear" onClick={ this.clickType }>
+      <ul class={ 'type fn-clear' + ((this.index, this.datas || []).length === 1 ? ' single' : '') } onClick={ this.clickType }>
         {
           (this.index, this.datas || []).map(function(item, index) {
             return <li class={ this.index === index ? 'cur' : '' } rel={ index }>{ item.Tips || '普通版' }</li>;
@@ -330,7 +330,9 @@ class Video extends migi.Component {
       <div class="num">
         <small class="play">{ this.datas[this.index].PlayHis || 0 }</small>
       </div>
-      <div class="c" ref="c" style={ this.isPlaying ? '' : 'opacity:0.75' }></div>
+      <div class="c" ref="c" style={ this.isPlaying ? '' : 'opacity:0.75' }>
+        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
+      </div>
       <div class="fn fn-hidden" ref="fn">
         <div class="control">
           <b class="full" onClick={ this.clickScreen }/>
@@ -363,7 +365,6 @@ class Video extends migi.Component {
           <li class="share" onClick={ this.clickShare }/>
         </ul>
       </div>
-      <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
     </div>;
   }
 }
