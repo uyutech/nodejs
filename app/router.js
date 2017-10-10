@@ -2,7 +2,6 @@
 
 module.exports = app => {
   app.get('/404.html', 'error.c404');
-  app.post('/api/login/loginOut', 'api.login.loginOut');
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
 
@@ -12,6 +11,7 @@ module.exports = app => {
   app.get('/d/author/:authorID', 'd.author.index');
   app.get('/d/search/:kw', 'd.search.index');
   app.get('/d/my', app.middlewares.needLogin(), 'd.my.index');
+  app.get('/d/login', 'd.login.index');
 
   app.get('/m', 'm.index.index');
   app.get('/m/find', 'm.find.index');
@@ -19,6 +19,7 @@ module.exports = app => {
   app.get('/m/author/:authorID', 'm.author.index');
   app.get('/m/search/:kw', 'm.search.index');
 
+  app.post('/api/login/loginOut', 'api.login.loginOut');
   app.post('/api/find/hotWorkList', 'api.find.hotWorkList');
   app.post('/api/find/tagB', 'api.find.tagB');
   app.post('/api/find/playList', 'api.find.playList');

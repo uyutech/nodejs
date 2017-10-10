@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 74);
+/******/ 	return __webpack_require__(__webpack_require__.s = 75);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 24:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -86,68 +86,47 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var TopNav = function (_migi$Component) {
-  _inherits(TopNav, _migi$Component);
+var Login = function (_migi$Component) {
+  _inherits(Login, _migi$Component);
 
-  function TopNav() {
+  function Login() {
     var _ref;
 
-    _classCallCheck(this, TopNav);
+    _classCallCheck(this, Login);
 
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
+    return _possibleConstructorReturn(this, (_ref = Login.__proto__ || Object.getPrototypeOf(Login)).call.apply(_ref, [this].concat(data)));
   }
 
-  _createClass(TopNav, [{
-    key: 'setTop',
-    value: function setTop(top) {
-      top = Math.min(top, 72);
-      $(this.element).css('-webkit-transform', 'translateY(' + -top + 'px)');
-      $(this.element).css('transform', 'translateY(' + -top + 'px)');
-    }
-  }, {
-    key: 'setMarginRight',
-    value: function setMarginRight(right) {
-      $(this.element).css('margin-right', right);
-    }
-  }, {
-    key: 'submit',
-    value: function submit(e) {
+  _createClass(Login, [{
+    key: 'clickWeibo',
+    value: function clickWeibo(e) {
       e.preventDefault();
-      var v = this.ref.input.element.value.trim();
-      if (v) {
-        this.emit('search', v);
-      }
-    }
-  }, {
-    key: 'click',
-    value: function click(e) {
-      if (!window.$CONFIG.isLogin) {
-        e.preventDefault();
-        migi.eventBus.emit('NEED_LOGIN');
+      var parent = window.parent;
+      if (parent !== window && parent.goto) {
+        parent.goto('/oauth/weibo');
       } else {
-        location.hash = '/my';
+        location.href = '/oauth/weibo';
       }
     }
   }, {
     key: 'render',
     value: function render() {
-      var userInfo = this.props.userInfo || {};
-      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]), migi.createVd("form", [["class", "search"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["ref", "input"], ["maxlength", "16"], ["placeholder", "弱弱的初级搜索功能QAQ"]])]), migi.createVd("div", [["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], [userInfo.NickName || '登陆/注册']), migi.createVd("img", [["src", userInfo.Head_Url || '//zhuanquan.xyz/img/blank.png']])])])]);
+      return migi.createVd("div", [["class", "login"]], [migi.createVd("a", [["href", "#"], ["class", "weibo"], ["onClick", new migi.Cb(this, this.clickWeibo)]], ["微博登录"])]);
     }
   }]);
 
-  return TopNav;
+  return Login;
 }(migi.Component);
 
-migi.name(TopNav, "TopNav");exports.default = TopNav;
+migi.name(Login, "Login");exports.default = Login;
 
 /***/ }),
 
-/***/ 74:
+/***/ 75:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -159,16 +138,15 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (data) {
   migi.Element.resetUid();
-  var userInfo = data.userInfo;
 
-  var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo]]));
+  var login = migi.preRender(migi.createCp(_Login2.default, []));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dindex.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dindex.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dlogin.css') + '"/>\n</head>\n<body>\n<div id="page">' + login + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dlogin.js') + '"></script>\n</body>\n</html>';
 };
 
-var _TopNav = __webpack_require__(24);
+var _Login = __webpack_require__(26);
 
-var _TopNav2 = _interopRequireDefault(_TopNav);
+var _Login2 = _interopRequireDefault(_Login);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

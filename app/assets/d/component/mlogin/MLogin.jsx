@@ -20,8 +20,8 @@ class NeedLogin extends migi.Component {
   clickWeibo(e) {
     e.preventDefault();
     let parent = window.parent;
-    if(parent !== window) {
-      parent.goto && parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
+    if(parent !== window && parent.goto) {
+      parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
     }
     else {
       location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);

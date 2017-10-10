@@ -14,11 +14,11 @@ class My extends migi.Component {
   clickOut(e) {
     e.preventDefault();
     net.postJSON('/api/login/loginOut', function(res) {
-      if(window.parent && window.parent !== window) {
-        window.parent.location.reload(true);
+      if(parent && parent !== window && parent.goto) {
+        parent.goto('/login');
       }
       else {
-        location.reload(true);
+        location.href = '/login';
       }
     });
   }

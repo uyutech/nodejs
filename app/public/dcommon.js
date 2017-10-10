@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 141);
+/******/ 	return __webpack_require__(__webpack_require__.s = 144);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7287,13 +7287,13 @@ function onTouchEnd(e) {
 "use strict";
 
 
-__webpack_require__(140);
+__webpack_require__(143);
 
-var _MLogin = __webpack_require__(98);
+var _MLogin = __webpack_require__(100);
 
 var _MLogin2 = _interopRequireDefault(_MLogin);
 
-var _Share = __webpack_require__(99);
+var _Share = __webpack_require__(101);
 
 var _Share2 = _interopRequireDefault(_Share);
 
@@ -7335,7 +7335,8 @@ migi.eventBus.on('SET_VOLUME', function (v) {
 /* 71 */,
 /* 72 */,
 /* 73 */,
-/* 74 */
+/* 74 */,
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7441,7 +7442,7 @@ exports.default = function ($) {
 };
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17274,18 +17275,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(150)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(153)(module)))
 
 /***/ }),
-/* 76 */,
 /* 77 */,
-/* 78 */
+/* 78 */,
+/* 79 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 79 */,
 /* 80 */,
 /* 81 */,
 /* 82 */,
@@ -17304,7 +17304,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /* 95 */,
 /* 96 */,
 /* 97 */,
-/* 98 */
+/* 98 */,
+/* 99 */,
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17358,8 +17360,8 @@ var NeedLogin = function (_migi$Component) {
     value: function clickWeibo(e) {
       e.preventDefault();
       var parent = window.parent;
-      if (parent !== window) {
-        parent.goto && parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
+      if (parent !== window && parent.goto) {
+        parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
       } else {
         location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);
       }
@@ -17387,7 +17389,7 @@ var NeedLogin = function (_migi$Component) {
 migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
 
 /***/ }),
-/* 99 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17466,8 +17468,6 @@ var Share = function (_migi$Component) {
 migi.name(Share, "Share");exports.default = Share;
 
 /***/ }),
-/* 100 */,
-/* 101 */,
 /* 102 */,
 /* 103 */,
 /* 104 */,
@@ -17506,7 +17506,10 @@ migi.name(Share, "Share");exports.default = Share;
 /* 137 */,
 /* 138 */,
 /* 139 */,
-/* 140 */
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17564,7 +17567,7 @@ if (parent !== window) {
 }
 
 /***/ }),
-/* 141 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17574,17 +17577,17 @@ __webpack_require__(32);
 
 __webpack_require__(31);
 
-var _jquery = __webpack_require__(75);
+var _jquery = __webpack_require__(76);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _cookie = __webpack_require__(74);
+var _cookie = __webpack_require__(75);
 
 var _cookie2 = _interopRequireDefault(_cookie);
 
 __webpack_require__(61);
 
-__webpack_require__(78);
+__webpack_require__(79);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17604,15 +17607,15 @@ window.requestAnimationFrame = function () {
 window.$ = _jquery2.default;
 
 /***/ }),
-/* 142 */,
-/* 143 */,
-/* 144 */,
 /* 145 */,
 /* 146 */,
 /* 147 */,
 /* 148 */,
 /* 149 */,
-/* 150 */
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

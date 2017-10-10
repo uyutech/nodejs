@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 106);
+/******/ 	return __webpack_require__(__webpack_require__.s = 109);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -149,7 +149,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 103:
+/***/ 106:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -211,7 +211,7 @@ migi.name(Favor, "Favor");exports.default = Favor;
 
 /***/ }),
 
-/***/ 104:
+/***/ 107:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -273,7 +273,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 105:
+/***/ 108:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -361,15 +361,15 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 106:
+/***/ 109:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(81);
+__webpack_require__(83);
 
-var _My = __webpack_require__(66);
+var _My = __webpack_require__(67);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -448,7 +448,7 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 66:
+/***/ 67:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -464,15 +464,15 @@ var _net = __webpack_require__(6);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Profile = __webpack_require__(105);
+var _Profile = __webpack_require__(108);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(104);
+var _Follow = __webpack_require__(107);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _Favor = __webpack_require__(103);
+var _Favor = __webpack_require__(106);
 
 var _Favor2 = _interopRequireDefault(_Favor);
 
@@ -504,10 +504,10 @@ var My = function (_migi$Component) {
     value: function clickOut(e) {
       e.preventDefault();
       _net2.default.postJSON('/api/login/loginOut', function (res) {
-        if (window.parent && window.parent !== window) {
-          window.parent.location.reload(true);
+        if (parent && parent !== window && parent.goto) {
+          parent.goto('/login');
         } else {
-          location.reload(true);
+          location.href = '/login';
         }
       });
     }
@@ -525,7 +525,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 81:
+/***/ 83:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
