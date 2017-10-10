@@ -879,7 +879,7 @@ var Author = function (_migi$Component) {
             }
             var type = _authorTemplate2.default.code2Data[item.WorksAuthorType];
             var label = item.Tips || type.display;
-            temp.push(migi.createVd("span", [["class", "item"]], [migi.createVd("small", [], [label]), migi.createVd("a", [["class", "item"], ["href", "/author/" + item.ID]], [migi.createVd("img", [["src", item.HeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("span", [], [item.AuthName])])]));
+            temp.push(migi.createVd("span", [["class", "item"]], [migi.createVd("small", [], [label]), migi.createVd("a", [["class", "item"], ["href", "/author/" + item.ID], ["title", item.AuthName]], [migi.createVd("img", [["src", item.HeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("span", [], [item.AuthName])])]));
           } else {
             temp.push(migi.createVd("a", [["class", "item"], ["href", "/author/" + item.ID]], [migi.createVd("img", [["src", item.HeadUrl]]), migi.createVd("span", [], [item.AuthName])]));
           }

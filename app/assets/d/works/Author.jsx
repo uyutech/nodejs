@@ -35,7 +35,7 @@ class Author extends migi.Component {
           let label = item.Tips || type.display;
           temp.push(<span class="item">
             <small>{ label }</small>
-            <a class="item" href={ `/author/${item.ID}` }>
+            <a class="item" href={ `/author/${item.ID}` } title={ item.AuthName }>
               <img src={ item.HeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
               <span>{ item.AuthName }</span>
             </a>

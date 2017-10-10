@@ -810,6 +810,7 @@
             a.item{
               display:inline-block;
               white-space:nowrap;
+              vertical-align:top;
               img{
                 display:inline-block;
                 margin-right:0.05rem;
@@ -819,6 +820,12 @@
                 vertical-align:top;
                 box-shadow:0 0 1px rgba(0, 0, 0, 0.3);
               }
+              span{
+                display:inline-block;
+                max-width:0.6rem;
+                overflow:hidden;
+                text-overflow:ellipsis;
+              }
             }
             > .item{
               margin-right:0.05rem;
@@ -826,33 +833,6 @@
                 margin-right:0;
               }
             }
-            //&.label{
-            //  margin:0 0.05rem 0.05rem;
-            //  padding:0 0.05rem;
-            //  border:1px solid @mainColor;
-            //  font-size:0.12rem;
-            //  box-sizing:border-box;
-            //  border-radius:0.24rem;
-            //  color:@mainColor;
-            //  line-height:0.22rem;
-            //}
-            //&.item{
-            //  margin-bottom:0.05rem;
-            //  padding-right:0.05rem;
-            //  font-size:0.12rem;
-            //  white-space:nowrap;
-            //  overflow:hidden;
-            //  text-overflow:ellipsis;
-            //  max-width:0.85rem;
-            //  img{
-            //    display:inline-block;
-            //    margin-right:0.03rem;
-            //    width:0.24rem;
-            //    height:0.24rem;
-            //    border-radius:0.24rem;
-            //    vertical-align:top;
-            //  }
-            //}
           }
         }
       }
