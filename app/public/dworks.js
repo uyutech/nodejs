@@ -446,6 +446,7 @@ var Audio = function (_migi$Component) {
       if (this.index !== tvd.props.rel) {
         this.index = tvd.props.rel;
         this.audio.element.src = this.datas[this.index].FileUrl;
+        this.emit('switchTo', this.datas[this.index]);
       }
     }
   }, {
@@ -1109,24 +1110,46 @@ var Media = function (_migi$Component) {
   function Media() {
     var _ref;
 
-    _classCallCheck(this, Media);
-
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(data)));
+    _classCallCheck(this, Media);
+
+    var _this = _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var audio = self.ref.audio;
+      var video = self.ref.video;
+      if (audio) {
+        audio.on('switchTo', function (data) {
+          self.emit('switchTo', data);
+        });
+      }
+      if (video) {
+        video.on('switchTo', function (index, data) {
+          self.emit('switchTo', data);
+        });
+      }
+    });
+    return _this;
   }
 
   _createClass(Media, [{
     key: 'switchType',
     value: function switchType(type) {
+      var self = this;
+      var audio = self.ref.audio;
+      var video = self.ref.video;
       if (type === 'audio') {
-        this.ref.video.pause().hide();
-        this.ref.audio.show();
+        video.pause().hide();
+        audio.show();
+        self.emit('switchTo', audio.datas[audio.index]);
       } else if (type === 'video') {
-        this.ref.audio.pause().hide();
-        this.ref.video.show();
+        audio.pause().hide();
+        video.show();
+        self.emit('switchTo', video.datas[video.index]);
       }
     }
   }, {
@@ -1538,6 +1561,7 @@ var Video = function (_migi$Component) {
       if (this.index !== tvd.props.rel) {
         this.index = tvd.props.rel;
         this.video.element.src = this.datas[this.index].FileUrl;
+        this.emit('switchTo', this.datas[this.index]);
       }
     }
   }, {
@@ -1954,30 +1978,35 @@ var WorkComment = function (_migi$Component) {
       });
       var comment = self.ref.comment;
       comment.on('chooseSubComment', function (rid, cid, name) {
-        self.rootId = rid;
-        self.replayId = cid;
-        self.replayName = name;
+        self.emit('chooseSubComment', rid, cid);
+        // self.rootId = rid;
+        // self.replayId = cid;
+        // self.replayName = name;
       });
       comment.on('closeSubComment', function () {
-        self.clickReplay();
+        self.emit('closeSubComment');
+        // self.clickReplay();
       });
     });
     return _this;
   }
+  // @bind rootId = null
+  // @bind replayId = null
+  // @bind replayName
+  // @bind hasContent
+
 
   _createClass(WorkComment, [{
     key: 'show',
     value: function show() {
       var self = this;
       $(self.element).removeClass('fn-hide');
-      self.showComment = true;
     }
   }, {
     key: 'hide',
     value: function hide() {
       var self = this;
       $(self.element).addClass('fn-hide');
-      self.showComment = false;
       skip = 0;
     }
   }, {
@@ -2158,46 +2187,6 @@ var WorkComment = function (_migi$Component) {
       return migi.createVd("div", [["class", "comments"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论"]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / 10)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/works/likeComment"], ["subUrl", "/api/works/subCommentList"], ["delUrl", "/api/works/delComment"], ["data", this.props.commentData.data]])]);
     }
   }, {
-    key: 'showComment',
-    set: function set(v) {
-      this.__setBind("showComment", v);this.__data("showComment");
-    },
-    get: function get() {
-      return this.__getBind("showComment");
-    }
-  }, {
-    key: 'rootId',
-    set: function set(v) {
-      this.__setBind("rootId", v);this.__data("rootId");
-    },
-    get: function get() {
-      if (this.__initBind("rootId")) this.__setBind("rootId", null);return this.__getBind("rootId");
-    }
-  }, {
-    key: 'replayId',
-    set: function set(v) {
-      this.__setBind("replayId", v);this.__data("replayId");
-    },
-    get: function get() {
-      if (this.__initBind("replayId")) this.__setBind("replayId", null);return this.__getBind("replayId");
-    }
-  }, {
-    key: 'replayName',
-    set: function set(v) {
-      this.__setBind("replayName", v);this.__data("replayName");
-    },
-    get: function get() {
-      return this.__getBind("replayName");
-    }
-  }, {
-    key: 'hasContent',
-    set: function set(v) {
-      this.__setBind("hasContent", v);this.__data("hasContent");
-    },
-    get: function get() {
-      return this.__getBind("hasContent");
-    }
-  }, {
     key: 'loading',
     set: function set(v) {
       this.__setBind("loading", v);this.__data("loading");
@@ -2211,23 +2200,9 @@ var WorkComment = function (_migi$Component) {
       this.__setBind("worksID", v);this.__data("worksID");
     },
     get: function get() {
+      // @bind subWorkID
+      // @bind barrageTime
       return this.__getBind("worksID");
-    }
-  }, {
-    key: 'subWorkID',
-    set: function set(v) {
-      this.__setBind("subWorkID", v);this.__data("subWorkID");
-    },
-    get: function get() {
-      return this.__getBind("subWorkID");
-    }
-  }, {
-    key: 'barrageTime',
-    set: function set(v) {
-      this.__setBind("barrageTime", v);this.__data("barrageTime");
-    },
-    get: function get() {
-      return this.__getBind("barrageTime");
     }
   }]);
 
@@ -2912,17 +2887,33 @@ var Works = function (_migi$Component) {
   function Works() {
     var _ref;
 
-    _classCallCheck(this, Works);
-
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
+
+    _classCallCheck(this, Works);
 
     var _this = _possibleConstructorReturn(this, (_ref = Works.__proto__ || Object.getPrototypeOf(Works)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
     self.worksID = self.props.worksID;
     self.setWorks(self.props.worksDetail.Works_Items);
+    self.on(migi.Event.DOM, function () {
+      var media = self.ref.media;
+      media.on('switchTo', function (data) {
+        self.workID = data.ItemID;
+      });
+      var workComment = self.ref.workComment;
+      workComment.on('chooseSubComment', function (rid, cid, name) {
+        self.rootID = rid;
+        self.parentID = cid;
+        // self.replayName = name;
+      });
+      workComment.on('closeSubComment', function () {
+        self.rootID = -1;
+        self.parentID = -1;
+      });
+    });
     return _this;
   }
 

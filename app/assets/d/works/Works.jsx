@@ -23,6 +23,22 @@ class Works extends migi.Component {
     let self = this;
     self.worksID = self.props.worksID;
     self.setWorks(self.props.worksDetail.Works_Items);
+    self.on(migi.Event.DOM, function() {
+      let media = self.ref.media;
+      media.on('switchTo', function(data) {
+        self.workID = data.ItemID;
+      });
+      let workComment = self.ref.workComment;
+      workComment.on('chooseSubComment', function(rid, cid, name) {
+        self.rootID = rid;
+        self.parentID = cid;
+        // self.replayName = name;
+      });
+      workComment.on('closeSubComment', function() {
+        self.rootID = -1;
+        self.parentID = -1;
+      });
+    });
   }
   @bind worksID
   @bind workID

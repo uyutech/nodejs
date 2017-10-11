@@ -40,7 +40,6 @@ ${ botNav }
   $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
   $CONFIG.tags = ${JSON.stringify(tags)};
   $CONFIG.playList = ${JSON.stringify(playList)};
-  $CONFIG.playList2 = ${JSON.stringify(playList2)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mfind.js')}"></script>

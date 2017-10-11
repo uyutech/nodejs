@@ -4,14 +4,12 @@
 
 'use strict';
 
-const Bignumber = require('bignumber.js');
-
 module.exports = {
   getAssetUrl(url) {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?0';
+    return '/public' + url + '?2';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -59,10 +57,8 @@ module.exports = {
       <meta name="wap-font-scale" content="no"/>
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">`;
   },
-  encryptID: function(id) {},
-  decryptID: function(id) {},
   weiboAppKey: '2345825162',
   weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
-  weiboRedirect: 'http://circling.cc/oauth/login',
+  weiboRedirect: 'http://test.circling.cc/oauth/login',
   $CONFIG: 'var $CONFIG = {}; $CONFIG.startTime = Date.now();',
 };

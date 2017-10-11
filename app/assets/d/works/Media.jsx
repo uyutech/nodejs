@@ -8,15 +8,35 @@ import Video from './Video.jsx';
 class Media extends migi.Component {
   constructor(...data) {
     super(...data);
+    let self = this;
+    self.on(migi.Event.DOM, function() {
+      let audio = self.ref.audio;
+      let video = self.ref.video;
+      if(audio) {
+        audio.on('switchTo', function(data) {
+          self.emit('switchTo', data);
+        });
+      }
+      if(video) {
+        video.on('switchTo', function(index, data) {
+          self.emit('switchTo', data);
+        });
+      }
+    });
   }
   switchType(type) {
+    let self = this;
+    let audio = self.ref.audio;
+    let video = self.ref.video;
     if(type === 'audio') {
-      this.ref.video.pause().hide();
-      this.ref.audio.show();
+      video.pause().hide();
+      audio.show();
+      self.emit('switchTo', audio.datas[audio.index]);
     }
     else if(type === 'video') {
-      this.ref.audio.pause().hide();
-      this.ref.video.show();
+      audio.pause().hide();
+      video.show();
+      self.emit('switchTo', video.datas[video.index]);
     }
   }
   render() {

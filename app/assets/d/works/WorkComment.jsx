@@ -28,33 +28,32 @@ class WorkComment extends migi.Component {
       });
       let comment = self.ref.comment;
       comment.on('chooseSubComment', function(rid, cid, name) {
-        self.rootId = rid;
-        self.replayId = cid;
-        self.replayName = name;
+        self.emit('chooseSubComment', rid, cid);
+        // self.rootId = rid;
+        // self.replayId = cid;
+        // self.replayName = name;
       });
       comment.on('closeSubComment', function() {
-        self.clickReplay();
+        self.emit('closeSubComment');
+        // self.clickReplay();
       });
     });
   }
-  @bind showComment
-  @bind rootId = null
-  @bind replayId = null
-  @bind replayName
-  @bind hasContent
+  // @bind rootId = null
+  // @bind replayId = null
+  // @bind replayName
+  // @bind hasContent
   @bind loading
   @bind worksID
-  @bind subWorkID
-  @bind barrageTime
+  // @bind subWorkID
+  // @bind barrageTime
   show() {
     let self = this;
     $(self.element).removeClass('fn-hide');
-    self.showComment = true;
   }
   hide() {
     let self = this;
     $(self.element).addClass('fn-hide');
-    self.showComment = false;
     skip = 0;
   }
   load() {

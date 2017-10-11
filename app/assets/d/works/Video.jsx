@@ -129,6 +129,7 @@ class Video extends migi.Component {
     if(this.index !== tvd.props.rel) {
       this.index = tvd.props.rel;
       this.video.element.src = this.datas[this.index].FileUrl;
+      this.emit('switchTo', this.datas[this.index]);
     }
   }
   vmousedown(e) {
