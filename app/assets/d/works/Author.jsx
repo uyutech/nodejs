@@ -2,6 +2,7 @@
  * Created by army8735 on 2017/9/21.
  */
 
+import util from '../common/util';
 import authorTemplate from '../component/author/authorTemplate';
 
 class Author extends migi.Component {
@@ -36,16 +37,16 @@ class Author extends migi.Component {
           temp.push(<span class="item">
             <small>{ label }</small>
             <a class="item" href={ `/author/${item.ID}` } title={ item.AuthName }>
-              <img src={ item.HeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+              <img src={ util.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
               <span>{ item.AuthName }</span>
             </a>
           </span>);
         }
         else {
           temp.push(
-            <a class="item" href={`/author/${item.ID}`}>
-              <img src={item.HeadUrl}/>
-              <span>{item.AuthName}</span>
+            <a class="item" href={ `/author/${item.ID}` }>
+              <img src={ util.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+              <span>{ item.AuthName }</span>
             </a>
           );
         }

@@ -10,6 +10,7 @@ module.exports = {
     mauthor: './app/assets/m/author/index.jsx',
     msearch: './app/assets/m/search/index.jsx',
     dcommon: './app/assets/d/common/index.js',
+    dcommon2: './app/assets/d/common/index2.js',
     dindex: './app/assets/d/index/index.jsx',
     dfind: './app/assets/d/find/index.jsx',
     dworks: './app/assets/d/works/index.jsx',
@@ -17,6 +18,7 @@ module.exports = {
     dsearch: './app/assets/d/search/index.jsx',
     dmy: './app/assets/d/my/index.jsx',
     dlogin: './app/assets/d/login/index.jsx',
+    activity: './app/assets/activity/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

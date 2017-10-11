@@ -11,6 +11,7 @@ module.exports = {
     dsearch: './app/view/d/search.jsx',
     dmy: './app/view/d/my.jsx',
     dlogin: './app/view/d/login.jsx',
+    activity: './app/view/activity.jsx',
   },
   output: {
     path: __dirname + '/app/view',

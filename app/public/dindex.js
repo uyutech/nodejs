@@ -63,28 +63,28 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 104);
+/******/ 	return __webpack_require__(__webpack_require__.s = 113);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 104:
+/***/ 113:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(81);
+__webpack_require__(90);
 
-var _TopNav = __webpack_require__(63);
+var _TopNav = __webpack_require__(47);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(62);
+var _CIframe = __webpack_require__(72);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(65);
+var _QuanNiang = __webpack_require__(74);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
@@ -139,54 +139,7 @@ migi.render(migi.createVd("div", [["class", "info"]]), document.body);
 
 /***/ }),
 
-/***/ 62:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var CIframe = function (_migi$Component) {
-  _inherits(CIframe, _migi$Component);
-
-  function CIframe() {
-    var _ref;
-
-    _classCallCheck(this, CIframe);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = CIframe.__proto__ || Object.getPrototypeOf(CIframe)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(CIframe, [{
-    key: "render",
-    value: function render() {
-      return migi.createVd("iframe", [["class", "cp-ciframe"], ["src", "about:blank"], ["frameBorder", "0"], ["scrolling", "auto"], ["allowfullscreen", "allowfullscreen"]]);
-    }
-  }]);
-
-  return CIframe;
-}(migi.Component);
-
-migi.name(CIframe, "CIframe");exports.default = CIframe;
-
-/***/ }),
-
-/***/ 63:
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -265,7 +218,54 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 65:
+/***/ 72:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CIframe = function (_migi$Component) {
+  _inherits(CIframe, _migi$Component);
+
+  function CIframe() {
+    var _ref;
+
+    _classCallCheck(this, CIframe);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = CIframe.__proto__ || Object.getPrototypeOf(CIframe)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(CIframe, [{
+    key: "render",
+    value: function render() {
+      return migi.createVd("iframe", [["class", "cp-ciframe"], ["src", "about:blank"], ["frameBorder", "0"], ["scrolling", "auto"], ["allowfullscreen", "allowfullscreen"]]);
+    }
+  }]);
+
+  return CIframe;
+}(migi.Component);
+
+migi.name(CIframe, "CIframe");exports.default = CIframe;
+
+/***/ }),
+
+/***/ 74:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -330,7 +330,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 81:
+/***/ 90:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

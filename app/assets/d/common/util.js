@@ -6,6 +6,9 @@ let util = {
   goto: function(url) {
     location.href = url;
   },
+  autoSsl: function(url) {
+    return (url || '').replace(/^https?:\/\//i, '//');
+  },
   img192_192: function(url) {
     return url ? url + '-192_192' : url;
   },

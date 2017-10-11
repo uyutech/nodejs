@@ -19,7 +19,7 @@ class Comment extends migi.Component {
     super(...data);
     let self = this;
     let html = '';
-    self.props.data.forEach(function(item) {
+    (self.props.data || []).forEach(function(item) {
       html += self.genComment(item);
     });
     self.html = html;

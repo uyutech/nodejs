@@ -44,4 +44,6 @@ module.exports = app => {
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
+
+  app.get('/activity/:id', 'activity.index');
 };

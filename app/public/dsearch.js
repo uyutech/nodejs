@@ -63,12 +63,30 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 110);
+/******/ 	return __webpack_require__(__webpack_require__.s = 119);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 10:
+/***/ 119:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(93);
+
+var _Search = __webpack_require__(77);
+
+var _Search2 = _interopRequireDefault(_Search);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var search = migi.preExist(migi.createCp(_Search2.default, [["kw", $CONFIG.kw], ["datas", $CONFIG.datas]]));
+
+/***/ }),
+
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -183,25 +201,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 110:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(84);
-
-var _Search = __webpack_require__(68);
-
-var _Search2 = _interopRequireDefault(_Search);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var search = migi.preExist(migi.createCp(_Search2.default, [["kw", $CONFIG.kw], ["datas", $CONFIG.datas]]));
-
-/***/ }),
-
-/***/ 68:
+/***/ 77:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -213,7 +213,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(10);
+var _authorTemplate = __webpack_require__(19);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -397,7 +397,7 @@ migi.name(Search, "Search");exports.default = Search;
 
 /***/ }),
 
-/***/ 84:
+/***/ 93:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -2,6 +2,8 @@
  * Created by army8735 on 2017/9/18.
  */
 
+'use strict';
+
 import './iframe';
 import MLogin from '../component/mlogin/MLogin.jsx';
 import Share from '../component/share/Share.jsx';

@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 80);
+/******/ 	return __webpack_require__(__webpack_require__.s = 83);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
+/***/ 0:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -80,6 +80,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 let util = {
   goto: function(url) {
     location.href = url;
+  },
+  autoSsl: function(url) {
+    return (url || '').replace(/^https?:\/\//i, '//');
   },
   img192_192: function(url) {
     return url ? url + '-192_192' : url;
@@ -147,84 +150,7 @@ let util = {
 
 /***/ }),
 
-/***/ 27:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _net = __webpack_require__(3);
-
-var _net2 = _interopRequireDefault(_net);
-
-var _Profile = __webpack_require__(47);
-
-var _Profile2 = _interopRequireDefault(_Profile);
-
-var _Follow = __webpack_require__(46);
-
-var _Follow2 = _interopRequireDefault(_Follow);
-
-var _Favor = __webpack_require__(45);
-
-var _Favor2 = _interopRequireDefault(_Favor);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var My = function (_migi$Component) {
-  _inherits(My, _migi$Component);
-
-  function My() {
-    var _ref;
-
-    _classCallCheck(this, My);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = My.__proto__ || Object.getPrototypeOf(My)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(My, [{
-    key: 'clickOut',
-    value: function clickOut(e) {
-      e.preventDefault();
-      _net2.default.postJSON('/api/login/loginOut', function (res) {
-        if (parent && parent !== window && parent.goto) {
-          parent.goto('/login');
-        } else {
-          location.href = '/login';
-        }
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo]]), migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]]), migi.createCp(_Favor2.default, [["ref", "favor"], ["list", this.props.favors]]), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
-    }
-  }]);
-
-  return My;
-}(migi.Component);
-
-migi.name(My, "My");exports.default = My;
-
-/***/ }),
-
-/***/ 3:
+/***/ 2:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -292,7 +218,84 @@ let net = {
 
 /***/ }),
 
-/***/ 45:
+/***/ 28:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _net = __webpack_require__(2);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _Profile = __webpack_require__(49);
+
+var _Profile2 = _interopRequireDefault(_Profile);
+
+var _Follow = __webpack_require__(48);
+
+var _Follow2 = _interopRequireDefault(_Follow);
+
+var _Favor = __webpack_require__(47);
+
+var _Favor2 = _interopRequireDefault(_Favor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var My = function (_migi$Component) {
+  _inherits(My, _migi$Component);
+
+  function My() {
+    var _ref;
+
+    _classCallCheck(this, My);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = My.__proto__ || Object.getPrototypeOf(My)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(My, [{
+    key: 'clickOut',
+    value: function clickOut(e) {
+      e.preventDefault();
+      _net2.default.postJSON('/api/login/loginOut', function (res) {
+        if (parent && parent !== window && parent.goto) {
+          parent.goto('/login');
+        } else {
+          location.href = '/login';
+        }
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo]]), migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]]), migi.createCp(_Favor2.default, [["ref", "favor"], ["list", this.props.favors]]), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
+    }
+  }]);
+
+  return My;
+}(migi.Component);
+
+migi.name(My, "My");exports.default = My;
+
+/***/ }),
+
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -354,7 +357,7 @@ migi.name(Favor, "Favor");exports.default = Favor;
 
 /***/ }),
 
-/***/ 46:
+/***/ 48:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -416,7 +419,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 47:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -428,11 +431,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(3);
+var _net = __webpack_require__(2);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(1);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -504,7 +507,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 80:
+/***/ 83:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -525,7 +528,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dmy.css') + '"/>\n</head>\n<body>\n<div id="page">' + my + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n  $CONFIG.follows = ' + JSON.stringify(follows) + ';\n  $CONFIG.favors = ' + JSON.stringify(favors) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dmy.js') + '"></script>\n</body>\n</html>';
 };
 
-var _My = __webpack_require__(27);
+var _My = __webpack_require__(28);
 
 var _My2 = _interopRequireDefault(_My);
 

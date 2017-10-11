@@ -17,12 +17,15 @@ module.exports = {
     }
     return 'http://172.19.118.93/' + url.replace(/^\//, '');
   },
+  autoSsl: function(url) {
+    return (url || '').replace(/^https?:\/\//i, '//');
+  },
   getDTopNav: function(data) {
     data = data || {};
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
       <title>${data.title || '转圈'}</title>
-      <link rel="icon" href="//zhuanquan.xyz/img/aede5930c001d6ed888ce4186a86502b.png" type="image/x-icon">
+      <link rel="icon" href="//zhuanquan.xin/img/526ac77cd8f453867cb378b4d22cffda.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>
       <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -47,7 +50,7 @@ module.exports = {
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
       <title>${data.title || '转圈'}</title>
-      <link rel="icon" href="//zhuanquan.xyz/img/aede5930c001d6ed888ce4186a86502b.png" type="image/x-icon">
+      <link rel="icon" href="//zhuanquan.xyz/img/526ac77cd8f453867cb378b4d22cffda.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>
       <meta name="apple-mobile-web-app-capable" content="yes"/>
