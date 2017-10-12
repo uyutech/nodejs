@@ -11,9 +11,12 @@ class Activity extends migi.Component {
     super(...data);
   }
   render() {
-    return <div class="activity">
+    return <div class="activity fn-clear">
       <div class="con" dangerouslySetInnerHTML={ this.props.postData.Content }/>
-      <ActivityComment/>
+      <ActivityComment ref="activityComment"
+                       id={ this.props.id }
+                       isLogin={ this.props.isLogin }
+                       commentData={ this.props.commentData }/>
     </div>;
   }
 }

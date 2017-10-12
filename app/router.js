@@ -41,6 +41,11 @@ module.exports = app => {
   app.post('/api/author/likeComment', app.middlewares.needLoginJson(), 'api.author.likeComment');
   app.post('/api/author/subCommentList', 'api.author.subCommentList');
   app.post('/api/author/delComment', app.middlewares.needLoginJson(), 'api.author.delComment');
+  app.post('/api/activity/commentList', 'api.activity.commentList');
+  app.post('/api/activity/addComment', app.middlewares.needLoginJson(), 'api.activity.addComment');
+  app.post('/api/activity/likeComment', app.middlewares.needLoginJson(), 'api.activity.likeComment');
+  app.post('/api/activity/subCommentList', 'api.activity.subCommentList');
+  app.post('/api/activity/delComment', app.middlewares.needLoginJson(), 'api.activity.delComment');
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');

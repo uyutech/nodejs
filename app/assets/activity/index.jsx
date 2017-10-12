@@ -8,4 +8,8 @@ import './index.less';
 
 import Activity from './Activity.jsx';
 
-let activity = migi.preExist(<Activity postData={ $CONFIG.postData }/>);
+let activity = migi.preExist(<Activity
+  postData={ $CONFIG.postData }
+  id={ $CONFIG.id }
+  commentData={ $CONFIG.commentData }
+  isLogin={ $CONFIG.isLogin }/>);

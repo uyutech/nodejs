@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 83);
+/******/ 	return __webpack_require__(__webpack_require__.s = 84);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -234,15 +234,15 @@ var _net = __webpack_require__(2);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Profile = __webpack_require__(49);
+var _Profile = __webpack_require__(50);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(48);
+var _Follow = __webpack_require__(49);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _Favor = __webpack_require__(47);
+var _Favor = __webpack_require__(48);
 
 var _Favor2 = _interopRequireDefault(_Favor);
 
@@ -295,7 +295,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 47:
+/***/ 48:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -357,7 +357,7 @@ migi.name(Favor, "Favor");exports.default = Favor;
 
 /***/ }),
 
-/***/ 48:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -419,7 +419,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 49:
+/***/ 50:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -507,7 +507,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 83:
+/***/ 84:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

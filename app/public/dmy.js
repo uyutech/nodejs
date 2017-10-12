@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 118);
+/******/ 	return __webpack_require__(__webpack_require__.s = 119);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 115:
+/***/ 116:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -130,7 +130,7 @@ migi.name(Favor, "Favor");exports.default = Favor;
 
 /***/ }),
 
-/***/ 116:
+/***/ 117:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -192,7 +192,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 117:
+/***/ 118:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -208,7 +208,7 @@ var _net = __webpack_require__(6);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(4);
+var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -280,7 +280,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 118:
+/***/ 119:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -298,7 +298,7 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 4:
+/***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -467,15 +467,15 @@ var _net = __webpack_require__(6);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Profile = __webpack_require__(117);
+var _Profile = __webpack_require__(118);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(116);
+var _Follow = __webpack_require__(117);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _Favor = __webpack_require__(115);
+var _Favor = __webpack_require__(116);
 
 var _Favor2 = _interopRequireDefault(_Favor);
 

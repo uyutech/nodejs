@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 78);
+/******/ 	return __webpack_require__(__webpack_require__.s = 79);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -339,7 +339,7 @@ var Activity = function (_migi$Component) {
   _createClass(Activity, [{
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "activity"]], [migi.createVd("div", [["class", "con"], ["dangerouslySetInnerHTML", this.props.postData.Content]]), migi.createCp(_ActivityComment2.default, [])]);
+      return migi.createVd("div", [["class", "activity fn-clear"]], [migi.createVd("div", [["class", "con"], ["dangerouslySetInnerHTML", this.props.postData.Content]]), migi.createCp(_ActivityComment2.default, [["ref", "activityComment"], ["id", this.props.id], ["isLogin", this.props.isLogin], ["commentData", this.props.commentData]])]);
     }
   }]);
 
@@ -378,6 +378,10 @@ var _Page = __webpack_require__(9);
 
 var _Page2 = _interopRequireDefault(_Page);
 
+var _SubCmt = __webpack_require__(46);
+
+var _SubCmt2 = _interopRequireDefault(_SubCmt);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -391,6 +395,8 @@ var take = 10;
 var sortType = 0;
 var myComment = 0;
 var currentCount = 0;
+var ajax = void 0;
+var loadEnd = void 0;
 
 var ActivityComment = function (_migi$Component) {
   _inherits(ActivityComment, _migi$Component);
@@ -404,13 +410,188 @@ var ActivityComment = function (_migi$Component) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = ActivityComment.__proto__ || Object.getPrototypeOf(ActivityComment)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = ActivityComment.__proto__ || Object.getPrototypeOf(ActivityComment)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var subCmt = self.ref.subCmt;
+      var comment = self.ref.comment;
+      var page = self.ref.page;
+      page.on('page', function (i) {
+        skip = (i - 1) * take;
+        self.loadPage();
+      });
+      subCmt.on('submit', function (content) {
+        subCmt.isCommentSending = true;
+        var rootID = self.rootID;
+        self.isCommentSending = true;
+        _net2.default.postJSON('/api/activity/addComment', {
+          parentID: self.parentID,
+          rootID: self.rootID,
+          activityID: self.props.id,
+          content: content
+        }, function (res) {
+          if (res.success) {
+            subCmt.value = '';
+            subCmt.hasCommentContent = false;
+            if (rootID === -1) {
+              comment.prependData(res.data);
+              comment.message = '';
+            } else {
+              comment.prependChild(res.data);
+            }
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          subCmt.isCommentSending = false;
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          subCmt.isCommentSending = false;
+        });
+      });
+    });
+    return _this;
   }
 
   _createClass(ActivityComment, [{
+    key: 'load',
+    value: function load() {
+      var self = this;
+      var comment = self.ref.comment;
+      var page = self.ref.page;
+      comment.message = '读取中...';
+      page.total = 1;
+      if (ajax) {
+        ajax.abort();
+      }
+      self.loading = true;
+      ajax = _net2.default.postJSON('/api/activity/commentList', { activityID: self.props.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
+        if (res.success) {
+          var data = res.data;
+          currentCount = data.Size;
+          skip += take;
+          if (data.data.length) {
+            comment.message = '';
+            comment.appendData(res.data.data);
+            page.total = Math.ceil(currentCount / take);
+          } else {
+            comment.appendData(res.data.data);
+            comment.message = '暂无评论';
+            loadEnd = true;
+          }
+        } else {
+          if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          }
+          comment.message = res.message || _util2.default.ERROR_MESSAGE;
+        }
+        self.loading = false;
+      }, function (res) {
+        comment.message = res.message || _util2.default.ERROR_MESSAGE;
+        self.loading = false;
+      });
+    }
+  }, {
+    key: 'loadPage',
+    value: function loadPage() {
+      var self = this;
+      var comment = self.ref.comment;
+      comment.message = '读取中...';
+      comment.setData();
+      if (ajax) {
+        ajax.abort();
+      }
+      self.loading = true;
+      ajax = _net2.default.postJSON('/api/activity/commentList', { activityID: self.props.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
+        if (res.success) {
+          var data = res.data;
+          skip += take;
+          if (data.data.length) {
+            comment.message = '';
+            comment.appendData(res.data.data);
+          } else {
+            comment.appendData(res.data.data);
+            comment.message = '暂无评论';
+            loadEnd = true;
+          }
+        } else {
+          if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          }
+          comment.message = res.message || _util2.default.ERROR_MESSAGE;
+        }
+        self.loading = false;
+      }, function (res) {
+        comment.message = res.message || _util2.default.ERROR_MESSAGE;
+        self.loading = false;
+      });
+    }
+  }, {
+    key: 'switchType',
+    value: function switchType(e, vd) {
+      var $ul = $(vd.element);
+      $ul.toggleClass('alt');
+      $ul.find('li').toggleClass('cur');
+      var rel = $ul.find('.cur').attr('rel');
+      currentCount = 0;
+      sortType = rel;
+      skip = 0;
+      if (ajax) {
+        ajax.abort();
+      }
+      loadEnd = false;
+      this.loading = false;
+      this.ref.comment.clearData();
+      this.load();
+    }
+  }, {
+    key: 'switchType2',
+    value: function switchType2(e, vd) {
+      var $ul = $(vd.element);
+      $ul.toggleClass('alt');
+      $ul.find('li').toggleClass('cur');
+      var rel = $ul.find('.cur').attr('rel');
+      currentCount = 0;
+      myComment = rel;
+      skip = 0;
+      if (ajax) {
+        ajax.abort();
+      }
+      loadEnd = false;
+      this.loading = false;
+      this.ref.comment.clearData();
+      this.load();
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "comments"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", 1]]), migi.createCp(_Comment2.default, [["ref", "comment"]])]);
+      return migi.createVd("div", [["class", "comments"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论"]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / take)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/activity/likeComment"], ["subUrl", "/api/activity/subCommentList"], ["delUrl", "/api/activity/delComment"], ["data", this.props.commentData.data]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["placeholder", "夸夸这个活动吧"]])]);
+    }
+  }, {
+    key: 'rootID',
+    set: function set(v) {
+      this.__setBind("rootID", v);this.__data("rootID");
+    },
+    get: function get() {
+      if (this.__initBind("rootID")) this.__setBind("rootID", -1);return this.__getBind("rootID");
+    }
+  }, {
+    key: 'parentID',
+    set: function set(v) {
+      this.__setBind("parentID", v);this.__data("parentID");
+    },
+    get: function get() {
+      if (this.__initBind("parentID")) this.__setBind("parentID", -1);return this.__getBind("parentID");
+    }
+  }, {
+    key: 'loading',
+    set: function set(v) {
+      this.__setBind("loading", v);this.__data("loading");
+    },
+    get: function get() {
+      return this.__getBind("loading");
     }
   }]);
 
@@ -421,7 +602,143 @@ migi.name(ActivityComment, "ActivityComment");exports.default = ActivityComment;
 
 /***/ }),
 
-/***/ 78:
+/***/ 46:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SubCmt = function (_migi$Component) {
+  _inherits(SubCmt, _migi$Component);
+
+  function SubCmt() {
+    var _ref;
+
+    _classCallCheck(this, SubCmt);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = SubCmt.__proto__ || Object.getPrototypeOf(SubCmt)).call.apply(_ref, [this].concat(data)));
+
+    _this.value = _this.props.value || '';
+    _this.hasCommentContent = _this.value.trim().length;
+    _this.maxlength = _this.props.maxlength;
+    _this.subText = _this.props.subText;
+    _this.placeholder = _this.props.placeholder;
+    return _this;
+  }
+
+  _createClass(SubCmt, [{
+    key: 'input',
+    value: function input(e, vd) {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+      } else {
+        this.hasCommentContent = $(vd.element).val().trim().length;
+      }
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      if (!window.$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+    }
+  }, {
+    key: 'submit',
+    value: function submit(e) {
+      e.preventDefault();
+      if (this.hasCommentContent) {
+        this.emit('submit', this.value);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-subcmt"]], [migi.createVd("form", [["class", "fn-clear"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj("placeholder", this, function () {
+        return this.placeholder || '夸夸这个作品吧';
+      })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
+        return this.maxlength || 120;
+      })], ["value", new migi.Obj("value", this, function () {
+        return this.value;
+      })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj(["hasCommentContent", "isCommentSending"], this, function () {
+        return 'submit' + (this.hasCommentContent && !this.isCommentSending ? '' : ' dis');
+      })], ["value", new migi.Obj("subText", this, function () {
+        return this.subText || '发布评论';
+      })]])])]);
+    }
+  }, {
+    key: 'hasCommentContent',
+    set: function set(v) {
+      this.__setBind("hasCommentContent", v);this.__data("hasCommentContent");
+    },
+    get: function get() {
+      return this.__getBind("hasCommentContent");
+    }
+  }, {
+    key: 'isCommentSending',
+    set: function set(v) {
+      this.__setBind("isCommentSending", v);this.__data("isCommentSending");
+    },
+    get: function get() {
+      return this.__getBind("isCommentSending");
+    }
+  }, {
+    key: 'maxlength',
+    set: function set(v) {
+      this.__setBind("maxlength", v);this.__data("maxlength");
+    },
+    get: function get() {
+      return this.__getBind("maxlength");
+    }
+  }, {
+    key: 'placeholder',
+    set: function set(v) {
+      this.__setBind("placeholder", v);this.__data("placeholder");
+    },
+    get: function get() {
+      return this.__getBind("placeholder");
+    }
+  }, {
+    key: 'subText',
+    set: function set(v) {
+      this.__setBind("subText", v);this.__data("subText");
+    },
+    get: function get() {
+      return this.__getBind("subText");
+    }
+  }, {
+    key: 'value',
+    set: function set(v) {
+      this.__setBind("value", v);this.__data("value");
+    },
+    get: function get() {
+      if (this.__initBind("value")) this.__setBind("value", '');return this.__getBind("value");
+    }
+  }]);
+
+  return SubCmt;
+}(migi.Component);
+
+migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
+
+/***/ }),
+
+/***/ 79:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -434,15 +751,17 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (data) {
   migi.Element.resetUid();
   var userInfo = data.userInfo;
+  var isLogin = data.isLogin;
   var id = data.id;
-  var postData = data.postData;console.log(postData);
+  var postData = data.postData;
+  var commentData = data.commentData;
 
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo]]));
-  var activity = migi.preRender(migi.createCp(_Activity2.default, [["postData", postData]]));
+  var activity = migi.preRender(migi.createCp(_Activity2.default, [["isLogin", isLogin], ["id", id], ["postData", postData], ["commentData", commentData]]));
 
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav({
     title: postData.Title
-  }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon2.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/activity.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<div id="page">' + activity + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n  $CONFIG.id = ' + JSON.stringify(id) + ';\n  $CONFIG.postData = ' + JSON.stringify(postData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon2.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/activity.js') + '"></script>\n</body>\n</html>';
+  }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon2.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/activity.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<div id="page">' + activity + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n  $CONFIG.isLogin = ' + JSON.stringify(isLogin) + ';\n  $CONFIG.id = ' + JSON.stringify(id) + ';\n  $CONFIG.postData = ' + JSON.stringify(postData) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon2.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/activity.js') + '"></script>\n</body>\n</html>';
 };
 
 var _TopNav = __webpack_require__(10);
