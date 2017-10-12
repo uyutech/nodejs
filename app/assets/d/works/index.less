@@ -13,6 +13,7 @@
     margin-bottom:0.2rem;
     .pic{
       float:left;
+      height:1rem;
       border-radius:0.15rem;
       img{
         display:block;
@@ -823,9 +824,6 @@
       &.authors{
         overflow:hidden;
         font-size:0.12rem;
-        .c{
-          padding-bottom:0;
-        }
         ul{
           margin-bottom:0.1rem;
           &:last-child{
@@ -920,16 +918,11 @@
                   .name{
                     display:inline-block;
                     margin-right:0.1rem;
-                    color:#555;
                     font-size:0.12rem;
                   }
                   .time{
                     display:inline-block;
-                    color:#A8A8A8;
-                    font-size:0.12rem;
-                  }
-                  p{
-                    color:#A8A8A8;
+                    color:@secondTextColor;
                     font-size:0.12rem;
                   }
                 }
@@ -991,6 +984,9 @@
       &.timeline{
         font-size:0.14rem;
         color:@secondTextColor;
+        .c{
+          padding-top:0;
+        }
       }
     }
   }

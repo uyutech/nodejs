@@ -119,15 +119,10 @@
 .cp-comment .list > li > .t > .profile .txt .name {
   display: inline-block;
   margin-right: 0.1rem;
-  font-size: 0.12rem;
 }
 .cp-comment .list > li > .t > .profile .txt .time {
   display: inline-block;
   color: #B1C0C9;
-  font-size: 0.12rem;
-}
-.cp-comment .list > li > .t > .profile .txt p {
-  color: #A8A8A8;
   font-size: 0.12rem;
 }
 .cp-comment .list > li > .t > .fn {
@@ -279,7 +274,6 @@
 .cp-comment .list > li > .list2 li .t > .profile .txt .name {
   display: inline-block;
   margin-left: 0.1rem;
-  font-size: 0.12rem;
 }
 .cp-comment .list > li > .list2 li .t > .profile .txt .time {
   display: inline-block;
@@ -297,14 +291,6 @@
   border-left-color: transparent;
   -webkit-transform: scaleX(2.2);
           transform: scaleX(2.2);
-}
-.cp-comment .list > li > .list2 li .t > .profile .txt .name2 {
-  font-size: 0.12rem;
-  color: #A8A8A8;
-}
-.cp-comment .list > li > .list2 li .t > .profile .txt p {
-  color: #A8A8A8;
-  font-size: 0.12rem;
 }
 .cp-comment .list > li > .list2 li .t > .fn {
   float: right;

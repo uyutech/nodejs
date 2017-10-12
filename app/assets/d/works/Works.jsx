@@ -187,7 +187,11 @@ class Works extends migi.Component {
         </ul>
         <div class="info">
           <Author authorList={ this.authorList }/>
-          <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+          {
+            this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
+              ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+              : ''
+          }
           {
             this.textData
               ? <Text datas={ this.textData }/>
