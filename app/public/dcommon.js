@@ -17202,7 +17202,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66)(module)))
 
 /***/ }),
 /* 45 */,
@@ -17385,7 +17385,8 @@ migi.name(Share, "Share");exports.default = Share;
 /* 62 */,
 /* 63 */,
 /* 64 */,
-/* 65 */
+/* 65 */,
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17415,11 +17416,11 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 66 */,
 /* 67 */,
 /* 68 */,
 /* 69 */,
-/* 70 */
+/* 70 */,
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17461,7 +17462,6 @@ migi.eventBus.on('SET_VOLUME', function (v) {
 });
 
 /***/ }),
-/* 71 */,
 /* 72 */,
 /* 73 */,
 /* 74 */,
@@ -17477,13 +17477,13 @@ migi.eventBus.on('SET_VOLUME', function (v) {
 /* 84 */,
 /* 85 */,
 /* 86 */,
-/* 87 */
+/* 87 */,
+/* 88 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 88 */,
 /* 89 */,
 /* 90 */,
 /* 91 */,
@@ -17633,9 +17633,9 @@ var _cookie = __webpack_require__(43);
 
 var _cookie2 = _interopRequireDefault(_cookie);
 
-__webpack_require__(70);
+__webpack_require__(71);
 
-__webpack_require__(87);
+__webpack_require__(88);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

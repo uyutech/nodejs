@@ -25,29 +25,13 @@ class Works extends migi.Component {
     self.setWorks(self.props.worksDetail.Works_Items);
     self.on(migi.Event.DOM, function() {
       let media = self.ref.media;
-      media.on('switchTo', function(data) {
-        self.workID = data.ItemID;
-      });
       let workComment = self.ref.workComment;
-      workComment.on('chooseSubComment', function(rid, cid, name) {
-        self.rootID = rid;
-        self.parentID = cid;
-        // self.replayName = name;
-      });
-      workComment.on('closeSubComment', function() {
-        self.rootID = -1;
-        self.parentID = -1;
+      media.on('switchTo', function(data) {
+        workComment.workID = data.ItemID;
       });
     });
   }
   @bind worksID
-  @bind workID
-  @bind rootID = -1
-  @bind parentID = -1
-  @bind content
-  @bind barrageTime = 0
-  @bind hasCommentContent
-  @bind isCommentSending
   setWorks(works) {
     let self = this;
     let workHash = {};
@@ -167,59 +151,6 @@ class Works extends migi.Component {
       this.ref.media.switchType(type);
     }
   }
-  input(e, vd) {
-    if(!window.$CONFIG.isLogin) {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-    else {
-      let v = $(vd.element).val().trim();
-      this.hasCommentContent = v.length > 0;
-    }
-  }
-  focus(e, vd) {
-    if(!window.$CONFIG.isLogin) {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-  }
-  submit(e) {
-    e.preventDefault();
-    let self = this;
-    if(self.hasCommentContent) {
-      let $input = $(this.ref.input.element);
-      let rootID = self.rootID;
-      self.isCommentSending = true;
-      net.postJSON('/api/works/addComment', {
-        parentID: self.parentID,
-        rootID,
-        content: $input.val(),
-        worksID: self.worksID,
-        workID: self.workID,
-        barrageTime: self.barrageTime,
-      }, function(res) {
-        if(res.success) {
-          $input.val('');
-          self.hasCommentContent = false;
-          if(rootID === -1) {
-            self.ref.workComment.ref.comment.prependData(res.data);
-            self.ref.workComment.ref.comment.message = '';
-          }
-          else {
-            self.ref.workComment.ref.comment.prependChild(res.data);
-          }
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        self.isCommentSending = false;
-      }, function(res) {
-        alert(res.message || util.ERROR_MESSAGE);
-        self.isCommentSending = false;
-      });
-    }
-  }
   render() {
     return <div class="works fn-clear">
       <Title ref="title"
@@ -246,6 +177,7 @@ class Works extends migi.Component {
         <WorkComment ref="workComment"
                      isLogin={ this.props.isLogin }
                      worksID={ this.props.worksID }
+                     workID={ this.workID }
                      commentData={ this.props.commentData }/>
       </div>
       <div class="side">
@@ -275,13 +207,6 @@ class Works extends migi.Component {
               : ''
           }
         </div>
-      </div>
-      <div class="form">
-        <form class="fn-clear" ref="form" onSubmit={ this.submit }>
-          <input type="text" class="text" ref="input" placeholder="夸夸这个作品吧"
-                 onInput={ this.input } onFocus={ this.focus } maxlength="120"/>
-          <input type="submit" class={ 'submit' + (this.hasCommentContent && !this.isCommentSending ? '' : ' dis') } value="发布评论"/>
-        </form>
       </div>
     </div>;
   }

@@ -74,9 +74,9 @@
 "use strict";
 
 
-__webpack_require__(91);
+__webpack_require__(92);
 
-var _Login = __webpack_require__(75);
+var _Login = __webpack_require__(76);
 
 var _Login2 = _interopRequireDefault(_Login);
 
@@ -86,7 +86,7 @@ var login = migi.preExist(migi.createCp(_Login2.default, []));
 
 /***/ }),
 
-/***/ 75:
+/***/ 76:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -144,7 +144,7 @@ migi.name(Login, "Login");exports.default = Login;
 
 /***/ }),
 
-/***/ 91:
+/***/ 92:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

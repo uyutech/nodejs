@@ -30,13 +30,21 @@ class ActivityComment extends migi.Component {
         skip = (i - 1) * take;
         self.loadPage();
       });
+      comment.on('chooseSubComment', function(rid, cid, name) {
+        self.rootID = rid;
+        self.parentID = cid;
+      });
+      comment.on('closeSubComment', function() {
+        self.rootID = -1;
+        self.parentID = -1;
+      });
       subCmt.on('submit', function(content) {
         subCmt.isCommentSending = true;
         let rootID = self.rootID;
-        self.isCommentSending = true;
+        let parentID = self.parentID;
         net.postJSON('/api/activity/addComment', {
-          parentID: self.parentID,
-          rootID: self.rootID,
+          parentID,
+          rootID,
           activityID: self.props.id,
           content,
         }, function(res) {

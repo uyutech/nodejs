@@ -101,7 +101,7 @@ let util = {
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -473,7 +473,7 @@ let net = {
 
 /***/ }),
 
-/***/ 34:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -743,7 +743,7 @@ migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
 
-/***/ 36:
+/***/ 37:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1618,7 +1618,7 @@ var _Video = __webpack_require__(77);
 
 var _Video2 = _interopRequireDefault(_Video);
 
-var _itemTemplate = __webpack_require__(36);
+var _itemTemplate = __webpack_require__(37);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
@@ -2287,7 +2287,7 @@ var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(18);
+var _Comment = __webpack_require__(19);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -2571,7 +2571,7 @@ var _BotNav = __webpack_require__(4);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Works = __webpack_require__(34);
+var _Works = __webpack_require__(35);
 
 var _Works2 = _interopRequireDefault(_Works);
 

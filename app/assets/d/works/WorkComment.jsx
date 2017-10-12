@@ -6,6 +6,7 @@ import net from '../common/net';
 import util from '../common/util';
 import Comment from '../component/comment/Comment.jsx';
 import Page from '../component/page/Page.jsx';
+import SubCmt from '../component/subcmt/SubCmt.jsx';
 
 let skip = 0;
 let take = 10;
@@ -20,7 +21,9 @@ class WorkComment extends migi.Component {
     super(...data);
     let self = this;
     self.worksID = self.props.worksID;
+    self.workID = self.props.workID;
     self.on(migi.Event.DOM, function() {
+      let subCmt = self.ref.subCmt;
       let page = self.ref.page;
       page.on('page', function(i) {
         skip = (i - 1) * take;
@@ -28,34 +31,56 @@ class WorkComment extends migi.Component {
       });
       let comment = self.ref.comment;
       comment.on('chooseSubComment', function(rid, cid, name) {
-        self.emit('chooseSubComment', rid, cid);
-        // self.rootId = rid;
-        // self.replayId = cid;
-        // self.replayName = name;
+        self.rootID = rid;
+        self.parentID = cid;
       });
       comment.on('closeSubComment', function() {
-        self.emit('closeSubComment');
-        // self.clickReplay();
+        self.rootID = -1;
+        self.parentID = -1;
+      });
+      subCmt.on('submit', function(content) {
+        subCmt.isCommentSending = true;
+        let rootID = self.rootID;
+        let parentID = self.parentID;
+        net.postJSON('/api/works/addComment', {
+          parentID: self.parentID,
+          rootID: self.rootID,
+          worksID: self.worksID,
+          workID: self.workID,
+          barrageTime: self.barrageTime,
+          content,
+        }, function(res) {
+          if(res.success) {
+            subCmt.value = '';
+            subCmt.hasCommentContent = false;
+            if(rootID === -1) {
+              comment.prependData(res.data);
+              comment.message = '';
+            }
+            else {
+              comment.prependChild(res.data);
+            }
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+          }
+          subCmt.isCommentSending = false;
+        }, function(res) {
+          alert(res.message || util.ERROR_MESSAGE);
+          subCmt.isCommentSending = false;
+        });
       });
     });
   }
-  // @bind rootId = null
-  // @bind replayId = null
-  // @bind replayName
-  // @bind hasContent
   @bind loading
   @bind worksID
-  // @bind subWorkID
-  // @bind barrageTime
-  show() {
-    let self = this;
-    $(self.element).removeClass('fn-hide');
-  }
-  hide() {
-    let self = this;
-    $(self.element).addClass('fn-hide');
-    skip = 0;
-  }
+  @bind workID
+  @bind rootID = -1
+  @bind parentID = -1
+  @bind barrageTime = 0
   load() {
     let self = this;
     let comment = self.ref.comment;
@@ -166,60 +191,6 @@ class WorkComment extends migi.Component {
     this.replayName = null;
     this.rootId = null;
   }
-  input(e, vd) {
-    if(window.$CONFIG.isLogin !== 'True') {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-    else {
-      let v = $(vd.element).val().trim();
-      this.hasContent = v.length > 0;
-    }
-  }
-  focus(e, vd) {
-    if(window.$CONFIG.isLogin !== 'True') {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-  }
-  submit(e) {
-    e.preventDefault();
-    let self = this;
-    if(self.hasContent) {
-      let $input = $(this.ref.input.element);
-      let Content = $input.val();
-      let ParentID = self.replayId !== null ? self.replayId : -1;
-      let RootID = self.rootId !== null ? self.rootId : -1;
-      self.loading = true;
-      util.postJSON('api/works/AddComment', {
-        ParentID,
-        RootID,
-        Content,
-        subWorkID: self.subWorkID,
-        BarrageTime: self.barrageTime
-      }, function(res) {
-        if(res.success) {
-          $input.val('');
-          self.hasContent = false;
-          if(RootID === -1) {
-            self.ref.comment.prependData(res.data);
-            self.ref.comment.message = '';
-          }
-          else {
-            self.ref.comment.prependChild(res.data);
-          }
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        self.loading = false;
-      }, function(res) {
-        alert(res.message || util.ERROR_MESSAGE);
-        self.loading = false;
-      });
-    }
-  }
   render() {
     return <div class="comments">
       <div class="fn">
@@ -242,6 +213,8 @@ class WorkComment extends migi.Component {
                subUrl="/api/works/subCommentList"
                delUrl="/api/works/delComment"
                data={ this.props.commentData.data }/>
+      <SubCmt ref="subCmt"
+              placeholder="夸夸这个作品吧"/>
     </div>;
   }
 }
