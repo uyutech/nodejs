@@ -29,19 +29,19 @@ class Comment extends migi.Component {
 
     self.on(migi.Event.DOM, function() {
       let $root = $(self.element);
-      $root.on('click', '.zan', function() {
-        let $span = $(this);
-        let commentID = $span.attr('cid');
+      $root.on('click', '.like', function() {
+        let $elem = $(this);
+        let commentID = $elem.attr('cid');
         net.postJSON(self.props.zanUrl, { commentID }, function(res) {
           if(res.success) {
             let data = res.data;
             if(data.State === 'likeWordsUser') {
-              $span.addClass('has');
+              $elem.addClass('liked');
             }
             else {
-              $span.removeClass('has');
+              $elem.removeClass('liked');
             }
-            $span.find('small').text(data.LikeCount);
+            $elem.text(data.LikeCount);
           }
           else if(res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
@@ -51,8 +51,8 @@ class Comment extends migi.Component {
           }
         });
       });
-      $root.on('click', '.slide', function() {
-        self.slide($(this));
+      $root.on('click', '.slide .sub, .slide span', function() {
+        self.slide($(this).parent());
       });
       $root.on('click', '.more', function() {
         let $message = $(this);
@@ -225,8 +225,6 @@ class Comment extends migi.Component {
           </div>
         </div>
         <div class="fn fn-clear">
-          <span cid={ item.Send_ID } class={ 'zan' + (item.IsLike ? ' has' : '') }><small>{ item.LikeCount }</small></span>
-          <a class="share" href={ '/?cid=' + item.Send_ID } target="_blank">分享</a>
           {
             item.ISOwn ? <span cid={ item.Send_ID } class="remove">删除</span> : ''
           }
@@ -235,7 +233,8 @@ class Comment extends migi.Component {
       <div class="c">
         <pre>{ item.Send_Content }<span class="placeholder"/></pre>
         <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_UserName }>
-          <small>{ item.sub_Count }</small>
+          <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
+          <small class="sub">{ item.sub_Count }</small>
           <span>收起</span>
         </div>
         <b class="arrow"/>
@@ -257,7 +256,6 @@ class Comment extends migi.Component {
           </div>
         </div>
         <div class="fn fn-clear">
-          <span cid={ item.Send_ID } class={ 'zan' + (item.IsLike ? ' has' : '') }><small>{ item.LikeCount }</small></span>
           {
             item.ISOwn ? <span cid={ item.Send_ID } class="remove">删除</span> : ''
           }
@@ -265,6 +263,10 @@ class Comment extends migi.Component {
       </div>
       <div class="c">
         <pre cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>{ item.Send_Content }</pre>
+        <div class="slide2">
+          <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
+        </div>
+        <b class="arrow"/>
       </div>
     </li>;
   }

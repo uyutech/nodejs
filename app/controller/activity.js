@@ -9,9 +9,19 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let id = ctx.params.id;
+      let list = [];
       let postData = {};
       let commentData = {};
       let res = yield {
+        list: ctx.curl(ctx.helper.getRemoteUrl('api/tag/GetTagPost'), {
+          method: 'POST',
+          data: {
+            uid,
+            TagID: 21,
+          },
+          dataType: 'json',
+          gzip: true,
+        }),
         post: ctx.curl(ctx.helper.getRemoteUrl('api/tag/GetTagPostDetailes'), {
           method: 'POST',
           data: {
@@ -36,6 +46,9 @@ module.exports = app => {
           gzip: true,
         }),
       };
+      if(res.list.data.success) {
+        list = res.list.data.data;
+      }
       if(res.post.data.success) {
         postData = res.post.data.data;
       }
@@ -56,6 +69,7 @@ module.exports = app => {
           isLogin: true,
           userInfo,
           id,
+          list,
           postData,
           commentData,
         });
@@ -65,6 +79,7 @@ module.exports = app => {
           isLogin: false,
           userInfo: {},
           id,
+          list,
           postData,
           commentData,
         });

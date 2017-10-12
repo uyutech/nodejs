@@ -79,7 +79,7 @@ body {
           flex-direction: column;
   margin: 0;
   padding: 0;
-  padding-top: 0.73rem;
+  padding-top: 0.9rem;
   box-sizing: border-box;
   background: transparent;
   width: 100%;
@@ -95,6 +95,7 @@ input,
 select,
 textarea,
 pre {
+  margin: 0;
   font-size: 0.12rem;
   line-height: 1.5;
   font-family: -apple-system, "Helvetica Neue", "Arial", "PingFang SC", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, sans-serif;
@@ -110,7 +111,7 @@ input {
   line-height: normal;
 }
 a {
-  color: #555;
+  color: #2D4D67;
   text-decoration: none;
 }
 a:hover {
@@ -288,7 +289,7 @@ a:hover {
   position: absolute;
   top: 0.18rem;
   right: 0;
-  color: #555;
+  color: #2D4D67;
 }
 .cp-botnav .c .link li {
   float: left;

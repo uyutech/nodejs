@@ -170,21 +170,24 @@ class WorkComment extends migi.Component {
     this.ref.comment.clearData();
     this.load();
   }
-  switchType2(e, vd) {
-    let $ul = $(vd.element);
-    $ul.toggleClass('alt');
-    $ul.find('li').toggleClass('cur');
-    let rel = $ul.find('.cur').attr('rel');
-    currentCount = 0;
-    myComment = rel;
-    skip = 0;
-    if(ajax) {
-      ajax.abort();
+  switchType2(e, vd, tvd) {
+    let $li = $(tvd.element);
+    if(!$li.hasClass('cur')) {
+      let $ul = $(vd.element);
+      $ul.toggleClass('alt');
+      $ul.find('li').toggleClass('cur');
+      let rel = $ul.find('.cur').attr('rel');
+      currentCount = 0;
+      myComment = rel;
+      skip = 0;
+      if(ajax) {
+        ajax.abort();
+      }
+      loadEnd = false;
+      this.loading = false;
+      this.ref.comment.clearData();
+      this.load();
     }
-    loadEnd = false;
-    this.loading = false;
-    this.ref.comment.clearData();
-    this.load();
   }
   clickReplay() {
     this.replayId = null;
@@ -192,10 +195,11 @@ class WorkComment extends migi.Component {
     this.rootId = null;
   }
   render() {
-    return <div class="comments">
+    return <div class="mod comments">
+      <h4>评论</h4>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
-          <li class="cur" rel="0">全部评论</li>
+          <li class="cur" rel="0">全部评论<small>123</small></li>
           {
             this.props.isLogin
               ? <li rel="1">我的</li>

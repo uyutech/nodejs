@@ -112,8 +112,8 @@ class Page extends migi.Component {
       </ol>
       <a href="#" class={ this.index == this.total ? 'next dis' : 'next' } onClick={ this.next }>下一页<b></b></a>
       <span>{ this.index }/{ this.total } 页</span>
-      <input type="number" name="page" value={ this.num } min="1" max={ this.total }/>
-      <input type="submit" value="跳转"/>
+      <input type="number" class="num" name="page" value={ this.num } min="1" max={ this.total }/>
+      <input type="submit" class="sub" value="跳转"/>
     </form>;
   }
 }

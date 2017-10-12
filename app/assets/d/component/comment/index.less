@@ -2,6 +2,8 @@
  * Created by army8735 on 2017/8/26.
  */
 
+@import '../../common/var.less';
+
 .cp-comment{
   min-height:1rem;
   .list{
@@ -30,12 +32,11 @@
             .name{
               display:inline-block;
               margin-right:0.1rem;
-              color:#555;
               font-size:0.12rem;
             }
             .time{
               display:inline-block;
-              color:#A8A8A8;
+              color:@secondTextColor;
               font-size:0.12rem;
             }
             p{
@@ -49,36 +50,6 @@
           top:0;
           right:0;
           padding:0 0 0 0.1rem;
-          .zan{
-            float:right;
-            padding-left:0.24rem;
-            height:0.3rem;
-            line-height:0.32rem;
-            background:url(zan.png) no-repeat 0.06rem center;
-            background-size:0.12rem auto;
-            color:#A8A8A8;
-            cursor:pointer;
-            &.has{
-              color:#4C8DAF;
-              background:url(zan_has.png) no-repeat 0.06rem center;
-              background-size:0.12rem auto;
-            }
-            small{
-              font-size:0.12rem;
-            }
-          }
-          .share{
-            display:none;
-            float:right;
-            width:0.3rem;
-            height:0.3rem;
-            background:url(share.png) no-repeat center;
-            background-size:0.18rem;
-            text-indent:999rem;
-            white-space:nowrap;
-            overflow:hidden;
-            cursor:pointer;
-          }
           .remove{
             float:right;
             width:0.3rem;
@@ -99,12 +70,11 @@
         margin:0.1rem 0;
         padding:0.05rem 0.1rem;
         background:#FFF;
-        font-size:0.12rem;
         border:1px solid #D9D9D9;
         border-radius:0.1rem;
         .arrow{
           position:absolute;
-          left:0.1rem;
+          right:0.1rem;
           top:-1px;
           display:block;
           width:0.1rem;
@@ -125,54 +95,71 @@
           }
         }
         > pre{
-          margin:0;
           word-break:break-all;
           word-wrap:break-word;
           white-space:pre-wrap;
           .placeholder{
             display:inline-block;
-            width:0.4rem;
+            width:0.7rem;
             height:0.1rem;
           }
         }
         > .slide{
           position:absolute;
-          right:0;
+          right:0.05rem;
           bottom:-0.05rem;
           display:block;
-          padding:0 0.08rem;
+          padding:0 0.05rem;
           min-width:0.24rem;
-          height:0.24rem;
-          line-height:0.24rem;
-          background:#A4D2DF;
-          color:#FFF;
+          height:0.2rem;
+          background:#FFF;
           text-align:center;
-          border-radius:0.24rem;
+          border-radius:0.2rem;
+          border:1px solid #A0CAE1;
           cursor:pointer;
+          white-space:nowrap;
           span{
             display:none;
             font-size:0.12rem;
+            line-height:0.2rem;
           }
           small{
-            font-size:0.12rem;
-          }
-          &:after{
             display:inline-block;
-            margin-left:0.05rem;
-            width:0.16rem;
-            height:0.14rem;
-            background:url(comment.png) no-repeat;
-            background-size:100% auto;
-            content:' ';
-            transform:translateY(0.03rem);
+            font-size:0.12rem;
+            line-height:0.2rem;
+          }
+          .like{
+            margin-right:0.05rem;
+            &:after{
+              display:inline-block;
+              margin-left:0.05rem;
+              width:0.12rem;
+              height:0.13rem;
+              background:url(like.png) no-repeat;
+              background-size:contain;
+              content:' ';
+              vertical-align:top;
+              transform:translateY(0.03rem);
+            }
+            &.liked:after{
+              background-image:url(liked.png);
+            }
+          }
+          .sub{
+            &:after{
+              display:inline-block;
+              margin-left:0.05rem;
+              width:0.14rem;
+              height:0.14rem;
+              background:url(comment.png) no-repeat;
+              background-size:contain;
+              content:' ';
+              vertical-align:top;
+              transform:translateY(0.03rem);
+            }
           }
           &.on{
-            //background:#EDF3F7;
-            color:#FFF;
-            &:after{
-              display:none;
-            }
-            small{
+            .sub{
               display:none;
             }
             span{
@@ -206,12 +193,11 @@
                 .name{
                   display:inline-block;
                   margin-left:0.1rem;
-                  color:#555;
                   font-size:0.12rem;
                 }
                 .time{
                   display:inline-block;
-                  color:#A8A8A8;
+                  color:@secondTextColor;
                   font-size:0.12rem;
                 }
                 .arrow{
@@ -238,24 +224,6 @@
             > .fn{
               float:right;
               margin-right:0.2rem;
-              .zan{
-                float:right;
-                padding-left:0.24rem;
-                height:0.3rem;
-                line-height:0.3rem;
-                background:url(zan.png) no-repeat 0.06rem center;
-                background-size:0.12rem auto;
-                color:#A8A8A8;
-                cursor:pointer;
-                &.has{
-                  color:#4C8DAF;
-                  background:url(zan_has.png) no-repeat 0.06rem center;
-                  background-size:0.12rem auto;
-                }
-                small{
-                  font-size:0.12rem;
-                }
-              }
               .remove{
                 float:right;
                 width:0.3rem;
@@ -273,32 +241,72 @@
             position:relative;
             display:inline-block;
             margin:0.1rem 0;
-            padding:0.05rem 0.1rem;
-            color:#FFF;
-            font-size:0.12rem;
-            background:#4E8EB0;
+            padding:0.05rem 0.1rem 0.05rem 0.5rem;
+            background:#FFF;
+            border:1px solid #D9D9D9;
             border-radius:0.1rem;
-            &:after{
+            .arrow{
               position:absolute;
-              right:0.05rem;
-              top:-0.16rem;
+              right:0.1rem;
+              top:-1px;
               display:block;
-              width:0;
-              height:0;
-              border:0.08rem solid #4E8EB0;
-              border-top-color:transparent;
-              border-left-color:transparent;
-              border-right-color:transparent;
-              content:' ';
-              transform:scaleX(0.6);
+              width:0.1rem;
+              height:0.1rem;
+              border-top:1px solid #FFF;
+              &:after{
+                position:absolute;
+                left:0;
+                top:-0.06rem;
+                display:block;
+                width:0.1rem;
+                height:0.1rem;
+                border:1px solid #D9D9D9;
+                border-left:none;
+                border-bottom:none;
+                transform:scaleX(0.7) rotateZ(-45deg);
+                content:' ';
+              }
             }
             > pre{
-              display:inline-block;
-              margin:0;
-              text-align:left;
               word-break:break-all;
               word-wrap:break-word;
               white-space:pre-wrap;
+            }
+            > .slide2{
+              position:absolute;
+              left:0.05rem;
+              bottom:-0.05rem;
+              display:block;
+              padding:0 0.05rem;
+              min-width:0.24rem;
+              height:0.2rem;
+              background:#FFF;
+              text-align:center;
+              border-radius:0.2rem;
+              border:1px solid #A0CAE1;
+              cursor:pointer;
+              white-space:nowrap;
+              small{
+                display:inline-block;
+                font-size:0.12rem;
+                line-height:0.2rem;
+              }
+              .like{
+                &:after{
+                  display:inline-block;
+                  margin-left:0.05rem;
+                  width:0.12rem;
+                  height:0.13rem;
+                  background:url(like.png) no-repeat;
+                  background-size:contain;
+                  content:' ';
+                  vertical-align:top;
+                  transform:translateY(0.03rem);
+                }
+                &.liked:after{
+                  background-image:url(liked.png);
+                }
+              }
             }
           }
         }
