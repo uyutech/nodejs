@@ -32,7 +32,7 @@ class Find extends migi.Component {
             if(res.success) {
               let data = res.data;
               doubleCheck.tagList2 = data;
-              doubleCheck.autoWidth2();
+              // doubleCheck.autoWidth2();
               doubleCheck.setCacheL2(param, data);
               doubleCheck.checkL2();
             }
@@ -106,9 +106,11 @@ class Find extends migi.Component {
   render() {
     return <div class="find">
       <Banner/>
-      <HotWork ref="hotWork" title="推荐作品" dataList={ this.props.hotWorkList }/>
-      <HotCollection ref="hotCollection" title="推荐专辑"/>
-      <HotAuthor ref="hotAuthor" title="推荐作者" dataList={ this.props.hotAuthorList }/>
+      <div class="hot">
+        <HotWork ref="hotWork" title="推荐作品" dataList={ this.props.hotWorkList }/>
+        <HotCollection ref="hotCollection" title="推荐专辑"/>
+        <HotAuthor ref="hotAuthor" title="推荐作者" dataList={ this.props.hotAuthorList }/>
+      </div>
       <DoubleCheck ref="doubleCheck" tags={ this.props.tags }/>
       <PlayList ref="playList" dataList={ this.props.playList.data } dataList2={ this.props.playList2.data }/>
     </div>;

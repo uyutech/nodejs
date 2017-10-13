@@ -18,12 +18,7 @@ class HotAuthor extends migi.Component {
   }
   render() {
     return <div class="cp-hotauthor">
-      <h3>{ this.props.title }<small>我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3&lt;</small></h3>
-      <b class="line"/>
-      <div class="fn fn-clear fn-hide">
-        <a href="#" class="prev" onClick={ this.clickPrev }>上一页</a>
-        <a href="#" class="next" onClick={ this.clickNext }>下一页</a>
-      </div>
+      <h4>{ this.props.title }<small>我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3&lt;</small></h4>
       {
         this.dataList && this.dataList.length
           ? <ul class="list fn-clear">

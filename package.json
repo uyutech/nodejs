@@ -9,7 +9,8 @@
     "egg-view-migi": "~1.0.3",
     "egg-view-nunjucks": "~2.1.4",
     "md5": "^2.2.1",
-    "migi": "~3.9.1"
+    "migi": "~3.9.1",
+    "moment": "^2.19.1"
   },
   "devDependencies": {
     "anima-querystring": "^2.0.0",
@@ -35,7 +36,7 @@
     "migi-es6-shim": "^0.34.1",
     "migi-loader": "^3.8.0",
     "url-loader": "^0.5.9",
-    "webpack": "^2.7.0",
+    "webpack": "^3.7.1",
     "webstorm-disable-index": "^1.2.0"
   },
   "engines": {
@@ -53,8 +54,8 @@
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
     "autod": "autod",
-    "webpack": "webpack",
-    "package": "npm install --production && tar -zcvf ../release.tgz ."
+    "webpack": "webpack -p",
+    "pack": "npm install --production && tar -zcvf ../release.tgz ."
   },
   "ci": {
     "version": "8"

@@ -12,7 +12,7 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['d2m', 'm2d', 'jsConfig'];
+  config.middleware = ['controllerLog', 'd2m', 'm2d', 'jsConfig'];
   config.d2m = {
     match: '/d',
   };

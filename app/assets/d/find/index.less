@@ -1,7 +1,6 @@
 /**
  * Created by army8735 on 2017/9/21.
  */
-
 @import '../common/var.less';
 @import '../component/hotwork/index.less';
 @import '../component/hotcollection/index.less';
@@ -42,7 +41,7 @@
         width:0.1rem;
         height:0.1rem;
         border:1px solid #B1C0C9;
-        background:#fff;
+        background:#FFF;
         border-radius:100%;
         text-indent:99rem;
         overflow:hidden;
@@ -56,19 +55,36 @@
       }
     }
   }
-  > .cp-hotwork{
-    margin-top:0.2rem;
+  > .hot{
+    margin:0.2rem 0;
+    box-shadow:@boxShadow;
+    border-radius:0.1rem;
+    overflow:hidden;
+    > .cp-hotwork{
+      //margin-top:0.2rem;
+    }
+    > .cp-collection{
+      margin-top:0.2rem;
+    }
+    > .cp-hotauthor{
+      margin-top:0.2rem;
+      .list li .info{
+        display:none;
+      }
+    }
   }
-  > .cp-collection{
-    margin-top:0.2rem;
-  }
-  > .cp-hotauthor{
-    margin-top:0.2rem;
-    .list li .info{
-      display:none;
+  > .cp-doublecheck{
+    .l2{
+      box-shadow:@boxShadow;
+      border-top-right-radius:0.1rem;
     }
   }
   > .cp-playlist{
-    margin-bottom:0.2rem;
+    position:relative;
+    padding:0.2rem;
+    background:#FFF;
+    box-shadow:@boxShadow;
+    border-bottom-left-radius:0.1rem;
+    border-bottom-right-radius:0.1rem;
   }
 }

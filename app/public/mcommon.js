@@ -33,9 +33,6 @@
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -63,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 161);
+/******/ 	return __webpack_require__(__webpack_require__.s = 78);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -747,7 +744,7 @@ var _Element2 = __webpack_require__(4);
 
 var _Element3 = _interopRequireDefault(_Element2);
 
-var _VirtualDom = __webpack_require__(11);
+var _VirtualDom = __webpack_require__(9);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -759,23 +756,23 @@ var _Obj = __webpack_require__(10);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _EventBus = __webpack_require__(13);
+var _EventBus = __webpack_require__(11);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(14);
+var _Model = __webpack_require__(12);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _Stream = __webpack_require__(24);
+var _Stream = __webpack_require__(25);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _Fastclick = __webpack_require__(23);
+var _Fastclick = __webpack_require__(26);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
-var _array = __webpack_require__(36);
+var _array = __webpack_require__(39);
 
 var _array2 = _interopRequireDefault(_array);
 
@@ -1223,8 +1220,7 @@ var Component = function (_Element) {
 exports.default = Component;
 
 /***/ }),
-/* 6 */,
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1246,102 +1242,9 @@ exports.default = {
 };
 
 /***/ }),
+/* 7 */,
 /* 8 */,
-/* 9 */,
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-var _Element = __webpack_require__(4);
-
-var _Element2 = _interopRequireDefault(_Element);
-
-var _util = __webpack_require__(1);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-var Obj = function () {
-  function Obj(k, context, cb) {
-    _classCallCheck(this, Obj);
-
-    this.k = k;
-    this.context = context;
-    this.cb = cb;
-    this.setV(cb.call(context));
-  }
-
-  _createClass(Obj, [{
-    key: 'setV',
-    value: function setV(v) {
-      this.v = _util2.default.clone(v);
-    }
-    //prop为true时作为prop渲染转义，否则为innerHTML转义
-
-  }, {
-    key: 'toString',
-    value: function toString(prop) {
-      //array调用join包括转码
-      if (Array.isArray(this.v)) {
-        return _util2.default.joinArray(this.v, prop);
-      }
-      var s = _util2.default.stringify(this.v);
-      if (prop) {
-        return _util2.default.encodeHtml(s, prop);
-      }
-      return this.v instanceof _Element2.default ? s : _util2.default.encodeHtml(s);
-    }
-  }, {
-    key: 'toSourceString',
-    value: function toSourceString() {
-      if (Array.isArray(this.v)) {
-        return _util2.default.joinSourceArray(this.v);
-      }
-      return _util2.default.stringify(this.v);
-    }
-  }, {
-    key: 'update',
-    value: function update(ov) {
-      var nv = this.cb.call(this.context);
-      if (!_util2.default.equal(ov, nv)) {
-        this.setV(nv);
-        return true;
-      }
-    }
-  }]);
-
-  return Obj;
-}();
-
-exports.default = Obj;
-
-/***/ }),
-/* 11 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1399,51 +1302,51 @@ var _Obj = __webpack_require__(10);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(12);
+var _Cb = __webpack_require__(13);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _range = __webpack_require__(29);
+var _range = __webpack_require__(20);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _match = __webpack_require__(40);
+var _match = __webpack_require__(34);
 
 var _match2 = _interopRequireDefault(_match);
 
-var _domDiff = __webpack_require__(38);
+var _domDiff = __webpack_require__(35);
 
 var _domDiff2 = _interopRequireDefault(_domDiff);
 
-var _type = __webpack_require__(18);
+var _type = __webpack_require__(15);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _fixEvent = __webpack_require__(27);
+var _fixEvent = __webpack_require__(23);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _attr = __webpack_require__(37);
+var _attr = __webpack_require__(36);
 
 var _attr2 = _interopRequireDefault(_attr);
 
-var _hash = __webpack_require__(7);
+var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _touch = __webpack_require__(42);
+var _touch = __webpack_require__(37);
 
 var _touch2 = _interopRequireDefault(_touch);
 
-var _delegate = __webpack_require__(26);
+var _delegate = __webpack_require__(24);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
-var _matchUtil = __webpack_require__(16);
+var _matchUtil = __webpack_require__(17);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
-var _eventCaseName = __webpack_require__(39);
+var _eventCaseName = __webpack_require__(38);
 
 var _eventCaseName2 = _interopRequireDefault(_eventCaseName);
 
@@ -2641,7 +2544,7 @@ function allChildren(child) {
 exports.default = VirtualDom;
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2651,23 +2554,90 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+var _Element = __webpack_require__(4);
+
+var _Element2 = _interopRequireDefault(_Element);
+
+var _util = __webpack_require__(1);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
 
-var Cb = function Cb(context, cb) {
-  _classCallCheck(this, Cb);
+var Obj = function () {
+  function Obj(k, context, cb) {
+    _classCallCheck(this, Obj);
 
-  this.context = context;
-  this.cb = cb;
-};
+    this.k = k;
+    this.context = context;
+    this.cb = cb;
+    this.setV(cb.call(context));
+  }
 
-exports.default = Cb;
+  _createClass(Obj, [{
+    key: 'setV',
+    value: function setV(v) {
+      this.v = _util2.default.clone(v);
+    }
+    //prop为true时作为prop渲染转义，否则为innerHTML转义
+
+  }, {
+    key: 'toString',
+    value: function toString(prop) {
+      //array调用join包括转码
+      if (Array.isArray(this.v)) {
+        return _util2.default.joinArray(this.v, prop);
+      }
+      var s = _util2.default.stringify(this.v);
+      if (prop) {
+        return _util2.default.encodeHtml(s, prop);
+      }
+      return this.v instanceof _Element2.default ? s : _util2.default.encodeHtml(s);
+    }
+  }, {
+    key: 'toSourceString',
+    value: function toSourceString() {
+      if (Array.isArray(this.v)) {
+        return _util2.default.joinSourceArray(this.v);
+      }
+      return _util2.default.stringify(this.v);
+    }
+  }, {
+    key: 'update',
+    value: function update(ov) {
+      var nv = this.cb.call(this.context);
+      if (!_util2.default.equal(ov, nv)) {
+        this.setV(nv);
+        return true;
+      }
+    }
+  }]);
+
+  return Obj;
+}();
+
+exports.default = Obj;
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2875,7 +2845,7 @@ var EventBus = function (_Event) {
 exports.default = EventBus;
 
 /***/ }),
-/* 14 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2996,7 +2966,33 @@ var Model = function (_Event) {
 exports.default = Model;
 
 /***/ }),
-/* 15 */
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+var Cb = function Cb(context, cb) {
+  _classCallCheck(this, Cb);
+
+  this.context = context;
+  this.cb = cb;
+};
+
+exports.default = Cb;
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3048,6 +3044,21 @@ exports.default = {
 };
 
 /***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  TEXT: 1,
+  DOM: 2
+};
+
+/***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3058,7 +3069,73 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(17);
+exports.default = function (arr, compare) {
+  if (!Array.isArray(arr)) {
+    throw new Error('quick sort need an array');
+  }
+  if (arr.length < 2) {
+    return arr;
+  }
+  compare = compare || function () {};
+  quickSort(arr, 0, arr.length - 1, compare);
+  return arr;
+};
+
+function quickSort(arr, begin, end, compare) {
+  if (begin >= end) {
+    return;
+  }
+  var i = begin,
+      j = end,
+      p = i,
+      v = arr[p],
+      seq = true;
+  while (i < j) {
+    if (seq) {
+      for (; i < j; j--) {
+        if (compare.call(arr, v, arr[j])) {
+          swap(arr, p, j);
+          p = j;
+          seq = !seq;
+          i++;
+          break;
+        }
+      }
+    } else {
+      for (; i < j; i++) {
+        if (compare.call(arr, arr[i], v)) {
+          swap(arr, p, i);
+          p = i;
+          seq = !seq;
+          j--;
+          break;
+        }
+      }
+    }
+  }
+  quickSort(arr, begin, p - 1, compare);
+  quickSort(arr, p + 1, end, compare);
+}
+function swap(arr, a, b) {
+  var temp = arr[a];
+  arr[a] = arr[b];
+  arr[b] = temp;
+}
+
+;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _sort = __webpack_require__(16);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3348,96 +3425,444 @@ function nth(idx, n) {
 }
 
 /***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (arr, compare) {
-  if (!Array.isArray(arr)) {
-    throw new Error('quick sort need an array');
-  }
-  if (arr.length < 2) {
-    return arr;
-  }
-  compare = compare || function () {};
-  quickSort(arr, 0, arr.length - 1, compare);
-  return arr;
-};
-
-function quickSort(arr, begin, end, compare) {
-  if (begin >= end) {
-    return;
-  }
-  var i = begin,
-      j = end,
-      p = i,
-      v = arr[p],
-      seq = true;
-  while (i < j) {
-    if (seq) {
-      for (; i < j; j--) {
-        if (compare.call(arr, v, arr[j])) {
-          swap(arr, p, j);
-          p = j;
-          seq = !seq;
-          i++;
-          break;
-        }
-      }
-    } else {
-      for (; i < j; i++) {
-        if (compare.call(arr, arr[i], v)) {
-          swap(arr, p, i);
-          p = i;
-          seq = !seq;
-          j--;
-          break;
-        }
-      }
-    }
-  }
-  quickSort(arr, begin, p - 1, compare);
-  quickSort(arr, p + 1, end, compare);
-}
-function swap(arr, a, b) {
-  var temp = arr[a];
-  arr[a] = arr[b];
-  arr[b] = temp;
-}
-
-;
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  TEXT: 1,
-  DOM: 2
-};
-
-/***/ }),
-/* 19 */,
-/* 20 */,
-/* 21 */
+/* 18 */,
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Element = __webpack_require__(4);
+
+var _Element2 = _interopRequireDefault(_Element);
+
+var _VirtualDom = __webpack_require__(9);
+
+var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
+
+var _Obj = __webpack_require__(10);
+
+var _Obj2 = _interopRequireDefault(_Obj);
+
+var _util = __webpack_require__(1);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _browser = __webpack_require__(14);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _type = __webpack_require__(15);
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function join(index, children, history) {
+  var res = '';
+  for (var i = index.shift(), len = children.length; i < len; i++) {
+    var child = children[i];
+    if (index.length) {
+      if (child instanceof _Obj2.default) {
+        res += join(index, child.v, history);
+      } else {
+        res += join(index, child, history);
+      }
+      if (history.end) {
+        break;
+      }
+    } else if (child instanceof _Obj2.default) {
+      if (Array.isArray(child.v)) {
+        res += joinObj(child.v, history);
+        if (history.end) {
+          break;
+        }
+      } else if (child.v instanceof _Element2.default) {
+        history.end = true;
+        break;
+      } else {
+        res += child.toString();
+      }
+    } else if (child instanceof _Element2.default) {
+      history.end = true;
+      break;
+    }
+    //array逻辑和Obj里面相同
+    else if (Array.isArray(child)) {
+        res += joinObj(child, history);
+        if (history.end) {
+          break;
+        }
+      } else {
+        res += _util2.default.stringify(child);
+      }
+  }
+  return res;
+}
+//递归找到第一个不是text的为止，将之前的text拼接返回
+function joinObj(arr, history) {
+  var res = '';
+  for (var i = 0, len = arr.length; i < len; i++) {
+    var child = arr[i];
+    if (history.end) {
+      break;
+    }
+    if (Array.isArray(child)) {
+      res += joinObj(child, history);
+    } else if (child instanceof _Element2.default) {
+      history.end = true;
+      break;
+    } else {
+      res += _util2.default.stringify(child);
+    }
+  }
+  return res;
+}
+
+function update(item, children, elem) {
+  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
+  var res = join(item.index, children, {});
+  var cns = elem.childNodes;
+  var textNode = cns[item.start];
+  //神奇的地方，更新的对象是个DOM而不是TEXT，会发生在混杂情况下的t2d变化
+  //如t1{t}t2{t}变为t1{d}t2{d}，t2记录的range的start在3，而其目前是第2个{d}的DOM，插入在t2d逻辑中
+  if (textNode.nodeType == 1) {
+    return;
+  }
+  var now = textNode.textContent;
+  if (res != now) {
+    //textContent自动转义，保留空白
+    //有实体字符时也不能用textContent
+    if (/&([a-z]+|#\d+);/i.test(res)) {
+      var node = _browser2.default.NODE;
+      node.innerHTML = _util2.default.encodeHtml(res);
+      elem.replaceChild(node.firstChild, textNode);
+    } else {
+      textNode.textContent = res;
+    }
+  }
+}
+
+function value(item, children) {
+  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
+  return join(item.index, children, {});
+}
+
+function record(history, option) {
+  if (option.first || option.prev == _type2.default.DOM) {
+    option.record = history.slice();
+  }
+}
+
+exports.default = {
+  update: update,
+  value: value,
+  record: record
+};
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var hash = {};
+
+exports.default = {
+  add: function add(uid, cb) {
+    hash[uid] = cb;
+  },
+  del: function del(uid) {
+    var cb = hash[uid];
+    if (cb) {
+      window.removeEventListener('mouseup', cb, true);
+      window.removeEventListener('touchend', cb, true);
+      window.removeEventListener('touchcancel', cb, true);
+      window.removeEventListener('blur', cb);
+      window.removeEventListener('dragend', cb);
+      delete hash[uid];
+    }
+  }
+};
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var MAX = 4096;
+var cache = new Array(MAX);
+
+var pool = {
+  index: 0,
+  add: function add(item) {
+    if (!item.__hasDes && this.index < MAX) {
+      cache[this.index++] = item;
+      item.__hasDes = true;
+    }
+  },
+  get: function get() {
+    return cache[--this.index];
+  }
+};
+
+exports.default = pool;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (e) {
+  //chrome23+以上文本节点会相应事件取不到DOM对象
+  if (e.target.nodeType == 3) {
+    e.target = e.target.parentNode;
+  }
+};
+
+;
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _hash = __webpack_require__(6);
+
+var _hash2 = _interopRequireDefault(_hash);
+
+var _matchUtil = __webpack_require__(17);
+
+var _matchUtil2 = _interopRequireDefault(_matchUtil);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var res;
+
+function delegate(e, json, top) {
+  var elem = e.target;
+  var vd = _hash2.default.get(elem.getAttribute('migi-uid'));
+  //点击根元素忽略；不存在也忽略，比如非vd添加的dom没有migi-uid
+  if (vd == top || !vd) {
+    return [false];
+  }
+  var names = [];
+  var classes = [];
+  var ids = [];
+  push(vd, names, classes, ids);
+  var temp = vd;
+  while (temp.parent && temp.parent != top) {
+    temp = temp.parent;
+    push(temp, names, classes, ids);
+  }
+  res = false;
+  matchSel(names.length - 1, names, classes, ids, json, vd);
+  //不同于样式，事件是冒泡的，所以最里层叶子结点也许是事件产生者，但没侦听，结果冒泡到父层被响应
+  while (!res && names.length) {
+    vd = vd.parent;
+    names.pop();
+    classes.pop();
+    ids.pop();
+    matchSel(names.length - 1, names, classes, ids, json, vd);
+  }
+  return [res, vd];
+}
+
+function push(vd, names, classes, ids) {
+  names.unshift(vd.name);
+  classes.unshift(_matchUtil2.default.splitClass(vd.__cache['class']));
+  ids.unshift(_matchUtil2.default.preId(vd.__cache.id));
+}
+
+//从底部往上匹配，即.a .b这样的选择器是.b->.a逆序对比
+//过程中只要不匹配就跳出，i从最大到0
+function matchSel(i, names, classes, ids, json, virtualDom) {
+  //只要有一次命中即跳出，不同于css样式全部递归完毕
+  if (res) {
+    return;
+  }
+  var combo = _matchUtil2.default.combo(classes[i], names[i], ids[i], json);
+  for (var j = 0, len = combo.length; j < len; j++) {
+    var k = combo[j];
+    if (json.hasOwnProperty(k)) {
+      var item = json[k];
+      //还未到根节点继续匹配
+      if (i) {
+        matchSel(i - 1, names, classes, ids, item, virtualDom.parent);
+        //多层级时需递归所有层级组合，如<div><p><span>对应div span{}的样式时，并非一一对应
+        for (var l = i - 2; l >= 0; l--) {
+          matchSel(l, names, classes, ids, item, virtualDom.parent);
+        }
+      }
+      //将当前层次的值存入
+      if (item.hasOwnProperty('_v')) {
+        res = true;
+        return;
+      }
+      //:和[可能同时存在，也可能分开
+      if (item.hasOwnProperty('_:') || item.hasOwnProperty('_[')) {
+        //有:[属性时，检查是否满足伪类情况，全部满足后追加样式
+        var inAttr = function inAttr(item) {
+          if (item && item.hasOwnProperty('_[')) {
+            var item2 = item['_['];
+            item2.forEach(function (attrItem) {
+              var isMatch = _matchUtil2.default.attr(attrItem[0], virtualDom);
+              if (isMatch) {
+                item2 = attrItem[1];
+                //同普通匹配一样
+                if (i) {
+                  matchSel(i - 1, names, classes, ids, item2, virtualDom.parent);
+                }
+                if (item2.hasOwnProperty('_v')) {
+                  res = true;
+                }
+              }
+            });
+          }
+        };
+
+        var item2;
+        //有:伪类时，检查是否满足伪类情况，全部满足后追加样式
+        if (item.hasOwnProperty('_:')) {
+          item2 = item['_:'];
+          item2.forEach(function (pseudoItem) {
+            var isMatch = _matchUtil2.default.pseudo(pseudoItem[0], virtualDom, k);
+            if (isMatch) {
+              item2 = pseudoItem[1];
+              //同普通匹配一样
+              if (i) {
+                matchSel(i - 1, names, classes, ids, item2, virtualDom.parent);
+              }
+              if (item2.hasOwnProperty('_v')) {
+                res = true;
+              }
+            }
+          });
+        }
+        inAttr(item);
+        inAttr(item2);
+      }
+      //父子选择器
+      if (item.hasOwnProperty('_>')) {
+        var item2 = item['_>'];
+        matchSel(i - 1, names, classes, ids, item2, virtualDom.parent);
+      }
+      //相邻兄弟选择器
+      if (item.hasOwnProperty('_+')) {
+        var item2 = item['_+'];
+        var prev = virtualDom.prev();
+        if (prev) {
+          Object.keys(item2).forEach(function (k) {
+            if (_matchUtil2.default.nci(k, prev)) {
+              return;
+            }
+            //将当前层次的值存入
+            if (item2[k].hasOwnProperty('_v')) {
+              res = true;
+              return;
+            }
+            matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent);
+          });
+        }
+      }
+      //兄弟选择器
+      if (item.hasOwnProperty('_~')) {
+        var item2 = item['_~'];
+        var prevAll = virtualDom.prevAll();
+        if (prevAll.length) {
+          var hasSibiling = false;
+          for (var j = prevAll.length - 1; j >= 0; j--) {
+            var prev = prevAll[j];
+            Object.keys(item2).forEach(function (k) {
+              if (_matchUtil2.default.nci(k, prev)) {
+                return;
+              }
+              //将当前层次的值存入
+              if (item2[k].hasOwnProperty('_v')) {
+                res = true;
+                return;
+              }
+              hasSibiling = true;
+              matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent);
+            });
+            //一旦前方出现一次，即说明命中兄弟选择器，可以跳出继续判断下去的循环
+            if (hasSibiling) {
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+exports.default = delegate;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -3453,280 +3878,52 @@ var _createClass = function () {
   };
 }();
 
-var _Event = __webpack_require__(0);
-
-var _Event2 = _interopRequireDefault(_Event);
-
-var _Component2 = __webpack_require__(5);
-
-var _Component3 = _interopRequireDefault(_Component2);
-
-var _EventBus = __webpack_require__(13);
-
-var _EventBus2 = _interopRequireDefault(_EventBus);
-
-var _Stream = __webpack_require__(24);
-
-var _Stream2 = _interopRequireDefault(_Stream);
-
-var _CacheModel = __webpack_require__(22);
-
-var _CacheModel2 = _interopRequireDefault(_CacheModel);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
 
-function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-}
+var sid = 1;
 
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
+var Stream = function () {
+  function Stream(cid, iid) {
+    _classCallCheck(this, Stream);
 
-var CacheComponent = function (_Component) {
-  _inherits(CacheComponent, _Component);
-
-  function CacheComponent() {
-    var _ref;
-
-    _classCallCheck(this, CacheComponent);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = CacheComponent.__proto__ || Object.getPrototypeOf(CacheComponent)).call.apply(_ref, [this].concat(data)));
-
-    _this.__handler = {}; //缓存data key的hash
-    _this.__ccb = false; //缓存1ms再数据分发的是否在缓存时间内的状态标识
-    _this.__handler2 = {}; //handler的副本，每次handler被重置为空后保留缓存值
-    _this.__timeout;
-    _this.__timecb;
-    return _this;
+    this.sid = iid === undefined ? sid++ : iid;
+    this.hash = {};
+    this.hash[cid] = true;
   }
 
-  //@overwrite
-
-
-  _createClass(CacheComponent, [{
-    key: '__data',
-    value: function __data(k) {
-      var self = this;
-      //set触发数据变更时，若已DOM则打开开关
-      if (self.dom) {
-        self.__canData = true;
-      }
-
-      if (!Array.isArray(k)) {
-        k = [k];
-      }
-      //没有缓存根据是否桥接模式赋予stream对象或生成sid
-      k.forEach(function (k) {
-        if (!self.__handler.hasOwnProperty(k)) {
-          self.__handler[k] = self.__stream || _Stream2.default.gen();
-        } else {
-          var item = self.__handler[k];
-          //新stream的sid必须大于老stream的sid或sid才能覆盖
-          if (self.__stream) {
-            if (item instanceof _Stream2.default) {
-              if (item.sid < self.__stream.sid) {
-                self.__handler[k] = self.__stream;
-              }
-            } else if (item < self.__stream.sid) {
-              self.__handler[k] = self.__stream;
-            }
-          }
-          //非stream触发更新即主动数据更新
-          //当缓存是bridge时，Stream当前的sid>=缓存的sid即说明是发生在bridge之后的
-          else {
-              var now = _Stream2.default.now();
-              if (item instanceof _Stream2.default) {
-                if (item.sid <= now) {
-                  self.__handler[k] = now;
-                }
-              } else if (item < now) {
-                self.__handler[k] = now;
-              }
-            }
-        }
-      });
-      if (!self.__ccb) {
-        self.__ccb = true;
-        //1ms后触发数据变更并重设状态
-        self.__timeout = setTimeout(self.__timecb = function () {
-          self.__ccb = false;
-          var temp = self.__handler;
-          var keys = Object.keys(temp);
-          self.__handler = {};
-          //赋值更新状态的sid到缓存
-          keys.forEach(function (key) {
-            var item = temp[key];
-            self.__handler2[key] = item.sid || item;
-          });
-          //可能被清空
-          if (keys.length) {
-            self.__onData(keys);
-            self.emit(_Event2.default.DATA, keys.length > 1 ? keys : keys[0]);
-            keys.forEach(function (key) {
-              var stream = temp[key];
-              //被桥接触发记录的是stream
-              if (stream instanceof _Stream2.default) {
-                if (self.__bridgeHash) {
-                  var bridge = self.__bridgeHash[key];
-                  if (bridge) {
-                    bridge.forEach(function (item) {
-                      var target = item.target;
-                      var name = item.name;
-                      var middleware = item.middleware;
-                      if (!stream.has(target.uid)) {
-                        stream.add(target.uid);
-                        //必须大于桥接对象的sid才生效
-                        var tItem = CacheComponent.getSid(target, name);
-                        if (stream.sid > tItem) {
-                          //先设置桥接对象数据为桥接模式，修改数据后再恢复
-                          target.__stream = stream;
-                          target[name] = middleware ? middleware.call(self, self[key]) : self[key];
-                          target.__stream = null;
-                        }
-                      }
-                    });
-                  }
-                }
-              } else if (self.__bridgeHash) {
-                var bridge = self.__bridgeHash[key];
-                if (bridge) {
-                  stream = new _Stream2.default(self.uid, temp[key]);
-                  bridge.forEach(function (item) {
-                    var target = item.target;
-                    var name = item.name;
-                    var middleware = item.middleware;
-                    //作为主动发起数据变更方，第一位无需检查重复
-                    stream.add(target.uid);
-                    if (target instanceof _EventBus2.default) {
-                      target.emit(_Event2.default.DATA, name, middleware ? middleware.call(self, self[key]) : self[key], stream);
-                    } else {
-                      //必须大于桥接对象的sid才生效
-                      var tItem = CacheComponent.getSid(target, name);
-                      if (stream.sid > tItem) {
-                        //先设置桥接对象数据为桥接模式，修改数据后再恢复
-                        target.__stream = stream;
-                        target[name] = middleware ? middleware.call(self, self[key]) : self[key];
-                        target.__stream = null;
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }, 0);
-      }
+  _createClass(Stream, [{
+    key: "add",
+    value: function add(k) {
+      this.hash[k] = true;
     }
   }, {
-    key: 'flush',
-    value: function flush() {
-      if (this.__timeout) {
-        clearTimeout(this.__timeout);
-        this.__ccb = false;
-        this.__timecb();
-      }
+    key: "has",
+    value: function has(k) {
+      return this.hash.hasOwnProperty(k);
     }
   }], [{
-    key: 'getSid',
-    value: function getSid(target, name) {
-      if (target instanceof CacheComponent || target instanceof _CacheModel2.default) {
-        var tItem = target.__handler[name] || target.__handler2[name] || 0;
-        return tItem.sid || tItem;
-      }
-      return 0;
+    key: "now",
+    value: function now() {
+      return sid;
+    }
+  }, {
+    key: "gen",
+    value: function gen() {
+      return sid++;
     }
   }]);
 
-  return CacheComponent;
-}(_Component3.default);
+  return Stream;
+}();
 
-exports.default = CacheComponent;
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Model2 = __webpack_require__(14);
-
-var _Model3 = _interopRequireDefault(_Model2);
-
-var _CacheComponent = __webpack_require__(21);
-
-var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
-
-var CacheModel = function (_Model) {
-  _inherits(CacheModel, _Model);
-
-  function CacheModel() {
-    _classCallCheck(this, CacheModel);
-
-    var _this = _possibleConstructorReturn(this, (CacheModel.__proto__ || Object.getPrototypeOf(CacheModel)).call(this));
-
-    _this.__handler = {}; //普通状态下缓存data key的hash
-    _this.__ccb = false; //缓存1ms再数据分发的是否在缓存时间内的状态标识
-    _this.__handler2 = {}; //handler的副本，每次handler被重置为空后保留缓存值
-    _this.__timeout;
-    _this.__timecb;
-    return _this;
-  }
-
-  return CacheModel;
-}(_Model3.default);
-
-CacheModel.prototype.__data = _CacheComponent2.default.prototype.__data;
-
-exports.default = CacheModel;
+exports.default = Stream;
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4574,11 +4771,79 @@ FastClick.attach = function (layer, options) {
 exports.default = FastClick;
 
 /***/ }),
-/* 24 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Model2 = __webpack_require__(12);
+
+var _Model3 = _interopRequireDefault(_Model2);
+
+var _CacheComponent = __webpack_require__(28);
+
+var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var CacheModel = function (_Model) {
+  _inherits(CacheModel, _Model);
+
+  function CacheModel() {
+    _classCallCheck(this, CacheModel);
+
+    var _this = _possibleConstructorReturn(this, (CacheModel.__proto__ || Object.getPrototypeOf(CacheModel)).call(this));
+
+    _this.__handler = {}; //普通状态下缓存data key的hash
+    _this.__ccb = false; //缓存1ms再数据分发的是否在缓存时间内的状态标识
+    _this.__handler2 = {}; //handler的副本，每次handler被重置为空后保留缓存值
+    _this.__timeout;
+    _this.__timecb;
+    return _this;
+  }
+
+  return CacheModel;
+}(_Model3.default);
+
+CacheModel.prototype.__data = _CacheComponent2.default.prototype.__data;
+
+exports.default = CacheModel;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -4594,493 +4859,216 @@ var _createClass = function () {
   };
 }();
 
+var _Event = __webpack_require__(0);
+
+var _Event2 = _interopRequireDefault(_Event);
+
+var _Component2 = __webpack_require__(5);
+
+var _Component3 = _interopRequireDefault(_Component2);
+
+var _EventBus = __webpack_require__(11);
+
+var _EventBus2 = _interopRequireDefault(_EventBus);
+
+var _Stream = __webpack_require__(25);
+
+var _Stream2 = _interopRequireDefault(_Stream);
+
+var _CacheModel = __webpack_require__(27);
+
+var _CacheModel2 = _interopRequireDefault(_CacheModel);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
 
-var sid = 1;
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-var Stream = function () {
-  function Stream(cid, iid) {
-    _classCallCheck(this, Stream);
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    this.sid = iid === undefined ? sid++ : iid;
-    this.hash = {};
-    this.hash[cid] = true;
+var CacheComponent = function (_Component) {
+  _inherits(CacheComponent, _Component);
+
+  function CacheComponent() {
+    var _ref;
+
+    _classCallCheck(this, CacheComponent);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = CacheComponent.__proto__ || Object.getPrototypeOf(CacheComponent)).call.apply(_ref, [this].concat(data)));
+
+    _this.__handler = {}; //缓存data key的hash
+    _this.__ccb = false; //缓存1ms再数据分发的是否在缓存时间内的状态标识
+    _this.__handler2 = {}; //handler的副本，每次handler被重置为空后保留缓存值
+    _this.__timeout;
+    _this.__timecb;
+    return _this;
   }
 
-  _createClass(Stream, [{
-    key: "add",
-    value: function add(k) {
-      this.hash[k] = true;
+  //@overwrite
+
+
+  _createClass(CacheComponent, [{
+    key: '__data',
+    value: function __data(k) {
+      var self = this;
+      //set触发数据变更时，若已DOM则打开开关
+      if (self.dom) {
+        self.__canData = true;
+      }
+
+      if (!Array.isArray(k)) {
+        k = [k];
+      }
+      //没有缓存根据是否桥接模式赋予stream对象或生成sid
+      k.forEach(function (k) {
+        if (!self.__handler.hasOwnProperty(k)) {
+          self.__handler[k] = self.__stream || _Stream2.default.gen();
+        } else {
+          var item = self.__handler[k];
+          //新stream的sid必须大于老stream的sid或sid才能覆盖
+          if (self.__stream) {
+            if (item instanceof _Stream2.default) {
+              if (item.sid < self.__stream.sid) {
+                self.__handler[k] = self.__stream;
+              }
+            } else if (item < self.__stream.sid) {
+              self.__handler[k] = self.__stream;
+            }
+          }
+          //非stream触发更新即主动数据更新
+          //当缓存是bridge时，Stream当前的sid>=缓存的sid即说明是发生在bridge之后的
+          else {
+              var now = _Stream2.default.now();
+              if (item instanceof _Stream2.default) {
+                if (item.sid <= now) {
+                  self.__handler[k] = now;
+                }
+              } else if (item < now) {
+                self.__handler[k] = now;
+              }
+            }
+        }
+      });
+      if (!self.__ccb) {
+        self.__ccb = true;
+        //1ms后触发数据变更并重设状态
+        self.__timeout = setTimeout(self.__timecb = function () {
+          self.__ccb = false;
+          var temp = self.__handler;
+          var keys = Object.keys(temp);
+          self.__handler = {};
+          //赋值更新状态的sid到缓存
+          keys.forEach(function (key) {
+            var item = temp[key];
+            self.__handler2[key] = item.sid || item;
+          });
+          //可能被清空
+          if (keys.length) {
+            self.__onData(keys);
+            self.emit(_Event2.default.DATA, keys.length > 1 ? keys : keys[0]);
+            keys.forEach(function (key) {
+              var stream = temp[key];
+              //被桥接触发记录的是stream
+              if (stream instanceof _Stream2.default) {
+                if (self.__bridgeHash) {
+                  var bridge = self.__bridgeHash[key];
+                  if (bridge) {
+                    bridge.forEach(function (item) {
+                      var target = item.target;
+                      var name = item.name;
+                      var middleware = item.middleware;
+                      if (!stream.has(target.uid)) {
+                        stream.add(target.uid);
+                        //必须大于桥接对象的sid才生效
+                        var tItem = CacheComponent.getSid(target, name);
+                        if (stream.sid > tItem) {
+                          //先设置桥接对象数据为桥接模式，修改数据后再恢复
+                          target.__stream = stream;
+                          target[name] = middleware ? middleware.call(self, self[key]) : self[key];
+                          target.__stream = null;
+                        }
+                      }
+                    });
+                  }
+                }
+              } else if (self.__bridgeHash) {
+                var bridge = self.__bridgeHash[key];
+                if (bridge) {
+                  stream = new _Stream2.default(self.uid, temp[key]);
+                  bridge.forEach(function (item) {
+                    var target = item.target;
+                    var name = item.name;
+                    var middleware = item.middleware;
+                    //作为主动发起数据变更方，第一位无需检查重复
+                    stream.add(target.uid);
+                    if (target instanceof _EventBus2.default) {
+                      target.emit(_Event2.default.DATA, name, middleware ? middleware.call(self, self[key]) : self[key], stream);
+                    } else {
+                      //必须大于桥接对象的sid才生效
+                      var tItem = CacheComponent.getSid(target, name);
+                      if (stream.sid > tItem) {
+                        //先设置桥接对象数据为桥接模式，修改数据后再恢复
+                        target.__stream = stream;
+                        target[name] = middleware ? middleware.call(self, self[key]) : self[key];
+                        target.__stream = null;
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          }
+        }, 0);
+      }
     }
   }, {
-    key: "has",
-    value: function has(k) {
-      return this.hash.hasOwnProperty(k);
+    key: 'flush',
+    value: function flush() {
+      if (this.__timeout) {
+        clearTimeout(this.__timeout);
+        this.__ccb = false;
+        this.__timecb();
+      }
     }
   }], [{
-    key: "now",
-    value: function now() {
-      return sid;
-    }
-  }, {
-    key: "gen",
-    value: function gen() {
-      return sid++;
+    key: 'getSid',
+    value: function getSid(target, name) {
+      if (target instanceof CacheComponent || target instanceof _CacheModel2.default) {
+        var tItem = target.__handler[name] || target.__handler2[name] || 0;
+        return tItem.sid || tItem;
+      }
+      return 0;
     }
   }]);
 
-  return Stream;
-}();
+  return CacheComponent;
+}(_Component3.default);
 
-exports.default = Stream;
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var MAX = 4096;
-var cache = new Array(MAX);
-
-var pool = {
-  index: 0,
-  add: function add(item) {
-    if (!item.__hasDes && this.index < MAX) {
-      cache[this.index++] = item;
-      item.__hasDes = true;
-    }
-  },
-  get: function get() {
-    return cache[--this.index];
-  }
-};
-
-exports.default = pool;
+exports.default = CacheComponent;
 
 /***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _hash = __webpack_require__(7);
-
-var _hash2 = _interopRequireDefault(_hash);
-
-var _matchUtil = __webpack_require__(16);
-
-var _matchUtil2 = _interopRequireDefault(_matchUtil);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var res;
-
-function delegate(e, json, top) {
-  var elem = e.target;
-  var vd = _hash2.default.get(elem.getAttribute('migi-uid'));
-  //点击根元素忽略；不存在也忽略，比如非vd添加的dom没有migi-uid
-  if (vd == top || !vd) {
-    return [false];
-  }
-  var names = [];
-  var classes = [];
-  var ids = [];
-  push(vd, names, classes, ids);
-  var temp = vd;
-  while (temp.parent && temp.parent != top) {
-    temp = temp.parent;
-    push(temp, names, classes, ids);
-  }
-  res = false;
-  matchSel(names.length - 1, names, classes, ids, json, vd);
-  //不同于样式，事件是冒泡的，所以最里层叶子结点也许是事件产生者，但没侦听，结果冒泡到父层被响应
-  while (!res && names.length) {
-    vd = vd.parent;
-    names.pop();
-    classes.pop();
-    ids.pop();
-    matchSel(names.length - 1, names, classes, ids, json, vd);
-  }
-  return [res, vd];
-}
-
-function push(vd, names, classes, ids) {
-  names.unshift(vd.name);
-  classes.unshift(_matchUtil2.default.splitClass(vd.__cache['class']));
-  ids.unshift(_matchUtil2.default.preId(vd.__cache.id));
-}
-
-//从底部往上匹配，即.a .b这样的选择器是.b->.a逆序对比
-//过程中只要不匹配就跳出，i从最大到0
-function matchSel(i, names, classes, ids, json, virtualDom) {
-  //只要有一次命中即跳出，不同于css样式全部递归完毕
-  if (res) {
-    return;
-  }
-  var combo = _matchUtil2.default.combo(classes[i], names[i], ids[i], json);
-  for (var j = 0, len = combo.length; j < len; j++) {
-    var k = combo[j];
-    if (json.hasOwnProperty(k)) {
-      var item = json[k];
-      //还未到根节点继续匹配
-      if (i) {
-        matchSel(i - 1, names, classes, ids, item, virtualDom.parent);
-        //多层级时需递归所有层级组合，如<div><p><span>对应div span{}的样式时，并非一一对应
-        for (var l = i - 2; l >= 0; l--) {
-          matchSel(l, names, classes, ids, item, virtualDom.parent);
-        }
-      }
-      //将当前层次的值存入
-      if (item.hasOwnProperty('_v')) {
-        res = true;
-        return;
-      }
-      //:和[可能同时存在，也可能分开
-      if (item.hasOwnProperty('_:') || item.hasOwnProperty('_[')) {
-        //有:[属性时，检查是否满足伪类情况，全部满足后追加样式
-        var inAttr = function inAttr(item) {
-          if (item && item.hasOwnProperty('_[')) {
-            var item2 = item['_['];
-            item2.forEach(function (attrItem) {
-              var isMatch = _matchUtil2.default.attr(attrItem[0], virtualDom);
-              if (isMatch) {
-                item2 = attrItem[1];
-                //同普通匹配一样
-                if (i) {
-                  matchSel(i - 1, names, classes, ids, item2, virtualDom.parent);
-                }
-                if (item2.hasOwnProperty('_v')) {
-                  res = true;
-                }
-              }
-            });
-          }
-        };
-
-        var item2;
-        //有:伪类时，检查是否满足伪类情况，全部满足后追加样式
-        if (item.hasOwnProperty('_:')) {
-          item2 = item['_:'];
-          item2.forEach(function (pseudoItem) {
-            var isMatch = _matchUtil2.default.pseudo(pseudoItem[0], virtualDom, k);
-            if (isMatch) {
-              item2 = pseudoItem[1];
-              //同普通匹配一样
-              if (i) {
-                matchSel(i - 1, names, classes, ids, item2, virtualDom.parent);
-              }
-              if (item2.hasOwnProperty('_v')) {
-                res = true;
-              }
-            }
-          });
-        }
-        inAttr(item);
-        inAttr(item2);
-      }
-      //父子选择器
-      if (item.hasOwnProperty('_>')) {
-        var item2 = item['_>'];
-        matchSel(i - 1, names, classes, ids, item2, virtualDom.parent);
-      }
-      //相邻兄弟选择器
-      if (item.hasOwnProperty('_+')) {
-        var item2 = item['_+'];
-        var prev = virtualDom.prev();
-        if (prev) {
-          Object.keys(item2).forEach(function (k) {
-            if (_matchUtil2.default.nci(k, prev)) {
-              return;
-            }
-            //将当前层次的值存入
-            if (item2[k].hasOwnProperty('_v')) {
-              res = true;
-              return;
-            }
-            matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent);
-          });
-        }
-      }
-      //兄弟选择器
-      if (item.hasOwnProperty('_~')) {
-        var item2 = item['_~'];
-        var prevAll = virtualDom.prevAll();
-        if (prevAll.length) {
-          var hasSibiling = false;
-          for (var j = prevAll.length - 1; j >= 0; j--) {
-            var prev = prevAll[j];
-            Object.keys(item2).forEach(function (k) {
-              if (_matchUtil2.default.nci(k, prev)) {
-                return;
-              }
-              //将当前层次的值存入
-              if (item2[k].hasOwnProperty('_v')) {
-                res = true;
-                return;
-              }
-              hasSibiling = true;
-              matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent);
-            });
-            //一旦前方出现一次，即说明命中兄弟选择器，可以跳出继续判断下去的循环
-            if (hasSibiling) {
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-exports.default = delegate;
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (e) {
-  //chrome23+以上文本节点会相应事件取不到DOM对象
-  if (e.target.nodeType == 3) {
-    e.target = e.target.parentNode;
-  }
-};
-
-;
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var hash = {};
-
-exports.default = {
-  add: function add(uid, cb) {
-    hash[uid] = cb;
-  },
-  del: function del(uid) {
-    var cb = hash[uid];
-    if (cb) {
-      window.removeEventListener('mouseup', cb, true);
-      window.removeEventListener('touchend', cb, true);
-      window.removeEventListener('touchcancel', cb, true);
-      window.removeEventListener('blur', cb);
-      window.removeEventListener('dragend', cb);
-      delete hash[uid];
-    }
-  }
-};
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Element = __webpack_require__(4);
-
-var _Element2 = _interopRequireDefault(_Element);
-
-var _VirtualDom = __webpack_require__(11);
-
-var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
-
-var _Obj = __webpack_require__(10);
-
-var _Obj2 = _interopRequireDefault(_Obj);
-
-var _util = __webpack_require__(1);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _browser = __webpack_require__(15);
-
-var _browser2 = _interopRequireDefault(_browser);
-
-var _type = __webpack_require__(18);
-
-var _type2 = _interopRequireDefault(_type);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function join(index, children, history) {
-  var res = '';
-  for (var i = index.shift(), len = children.length; i < len; i++) {
-    var child = children[i];
-    if (index.length) {
-      if (child instanceof _Obj2.default) {
-        res += join(index, child.v, history);
-      } else {
-        res += join(index, child, history);
-      }
-      if (history.end) {
-        break;
-      }
-    } else if (child instanceof _Obj2.default) {
-      if (Array.isArray(child.v)) {
-        res += joinObj(child.v, history);
-        if (history.end) {
-          break;
-        }
-      } else if (child.v instanceof _Element2.default) {
-        history.end = true;
-        break;
-      } else {
-        res += child.toString();
-      }
-    } else if (child instanceof _Element2.default) {
-      history.end = true;
-      break;
-    }
-    //array逻辑和Obj里面相同
-    else if (Array.isArray(child)) {
-        res += joinObj(child, history);
-        if (history.end) {
-          break;
-        }
-      } else {
-        res += _util2.default.stringify(child);
-      }
-  }
-  return res;
-}
-//递归找到第一个不是text的为止，将之前的text拼接返回
-function joinObj(arr, history) {
-  var res = '';
-  for (var i = 0, len = arr.length; i < len; i++) {
-    var child = arr[i];
-    if (history.end) {
-      break;
-    }
-    if (Array.isArray(child)) {
-      res += joinObj(child, history);
-    } else if (child instanceof _Element2.default) {
-      history.end = true;
-      break;
-    } else {
-      res += _util2.default.stringify(child);
-    }
-  }
-  return res;
-}
-
-function update(item, children, elem) {
-  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
-  var res = join(item.index, children, {});
-  var cns = elem.childNodes;
-  var textNode = cns[item.start];
-  //神奇的地方，更新的对象是个DOM而不是TEXT，会发生在混杂情况下的t2d变化
-  //如t1{t}t2{t}变为t1{d}t2{d}，t2记录的range的start在3，而其目前是第2个{d}的DOM，插入在t2d逻辑中
-  if (textNode.nodeType == 1) {
-    return;
-  }
-  var now = textNode.textContent;
-  if (res != now) {
-    //textContent自动转义，保留空白
-    //有实体字符时也不能用textContent
-    if (/&([a-z]+|#\d+);/i.test(res)) {
-      var node = _browser2.default.NODE;
-      node.innerHTML = _util2.default.encodeHtml(res);
-      elem.replaceChild(node.firstChild, textNode);
-    } else {
-      textNode.textContent = res;
-    }
-  }
-}
-
-function value(item, children) {
-  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
-  return join(item.index, children, {});
-}
-
-function record(history, option) {
-  if (option.first || option.prev == _type2.default.DOM) {
-    option.record = history.slice();
-  }
-}
-
-exports.default = {
-  update: update,
-  value: value,
-  record: record
-};
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
+/* 29 */,
+/* 30 */,
 /* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = __webpack_require__(41)['default'];
-
-/***/ }),
-/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5398,327 +5386,629 @@ defineProperties(Number, {
   MAX_SAFE_INTEGER: maxSafeInteger,
   MIN_SAFE_INTEGER: -maxSafeInteger
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
-/* 33 */,
-/* 34 */,
-/* 35 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-var _Component2 = __webpack_require__(5);
-
-var _Component3 = _interopRequireDefault(_Component2);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
-
-var NonVisualComponent = function (_Component) {
-  _inherits(NonVisualComponent, _Component);
-
-  function NonVisualComponent() {
-    var _ref;
-
-    _classCallCheck(this, NonVisualComponent);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = NonVisualComponent.__proto__ || Object.getPrototypeOf(NonVisualComponent)).call.apply(_ref, [this].concat(data)));
-  }
-
-  //非可视为空
-  //@overwrite
-
-
-  _createClass(NonVisualComponent, [{
-    key: 'toString',
-    value: function toString() {
-      return '';
-    }
-
-    //没有dom
-    //@overwrite
-
-  }, {
-    key: '__onDom',
-    value: function __onDom() {
-      this.__dom = true;
-      _Component3.default.fakeDom(this.children);
-    }
-  }]);
-
-  return NonVisualComponent;
-}(_Component3.default);
-
-exports.default = NonVisualComponent;
+module.exports = __webpack_require__(33)['default'];
 
 /***/ }),
-/* 36 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var arrayProto = Array.prototype;
-var arrayMethods = Object.create(arrayProto);
-
-['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
-  var original = arrayProto[method];
-  Object.defineProperty(arrayMethods, method, {
-    value: function value() {
-      var i = arguments.length;
-      var args = new Array(i);
-      while (i--) {
-        args[i] = arguments[i];
-      }
-      var result = original.apply(this, args);
-      if (Array.isArray(this.__cb__)) {
-        this.__cb__.forEach(function (cb) {
-          cb();
-        });
-      }
-      return result;
-    }
-  });
-});
-
-exports.default = arrayMethods;
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/* WEBPACK VAR INJECTION */(function(global) {
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _Event = __webpack_require__(0);
+
+var _Event2 = _interopRequireDefault(_Event);
+
+var _Element = __webpack_require__(4);
+
+var _Element2 = _interopRequireDefault(_Element);
+
+var _EventBus = __webpack_require__(11);
+
+var _EventBus2 = _interopRequireDefault(_EventBus);
+
+var _Model = __webpack_require__(12);
+
+var _Model2 = _interopRequireDefault(_Model);
+
+var _CacheModel = __webpack_require__(27);
+
+var _CacheModel2 = _interopRequireDefault(_CacheModel);
+
+var _Component = __webpack_require__(5);
+
+var _Component2 = _interopRequireDefault(_Component);
+
+var _VirtualDom = __webpack_require__(9);
+
+var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
+
+var _NonVisualComponent = __webpack_require__(40);
+
+var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
+
+var _CacheComponent = __webpack_require__(28);
+
+var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
+
+var _Obj = __webpack_require__(10);
+
+var _Obj2 = _interopRequireDefault(_Obj);
+
+var _Cb = __webpack_require__(13);
+
+var _Cb2 = _interopRequireDefault(_Cb);
+
+var _cachePool = __webpack_require__(22);
+
+var _cachePool2 = _interopRequireDefault(_cachePool);
 
 var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
+var _browser = __webpack_require__(14);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _sort = __webpack_require__(16);
+
+var _sort2 = _interopRequireDefault(_sort);
+
+var _hash = __webpack_require__(6);
+
+var _hash2 = _interopRequireDefault(_hash);
+
+var _Fastclick = __webpack_require__(26);
+
+var _Fastclick2 = _interopRequireDefault(_Fastclick);
+
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
-var NUM = 0;
-var STR = 1;
-var BOOL = 2;
-
-var RENDER_EXIST = 1;
-var RENDER_DOM = 2;
-
-var SPECIALS = {
-  button: {
-    disabled: RENDER_EXIST
-  },
-  input: {
-    autofocus: RENDER_EXIST,
-    checked: RENDER_EXIST,
-    defaultChecked: RENDER_DOM,
-    defaultchecked: RENDER_DOM,
-    defaultValue: RENDER_DOM,
-    defaultvalue: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    multiple: RENDER_EXIST,
-    readOnly: RENDER_EXIST,
-    readonly: RENDER_EXIST,
-    required: RENDER_EXIST
-  },
-  link: {
-    disabled: RENDER_EXIST
-  },
-  option: {
-    defaultSelected: RENDER_DOM,
-    defaultselected: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    selected: RENDER_EXIST,
-    text: RENDER_DOM
-  },
-  select: {
-    autofocus: RENDER_EXIST,
-    disabled: RENDER_EXIST,
-    multiple: RENDER_EXIST,
-    selectedIndex: RENDER_DOM,
-    selectedindex: RENDER_DOM
-  },
-  textarea: {
-    autofocus: RENDER_EXIST,
-    defaultValue: RENDER_DOM,
-    defaultvalue: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    readOnly: RENDER_EXIST,
-    readonly: RENDER_EXIST
-  }
-};
-
-var SETS = {
-  button: {
-    disabled: BOOL
-  },
-  input: {
-    autofocus: BOOL,
-    checked: BOOL,
-    defaultChecked: BOOL,
-    defaultchecked: BOOL,
-    defaultValue: STR,
-    defaultvalue: STR,
-    disabled: BOOL,
-    readOnly: BOOL,
-    readonly: BOOL,
-    required: BOOL,
-    value: STR
-  },
-  link: {
-    checked: BOOL
-  },
-  option: {
-    defaultSelected: BOOL,
-    defaultselected: BOOL,
-    disabled: BOOL,
-    selected: BOOL,
-    text: STR
-  },
-  select: {
-    autofocus: BOOL,
-    disabled: BOOL,
-    required: BOOL,
-    selectedIndex: NUM,
-    selectedindex: NUM,
-    value: STR
-  },
-  textarea: {
-    autofocus: BOOL,
-    defaultValue: STR,
-    defaultvalue: STR,
-    disabled: BOOL,
-    readOnly: BOOL,
-    readonly: BOOL,
-    required: BOOL,
-    value: STR
-  }
-};
-
-var lowerCase = {
-  defaultchecked: 'defaultChecked',
-  defaultselected: 'defaultSelected',
-  defaultvalue: 'defautlValue',
-  readonly: 'readOnly',
-  selectindex: 'selectIndex'
-};
-
-exports.default = {
-  RENDER_EXIST: RENDER_EXIST,
-  RENDER_DOM: RENDER_DOM,
-  special: function special(name, prop) {
-    if (SPECIALS.hasOwnProperty(name)) {
-      var o = SPECIALS[name];
-      if (o.hasOwnProperty(prop)) {
-        return o[prop];
-      }
+var migi = {
+  render: function render(element, dom) {
+    if (dom) {
+      element.appendTo(dom);
     }
+    return element;
   },
-  update: function update(name, element, k, v, jaw) {
-    //特殊对待的prop，用js赋值
-    if (SETS.hasOwnProperty(name)) {
-      var o = SETS[name];
-      if (o.hasOwnProperty(k)) {
-        o = o[k];
-        k = lowerCase[k] || k;
-        switch (o) {
-          case NUM:
-            v = parseInt(v);
-            element[k] = v || 0;
-            break;
-          case STR:
-            v = _util2.default.stringify(v);
-            element[k] = v;
-            break;
-          case BOOL:
-            v = !!v;
-            element[k] = v;
-            break;
-        }
-        return;
-      }
+
+  // 提前或服务器端渲染，仅输出，不触发DOM事件
+  preRender: function preRender(element) {
+    return element.toString();
+  },
+  preExist: function preExist(element) {
+    element.preString();
+    return element.emit(_Event2.default.DOM);
+  },
+  createCp: function createCp(cp, props, children) {
+    return _hash2.default.set(new cp(props, children));
+  },
+  createVd: function createVd(name, props, children) {
+    if (name == 'style' || name == 'script') {
+      throw new Error('can not create VirtualDom of: ' + name);
     }
-    //普通的setAttribute
-    switch (k) {
-      case 'className':
-        k = 'class';
-        break;
-      case 'htmlFor':
-        k = 'for';
-        break;
-    }
-    //jaw导入style时改写migi-前缀
-    if (jaw) {
-      switch (k) {
-        case 'id':
-        case 'class':
-          k = 'migi-' + k;
-          break;
-      }
-    }
-    if (v === null || v === void 0) {
-      element.removeAttribute(k);
-    } else if (k == 'id') {
-      element[k] = v;
-    } else if (k == 'class') {
-      element.className = v;
-    } else {
-      element.setAttribute(k, v);
+    return _hash2.default.set(_cachePool2.default.index ? _cachePool2.default.get().__reset(name, props, children) : new _VirtualDom2.default(name, props, children));
+  },
+
+  Event: _Event2.default,
+  Model: _Model2.default,
+  CacheModel: _CacheModel2.default,
+  EventBus: _EventBus2.default,
+  eventBus: new _EventBus2.default(),
+  Element: _Element2.default,
+  Component: _Component2.default,
+  NonVisualComponent: _NonVisualComponent2.default,
+  CacheComponent: _CacheComponent2.default,
+  VirtualDom: _VirtualDom2.default,
+  Obj: _Obj2.default,
+  Cb: _Cb2.default,
+  util: _util2.default,
+  browser: _browser2.default,
+  sort: _sort2.default,
+  hash: _hash2.default,
+  Fastclick: _Fastclick2.default,
+  name: function name(Class, _name) {
+    if (_Component2.default.prototype.isPrototypeOf(Class.prototype)) {
+      Class.__migiName = _name;
     }
   }
 };
+
+if (typeof window != 'undefined') {
+  window.migi = migi;
+  if (document.body) {
+    _Fastclick2.default.attach(document.body);
+  } else {
+    document.addEventListener('DOMContentLoaded', function () {
+      _Fastclick2.default.attach(document.body);
+    });
+  }
+} else if (typeof global != 'undefined') {
+  global.migi = migi;
+}
+
+exports.default = migi;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
-/* 38 */
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _VirtualDom = __webpack_require__(9);
+
+var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
+
+var _Event = __webpack_require__(0);
+
+var _Event2 = _interopRequireDefault(_Event);
+
+var _sort = __webpack_require__(16);
+
+var _sort2 = _interopRequireDefault(_sort);
+
+var _hash = __webpack_require__(6);
+
+var _hash2 = _interopRequireDefault(_hash);
+
+var _matchHash = __webpack_require__(21);
+
+var _matchHash2 = _interopRequireDefault(_matchHash);
+
+var _matchUtil = __webpack_require__(17);
+
+var _matchUtil2 = _interopRequireDefault(_matchUtil);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+//names,classes,ids为从当前节点开始往上的列表
+//style为jaw传入的总样式对象
+//virtualDom当前传入的VirtualDom对象
+//first为初始化时第一次
+function match(names, classes, ids, style, virtualDom, first) {
+  var res = [];
+  matchSel(names.length - 1, names, classes, ids, style.default, virtualDom, res, first);
+  //如果有media query
+  if (style.media) {
+    style.media.forEach(function (media) {
+      var match = false;
+      media.query.forEach(function (qlist) {
+        //中一个即命中不再往下匹配
+        if (match) {
+          return;
+        }
+        for (var i = 0, len = qlist.length; i < len; i++) {
+          var item = qlist[i];
+          //Array/String类型标明是否有值，目前只支持Array
+          if (Array.isArray(item)) {
+            var k = item[0].replace(/^-[a-z]+-/i, '').replace(/^mso-/i, '').toLowerCase();
+            var v = item[1];
+            //只支持px单位
+            if (/(px|\d)$/.test(v)) {
+              v = v.replace(/px$/, '');
+              switch (k) {
+                case 'width':
+                case 'height':
+                  var cur = getCur(k);
+                  if (cur == v) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                    return;
+                  }
+                  break;
+                case 'min-width':
+                case 'max-width':
+                case 'min-height':
+                case 'max-height':
+                  var cur = getCur(k.slice(4));
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+                case 'device-width':
+                case 'device-height':
+                  var cur = window.screen[k.slice(7)];
+                  if (cur == v) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                  }
+                  break;
+                case 'min-device-width':
+                case 'min-device-height':
+                case 'max-device-width':
+                case 'max-device-height':
+                  var cur = window.screen[k.slice(11)];
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+                case 'aspect-ratio':
+                  var w = getCur('width');
+                  var h = getCur('height');
+                  var cur = w / h;
+                  var val = v.split('/');
+                  val = val[0] / val[1];
+                  if (cur == val) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                    return;
+                  }
+                  break;
+                case 'min-aspect-ratio':
+                case 'max-aspect-ratio':
+                  var w = getCur('width');
+                  var h = getCur('height');
+                  var cur = w / h;
+                  var val = v.split('/');
+                  val = val[0] / val[1];
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+                case 'device-aspect-ratio':
+                  var w = window.screen.width;
+                  var h = window.screen.height;
+                  var cur = w / h;
+                  var val = v.split('/');
+                  val = val[0] / val[1];
+                  if (cur == val) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                    return;
+                  }
+                  break;
+                case 'min-device-aspect-ratio':
+                case 'max-device-aspect-ratio':
+                  var w = window.screen.width;
+                  var h = window.screen.height;
+                  var cur = w / h;
+                  var val = v.split('/');
+                  val = val[0] / val[1];
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+                case 'device-pixel-ratio':
+                  var cur = window.devicePixelRatio;
+                  if (cur == v) {
+                    match = true;
+                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                    return;
+                  }
+                  break;
+                case 'min-device-pixel-ratio':
+                case 'max-device-pixel-ratio':
+                  var cur = window.devicePixelRatio;
+                  if (k.indexOf('min-') == 0) {
+                    if (cur >= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  } else {
+                    if (cur <= v) {
+                      match = true;
+                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
+                      return;
+                    }
+                  }
+                  break;
+              }
+            }
+          }
+        }
+      });
+    });
+    //窗口resize时重新匹配@media query
+    if (first) {
+      var resize = function resize() {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+        timeout = setTimeout(function () {
+          _hash2.default.get(virtualDom.uid).__updateStyle();
+        }, 100);
+      };
+
+      var timeout;
+
+      window.addEventListener('resize', resize);
+      _matchHash2.default.add(virtualDom.uid, resize);
+    }
+  }
+  (0, _sort2.default)(res, function (a, b) {
+    var pa = a[2];
+    var pb = b[2];
+    //引用相等比较出现顺序
+    if (pa == pb) {
+      return a[0] > b[0];
+    }
+    //优先级不相等
+    for (var i = 0; i < 3; i++) {
+      if (pa[i] != pb[i]) {
+        return pa[i] > pb[i];
+      }
+    }
+    //优先级相等比较出现顺序
+    return a[0] > b[0];
+  });
+  var s = '';
+  res.forEach(function (item) {
+    s += item[1] + ';';
+  });
+  return s;
+}
+//从底部往上匹配，即.a .b这样的选择器是.b->.a逆序对比
+//过程中只要不匹配就跳出，i从最大到0
+function matchSel(i, names, classes, ids, style, virtualDom, res, first, isChild) {
+  var combo = _matchUtil2.default.combo(classes[i], names[i], ids[i], style);
+  for (var j = 0, len = combo.length; j < len; j++) {
+    var k = combo[j];
+    if (style.hasOwnProperty(k)) {
+      var item = style[k];
+      //还未到根节点继续匹配
+      if (i) {
+        matchSel(i - 1, names, classes, ids, item, virtualDom.parent, res, first);
+        //多层级时需递归所有层级组合，如<div><p><span>对应div span{}的样式时，并非一一对应
+        if (!isChild) {
+          for (var l = i - 2; l >= 0; l--) {
+            matchSel(l, names, classes, ids, item, virtualDom.parent, res, first);
+          }
+        }
+      }
+      //将当前层次的值存入
+      if (item.hasOwnProperty('_v')) {
+        dealStyle(res, item);
+      }
+      //首次进入处理:伪类
+      if (first && item.hasOwnProperty('_:')) {
+        item['_:'].forEach(function (pseudoItem) {
+          pseudoItem[0].forEach(function (pseudo) {
+            var uid = virtualDom.uid;
+            switch (pseudo) {
+              case 'hover':
+                var onHover = function onHover() {
+                  //因为vd可能destroy导致被回收，所以每次动态从hash中取当前的vd
+                  _hash2.default.get(uid).__hover = true;
+                  _hash2.default.get(uid).__updateStyle();
+                };
+
+                var outHover = function outHover() {
+                  _hash2.default.get(uid).__hover = false;
+                  _hash2.default.get(uid).__updateStyle();
+                };
+
+                var cb = function cb() {
+                  virtualDom.element.addEventListener('mouseenter', onHover);
+                  virtualDom.element.addEventListener('mouseleave', outHover);
+                };
+                //可能由DOMDiff发起，此时已经在DOM上了
+
+
+                if (virtualDom.__dom) {
+                  cb();
+                } else {
+                  virtualDom.once(_Event2.default.DOM, cb);
+                }
+                //记录缓存当destryo时移除
+                virtualDom.__onHover = onHover;
+                virtualDom.__outHover = outHover;
+                break;
+              case 'active':
+                var onActive = function onActive() {
+                  //因为vd可能destroy导致被回收，所以每次动态从hash中取当前的vd
+                  _hash2.default.get(uid).__active = true;
+                  _hash2.default.get(uid).__updateStyle();
+                };
+
+                var outActive = function outActive() {
+                  _hash2.default.get(uid).__active = false;
+                  _hash2.default.get(uid).__updateStyle();
+                };
+
+                var cb2 = function cb2() {
+                  virtualDom.element.addEventListener('mousedown', onActive);
+                  //鼠标弹起捕获body，因为可能会移出元素后再弹起，且事件被shadow化阻止冒泡了
+                  window.addEventListener('mouseup', outActive, true);
+                  //touchend也失焦
+                  window.addEventListener('touchend', outActive, true);
+                  //touchcancel也失焦
+                  window.addEventListener('touchcancel', outActive, true);
+                  //window失焦时也需判断
+                  window.addEventListener('blur', outActive);
+                  //drag结束时也需判断
+                  window.addEventListener('dragend', outActive);
+                };
+                //可能由DOMDiff发起，此时已经在DOM上了
+
+
+                if (virtualDom.__dom) {
+                  cb2();
+                } else {
+                  virtualDom.once(_Event2.default.DOM, cb2);
+                }
+                //对window的侦听需要在destroy后移除，先记录下来
+                _matchHash2.default.add(uid, outActive);
+                break;
+            }
+          });
+        });
+      }
+      //:和[可能同时存在，也可能分开
+      if (item.hasOwnProperty('_:') || item.hasOwnProperty('_[')) {
+        //有:[属性时，检查是否满足伪类情况，全部满足后追加样式
+        var inAttr = function inAttr(item) {
+          if (item && item.hasOwnProperty('_[')) {
+            var item2 = item['_['];
+            item2.forEach(function (attrItem) {
+              var isMatch = _matchUtil2.default.attr(attrItem[0], virtualDom);
+              if (isMatch) {
+                item2 = attrItem[1];
+                //同普通匹配一样
+                if (i) {
+                  matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, first);
+                }
+                if (item2.hasOwnProperty('_v')) {
+                  dealStyle(res, item2);
+                }
+              }
+            });
+          }
+        };
+
+        var item2;
+        //有:伪类时，检查是否满足伪类情况，全部满足后追加样式
+        if (item.hasOwnProperty('_:')) {
+          item2 = item['_:'];
+          item2.forEach(function (pseudoItem) {
+            var isMatch = _matchUtil2.default.pseudo(pseudoItem[0], virtualDom, k);
+            if (isMatch) {
+              item2 = pseudoItem[1];
+              //同普通匹配一样
+              if (i) {
+                matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, first);
+              }
+              if (item2.hasOwnProperty('_v')) {
+                dealStyle(res, item2);
+              }
+            }
+          });
+        }
+        inAttr(item);
+        inAttr(item2);
+      }
+      //父子选择器
+      if (item.hasOwnProperty('_>')) {
+        var item2 = item['_>'];
+        matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, false, isChild);
+      }
+      //相邻兄弟选择器
+      if (item.hasOwnProperty('_+')) {
+        var item2 = item['_+'];
+        var prev = virtualDom.prev();
+        if (prev) {
+          Object.keys(item2).forEach(function (k) {
+            if (_matchUtil2.default.nci(k, prev)) {
+              return;
+            }
+            //将当前层次的值存入
+            if (item2[k].hasOwnProperty('_v')) {
+              dealStyle(res, item2[k]);
+            }
+            matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent, res, false, isChild);
+          });
+        }
+      }
+      //兄弟选择器
+      if (item.hasOwnProperty('_~')) {
+        var item2 = item['_~'];
+        var prevAll = virtualDom.prevAll();
+        if (prevAll.length) {
+          var hasSibiling = false;
+          for (var j = prevAll.length - 1; j >= 0; j--) {
+            var prev = prevAll[j];
+            Object.keys(item2).forEach(function (k) {
+              if (_matchUtil2.default.nci(k, prev)) {
+                return;
+              }
+              //将当前层次的值存入
+              if (item2[k].hasOwnProperty('_v')) {
+                dealStyle(res, item2[k]);
+              }
+              hasSibiling = true;
+              matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent, res, false, isChild);
+            });
+            //一旦前方出现一次，即说明命中兄弟选择器，可以跳出继续判断下去的循环
+            if (hasSibiling) {
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+function dealStyle(res, item) {
+  item._v.forEach(function (style) {
+    style[2] = item._p;
+    res.push(style);
+  });
+}
+
+function getCur(k) {
+  var key = k.charAt(0).toUpperCase() + k.slice(1);
+  return window['inner' + key] || document.documentElement['client' + key] || document.body['client' + key];
+}
+
+exports.default = match;
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5740,7 +6030,7 @@ var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _Cb = __webpack_require__(12);
+var _Cb = __webpack_require__(13);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -5748,35 +6038,35 @@ var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(15);
+var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _range = __webpack_require__(29);
+var _range = __webpack_require__(20);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _cachePool = __webpack_require__(25);
+var _cachePool = __webpack_require__(22);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
-var _type = __webpack_require__(18);
+var _type = __webpack_require__(15);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _hash = __webpack_require__(7);
+var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(28);
+var _matchHash = __webpack_require__(21);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
-var _fixEvent = __webpack_require__(27);
+var _fixEvent = __webpack_require__(23);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _delegate = __webpack_require__(26);
+var _delegate = __webpack_require__(24);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
@@ -6503,7 +6793,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 39 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6512,628 +6802,188 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = {
-  domactivate: 'DOMActivate',
-  domfocusin: 'DOMFocusIn',
-  msgestureend: 'MSGestureEnd',
-  mspointerdown: 'MSPointerDown',
-  mspointermove: 'MSPointerMove',
-  mspointerup: 'MSPointerUp',
-  mspointercancel: 'MSPointerCancel'
-};
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _VirtualDom = __webpack_require__(11);
-
-var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
-
-var _Event = __webpack_require__(0);
-
-var _Event2 = _interopRequireDefault(_Event);
-
-var _sort = __webpack_require__(17);
-
-var _sort2 = _interopRequireDefault(_sort);
-
-var _hash = __webpack_require__(7);
-
-var _hash2 = _interopRequireDefault(_hash);
-
-var _matchHash = __webpack_require__(28);
-
-var _matchHash2 = _interopRequireDefault(_matchHash);
-
-var _matchUtil = __webpack_require__(16);
-
-var _matchUtil2 = _interopRequireDefault(_matchUtil);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-//names,classes,ids为从当前节点开始往上的列表
-//style为jaw传入的总样式对象
-//virtualDom当前传入的VirtualDom对象
-//first为初始化时第一次
-function match(names, classes, ids, style, virtualDom, first) {
-  var res = [];
-  matchSel(names.length - 1, names, classes, ids, style.default, virtualDom, res, first);
-  //如果有media query
-  if (style.media) {
-    style.media.forEach(function (media) {
-      var match = false;
-      media.query.forEach(function (qlist) {
-        //中一个即命中不再往下匹配
-        if (match) {
-          return;
-        }
-        for (var i = 0, len = qlist.length; i < len; i++) {
-          var item = qlist[i];
-          //Array/String类型标明是否有值，目前只支持Array
-          if (Array.isArray(item)) {
-            var k = item[0].replace(/^-[a-z]+-/i, '').replace(/^mso-/i, '').toLowerCase();
-            var v = item[1];
-            //只支持px单位
-            if (/(px|\d)$/.test(v)) {
-              v = v.replace(/px$/, '');
-              switch (k) {
-                case 'width':
-                case 'height':
-                  var cur = getCur(k);
-                  if (cur == v) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                    return;
-                  }
-                  break;
-                case 'min-width':
-                case 'max-width':
-                case 'min-height':
-                case 'max-height':
-                  var cur = getCur(k.slice(4));
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-                case 'device-width':
-                case 'device-height':
-                  var cur = window.screen[k.slice(7)];
-                  if (cur == v) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                  }
-                  break;
-                case 'min-device-width':
-                case 'min-device-height':
-                case 'max-device-width':
-                case 'max-device-height':
-                  var cur = window.screen[k.slice(11)];
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-                case 'aspect-ratio':
-                  var w = getCur('width');
-                  var h = getCur('height');
-                  var cur = w / h;
-                  var val = v.split('/');
-                  val = val[0] / val[1];
-                  if (cur == val) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                    return;
-                  }
-                  break;
-                case 'min-aspect-ratio':
-                case 'max-aspect-ratio':
-                  var w = getCur('width');
-                  var h = getCur('height');
-                  var cur = w / h;
-                  var val = v.split('/');
-                  val = val[0] / val[1];
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-                case 'device-aspect-ratio':
-                  var w = window.screen.width;
-                  var h = window.screen.height;
-                  var cur = w / h;
-                  var val = v.split('/');
-                  val = val[0] / val[1];
-                  if (cur == val) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                    return;
-                  }
-                  break;
-                case 'min-device-aspect-ratio':
-                case 'max-device-aspect-ratio':
-                  var w = window.screen.width;
-                  var h = window.screen.height;
-                  var cur = w / h;
-                  var val = v.split('/');
-                  val = val[0] / val[1];
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-                case 'device-pixel-ratio':
-                  var cur = window.devicePixelRatio;
-                  if (cur == v) {
-                    match = true;
-                    matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                    return;
-                  }
-                  break;
-                case 'min-device-pixel-ratio':
-                case 'max-device-pixel-ratio':
-                  var cur = window.devicePixelRatio;
-                  if (k.indexOf('min-') == 0) {
-                    if (cur >= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  } else {
-                    if (cur <= v) {
-                      match = true;
-                      matchSel(names.length - 1, names, classes, ids, media.style, virtualDom, res, first);
-                      return;
-                    }
-                  }
-                  break;
-              }
-            }
-          }
-        }
-      });
-    });
-    //窗口resize时重新匹配@media query
-    if (first) {
-      var resize = function resize() {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-        timeout = setTimeout(function () {
-          _hash2.default.get(virtualDom.uid).__updateStyle();
-        }, 100);
-      };
-
-      var timeout;
-
-      window.addEventListener('resize', resize);
-      _matchHash2.default.add(virtualDom.uid, resize);
-    }
-  }
-  (0, _sort2.default)(res, function (a, b) {
-    var pa = a[2];
-    var pb = b[2];
-    //引用相等比较出现顺序
-    if (pa == pb) {
-      return a[0] > b[0];
-    }
-    //优先级不相等
-    for (var i = 0; i < 3; i++) {
-      if (pa[i] != pb[i]) {
-        return pa[i] > pb[i];
-      }
-    }
-    //优先级相等比较出现顺序
-    return a[0] > b[0];
-  });
-  var s = '';
-  res.forEach(function (item) {
-    s += item[1] + ';';
-  });
-  return s;
-}
-//从底部往上匹配，即.a .b这样的选择器是.b->.a逆序对比
-//过程中只要不匹配就跳出，i从最大到0
-function matchSel(i, names, classes, ids, style, virtualDom, res, first, isChild) {
-  var combo = _matchUtil2.default.combo(classes[i], names[i], ids[i], style);
-  for (var j = 0, len = combo.length; j < len; j++) {
-    var k = combo[j];
-    if (style.hasOwnProperty(k)) {
-      var item = style[k];
-      //还未到根节点继续匹配
-      if (i) {
-        matchSel(i - 1, names, classes, ids, item, virtualDom.parent, res, first);
-        //多层级时需递归所有层级组合，如<div><p><span>对应div span{}的样式时，并非一一对应
-        if (!isChild) {
-          for (var l = i - 2; l >= 0; l--) {
-            matchSel(l, names, classes, ids, item, virtualDom.parent, res, first);
-          }
-        }
-      }
-      //将当前层次的值存入
-      if (item.hasOwnProperty('_v')) {
-        dealStyle(res, item);
-      }
-      //首次进入处理:伪类
-      if (first && item.hasOwnProperty('_:')) {
-        item['_:'].forEach(function (pseudoItem) {
-          pseudoItem[0].forEach(function (pseudo) {
-            var uid = virtualDom.uid;
-            switch (pseudo) {
-              case 'hover':
-                var onHover = function onHover() {
-                  //因为vd可能destroy导致被回收，所以每次动态从hash中取当前的vd
-                  _hash2.default.get(uid).__hover = true;
-                  _hash2.default.get(uid).__updateStyle();
-                };
-
-                var outHover = function outHover() {
-                  _hash2.default.get(uid).__hover = false;
-                  _hash2.default.get(uid).__updateStyle();
-                };
-
-                var cb = function cb() {
-                  virtualDom.element.addEventListener('mouseenter', onHover);
-                  virtualDom.element.addEventListener('mouseleave', outHover);
-                };
-                //可能由DOMDiff发起，此时已经在DOM上了
-
-
-                if (virtualDom.__dom) {
-                  cb();
-                } else {
-                  virtualDom.once(_Event2.default.DOM, cb);
-                }
-                //记录缓存当destryo时移除
-                virtualDom.__onHover = onHover;
-                virtualDom.__outHover = outHover;
-                break;
-              case 'active':
-                var onActive = function onActive() {
-                  //因为vd可能destroy导致被回收，所以每次动态从hash中取当前的vd
-                  _hash2.default.get(uid).__active = true;
-                  _hash2.default.get(uid).__updateStyle();
-                };
-
-                var outActive = function outActive() {
-                  _hash2.default.get(uid).__active = false;
-                  _hash2.default.get(uid).__updateStyle();
-                };
-
-                var cb2 = function cb2() {
-                  virtualDom.element.addEventListener('mousedown', onActive);
-                  //鼠标弹起捕获body，因为可能会移出元素后再弹起，且事件被shadow化阻止冒泡了
-                  window.addEventListener('mouseup', outActive, true);
-                  //touchend也失焦
-                  window.addEventListener('touchend', outActive, true);
-                  //touchcancel也失焦
-                  window.addEventListener('touchcancel', outActive, true);
-                  //window失焦时也需判断
-                  window.addEventListener('blur', outActive);
-                  //drag结束时也需判断
-                  window.addEventListener('dragend', outActive);
-                };
-                //可能由DOMDiff发起，此时已经在DOM上了
-
-
-                if (virtualDom.__dom) {
-                  cb2();
-                } else {
-                  virtualDom.once(_Event2.default.DOM, cb2);
-                }
-                //对window的侦听需要在destroy后移除，先记录下来
-                _matchHash2.default.add(uid, outActive);
-                break;
-            }
-          });
-        });
-      }
-      //:和[可能同时存在，也可能分开
-      if (item.hasOwnProperty('_:') || item.hasOwnProperty('_[')) {
-        //有:[属性时，检查是否满足伪类情况，全部满足后追加样式
-        var inAttr = function inAttr(item) {
-          if (item && item.hasOwnProperty('_[')) {
-            var item2 = item['_['];
-            item2.forEach(function (attrItem) {
-              var isMatch = _matchUtil2.default.attr(attrItem[0], virtualDom);
-              if (isMatch) {
-                item2 = attrItem[1];
-                //同普通匹配一样
-                if (i) {
-                  matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, first);
-                }
-                if (item2.hasOwnProperty('_v')) {
-                  dealStyle(res, item2);
-                }
-              }
-            });
-          }
-        };
-
-        var item2;
-        //有:伪类时，检查是否满足伪类情况，全部满足后追加样式
-        if (item.hasOwnProperty('_:')) {
-          item2 = item['_:'];
-          item2.forEach(function (pseudoItem) {
-            var isMatch = _matchUtil2.default.pseudo(pseudoItem[0], virtualDom, k);
-            if (isMatch) {
-              item2 = pseudoItem[1];
-              //同普通匹配一样
-              if (i) {
-                matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, first);
-              }
-              if (item2.hasOwnProperty('_v')) {
-                dealStyle(res, item2);
-              }
-            }
-          });
-        }
-        inAttr(item);
-        inAttr(item2);
-      }
-      //父子选择器
-      if (item.hasOwnProperty('_>')) {
-        var item2 = item['_>'];
-        matchSel(i - 1, names, classes, ids, item2, virtualDom.parent, res, false, isChild);
-      }
-      //相邻兄弟选择器
-      if (item.hasOwnProperty('_+')) {
-        var item2 = item['_+'];
-        var prev = virtualDom.prev();
-        if (prev) {
-          Object.keys(item2).forEach(function (k) {
-            if (_matchUtil2.default.nci(k, prev)) {
-              return;
-            }
-            //将当前层次的值存入
-            if (item2[k].hasOwnProperty('_v')) {
-              dealStyle(res, item2[k]);
-            }
-            matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent, res, false, isChild);
-          });
-        }
-      }
-      //兄弟选择器
-      if (item.hasOwnProperty('_~')) {
-        var item2 = item['_~'];
-        var prevAll = virtualDom.prevAll();
-        if (prevAll.length) {
-          var hasSibiling = false;
-          for (var j = prevAll.length - 1; j >= 0; j--) {
-            var prev = prevAll[j];
-            Object.keys(item2).forEach(function (k) {
-              if (_matchUtil2.default.nci(k, prev)) {
-                return;
-              }
-              //将当前层次的值存入
-              if (item2[k].hasOwnProperty('_v')) {
-                dealStyle(res, item2[k]);
-              }
-              hasSibiling = true;
-              matchSel(i - 1, names, classes, ids, item2[k], virtualDom.parent, res, false, isChild);
-            });
-            //一旦前方出现一次，即说明命中兄弟选择器，可以跳出继续判断下去的循环
-            if (hasSibiling) {
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-function dealStyle(res, item) {
-  item._v.forEach(function (style) {
-    style[2] = item._p;
-    res.push(style);
-  });
-}
-
-function getCur(k) {
-  var key = k.charAt(0).toUpperCase() + k.slice(1);
-  return window['inner' + key] || document.documentElement['client' + key] || document.body['client' + key];
-}
-
-exports.default = match;
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Event = __webpack_require__(0);
-
-var _Event2 = _interopRequireDefault(_Event);
-
-var _Element = __webpack_require__(4);
-
-var _Element2 = _interopRequireDefault(_Element);
-
-var _EventBus = __webpack_require__(13);
-
-var _EventBus2 = _interopRequireDefault(_EventBus);
-
-var _Model = __webpack_require__(14);
-
-var _Model2 = _interopRequireDefault(_Model);
-
-var _CacheModel = __webpack_require__(22);
-
-var _CacheModel2 = _interopRequireDefault(_CacheModel);
-
-var _Component = __webpack_require__(5);
-
-var _Component2 = _interopRequireDefault(_Component);
-
-var _VirtualDom = __webpack_require__(11);
-
-var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
-
-var _NonVisualComponent = __webpack_require__(35);
-
-var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
-
-var _CacheComponent = __webpack_require__(21);
-
-var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
-
-var _Obj = __webpack_require__(10);
-
-var _Obj2 = _interopRequireDefault(_Obj);
-
-var _Cb = __webpack_require__(12);
-
-var _Cb2 = _interopRequireDefault(_Cb);
-
-var _cachePool = __webpack_require__(25);
-
-var _cachePool2 = _interopRequireDefault(_cachePool);
 
 var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(15);
-
-var _browser2 = _interopRequireDefault(_browser);
-
-var _sort = __webpack_require__(17);
-
-var _sort2 = _interopRequireDefault(_sort);
-
-var _hash = __webpack_require__(7);
-
-var _hash2 = _interopRequireDefault(_hash);
-
-var _Fastclick = __webpack_require__(23);
-
-var _Fastclick2 = _interopRequireDefault(_Fastclick);
-
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
-var migi = {
-  render: function render(element, dom) {
-    if (dom) {
-      element.appendTo(dom);
-    }
-    return element;
-  },
+var NUM = 0;
+var STR = 1;
+var BOOL = 2;
 
-  // 提前或服务器端渲染，仅输出，不触发DOM事件
-  preRender: function preRender(element) {
-    return element.toString();
-  },
-  preExist: function preExist(element) {
-    element.preString();
-    return element.emit(_Event2.default.DOM);
-  },
-  createCp: function createCp(cp, props, children) {
-    return _hash2.default.set(new cp(props, children));
-  },
-  createVd: function createVd(name, props, children) {
-    if (name == 'style' || name == 'script') {
-      throw new Error('can not create VirtualDom of: ' + name);
-    }
-    return _hash2.default.set(_cachePool2.default.index ? _cachePool2.default.get().__reset(name, props, children) : new _VirtualDom2.default(name, props, children));
-  },
+var RENDER_EXIST = 1;
+var RENDER_DOM = 2;
 
-  Event: _Event2.default,
-  Model: _Model2.default,
-  CacheModel: _CacheModel2.default,
-  EventBus: _EventBus2.default,
-  eventBus: new _EventBus2.default(),
-  Element: _Element2.default,
-  Component: _Component2.default,
-  NonVisualComponent: _NonVisualComponent2.default,
-  CacheComponent: _CacheComponent2.default,
-  VirtualDom: _VirtualDom2.default,
-  Obj: _Obj2.default,
-  Cb: _Cb2.default,
-  util: _util2.default,
-  browser: _browser2.default,
-  sort: _sort2.default,
-  hash: _hash2.default,
-  Fastclick: _Fastclick2.default,
-  name: function name(Class, _name) {
-    if (_Component2.default.prototype.isPrototypeOf(Class.prototype)) {
-      Class.__migiName = _name;
+var SPECIALS = {
+  button: {
+    disabled: RENDER_EXIST
+  },
+  input: {
+    autofocus: RENDER_EXIST,
+    checked: RENDER_EXIST,
+    defaultChecked: RENDER_DOM,
+    defaultchecked: RENDER_DOM,
+    defaultValue: RENDER_DOM,
+    defaultvalue: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    multiple: RENDER_EXIST,
+    readOnly: RENDER_EXIST,
+    readonly: RENDER_EXIST,
+    required: RENDER_EXIST
+  },
+  link: {
+    disabled: RENDER_EXIST
+  },
+  option: {
+    defaultSelected: RENDER_DOM,
+    defaultselected: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    selected: RENDER_EXIST,
+    text: RENDER_DOM
+  },
+  select: {
+    autofocus: RENDER_EXIST,
+    disabled: RENDER_EXIST,
+    multiple: RENDER_EXIST,
+    selectedIndex: RENDER_DOM,
+    selectedindex: RENDER_DOM
+  },
+  textarea: {
+    autofocus: RENDER_EXIST,
+    defaultValue: RENDER_DOM,
+    defaultvalue: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    readOnly: RENDER_EXIST,
+    readonly: RENDER_EXIST
+  }
+};
+
+var SETS = {
+  button: {
+    disabled: BOOL
+  },
+  input: {
+    autofocus: BOOL,
+    checked: BOOL,
+    defaultChecked: BOOL,
+    defaultchecked: BOOL,
+    defaultValue: STR,
+    defaultvalue: STR,
+    disabled: BOOL,
+    readOnly: BOOL,
+    readonly: BOOL,
+    required: BOOL,
+    value: STR
+  },
+  link: {
+    checked: BOOL
+  },
+  option: {
+    defaultSelected: BOOL,
+    defaultselected: BOOL,
+    disabled: BOOL,
+    selected: BOOL,
+    text: STR
+  },
+  select: {
+    autofocus: BOOL,
+    disabled: BOOL,
+    required: BOOL,
+    selectedIndex: NUM,
+    selectedindex: NUM,
+    value: STR
+  },
+  textarea: {
+    autofocus: BOOL,
+    defaultValue: STR,
+    defaultvalue: STR,
+    disabled: BOOL,
+    readOnly: BOOL,
+    readonly: BOOL,
+    required: BOOL,
+    value: STR
+  }
+};
+
+var lowerCase = {
+  defaultchecked: 'defaultChecked',
+  defaultselected: 'defaultSelected',
+  defaultvalue: 'defautlValue',
+  readonly: 'readOnly',
+  selectindex: 'selectIndex'
+};
+
+exports.default = {
+  RENDER_EXIST: RENDER_EXIST,
+  RENDER_DOM: RENDER_DOM,
+  special: function special(name, prop) {
+    if (SPECIALS.hasOwnProperty(name)) {
+      var o = SPECIALS[name];
+      if (o.hasOwnProperty(prop)) {
+        return o[prop];
+      }
+    }
+  },
+  update: function update(name, element, k, v, jaw) {
+    //特殊对待的prop，用js赋值
+    if (SETS.hasOwnProperty(name)) {
+      var o = SETS[name];
+      if (o.hasOwnProperty(k)) {
+        o = o[k];
+        k = lowerCase[k] || k;
+        switch (o) {
+          case NUM:
+            v = parseInt(v);
+            element[k] = v || 0;
+            break;
+          case STR:
+            v = _util2.default.stringify(v);
+            element[k] = v;
+            break;
+          case BOOL:
+            v = !!v;
+            element[k] = v;
+            break;
+        }
+        return;
+      }
+    }
+    //普通的setAttribute
+    switch (k) {
+      case 'className':
+        k = 'class';
+        break;
+      case 'htmlFor':
+        k = 'for';
+        break;
+    }
+    //jaw导入style时改写migi-前缀
+    if (jaw) {
+      switch (k) {
+        case 'id':
+        case 'class':
+          k = 'migi-' + k;
+          break;
+      }
+    }
+    if (v === null || v === void 0) {
+      element.removeAttribute(k);
+    } else if (k == 'id') {
+      element[k] = v;
+    } else if (k == 'class') {
+      element.className = v;
+    } else {
+      element.setAttribute(k, v);
     }
   }
 };
 
-if (typeof window != 'undefined') {
-  window.migi = migi;
-  if (document.body) {
-    _Fastclick2.default.attach(document.body);
-  } else {
-    document.addEventListener('DOMContentLoaded', function () {
-      _Fastclick2.default.attach(document.body);
-    });
-  }
-} else if (typeof global != 'undefined') {
-  global.migi = migi;
-}
-
-exports.default = migi;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30)))
-
 /***/ }),
-/* 42 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7310,38 +7160,166 @@ function onTouchEnd(e) {
 ;
 
 /***/ }),
-/* 43 */,
-/* 44 */,
-/* 45 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var core = __webpack_require__(166);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  domactivate: 'DOMActivate',
+  domfocusin: 'DOMFocusIn',
+  msgestureend: 'MSGestureEnd',
+  mspointerdown: 'MSPointerDown',
+  mspointermove: 'MSPointerMove',
+  mspointerup: 'MSPointerUp',
+  mspointercancel: 'MSPointerCancel'
+};
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var arrayProto = Array.prototype;
+var arrayMethods = Object.create(arrayProto);
+
+['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
+  var original = arrayProto[method];
+  Object.defineProperty(arrayMethods, method, {
+    value: function value() {
+      var i = arguments.length;
+      var args = new Array(i);
+      while (i--) {
+        args[i] = arguments[i];
+      }
+      var result = original.apply(this, args);
+      if (Array.isArray(this.__cb__)) {
+        this.__cb__.forEach(function (cb) {
+          cb();
+        });
+      }
+      return result;
+    }
+  });
+});
+
+exports.default = arrayMethods;
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+var _Component2 = __webpack_require__(5);
+
+var _Component3 = _interopRequireDefault(_Component2);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var NonVisualComponent = function (_Component) {
+  _inherits(NonVisualComponent, _Component);
+
+  function NonVisualComponent() {
+    var _ref;
+
+    _classCallCheck(this, NonVisualComponent);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = NonVisualComponent.__proto__ || Object.getPrototypeOf(NonVisualComponent)).call.apply(_ref, [this].concat(data)));
+  }
+
+  //非可视为空
+  //@overwrite
+
+
+  _createClass(NonVisualComponent, [{
+    key: 'toString',
+    value: function toString() {
+      return '';
+    }
+
+    //没有dom
+    //@overwrite
+
+  }, {
+    key: '__onDom',
+    value: function __onDom() {
+      this.__dom = true;
+      _Component3.default.fakeDom(this.children);
+    }
+  }]);
+
+  return NonVisualComponent;
+}(_Component3.default);
+
+exports.default = NonVisualComponent;
+
+/***/ }),
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var core = __webpack_require__(88);
 
 module.exports = core;
 
 /***/ }),
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7379,17 +7357,36 @@ module.exports = {
 };
 
 /***/ }),
-/* 65 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var event = __webpack_require__(167);
+var event = __webpack_require__(89);
 
 module.exports = event;
 
 /***/ }),
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
 /* 66 */,
 /* 67 */,
 /* 68 */,
@@ -7402,348 +7399,23 @@ module.exports = event;
 /* 75 */,
 /* 76 */,
 /* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _util = __webpack_require__(3);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _TopNav = __webpack_require__(145);
-
-var _TopNav2 = _interopRequireDefault(_TopNav);
-
-var _BotNav = __webpack_require__(142);
-
-var _BotNav2 = _interopRequireDefault(_BotNav);
-
-var _MLogin = __webpack_require__(144);
-
-var _MLogin2 = _interopRequireDefault(_MLogin);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-document.addEventListener('DOMContentLoaded', function () {
-  var topNav = migi.preExist(migi.createCp(_TopNav2.default, []));
-  topNav.on('search', function (kw) {
-    _util2.default.goto('/search/' + kw);
-  });
-  migi.preExist(migi.createCp(_BotNav2.default, []));
-
-  var mlogin = void 0;
-
-  migi.eventBus.on('NEED_LOGIN', function () {
-    if (!mlogin) {
-      mlogin = migi.render(migi.createCp(_MLogin2.default, []), document.body);
-    }
-    mlogin.show();
-  });
-});
-
-/***/ }),
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var ajax = __webpack_require__(163);
-
-module.exports = ajax;
-
-/***/ }),
-/* 86 */,
-/* 87 */,
-/* 88 */,
-/* 89 */,
-/* 90 */,
-/* 91 */,
-/* 92 */,
-/* 93 */,
-/* 94 */,
-/* 95 */,
-/* 96 */,
-/* 97 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 98 */,
-/* 99 */,
-/* 100 */,
-/* 101 */,
-/* 102 */,
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */,
-/* 107 */,
-/* 108 */,
-/* 109 */,
-/* 110 */,
-/* 111 */,
-/* 112 */,
-/* 113 */,
-/* 114 */,
-/* 115 */,
-/* 116 */,
-/* 117 */,
-/* 118 */,
-/* 119 */,
-/* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */,
-/* 124 */,
-/* 125 */,
-/* 126 */,
-/* 127 */,
-/* 128 */,
-/* 129 */,
-/* 130 */,
-/* 131 */,
-/* 132 */,
-/* 133 */,
-/* 134 */,
-/* 135 */,
-/* 136 */,
-/* 137 */,
-/* 138 */,
-/* 139 */,
-/* 140 */,
-/* 141 */,
-/* 142 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var BotNav = function (_migi$Component) {
-  _inherits(BotNav, _migi$Component);
-
-  function BotNav() {
-    var _ref;
-
-    _classCallCheck(this, BotNav);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = BotNav.__proto__ || Object.getPrototypeOf(BotNav)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(BotNav, [{
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-botnav"]], ["All Rights Reserved 转圈circling 浙ICP备17029501号-2"]);
-    }
-  }]);
-
-  return BotNav;
-}(migi.Component);
-
-migi.name(BotNav, "BotNav");exports.default = BotNav;
-
-/***/ }),
-/* 143 */,
-/* 144 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var NeedLogin = function (_migi$Component) {
-  _inherits(NeedLogin, _migi$Component);
-
-  function NeedLogin() {
-    var _ref;
-
-    _classCallCheck(this, NeedLogin);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = NeedLogin.__proto__ || Object.getPrototypeOf(NeedLogin)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(NeedLogin, [{
-    key: "show",
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-    }
-  }, {
-    key: "hide",
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-    }
-  }, {
-    key: "clickClose",
-    value: function clickClose(e) {
-      e.preventDefault();
-      this.hide();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-mlogin fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("h3", [], ["您尚未登录..."]), migi.createVd("p", [], [new migi.Obj("message", this, function () {
-        return this.message || '登录后即可进行相关操作~';
-      })]), migi.createVd("a", [["href", window.$CONFIG.loginUrl], ["class", "weibo"]], ["微博登录"]), migi.createVd("a", [["href", "#"], ["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
-    }
-  }, {
-    key: "message",
-    set: function set(v) {
-      this.__setBind("message", v);this.__data("message");
-    },
-    get: function get() {
-      return this.__getBind("message");
-    }
-  }]);
-
-  return NeedLogin;
-}(migi.Component);
-
-migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
-
-/***/ }),
-/* 145 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TopNav = function (_migi$Component) {
-  _inherits(TopNav, _migi$Component);
-
-  function TopNav() {
-    var _ref;
-
-    _classCallCheck(this, TopNav);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(TopNav, [{
-    key: 'focus',
-    value: function focus() {
-      this.emit('focus');
-    }
-  }, {
-    key: 'click',
-    value: function click() {
-      this.submit();
-    }
-  }, {
-    key: 'submit',
-    value: function submit(e) {
-      e && e.preventDefault();
-      var v = this.ref.input.element.value;
-      this.emit('search', v);
-    }
-  }, {
-    key: 'clickUser',
-    value: function clickUser(e) {
-      if ($CONFIG.isLogin !== 'True') {
-        e.preventDefault();
-        migi.eventBus.emit('NEED_LOGIN');
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "top-nav"]], [migi.createVd("a", [["href", "/"], ["class", "logo"]]), migi.createVd("form", [["class", "form"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["action", "/search/"]], [migi.createVd("input", [["ref", "input"], ["type", "text"], ["maxlength", "16"], ["placeholder", "新歌《燃尽人间色发布》"], ["value", this.props.kw || ''], ["onFocus", new migi.Cb(this, this.focus)]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)]], ["确认"]), migi.createVd("a", [["href", "/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.clickUser)]], [migi.createVd("img", [["src", this.props.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])])]);
-    }
-  }]);
-
-  return TopNav;
-}(migi.Component);
-
-migi.name(TopNav, "TopNav");exports.default = TopNav;
-
-/***/ }),
-/* 146 */,
-/* 147 */,
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
-/* 154 */,
-/* 155 */,
-/* 156 */,
-/* 157 */,
-/* 158 */,
-/* 159 */,
-/* 160 */,
-/* 161 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(32);
 
 __webpack_require__(31);
 
-var _animaYoctoAjax = __webpack_require__(85);
+__webpack_require__(32);
+
+var _animaYoctoAjax = __webpack_require__(86);
 
 var _animaYoctoAjax2 = _interopRequireDefault(_animaYoctoAjax);
 
-__webpack_require__(81);
+__webpack_require__(92);
 
-__webpack_require__(97);
+__webpack_require__(96);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7798,346 +7470,43 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 162 */,
-/* 163 */
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var $ = __webpack_require__(45),
-    util = __webpack_require__(64);
+var ajax = __webpack_require__(87);
 
-__webpack_require__(65);
-
-__webpack_require__(164);
-
-__webpack_require__(165);
-
-module.exports = $;
+module.exports = ajax;
 
 /***/ }),
-/* 164 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var $ = __webpack_require__(45),
-    util = __webpack_require__(64);
+var $ = __webpack_require__(44),
+    util = __webpack_require__(45);
 
-__webpack_require__(65);
+__webpack_require__(46);
 
-var jsonpID = Date.now(),
-    document = window.document,
-    ajaxBeforeSend = util.ajaxBeforeSend,
-    ajaxSuccess = util.ajaxSuccess,
-    ajaxError = util.ajaxError;
+__webpack_require__(90);
 
-$.ajaxJSONP = function (options, deferred) {
-  if (!('type' in options)) return $.ajax && $.ajax(options);
-
-  var _callbackName = options.jsonpCallback,
-      callbackName = ($.isFunction(_callbackName) ? _callbackName() : _callbackName) || 'jsonp' + ++jsonpID,
-      script = document.createElement('script'),
-      originalCallback = window[callbackName],
-      responseData,
-      abort = function abort(errorType) {
-    $(script).triggerHandler('error', errorType || 'abort');
-  },
-      xhr = { abort: abort },
-      abortTimeout;
-
-  if (deferred) deferred.promise(xhr);
-
-  $(script).on('load error', function (e, errorType) {
-    clearTimeout(abortTimeout);
-    $(script).off().remove();
-
-    if (e.type == 'error' || !responseData) {
-      ajaxError(null, errorType || 'error', xhr, options, deferred);
-    } else {
-      ajaxSuccess(responseData[0], xhr, options, deferred);
-    }
-
-    window[callbackName] = originalCallback;
-    if (responseData && $.isFunction(originalCallback)) originalCallback(responseData[0]);
-
-    originalCallback = responseData = undefined;
-  });
-
-  if (ajaxBeforeSend(xhr, options) === false) {
-    abort('abort');
-    return xhr;
-  }
-
-  window[callbackName] = function () {
-    responseData = arguments;
-  };
-
-  script.src = options.url.replace(/\?(.+)=\?/, '?$1=' + callbackName);
-  document.head.appendChild(script);
-
-  if (options.timeout > 0) abortTimeout = setTimeout(function () {
-    abort('timeout');
-  }, options.timeout);
-
-  return xhr;
-};
+__webpack_require__(91);
 
 module.exports = $;
 
 /***/ }),
-/* 165 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var $ = __webpack_require__(45),
-    util = __webpack_require__(64);
-
-__webpack_require__(65);
-
-var key,
-    name,
-    rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    scriptTypeRE = /^(?:text|application)\/javascript/i,
-    xmlTypeRE = /^(?:text|application)\/xml/i,
-    jsonType = 'application/json',
-    htmlType = 'text/html',
-    blankRE = /^\s*$/,
-    ajaxBeforeSend = util.ajaxBeforeSend,
-    ajaxSuccess = util.ajaxSuccess,
-    ajaxError = util.ajaxError;
-
-function empty() {}
-
-$.ajaxSettings = {
-  // Default type of request
-  type: 'GET',
-  // Callback that is executed before request
-  beforeSend: empty,
-  // Callback that is executed if the request succeeds
-  success: empty,
-  // Callback that is executed the the server drops error
-  error: empty,
-  // Callback that is executed on request complete (both: error and success)
-  complete: empty,
-  // The context for the callbacks
-  context: null,
-  // Whether to trigger "global" Ajax events
-  global: true,
-  // Transport
-  xhr: function xhr() {
-    return new window.XMLHttpRequest();
-  },
-  // MIME types mapping
-  // IIS returns Javascript as "application/x-javascript"
-  accepts: {
-    script: 'text/javascript, application/javascript, application/x-javascript',
-    json: jsonType,
-    xml: 'application/xml, text/xml',
-    html: htmlType,
-    text: 'text/plain'
-  },
-  // Whether the request is to another domain
-  crossDomain: false,
-  // Default timeout
-  timeout: 0,
-  // Whether data should be serialized to string
-  processData: true,
-  // Whether the browser should be allowed to cache GET responses
-  cache: true
-};
-
-function mimeToDataType(mime) {
-  if (mime) mime = mime.split(';', 2)[0];
-  return mime && (mime == htmlType ? 'html' : mime == jsonType ? 'json' : scriptTypeRE.test(mime) ? 'script' : xmlTypeRE.test(mime) && 'xml') || 'text';
-}
-
-function appendQuery(url, query) {
-  if (query == '') return url;
-  return (url + '&' + query).replace(/[&?]{1,2}/, '?');
-}
-
-// serialize payload and append it to the URL for GET requests
-function serializeData(options) {
-  if (options.processData && options.data && $.type(options.data) != "string") options.data = $.param(options.data, options.traditional);
-  if (options.data && (!options.type || options.type.toUpperCase() == 'GET')) options.url = appendQuery(options.url, options.data), options.data = undefined;
-}
-
-$.ajax = function (options) {
-  var settings = $.extend({}, options || {}),
-      deferred = $.Deferred && $.Deferred();
-  for (key in $.ajaxSettings) {
-    if (settings[key] === undefined) settings[key] = $.ajaxSettings[key];
-  }if (!settings.crossDomain) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) && RegExp.$2 != window.location.host;
-
-  if (!settings.url) settings.url = window.location.toString();
-  serializeData(settings);
-  if (settings.cache === false) settings.url = appendQuery(settings.url, '_=' + Date.now());
-
-  var dataType = settings.dataType,
-      hasPlaceholder = /\?.+=\?/.test(settings.url);
-  if (dataType == 'jsonp' || hasPlaceholder) {
-    if (!hasPlaceholder) settings.url = appendQuery(settings.url, settings.jsonp ? settings.jsonp + '=?' : settings.jsonp === false ? '' : 'callback=?');
-    return $.ajaxJSONP(settings, deferred);
-  }
-
-  var mime = settings.accepts[dataType],
-      headers = {},
-      setHeader = function setHeader(name, value) {
-    headers[name.toLowerCase()] = [name, value];
-  },
-      protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
-      xhr = settings.xhr(),
-      nativeSetHeader = xhr.setRequestHeader,
-      abortTimeout;
-
-  if (deferred) deferred.promise(xhr);
-
-  if (!settings.crossDomain) setHeader('X-Requested-With', 'XMLHttpRequest');
-  setHeader('Accept', mime || '*/*');
-  if (mime) {
-    if (mime.indexOf(',') > -1) mime = mime.split(',', 2)[0];
-    xhr.overrideMimeType && xhr.overrideMimeType(mime);
-  }
-  if (settings.contentType || settings.contentType !== false && settings.data && settings.type.toUpperCase() != 'GET') setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded');
-
-  if (settings.headers) for (name in settings.headers) {
-    setHeader(name, settings.headers[name]);
-  }xhr.setRequestHeader = setHeader;
-
-  var async = 'async' in settings ? settings.async : true;
-  xhr.open(settings.type, settings.url, async);
-
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4) {
-      xhr.onreadystatechange = empty;
-      clearTimeout(abortTimeout);
-      var result,
-          error = false;
-      if (xhr.status >= 200 && xhr.status < 300 || xhr.status == 304 || xhr.status == 0 && protocol == 'file:') {
-        dataType = dataType || mimeToDataType(xhr.getResponseHeader('content-type'));
-        result = xhr.responseText;
-
-        try {
-          // http://perfectionkills.com/global-eval-what-are-the-options/
-          if (dataType == 'script') (1, eval)(result);else if (dataType == 'xml') result = xhr.responseXML;else if (dataType == 'json') result = blankRE.test(result) ? null : $.parseJSON(result);
-        } catch (e) {
-          error = e;
-        }
-
-        if (error) ajaxError(error, 'parsererror', xhr, settings, deferred);else ajaxSuccess(result, xhr, settings, deferred);
-      } else {
-        ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings, deferred);
-      }
-    }
-  };
-
-  if (ajaxBeforeSend(xhr, settings) === false) {
-    xhr.abort();
-    ajaxError(null, 'abort', xhr, settings, deferred);
-    return xhr;
-  }
-
-  for (name in headers) {
-    nativeSetHeader.apply(xhr, headers[name]);
-  } // if (settings.timeout > 0) abortTimeout = setTimeout(function(){
-  //     xhr.onreadystatechange = empty
-  //     xhr.abort()
-  //     ajaxError(null, 'timeout', xhr, settings, deferred)
-  //   }, settings.timeout)
-
-  // 使用原生timeout属性
-  if (settings.timeout > 0) {
-    xhr.timeout = settings.timeout;
-    xhr.ontimeout = function () {
-      xhr.onreadystatechange = empty;
-      xhr.abort();
-      ajaxError(null, 'timeout', xhr, settings, deferred);
-    };
-  }
-
-  // avoid sending empty string (#319)
-  xhr.send(settings.data ? settings.data : null);
-  return xhr;
-};
-
-// handle optional data/success arguments
-function parseArguments(url, data, success, dataType) {
-  if ($.isFunction(data)) dataType = success, success = data, data = undefined;
-  if (!$.isFunction(success)) dataType = success, success = undefined;
-  return {
-    url: url,
-    data: data,
-    success: success,
-    dataType: dataType
-  };
-}
-
-$.get = function () /* url, data, success, dataType */{
-  return $.ajax(parseArguments.apply(null, arguments));
-};
-
-$.post = function () /* url, data, success, dataType */{
-  var options = parseArguments.apply(null, arguments);
-  options.type = 'POST';
-  return $.ajax(options);
-};
-
-$.getJSON = function () /* url, data, success */{
-  var options = parseArguments.apply(null, arguments);
-  options.dataType = 'json';
-  return $.ajax(options);
-};
-
-$.fn.load = function (url, data, success) {
-  if (!this.length) return this;
-  var self = this,
-      parts = url.split(/\s/),
-      selector,
-      options = parseArguments(url, data, success),
-      callback = options.success;
-  if (parts.length > 1) options.url = parts[0], selector = parts[1];
-  options.success = function (response) {
-    self.html(selector ? $('<div>').html(response.replace(rscript, "")).find(selector) : response);
-    callback && callback.apply(self, arguments);
-  };
-  $.ajax(options);
-  return this;
-};
-
-var escape = encodeURIComponent;
-
-function serialize(params, obj, traditional, scope) {
-  var type,
-      array = $.isArray(obj),
-      hash = $.isPlainObject(obj);
-  $.each(obj, function (key, value) {
-    type = $.type(value);
-    if (scope) key = traditional ? scope : scope + '[' + (hash || type == 'object' || type == 'array' ? key : '') + ']';
-    // handle data in serializeArray() format
-    if (!scope && array) params.add(value.name, value.value);
-    // recurse into nested objects
-    else if (type == "array" || !traditional && type == "object") serialize(params, value, traditional, key);else params.add(key, value);
-  });
-}
-
-$.param = function (obj, traditional) {
-  var params = [];
-  params.add = function (k, v) {
-    this.push(escape(k) + '=' + escape(v));
-  };
-  serialize(params, obj, traditional);
-  return params.join('&').replace(/%20/g, '+');
-};
-
-module.exports = $;
-
-/***/ }),
-/* 166 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8948,13 +8317,13 @@ var Yocto = function () {
 module.exports = Yocto;
 
 /***/ }),
-/* 167 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var $ = __webpack_require__(45);
+var $ = __webpack_require__(44);
 
 // Event Module
 var _zid = 1,
@@ -9211,6 +8580,563 @@ $.Event = function (type, props) {
 };
 
 module.exports = $;
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var $ = __webpack_require__(44),
+    util = __webpack_require__(45);
+
+__webpack_require__(46);
+
+var jsonpID = Date.now(),
+    document = window.document,
+    ajaxBeforeSend = util.ajaxBeforeSend,
+    ajaxSuccess = util.ajaxSuccess,
+    ajaxError = util.ajaxError;
+
+$.ajaxJSONP = function (options, deferred) {
+  if (!('type' in options)) return $.ajax && $.ajax(options);
+
+  var _callbackName = options.jsonpCallback,
+      callbackName = ($.isFunction(_callbackName) ? _callbackName() : _callbackName) || 'jsonp' + ++jsonpID,
+      script = document.createElement('script'),
+      originalCallback = window[callbackName],
+      responseData,
+      abort = function abort(errorType) {
+    $(script).triggerHandler('error', errorType || 'abort');
+  },
+      xhr = { abort: abort },
+      abortTimeout;
+
+  if (deferred) deferred.promise(xhr);
+
+  $(script).on('load error', function (e, errorType) {
+    clearTimeout(abortTimeout);
+    $(script).off().remove();
+
+    if (e.type == 'error' || !responseData) {
+      ajaxError(null, errorType || 'error', xhr, options, deferred);
+    } else {
+      ajaxSuccess(responseData[0], xhr, options, deferred);
+    }
+
+    window[callbackName] = originalCallback;
+    if (responseData && $.isFunction(originalCallback)) originalCallback(responseData[0]);
+
+    originalCallback = responseData = undefined;
+  });
+
+  if (ajaxBeforeSend(xhr, options) === false) {
+    abort('abort');
+    return xhr;
+  }
+
+  window[callbackName] = function () {
+    responseData = arguments;
+  };
+
+  script.src = options.url.replace(/\?(.+)=\?/, '?$1=' + callbackName);
+  document.head.appendChild(script);
+
+  if (options.timeout > 0) abortTimeout = setTimeout(function () {
+    abort('timeout');
+  }, options.timeout);
+
+  return xhr;
+};
+
+module.exports = $;
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var $ = __webpack_require__(44),
+    util = __webpack_require__(45);
+
+__webpack_require__(46);
+
+var key,
+    name,
+    rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    scriptTypeRE = /^(?:text|application)\/javascript/i,
+    xmlTypeRE = /^(?:text|application)\/xml/i,
+    jsonType = 'application/json',
+    htmlType = 'text/html',
+    blankRE = /^\s*$/,
+    ajaxBeforeSend = util.ajaxBeforeSend,
+    ajaxSuccess = util.ajaxSuccess,
+    ajaxError = util.ajaxError;
+
+function empty() {}
+
+$.ajaxSettings = {
+  // Default type of request
+  type: 'GET',
+  // Callback that is executed before request
+  beforeSend: empty,
+  // Callback that is executed if the request succeeds
+  success: empty,
+  // Callback that is executed the the server drops error
+  error: empty,
+  // Callback that is executed on request complete (both: error and success)
+  complete: empty,
+  // The context for the callbacks
+  context: null,
+  // Whether to trigger "global" Ajax events
+  global: true,
+  // Transport
+  xhr: function xhr() {
+    return new window.XMLHttpRequest();
+  },
+  // MIME types mapping
+  // IIS returns Javascript as "application/x-javascript"
+  accepts: {
+    script: 'text/javascript, application/javascript, application/x-javascript',
+    json: jsonType,
+    xml: 'application/xml, text/xml',
+    html: htmlType,
+    text: 'text/plain'
+  },
+  // Whether the request is to another domain
+  crossDomain: false,
+  // Default timeout
+  timeout: 0,
+  // Whether data should be serialized to string
+  processData: true,
+  // Whether the browser should be allowed to cache GET responses
+  cache: true
+};
+
+function mimeToDataType(mime) {
+  if (mime) mime = mime.split(';', 2)[0];
+  return mime && (mime == htmlType ? 'html' : mime == jsonType ? 'json' : scriptTypeRE.test(mime) ? 'script' : xmlTypeRE.test(mime) && 'xml') || 'text';
+}
+
+function appendQuery(url, query) {
+  if (query == '') return url;
+  return (url + '&' + query).replace(/[&?]{1,2}/, '?');
+}
+
+// serialize payload and append it to the URL for GET requests
+function serializeData(options) {
+  if (options.processData && options.data && $.type(options.data) != "string") options.data = $.param(options.data, options.traditional);
+  if (options.data && (!options.type || options.type.toUpperCase() == 'GET')) options.url = appendQuery(options.url, options.data), options.data = undefined;
+}
+
+$.ajax = function (options) {
+  var settings = $.extend({}, options || {}),
+      deferred = $.Deferred && $.Deferred();
+  for (key in $.ajaxSettings) {
+    if (settings[key] === undefined) settings[key] = $.ajaxSettings[key];
+  }if (!settings.crossDomain) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) && RegExp.$2 != window.location.host;
+
+  if (!settings.url) settings.url = window.location.toString();
+  serializeData(settings);
+  if (settings.cache === false) settings.url = appendQuery(settings.url, '_=' + Date.now());
+
+  var dataType = settings.dataType,
+      hasPlaceholder = /\?.+=\?/.test(settings.url);
+  if (dataType == 'jsonp' || hasPlaceholder) {
+    if (!hasPlaceholder) settings.url = appendQuery(settings.url, settings.jsonp ? settings.jsonp + '=?' : settings.jsonp === false ? '' : 'callback=?');
+    return $.ajaxJSONP(settings, deferred);
+  }
+
+  var mime = settings.accepts[dataType],
+      headers = {},
+      setHeader = function setHeader(name, value) {
+    headers[name.toLowerCase()] = [name, value];
+  },
+      protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
+      xhr = settings.xhr(),
+      nativeSetHeader = xhr.setRequestHeader,
+      abortTimeout;
+
+  if (deferred) deferred.promise(xhr);
+
+  if (!settings.crossDomain) setHeader('X-Requested-With', 'XMLHttpRequest');
+  setHeader('Accept', mime || '*/*');
+  if (mime) {
+    if (mime.indexOf(',') > -1) mime = mime.split(',', 2)[0];
+    xhr.overrideMimeType && xhr.overrideMimeType(mime);
+  }
+  if (settings.contentType || settings.contentType !== false && settings.data && settings.type.toUpperCase() != 'GET') setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded');
+
+  if (settings.headers) for (name in settings.headers) {
+    setHeader(name, settings.headers[name]);
+  }xhr.setRequestHeader = setHeader;
+
+  var async = 'async' in settings ? settings.async : true;
+  xhr.open(settings.type, settings.url, async);
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4) {
+      xhr.onreadystatechange = empty;
+      clearTimeout(abortTimeout);
+      var result,
+          error = false;
+      if (xhr.status >= 200 && xhr.status < 300 || xhr.status == 304 || xhr.status == 0 && protocol == 'file:') {
+        dataType = dataType || mimeToDataType(xhr.getResponseHeader('content-type'));
+        result = xhr.responseText;
+
+        try {
+          // http://perfectionkills.com/global-eval-what-are-the-options/
+          if (dataType == 'script') (1, eval)(result);else if (dataType == 'xml') result = xhr.responseXML;else if (dataType == 'json') result = blankRE.test(result) ? null : $.parseJSON(result);
+        } catch (e) {
+          error = e;
+        }
+
+        if (error) ajaxError(error, 'parsererror', xhr, settings, deferred);else ajaxSuccess(result, xhr, settings, deferred);
+      } else {
+        ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings, deferred);
+      }
+    }
+  };
+
+  if (ajaxBeforeSend(xhr, settings) === false) {
+    xhr.abort();
+    ajaxError(null, 'abort', xhr, settings, deferred);
+    return xhr;
+  }
+
+  for (name in headers) {
+    nativeSetHeader.apply(xhr, headers[name]);
+  } // if (settings.timeout > 0) abortTimeout = setTimeout(function(){
+  //     xhr.onreadystatechange = empty
+  //     xhr.abort()
+  //     ajaxError(null, 'timeout', xhr, settings, deferred)
+  //   }, settings.timeout)
+
+  // 使用原生timeout属性
+  if (settings.timeout > 0) {
+    xhr.timeout = settings.timeout;
+    xhr.ontimeout = function () {
+      xhr.onreadystatechange = empty;
+      xhr.abort();
+      ajaxError(null, 'timeout', xhr, settings, deferred);
+    };
+  }
+
+  // avoid sending empty string (#319)
+  xhr.send(settings.data ? settings.data : null);
+  return xhr;
+};
+
+// handle optional data/success arguments
+function parseArguments(url, data, success, dataType) {
+  if ($.isFunction(data)) dataType = success, success = data, data = undefined;
+  if (!$.isFunction(success)) dataType = success, success = undefined;
+  return {
+    url: url,
+    data: data,
+    success: success,
+    dataType: dataType
+  };
+}
+
+$.get = function () /* url, data, success, dataType */{
+  return $.ajax(parseArguments.apply(null, arguments));
+};
+
+$.post = function () /* url, data, success, dataType */{
+  var options = parseArguments.apply(null, arguments);
+  options.type = 'POST';
+  return $.ajax(options);
+};
+
+$.getJSON = function () /* url, data, success */{
+  var options = parseArguments.apply(null, arguments);
+  options.dataType = 'json';
+  return $.ajax(options);
+};
+
+$.fn.load = function (url, data, success) {
+  if (!this.length) return this;
+  var self = this,
+      parts = url.split(/\s/),
+      selector,
+      options = parseArguments(url, data, success),
+      callback = options.success;
+  if (parts.length > 1) options.url = parts[0], selector = parts[1];
+  options.success = function (response) {
+    self.html(selector ? $('<div>').html(response.replace(rscript, "")).find(selector) : response);
+    callback && callback.apply(self, arguments);
+  };
+  $.ajax(options);
+  return this;
+};
+
+var escape = encodeURIComponent;
+
+function serialize(params, obj, traditional, scope) {
+  var type,
+      array = $.isArray(obj),
+      hash = $.isPlainObject(obj);
+  $.each(obj, function (key, value) {
+    type = $.type(value);
+    if (scope) key = traditional ? scope : scope + '[' + (hash || type == 'object' || type == 'array' ? key : '') + ']';
+    // handle data in serializeArray() format
+    if (!scope && array) params.add(value.name, value.value);
+    // recurse into nested objects
+    else if (type == "array" || !traditional && type == "object") serialize(params, value, traditional, key);else params.add(key, value);
+  });
+}
+
+$.param = function (obj, traditional) {
+  var params = [];
+  params.add = function (k, v) {
+    this.push(escape(k) + '=' + escape(v));
+  };
+  serialize(params, obj, traditional);
+  return params.join('&').replace(/%20/g, '+');
+};
+
+module.exports = $;
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _util = __webpack_require__(3);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _TopNav = __webpack_require__(93);
+
+var _TopNav2 = _interopRequireDefault(_TopNav);
+
+var _BotNav = __webpack_require__(94);
+
+var _BotNav2 = _interopRequireDefault(_BotNav);
+
+var _MLogin = __webpack_require__(95);
+
+var _MLogin2 = _interopRequireDefault(_MLogin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.addEventListener('DOMContentLoaded', function () {
+  var topNav = migi.preExist(migi.createCp(_TopNav2.default, []));
+  topNav.on('search', function (kw) {
+    _util2.default.goto('/search/' + kw);
+  });
+  migi.preExist(migi.createCp(_BotNav2.default, []));
+
+  var mlogin = void 0;
+
+  migi.eventBus.on('NEED_LOGIN', function () {
+    if (!mlogin) {
+      mlogin = migi.render(migi.createCp(_MLogin2.default, []), document.body);
+    }
+    mlogin.show();
+  });
+});
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TopNav = function (_migi$Component) {
+  _inherits(TopNav, _migi$Component);
+
+  function TopNav() {
+    var _ref;
+
+    _classCallCheck(this, TopNav);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(TopNav, [{
+    key: 'focus',
+    value: function focus() {
+      this.emit('focus');
+    }
+  }, {
+    key: 'click',
+    value: function click() {
+      this.submit();
+    }
+  }, {
+    key: 'submit',
+    value: function submit(e) {
+      e && e.preventDefault();
+      var v = this.ref.input.element.value;
+      this.emit('search', v);
+    }
+  }, {
+    key: 'clickUser',
+    value: function clickUser(e) {
+      if ($CONFIG.isLogin !== 'True') {
+        e.preventDefault();
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "top-nav"]], [migi.createVd("a", [["href", "/"], ["class", "logo"]]), migi.createVd("form", [["class", "form"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["action", "/search/"]], [migi.createVd("input", [["ref", "input"], ["type", "text"], ["maxlength", "16"], ["placeholder", "新歌《燃尽人间色发布》"], ["value", this.props.kw || ''], ["onFocus", new migi.Cb(this, this.focus)]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)]], ["确认"]), migi.createVd("a", [["href", "/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.clickUser)]], [migi.createVd("img", [["src", this.props.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])])]);
+    }
+  }]);
+
+  return TopNav;
+}(migi.Component);
+
+migi.name(TopNav, "TopNav");exports.default = TopNav;
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BotNav = function (_migi$Component) {
+  _inherits(BotNav, _migi$Component);
+
+  function BotNav() {
+    var _ref;
+
+    _classCallCheck(this, BotNav);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = BotNav.__proto__ || Object.getPrototypeOf(BotNav)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(BotNav, [{
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-botnav"]], ["All Rights Reserved 转圈circling 浙ICP备17029501号-2"]);
+    }
+  }]);
+
+  return BotNav;
+}(migi.Component);
+
+migi.name(BotNav, "BotNav");exports.default = BotNav;
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NeedLogin = function (_migi$Component) {
+  _inherits(NeedLogin, _migi$Component);
+
+  function NeedLogin() {
+    var _ref;
+
+    _classCallCheck(this, NeedLogin);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = NeedLogin.__proto__ || Object.getPrototypeOf(NeedLogin)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(NeedLogin, [{
+    key: "show",
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: "clickClose",
+    value: function clickClose(e) {
+      e.preventDefault();
+      this.hide();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-mlogin fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("h3", [], ["您尚未登录..."]), migi.createVd("p", [], [new migi.Obj("message", this, function () {
+        return this.message || '登录后即可进行相关操作~';
+      })]), migi.createVd("a", [["href", window.$CONFIG.loginUrl], ["class", "weibo"]], ["微博登录"]), migi.createVd("a", [["href", "#"], ["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
+    }
+  }, {
+    key: "message",
+    set: function set(v) {
+      this.__setBind("message", v);this.__data("message");
+    },
+    get: function get() {
+      return this.__getBind("message");
+    }
+  }]);
+
+  return NeedLogin;
+}(migi.Component);
+
+migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

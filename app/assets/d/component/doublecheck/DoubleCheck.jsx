@@ -15,8 +15,8 @@ class DoubleCheck extends migi.Component {
     this.tagList2 = this.props.tags.FilterlevelB;
     all = this.tagList2;
     this.on(migi.Event.DOM, function() {
-      this.autoWidth();
-      this.autoWidth2();
+      // this.autoWidth();
+      // this.autoWidth2();
     });
   }
   get tagList() {
@@ -36,9 +36,9 @@ class DoubleCheck extends migi.Component {
   @bind isLoadindL2
   setData(v) {
     this.tagList = v.FilterlevelA;
-    this.autoWidth();
+    // this.autoWidth();
     this.tagList2 = v.FilterlevelB;
-    this.autoWidth2();
+    // this.autoWidth2();
     all = this.tagList2;
   }
   setCacheL2(k, v) {
@@ -148,8 +148,8 @@ class DoubleCheck extends migi.Component {
             {
               this.tagList.map(function(item, i) {
                 let type = authorTemplate.code2Data[item.TagName];
-                return <li rel={ i } tagType={ item.TagType } tagID={ item.ID }><a href="#"><span>{ type ? type.name : item.TagName }</span></a></li>;
-              })
+                return <li class={ this.tagList.length === 1 ? 'on' : '' } rel={ i } tagType={ item.TagType } tagID={ item.ID }>{ type ? type.name : item.TagName }</li>;
+              }.bind(this))
             }
           </ul>
         </div>
@@ -160,7 +160,7 @@ class DoubleCheck extends migi.Component {
             {
               this.tagList2.map(function(item, i) {
                 let key = 'id' + item.ID + ',type' + item.TagType;
-                return <li rel={ i } tagType={ item.TagType } tagID={ item.ID } class={ choosedL2[key] ? 'on' : '' }><a href="#"><span>{ item.TagName }</span></a></li>;
+                return <li rel={ i } tagType={ item.TagType } tagID={ item.ID } class={ choosedL2[key] ? 'on' : '' }>{ item.TagName }</li>;
               })
             }
           </ul>

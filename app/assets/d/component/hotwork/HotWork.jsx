@@ -24,8 +24,7 @@ class HotWork extends migi.Component {
   render() {
     let authorId = this.props.authorId;
     return <div class="cp-hotwork">
-      <h3>{ this.props.title }<small>未来会根据你的口味进行精准智能的推送！>3&lt;</small></h3>
-      <b class="line"/>
+      <h4>{ this.props.title }<small>未来会根据你的口味进行精准智能的推送！>3&lt;</small></h4>
       <div class="fn fn-clear">
         <a href="#" class="change" onClick={ this.clickChange }>换一批</a>
       </div>
