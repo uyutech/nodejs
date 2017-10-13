@@ -12,29 +12,14 @@ module.exports = app => {
       let follows = [];
       let favors = [];
       let res = yield {
-        userInfo: ctx.curl(ctx.helper.getRemoteUrl('api/users/GetUserInfo'), {
-          method: 'POST',
-          data: {
-            uid,
-          },
-          dataType: 'json',
-          gzip: true,
+        userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+          uid,
         }),
-        follows: ctx.curl(ctx.helper.getRemoteUrl('api/users/GetLikeAuthorList'), {
-          method: 'POST',
-          data: {
-            uid,
-          },
-          dataType: 'json',
-          gzip: true,
+        follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+          uid,
         }),
-        favors: ctx.curl(ctx.helper.getRemoteUrl('api/users/GetLikeWorksList'), {
-          method: 'POST',
-          data: {
-            uid,
-          },
-          dataType: 'json',
-          gzip: true,
+        favors: ctx.helper.postServiceJSON('api/users/GetLikeWorksList', {
+          uid,
         }),
       };
       if(res.userInfo.data.success) {

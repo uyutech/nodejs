@@ -73,7 +73,7 @@
 
 __webpack_require__(134);
 
-var _TopNav = __webpack_require__(59);
+var _TopNav = __webpack_require__(60);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
@@ -255,7 +255,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 59:
+/***/ 60:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -402,7 +402,8 @@ migi.name(BotNav, "BotNav");exports.default = BotNav;
 /* 13 */,
 /* 14 */,
 /* 15 */,
-/* 16 */
+/* 16 */,
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -705,7 +706,6 @@ var Comment = function (_migi$Component) {
 migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
-/* 17 */,
 /* 18 */,
 /* 19 */,
 /* 20 */,
@@ -2331,7 +2331,7 @@ var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(16);
+var _Comment = __webpack_require__(17);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 

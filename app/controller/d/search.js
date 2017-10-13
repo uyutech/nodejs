@@ -10,13 +10,8 @@ module.exports = app => {
       let kw = ctx.params.kw;
       let datas = {};
       let res = yield {
-        datas: ctx.curl(ctx.helper.getRemoteUrl('api/search/Homesearch'), {
-          method: 'POST',
-          data: {
-            Parameter: kw,
-          },
-          dataType: 'json',
-          gzip: true,
+        datas: ctx.helper.postServiceJSON('api/search/Homesearch', {
+          Parameter: kw,
         }),
       };
       if(res.datas.data.success) {

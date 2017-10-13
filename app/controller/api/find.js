@@ -7,11 +7,7 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * hotWorkList(ctx) {
-      let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/find/Hot_works_List'), {
-        method: 'POST',
-        dataType: 'json',
-        gzip: true,
-      });
+      let res = yield ctx.helper.postServiceJSON('api/find/Hot_works_List');
       ctx.body = res.data;
     }
     * tagB(ctx) {
@@ -21,27 +17,17 @@ module.exports = app => {
       let playList = {};
       let playList2 = {};
       let res = yield {
-        playList: ctx.curl(ctx.helper.getRemoteUrl('api/find/GetFindWorkList'), {
-          method: 'POST',
-          data: {
-            Parameter: query.Parameter,
-            Skip: 0,
-            Take: 10,
-            SortType: 1,
-          },
-          dataType: 'json',
-          gzip: true,
+        playList: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
+          Parameter: query.Parameter,
+          Skip: 0,
+          Take: 10,
+          SortType: 1,
         }),
-        playList2: ctx.curl(ctx.helper.getRemoteUrl('api/find/GetFindWorkList'), {
-          method: 'POST',
-          data: {
-            Parameter: query.Parameter,
-            Skip: 0,
-            Take: 10,
-            SortType: 0,
-          },
-          dataType: 'json',
-          gzip: true,
+        playList2: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
+          Parameter: query.Parameter,
+          Skip: 0,
+          Take: 10,
+          SortType: 0,
         }),
       };
       if(res.playList.data.success) {

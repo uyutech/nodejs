@@ -17,6 +17,21 @@ module.exports = {
     }
     return 'http://172.19.118.93/' + url.replace(/^\//, '');
   },
+  * postServiceJSON(url, data) {
+    if(url.indexOf('//') === -1) {
+      url = 'http://172.19.118.93/' + url.replace(/^\//, '');
+    }
+    let start = Date.now();
+    let res = yield this.ctx.curl(url, {
+      method: 'POST',
+      data,
+      dataType: 'json',
+      gzip: true,
+    });
+    let end = Date.now();
+    this.ctx.getLogger('serviceLogger').info('[%s/%sms]', this.ctx.traceID, end - start);
+    return res;
+  },
   autoSsl: function(url) {
     return (url || '').replace(/^https?:\/\//i, '//');
   },

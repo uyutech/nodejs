@@ -12,29 +12,13 @@ module.exports = app => {
       let worksDetail = {};
       let commentData = {};
       let res = yield {
-        worksDetail: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetWorkDetails'), {
-          method: 'POST',
-          data: {
-            uid,
-            WorksID: worksID,
-          },
-          dataType: 'json',
-          gzip: true,
+        worksDetail: ctx.helper.postServiceJSON('api/works/GetWorkDetails', {
+          uid,
+          WorksID: worksID,
         }),
-        commentData: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetToWorkMessage_List'), {
-          method: 'POST',
-          data: {
-            uid,
-            WorksID: worksID,
-            WorkID: worksID,
-            Skip: 0,
-            Take: 10,
-            SortType: 0,
-            MyComment: 0,
-            CurrentCount: 0,
-          },
-          dataType: 'json',
-          gzip: true,
+        commentData: ctx.helper.postServiceJSON('api/works/GetToWorkMessage_List', {
+          uid,
+          WorksID: worksID,
         }),
       };
       if(res.worksDetail.data.success) {

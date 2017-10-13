@@ -13,37 +13,22 @@ module.exports = app => {
       let postData = {};
       let commentData = {};
       let res = yield {
-        list: ctx.curl(ctx.helper.getRemoteUrl('api/tag/GetTagPost'), {
-          method: 'POST',
-          data: {
-            uid,
-            TagID: 21,
-          },
-          dataType: 'json',
-          gzip: true,
+        list: ctx.helper.postServiceJSON('api/tag/GetTagPost', {
+          uid,
+          TagID: 21,
         }),
-        post: ctx.curl(ctx.helper.getRemoteUrl('api/tag/GetTagPostDetailes'), {
-          method: 'POST',
-          data: {
-            uid,
-            PostID: id,
-          },
-          dataType: 'json',
-          gzip: true,
+        post: ctx.helper.postServiceJSON('api/tag/GetTagPostDetailes', {
+          uid,
+          PostID: id,
         }),
-        commentData: ctx.curl(ctx.helper.getRemoteUrl('api/tag/GetToPostMessage_List'), {
-          method: 'POST',
-          data: {
-            uid,
-            PostID: id,
-            Skip: 0,
-            Take: 10,
-            sortType: 0,
-            currentCount: 0,
-            myComment: 0,
-          },
-          dataType: 'json',
-          gzip: true,
+        commentData: ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
+          uid,
+          PostID: id,
+          Skip: 0,
+          Take: 10,
+          sortType: 0,
+          currentCount: 0,
+          myComment: 0,
         }),
       };
       if(res.list.data.success) {
@@ -56,13 +41,8 @@ module.exports = app => {
         commentData = res.commentData.data.data;
       }
       if(uid) {
-        let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/users/GetUserInfo'), {
-          method: 'POST',
-          data: {
-            uid,
-          },
-          dataType: 'json',
-          gzip: true,
+        let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+          uid,
         });
         let userInfo = res.data.data || {};
         yield ctx.render('activity', {

@@ -706,15 +706,15 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _HotWork = __webpack_require__(47);
+var _HotWork = __webpack_require__(48);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotCollection = __webpack_require__(49);
+var _HotCollection = __webpack_require__(50);
 
 var _HotCollection2 = _interopRequireDefault(_HotCollection);
 
-var _HotAuthor = __webpack_require__(50);
+var _HotAuthor = __webpack_require__(51);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
@@ -889,11 +889,11 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _DoubleCheck = __webpack_require__(51);
+var _DoubleCheck = __webpack_require__(52);
 
 var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
 
-var _PlayList = __webpack_require__(52);
+var _PlayList = __webpack_require__(53);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -1050,7 +1050,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(53);
+var _Comment = __webpack_require__(54);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -1534,7 +1534,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 47:
+/***/ 48:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1550,7 +1550,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(48);
+var _AuthorType = __webpack_require__(49);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -1665,7 +1665,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 48:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1725,7 +1725,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 49:
+/***/ 50:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1796,7 +1796,7 @@ migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
 
-/***/ 50:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1887,7 +1887,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 51:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2113,7 +2113,7 @@ migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
 
-/***/ 52:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2181,7 +2181,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
 
-/***/ 53:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

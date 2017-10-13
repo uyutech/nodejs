@@ -9,13 +9,8 @@ module.exports = app => {
     * index(ctx) {
       if(ctx.session.uid) {
         let uid = ctx.session.uid;
-        let res = yield ctx.curl(ctx.helper.getRemoteUrl('api/users/GetUserInfo'), {
-          method: 'POST',
-          data: {
-            uid,
-          },
-          dataType: 'json',
-          gzip: true,
+        let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+          uid,
         });
         let userInfo = res.data.data || {};
         yield ctx.render('dindex', {

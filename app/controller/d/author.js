@@ -16,68 +16,38 @@ module.exports = app => {
       let playList2 = {};
       let commentData = [];
       let res = yield {
-        authorDetail: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetAuthorDetails'), {
-          method: 'POST',
-          data: {
-            uid,
-            AuthorID: authorID,
-          },
-          dataType: 'json',
-          gzip: true,
+        authorDetail: ctx.helper.postServiceJSON('api/author/GetAuthorDetails', {
+          uid,
+          AuthorID: authorID,
         }),
-        homeDetail: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetAuthorHomePage'), {
-          method: 'POST',
-          data: {
-            AuthorID: authorID,
-          },
-          dataType: 'json',
-          gzip: true,
+        homeDetail: ctx.helper.postServiceJSON('api/author/GetAuthorHomePage', {
+          AuthorID: authorID,
         }),
-        tags: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetAuthorWorks'), {
-          method: 'POST',
-          data: {
-            AuthorID: authorID,
-          },
-          dataType: 'json',
-          gzip: true,
+        tags: ctx.helper.postServiceJSON('api/author/GetAuthorWorks', {
+          AuthorID: authorID,
         }),
-        playList: ctx.curl(ctx.helper.getRemoteUrl('api/author/SearchWorks'), {
-          method: 'POST',
-          data: {
-            AuthorID: authorID,
-            Parameter: '',
-            Skip: 0,
-            Take: 10,
-            SortType: 1,
-          },
-          dataType: 'json',
-          gzip: true,
+        playList: ctx.helper.postServiceJSON('api/author/SearchWorks', {
+          AuthorID: authorID,
+          Parameter: '',
+          Skip: 0,
+          Take: 10,
+          SortType: 1,
         }),
-        playList2: ctx.curl(ctx.helper.getRemoteUrl('api/author/SearchWorks'), {
-          method: 'POST',
-          data: {
-            AuthorID: authorID,
-            Parameter: '',
-            Skip: 0,
-            Take: 10,
-            SortType: 0,
-          },
-          dataType: 'json',
-          gzip: true,
+        playList2: ctx.helper.postServiceJSON('api/author/SearchWorks', {
+          AuthorID: authorID,
+          Parameter: '',
+          Skip: 0,
+          Take: 10,
+          SortType: 0,
         }),
-        commentData: ctx.curl(ctx.helper.getRemoteUrl('api/author/GetToAuthorMessage_List'), {
-          method: 'POST',
-          data: {
-            uid,
-            AuthorID: authorID,
-            Skip: 0,
-            Take: 10,
-            SortType: 0,
-            MyComment: 0,
-            CurrentCount: 0,
-          },
-          dataType: 'json',
-          gzip: true,
+        commentData: ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
+          uid,
+          AuthorID: authorID,
+          Skip: 0,
+          Take: 10,
+          SortType: 0,
+          MyComment: 0,
+          CurrentCount: 0,
         }),
       };
       if(res.authorDetail.data.success) {

@@ -13,42 +13,20 @@ module.exports = app => {
       let playList = [];
       let playList2 = [];
       let res = yield {
-        hotWorkList: ctx.curl(ctx.helper.getRemoteUrl('api/find/Hot_works_List'), {
-          method: 'POST',
-          dataType: 'json',
-          gzip: true,
+        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List'),
+        hotAuthorList: ctx.helper.postServiceJSON('api/find/Hot_Author_List'),
+        tags: ctx.helper.postServiceJSON('api/find/GetTag'),
+        playList: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
+          Parameter: '',
+          Skip: 0,
+          Take: 10,
+          SortType: 1,
         }),
-        hotAuthorList: ctx.curl(ctx.helper.getRemoteUrl('api/find/Hot_Author_List'), {
-          method: 'POST',
-          dataType: 'json',
-          gzip: true,
-        }),
-        tags: ctx.curl(ctx.helper.getRemoteUrl('api/find/GetTag'), {
-          method: 'POST',
-          dataType: 'json',
-          gzip: true,
-        }),
-        playList: ctx.curl(ctx.helper.getRemoteUrl('api/find/GetFindWorkList'), {
-          method: 'POST',
-          data: {
-            Parameter: '',
-            Skip: 0,
-            Take: 10,
-            SortType: 1,
-          },
-          dataType: 'json',
-          gzip: true,
-        }),
-        playList2: ctx.curl(ctx.helper.getRemoteUrl('api/find/GetFindWorkList'), {
-          method: 'POST',
-          data: {
-            Parameter: '',
-            Skip: 0,
-            Take: 10,
-            SortType: 0,
-          },
-          dataType: 'json',
-          gzip: true,
+        playList2: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
+          Parameter: '',
+          Skip: 0,
+          Take: 10,
+          SortType: 0,
         }),
       };
       if(res.hotWorkList.data.success) {
