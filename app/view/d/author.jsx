@@ -8,6 +8,7 @@ import Author from '../../assets/d/author/Author.jsx';
 
 export default function(data) {
   migi.Element.resetUid();
+  let isLogin = !!data.ctx.session.uid;
   let authorID = data.authorID;
   let authorDetail = data.authorDetail;
   let homeDetail = data.homeDetail;
@@ -17,6 +18,7 @@ export default function(data) {
   let commentData = data.commentData;
 
   let author = migi.preRender(<Author
+    isLogin={ isLogin }
     authorID={ authorID }
     authorDetail={ authorDetail }
     homeDetail={ homeDetail }

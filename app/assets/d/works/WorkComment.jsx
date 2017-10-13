@@ -199,7 +199,7 @@ class WorkComment extends migi.Component {
       <h4>评论</h4>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
-          <li class="cur" rel="0">全部评论<small>123</small></li>
+          <li class="cur" rel="0">全部评论<small>{ this.props.commentData.Size }</small></li>
           {
             this.props.isLogin
               ? <li rel="1">我的</li>
@@ -211,7 +211,7 @@ class WorkComment extends migi.Component {
           <li rel="1">最热</li>
         </ul>
       </div>
-      <Page ref="page" total={ Math.ceil(this.props.commentData.Size / 10) }/>
+      <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <Comment ref="comment"
                zanUrl="/api/works/likeComment"
                subUrl="/api/works/subCommentList"

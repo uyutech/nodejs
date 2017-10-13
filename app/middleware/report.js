@@ -13,6 +13,6 @@ module.exports = () => {
     let uid = this.session ? this.session.uid || '-' : '-';
     let method = this.request.method;
     let url = this.request.url;
-    this.app.logger.info('[%s/%s/-/%sms %s %s]', uid, ip, end - start, method, url);
+    this.app.logger.info('[%s/%s/%s/%sms %s %s]', uid, ip, this.traceID, end - start, method, url);
   };
 };

@@ -40,10 +40,15 @@
           &.on{
             background-color:@mainColor;
             color:@mainTextColor;
-            cursor:default;
+            font-size:0.14rem;
+          }
+          &:only-child{
+            background-color:@mainColor;
+            color:@mainTextColor;
             font-size:0.14rem;
             &:hover{
               text-decoration:none;
+              cursor:default;
             }
           }
         }
@@ -90,7 +95,6 @@
           }
           &.on{
             color:@mainTextColor;
-            cursor:default;
             &:after{
               position:absolute;
               left:20%;
@@ -102,8 +106,12 @@
               border-radius:0.02rem;
               content:' ';
             }
+          }
+          &:only-child{
+            color:@mainTextColor;
             &:hover{
-              text-decoration:none;
+              text-decoration:underline;
+              cursor:default;
             }
           }
         }

@@ -220,26 +220,26 @@ class AuthorComment extends migi.Component {
   }
   render() {
     return <div class="comments fn-hide">
-      <ul class="type2 fn-clear" onClick={ { li: this.switchType2 } }>
-        <li class="cur" rel="0">全部</li>
-        <li rel="1">我的</li>
-      </ul>
-      <ul class="type fn-clear" onClick={ { li: this.switchType } }>
-        <li class="cur" rel="0">最新</li>
-        <li rel="1">最热</li>
-      </ul>
-      <div class={ 'reply' + (this.replayId ? '' : ' fn-hidden') } onClick={ this.clickReplay }>回复：{ this.replayName }</div>
-      <form class="form" ref="form" onSubmit={ this.submit }>
-        <input type="text" class="text" ref="input" placeholder="请输入评论内容" onInput={ this.input } onFocus={ this.focus }/>
-        <input type="submit" class={ 'submit' + (this.hasContent && !this.loading ? '' : ' dis') } value="发布评论"/>
-      </form>
+      <div class="fn">
+        <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
+          <li class="cur" rel="0">全部评论<small>{ this.props.commentData.Size }</small></li>
+          {
+            this.props.isLogin
+              ? <li rel="1">我的</li>
+              : ''
+          }
+        </ul>
+        <ul class="type2 fn-clear" onClick={ { li: this.switchType } }>
+          <li class="cur" rel="0">最新</li>
+          <li rel="1">最热</li>
+        </ul>
+      </div>
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
-      <Comment
-        ref="comment"
-        zanUrl="/api/author/likeComment"
-        subUrl="/api/author/subCommentList"
-        delUrl="/api/author/delComment"
-        data={ this.props.commentData.data }/>
+      <Comment ref="comment"
+               zanUrl="/api/author/likeComment"
+               subUrl="/api/author/subCommentList"
+               delUrl="/api/author/delComment"
+               data={ this.props.commentData.data }/>
     </div>;
   }
 }

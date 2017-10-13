@@ -9,16 +9,10 @@ class Dynamics extends migi.Component {
   @bind list = []
   click(e, vd, tvd) {
     let url = tvd.props.href;
-    jsBridge.openUri(url);
   }
   render() {
     return <div class="cp-dynamic">
-      <h3>{ this.props.title }<small>等这个功能上线，就再也不用担心特关是死的啦！>3&lt;</small></h3>
-      <b class="line"/>
-      <div class="fn fn-clear fn-hide">
-        <a href="#" class="prev">上一页</a>
-        <a href="#" class="next">下一页</a>
-      </div>
+      <h4>{ this.props.title }<small>等这个功能上线，就再也不用担心特关是死的啦！>3&lt;</small></h4>
       <ul class={ this.list.length ? '' : 'fn-hide' } onClick={ { li: this.click } }>
         {
           this.list.map(function(item) {

@@ -173,24 +173,6 @@
   font-size: 0.12rem;
   opacity: 0.8;
 }
-.cp-hotauthor .fn {
-  position: absolute;
-  top: 0.05rem;
-  right: 0.2rem;
-  font-size: 0.12rem;
-  color: #FFF;
-}
-.cp-hotauthor .fn .change {
-  float: left;
-  position: relative;
-  margin-left: 0.2rem;
-  padding: 0 0.1rem;
-  height: 0.24rem;
-  line-height: 0.24rem;
-  border: 1px solid #FFF;
-  border-radius: 0.24rem;
-  color: #FFF;
-}
 .cp-hotauthor .list {
   margin-top: 0.2rem;
   margin-right: -0.72rem;
@@ -303,11 +285,16 @@
 .cp-doublecheck .l1 .c ul li.on {
   background-color: #8BBDE1;
   color: #2D4D67;
-  cursor: default;
   font-size: 0.14rem;
 }
-.cp-doublecheck .l1 .c ul li.on:hover {
+.cp-doublecheck .l1 .c ul li:only-child {
+  background-color: #8BBDE1;
+  color: #2D4D67;
+  font-size: 0.14rem;
+}
+.cp-doublecheck .l1 .c ul li:only-child:hover {
   text-decoration: none;
+  cursor: default;
 }
 .cp-doublecheck .l2 {
   position: relative;
@@ -346,7 +333,6 @@
 }
 .cp-doublecheck .l2 .c ul li.on {
   color: #2D4D67;
-  cursor: default;
 }
 .cp-doublecheck .l2 .c ul li.on:after {
   position: absolute;
@@ -359,8 +345,12 @@
   border-radius: 0.02rem;
   content: ' ';
 }
-.cp-doublecheck .l2 .c ul li.on:hover {
-  text-decoration: none;
+.cp-doublecheck .l2 .c ul li:only-child {
+  color: #2D4D67;
+}
+.cp-doublecheck .l2 .c ul li:only-child:hover {
+  text-decoration: underline;
+  cursor: default;
 }
 /**
  * Created by army on 2017/7/1.
@@ -536,7 +526,10 @@
   margin: 0.2rem 0;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   border-radius: 0.1rem;
-  overflow: hidden;
+}
+.find > .hot > .cp-hotwork h4 {
+  border-top-left-radius: 0.1rem;
+  border-top-right-radius: 0.1rem;
 }
 .find > .hot > .cp-collection {
   margin-top: 0.2rem;

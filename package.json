@@ -6,11 +6,12 @@
   "dependencies": {
     "egg": "~1.8.0",
     "egg-scripts": "~1.2.0",
-    "egg-view-migi": "~1.0.3",
+    "egg-view-migi": "~1.0.4",
     "egg-view-nunjucks": "~2.1.4",
-    "md5": "^2.2.1",
+    "md5": "~2.2.1",
     "migi": "~3.9.1",
-    "moment": "^2.19.1"
+    "moment": "~2.19.1",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "anima-querystring": "^2.0.0",

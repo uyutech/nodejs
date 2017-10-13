@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 78);
+/******/ 	return __webpack_require__(__webpack_require__.s = 74);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7395,11 +7395,7 @@ module.exports = event;
 /* 71 */,
 /* 72 */,
 /* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7470,6 +7466,10 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
 /* 79 */,
 /* 80 */,
 /* 81 */,
