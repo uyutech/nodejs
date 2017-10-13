@@ -713,7 +713,7 @@ var _Element2 = __webpack_require__(4);
 
 var _Element3 = _interopRequireDefault(_Element2);
 
-var _VirtualDom = __webpack_require__(9);
+var _VirtualDom = __webpack_require__(11);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -721,11 +721,15 @@ var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _EventBus = __webpack_require__(12);
+var _Obj = __webpack_require__(10);
+
+var _Obj2 = _interopRequireDefault(_Obj);
+
+var _EventBus = __webpack_require__(13);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(13);
+var _Model = __webpack_require__(14);
 
 var _Model2 = _interopRequireDefault(_Model);
 
@@ -789,19 +793,17 @@ var Component = function (_Element) {
     self.__bindHash = {}; //缩略语法中是否设置过默认值
     self.__ob = []; //被array们的__ob__引用
 
-    self.__props.forEach(function (item) {
+    self.__props.forEach(function (item, index) {
       var k = item[0];
       var v = item[1];
-      self.__init(k, v);
+      self.__init(k, v, index);
     });
-
-    // self.on(Event.DATA, self.__onData);
     return _this;
   }
 
   _createClass(Component, [{
     key: '__init',
-    value: function __init(k, v) {
+    value: function __init(k, v, index) {
       var self = this;
       if (/^on[a-zA-Z]/.test(k)) {
         var name = k.slice(2).toLowerCase();
@@ -815,6 +817,9 @@ var Component = function (_Element) {
         });
       } else if (k == 'model') {
         self.model = v;
+      } else if (v instanceof _Obj2.default) {
+        self.__props[index] = v.v;
+        self.props[k] = v.v;
       }
     }
     //需要被子类覆盖
@@ -1208,7 +1213,101 @@ exports.default = {
 
 /***/ }),
 /* 8 */,
-/* 9 */
+/* 9 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+var _Element = __webpack_require__(4);
+
+var _Element2 = _interopRequireDefault(_Element);
+
+var _util = __webpack_require__(1);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+var Obj = function () {
+  function Obj(k, context, cb) {
+    _classCallCheck(this, Obj);
+
+    this.k = k;
+    this.context = context;
+    this.cb = cb;
+    this.setV(cb.call(context));
+  }
+
+  _createClass(Obj, [{
+    key: 'setV',
+    value: function setV(v) {
+      this.v = _util2.default.clone(v);
+    }
+    //prop为true时作为prop渲染转义，否则为innerHTML转义
+
+  }, {
+    key: 'toString',
+    value: function toString(prop) {
+      //array调用join包括转码
+      if (Array.isArray(this.v)) {
+        return _util2.default.joinArray(this.v, prop);
+      }
+      var s = _util2.default.stringify(this.v);
+      if (prop) {
+        return _util2.default.encodeHtml(s, prop);
+      }
+      return this.v instanceof _Element2.default ? s : _util2.default.encodeHtml(s);
+    }
+  }, {
+    key: 'toSourceString',
+    value: function toSourceString() {
+      if (Array.isArray(this.v)) {
+        return _util2.default.joinSourceArray(this.v);
+      }
+      return _util2.default.stringify(this.v);
+    }
+  }, {
+    key: 'update',
+    value: function update(ov) {
+      var nv = this.cb.call(this.context);
+      if (!_util2.default.equal(ov, nv)) {
+        this.setV(nv);
+        return true;
+      }
+    }
+  }]);
+
+  return Obj;
+}();
+
+exports.default = Obj;
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1262,11 +1361,11 @@ var _util = __webpack_require__(1);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Obj = __webpack_require__(14);
+var _Obj = __webpack_require__(10);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(11);
+var _Cb = __webpack_require__(12);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -1481,8 +1580,22 @@ var VirtualDom = function (_Element) {
         return res + '/>';
       }
       res += '>';
+      //有dangerouslySetInnerHTML直接返回
+      if (self.props.dangerouslySetInnerHTML) {
+        var s = self.props.dangerouslySetInnerHTML;
+        if (s instanceof _Obj2.default) {
+          s = s.toSourceString();
+        } else if (Array.isArray(s)) {
+          s = _util2.default.joinSourceArray(s);
+        } else {
+          s = _util2.default.stringify(s);
+        }
+        res += s;
+      }
       //渲染children
-      res += self.__renderChildren();
+      else {
+          res += self.__renderChildren();
+        }
       res += '</' + self.name + '>';
       return res;
     }
@@ -1714,9 +1827,6 @@ var VirtualDom = function (_Element) {
       else if (v instanceof _Obj2.default) {
           //特殊html不转义
           if (k == 'dangerouslySetInnerHTML') {
-            self.once(_Event2.default.DOM, function () {
-              self.element.innerHTML = v.toSourceString();
-            });
             return '';
           }
           var s = v.toString(true);
@@ -1746,9 +1856,6 @@ var VirtualDom = function (_Element) {
         } else {
           var s = Array.isArray(v) ? _util2.default.joinSourceArray(v) : _util2.default.stringify(v);
           if (k == 'dangerouslySetInnerHTML') {
-            self.once(_Event2.default.DOM, function () {
-              self.element.innerHTML = s;
-            });
             return '';
           }
           if (k == 'className') {
@@ -2500,8 +2607,7 @@ function allChildren(child) {
 exports.default = VirtualDom;
 
 /***/ }),
-/* 10 */,
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2527,7 +2633,7 @@ var Cb = function Cb(context, cb) {
 exports.default = Cb;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2735,7 +2841,7 @@ var EventBus = function (_Event) {
 exports.default = EventBus;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2854,99 +2960,6 @@ var Model = function (_Event) {
 });
 
 exports.default = Model;
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-var _Element = __webpack_require__(4);
-
-var _Element2 = _interopRequireDefault(_Element);
-
-var _util = __webpack_require__(1);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-var Obj = function () {
-  function Obj(k, context, cb) {
-    _classCallCheck(this, Obj);
-
-    this.k = k;
-    this.context = context;
-    this.cb = cb;
-    this.setV(cb.call(context));
-  }
-
-  _createClass(Obj, [{
-    key: 'setV',
-    value: function setV(v) {
-      this.v = _util2.default.clone(v);
-    }
-    //prop为true时作为prop渲染转义，否则为innerHTML转义
-
-  }, {
-    key: 'toString',
-    value: function toString(prop) {
-      //array调用join包括转码
-      if (Array.isArray(this.v)) {
-        return _util2.default.joinArray(this.v, prop);
-      }
-      var s = _util2.default.stringify(this.v);
-      if (prop) {
-        return _util2.default.encodeHtml(s, prop);
-      }
-      return this.v instanceof _Element2.default ? s : _util2.default.encodeHtml(s);
-    }
-  }, {
-    key: 'toSourceString',
-    value: function toSourceString() {
-      if (Array.isArray(this.v)) {
-        return _util2.default.joinSourceArray(this.v);
-      }
-      return _util2.default.stringify(this.v);
-    }
-  }, {
-    key: 'update',
-    value: function update(ov) {
-      var nv = this.cb.call(this.context);
-      if (!_util2.default.equal(ov, nv)) {
-        this.setV(nv);
-        return true;
-      }
-    }
-  }]);
-
-  return Obj;
-}();
-
-exports.default = Obj;
 
 /***/ }),
 /* 15 */
@@ -3414,7 +3427,7 @@ var _Component2 = __webpack_require__(5);
 
 var _Component3 = _interopRequireDefault(_Component2);
 
-var _EventBus = __webpack_require__(12);
+var _EventBus = __webpack_require__(13);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
@@ -3625,7 +3638,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Model2 = __webpack_require__(13);
+var _Model2 = __webpack_require__(14);
 
 var _Model3 = _interopRequireDefault(_Model2);
 
@@ -4867,11 +4880,11 @@ var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _VirtualDom = __webpack_require__(9);
+var _VirtualDom = __webpack_require__(11);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _Obj = __webpack_require__(14);
+var _Obj = __webpack_require__(10);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -5693,7 +5706,7 @@ var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _Cb = __webpack_require__(11);
+var _Cb = __webpack_require__(12);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -6486,7 +6499,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _VirtualDom = __webpack_require__(9);
+var _VirtualDom = __webpack_require__(11);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -6955,11 +6968,11 @@ var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _EventBus = __webpack_require__(12);
+var _EventBus = __webpack_require__(13);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(13);
+var _Model = __webpack_require__(14);
 
 var _Model2 = _interopRequireDefault(_Model);
 
@@ -6971,7 +6984,7 @@ var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _VirtualDom = __webpack_require__(9);
+var _VirtualDom = __webpack_require__(11);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -6983,11 +6996,11 @@ var _CacheComponent = __webpack_require__(21);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
-var _Obj = __webpack_require__(14);
+var _Obj = __webpack_require__(10);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(11);
+var _Cb = __webpack_require__(12);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 

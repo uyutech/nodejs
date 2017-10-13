@@ -40,7 +40,7 @@ class Works extends migi.Component {
     let authorHash = {};
     works.forEach(function(item) {
       // 将每个小作品根据小类型映射到大类型上，再归类
-      let type = itemTemplate(item.ItemType);
+      let type = itemTemplate.workType(item.ItemType);
       let bigType = type.bigType;
       let name = type.display || type.name;
       if(bigType) {
@@ -67,53 +67,36 @@ class Works extends migi.Component {
     });
 
     authorHash = {};
-    let tempHash = {
-      901: 1,
-      111: 1,
-      112: 1,
-      121: 2,
-      122: 2,
-      411: 2,
-      421: 2,
-      131: 2,
-      134: 2,
-      141: 2,
-      211: 3,
-      312: 3,
-      311: 3,
-      313: 3,
-      351: 3,
-      331: 3,
-      332: 3,
-    };
+    let authorType = itemTemplate.authorType;
+    let authorTypeHash = {};
+    let authorTypeList = [];
+    let unknowList = [];
+    authorType.forEach(function(list, index) {
+      list.forEach(function(item) {
+        authorTypeHash[item] = index;
+      });
+    });
     authorList.forEach(function(item) {
-      let type = tempHash[item.WorksAuthorType] || 3;
-      authorHash[type] = authorHash[type] || [];
-      authorHash[type].push(item);
+      let i = authorTypeHash[item.WorksAuthorType];
+      if(i === undefined) {
+        unknowList.push(item);
+      }
+      else {
+        authorTypeList[i] = authorTypeList[i] || [];
+        authorTypeList[i].push(item);
+      }
     });
     authorList = [];
-    if(authorHash[1]) {
-      let seq = [901, 111, 112];
-      migi.sort(authorHash[1], function(a, b) {
+    authorTypeList.forEach(function(item, index) {
+      let seq = itemTemplate.authorType[index];
+      migi.sort(item, function(a, b) {
         return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
       });
-      authorList.push(authorHash[1]);
+    });
+    if(unknowList.length) {
+      authorTypeList.push(unknowList);
     }
-    if(authorHash[2]) {
-      let seq = [121, 122, 411, 421, 131, 134, 141];
-      migi.sort(authorHash[2], function(a, b) {
-        return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
-      });
-      authorList.push(authorHash[2]);
-    }
-    if(authorHash[3]) {
-      let seq = [211, 312, 311, 313, 351, 331, 332];
-      migi.sort(authorHash[3], function(a, b) {
-        return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
-      });
-      authorList.push(authorHash[3]);
-    }
-    self.authorList = authorList;
+    self.authorList = authorTypeList;
 
     workList.forEach(function(item) {
       if(item.bigType === 'audio') {

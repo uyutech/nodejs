@@ -680,7 +680,7 @@ var Author = function (_migi$Component) {
     key: 'setAuthor',
     value: function setAuthor(data) {
       var list = [];
-      data.forEach(function (item) {
+      (data || []).forEach(function (item) {
         var temp = [];
         var lis = [];
         var last = '';
@@ -721,7 +721,7 @@ var Author = function (_migi$Component) {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "mod authors"]], [migi.createVd("h4", [], ["作者"]), migi.createVd("div", [["class", "c"]], [new migi.Obj("list", this, function () {
-        return this.list.map(function (item) {
+        return (this.list || []).map(function (item) {
           return item;
         });
       })])]);
@@ -1108,8 +1108,8 @@ var Timeline = function (_migi$Component) {
   _createClass(Timeline, [{
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "mod timeline"]], [migi.createVd("ul", [["class", "c"]], [(this.props.datas || []).map(function (item) {
-        return migi.createVd("li", [], [item.LineDate + ' ' + item.Describe]);
+      return migi.createVd("div", [["class", "mod timeline"]], [migi.createVd("ul", [["class", "c fn-clear"]], [(this.props.datas || []).map(function (item) {
+        return migi.createVd("li", [], [migi.createVd("span", [], [item.Describe]), migi.createVd("small", [], [item.LineDate])]);
       })])]);
     }
   }]);
@@ -2049,48 +2049,50 @@ var works = migi.preExist(migi.createCp(_Works2.default, [["isLogin", $CONFIG.is
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+/**
+ * Created by army8735 on 2017/8/13.
+ */
 
-exports.default = function (workType) {
-  switch (workType) {
-    case 1111:
-      return {
-        bigType: 'audio',
-        name: '原创音乐'
-      };
-    case 1131:
-      return {
-        bigType: 'audio',
-        name: '原创伴奏'
-      };
-    case 2111:
-      return {
-        bigType: 'video',
-        name: '原创视频'
-      };
-    case 3120:
-      return {
-        bigType: 'poster',
-        name: '海报'
-      };
-    case 4110:
-      return {
-        bigType: 'text',
-        name: '文案'
-      };
-    case 4211:
-      return {
-        bigType: 'lyric',
-        name: '原创歌词',
-        display: '歌词'
-      };
-    default:
-      return {};
-  }
+exports.default = {
+  workType: function workType(type) {
+    switch (type) {
+      case 1111:
+        return {
+          bigType: 'audio',
+          name: '原创音乐'
+        };
+      case 1131:
+        return {
+          bigType: 'audio',
+          name: '原创伴奏'
+        };
+      case 2111:
+        return {
+          bigType: 'video',
+          name: '原创视频'
+        };
+      case 3120:
+        return {
+          bigType: 'poster',
+          name: '海报'
+        };
+      case 4110:
+        return {
+          bigType: 'text',
+          name: '文案'
+        };
+      case 4211:
+        return {
+          bigType: 'lyric',
+          name: '原创歌词',
+          display: '歌词'
+        };
+      default:
+        return {};
+    }
+  },
+  authorType: [[901, 902], [111, 112], [151], [121, 122], [411, 421], [131, 132, 134], [141], [211], [312, 311, 313], [351], [331, 332]]
 };
-
-; /**
-   * Created by army8735 on 2017/8/13.
-   */
 
 /***/ }),
 
@@ -3062,7 +3064,7 @@ var Works = function (_migi$Component) {
       var authorHash = {};
       works.forEach(function (item) {
         // 将每个小作品根据小类型映射到大类型上，再归类
-        var type = (0, _itemTemplate2.default)(item.ItemType);
+        var type = _itemTemplate2.default.workType(item.ItemType);
         var bigType = type.bigType;
         var name = type.display || type.name;
         if (bigType) {
@@ -3089,53 +3091,35 @@ var Works = function (_migi$Component) {
       });
 
       authorHash = {};
-      var tempHash = {
-        901: 1,
-        111: 1,
-        112: 1,
-        121: 2,
-        122: 2,
-        411: 2,
-        421: 2,
-        131: 2,
-        134: 2,
-        141: 2,
-        211: 3,
-        312: 3,
-        311: 3,
-        313: 3,
-        351: 3,
-        331: 3,
-        332: 3
-      };
+      var authorType = _itemTemplate2.default.authorType;
+      var authorTypeHash = {};
+      var authorTypeList = [];
+      var unknowList = [];
+      authorType.forEach(function (list, index) {
+        list.forEach(function (item) {
+          authorTypeHash[item] = index;
+        });
+      });
       authorList.forEach(function (item) {
-        var type = tempHash[item.WorksAuthorType] || 3;
-        authorHash[type] = authorHash[type] || [];
-        authorHash[type].push(item);
+        var i = authorTypeHash[item.WorksAuthorType];
+        if (i === undefined) {
+          unknowList.push(item);
+        } else {
+          authorTypeList[i] = authorTypeList[i] || [];
+          authorTypeList[i].push(item);
+        }
       });
       authorList = [];
-      if (authorHash[1]) {
-        var seq = [901, 111, 112];
-        migi.sort(authorHash[1], function (a, b) {
+      authorTypeList.forEach(function (item, index) {
+        var seq = _itemTemplate2.default.authorType[index];
+        migi.sort(item, function (a, b) {
           return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
         });
-        authorList.push(authorHash[1]);
+      });
+      if (unknowList.length) {
+        authorTypeList.push(unknowList);
       }
-      if (authorHash[2]) {
-        var _seq = [121, 122, 411, 421, 131, 134, 141];
-        migi.sort(authorHash[2], function (a, b) {
-          return _seq.indexOf(a.WorksAuthorType) > _seq.indexOf(b.WorksAuthorType);
-        });
-        authorList.push(authorHash[2]);
-      }
-      if (authorHash[3]) {
-        var _seq2 = [211, 312, 311, 313, 351, 331, 332];
-        migi.sort(authorHash[3], function (a, b) {
-          return _seq2.indexOf(a.WorksAuthorType) > _seq2.indexOf(b.WorksAuthorType);
-        });
-        authorList.push(authorHash[3]);
-      }
-      self.authorList = authorList;
+      self.authorList = authorTypeList;
 
       workList.forEach(function (item) {
         if (item.bigType === 'audio') {

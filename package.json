@@ -9,7 +9,7 @@
     "egg-view-migi": "~1.0.3",
     "egg-view-nunjucks": "~2.1.4",
     "md5": "^2.2.1",
-    "migi": "~3.9.0"
+    "migi": "~3.9.1"
   },
   "devDependencies": {
     "anima-querystring": "^2.0.0",

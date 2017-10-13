@@ -14,7 +14,7 @@ export default function(data) {
   let id = data.id;
   let postData = data.postData;
   let commentData = data.commentData;
-  let list = data.list;console.log(list);
+  let list = data.list;
 
   let topNav = migi.preRender(<TopNav userInfo={ userInfo }/>);
   let activity = migi.preRender(<Activity

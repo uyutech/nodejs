@@ -14,7 +14,7 @@ class Author extends migi.Component {
   @bind list = []
   setAuthor(data) {
     let list = [];
-    data.forEach(function(item) {
+    (data || []).forEach(function(item) {
       let temp = [];
       let lis = [];
       let last = '';
@@ -80,7 +80,7 @@ class Author extends migi.Component {
       <h4>作者</h4>
       <div class="c">
         {
-          this.list.map(function(item) {
+          (this.list || []).map(function(item) {
             return item;
           })
         }

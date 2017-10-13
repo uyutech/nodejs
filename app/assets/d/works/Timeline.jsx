@@ -10,10 +10,13 @@ class Timeline extends migi.Component {
   }
   render() {
     return <div class="mod timeline">
-      <ul class="c">
+      <ul class="c fn-clear">
         {
           (this.props.datas || []).map(function(item) {
-            return <li>{ item.LineDate + ' ' + item.Describe }</li>;
+            return <li>
+              <span>{ item.Describe }</span>
+              <small>{ item.LineDate }</small>
+            </li>;
           })
         }
       </ul>

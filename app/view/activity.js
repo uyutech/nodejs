@@ -766,7 +766,7 @@ exports.default = function (data) {
   var id = data.id;
   var postData = data.postData;
   var commentData = data.commentData;
-  var list = data.list;console.log(list);
+  var list = data.list;
 
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo]]));
   var activity = migi.preRender(migi.createCp(_Activity2.default, [["isLogin", isLogin], ["id", id], ["postData", postData], ["commentData", commentData]]));
