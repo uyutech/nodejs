@@ -28,32 +28,28 @@ class AuthorComment extends migi.Component {
       });
       let comment = self.ref.comment;
       comment.on('chooseSubComment', function(rid, cid, name) {
-        self.rootId = rid;
-        self.replayId = cid;
+        self.rootID = rid;
+        self.parentID = cid;
         self.replayName = name;
       });
       comment.on('closeSubComment', function() {
-        self.clickReplay();
+        self.rootID = -1;
+        self.parentID = -1;
       });
     });
   }
-  @bind showComment
-  @bind rootId = null
-  @bind replayId = null
-  @bind replayName
-  @bind hasContent
   @bind loading
   @bind authorID
+  @bind rootID = -1
+  @bind parentID = -1
+  @bind replayName = ''
   show() {
     let self = this;
     $(self.element).removeClass('fn-hide');
-    self.showComment = true;
   }
   hide() {
     let self = this;
     $(self.element).addClass('fn-hide');
-    self.showComment = false;
-    skip = 0;
   }
   load() {
     let self = this;
@@ -159,64 +155,6 @@ class AuthorComment extends migi.Component {
     this.loading = false;
     this.ref.comment.clearData();
     this.load();
-  }
-  clickReplay() {
-    this.replayId = null;
-    this.replayName = null;
-    this.rootId = null;
-  }
-  input(e, vd) {
-    if(!window.$CONFIG.isLogin) {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-    else {
-      let v = $(vd.element).val().trim();
-      this.hasContent = v.length > 0;
-    }
-  }
-  focus(e, vd) {
-    if(!window.$CONFIG.isLogin) {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-  }
-  submit(e) {
-    e.preventDefault();
-    let self = this;
-    if(self.hasContent) {
-      let $input = $(this.ref.input.element);
-      let content = $input.val();
-      let parentID = self.replayId !== null ? self.replayId : -1;
-      let rootID = self.rootId !== null ? self.rootId : -1;
-      self.loading = true;
-      net.postJSON('/api/author/addComment', {
-        authorID: self.authorID,
-        parentID,
-        rootID,
-        content,
-      }, function(res) {
-        if(res.success) {
-          $input.val('');
-          self.hasContent = false;
-          if(RootID === -1) {
-            self.ref.comment.prependData(res.data);
-            self.ref.comment.message = '';
-          }
-          else {
-            self.ref.comment.prependChild(res.data);
-          }
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        self.loading = false;
-      }, function(res) {
-        alert(res.message || util.ERROR_MESSAGE);
-        self.loading = false;
-      });
-    }
   }
   render() {
     return <div class="comments fn-hide">

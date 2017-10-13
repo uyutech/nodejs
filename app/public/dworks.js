@@ -2097,18 +2097,20 @@ var WorkComment = function (_migi$Component) {
       comment.on('chooseSubComment', function (rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
+        self.replayName = name;
       });
       comment.on('closeSubComment', function () {
         self.rootID = -1;
         self.parentID = -1;
+        self.replayName = '';
       });
       subCmt.on('submit', function (content) {
         subCmt.isCommentSending = true;
         var rootID = self.rootID;
         var parentID = self.parentID;
         _net2.default.postJSON('/api/works/addComment', {
-          parentID: self.parentID,
-          rootID: self.rootID,
+          parentID: parentID,
+          rootID: rootID,
           worksID: self.worksID,
           workID: self.workID,
           barrageTime: self.barrageTime,
@@ -2251,13 +2253,6 @@ var WorkComment = function (_migi$Component) {
       }
     }
   }, {
-    key: 'clickReplay',
-    value: function clickReplay() {
-      this.replayId = null;
-      this.replayName = null;
-      this.rootId = null;
-    }
-  }, {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "mod comments"]], [migi.createVd("h4", [], ["评论"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / take)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/works/likeComment"], ["subUrl", "/api/works/subCommentList"], ["delUrl", "/api/works/delComment"], ["data", this.props.commentData.data]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["placeholder", "夸夸这个作品吧"]])]);
@@ -2301,6 +2296,14 @@ var WorkComment = function (_migi$Component) {
     },
     get: function get() {
       if (this.__initBind("parentID")) this.__setBind("parentID", -1);return this.__getBind("parentID");
+    }
+  }, {
+    key: 'replayName',
+    set: function set(v) {
+      this.__setBind("replayName", v);this.__data("replayName");
+    },
+    get: function get() {
+      if (this.__initBind("replayName")) this.__setBind("replayName", '');return this.__getBind("replayName");
     }
   }, {
     key: 'barrageTime',

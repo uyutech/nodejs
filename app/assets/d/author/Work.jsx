@@ -2,6 +2,8 @@
  * Created by army on 2017/6/24.
  */
 
+import net from '../common/net';
+import util from '../common/util';
 import DoubleCheck from '../component/doublecheck/DoubleCheck.jsx';
 import PlayList from '../component/playlist/PlayList.jsx';
 
@@ -23,7 +25,7 @@ class Work extends migi.Component {
             ajaxL2.abort();
           }
           doubleCheck.isLoadindL2 = true;
-          util.postJSON('api/author/GetAuthorFilterlevelB', { AuthorID: self.authorID, FilterlevelA: param }, function (res) {
+          net.postJSON('api/author/GetAuthorFilterlevelB', { AuthorID: self.authorID, FilterlevelA: param }, function (res) {
             if(res.success) {
               let data = res.data;
               doubleCheck.tagList2 = data;
@@ -54,22 +56,12 @@ class Work extends migi.Component {
   hide() {
     $(this.element).addClass('fn-hide');
   }
-  load() {
-    let self = this;
-    util.postJSON('api/author/GetAuthorWorks', { AuthorID: self.authorID }, function (res) {
-      if(res.success) {
-        let data = res.data;
-        self.ref.doubleCheck.setData(data);
-      }
-    });
-    self.loadPlayList();
-  }
   loadPlayList() {
     let self = this;
     if(ajax) {
       ajax.abort();
     }
-    ajax = util.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, Parameter, Skip: 0, Take: 10, SortType }, function(res) {
+    ajax = net.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, Parameter, Skip: 0, Take: 10, SortType }, function(res) {
       if(res.success) {
         let data = res.data;
         self.ref.playList.setData(data.data);

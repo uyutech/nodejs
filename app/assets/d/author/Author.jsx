@@ -8,38 +8,50 @@ import Nav from './Nav.jsx';
 import Home from './Home.jsx';
 import Work from './Work.jsx';
 import AuthorComment from './AuthorComment.jsx';
+import SubCmt from '../component/subcmt/SubCmt.jsx';
 
 class Author extends migi.Component {
   constructor(...data) {
     super(...data);
-    // let self = this;
-    // self.on(migi.Event.DOM, function() {
-    //   let tags = self.ref.tags;
-    //   let home = self.ref.home;
-    //   let work = self.ref.work;
-    //   let authorComment = self.ref.authorComment;
-    //   tags.on('change', function(i) {
-    //     home && home.hide();
-    //     work && work.hide();
-    //     authorComment && authorComment.hide();
-    //     switch (i) {
-    //       case '0':
-    //         home.show();
-    //         break;
-    //       case '1':
-    //         work.show();
-    //         work.ref.doubleCheck.autoWidth();
-    //         work.ref.doubleCheck.autoWidth2();
-    //         break;
-    //       case '2':
-    //         authorComment.show();
-    //         break;
-    //     }
-    //   });
-    //   // setTimeout(function() {
-    //   //   tags.emit('change', '2');
-    //   // }, 100);
-    // });
+    let self = this;
+    self.on(migi.Event.DOM, function() {
+      let authorComment = self.ref.authorComment;
+      let comment = self.ref.authorComment.ref.comment;
+      let subCmt = self.ref.subCmt;
+      subCmt.on('submit', function(content) {
+        subCmt.isCommentSending = true;
+        let rootID = authorComment.rootID;
+        let parentID = authorComment.parentID;
+        net.postJSON('/api/author/addComment', {
+          parentID: parentID,
+          rootID: rootID,
+          authorID: authorComment.authorID,
+          content,
+        }, function(res) {
+          if(res.success) {
+            subCmt.value = '';
+            subCmt.hasCommentContent = false;
+            if(rootID === -1) {
+              comment.prependData(res.data);
+              comment.message = '';
+            }
+            else {
+              comment.prependChild(res.data);
+            }
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+          }
+          subCmt.isCommentSending = false;
+        }, function(res) {
+          alert(res.message || util.ERROR_MESSAGE);
+          subCmt.isCommentSending = false;
+        });
+      });
+    });
   }
   clickType(e, vd ,tvd) {
     let $li = $(tvd.element);
@@ -83,6 +95,8 @@ class Author extends migi.Component {
         isLogin={ this.props.isLogin }
         authorID={ this.props.authorID }
         commentData={ this.props.commentData }/>
+      <SubCmt ref="subCmt"
+              placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
     </div>;
   }
 }

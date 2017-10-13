@@ -33,18 +33,20 @@ class WorkComment extends migi.Component {
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
+        self.replayName = name;
       });
       comment.on('closeSubComment', function() {
         self.rootID = -1;
         self.parentID = -1;
+        self.replayName = '';
       });
       subCmt.on('submit', function(content) {
         subCmt.isCommentSending = true;
         let rootID = self.rootID;
         let parentID = self.parentID;
         net.postJSON('/api/works/addComment', {
-          parentID: self.parentID,
-          rootID: self.rootID,
+          parentID: parentID,
+          rootID: rootID,
           worksID: self.worksID,
           workID: self.workID,
           barrageTime: self.barrageTime,
@@ -80,6 +82,7 @@ class WorkComment extends migi.Component {
   @bind workID
   @bind rootID = -1
   @bind parentID = -1
+  @bind replayName = ''
   @bind barrageTime = 0
   load() {
     let self = this;
@@ -188,11 +191,6 @@ class WorkComment extends migi.Component {
       this.ref.comment.clearData();
       this.load();
     }
-  }
-  clickReplay() {
-    this.replayId = null;
-    this.replayName = null;
-    this.rootId = null;
   }
   render() {
     return <div class="mod comments">
