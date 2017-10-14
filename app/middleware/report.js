@@ -9,7 +9,7 @@ module.exports = () => {
     let start = Date.now();
     yield next;
     let end = Date.now();
-    let ip = this.request.ip;
+    let ip = this.request.header['x-real-ip'];
     let uid = this.session ? this.session.uid || '-' : '-';
     let method = this.request.method;
     let url = this.request.url;
