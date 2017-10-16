@@ -18,7 +18,10 @@ module.exports = {
     dsearch: './app/assets/d/search/index.jsx',
     dmy: './app/assets/d/my/index.jsx',
     dlogin: './app/assets/d/login/index.jsx',
+    dupload: './app/assets/d/upload/index.jsx',
     activity: './app/assets/activity/index.jsx',
+    rcommon: './app/assets/rhyme/common/index.js',
+    rsingle: './app/assets/rhyme/single/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

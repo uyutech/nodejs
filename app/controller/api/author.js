@@ -37,7 +37,7 @@ module.exports = app => {
     * unFollow(ctx) {
       let uid = ctx.session.uid;
       let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.getRemoteUrl('api/author/RemoveAuthorToUser', {
+      let res = yield ctx.helper.postServiceJSON('api/author/RemoveAuthorToUser', {
         uid,
         Author: authorID,
       });
@@ -46,7 +46,7 @@ module.exports = app => {
     * commentList(ctx) {
       let uid = ctx.session.uid;
       const body = ctx.request.body;
-      let res = yield ctx.helper.getRemoteUrl('api/author/GetToAuthorMessage_List', {
+      let res = yield ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
         uid,
         AuthorID: body.authorID,
         Skip: body.skip,
@@ -60,7 +60,7 @@ module.exports = app => {
     * addComment(ctx) {
       let uid = ctx.session.uid;
       const body = ctx.request.body;
-      let res = yield ctx.helper.getRemoteUrl('api/author/AddComment', {
+      let res = yield ctx.helper.postServiceJSON('api/author/AddComment', {
         uid,
         ParentID: body.parentID,
         RootID: body.rootID,
@@ -72,7 +72,7 @@ module.exports = app => {
     * likeComment(ctx) {
       let uid = ctx.session.uid;
       const body = ctx.request.body;
-      let res = yield ctx.helper.getRemoteUrl('api/author/AddWorkCommentLike', {
+      let res = yield ctx.helper.postServiceJSON('api/author/AddWorkCommentLike', {
         uid,
         CommentID: body.commentID,
       });
@@ -81,7 +81,7 @@ module.exports = app => {
     * delComment(ctx) {
       let uid = ctx.session.uid;
       const body = ctx.request.body;
-      let res = yield ctx.helper.getRemoteUrl('api/author/DeleteCommentByID', {
+      let res = yield ctx.helper.postServiceJSON('api/author/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
       });
@@ -90,11 +90,20 @@ module.exports = app => {
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
       const body = ctx.request.body;
-      let res = yield ctx.helper.getRemoteUrl('api/author/GetTocomment_T_List', {
+      let res = yield ctx.helper.postServiceJSON('api/author/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
         Skip: body.skip,
         Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * singleComment(ctx) {
+      let uid = ctx.session.uid;
+      const body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/author/GetCommentByID', {
+        uid,
+        CommentID: body.commentID,
       });
       ctx.body = res.data;
     }

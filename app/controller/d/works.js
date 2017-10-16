@@ -18,6 +18,7 @@ module.exports = app => {
         }),
         commentData: ctx.helper.postServiceJSON('api/works/GetToWorkMessage_List', {
           uid,
+          WorkID: worksID,
           WorksID: worksID,
         }),
       };

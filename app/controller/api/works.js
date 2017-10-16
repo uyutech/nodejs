@@ -6,6 +6,16 @@
 
 module.exports = app => {
   class Controller extends app.Controller {
+    * detail(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/GetWorkDetails', {
+        uid,
+        WorksID: body.worksID,
+        WorkID: body.worksID,
+      });
+      ctx.body = res.data;
+    }
     * commentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;

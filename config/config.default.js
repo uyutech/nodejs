@@ -51,6 +51,15 @@ module.exports = appInfo => {
     },
   };
 
+  config.redis = {
+    client: {
+      port: 6379,
+      host: '127.0.0.1',
+      password: 'army8735',
+      db: 0,
+    },
+  };
+
   config.notfound = {
     pageUrl: '/404.html',
   };

@@ -11,3 +11,8 @@ exports.nunjucks = {
 };
 
 exports.static = true;
+
+exports.redis = {
+  enable: false,
+  package: 'egg-redis',
+};
