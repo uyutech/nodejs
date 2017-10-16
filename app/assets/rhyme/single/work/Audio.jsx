@@ -127,7 +127,7 @@ class Audio extends migi.Component {
     let $vd = $(vd.element);
     if(!$vd.hasClass('loading')) {
       $vd.addClass('loading');
-      util.postJSON('works/AddLikeBehavior', {WorkItemsID: self.data[self.workIndex].ItemID}, function (res) {
+      util.postJSON('/api/works/likeWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
         if(res.success) {
           self.isLike = res.data === 211;
         }
@@ -151,7 +151,7 @@ class Audio extends migi.Component {
       //
     }
     else if($vd.hasClass('has')) {
-      util.postJSON('works/RemoveCollection', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
+      util.postJSON('/api/works/unFavorWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
         if(res.success) {
           self.isFavor = false;
         }
@@ -168,7 +168,7 @@ class Audio extends migi.Component {
       });
     }
     else {
-      util.postJSON('works/AddCollection', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
+      util.postJSON('/api/works/favorWork', { workID: self.data[self.workIndex].ItemID }, function (res) {
         if(res.success) {
           self.isFavor = true;
         }

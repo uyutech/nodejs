@@ -11,6 +11,7 @@ module.exports = app => {
   app.get('/rhymes/rjrjs', 'rhyme.rjrjs');
   app.get('/rhymes/jrj', 'rhyme.jrj');
   app.get('/rhymes/shuomeng', 'rhyme.shuomeng');
+  app.get('/rhymes/music/jrjbz', 'rhyme.jrjbz');
 
   app.get('/d', 'd.index.index');
   app.get('/d/find', 'd.find.index');

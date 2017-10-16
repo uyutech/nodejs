@@ -22,6 +22,7 @@ module.exports = {
     activity: './app/assets/activity/index.jsx',
     rcommon: './app/assets/rhyme/common/index.js',
     rsingle: './app/assets/rhyme/single/index.jsx',
+    jrjbz: './app/assets/rhyme/jrjbz/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

@@ -9,11 +9,16 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let follows = {};
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserLikeYSYAuthor', {
-        uid,
-      });
-      if(res.data.success) {
-        follows = res.data.data;
+      if(uid) {
+        let res = yield ctx.helper.postServiceJSON('api/users/GetUserLikeYSYAuthor', {
+          uid,
+        });
+        if(res.data.success) {
+          follows = res.data.data;
+        }
+      }
+      else {
+        follows = {};
       }
       yield ctx.render('rhyme', {
         isLogin: !!uid,
@@ -29,6 +34,10 @@ module.exports = app => {
     }
     * shuomeng(ctx) {
       ctx.redirect('/#work2015000000000002');
+    }
+    * jrjbz(ctx) {
+      yield ctx.render('jrjbz', {
+      });
     }
   }
   return Controller;

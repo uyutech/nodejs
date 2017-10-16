@@ -14,6 +14,7 @@ module.exports = {
     dupload: './app/view/d/upload.jsx',
     activity: './app/view/activity.jsx',
     rhyme: './app/view/rhyme.jsx',
+    jrjbz: './app/view/jrjbz.jsx',
   },
   output: {
     path: __dirname + '/app/view',
