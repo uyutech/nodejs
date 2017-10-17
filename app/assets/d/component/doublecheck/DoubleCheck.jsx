@@ -65,8 +65,8 @@ class DoubleCheck extends migi.Component {
       });
       param = JSON.stringify(param);
       if(cacheL2[param]) {
-        this.tagList2 = cacheL2[param];
         this.checkL2();
+        this.tagList2 = cacheL2[param];
         this.change();
       }
       else {
@@ -109,7 +109,7 @@ class DoubleCheck extends migi.Component {
         ID: item.ID,
         TagType: 0,
         Filterlevel: 'A',
-        ParameterAName: item.TagName,
+        ParameterName: item.TagName,
       });
     });
     let lB = [];
@@ -120,7 +120,7 @@ class DoubleCheck extends migi.Component {
           ID: item.ID,
           TagType: item.TagType,
           Filterlevel: item.Filterlevel,
-          ParameterAName: item.TagName,
+          ParameterName: item.TagName,
         });
       }
     });
@@ -144,11 +144,11 @@ class DoubleCheck extends migi.Component {
     return <div class="cp-doublecheck">
       <div class="l1" ref="l1" onClick={ { li: this.clickL1 } }>
         <div class="c">
-          <ul>
+          <ul class="fn-clear">
             {
               this.tagList.map(function(item, i) {
                 let type = authorTemplate.code2Data[item.TagName];
-                return <li class={ this.tagList.length === 1 ? 'on' : '' } rel={ i } tagType={ item.TagType } tagID={ item.ID }>{ type ? type.name : item.TagName }</li>;
+                return <li class={ this.tagList.length === 1 ? 'on' : '' } rel={ i } tagType={ item.TagType } tagID={ item.ID }><span>{ type ? type.name : item.TagName }</span></li>;
               }.bind(this))
             }
           </ul>
@@ -156,11 +156,11 @@ class DoubleCheck extends migi.Component {
       </div>
       <div class={ 'l2' + (this.isLoadindL2 ? ' loading' : '') } ref="l2" onClick={ { li: this.clickL2 } }>
         <div class="c">
-          <ul>
+          <ul class="fn-clear">
             {
               this.tagList2.map(function(item, i) {
                 let key = 'id' + item.ID + ',type' + item.TagType;
-                return <li rel={ i } tagType={ item.TagType } tagID={ item.ID } class={ choosedL2[key] ? 'on' : '' }>{ item.TagName }</li>;
+                return <li rel={ i } tagType={ item.TagType } tagID={ item.ID } class={ choosedL2[key] ? 'on' : '' }><span>{ item.TagName }</span></li>;
               })
             }
           </ul>

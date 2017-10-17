@@ -50,7 +50,8 @@ module.exports = app => {
   app.post('/api/author/likeComment', app.middlewares.needLoginJson(), 'api.author.likeComment');
   app.post('/api/author/subCommentList', 'api.author.subCommentList');
   app.post('/api/author/delComment', app.middlewares.needLoginJson(), 'api.author.delComment');
-  app.post('/api/author/singleComment', app.middlewares.needLoginJson(), 'api.author.singleComment');
+  app.post('/api/author/singleComment', 'api.author.singleComment');
+  app.post('/api/author/searchWorks', 'api.author.searchWorks');
   app.post('/api/activity/commentList', 'api.activity.commentList');
   app.post('/api/activity/addComment', app.middlewares.needLoginJson(), 'api.activity.addComment');
   app.post('/api/activity/likeComment', app.middlewares.needLoginJson(), 'api.activity.likeComment');

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 189);
+/******/ 	return __webpack_require__(__webpack_require__.s = 188);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1214,7 +1214,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 189:
+/***/ 188:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1224,15 +1224,15 @@ __webpack_require__(31);
 
 __webpack_require__(32);
 
-var _jquery = __webpack_require__(190);
+var _jquery = __webpack_require__(189);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _util = __webpack_require__(192);
+var _util = __webpack_require__(191);
 
 var _util2 = _interopRequireDefault(_util);
 
-__webpack_require__(194);
+__webpack_require__(193);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1368,149 +1368,7 @@ window.util = _util2.default;
 
 /***/ }),
 
-/***/ 19:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Element = __webpack_require__(2);
-
-var _Element2 = _interopRequireDefault(_Element);
-
-var _VirtualDom = __webpack_require__(7);
-
-var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
-
-var _Obj = __webpack_require__(8);
-
-var _Obj2 = _interopRequireDefault(_Obj);
-
-var _util = __webpack_require__(1);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _browser = __webpack_require__(13);
-
-var _browser2 = _interopRequireDefault(_browser);
-
-var _type = __webpack_require__(14);
-
-var _type2 = _interopRequireDefault(_type);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function join(index, children, history) {
-  var res = '';
-  for (var i = index.shift(), len = children.length; i < len; i++) {
-    var child = children[i];
-    if (index.length) {
-      if (child instanceof _Obj2.default) {
-        res += join(index, child.v, history);
-      } else {
-        res += join(index, child, history);
-      }
-      if (history.end) {
-        break;
-      }
-    } else if (child instanceof _Obj2.default) {
-      if (Array.isArray(child.v)) {
-        res += joinObj(child.v, history);
-        if (history.end) {
-          break;
-        }
-      } else if (child.v instanceof _Element2.default) {
-        history.end = true;
-        break;
-      } else {
-        res += child.toString();
-      }
-    } else if (child instanceof _Element2.default) {
-      history.end = true;
-      break;
-    }
-    //array逻辑和Obj里面相同
-    else if (Array.isArray(child)) {
-        res += joinObj(child, history);
-        if (history.end) {
-          break;
-        }
-      } else {
-        res += _util2.default.stringify(child);
-      }
-  }
-  return res;
-}
-//递归找到第一个不是text的为止，将之前的text拼接返回
-function joinObj(arr, history) {
-  var res = '';
-  for (var i = 0, len = arr.length; i < len; i++) {
-    var child = arr[i];
-    if (history.end) {
-      break;
-    }
-    if (Array.isArray(child)) {
-      res += joinObj(child, history);
-    } else if (child instanceof _Element2.default) {
-      history.end = true;
-      break;
-    } else {
-      res += _util2.default.stringify(child);
-    }
-  }
-  return res;
-}
-
-function update(item, children, elem) {
-  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
-  var res = join(item.index, children, {});
-  var cns = elem.childNodes;
-  var textNode = cns[item.start];
-  //神奇的地方，更新的对象是个DOM而不是TEXT，会发生在混杂情况下的t2d变化
-  //如t1{t}t2{t}变为t1{d}t2{d}，t2记录的range的start在3，而其目前是第2个{d}的DOM，插入在t2d逻辑中
-  if (textNode.nodeType == 1) {
-    return;
-  }
-  var now = textNode.textContent;
-  if (res != now) {
-    //textContent自动转义，保留空白
-    //有实体字符时也不能用textContent
-    if (/&([a-z]+|#\d+);/i.test(res)) {
-      var node = _browser2.default.NODE;
-      node.innerHTML = _util2.default.encodeHtml(res);
-      elem.replaceChild(node.firstChild, textNode);
-    } else {
-      textNode.textContent = res;
-    }
-  }
-}
-
-function value(item, children) {
-  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
-  return join(item.index, children, {});
-}
-
-function record(history, option) {
-  if (option.first || option.prev == _type2.default.DOM) {
-    option.record = history.slice();
-  }
-}
-
-exports.default = {
-  update: update,
-  value: value,
-  record: record
-};
-
-/***/ }),
-
-/***/ 190:
+/***/ 189:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3789,7 +3647,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return 1 === arguments.length ? this.off(a, "**") : this.off(b, a || "**", c);
     } }), r.holdReady = function (a) {
     a ? r.readyWait++ : r.ready(!0);
-  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(191) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(190) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return r;
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));var Vb = a.jQuery,
@@ -3801,17 +3659,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /***/ }),
 
-/***/ 191:
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-
-/***/ 192:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3821,7 +3669,159 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(193);
+var _Element = __webpack_require__(2);
+
+var _Element2 = _interopRequireDefault(_Element);
+
+var _VirtualDom = __webpack_require__(7);
+
+var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
+
+var _Obj = __webpack_require__(8);
+
+var _Obj2 = _interopRequireDefault(_Obj);
+
+var _util = __webpack_require__(1);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _browser = __webpack_require__(13);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _type = __webpack_require__(14);
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function join(index, children, history) {
+  var res = '';
+  for (var i = index.shift(), len = children.length; i < len; i++) {
+    var child = children[i];
+    if (index.length) {
+      if (child instanceof _Obj2.default) {
+        res += join(index, child.v, history);
+      } else {
+        res += join(index, child, history);
+      }
+      if (history.end) {
+        break;
+      }
+    } else if (child instanceof _Obj2.default) {
+      if (Array.isArray(child.v)) {
+        res += joinObj(child.v, history);
+        if (history.end) {
+          break;
+        }
+      } else if (child.v instanceof _Element2.default) {
+        history.end = true;
+        break;
+      } else {
+        res += child.toString();
+      }
+    } else if (child instanceof _Element2.default) {
+      history.end = true;
+      break;
+    }
+    //array逻辑和Obj里面相同
+    else if (Array.isArray(child)) {
+        res += joinObj(child, history);
+        if (history.end) {
+          break;
+        }
+      } else {
+        res += _util2.default.stringify(child);
+      }
+  }
+  return res;
+}
+//递归找到第一个不是text的为止，将之前的text拼接返回
+function joinObj(arr, history) {
+  var res = '';
+  for (var i = 0, len = arr.length; i < len; i++) {
+    var child = arr[i];
+    if (history.end) {
+      break;
+    }
+    if (Array.isArray(child)) {
+      res += joinObj(child, history);
+    } else if (child instanceof _Element2.default) {
+      history.end = true;
+      break;
+    } else {
+      res += _util2.default.stringify(child);
+    }
+  }
+  return res;
+}
+
+function update(item, children, elem) {
+  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
+  var res = join(item.index, children, {});
+  var cns = elem.childNodes;
+  var textNode = cns[item.start];
+  //神奇的地方，更新的对象是个DOM而不是TEXT，会发生在混杂情况下的t2d变化
+  //如t1{t}t2{t}变为t1{d}t2{d}，t2记录的range的start在3，而其目前是第2个{d}的DOM，插入在t2d逻辑中
+  if (textNode.nodeType == 1) {
+    return;
+  }
+  var now = textNode.textContent;
+  if (res != now) {
+    //textContent自动转义，保留空白
+    //有实体字符时也不能用textContent
+    if (/&([a-z]+|#\d+);/i.test(res)) {
+      var node = _browser2.default.NODE;
+      node.innerHTML = _util2.default.encodeHtml(res);
+      elem.replaceChild(node.firstChild, textNode);
+    } else {
+      textNode.textContent = res;
+    }
+  }
+}
+
+function value(item, children) {
+  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
+  return join(item.index, children, {});
+}
+
+function record(history, option) {
+  if (option.first || option.prev == _type2.default.DOM) {
+    option.record = history.slice();
+  }
+}
+
+exports.default = {
+  update: update,
+  value: value,
+  record: record
+};
+
+/***/ }),
+
+/***/ 190:
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+
+/***/ 191:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _sort = __webpack_require__(192);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3892,7 +3892,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 193:
+/***/ 192:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3959,7 +3959,7 @@ function swap(arr, a, b) {
 
 /***/ }),
 
-/***/ 194:
+/***/ 193:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -29,13 +29,13 @@ export default function(data) {
   <div class="ti"></div>
   <ul>
     <li>
-      <a href="//rhymesland.com" class="fanhui"></a>
+      <a href="/" class="fanhui"></a>
     </li>
     <li>
       <a href="http://zhuanquan.net.cn/audio/219423ff-4e9d-44ce-80b6-65f43fc7ed33.mp3" class="banzou" download="http://zhuanquan.net.cn/audio/219423ff-4e9d-44ce-80b6-65f43fc7ed33.mp3"></a>
     </li>
     <li>
-      <a href="//rhymesland.com/#work2015000000000001" class="yuanqu"></a>
+      <a href="/#work2015000000000001" class="yuanqu"></a>
     </li>
   </ul>
 </div>

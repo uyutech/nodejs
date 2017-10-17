@@ -1305,8 +1305,8 @@ var DoubleCheck = function (_migi$Component) {
         });
         param = JSON.stringify(param);
         if (cacheL2[param]) {
-          this.tagList2 = cacheL2[param];
           this.checkL2();
+          this.tagList2 = cacheL2[param];
           this.change();
         } else {
           this.emit('changeL1', param);
@@ -1354,7 +1354,7 @@ var DoubleCheck = function (_migi$Component) {
           ID: item.ID,
           TagType: 0,
           Filterlevel: 'A',
-          ParameterAName: item.TagName
+          ParameterName: item.TagName
         });
       });
       var lB = [];
@@ -1365,7 +1365,7 @@ var DoubleCheck = function (_migi$Component) {
             ID: item.ID,
             TagType: item.TagType,
             Filterlevel: item.Filterlevel,
-            ParameterAName: item.TagName
+            ParameterName: item.TagName
           });
         }
       });
@@ -1392,17 +1392,17 @@ var DoubleCheck = function (_migi$Component) {
   }, {
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "cp-doublecheck"]], [migi.createVd("div", [["class", "l1"], ["ref", "l1"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL1)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [], [new migi.Obj("tagList", this, function () {
+      return migi.createVd("div", [["class", "cp-doublecheck"]], [migi.createVd("div", [["class", "l1"], ["ref", "l1"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL1)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [["class", "fn-clear"]], [new migi.Obj("tagList", this, function () {
         return this.tagList.map(function (item, i) {
           var type = _authorTemplate2.default.code2Data[item.TagName];
-          return migi.createVd("li", [["class", this.tagList.length === 1 ? 'on' : ''], ["rel", i], ["tagType", item.TagType], ["tagID", item.ID]], [type ? type.name : item.TagName]);
+          return migi.createVd("li", [["class", this.tagList.length === 1 ? 'on' : ''], ["rel", i], ["tagType", item.TagType], ["tagID", item.ID]], [migi.createVd("span", [], [type ? type.name : item.TagName])]);
         }.bind(this));
       })])])]), migi.createVd("div", [["class", new migi.Obj("isLoadindL2", this, function () {
         return 'l2' + (this.isLoadindL2 ? ' loading' : '');
-      })], ["ref", "l2"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL2)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [], [new migi.Obj("tagList2", this, function () {
+      })], ["ref", "l2"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL2)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [["class", "fn-clear"]], [new migi.Obj("tagList2", this, function () {
         return this.tagList2.map(function (item, i) {
           var key = 'id' + item.ID + ',type' + item.TagType;
-          return migi.createVd("li", [["rel", i], ["tagType", item.TagType], ["tagID", item.ID], ["class", choosedL2[key] ? 'on' : '']], [item.TagName]);
+          return migi.createVd("li", [["rel", i], ["tagType", item.TagType], ["tagID", item.ID], ["class", choosedL2[key] ? 'on' : '']], [migi.createVd("span", [], [item.TagName])]);
         });
       })])])])]);
     }
@@ -1696,6 +1696,8 @@ var Author = function (_migi$Component) {
           subCmt.isCommentSending = false;
         });
       });
+      // self.ref.home.hide();
+      // self.ref.works.show();
     });
     return _this;
   }
@@ -2319,8 +2321,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var ajax = void 0;
-var SortType = '1';
-var Parameter = '';
+var sortType = '1';
+var parameter = '';
 var ajaxL2 = void 0;
 
 var Work = function (_migi$Component) {
@@ -2338,7 +2340,7 @@ var Work = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = Work.__proto__ || Object.getPrototypeOf(Work)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    self.authorID = -1;
+    self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function () {
       var doubleCheck = self.ref.doubleCheck;
       doubleCheck.on('changeL1', function (param) {
@@ -2347,13 +2349,14 @@ var Work = function (_migi$Component) {
             ajaxL2.abort();
           }
           doubleCheck.isLoadindL2 = true;
-          _net2.default.postJSON('api/author/GetAuthorFilterlevelB', { AuthorID: self.authorID, FilterlevelA: param }, function (res) {
+          _net2.default.postJSON('/api/author/tagB', { authorID: self.authorID, tagA: param }, function (res) {
             if (res.success) {
               var _data = res.data;
-              doubleCheck.tagList2 = _data;
-              doubleCheck.autoWidth2();
-              doubleCheck.setCacheL2(param, _data);
               doubleCheck.checkL2();
+              doubleCheck.setCacheL2(param, _data);
+              doubleCheck.tagList2 = _data;
+              doubleCheck.change();
+              // doubleCheck.autoWidth2();
             }
             doubleCheck.isLoadindL2 = false;
           }, function () {
@@ -2364,8 +2367,8 @@ var Work = function (_migi$Component) {
       doubleCheck.on('change', function (lA, lB) {
         var temp = lA.concat(lB);
         temp = temp.length ? JSON.stringify(temp) : '';
-        if (temp !== Parameter) {
-          Parameter = temp;
+        if (temp !== parameter) {
+          parameter = temp;
           self.loadPlayList();
         }
       });
@@ -2390,18 +2393,18 @@ var Work = function (_migi$Component) {
       if (ajax) {
         ajax.abort();
       }
-      ajax = _net2.default.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, Parameter: Parameter, Skip: 0, Take: 10, SortType: SortType }, function (res) {
+      ajax = _net2.default.postJSON('/api/author/searchWorks', { authorID: self.authorID, parameter: parameter, skip: 0, take: 10, sortType: sortType }, function (res) {
         if (res.success) {
           var data = res.data;
-          self.ref.playList.setData(data.data);
+          self.ref.playList.dataList = data.data;
         }
       });
-      _util2.default.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, Parameter: Parameter, Skip: 1, Take: 10, SortType: '0' }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          self.ref.playList.setData2(data.data);
-        }
-      });
+      // net.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, parameter, skip: 1, take: 10, sortType: '0' }, function(res) {
+      //   if(res.success) {
+      //     let data = res.data;
+      //     self.ref.playList.setData2(data.data);
+      //   }
+      // });
     }
   }, {
     key: 'switchType',
@@ -2409,7 +2412,7 @@ var Work = function (_migi$Component) {
       var $ul = $(vd.element);
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
-      SortType = $ul.find('.cur').attr('rel');
+      sortType = $ul.find('.cur').attr('rel');
       this.loadPlayList();
     }
   }, {

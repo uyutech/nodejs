@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 139);
+/******/ 	return __webpack_require__(__webpack_require__.s = 138);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 139:
+/***/ 138:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(140);
+__webpack_require__(139);
 
-var _Find = __webpack_require__(141);
+var _Find = __webpack_require__(140);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -83,14 +83,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 140:
+/***/ 139:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 141:
+/***/ 140:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -110,7 +110,7 @@ var _util = __webpack_require__(4);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(142);
+var _Banner = __webpack_require__(141);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -265,7 +265,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 142:
+/***/ 141:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -955,8 +955,8 @@ var DoubleCheck = function (_migi$Component) {
         });
         param = JSON.stringify(param);
         if (cacheL2[param]) {
-          this.tagList2 = cacheL2[param];
           this.checkL2();
+          this.tagList2 = cacheL2[param];
           this.change();
         } else {
           this.emit('changeL1', param);
@@ -1004,7 +1004,7 @@ var DoubleCheck = function (_migi$Component) {
           ID: item.ID,
           TagType: 0,
           Filterlevel: 'A',
-          ParameterAName: item.TagName
+          ParameterName: item.TagName
         });
       });
       var lB = [];
@@ -1015,7 +1015,7 @@ var DoubleCheck = function (_migi$Component) {
             ID: item.ID,
             TagType: item.TagType,
             Filterlevel: item.Filterlevel,
-            ParameterAName: item.TagName
+            ParameterName: item.TagName
           });
         }
       });
@@ -1042,17 +1042,17 @@ var DoubleCheck = function (_migi$Component) {
   }, {
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "cp-doublecheck"]], [migi.createVd("div", [["class", "l1"], ["ref", "l1"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL1)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [], [new migi.Obj("tagList", this, function () {
+      return migi.createVd("div", [["class", "cp-doublecheck"]], [migi.createVd("div", [["class", "l1"], ["ref", "l1"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL1)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [["class", "fn-clear"]], [new migi.Obj("tagList", this, function () {
         return this.tagList.map(function (item, i) {
           var type = _authorTemplate2.default.code2Data[item.TagName];
-          return migi.createVd("li", [["class", this.tagList.length === 1 ? 'on' : ''], ["rel", i], ["tagType", item.TagType], ["tagID", item.ID]], [type ? type.name : item.TagName]);
+          return migi.createVd("li", [["class", this.tagList.length === 1 ? 'on' : ''], ["rel", i], ["tagType", item.TagType], ["tagID", item.ID]], [migi.createVd("span", [], [type ? type.name : item.TagName])]);
         }.bind(this));
       })])])]), migi.createVd("div", [["class", new migi.Obj("isLoadindL2", this, function () {
         return 'l2' + (this.isLoadindL2 ? ' loading' : '');
-      })], ["ref", "l2"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL2)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [], [new migi.Obj("tagList2", this, function () {
+      })], ["ref", "l2"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL2)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [["class", "fn-clear"]], [new migi.Obj("tagList2", this, function () {
         return this.tagList2.map(function (item, i) {
           var key = 'id' + item.ID + ',type' + item.TagType;
-          return migi.createVd("li", [["rel", i], ["tagType", item.TagType], ["tagID", item.ID], ["class", choosedL2[key] ? 'on' : '']], [item.TagName]);
+          return migi.createVd("li", [["rel", i], ["tagType", item.TagType], ["tagID", item.ID], ["class", choosedL2[key] ? 'on' : '']], [migi.createVd("span", [], [item.TagName])]);
         });
       })])])])]);
     }

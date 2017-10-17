@@ -8,15 +8,15 @@ import DoubleCheck from '../component/doublecheck/DoubleCheck.jsx';
 import PlayList from '../component/playlist/PlayList.jsx';
 
 let ajax;
-let SortType = '1';
-let Parameter = '';
+let sortType = '1';
+let parameter = '';
 let ajaxL2;
 
 class Work extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.authorID = -1;
+    self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function() {
       let doubleCheck = self.ref.doubleCheck;
       doubleCheck.on('changeL1', function(param) {
@@ -25,13 +25,14 @@ class Work extends migi.Component {
             ajaxL2.abort();
           }
           doubleCheck.isLoadindL2 = true;
-          net.postJSON('api/author/GetAuthorFilterlevelB', { AuthorID: self.authorID, FilterlevelA: param }, function (res) {
+          net.postJSON('/api/author/tagB', { authorID: self.authorID, tagA: param }, function (res) {
             if(res.success) {
               let data = res.data;
-              doubleCheck.tagList2 = data;
-              doubleCheck.autoWidth2();
-              doubleCheck.setCacheL2(param, data);
               doubleCheck.checkL2();
+              doubleCheck.setCacheL2(param, data);
+              doubleCheck.tagList2 = data;
+              doubleCheck.change();
+              // doubleCheck.autoWidth2();
             }
             doubleCheck.isLoadindL2 = false;
           }, function() {
@@ -42,8 +43,8 @@ class Work extends migi.Component {
       doubleCheck.on('change', function(lA, lB) {
         let temp = lA.concat(lB);
         temp = temp.length ? JSON.stringify(temp) : '';
-        if(temp !== Parameter) {
-          Parameter = temp;
+        if(temp !== parameter) {
+          parameter = temp;
           self.loadPlayList();
         }
       });
@@ -61,24 +62,24 @@ class Work extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    ajax = net.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, Parameter, Skip: 0, Take: 10, SortType }, function(res) {
+    ajax = net.postJSON('/api/author/searchWorks', { authorID: self.authorID, parameter, skip: 0, take: 10, sortType }, function(res) {
       if(res.success) {
         let data = res.data;
-        self.ref.playList.setData(data.data);
+        self.ref.playList.dataList = data.data;
       }
     });
-    util.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, Parameter, Skip: 1, Take: 10, SortType: '0' }, function(res) {
-      if(res.success) {
-        let data = res.data;
-        self.ref.playList.setData2(data.data);
-      }
-    });
+    // net.postJSON('api/author/SearchWorks', { AuthorID: self.authorID, parameter, skip: 1, take: 10, sortType: '0' }, function(res) {
+    //   if(res.success) {
+    //     let data = res.data;
+    //     self.ref.playList.setData2(data.data);
+    //   }
+    // });
   }
   switchType(e, vd) {
     let $ul = $(vd.element);
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
-    SortType = $ul.find('.cur').attr('rel');
+    sortType = $ul.find('.cur').attr('rel');
     this.loadPlayList();
   }
   render() {

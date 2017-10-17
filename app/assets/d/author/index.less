@@ -7,7 +7,7 @@
 @import '../component/hotcollection/index.less';
 @import '../component/hotauthor/index.less';
 @import '../component/dynamic/index.less';
-@import '../component/doublecheck/index.less';
+//@import '../component/doublecheck/index.less';
 @import '../component/playlist/index.less';
 @import '../component/comment/index.less';
 @import '../component/page/index.less';
@@ -493,6 +493,155 @@
     .cp-comment{
       margin:0.1rem 0.1rem 0 0.1rem;
       min-height:1rem;
+    }
+  }
+}
+
+.cp-doublecheck{
+  .l1{
+    position:relative;
+    &.loading{
+      opacity:0.3;
+    }
+    .c{
+      ul{
+        padding:0.1rem;
+        background:@mainColor;
+        overflow:hidden;
+        &:after{
+          margin-left:0.1rem;
+          content:'更多作品类型将陆续上线-3-';
+          font-size:0.12rem;
+          color:#4E8EB0;
+          opacity:0.8;
+          line-height:0.48rem;
+        }
+        li{
+          position:relative;
+          float:left;
+          margin-right:0.1rem;
+          padding:0 0.1rem;
+          color:@thirdTextColor;
+          line-height:0.28rem;
+          cursor:pointer;
+          font-size:0.14rem;
+          &:before{
+            position:absolute;
+            left:0;
+            top:0.35rem;
+            display:block;
+            width:100%;
+            height:300%;
+            background:@thirdTextColor;
+            border-top-left-radius:0.1rem;
+            border-top-right-radius:0.1rem;
+            content:' ';
+          }
+          &:after{
+            position:absolute;
+            left:0;
+          }
+          &:last-child{
+            margin:0;
+          }
+          &:hover{
+            text-decoration:underline;
+          }
+          &.on{
+            background-color:@mainColor;
+            color:@mainTextColor;
+            font-size:0.14rem;
+            text-decoration:none;
+            cursor:default;
+            span{
+              border-color:@mainTextColor;
+            }
+            &:before{
+              top:-0.05rem;
+            }
+          }
+          &:only-child{
+            background-color:@mainColor;
+            color:@mainTextColor;
+            font-size:0.14rem;
+            &:hover{
+              text-decoration:none;
+              cursor:default;
+            }
+          }
+          span{
+            position:relative;
+            display:block;
+            padding:0 0.1rem;
+            height:0.28rem;
+            border:1px solid @thirdTextColor;
+            border-radius:0.28rem;
+          }
+        }
+      }
+    }
+  }
+  .l2{
+    position:relative;
+    background:@mainColor;
+    &.loading{
+      .c ul li a{
+        opacity:0.3;
+      }
+    }
+    .c{
+      ul{
+        padding:0 0.1rem 0.05rem 0.1rem;
+        height:0.3rem;
+        color:@thirdTextColor;
+        font-size:0.12rem;
+        &:after{
+          margin-left:0.1rem;
+          content:'更多作品标签等待添加-3-';
+          font-size:0.12rem;
+          color:#4E8EB0;
+          opacity:0.8;
+          line-height:0.3rem;
+        }
+        li{
+          position:relative;
+          margin-right:0.1rem;
+          float:left;
+          height:100%;
+          line-height:0.3rem;
+          cursor:pointer;
+          &:last-child{
+            margin:0;
+          }
+          &:hover{
+            text-decoration:underline;
+          }
+          &.on{
+            color:@mainTextColor;
+            &:after{
+              position:absolute;
+              left:20%;
+              right:20%;
+              bottom:0.02rem;
+              display:block;
+              height:0.02rem;
+              background:@mainTextColor;
+              border-radius:0.02rem;
+              content:' ';
+            }
+          }
+          &:only-child{
+            color:@mainTextColor;
+            &:hover{
+              text-decoration:underline;
+              cursor:default;
+            }
+          }
+          span{
+            position:relative;
+          }
+        }
+      }
     }
   }
 }

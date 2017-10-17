@@ -98,12 +98,24 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    // 异世谣特殊接口，其中AuthorID字段为评论属于总作者的ID
     * singleComment(ctx) {
       let uid = ctx.session.uid;
       const body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/author/GetCommentByID', {
         uid,
         CommentID: body.commentID,
+      });
+      ctx.body = res.data;
+    }
+    * searchWorks(ctx) {
+      const body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/author/SearchWorks', {
+        AuthorID: body.authorID,
+        Parameter: body.parameter,
+        Skip: body.skip,
+        Take: body.take,
+        SortType: body.sortType,
       });
       ctx.body = res.data;
     }
