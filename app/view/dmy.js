@@ -365,7 +365,13 @@ var Profile = function (_migi$Component) {
 
     var _this = _possibleConstructorReturn(this, (_ref = Profile.__proto__ || Object.getPrototypeOf(Profile)).call.apply(_ref, [this].concat(data)));
 
-    _this.userInfo = _this.props.userInfo;
+    var self = _this;
+    self.head = self.props.userInfo.Head_Url;
+    self.name = self.props.userInfo.NickName;
+    self.on(migi.Event.DOM, function () {
+      var name = self.ref.name;
+      var input = self.ref.input;
+    });
     return _this;
   }
 
@@ -374,33 +380,67 @@ var Profile = function (_migi$Component) {
     value: function click(e) {
       e.preventDefault();
       var self = this;
-      var name = window.prompt('请输入想要修改的昵称', $CONFIG.userName).trim();
-      if (name !== $CONFIG.userName) {
-        _net2.default.postJSON('api/users/UpdateNickName', { NickName: name }, function (res) {
+      $(self.ref.name.element).addClass('fn-hide');
+      $(self.ref.edit.element).addClass('fn-hide');
+      $(self.ref.input.element).removeClass('fn-hide').focus().val(self.name);
+      // let name = window.prompt('请输入想要修改的昵称', $CONFIG.userName).trim();
+      // if(name !== $CONFIG.userName) {
+      //   net.postJSON('api/users/UpdateNickName', { NickName: name }, function(res) {
+      //     if(res.success) {
+      //       self.userName = name;
+      //     }
+      //     else {
+      //       alert(res.message || util.ERROR_MESSAGE);
+      //     }
+      //   });
+      // }
+    }
+  }, {
+    key: 'blur',
+    value: function blur() {
+      var self = this;
+      $(self.ref.name.element).removeClass('fn-hide');
+      $(self.ref.input.element).addClass('fn-hide');
+      var $edit = $(self.ref.edit.element);
+      var newName = $(self.ref.input.element).val().trim();
+      if (newName !== self.name) {
+        _net2.default.postJSON('/api/user/updateNickName', { nickName: newName }, function (res) {
           if (res.success) {
-            self.userName = name;
+            self.name = newName;
           } else {
             alert(res.message || _util2.default.ERROR_MESSAGE);
           }
+          $edit.removeClass('fn-hide');
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $edit.removeClass('fn-hide');
         });
       }
     }
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("userInfo", this, function () {
-        return this.userInfo.Head_Url || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png';
-      })]])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [], [new migi.Obj("userInfo", this, function () {
-        return this.userInfo.NickName;
-      })])])]);
+      return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
+        return this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png';
+      })]])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
+        return this.name;
+      })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["onBlur", new migi.Cb(this, this.blur)]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]])])]);
     }
   }, {
-    key: 'userInfo',
+    key: 'head',
     set: function set(v) {
-      this.__setBind("userInfo", v);this.__data("userInfo");
+      this.__setBind("head", v);this.__data("head");
     },
     get: function get() {
-      if (this.__initBind("userInfo")) this.__setBind("userInfo", {});return this.__getBind("userInfo");
+      return this.__getBind("head");
+    }
+  }, {
+    key: 'name',
+    set: function set(v) {
+      this.__setBind("name", v);this.__data("name");
+    },
+    get: function get() {
+      return this.__getBind("name");
     }
   }]);
 

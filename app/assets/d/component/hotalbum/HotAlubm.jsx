@@ -10,7 +10,7 @@ class HotAlubm extends migi.Component {
     this.dataList = this.props.dataList;
   }
   @bind dataList
-  render() {console.log(this.dataList);
+  render() {
     return <div class="cp-hotalbum">
       <h4>{ this.props.title }<small>我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3&lt;</small></h4>
       {

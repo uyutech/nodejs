@@ -10,9 +10,9 @@ class Nav extends migi.Component {
     super(...data);
   }
   render() {
-    return <div class="nav">
+    return <div class="nav fn-clear">
       <div class="bg"/>
-      <Profile ref="profile" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
+      <Profile ref="profile" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
       <Link ref="link" authorDetail={ this.props.authorDetail }/>
     </div>;
   }

@@ -24,11 +24,14 @@
 .my > .profile .txt {
   float: left;
   margin-left: 0.3rem;
-  line-height: 1.1rem;
+  margin-top: 0.4rem;
 }
 .my > .profile .txt strong {
   font-size: 0.18rem;
   font-weight: 400;
+}
+.my > .profile .txt input {
+  font-size: 0.18rem;
 }
 .my > .profile .txt .edit {
   display: inline-block;
@@ -39,6 +42,7 @@
   background-size: contain;
   text-indent: 999rem;
   overflow: hidden;
+  cursor: pointer;
 }
 .my > .follow {
   position: relative;

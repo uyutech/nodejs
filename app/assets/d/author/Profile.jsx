@@ -92,21 +92,12 @@ class Profile extends migi.Component {
             })
           }
         </div>
-        <p class="intro">{ this.sign || '&nbsp;' }</p>
-        <div class="o">
-          <div class="fans">
-            <strong>{ this.fansNumber || '0' }</strong>
-            <span>粉丝</span>
-          </div>
-          <div class="hot">
-            <div class="line">
-              <b class="progress"/>
-              <b class="point"/>
-            </div>
-            <span>热度</span>
-          </div>
-          <a href="#" class={ (this.isLike ? 'support' : 'follow') + (this.loading ? ' loading' : '') } onClick={ this.click }>{ this.isLike ? '取关' : '关注' }</a>
+        <div class="rel">
+          <label>粉丝</label>
+          <span>{ this.fansNumber || '0' }</span>
+          <a href="#" class={ (this.isLike ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '') } onClick={ this.click }>{ this.isLike ? '取关' : '关注' }</a>
         </div>
+        <p class="intro">{ this.sign }</p>
       </div>
     </div>;
   }

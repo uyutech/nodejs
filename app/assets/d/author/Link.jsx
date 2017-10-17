@@ -20,12 +20,13 @@ class Link extends migi.Component {
   render() {
     return <div class="link">
       <ul>
-        <li><a target="_blank" href={ this._5SingUrl } class={ this._5SingUrl ? '5sing' : 'fn-hide' }><span>5sing</span></a></li>
-        <li><a target="_blank" href={ this._BilibiliUrl } class={ this._BilibiliUrl ? 'bili' : 'fn-hide' }><span>b站</span></a></li>
-        <li><a target="_blank" href={ this._BaiduUrl } class={ this._BaiduUrl ? 'baidu' : 'fn-hide' }><span>百度</span></a></li>
-        <li><a target="_blank" href={ this._WangyiUrl } class={ this._WangyiUrl ? 'wangyi' : 'fn-hide' }><span>网易</span></a></li>
-        <li><a target="_blank" href={ this._WeiboUrl } class={ this._WeiboUrl ? 'weibo' : 'fn-hide' }><span>微博</span></a></li>
+        <li><a target="_blank" href={ this._5SingUrl } class={ this._5SingUrl ? 'sing5' : 'fn-hide' }>5sing</a></li>
+        <li><a target="_blank" href={ this._BilibiliUrl } class={ this._BilibiliUrl ? 'bilibili' : 'fn-hide' }>b站</a></li>
+        <li><a target="_blank" href={ this._BaiduUrl } class={ this._BaiduUrl ? 'baidu' : 'fn-hide' }>百度</a></li>
+        <li><a target="_blank" href={ this._WangyiUrl } class={ this._WangyiUrl ? 'wangyi' : 'fn-hide' }>网易</a></li>
+        <li><a target="_blank" href={ this._WeiboUrl } class={ this._WeiboUrl ? 'weibo' : 'fn-hide' }>微博</a></li>
       </ul>
+      <p>外站主页</p>
     </div>;
   }
 }

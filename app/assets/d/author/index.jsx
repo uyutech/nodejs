@@ -7,7 +7,7 @@ import './index.less';
 import Author from './Author.jsx';
 
 let author = migi.preExist(<Author
-  isLogin={ $CONFIG.isLogin }
+  uid={ $CONFIG.uid }
   authorID={ $CONFIG.authorID }
   authorDetail={ $CONFIG.authorDetail }
   homeDetail={ $CONFIG.homeDetail }

@@ -84,7 +84,7 @@ class Author extends migi.Component {
   }
   render() {
     return <div class="author">
-      <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
+      <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
       <ul class="type fn-clear" onClick={ { li: this.clickType } }>
         <li class="home cur" rel="0">主页</li>
         <li class="works" rel="1">作品</li>
@@ -94,7 +94,7 @@ class Author extends migi.Component {
       <Work ref="works" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList } playList2={ this.props.playList2 }/>
       <AuthorComment
         ref="authorComment"
-        isLogin={ this.props.isLogin }
+        isLogin={ !!this.props.uid }
         authorID={ this.props.authorID }
         commentData={ this.props.commentData }/>
       <SubCmt ref="subCmt"
