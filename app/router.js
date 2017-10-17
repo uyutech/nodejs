@@ -33,6 +33,8 @@ module.exports = app => {
   app.post('/api/find/tagB', 'api.find.tagB');
   app.post('/api/find/playList', 'api.find.playList');
   app.post('/api/user/updateNickName', app.middlewares.needLoginJson(), 'api.user.updateNickName');
+  app.post('/api/user/checkExistHead', app.middlewares.needLoginJson(), 'api.user.checkExistHead');
+  app.post('/api/user/uploadHead', app.middlewares.needLoginJson(), 'api.user.uploadHead');
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');
   app.post('/api/works/likeWork', app.middlewares.needLoginJson(), 'api.works.likeWork');

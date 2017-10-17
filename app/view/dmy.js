@@ -312,7 +312,7 @@ var My = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo]]), migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]]), migi.createCp(_Favor2.default, [["ref", "favor"], ["list", this.props.favors]]), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
+      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo]]), migi.createVd("div", [["class", "c"]], [migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]]), migi.createCp(_Favor2.default, [["ref", "favor"], ["list", this.props.favors]])]), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
     }
   }]);
 
@@ -351,6 +351,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// import Spark from 'spark-md5';
+
 var Profile = function (_migi$Component) {
   _inherits(Profile, _migi$Component);
 
@@ -383,17 +385,6 @@ var Profile = function (_migi$Component) {
       $(self.ref.name.element).addClass('fn-hide');
       $(self.ref.edit.element).addClass('fn-hide');
       $(self.ref.input.element).removeClass('fn-hide').focus().val(self.name);
-      // let name = window.prompt('请输入想要修改的昵称', $CONFIG.userName).trim();
-      // if(name !== $CONFIG.userName) {
-      //   net.postJSON('api/users/UpdateNickName', { NickName: name }, function(res) {
-      //     if(res.success) {
-      //       self.userName = name;
-      //     }
-      //     else {
-      //       alert(res.message || util.ERROR_MESSAGE);
-      //     }
-      //   });
-      // }
     }
   }, {
     key: 'blur',
@@ -418,11 +409,36 @@ var Profile = function (_migi$Component) {
       }
     }
   }, {
+    key: 'change',
+    value: function change(e) {
+      if (window.FileReader) {
+        var file = e.target.files[0];
+        var size = file.size;
+        if (size && size !== 0 && size < 1024 * 300) {
+          var fileReader = new FileReader();
+          fileReader.onload = function () {
+            // let spark = new Spark();
+            // spark.append(fileReader.result);
+            // let md5 = spark.end();
+            // net.postJSON('/api/user/checkExistHead', { md5 }, function(res) {
+            //   console.log(res);
+            // });
+            _net2.default.postJSON('/api/user/uploadHead', { img: fileReader.result }, function (res) {});
+          };
+          fileReader.readAsDataURL(file);
+        } else {
+          alert('图片尺寸太大啦！不能超过300k');
+        }
+      } else {
+        alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器。');
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
         return this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png';
-      })]])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
+      })]]), migi.createVd("div", [["class", "upload"]], [migi.createVd("input", [["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["accept", "image/gif, image/jpeg, image/png"]])])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
         return this.name;
       })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["onBlur", new migi.Cb(this, this.blur)]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]])])]);
     }
@@ -490,7 +506,7 @@ var Follow = function (_migi$Component) {
   _createClass(Follow, [{
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "follow"]], [migi.createVd("h3", [], ["我的关注"]), migi.createVd("b", [["class", "line"]]), migi.createVd("div", [["class", "fn fn-clear fn-hide"]], [migi.createVd("a", [["href", "#"], ["class", "prev"]], ["查看上页"]), migi.createVd("a", [["href", "#"], ["class", "next"]], ["查看下页"])]), migi.createVd("ul", [["class", "list fn-clear"]], [new migi.Obj("list", this, function () {
+      return migi.createVd("div", [["class", "follow"]], [migi.createVd("h4", [], ["我的关注"]), migi.createVd("ul", [["class", "list fn-clear"]], [new migi.Obj("list", this, function () {
         return (this.list || []).map(function (item) {
           return migi.createVd("li", [], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", item.Head_url]])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [item.AuthorName]), migi.createVd("div", [["class", "info"]], [item.FansNumber, "粉丝"])]);
         });
@@ -552,9 +568,9 @@ var Favor = function (_migi$Component) {
   _createClass(Favor, [{
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "favor"]], [migi.createVd("h3", [], ["我的收藏"]), migi.createVd("b", [["class", "line"]]), migi.createVd("div", [["class", "fn fn-clear fn-hide"]], [migi.createVd("a", [["href", "#"], ["class", "prev"]], ["查看上页"]), migi.createVd("a", [["href", "#"], ["class", "next"]], ["查看下页"])]), migi.createVd("ul", [["class", "list fn-clear"]], [new migi.Obj("list", this, function () {
+      return migi.createVd("div", [["class", "favor"]], [migi.createVd("h4", [], ["我的收藏"]), migi.createVd("ul", [["class", "list fn-clear"]], [new migi.Obj("list", this, function () {
         return (this.list || []).map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", item.cover_Pic]]), migi.createVd("div", [["class", "ath"]], [item.SingerName])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [item.Title])]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", item.cover_Pic || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "ath"]], [item.SingerName])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [item.Title])]);
         });
       })])]);
     }

@@ -10,12 +10,7 @@ class Follow extends migi.Component {
   @bind list
   render() {
     return <div class="follow">
-      <h3>我的关注</h3>
-      <b class="line"/>
-      <div class="fn fn-clear fn-hide">
-        <a href="#" class="prev">查看上页</a>
-        <a href="#" class="next">查看下页</a>
-      </div>
+      <h4>我的关注</h4>
       <ul class="list fn-clear">
         {
           (this.list || []).map(function(item) {

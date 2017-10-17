@@ -4,6 +4,7 @@
 
 import net from '../common/net';
 import util from '../common/util';
+// import Spark from 'spark-md5';
 
 class Profile extends migi.Component {
   constructor(...data) {
@@ -24,17 +25,6 @@ class Profile extends migi.Component {
     $(self.ref.name.element).addClass('fn-hide');
     $(self.ref.edit.element).addClass('fn-hide');
     $(self.ref.input.element).removeClass('fn-hide').focus().val(self.name);
-    // let name = window.prompt('请输入想要修改的昵称', $CONFIG.userName).trim();
-    // if(name !== $CONFIG.userName) {
-    //   net.postJSON('api/users/UpdateNickName', { NickName: name }, function(res) {
-    //     if(res.success) {
-    //       self.userName = name;
-    //     }
-    //     else {
-    //       alert(res.message || util.ERROR_MESSAGE);
-    //     }
-    //   });
-    // }
   }
   blur() {
     let self = this;
@@ -57,10 +47,38 @@ class Profile extends migi.Component {
       });
     }
   }
+  change(e) {
+    if(window.FileReader) {
+      let file = e.target.files[0];
+      let size = file.size;
+      if(size && size !== 0 && size < 1024 * 300) {
+        let fileReader = new FileReader();
+        fileReader.onload = function() {
+          // let spark = new Spark();
+          // spark.append(fileReader.result);
+          // let md5 = spark.end();
+          // net.postJSON('/api/user/checkExistHead', { md5 }, function(res) {
+          //   console.log(res);
+          // });
+          net.postJSON('/api/user/uploadHead', { img: fileReader.result }, function(res) {});
+        };
+        fileReader.readAsDataURL(file);
+      }
+      else {
+        alert('图片尺寸太大啦！不能超过300k');
+      }
+    }
+    else {
+      alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器。');
+    }
+  }
   render() {
     return <div class="profile fn-clear">
       <div class="pic">
         <img src={ this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
+        <div class="upload">
+          <input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>
+        </div>
       </div>
       <div class="txt">
         <strong ref="name">{ this.name }</strong>

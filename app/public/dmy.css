@@ -8,11 +8,11 @@
   padding-top: 0.2rem;
 }
 .my > .profile .pic {
+  position: relative;
   float: left;
   margin-left: 0.3rem;
   width: 1.1rem;
   height: 1.1rem;
-  border-radius: 100%;
   background: #F1F6F9;
   overflow: hidden;
 }
@@ -20,6 +20,21 @@
   display: block;
   width: 100%;
   height: 100%;
+  border-radius: 100%;
+}
+.my > .profile .pic .upload {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 0.24rem;
+  height: 0.24rem;
+  background: rgba(0, 0, 0, 0.1) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAALVBMVEUAAABhns5emsRemsVemsVdmcRem8VlmsxdmsVdmcRemsRemcVemsRfmcVdmcRgmA3NAAAADnRSTlMAFdS1dOY+GPmyxH3qRsbsh50AAACoSURBVDjLYxi6QKIRuzij3iMBrBJC794pYteg9wirFqFHcg/1FLFpUOR7IIRFC9cjAb4HjHoLMCSYFzLwPWCQMsBiCVACSAwaCV6bdwYICeZ3kQlQiX3vUCXevYaIs71wRDWqpA+ihfkJuh1+E8AU63N0iboAOB+dQTMJZgMMCRigqwQiSBAAESScT9Al/CZAg90dJgIPdlhEoYHXUBVsU1GEQVE75AAAvPxjgyfkhwAAAAAASUVORK5CYII=) no-repeat center;
+  background-size: contain;
+  border-radius: 0.05rem;
+}
+.my > .profile .pic .upload input {
+  height: 100%;
+  opacity: 0;
 }
 .my > .profile .txt {
   float: left;
@@ -44,23 +59,29 @@
   overflow: hidden;
   cursor: pointer;
 }
-.my > .follow {
-  position: relative;
-  margin-top: 0.2rem;
-}
-.my > .follow h3 {
-  color: #4E8EB0;
-  font-size: 0.2rem;
-  padding-left: 0.3rem;
-  line-height: 0.32rem;
+.my h4 {
+  padding: 0 0.2rem;
+  height: 0.36rem;
+  line-height: 0.36rem;
+  background: #8BBDE1;
+  font-size: 0.14rem;
   font-weight: 400;
 }
-.my > .follow .fn {
+.my > .c {
+  margin-top: 0.2rem;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 0.1rem;
+  overflow: hidden;
+}
+.my > .c > .follow {
+  position: relative;
+}
+.my > .c > .follow .fn {
   position: absolute;
   top: 0;
   right: 0.3rem;
 }
-.my > .follow .fn .prev {
+.my > .c > .follow .fn .prev {
   float: left;
   position: relative;
   padding: 0 0.15rem 0 0.3rem;
@@ -69,7 +90,7 @@
   border: 1px solid #4E8EB0;
   border-radius: 0.3rem;
 }
-.my > .follow .fn .prev:before {
+.my > .c > .follow .fn .prev:before {
   position: absolute;
   left: 0.15rem;
   top: 50%;
@@ -82,7 +103,7 @@
           transform: translateY(-50%) rotateZ(-45deg);
   content: ' ';
 }
-.my > .follow .fn .next {
+.my > .c > .follow .fn .next {
   float: left;
   position: relative;
   margin-left: 0.2rem;
@@ -92,7 +113,7 @@
   border: 1px solid #4E8EB0;
   border-radius: 0.3rem;
 }
-.my > .follow .fn .next:before {
+.my > .c > .follow .fn .next:before {
   position: absolute;
   right: 0.15rem;
   top: 50%;
@@ -105,29 +126,29 @@
           transform: translateY(-50%) rotateZ(45deg);
   content: ' ';
 }
-.my > .follow .line {
+.my > .c > .follow .line {
   display: block;
   margin-top: 0.1rem;
   height: 0.02rem;
   background: linear-gradient(90deg, #A4D2DF, #7EB4CA);
 }
-.my > .follow .list {
-  margin-top: 0.2rem;
+.my > .c > .follow .list {
   margin-right: -0.72rem;
+  padding: 0.2rem;
 }
-.my > .follow .list li {
+.my > .c > .follow .list li {
   float: left;
   margin-right: 0.3rem;
   width: 0.72rem;
   text-align: center;
 }
-.my > .follow .list li .pic {
+.my > .c > .follow .list li .pic {
   position: relative;
   display: block;
   width: 100%;
   height: 0.72rem;
 }
-.my > .follow .list li .pic img {
+.my > .c > .follow .list li .pic img {
   display: block;
   width: 100%;
   height: 100%;
@@ -135,7 +156,7 @@
   border-radius: 100%;
   overflow: hidden;
 }
-.my > .follow .list li .txt {
+.my > .c > .follow .list li .txt {
   display: block;
   margin-top: 0.05rem;
   width: 100%;
@@ -143,7 +164,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.my > .follow .list li .info {
+.my > .c > .follow .list li .info {
   display: block;
   font-size: 0.12rem;
   width: 100%;
@@ -152,23 +173,15 @@
   overflow: hidden;
   white-space: nowrap;
 }
-.my > .favor {
+.my > .c > .favor {
   position: relative;
-  margin-top: 0.2rem;
 }
-.my > .favor h3 {
-  color: #4E8EB0;
-  font-size: 0.2rem;
-  padding-left: 0.3rem;
-  line-height: 0.32rem;
-  font-weight: 400;
-}
-.my > .favor .fn {
+.my > .c > .favor .fn {
   position: absolute;
   top: 0;
   right: 0.3rem;
 }
-.my > .favor .fn .prev {
+.my > .c > .favor .fn .prev {
   float: left;
   position: relative;
   padding: 0 0.15rem 0 0.3rem;
@@ -177,7 +190,7 @@
   border: 1px solid #4E8EB0;
   border-radius: 0.3rem;
 }
-.my > .favor .fn .prev:before {
+.my > .c > .favor .fn .prev:before {
   position: absolute;
   left: 0.15rem;
   top: 50%;
@@ -190,7 +203,7 @@
           transform: translateY(-50%) rotateZ(-45deg);
   content: ' ';
 }
-.my > .favor .fn .next {
+.my > .c > .favor .fn .next {
   float: left;
   position: relative;
   margin-left: 0.2rem;
@@ -200,7 +213,7 @@
   border: 1px solid #4E8EB0;
   border-radius: 0.3rem;
 }
-.my > .favor .fn .next:before {
+.my > .c > .favor .fn .next:before {
   position: absolute;
   right: 0.15rem;
   top: 50%;
@@ -213,35 +226,35 @@
           transform: translateY(-50%) rotateZ(45deg);
   content: ' ';
 }
-.my > .favor .line {
+.my > .c > .favor .line {
   display: block;
   margin-top: 0.1rem;
   height: 0.02rem;
   background: linear-gradient(90deg, #A4D2DF, #7EB4CA);
 }
-.my > .favor .list {
-  margin-top: 0.2rem;
+.my > .c > .favor .list {
+  padding: 0.2rem;
   margin-right: -1.44rem;
 }
-.my > .favor .list li {
+.my > .c > .favor .list li {
   float: left;
   margin-right: 0.7rem;
   margin-bottom: 0.2rem;
   width: 1.44rem;
   font-size: 0.12rem;
 }
-.my > .favor .list li .pic {
+.my > .c > .favor .list li .pic {
   position: relative;
   display: block;
   width: 100%;
   height: 1.44rem;
   border-radius: 0.1rem;
-  color: #fff;
+  color: #FFF;
 }
-.my > .favor .list li .pic:hover {
+.my > .c > .favor .list li .pic:hover {
   box-shadow: 0 0 0.1rem #4E8EB0;
 }
-.my > .favor .list li .pic:before {
+.my > .c > .favor .list li .pic:before {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -252,7 +265,7 @@
   border-bottom-right-radius: 0.1rem;
   z-index: 2;
 }
-.my > .favor .list li .pic img {
+.my > .c > .favor .list li .pic img {
   position: relative;
   display: block;
   width: 100%;
@@ -260,7 +273,7 @@
   border-radius: 0.1rem;
   z-index: 1;
 }
-.my > .favor .list li .pic .num {
+.my > .c > .favor .list li .pic .num {
   position: absolute;
   left: 0.1rem;
   bottom: 0.25rem;
@@ -270,13 +283,13 @@
   background-size: 0.24rem auto;
   z-index: 3;
 }
-.my > .favor .list li .pic .ath {
+.my > .c > .favor .list li .pic .ath {
   position: absolute;
   left: 0.1rem;
   bottom: 0.05rem;
   z-index: 3;
 }
-.my > .favor .list li .txt {
+.my > .c > .favor .list li .txt {
   display: block;
   margin-top: 0.05rem;
   font-size: 0.14rem;
@@ -291,7 +304,7 @@
   width: 1.5rem;
   line-height: 0.42rem;
   font-size: 0.16rem;
-  color: #fff;
+  color: #FFF;
   border-radius: 0.12rem;
   background: #B65A58;
   text-align: center;

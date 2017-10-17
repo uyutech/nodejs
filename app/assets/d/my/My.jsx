@@ -25,8 +25,10 @@ class My extends migi.Component {
   render() {
     return <div class="my">
       <Profile userInfo={ this.props.userInfo }/>
-      <Follow ref="follow" list={ this.props.follows }/>
-      <Favor ref="favor" list={ this.props.favors }/>
+      <div class="c">
+        <Follow ref="follow" list={ this.props.follows }/>
+        <Favor ref="favor" list={ this.props.favors }/>
+      </div>
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>
     </div>;
   }

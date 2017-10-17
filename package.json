@@ -4,6 +4,7 @@
   "description": "",
   "private": true,
   "dependencies": {
+    "ali-oss": "~4.10.1",
     "egg": "~1.9.0",
     "egg-redis": "~1.0.2",
     "egg-scripts": "~1.2.0",
