@@ -153,7 +153,7 @@ class Audio extends migi.Component {
     return this;
   }
   pause() {
-    this.audio.element.pause();
+    this.audio && this.audio.element.pause();
     this.isPlaying = false;
     return this;
   }

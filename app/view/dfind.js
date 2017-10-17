@@ -593,7 +593,7 @@ var DoubleCheck = function (_migi$Component) {
         $lis.each(function (index, li) {
           var $li = $(li);
           param.push({
-            Filterlevel: $li.attr('tagID')
+            Filterlevel: $li.attr('tagName')
           });
         });
         param = JSON.stringify(param);
@@ -688,7 +688,7 @@ var DoubleCheck = function (_migi$Component) {
       return migi.createVd("div", [["class", "cp-doublecheck"]], [migi.createVd("div", [["class", "l1"], ["ref", "l1"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL1)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [["class", "fn-clear"]], [new migi.Obj("tagList", this, function () {
         return this.tagList.map(function (item, i) {
           var type = _authorTemplate2.default.code2Data[item.TagName];
-          return migi.createVd("li", [["class", this.tagList.length === 1 ? 'on' : ''], ["rel", i], ["tagType", item.TagType], ["tagID", item.ID]], [migi.createVd("span", [], [type ? type.name : item.TagName])]);
+          return migi.createVd("li", [["class", this.tagList.length === 1 ? 'on' : ''], ["rel", i], ["tagType", item.TagType], ["tagID", item.ID], ["tagName", item.TagName]], [migi.createVd("span", [], [type ? type.name : item.TagName])]);
         }.bind(this));
       })])])]), migi.createVd("div", [["class", new migi.Obj("isLoadindL2", this, function () {
         return 'l2' + (this.isLoadindL2 ? ' loading' : '');
@@ -941,13 +941,14 @@ exports.default = function (data) {
   migi.Element.resetUid();
   var hotWorkList = data.hotWorkList;
   var hotAuthorList = data.hotAuthorList;
+  var hotAlbumList = data.hotAlbumList;
   var tags = data.tags;
   var playList = data.playList;
   var playList2 = data.playList;
 
-  var find = migi.preRender(migi.createCp(_Find2.default, [["hotWorkList", hotWorkList], ["hotAuthorList", hotAuthorList], ["tags", tags], ["playList", playList], ["playList2", playList2]]));
+  var find = migi.preRender(migi.createCp(_Find2.default, [["hotWorkList", hotWorkList], ["hotAuthorList", hotAuthorList], ["hotAlbumList", hotAlbumList], ["tags", tags], ["playList", playList], ["playList2", playList2]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n  $CONFIG.playList2 = ' + JSON.stringify(playList2) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.hotAlbumList = ' + JSON.stringify(hotAlbumList) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n  $CONFIG.playList2 = ' + JSON.stringify(playList2) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n</body>\n</html>';
 };
 
 var _Find = __webpack_require__(52);
@@ -995,6 +996,10 @@ var _HotCollection2 = _interopRequireDefault(_HotCollection);
 var _HotAuthor = __webpack_require__(22);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
+
+var _HotAlubm = __webpack_require__(54);
+
+var _HotAlubm2 = _interopRequireDefault(_HotAlubm);
 
 var _DoubleCheck = __webpack_require__(23);
 
@@ -1124,7 +1129,7 @@ var Find = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createVd("div", [["class", "hot"]], [migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "推荐作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotCollection2.default, [["ref", "hotCollection"], ["title", "推荐专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "推荐作者"], ["dataList", this.props.hotAuthorList]])]), migi.createCp(_DoubleCheck2.default, [["ref", "doubleCheck"], ["tags", this.props.tags]]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["dataList", this.props.playList.data], ["dataList2", this.props.playList2.data]])]);
+      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createVd("div", [["class", "hot"]], [migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "推荐作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotCollection2.default, [["ref", "hotCollection"], ["title", "推荐专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "推荐作者"], ["dataList", this.props.hotAuthorList]]), migi.createCp(_HotAlubm2.default, [["ref", "hotAlbum"], ["title", "推荐相册"], ["dataList", this.props.hotAlbumList]])]), migi.createCp(_DoubleCheck2.default, [["ref", "doubleCheck"], ["tags", this.props.tags]]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["dataList", this.props.playList.data], ["dataList2", this.props.playList2.data]])]);
     }
   }]);
 
@@ -1240,6 +1245,69 @@ var Banner = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Banner, "Banner");exports.default = Banner;
+
+/***/ }),
+
+/***/ 54:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var HotAlubm = function (_migi$Component) {
+  _inherits(HotAlubm, _migi$Component);
+
+  function HotAlubm() {
+    var _ref;
+
+    _classCallCheck(this, HotAlubm);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = HotAlubm.__proto__ || Object.getPrototypeOf(HotAlubm)).call.apply(_ref, [this].concat(data)));
+
+    _this.dataList = _this.props.dataList;
+    return _this;
+  }
+
+  _createClass(HotAlubm, [{
+    key: "render",
+    value: function render() {
+      console.log(this.dataList);
+      return migi.createVd("div", [["class", "cp-hotalbum"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ["我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3&lt;"])]), new migi.Obj("dataList", this, function () {
+        return this.dataList && this.dataList.length ? migi.createVd("ul", [["class", "list fn-clear"]], [this.dataList.map(function (item) {
+          return migi.createVd("li", [], [migi.createVd("b", [["class", "bg"]]), migi.createVd("a", [["href", "/works/" + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", item.cover_Pic || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [item.Title])]);
+        })]) : migi.createVd("div", [["class", "empty"]], ["暂无数据"]);
+      })]);
+    }
+  }, {
+    key: "dataList",
+    set: function set(v) {
+      this.__setBind("dataList", v);this.__data("dataList");
+    },
+    get: function get() {
+      return this.__getBind("dataList");
+    }
+  }]);
+
+  return HotAlubm;
+}(migi.Component);
+
+migi.name(HotAlubm, "HotAlubm");exports.default = HotAlubm;
 
 /***/ })
 

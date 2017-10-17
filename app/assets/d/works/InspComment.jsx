@@ -12,7 +12,7 @@ class InspComment extends migi.Component {
   }
   render() {
     return <div class="mod insp">
-      <h4>创作灵感</h4>
+      <h5>创作灵感</h5>
       <ul class="c">
         {
           (this.props.commentData || []).map(function(item) {

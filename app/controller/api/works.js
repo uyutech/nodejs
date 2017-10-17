@@ -101,6 +101,18 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * photoList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/GetPhotoPicByWorkID', {
+        uid,
+        WorksID: body.worksID,
+        Skip: body.skip,
+        Take: body.take,
+        SortType: body.sortType,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

@@ -250,6 +250,96 @@
   border-radius: 100%;
 }
 /**
+ * Created by army8735 on 2017/10/17.
+ */
+.cp-hotalbum {
+  position: relative;
+}
+.cp-hotalbum h4 {
+  padding: 0 0.2rem;
+  height: 0.36rem;
+  line-height: 0.36rem;
+  background: #8BBDE1;
+  background-size: 0.24rem auto;
+  font-size: 0.14rem;
+  font-weight: 400;
+}
+.cp-hotalbum h4 small {
+  margin-left: 0.2rem;
+  font-size: 0.12rem;
+  opacity: 0.8;
+}
+.cp-hotalbum .list {
+  padding: 0.2rem;
+}
+.cp-hotalbum .list li {
+  float: left;
+  position: relative;
+  width: 1.44rem;
+  padding-top: 0.06rem;
+}
+.cp-hotalbum .list li .bg {
+  position: absolute;
+  left: 0.06rem;
+  top: 0;
+  right: 0.06rem;
+  height: 0.2rem;
+  background: #B1C0C9;
+  border-radius: 0.1rem;
+}
+.cp-hotalbum .list li .bg:before {
+  position: absolute;
+  left: -0.03rem;
+  top: 0.03rem;
+  right: -0.03rem;
+  height: 100%;
+  background: #C2D8E4;
+  border-radius: 0.1rem;
+  content: ' ';
+}
+.cp-hotalbum .list li .pic {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1.44rem;
+  background: #B1C0C9;
+  border-radius: 0.1rem;
+  overflow: hidden;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+.cp-hotalbum .list li .pic:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+  content: ' ';
+}
+.cp-hotalbum .list li .pic:after {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+  content: ' ';
+}
+.cp-hotalbum .list li .pic:hover {
+  box-shadow: 1px 1px 3px rgba(45, 77, 103, 0.5);
+}
+.cp-hotalbum .list li .txt {
+  display: block;
+  margin: 0.05rem 0.1rem;
+  font-size: 0.14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cp-hotalbum .empty {
+  padding: 0.1rem;
+  text-align: center;
+}
+/**
  * Created by army8735 on 2017/7/31.
  */
 .cp-doublecheck .l1.loading {

@@ -4,6 +4,7 @@
 
 import Audio from './Audio.jsx';
 import Video from './Video.jsx';
+import Link from './Link.jsx';
 
 class Media extends migi.Component {
   constructor(...data) {
@@ -28,15 +29,23 @@ class Media extends migi.Component {
     let self = this;
     let audio = self.ref.audio;
     let video = self.ref.video;
+    let link = self.ref.link;
     if(type === 'audio') {
-      video.pause().hide();
+      link.hide();
+      video && video.pause().hide();
       audio.show();
       self.emit('switchTo', audio.datas[audio.index]);
     }
     else if(type === 'video') {
-      audio.pause().hide();
+      link.hide();
+      audio && audio.pause().hide();
       video.show();
       self.emit('switchTo', video.datas[video.index]);
+    }
+    else if(type === 'link') {
+      audio && audio.pause().hide();
+      video && video.pause().hide();
+      link.show();
     }
   }
   render() {
@@ -51,6 +60,7 @@ class Media extends migi.Component {
           ? <Video ref="video" cover={ this.props.cover } datas={ this.props.videoData } show={ this.props.first === 'video' }/>
           : ''
       }
+      <Link ref="link"/>
     </div>;
   }
 }

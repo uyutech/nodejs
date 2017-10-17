@@ -10,6 +10,7 @@ export default function(data) {
   migi.Element.resetUid();
   let hotWorkList = data.hotWorkList;
   let hotAuthorList = data.hotAuthorList;
+  let hotAlbumList = data.hotAlbumList;
   let tags = data.tags;
   let playList = data.playList;
   let playList2 = data.playList;
@@ -17,6 +18,7 @@ export default function(data) {
   let find = migi.preRender(<Find
     hotWorkList={ hotWorkList }
     hotAuthorList={ hotAuthorList }
+    hotAlbumList={ hotAlbumList }
     tags={ tags }
     playList={ playList }
     playList2={ playList2 }/>);
@@ -35,6 +37,7 @@ ${data.helper.getDBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.hotWorkList = ${JSON.stringify(hotWorkList)};
   $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
+  $CONFIG.hotAlbumList = ${JSON.stringify(hotAlbumList)};
   $CONFIG.tags = ${JSON.stringify(tags)};
   $CONFIG.playList = ${JSON.stringify(playList)};
   $CONFIG.playList2 = ${JSON.stringify(playList2)};

@@ -121,7 +121,7 @@ class Video extends migi.Component {
     return this;
   }
   pause() {
-    this.video.element.pause();
+    this.video && this.video.element.pause();
     this.isPlaying = false;
     return this;
   }

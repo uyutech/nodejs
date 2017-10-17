@@ -9,12 +9,17 @@ module.exports = app => {
     * index(ctx) {
       let hotWorkList = [];
       let hotAuthorList = [];
+      let hotAlbumList = [];
       let tags = {};
       let playList = [];
       let playList2 = [];
       let res = yield {
         hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List'),
         hotAuthorList: ctx.helper.postServiceJSON('api/find/Hot_Author_List'),
+        hotAlbumList: ctx.helper.postServiceJSON('api/find/Hot_PHOTO_List', {
+          Skip: 0,
+          Take: 10,
+        }),
         tags: ctx.helper.postServiceJSON('api/find/GetTag'),
         playList: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
           Parameter: '',
@@ -34,6 +39,9 @@ module.exports = app => {
       }
       if(res.hotAuthorList.data.success) {
         hotAuthorList = res.hotAuthorList.data.data;
+      }
+      if(res.hotAlbumList.data.success) {
+        hotAlbumList = res.hotAlbumList.data.data;
       }
       if(res.tags.data.success) {
         tags = res.tags.data.data;
@@ -55,6 +63,7 @@ module.exports = app => {
       yield ctx.render('dfind', {
         hotWorkList,
         hotAuthorList,
+        hotAlbumList,
         tags,
         playList,
         playList2,

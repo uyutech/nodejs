@@ -10,7 +10,7 @@ class Text extends migi.Component {
   }
   render() {
     return <div class="mod text">
-      <h4>{ this.props.datas.name }</h4>
+      <h5>{ this.props.datas.name }</h5>
       <ul class="c">
       {
         (this.props.datas.value || []).map(function(item) {

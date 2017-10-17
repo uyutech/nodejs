@@ -14,6 +14,7 @@ import Poster from './Poster.jsx';
 import Timeline from './Timeline.jsx';
 import InspComment from './InspComment.jsx';
 import WorkComment from './WorkComment.jsx';
+import Album from './Album.jsx';
 
 let first;
 
@@ -22,16 +23,20 @@ class Works extends migi.Component {
     super(...data);
     let self = this;
     self.worksID = self.props.worksID;
+    self.worksType = self.props.worksDetail.WorkType;
     self.setWorks(self.props.worksDetail.Works_Items);
     self.on(migi.Event.DOM, function() {
       let media = self.ref.media;
       let workComment = self.ref.workComment;
-      media.on('switchTo', function(data) {
-        workComment.workID = data.ItemID;
-      });
+      if(media) {
+        media.on('switchTo', function(data) {
+          workComment.workID = data.ItemID;
+        });
+      }
     });
   }
   @bind worksID
+  @bind worksType
   setWorks(works) {
     let self = this;
     let workHash = {};
@@ -135,7 +140,46 @@ class Works extends migi.Component {
     }
   }
   render() {
-    return <div class="works fn-clear">
+    let self = this;
+    if(self.worksType === 11) {
+      return <div class={ 'works fn-clear t' + self.worksType }>
+        <Title ref="title"
+               worksDetail={ this.props.worksDetail }
+               authorList={ this.authorList }/>
+        <div class="main">
+          <Album worksID={ this.props.worksID }/>
+        </div>
+        <div class="side">
+          <div class="info">
+            <Author authorList={ this.authorList }/>
+            {
+              this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
+                ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+                : ''
+            }
+            {
+              this.textData
+                ? <Text datas={ this.textData }/>
+                : ''
+            }
+            {
+              this.lyricData
+                ? <Lyric datas={ this.lyricData }/>
+                : ''
+            }
+            <InspComment ref="inspComment"
+                         worksID={ this.props.worksID }
+                         commentData={ this.props.worksDetail.WorksAuthorComment }/>
+          </div>
+          <WorkComment ref="workComment"
+                       isLogin={ this.props.isLogin }
+                       worksID={ this.props.worksID }
+                       workID={ this.workID }
+                       commentData={ this.props.commentData }/>
+        </div>
+      </div>;
+    }
+    return <div class={ 'works fn-clear t' + self.worksType }>
       <Title ref="title"
              worksDetail={ this.props.worksDetail }
              authorList={ this.authorList }/>
@@ -151,6 +195,7 @@ class Works extends migi.Component {
               ? <li class={ 'audio' + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
               : ''
           }
+          <li class="link" rel="link">站外链接</li>
         </ul>
         <Media ref="media"
                cover={ this.props.worksDetail.cover_Pic }
@@ -166,7 +211,6 @@ class Works extends migi.Component {
       <div class="side">
         <ul class="sel fn-clear" ref="sel">
           <li class="cur">简介</li>
-          <li>站外链接</li>
         </ul>
         <div class="info">
           <Author authorList={ this.authorList }/>

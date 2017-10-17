@@ -60,7 +60,7 @@ class DoubleCheck extends migi.Component {
       $lis.each(function(index, li) {
         let $li = $(li);
         param.push({
-          Filterlevel: $li.attr('tagID')
+          Filterlevel: $li.attr('tagName')
         });
       });
       param = JSON.stringify(param);
@@ -148,7 +148,7 @@ class DoubleCheck extends migi.Component {
             {
               this.tagList.map(function(item, i) {
                 let type = authorTemplate.code2Data[item.TagName];
-                return <li class={ this.tagList.length === 1 ? 'on' : '' } rel={ i } tagType={ item.TagType } tagID={ item.ID }><span>{ type ? type.name : item.TagName }</span></li>;
+                return <li class={ this.tagList.length === 1 ? 'on' : '' } rel={ i } tagType={ item.TagType } tagID={ item.ID } tagName={ item.TagName }><span>{ type ? type.name : item.TagName }</span></li>;
               }.bind(this))
             }
           </ul>

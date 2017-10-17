@@ -51,8 +51,8 @@ class Author extends migi.Component {
           subCmt.isCommentSending = false;
         });
       });
-      // self.ref.home.hide();
-      // self.ref.works.show();
+      self.ref.home.hide();
+      self.ref.works.show();
     });
   }
   clickType(e, vd ,tvd) {

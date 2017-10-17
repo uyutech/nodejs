@@ -8,6 +8,7 @@ import Banner from './Banner.jsx';
 import HotWork from '../component/hotwork/HotWork.jsx';
 import HotCollection from '../component/hotcollection/HotCollection.jsx';
 import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
+import HotAlbum from '../component/hotalbum/HotAlubm.jsx';
 import DoubleCheck from '../component/doublecheck/DoubleCheck.jsx';
 import PlayList from '../component/playlist/PlayList.jsx';
 
@@ -110,6 +111,7 @@ class Find extends migi.Component {
         <HotWork ref="hotWork" title="推荐作品" dataList={ this.props.hotWorkList }/>
         <HotCollection ref="hotCollection" title="推荐专辑"/>
         <HotAuthor ref="hotAuthor" title="推荐作者" dataList={ this.props.hotAuthorList }/>
+        <HotAlbum ref="hotAlbum" title="推荐相册" dataList={ this.props.hotAlbumList }/>
       </div>
       <DoubleCheck ref="doubleCheck" tags={ this.props.tags }/>
       <PlayList ref="playList" dataList={ this.props.playList.data } dataList2={ this.props.playList2.data }/>

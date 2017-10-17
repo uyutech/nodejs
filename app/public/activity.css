@@ -90,7 +90,7 @@
  * Created by army8735 on 2017/8/26.
  */
 .cp-comment {
-  min-height: 1rem;
+  position: relative;
 }
 .cp-comment .list > li {
   padding: 0 0.05rem;
@@ -154,7 +154,7 @@
 }
 .cp-comment .list > li > .c .arrow {
   position: absolute;
-  right: 0.1rem;
+  left: 0.1rem;
   top: -1px;
   display: block;
   width: 0.1rem;
