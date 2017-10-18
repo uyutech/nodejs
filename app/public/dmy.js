@@ -460,15 +460,33 @@ var util = {
     location.href = url;
   },
   autoSsl: function autoSsl(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return (url || '').replace(/^https?:\/\//i, '//');
   },
   img192_192: function img192_192(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-192_192' : url;
   },
+  img144_: function img144_(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_' : url;
+  },
   img144_144: function img144_144(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-144_144' : url;
   },
   img100_100: function img100_100(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-100_100' : url;
   },
   formatTime: function formatTime(time) {

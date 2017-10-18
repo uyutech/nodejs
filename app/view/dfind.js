@@ -79,15 +79,33 @@ let util = {
     location.href = url;
   },
   autoSsl: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return (url || '').replace(/^https?:\/\//i, '//');
   },
   img192_192: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-192_192' : url;
   },
+  img144_: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_' : url;
+    },
   img144_144: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-144_144' : url;
   },
   img100_100: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-100_100' : url;
   },
   formatTime: function(time) {
@@ -942,13 +960,14 @@ exports.default = function (data) {
   var hotWorkList = data.hotWorkList;
   var hotAuthorList = data.hotAuthorList;
   var hotAlbumList = data.hotAlbumList;
+  var hotCollection = data.hotCollection;
   var tags = data.tags;
   var playList = data.playList;
   var playList2 = data.playList;
 
   var find = migi.preRender(migi.createCp(_Find2.default, [["hotWorkList", hotWorkList], ["hotAuthorList", hotAuthorList], ["hotAlbumList", hotAlbumList], ["tags", tags], ["playList", playList], ["playList2", playList2]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.hotAlbumList = ' + JSON.stringify(hotAlbumList) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n  $CONFIG.playList2 = ' + JSON.stringify(playList2) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.hotAlbumList = ' + JSON.stringify(hotAlbumList) + ';\n  $CONFIG.hotCollection = ' + JSON.stringify(hotCollection) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n  $CONFIG.playList2 = ' + JSON.stringify(playList2) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n</body>\n</html>';
 };
 
 var _Find = __webpack_require__(52);
@@ -1081,37 +1100,6 @@ var Find = function (_migi$Component) {
   }
 
   _createClass(Find, [{
-    key: 'load',
-    value: function load() {
-      var self = this;
-      _net2.default.postJSON('api/find/Hot_works_List', function (res) {
-        if (res.success) {
-          var data = res.data;
-          self.ref.hotWork.dataList = data;
-        }
-      });
-      _net2.default.postJSON('api/find/Hot_Author_List', function (res) {
-        if (res.success) {
-          var data = res.data;
-          self.ref.hotAuthor.dataList = data;
-        }
-      });
-      _net2.default.postJSON('api/find/GetTag', { Skip: 0, Take: 10 }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          data.FilterlevelA = [{
-            ID: 0,
-            TagName: '音乐',
-            TagType: 0,
-            TagCount: 3957,
-            Filterlevel: "A"
-          }];
-          self.ref.doubleCheck.setData(data);
-        }
-        self.loadPlayList();
-      });
-    }
-  }, {
     key: 'loadPlayList',
     value: function loadPlayList() {
       var self = this;
@@ -1123,7 +1111,11 @@ var Find = function (_migi$Component) {
           var data = res.data;
           self.ref.playList.dataList = data.playList;
           self.ref.playList.dataList2 = data.playList2;
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
         }
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
       });
     }
   }, {

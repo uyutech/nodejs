@@ -16,55 +16,12 @@ class Album extends migi.Component {
     super(...data);
     let self = this;
     self.on(migi.Event.DOM, function() {
-      let $l1 = $(self.ref.l1.element);
-      let $l2 = $(self.ref.l2.element);
-      let $l3 = $(self.ref.l3.element);
-      let $l4 = $(self.ref.l4.element);
-      function addWaterFall(li) {
-        let $min = $l1;
-        if($l2.height() < $min.height()) {
-          $min = $l2;
-        }
-        if($l3.height() < $min.height()) {
-          $min = $l3;
-        }
-        if($l4.height() < $min.height()) {
-          $min = $l4;
-        }
-        li.appendTo($min[0]);
-      }
-      self.load(function(data) {
-        let length = data.data.length;
-        let i = 0;
-        // 先把有高宽的直接加入流中
-        for(;i < length; i++) {
-          let item = data.data[i];
-          if(data.Width && data.Height) {
-            let li = self.genItem(item);
-            addWaterFall(li);
-          }
-          else {
-            break;
-          }
-        }
-        //剩下的先获取高度再加入流
-        let num = length - i;
-        let count = 0;
-        let j = i;
-        for(;i < length; i++) {
-          let item = data.data[i];
-          self.loadImgSize(item, function() {
-            count++;
-            if(count === num) {
-              for(;j < length; j++) {
-                let item = data.data[j];
-                let li = self.genItem(item);
-                addWaterFall(li);
-              }
-            }
-          });
-        }
+      let $window = $(window);
+      self.load($window);
+      $window.on('scroll', function() {
+        self.checkMore($window);
       });
+
       let $c = $(self.ref.c.element);
       $c.on('click', '.like', function() {
         let $b = $(this);
@@ -125,10 +82,95 @@ class Album extends migi.Component {
       });
     });
   }
-  load(cb) {
+  @bind loading
+  @bind loadEnd
+  load($window) {
+    let self = this;
+    if(self.loading) {
+      return;
+    }
+    self.loading = true;
+    let $l1 = $(self.ref.l1.element);
+    let $l2 = $(self.ref.l2.element);
+    let $l3 = $(self.ref.l3.element);
+    let $l4 = $(self.ref.l4.element);
+    function addWaterFall(li) {
+      let $min = $l1;
+      if($l2.height() < $min.height()) {
+        $min = $l2;
+      }
+      if($l3.height() < $min.height()) {
+        $min = $l3;
+      }
+      if($l4.height() < $min.height()) {
+        $min = $l4;
+      }
+      li.appendTo($min[0]);
+    }
+    self.loadImg(function(data) {
+      let length = data.data.length;
+      let i = 0;
+      // 先把有高宽的直接加入流中
+      for(;i < length; i++) {
+        let item = data.data[i];
+        if(data.Width && data.Height) {
+          let li = self.genItem(item);
+          addWaterFall(li);
+        }
+        else {
+          break;
+        }
+      }
+      //剩下的先获取高度再加入流
+      let num = length - i;
+      let count = 0;
+      let j = i;
+      let WIN_HEIGHT = $window.height();
+      let HEIGHT = $(document.body).height();
+      if(num === 0) {
+        self.loading = false;
+        if(HEIGHT <= WIN_HEIGHT && !self.loadEnd) {
+          self.load($window);
+        }
+      }
+      for(;i < length; i++) {
+        let item = data.data[i];
+        self.loadImgSize(item, function() {
+          count++;
+          if(count === num) {
+            for(;j < length; j++) {
+              let item = data.data[j];
+              let li = self.genItem(item);
+              addWaterFall(li);
+            }
+            self.loading = false;
+            if(HEIGHT <= WIN_HEIGHT && !self.loadEnd) {
+              self.load($window);
+            }
+          }
+        });
+      }
+    });
+  }
+  checkMore($window) {
+    let self = this;
+    let WIN_HEIGHT = $window.height();
+    let HEIGHT = $(document.body).height();
+    let bool;
+    bool = $window.scrollTop() + HEIGHT + 30 > WIN_HEIGHT;
+    if(!self.loading && !self.loadEnd && bool) {
+      self.load($window);
+    }
+  }
+  loadImg(cb) {
+    let self = this;
     net.postJSON('/api/works/photoList', { worksID: this.props.worksID, skip, take, sortType }, function(res) {
       if(res.success) {
         let data = res.data;
+        skip += take;
+        if(skip >= data.Size) {
+          self.loadEnd = true;
+        }
         cb(data);
       }
       else {
@@ -141,14 +183,14 @@ class Album extends migi.Component {
   genItem(data) {
     if(data.Width <= 144) {
       return <li>
-        <img src={ data.FileUrl } height={ data.Height }/>
+        <img src={ util.autoSsl(util.img144_(data.FileUrl)) } height={ data.Height }/>
         <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
         <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>
       </li>;
     }
     let height = data.Height * 144 / data.Width;
     return <li>
-      <img src={ data.FileUrl } height={ height }/>
+      <img src={ util.autoSsl(util.img144_(data.FileUrl)) } height={ height }/>
       <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
       <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>
     </li>;
@@ -163,7 +205,36 @@ class Album extends migi.Component {
       cb();
       document.body.removeChild(img);
     };
+    img.onerror = function() {
+      data.FileUrl = '//zhuanquan.xin/img/blank.png';
+      data.Width = 1;
+      data.Height = 100;
+      cb();
+      document.body.removeChild(img);
+    };
     document.body.appendChild(img);
+  }
+  clear() {
+    let self = this;
+    let $l1 = $(self.ref.l1.element);
+    let $l2 = $(self.ref.l2.element);
+    let $l3 = $(self.ref.l3.element);
+    let $l4 = $(self.ref.l4.element);
+    $l1.html('');
+    $l2.html('');
+    $l3.html('');
+    $l4.html('');
+    self.loadEnd = false;
+  }
+  switchType(e, vd) {
+    let $ul = $(vd.element);
+    $ul.toggleClass('alt');
+    $ul.find('li').toggleClass('cur');
+    let rel = $ul.find('cur').attr('rel');
+    sortType = rel;
+    skip = 0;
+    this.clear();
+    this.load($(window));
   }
   render() {
     return <div class="mod album">
@@ -173,20 +244,16 @@ class Album extends migi.Component {
           <li class="cur" rel="0">全部</li>
           <li rel="1">电脑壁纸</li>
         </ul>
-        <ul class="type2 fn-clear" onClick={ { li: this.switchType } }>
+        <ul class="type2 fn-clear" onClick={ this.switchType }>
           <li class="cur" rel="0">最新</li>
           <li rel="1">最热</li>
         </ul>
       </div>
       <div class="c fn-clear" ref="c">
-        <ul ref="l1">
-        </ul>
-        <ul ref="l2">
-        </ul>
-        <ul ref="l3">
-        </ul>
-        <ul ref="l4">
-        </ul>
+        <ul ref="l1"/>
+        <ul ref="l2"/>
+        <ul ref="l3"/>
+        <ul ref="l4"/>
       </div>
     </div>;
   }

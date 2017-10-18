@@ -11,6 +11,7 @@ export default function(data) {
   let hotWorkList = data.hotWorkList;
   let hotAuthorList = data.hotAuthorList;
   let hotAlbumList = data.hotAlbumList;
+  let hotCollection = data.hotCollection;
   let tags = data.tags;
   let playList = data.playList;
   let playList2 = data.playList;
@@ -38,6 +39,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.hotWorkList = ${JSON.stringify(hotWorkList)};
   $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
   $CONFIG.hotAlbumList = ${JSON.stringify(hotAlbumList)};
+  $CONFIG.hotCollection = ${JSON.stringify(hotCollection)};
   $CONFIG.tags = ${JSON.stringify(tags)};
   $CONFIG.playList = ${JSON.stringify(playList)};
   $CONFIG.playList2 = ${JSON.stringify(playList2)};

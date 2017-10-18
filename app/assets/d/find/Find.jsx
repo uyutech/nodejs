@@ -62,35 +62,6 @@ class Find extends migi.Component {
       });
     });
   }
-  load() {
-    let self = this;
-    net.postJSON('api/find/Hot_works_List', function(res) {
-      if(res.success) {
-        let data = res.data;
-        self.ref.hotWork.dataList = data;
-      }
-    });
-    net.postJSON('api/find/Hot_Author_List', function(res) {
-      if(res.success) {
-        let data = res.data;
-        self.ref.hotAuthor.dataList = data;
-      }
-    });
-    net.postJSON('api/find/GetTag', { Skip:0, Take: 10 }, function(res) {
-      if(res.success) {
-        let data = res.data;
-        data.FilterlevelA = [{
-          ID: 0,
-          TagName: '音乐',
-          TagType: 0,
-          TagCount: 3957,
-          Filterlevel: "A",
-        }];
-        self.ref.doubleCheck.setData(data);
-      }
-      self.loadPlayList();
-    });
-  }
   loadPlayList() {
     let self = this;
     if(ajax) {
@@ -102,6 +73,11 @@ class Find extends migi.Component {
         self.ref.playList.dataList = data.playList;
         self.ref.playList.dataList2 = data.playList2;
       }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
     });
   }
   render() {

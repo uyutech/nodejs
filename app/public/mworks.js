@@ -1722,7 +1722,7 @@ var WorkComment = function (_migi$Component) {
     self.on(migi.Event.DOM, function () {
       var $window = $(window);
       $window.on('scroll', function () {
-        self.checkMore();
+        self.checkMore($window);
       });
     });
     return _this;
@@ -1782,8 +1782,7 @@ var WorkComment = function (_migi$Component) {
     }
   }, {
     key: 'checkMore',
-    value: function checkMore() {
-      var $window = $(window);
+    value: function checkMore($window) {
       var self = this;
       var WIN_HEIGHT = $window.height();
       var HEIGHT = $(document.body).height();

@@ -24,6 +24,9 @@ class Title extends migi.Component {
   @bind type
   @bind tags
   @bind popular
+  clickAdd() {
+    migi.eventBus.emit('add-label');
+  }
   render() {
     let hasCover = this.props.worksDetail.cover_Pic;
     return <div class={ 'title' + (hasCover ? '' : ' no-cover') }>
@@ -39,12 +42,13 @@ class Title extends migi.Component {
         <h1>{ this.title }</h1>
         <h2 class={ this.subTitle ? '' : 'fn-hide' }>{ this.subTitle }</h2>
         <small class="pop">{ this.popular }</small>
-        <ul class={ 'tags fn-clear' + (this.tags && this.tags.length ? '' : ' fn-hide') }>
+        <ul class={ 'tags fn-clear' }>
           {
             (this.tags || []).map(function(item) {
               return <li rel={ item.ID }>{ item.Tag_Name }</li>;
             })
           }
+          <li class="add" onClick={ this.clickAdd }/>
         </ul>
       </div>
     </div>;

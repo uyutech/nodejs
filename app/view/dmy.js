@@ -79,15 +79,33 @@ let util = {
     location.href = url;
   },
   autoSsl: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return (url || '').replace(/^https?:\/\//i, '//');
   },
   img192_192: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-192_192' : url;
   },
+  img144_: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_' : url;
+    },
   img144_144: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-144_144' : url;
   },
   img100_100: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-100_100' : url;
   },
   formatTime: function(time) {

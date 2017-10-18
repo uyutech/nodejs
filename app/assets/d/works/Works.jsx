@@ -15,6 +15,7 @@ import Timeline from './Timeline.jsx';
 import InspComment from './InspComment.jsx';
 import WorkComment from './WorkComment.jsx';
 import Album from './Album.jsx';
+import AddLabelPanel from './AddLabelPanel.jsx';
 
 let first;
 
@@ -33,6 +34,10 @@ class Works extends migi.Component {
           workComment.workID = data.ItemID;
         });
       }
+      let addLabel = self.ref.addLabelPanel;
+      migi.eventBus.on('add-label', function() {
+        addLabel.show();
+      });
     });
   }
   @bind worksID
@@ -240,6 +245,7 @@ class Works extends migi.Component {
           }
         </div>
       </div>
+      <AddLabelPanel ref="addLabelPanel"/>
     </div>;
   }
 }

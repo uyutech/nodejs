@@ -30,7 +30,7 @@ class WorkComment extends migi.Component {
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
       $window.on('scroll', function() {
-        self.checkMore();
+        self.checkMore($window);
       });
     });
   }
@@ -89,8 +89,7 @@ class WorkComment extends migi.Component {
       self.loading = false;
     });
   }
-  checkMore() {
-    let $window = $(window);
+  checkMore($window) {
     let self = this;
     let WIN_HEIGHT = $window.height();
     let HEIGHT = $(document.body).height();

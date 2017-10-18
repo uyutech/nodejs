@@ -154,6 +154,10 @@ var _Album = __webpack_require__(160);
 
 var _Album2 = _interopRequireDefault(_Album);
 
+var _AddLabelPanel = __webpack_require__(503);
+
+var _AddLabelPanel2 = _interopRequireDefault(_AddLabelPanel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -190,6 +194,10 @@ var Works = function (_migi$Component) {
           workComment.workID = data.ItemID;
         });
       }
+      var addLabel = self.ref.addLabelPanel;
+      migi.eventBus.on('add-label', function () {
+        addLabel.show();
+      });
     });
     return _this;
   }
@@ -305,7 +313,7 @@ var Works = function (_migi$Component) {
       }
       return migi.createVd("div", [["class", new migi.Obj("worksType", this, function () {
         return 'works fn-clear t' + self.worksType;
-      })]], [migi.createCp(_Title2.default, [["ref", "title"], ["worksDetail", this.props.worksDetail], ["authorList", this.authorList]]), migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.videoData ? migi.createVd("li", [["class", 'video' + (first === 'video' ? ' cur' : '')], ["rel", "video"]], ["视频"]) : '', this.audioData ? migi.createVd("li", [["class", 'audio' + (first === 'audio' ? ' cur' : '')], ["rel", "audio"]], ["音频"]) : '', migi.createVd("li", [["class", "link"], ["rel", "link"]], ["站外链接"])]), migi.createCp(_Media2.default, [["ref", "media"], ["worksID", this.props.worksID], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", this.props.worksID], ["workID", this.workID], ["commentData", this.props.commentData]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["简介"])]), migi.createVd("div", [["class", "info"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["worksID", this.props.worksID], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : ''])])]);
+      })]], [migi.createCp(_Title2.default, [["ref", "title"], ["worksDetail", this.props.worksDetail], ["authorList", this.authorList]]), migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.videoData ? migi.createVd("li", [["class", 'video' + (first === 'video' ? ' cur' : '')], ["rel", "video"]], ["视频"]) : '', this.audioData ? migi.createVd("li", [["class", 'audio' + (first === 'audio' ? ' cur' : '')], ["rel", "audio"]], ["音频"]) : '', migi.createVd("li", [["class", "link"], ["rel", "link"]], ["站外链接"])]), migi.createCp(_Media2.default, [["ref", "media"], ["worksID", this.props.worksID], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", this.props.worksID], ["workID", this.workID], ["commentData", this.props.commentData]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["简介"])]), migi.createVd("div", [["class", "info"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["worksID", this.props.worksID], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : ''])]), migi.createCp(_AddLabelPanel2.default, [["ref", "addLabelPanel"]])]);
     }
   }, {
     key: 'worksID',
@@ -385,6 +393,11 @@ var Title = function (_migi$Component) {
   }
 
   _createClass(Title, [{
+    key: 'clickAdd',
+    value: function clickAdd() {
+      migi.eventBus.emit('add-label');
+    }
+  }, {
     key: 'render',
     value: function render() {
       var hasCover = this.props.worksDetail.cover_Pic;
@@ -398,13 +411,11 @@ var Title = function (_migi$Component) {
         return this.subTitle;
       })]), migi.createVd("small", [["class", "pop"]], [new migi.Obj("popular", this, function () {
         return this.popular;
-      })]), migi.createVd("ul", [["class", new migi.Obj("tags", this, function () {
-        return 'tags fn-clear' + (this.tags && this.tags.length ? '' : ' fn-hide');
-      })]], [new migi.Obj("tags", this, function () {
+      })]), migi.createVd("ul", [["class", 'tags fn-clear']], [new migi.Obj("tags", this, function () {
         return (this.tags || []).map(function (item) {
           return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
         });
-      })])])]);
+      }), migi.createVd("li", [["class", "add"], ["onClick", new migi.Cb(this, this.clickAdd)]])])])]);
     }
   }, {
     key: 'title',
@@ -1757,10 +1768,16 @@ var Link = function (_migi$Component) {
       var audioData = this.props.audioData;
       var videoData = this.props.videoData;
       var workList = [];
-      (audioData || []).concat(videoData || []).forEach(function (item) {
+      (videoData || []).forEach(function (item) {
         workList.push({
           id: item.ItemID,
-          name: item.ItemName + (item.Tips || '')
+          name: '视频-' + item.ItemName + (item.Tips || '')
+        });
+      });
+      (audioData || []).forEach(function (item) {
+        workList.push({
+          id: item.ItemID,
+          name: '音频-' + item.ItemName + (item.Tips || '')
         });
       });
       return migi.createVd("div", [["class", "link fn-hide"]], [migi.createVd("ul", [["ref", "list"], ["class", "list fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.click)]]]], [migi.createVd("li", [["class", "sing5 cur"], ["rel", "5sing"]], [migi.createVd("h6", [], ["5sing"])]), migi.createVd("li", [["class", "bilibili"], ["rel", "bili"]], [migi.createVd("h6", [], ["bilibili"])]), migi.createVd("li", [["class", "wangyi"], ["rel", "163"]], [migi.createVd("h6", [], ["网易云音乐"])]), migi.createVd("li", [["class", "baidu"], ["rel", "baidu"]], [migi.createVd("h6", [], ["百度音乐人"])])]), migi.createVd("form", [["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("p", [], ["添加站外链接"]), migi.createVd("select", [["ref", "select"]], [workList.map(function (item) {
@@ -1825,12 +1842,12 @@ exports.default = {
           bigType: 'audio',
           name: '原创音乐'
         };
-      case 1131:
+      case 1113:
         return {
           bigType: 'audio',
           name: '原创伴奏'
         };
-      case 2111:
+      case 2110:
         return {
           bigType: 'video',
           name: '原创视频'
@@ -2556,64 +2573,22 @@ var Album = function (_migi$Component) {
   function Album() {
     var _ref;
 
+    _classCallCheck(this, Album);
+
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
-
-    _classCallCheck(this, Album);
 
     var _this = _possibleConstructorReturn(this, (_ref = Album.__proto__ || Object.getPrototypeOf(Album)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
     self.on(migi.Event.DOM, function () {
-      var $l1 = $(self.ref.l1.element);
-      var $l2 = $(self.ref.l2.element);
-      var $l3 = $(self.ref.l3.element);
-      var $l4 = $(self.ref.l4.element);
-      function addWaterFall(li) {
-        var $min = $l1;
-        if ($l2.height() < $min.height()) {
-          $min = $l2;
-        }
-        if ($l3.height() < $min.height()) {
-          $min = $l3;
-        }
-        if ($l4.height() < $min.height()) {
-          $min = $l4;
-        }
-        li.appendTo($min[0]);
-      }
-      self.load(function (data) {
-        var length = data.data.length;
-        var i = 0;
-        // 先把有高宽的直接加入流中
-        for (; i < length; i++) {
-          var item = data.data[i];
-          if (data.Width && data.Height) {
-            var li = self.genItem(item);
-            addWaterFall(li);
-          } else {
-            break;
-          }
-        }
-        //剩下的先获取高度再加入流
-        var num = length - i;
-        var count = 0;
-        var j = i;
-        for (; i < length; i++) {
-          var _item = data.data[i];
-          self.loadImgSize(_item, function () {
-            count++;
-            if (count === num) {
-              for (; j < length; j++) {
-                var _item2 = data.data[j];
-                var _li = self.genItem(_item2);
-                addWaterFall(_li);
-              }
-            }
-          });
-        }
+      var $window = $(window);
+      self.load($window);
+      $window.on('scroll', function () {
+        self.checkMore($window);
       });
+
       var $c = $(self.ref.c.element);
       $c.on('click', '.like', function () {
         var $b = $(this);
@@ -2672,10 +2647,96 @@ var Album = function (_migi$Component) {
 
   _createClass(Album, [{
     key: 'load',
-    value: function load(cb) {
+    value: function load($window) {
+      var self = this;
+      if (self.loading) {
+        return;
+      }
+      self.loading = true;
+      var $l1 = $(self.ref.l1.element);
+      var $l2 = $(self.ref.l2.element);
+      var $l3 = $(self.ref.l3.element);
+      var $l4 = $(self.ref.l4.element);
+      function addWaterFall(li) {
+        var $min = $l1;
+        if ($l2.height() < $min.height()) {
+          $min = $l2;
+        }
+        if ($l3.height() < $min.height()) {
+          $min = $l3;
+        }
+        if ($l4.height() < $min.height()) {
+          $min = $l4;
+        }
+        li.appendTo($min[0]);
+      }
+      self.loadImg(function (data) {
+        var length = data.data.length;
+        var i = 0;
+        // 先把有高宽的直接加入流中
+        for (; i < length; i++) {
+          var item = data.data[i];
+          if (data.Width && data.Height) {
+            var li = self.genItem(item);
+            addWaterFall(li);
+          } else {
+            break;
+          }
+        }
+        //剩下的先获取高度再加入流
+        var num = length - i;
+        var count = 0;
+        var j = i;
+        var WIN_HEIGHT = $window.height();
+        var HEIGHT = $(document.body).height();
+        if (num === 0) {
+          self.loading = false;
+          if (HEIGHT <= WIN_HEIGHT && !self.loadEnd) {
+            self.load($window);
+          }
+        }
+        for (; i < length; i++) {
+          var _item = data.data[i];
+          self.loadImgSize(_item, function () {
+            count++;
+            if (count === num) {
+              for (; j < length; j++) {
+                var _item2 = data.data[j];
+                var _li = self.genItem(_item2);
+                addWaterFall(_li);
+              }
+              self.loading = false;
+              if (HEIGHT <= WIN_HEIGHT && !self.loadEnd) {
+                self.load($window);
+              }
+            }
+          });
+        }
+      });
+    }
+  }, {
+    key: 'checkMore',
+    value: function checkMore($window) {
+      var self = this;
+      var WIN_HEIGHT = $window.height();
+      var HEIGHT = $(document.body).height();
+      var bool = void 0;
+      bool = $window.scrollTop() + HEIGHT + 30 > WIN_HEIGHT;
+      if (!self.loading && !self.loadEnd && bool) {
+        self.load($window);
+      }
+    }
+  }, {
+    key: 'loadImg',
+    value: function loadImg(cb) {
+      var self = this;
       _net2.default.postJSON('/api/works/photoList', { worksID: this.props.worksID, skip: skip, take: take, sortType: sortType }, function (res) {
         if (res.success) {
           var data = res.data;
+          skip += take;
+          if (skip >= data.Size) {
+            self.loadEnd = true;
+          }
           cb(data);
         } else {
           alert(res.message || _util2.default.ERROR_MESSAGE);
@@ -2688,10 +2749,10 @@ var Album = function (_migi$Component) {
     key: 'genItem',
     value: function genItem(data) {
       if (data.Width <= 144) {
-        return migi.createVd("li", [], [migi.createVd("img", [["src", data.FileUrl], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+        return migi.createVd("li", [], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl))], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
       }
       var height = data.Height * 144 / data.Width;
-      return migi.createVd("li", [], [migi.createVd("img", [["src", data.FileUrl], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+      return migi.createVd("li", [], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl))], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
     }
   }, {
     key: 'loadImgSize',
@@ -2705,16 +2766,61 @@ var Album = function (_migi$Component) {
         cb();
         document.body.removeChild(img);
       };
+      img.onerror = function () {
+        data.FileUrl = '//zhuanquan.xin/img/blank.png';
+        data.Width = 1;
+        data.Height = 100;
+        cb();
+        document.body.removeChild(img);
+      };
       document.body.appendChild(img);
+    }
+  }, {
+    key: 'clear',
+    value: function clear() {
+      var self = this;
+      var $l1 = $(self.ref.l1.element);
+      var $l2 = $(self.ref.l2.element);
+      var $l3 = $(self.ref.l3.element);
+      var $l4 = $(self.ref.l4.element);
+      $l1.html('');
+      $l2.html('');
+      $l3.html('');
+      $l4.html('');
+      self.loadEnd = false;
+    }
+  }, {
+    key: 'switchType',
+    value: function switchType(e, vd) {
+      var $ul = $(vd.element);
+      $ul.toggleClass('alt');
+      $ul.find('li').toggleClass('cur');
+      var rel = $ul.find('cur').attr('rel');
+      sortType = rel;
+      skip = 0;
+      this.clear();
+      this.load($(window));
     }
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod album"]], [migi.createVd("h4", [], ["相册"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部"]), migi.createVd("li", [["rel", "1"]], ["电脑壁纸"])]), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createVd("div", [["class", "c fn-clear"], ["ref", "c"]], [migi.createVd("ul", [["ref", "l1"]], ["\n\
-        "]), migi.createVd("ul", [["ref", "l2"]], ["\n\
-        "]), migi.createVd("ul", [["ref", "l3"]], ["\n\
-        "]), migi.createVd("ul", [["ref", "l4"]], ["\n\
-        "])])]);
+      return migi.createVd("div", [["class", "mod album"]], [migi.createVd("h4", [], ["相册"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部"]), migi.createVd("li", [["rel", "1"]], ["电脑壁纸"])]), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", new migi.Cb(this, this.switchType)]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createVd("div", [["class", "c fn-clear"], ["ref", "c"]], [migi.createVd("ul", [["ref", "l1"]]), migi.createVd("ul", [["ref", "l2"]]), migi.createVd("ul", [["ref", "l3"]]), migi.createVd("ul", [["ref", "l4"]])])]);
+    }
+  }, {
+    key: 'loading',
+    set: function set(v) {
+      this.__setBind("loading", v);this.__data("loading");
+    },
+    get: function get() {
+      return this.__getBind("loading");
+    }
+  }, {
+    key: 'loadEnd',
+    set: function set(v) {
+      this.__setBind("loadEnd", v);this.__data("loadEnd");
+    },
+    get: function get() {
+      return this.__getBind("loadEnd");
     }
   }]);
 
@@ -2743,15 +2849,33 @@ var util = {
     location.href = url;
   },
   autoSsl: function autoSsl(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return (url || '').replace(/^https?:\/\//i, '//');
   },
   img192_192: function img192_192(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-192_192' : url;
   },
+  img144_: function img144_(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_' : url;
+  },
   img144_144: function img144_144(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-144_144' : url;
   },
   img100_100: function img100_100(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
     return url ? url + '-100_100' : url;
   },
   formatTime: function formatTime(time) {
@@ -3526,6 +3650,75 @@ var SubCmt = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
+
+/***/ }),
+
+/***/ 503:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AddLabelPanel = function (_migi$Component) {
+  _inherits(AddLabelPanel, _migi$Component);
+
+  function AddLabelPanel() {
+    var _ref;
+
+    _classCallCheck(this, AddLabelPanel);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = AddLabelPanel.__proto__ || Object.getPrototypeOf(AddLabelPanel)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var $list = $(self.ref.list.element);
+      var $has = $(self.ref.has.element);
+    });
+    return _this;
+  }
+
+  _createClass(AddLabelPanel, [{
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'clickOK',
+    value: function clickOK(e) {
+      this.hide();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "add-label fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("label", [["class", "l1"]], ["添加标签"]), migi.createVd("p", [], ["风格"]), migi.createVd("ul", [["class", "list fn-clear"], ["ref", "list"]], [migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"])]), migi.createVd("b", [["class", "line"]]), migi.createVd("label", [["class", "l2"]], ["已选标签"]), migi.createVd("ul", [["class", "has fn-clear"], ["ref", "has"]], [migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"]), migi.createVd("li", [], ["标签"])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickOK)]], ["选好啦！"])])]);
+    }
+  }]);
+
+  return AddLabelPanel;
+}(migi.Component);
+
+migi.name(AddLabelPanel, "AddLabelPanel");exports.default = AddLabelPanel;
 
 /***/ }),
 

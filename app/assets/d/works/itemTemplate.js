@@ -10,12 +10,12 @@ export default {
           bigType: 'audio',
           name: '原创音乐',
         };
-      case 1131:
+      case 1113:
         return {
           bigType: 'audio',
           name: '原创伴奏',
         };
-      case 2111:
+      case 2110:
         return {
           bigType: 'video',
           name: '原创视频',

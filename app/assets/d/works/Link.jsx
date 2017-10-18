@@ -65,10 +65,16 @@ class Link extends migi.Component {
     let audioData = this.props.audioData;
     let videoData = this.props.videoData;
     let workList = [];
-    (audioData || []).concat(videoData || []).forEach(function(item) {
+    (videoData || []).forEach(function(item) {
       workList.push({
         id: item.ItemID,
-        name: item.ItemName + (item.Tips || ''),
+        name: '视频-' + item.ItemName + (item.Tips || ''),
+      });
+    });
+    (audioData || []).forEach(function(item) {
+      workList.push({
+        id: item.ItemID,
+        name: '音频-' + item.ItemName + (item.Tips || ''),
       });
     });
     return <div class="link fn-hide">
