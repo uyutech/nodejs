@@ -93,6 +93,23 @@ module.exports = app => {
         success: false,
       };
     }
+    * labelList(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetLabelList', {
+        uid,
+      });
+      ctx.body = res.data;
+    }
+    * addLabel(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/UserAddWorkLabel', {
+        uid,
+        workid: body.worksID,
+        labelID: body.labelID,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

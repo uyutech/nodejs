@@ -151,7 +151,7 @@ class Works extends migi.Component {
         <Title ref="title"
                detail={ this.props.worksDetail }/>
         <div class="main">
-          <Album worksID={ this.props.worksID }/>
+          <Album worksID={ this.worksID }/>
         </div>
         <div class="side">
           <div class="info">
@@ -172,16 +172,16 @@ class Works extends migi.Component {
                 : ''
             }
             <InspComment ref="inspComment"
-                         worksID={ this.props.worksID }
+                         worksID={ this.worksID }
                          commentData={ this.props.worksDetail.WorksAuthorComment }/>
           </div>
           <WorkComment ref="workComment"
                        isLogin={ this.props.isLogin }
-                       worksID={ this.props.worksID }
+                       worksID={ this.worksID }
                        workID={ this.workID }
                        commentData={ this.props.commentData }/>
         </div>
-        <AddLabelPanel ref="addLabelPanel"/>
+        <AddLabelPanel ref="addLabelPanel" worksID={ this.worksID }/>
       </div>;
     }
     return <div class={ 'works fn-clear t' + self.worksType }>
@@ -202,14 +202,14 @@ class Works extends migi.Component {
           <li class="link" rel="link">站外链接</li>
         </ul>
         <Media ref="media"
-               worksID={ this.props.worksID }
+               worksID={ this.worksID }
                cover={ this.props.worksDetail.cover_Pic }
                audioData={ this.audioData }
                videoData={ this.videoData }
                first={ first }/>
         <WorkComment ref="workComment"
                      isLogin={ this.props.isLogin }
-                     worksID={ this.props.worksID }
+                     worksID={ this.worksID }
                      workID={ this.workID }
                      commentData={ this.props.commentData }/>
       </div>
@@ -235,7 +235,7 @@ class Works extends migi.Component {
               : ''
           }
           <InspComment ref="inspComment"
-                       worksID={ this.props.worksID }
+                       worksID={ this.worksID }
                        commentData={ this.props.worksDetail.WorksAuthorComment }/>
           {
             this.posterData
@@ -244,7 +244,7 @@ class Works extends migi.Component {
           }
         </div>
       </div>
-      <AddLabelPanel ref="addLabelPanel"/>
+      <AddLabelPanel ref="addLabelPanel" worksID={ this.worksID }/>
     </div>;
   }
 }

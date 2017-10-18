@@ -718,7 +718,7 @@ body {
           transform: translate3d(-50%, -50%, 0);
   border-radius: 0.2rem;
 }
-.add-label > .c .l1 {
+.add-label > .c label {
   display: block;
   margin-bottom: 0.2rem;
   font-size: 0.14rem;
@@ -726,6 +726,7 @@ body {
 .add-label > .c .list,
 .add-label > .c .has {
   margin-right: -0.1rem;
+  min-height: 0.36rem;
 }
 .add-label > .c .list li,
 .add-label > .c .has li {
@@ -745,8 +746,19 @@ body {
 }
 .add-label > .c .list li.cur,
 .add-label > .c .has li.cur {
-  background: #5D99C4;
   cursor: default;
+}
+.add-label > .c .list li.cur:after,
+.add-label > .c .has li.cur:after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAAAXVBMVEUAAABemsVgnMZdmcRemcRemcZdmcZemsZmmczt8/ddmcR1qM3n8PatzOHV5O+xzuLl7fTg6/PI3Ora5/Gpyd97rM9sosrd6fHF2uq10OSCsNJypstupMq60+SLttTnRaZtAAAACXRSTlMA2/7zpYpVUQUMyumgAAAAr0lEQVQY033R2Q6DIBCFYUYpyj+gdt/7/o9ZQSUmNj2XX5jMgslpnZW6FutaU9IIc6RZbAcauxC6qLBbrOr9nL6atKE6+JJDRTP2EMZ3JSEirXHoyo4XVZyxxLXxiVgjdMWuLx6hQ0xNuN0m2z85Dz5QJ7zQZ9NkCVP5He7eD4qO5sfy3CjCezij+1QQsdNIJ1Ce2bzi8vBZX9dpUaRd1jw9jmXN3wfZnu7Pkbff8QXhXw1z/hirogAAAABJRU5ErkJggg==) no-repeat center;
+  background-size: contain;
+  content: ' ';
 }
 .add-label > .c .has li:hover:after {
   position: absolute;
@@ -780,6 +792,10 @@ body {
   font-size: 0.14rem;
   color: #FFF;
   cursor: pointer;
+}
+.add-label > .c button.dis {
+  background: #CCC;
+  cursor: default;
 }
 /**
  * Created by army8735 on 2017/10/18.
