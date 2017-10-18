@@ -259,7 +259,7 @@ var Profile = function (_migi$Component) {
         var self = this;
         var file = e.target.files[0];
         var size = file.size;
-        if (size && size !== 0 && size < 1024 * 300) {
+        if (size && size !== 0 && size <= 1024 * 100) {
           var $upload = $(self.ref.upload.element);
           $upload.addClass('fn-hide');
           var fileReader = new FileReader();
@@ -278,7 +278,7 @@ var Profile = function (_migi$Component) {
           };
           fileReader.readAsDataURL(file);
         } else {
-          alert('图片尺寸太大啦！不能超过300k');
+          alert('图片体积太大啦，不能超过100k！');
         }
       } else {
         alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器。');

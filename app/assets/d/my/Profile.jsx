@@ -52,7 +52,7 @@ class Profile extends migi.Component {
       let self = this;
       let file = e.target.files[0];
       let size = file.size;
-      if(size && size !== 0 && size < 1024 * 300) {
+      if(size && size !== 0 && size <= 1024 * 100) {
         let $upload = $(self.ref.upload.element);
         $upload.addClass('fn-hide');
         let fileReader = new FileReader();
@@ -73,7 +73,7 @@ class Profile extends migi.Component {
         fileReader.readAsDataURL(file);
       }
       else {
-        alert('图片尺寸太大啦！不能超过300k');
+        alert('图片体积太大啦，不能超过100k！');
       }
     }
     else {

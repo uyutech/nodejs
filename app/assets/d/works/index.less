@@ -15,6 +15,8 @@
     padding-left:1.2rem;
     min-height:0.5rem;
     height:1rem;
+    background:url(title-bg.png) no-repeat right 0;
+    background-size:auto 2.17rem;
     &.no-cover{
       padding-left:0;
       height:auto;
@@ -34,7 +36,6 @@
     }
     .txt{
       position:relative;
-      background:url(title-bg.png) no-repeat right center;
       background-size:3.27rem auto;
       h1, h2, h3{
         display:inline-block;
@@ -664,7 +665,14 @@
       }
       .link{
         width:100%;
+        height:6.07rem;
         background:#FFF;
+        &:before{
+          display:block;
+          height:0.36rem;
+          background:@mainColor;
+          content:' ';
+        }
         .list{
           padding:0.2rem;
           li{
@@ -682,6 +690,11 @@
               border:1px solid #B1C0C9;
               text-align:center;
               border-radius:0.06rem;
+              cursor:pointer;
+            }
+            &.cur h6{
+              background-color:rgba(0, 0, 0, 0.1) !important;
+              cursor:default;
             }
             &.sing5{
               h6{
@@ -709,6 +722,49 @@
             }
             a{
               display:block;
+            }
+          }
+        }
+        form{
+          margin:0.2rem 0.2rem 0;
+          padding:0.2rem 0;
+          border-top:1px solid @mainColor;
+          p{
+            display:block;
+            color:#919191;
+            font-size:0.18rem;
+          }
+          select{
+            margin-top:0.1rem;
+          }
+          .txt{
+            display:block;
+            margin-top:0.1rem;
+            padding:0 0.1rem;
+            width:100%;
+            box-sizing:border-box;
+            height:0.38rem;
+            border:1px solid @thirdColor;
+            border-radius:0.1rem;
+            font-size:0.14rem;
+            &::-webkit-input-placeholder{
+              color:#B7C8D0;
+            }
+          }
+          .sub{
+            display:block;
+            margin:0.2rem auto 0;
+            padding:0 0.2rem;
+            color:@thirdTextColor;
+            font-size:0.16rem;
+            line-height:0.4rem;
+            border-radius:0.4rem;
+            border:none;
+            background:@secondColor;
+            cursor:pointer;
+            &.dis{
+              background:#CCC;
+              cursor:default;
             }
           }
         }

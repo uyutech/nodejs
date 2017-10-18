@@ -14,7 +14,7 @@ class Poster extends migi.Component {
       <ul class="c">
         {
           (this.props.datas.value || []).map(function(item) {
-            return <li><img src={ item.FileUrl }/></li>;
+            return <li><img src={ item.FileUrl || '//zhuanquan.xin/img/blank.png' }/></li>;
           })
         }
       </ul>

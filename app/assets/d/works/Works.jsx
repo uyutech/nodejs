@@ -198,6 +198,7 @@ class Works extends migi.Component {
           <li class="link" rel="link">站外链接</li>
         </ul>
         <Media ref="media"
+               worksID={ this.props.worksID }
                cover={ this.props.worksDetail.cover_Pic }
                audioData={ this.audioData }
                videoData={ this.videoData }

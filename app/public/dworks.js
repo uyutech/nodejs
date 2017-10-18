@@ -305,7 +305,7 @@ var Works = function (_migi$Component) {
       }
       return migi.createVd("div", [["class", new migi.Obj("worksType", this, function () {
         return 'works fn-clear t' + self.worksType;
-      })]], [migi.createCp(_Title2.default, [["ref", "title"], ["worksDetail", this.props.worksDetail], ["authorList", this.authorList]]), migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.videoData ? migi.createVd("li", [["class", 'video' + (first === 'video' ? ' cur' : '')], ["rel", "video"]], ["视频"]) : '', this.audioData ? migi.createVd("li", [["class", 'audio' + (first === 'audio' ? ' cur' : '')], ["rel", "audio"]], ["音频"]) : '', migi.createVd("li", [["class", "link"], ["rel", "link"]], ["站外链接"])]), migi.createCp(_Media2.default, [["ref", "media"], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", this.props.worksID], ["workID", this.workID], ["commentData", this.props.commentData]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["简介"])]), migi.createVd("div", [["class", "info"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["worksID", this.props.worksID], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : ''])])]);
+      })]], [migi.createCp(_Title2.default, [["ref", "title"], ["worksDetail", this.props.worksDetail], ["authorList", this.authorList]]), migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.videoData ? migi.createVd("li", [["class", 'video' + (first === 'video' ? ' cur' : '')], ["rel", "video"]], ["视频"]) : '', this.audioData ? migi.createVd("li", [["class", 'audio' + (first === 'audio' ? ' cur' : '')], ["rel", "audio"]], ["音频"]) : '', migi.createVd("li", [["class", "link"], ["rel", "link"]], ["站外链接"])]), migi.createCp(_Media2.default, [["ref", "media"], ["worksID", this.props.worksID], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", this.props.worksID], ["workID", this.workID], ["commentData", this.props.commentData]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["简介"])]), migi.createVd("div", [["class", "info"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["worksID", this.props.worksID], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : ''])])]);
     }
   }, {
     key: 'worksID',
@@ -545,7 +545,7 @@ var Media = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "media"], ["style", 'background-image:url(' + this.props.cover + ')']], [this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', migi.createCp(_Link2.default, [["ref", "link"]])]);
+      return migi.createVd("div", [["class", "media"], ["style", 'background-image:url(' + this.props.cover + ')']], [this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', migi.createCp(_Link2.default, [["ref", "link"], ["worksID", this.props.worksID], ["audioData", this.props.audioData], ["videoData", this.props.videoData]])]);
     }
   }]);
 
@@ -1664,6 +1664,16 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _net = __webpack_require__(7);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(3);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1696,9 +1706,94 @@ var Link = function (_migi$Component) {
       $(this.element).addClass('fn-hide');
     }
   }, {
+    key: 'submit',
+    value: function submit(e) {
+      e.preventDefault();
+      var self = this;
+      if (self.hasContent && !self.loading) {
+        var workID = self.ref.select.element.value;
+        var url = self.url.trim();
+        if (!/^https?:\/\/\w+\.\w+/.test(url)) {
+          alert('请输入合法的地址！');
+          return;
+        }
+        self.loading = true;
+        _net2.default.postJSON('/api/works/addTempLink', {
+          worksID: self.props.worksID,
+          workID: workID,
+          url: url,
+          name: $(self.ref.list.element).find('.cur').attr('rel')
+        }, function (res) {
+          if (res.success) {
+            alert('提交成功，感谢您的参与。');
+            self.url = '';
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          self.loading = false;
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        });
+      }
+    }
+  }, {
+    key: 'input',
+    value: function input(e, vd) {
+      var v = vd.element.value.trim();
+      this.hasContent = !!v.length;
+    }
+  }, {
+    key: 'click',
+    value: function click(e, vd, tvd) {
+      var $li = $(tvd.element);
+      if (!$li.hasClass('cur')) {
+        $(vd.element).find('.cur').removeClass('cur');
+        $li.addClass('cur');
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "link fn-hide1"]], [migi.createVd("ul", [["class", "list fn-clear"]], [migi.createVd("li", [["class", "sing5"]], [migi.createVd("h6", [], ["5sing"]), migi.createVd("a", [["href", '#']], ["链接"])]), migi.createVd("li", [["class", "bilibili"]], [migi.createVd("h6", [], ["bilibili"]), migi.createVd("a", [["href", '#']], ["链接"])]), migi.createVd("li", [["class", "wangyi"]], [migi.createVd("h6", [], ["网易云音乐"]), migi.createVd("a", [["href", '#']], ["链接"])]), migi.createVd("li", [["class", "baidu"]], [migi.createVd("h6", [], ["百度音乐人"]), migi.createVd("a", [["href", '#']], ["链接"])])])]);
+      var audioData = this.props.audioData;
+      var videoData = this.props.videoData;
+      var workList = [];
+      (audioData || []).concat(videoData || []).forEach(function (item) {
+        workList.push({
+          id: item.ItemID,
+          name: item.ItemName + (item.Tips || '')
+        });
+      });
+      return migi.createVd("div", [["class", "link fn-hide"]], [migi.createVd("ul", [["ref", "list"], ["class", "list fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.click)]]]], [migi.createVd("li", [["class", "sing5 cur"], ["rel", "5sing"]], [migi.createVd("h6", [], ["5sing"])]), migi.createVd("li", [["class", "bilibili"], ["rel", "bili"]], [migi.createVd("h6", [], ["bilibili"])]), migi.createVd("li", [["class", "wangyi"], ["rel", "163"]], [migi.createVd("h6", [], ["网易云音乐"])]), migi.createVd("li", [["class", "baidu"], ["rel", "baidu"]], [migi.createVd("h6", [], ["百度音乐人"])])]), migi.createVd("form", [["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("p", [], ["添加站外链接"]), migi.createVd("select", [["ref", "select"]], [workList.map(function (item) {
+        return migi.createVd("option", [["value", item.id]], [item.name]);
+      })]), migi.createVd("input", [["type", "text"], ["ref", "txt"], ["class", "txt"], ["placeholder", "请输入站外链接"], ["onInput", new migi.Cb(this, this.input)], ["value", new migi.Obj("url", this, function () {
+        return this.url;
+      })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj(["hasContent", "loading"], this, function () {
+        return 'sub' + (this.hasContent && !this.loading ? '' : ' dis');
+      })], ["value", "确定"]])])]);
+    }
+  }, {
+    key: 'hasContent',
+    set: function set(v) {
+      this.__setBind("hasContent", v);this.__data("hasContent");
+    },
+    get: function get() {
+      return this.__getBind("hasContent");
+    }
+  }, {
+    key: 'loading',
+    set: function set(v) {
+      this.__setBind("loading", v);this.__data("loading");
+    },
+    get: function get() {
+      return this.__getBind("loading");
+    }
+  }, {
+    key: 'url',
+    set: function set(v) {
+      this.__setBind("url", v);this.__data("url");
+    },
+    get: function get() {
+      return this.__getBind("url");
     }
   }]);
 
@@ -2014,7 +2109,7 @@ var Poster = function (_migi$Component) {
     key: "render",
     value: function render() {
       return migi.createVd("div", [["class", "mod poster"]], [migi.createVd("h5", [], [this.props.datas.name]), migi.createVd("ul", [["class", "c"]], [(this.props.datas.value || []).map(function (item) {
-        return migi.createVd("li", [], [migi.createVd("img", [["src", item.FileUrl]])]);
+        return migi.createVd("li", [], [migi.createVd("img", [["src", item.FileUrl || '//zhuanquan.xin/img/blank.png']])]);
       })])]);
     }
   }]);

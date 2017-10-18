@@ -113,6 +113,18 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * addTempLink(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/UserAddOutsite', {
+        uid,
+        workid: body.worksID,
+        workitemid: body.workID,
+        OutSiteUrl: body.url,
+        OutSiteName: body.name,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

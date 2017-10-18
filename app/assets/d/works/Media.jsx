@@ -60,7 +60,7 @@ class Media extends migi.Component {
           ? <Video ref="video" cover={ this.props.cover } datas={ this.props.videoData } show={ this.props.first === 'video' }/>
           : ''
       }
-      <Link ref="link"/>
+      <Link ref="link" worksID={ this.props.worksID } audioData={ this.props.audioData } videoData={ this.props.videoData }/>
     </div>;
   }
 }

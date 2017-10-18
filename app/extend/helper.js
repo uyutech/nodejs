@@ -22,14 +22,22 @@ module.exports = {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
     }
     let start = Date.now();
-    let res = yield this.ctx.curl(url, {
-      method: 'POST',
-      data,
-      dataType: 'json',
-      gzip: true,
-    });
+    let res;
+    try {
+      res = yield this.ctx.curl(url, {
+        method: 'POST',
+        data,
+        dataType: 'json',
+        gzip: true,
+      });
+    }
+    catch(e) {
+      let end = Date.now();
+      this.ctx.getLogger('serviceLogger').error('[-/-/%s/%sms POST %s]', this.ctx.traceID, end - start, url);
+      throw new Error(e);
+    }
     let end = Date.now();
-    this.ctx.getLogger('serviceLogger').info('[%s/%sms]', this.ctx.traceID, end - start);
+    this.ctx.getLogger('serviceLogger').info('[-/-/%s/%sms POST %s]', this.ctx.traceID, end - start, url);
     return res;
   },
   autoSsl: function(url) {
