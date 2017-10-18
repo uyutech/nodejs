@@ -33,12 +33,12 @@ class WorkComment extends migi.Component {
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
-        self.replayName = name;
+        subCmt.to = name;
       });
       comment.on('closeSubComment', function() {
         self.rootID = -1;
         self.parentID = -1;
-        self.replayName = '';
+        subCmt.to = '';
       });
       subCmt.on('submit', function(content) {
         subCmt.isCommentSending = true;
@@ -82,7 +82,6 @@ class WorkComment extends migi.Component {
   @bind workID
   @bind rootID = -1
   @bind parentID = -1
-  @bind replayName = ''
   @bind barrageTime = 0
   load() {
     let self = this;

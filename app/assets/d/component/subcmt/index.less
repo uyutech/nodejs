@@ -18,8 +18,25 @@ body{
   box-shadow:0 -1px 1px rgba(0, 0, 0, 0.1);
   z-index:99;
   form{
+    position:relative;
     margin:0.05rem auto 0;
     width:10rem;
+    label{
+      position:absolute;
+      left:0;
+      top:0;
+      display:none;
+      padding:0 0.1rem;
+      width:0.9rem;
+      height:0.28rem;
+      line-height:0.28rem;
+      border-radius:0.3rem;
+      border:1px solid #B1C0C9;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      text-align:center;
+    }
     .text{
       float:left;
       padding:0 0.2rem;
@@ -45,6 +62,15 @@ body{
       &.dis{
         background:#ccc;
         cursor:default;
+      }
+    }
+    &.to{
+      label{
+        display:block;
+      }
+      .text{
+        padding-left:1.2rem;
+        width:7.4rem;
       }
     }
   }

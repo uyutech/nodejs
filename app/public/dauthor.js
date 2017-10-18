@@ -187,8 +187,14 @@ var Author = function (_migi$Component) {
           subCmt.isCommentSending = false;
         });
       });
-      self.ref.home.hide();
-      self.ref.works.show();
+      comment.on('chooseSubComment', function (rid, cid, name) {
+        subCmt.to = name;
+      });
+      comment.on('closeSubComment', function () {
+        subCmt.to = '';
+      });
+      // self.ref.home.hide();
+      // self.ref.works.show();
     });
     return _this;
   }
@@ -1004,11 +1010,12 @@ var AuthorComment = function (_migi$Component) {
       comment.on('chooseSubComment', function (rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
-        self.replayName = name;
+        // self.emit('replayName', name);
       });
       comment.on('closeSubComment', function () {
         self.rootID = -1;
         self.parentID = -1;
+        // self.emit('replayName', '');
       });
     });
     return _this;
@@ -1171,14 +1178,6 @@ var AuthorComment = function (_migi$Component) {
     },
     get: function get() {
       if (this.__initBind("parentID")) this.__setBind("parentID", -1);return this.__getBind("parentID");
-    }
-  }, {
-    key: 'replayName',
-    set: function set(v) {
-      this.__setBind("replayName", v);this.__data("replayName");
-    },
-    get: function get() {
-      if (this.__initBind("replayName")) this.__setBind("replayName", '');return this.__getBind("replayName");
     }
   }]);
 
@@ -1912,7 +1911,11 @@ var SubCmt = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-subcmt"]], [migi.createVd("form", [["class", "fn-clear"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj("placeholder", this, function () {
+      return migi.createVd("div", [["class", "cp-subcmt"]], [migi.createVd("form", [["class", new migi.Obj("to", this, function () {
+        return 'fn-clear' + (this.to ? ' to' : '');
+      })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("label", [], ["TO: ", new migi.Obj("to", this, function () {
+        return this.to;
+      })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj("placeholder", this, function () {
         return this.placeholder || '夸夸这个作品吧';
       })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
         return this.maxlength || 120;
@@ -1971,6 +1974,14 @@ var SubCmt = function (_migi$Component) {
     },
     get: function get() {
       if (this.__initBind("value")) this.__setBind("value", '');return this.__getBind("value");
+    }
+  }, {
+    key: 'to',
+    set: function set(v) {
+      this.__setBind("to", v);this.__data("to");
+    },
+    get: function get() {
+      return this.__getBind("to");
     }
   }]);
 

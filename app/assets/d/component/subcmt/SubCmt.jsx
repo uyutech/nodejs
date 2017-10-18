@@ -19,6 +19,7 @@ class SubCmt extends migi.Component {
   @bind placeholder
   @bind subText
   @bind value = ''
+  @bind to
   input(e, vd) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
@@ -40,7 +41,8 @@ class SubCmt extends migi.Component {
   }
   render() {
     return <div class="cp-subcmt">
-      <form class="fn-clear" ref="form" onSubmit={ this.submit }>
+      <form class={ 'fn-clear' + (this.to ? ' to' : '') } ref="form" onSubmit={ this.submit }>
+        <label>TO: { this.to }</label>
         <input type="text" class="text" ref="input" placeholder={ this.placeholder || '夸夸这个作品吧' }
                onInput={ this.input } onFocus={ this.focus } maxlength={ this.maxlength || 120 }
                value={ this.value }/>

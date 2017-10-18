@@ -956,8 +956,25 @@ body {
   z-index: 99;
 }
 .cp-subcmt form {
+  position: relative;
   margin: 0.05rem auto 0;
   width: 10rem;
+}
+.cp-subcmt form label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  padding: 0 0.1rem;
+  width: 0.9rem;
+  height: 0.28rem;
+  line-height: 0.28rem;
+  border-radius: 0.3rem;
+  border: 1px solid #B1C0C9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
 }
 .cp-subcmt form .text {
   float: left;
@@ -985,6 +1002,13 @@ body {
 .cp-subcmt form .submit.dis {
   background: #ccc;
   cursor: default;
+}
+.cp-subcmt form.to label {
+  display: block;
+}
+.cp-subcmt form.to .text {
+  padding-left: 1.2rem;
+  width: 7.4rem;
 }
 .author > .nav {
   position: relative;

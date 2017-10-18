@@ -30,11 +30,12 @@ class AuthorComment extends migi.Component {
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
-        self.replayName = name;
+        // self.emit('replayName', name);
       });
       comment.on('closeSubComment', function() {
         self.rootID = -1;
         self.parentID = -1;
+        // self.emit('replayName', '');
       });
     });
   }
@@ -42,7 +43,6 @@ class AuthorComment extends migi.Component {
   @bind authorID
   @bind rootID = -1
   @bind parentID = -1
-  @bind replayName = ''
   show() {
     let self = this;
     $(self.element).removeClass('fn-hide');
