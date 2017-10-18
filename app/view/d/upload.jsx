@@ -7,7 +7,6 @@
 import Upload from '../../assets/d/upload/Upload.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let upload = migi.preRender(<Upload/>);
 
   return `<!DOCTYPE html>

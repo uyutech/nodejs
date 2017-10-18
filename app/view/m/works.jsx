@@ -9,7 +9,6 @@ import BotNav from '../../assets/m/component/botnav/BotNav.jsx';
 import Works from '../../assets/m/works/Works.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let worksID = data.worksID;
   let worksDetail = data.worksDetail;
   let commentData = data.commentData;

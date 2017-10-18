@@ -155,7 +155,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (data) {
-  migi.Element.resetUid();
   var userInfo = data.userInfo;
 
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo]]));

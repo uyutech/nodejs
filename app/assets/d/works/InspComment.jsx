@@ -11,7 +11,7 @@ class InspComment extends migi.Component {
     super(...data);
   }
   render() {
-    return <div class="mod insp">
+    return <div class="mod mod-insp">
       <h5>创作灵感</h5>
       <ul class="c">
         {

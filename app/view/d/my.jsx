@@ -7,7 +7,6 @@
 import My from '../../assets/d/my/My.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let userInfo = data.userInfo;
   let follows = data.follows;
   let favors = data.favors;

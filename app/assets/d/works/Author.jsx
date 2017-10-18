@@ -76,7 +76,7 @@ class Author extends migi.Component {
     this.list = list;
   }
   render() {
-    return <div class="mod authors">
+    return <div class="mod mod-author">
       <h5>作者</h5>
       <div class="c">
         {

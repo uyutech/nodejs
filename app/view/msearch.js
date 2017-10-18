@@ -289,7 +289,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (data) {
-  migi.Element.resetUid();
   var kw = data.kw;
   var datas = data.datas;
 

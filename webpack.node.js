@@ -7,6 +7,7 @@ module.exports = {
     dindex: './app/view/d/index.jsx',
     dfind: './app/view/d/find.jsx',
     dworks: './app/view/d/works.jsx',
+    dcollection: './app/view/d/collection.jsx',
     dauthor: './app/view/d/author.jsx',
     dsearch: './app/view/d/search.jsx',
     dmy: './app/view/d/my.jsx',

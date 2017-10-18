@@ -14,6 +14,7 @@ module.exports = {
     dindex: './app/assets/d/index/index.jsx',
     dfind: './app/assets/d/find/index.jsx',
     dworks: './app/assets/d/works/index.jsx',
+    dcollection: './app/assets/d/collection/index.jsx',
     dauthor: './app/assets/d/author/index.jsx',
     dsearch: './app/assets/d/search/index.jsx',
     dmy: './app/assets/d/my/index.jsx',

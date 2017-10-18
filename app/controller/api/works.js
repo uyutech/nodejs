@@ -39,7 +39,7 @@ module.exports = app => {
         ParentID: body.parentID,
         RootID: body.rootID,
         Content: body.content,
-        subWorkID: body.workID,
+        subWorkID: body.workID || '',
         WorkID: body.worksID,
         BarrageTime: body.barrageTime,
       });

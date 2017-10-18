@@ -237,12 +237,11 @@ class Album extends migi.Component {
     this.load($(window));
   }
   render() {
-    return <div class="mod album">
+    return <div class="mod mod-album">
       <h4>相册</h4>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="0">全部</li>
-          <li rel="1">电脑壁纸</li>
         </ul>
         <ul class="type2 fn-clear" onClick={ this.switchType }>
           <li class="cur" rel="0">最新</li>

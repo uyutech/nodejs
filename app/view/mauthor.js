@@ -1372,7 +1372,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (data) {
-  migi.Element.resetUid();
   var authorID = data.authorID;
   var authorDetail = data.authorDetail;
   var homeDetail = data.homeDetail;

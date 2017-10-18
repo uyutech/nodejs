@@ -14,7 +14,7 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['report', 'd2m', 'm2d', 'jsConfig'];
+  config.middleware = ['report', 'd2m', 'm2d', 'jsConfig', 'migiReset'];
   config.d2m = {
     match: '/d',
   };
@@ -29,7 +29,15 @@ module.exports = appInfo => {
       if(ctx.request.path.startsWith('/d/')) {
         return true;
       }
-      if(ctx.request.path.startsWith('/api/')) {
+      return false;
+    },
+  };
+  config.migiReset = {
+    match: function(ctx) {
+      if(ctx.request.path.startsWith('/m/')) {
+        return true;
+      }
+      if(ctx.request.path.startsWith('/d/')) {
         return true;
       }
       return false;

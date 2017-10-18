@@ -9,7 +9,6 @@ import BotNav from '../../assets/m/component/botnav/BotNav.jsx';
 import Find from '../../assets/m/find/Find.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let hotWorkList = data.hotWorkList;
   let hotAuthorList = data.hotAuthorList;
   let tags = data.tags;

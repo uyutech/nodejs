@@ -13,11 +13,11 @@ const TYPE_NAME = {
 class Title extends migi.Component {
   constructor(...data) {
     super(...data);
-    this.title = this.props.worksDetail.Title;
-    this.subTitle = this.props.worksDetail.sub_Title;
-    this.type = this.props.worksDetail.WorkType;
-    this.popular = this.props.worksDetail.Popular;
-    this.tags = this.props.worksDetail.ReturnTagData;
+    this.title = this.props.detail.Title;
+    this.subTitle = this.props.detail.sub_Title;
+    this.type = this.props.detail.WorkType;
+    this.popular = this.props.detail.Popular;
+    this.tags = this.props.detail.ReturnTagData;
   }
   @bind title
   @bind subTitle
@@ -28,12 +28,12 @@ class Title extends migi.Component {
     migi.eventBus.emit('add-label');
   }
   render() {
-    let hasCover = this.props.worksDetail.cover_Pic;
-    return <div class={ 'title' + (hasCover ? '' : ' no-cover') }>
+    let hasCover = this.props.detail.cover_Pic;
+    return <div class={ 'title mod-title' + (hasCover ? '' : ' no-cover') }>
       {
         hasCover
           ? <div class="pic">
-              <img src={ util.autoSsl(util.img100_100(this.props.worksDetail.cover_Pic)) }/>
+              <img src={ util.autoSsl(util.img100_100(this.props.detail.cover_Pic)) }/>
             </div>
           : ''
       }

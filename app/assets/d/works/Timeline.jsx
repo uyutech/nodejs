@@ -9,7 +9,7 @@ class Timeline extends migi.Component {
     super(...data);
   }
   render() {
-    return <div class="mod timeline">
+    return <div class="mod mod-timeline">
       <ul class="c fn-clear">
         {
           (this.props.datas || []).map(function(item) {

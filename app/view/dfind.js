@@ -956,7 +956,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (data) {
-  migi.Element.resetUid();
   var hotWorkList = data.hotWorkList;
   var hotAuthorList = data.hotAuthorList;
   var hotAlbumList = data.hotAlbumList;

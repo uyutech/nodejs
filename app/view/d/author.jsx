@@ -7,7 +7,6 @@
 import Author from '../../assets/d/author/Author.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let uid = data.ctx.session.uid;
   let authorID = data.authorID;
   let authorDetail = data.authorDetail;

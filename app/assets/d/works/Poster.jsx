@@ -9,7 +9,7 @@ class Poster extends migi.Component {
     super(...data);
   }
   render() {
-    return <div class="mod poster">
+    return <div class="mod mod-poster">
       <h5>{ this.props.datas.name }</h5>
       <ul class="c">
         {

@@ -9,7 +9,7 @@ class Text extends migi.Component {
     super(...data);
   }
   render() {
-    return <div class="mod text">
+    return <div class="mod mod-text">
       <h5>{ this.props.datas.name }</h5>
       <ul class="c">
       {

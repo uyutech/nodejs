@@ -7,7 +7,6 @@
 import Works from '../../assets/d/works/Works.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let isLogin = !!data.ctx.session.uid;
   let worksID = data.worksID;
   let worksDetail = data.worksDetail;

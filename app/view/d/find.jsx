@@ -7,7 +7,6 @@
 import Find from '../../assets/d/find/Find.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let hotWorkList = data.hotWorkList;
   let hotAuthorList = data.hotAuthorList;
   let hotAlbumList = data.hotAlbumList;

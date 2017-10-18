@@ -9,7 +9,6 @@ import BotNav from '../../assets/m/component/botnav/BotNav.jsx';
 import Author from '../../assets/m/author/Author.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let authorID = data.authorID;
   let authorDetail = data.authorDetail;
   let homeDetail = data.homeDetail;

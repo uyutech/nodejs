@@ -7,7 +7,6 @@
 import TopNav from '../../assets/d/component/topnav/TopNav.jsx';
 
 export default function(data) {
-  migi.Element.resetUid();
   let userInfo = data.userInfo;
 
   let topNav = migi.preRender(<TopNav userInfo={ userInfo }/>);

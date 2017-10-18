@@ -149,8 +149,7 @@ class Works extends migi.Component {
     if(self.worksType === 11) {
       return <div class={ 'works fn-clear t' + self.worksType }>
         <Title ref="title"
-               worksDetail={ this.props.worksDetail }
-               authorList={ this.authorList }/>
+               detail={ this.props.worksDetail }/>
         <div class="main">
           <Album worksID={ this.props.worksID }/>
         </div>
@@ -182,12 +181,12 @@ class Works extends migi.Component {
                        workID={ this.workID }
                        commentData={ this.props.commentData }/>
         </div>
+        <AddLabelPanel ref="addLabelPanel"/>
       </div>;
     }
     return <div class={ 'works fn-clear t' + self.worksType }>
       <Title ref="title"
-             worksDetail={ this.props.worksDetail }
-             authorList={ this.authorList }/>
+             detail={ this.props.worksDetail }/>
       <div class="main">
         <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
           {
