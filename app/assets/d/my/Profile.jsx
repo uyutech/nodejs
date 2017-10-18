@@ -49,18 +49,26 @@ class Profile extends migi.Component {
   }
   change(e) {
     if(window.FileReader) {
+      let self = this;
       let file = e.target.files[0];
       let size = file.size;
       if(size && size !== 0 && size < 1024 * 300) {
+        let $upload = $(self.ref.upload.element);
+        $upload.addClass('fn-hide');
         let fileReader = new FileReader();
         fileReader.onload = function() {
-          // let spark = new Spark();
-          // spark.append(fileReader.result);
-          // let md5 = spark.end();
-          // net.postJSON('/api/user/checkExistHead', { md5 }, function(res) {
-          //   console.log(res);
-          // });
-          net.postJSON('/api/user/uploadHead', { img: fileReader.result }, function(res) {});
+          net.postJSON('/api/user/uploadHead', { img: fileReader.result }, function(res) {
+            if(res.success) {
+              self.head = util.autoSsl(util.img144_144(res.url));
+            }
+            else {
+              alert(res.message || util.ERROR_MESSAGE);
+            }
+            $upload.removeClass('fn-hide');
+          }, function(res) {
+            alert(res.message || util.ERROR_MESSAGE);
+            $upload.removeClass('fn-hide');
+          });
         };
         fileReader.readAsDataURL(file);
       }
@@ -76,7 +84,7 @@ class Profile extends migi.Component {
     return <div class="profile fn-clear">
       <div class="pic">
         <img src={ this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
-        <div class="upload">
+        <div class="upload" ref="upload">
           <input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>
         </div>
       </div>

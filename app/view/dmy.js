@@ -412,18 +412,25 @@ var Profile = function (_migi$Component) {
     key: 'change',
     value: function change(e) {
       if (window.FileReader) {
+        var self = this;
         var file = e.target.files[0];
         var size = file.size;
         if (size && size !== 0 && size < 1024 * 300) {
+          var $upload = $(self.ref.upload.element);
+          $upload.addClass('fn-hide');
           var fileReader = new FileReader();
           fileReader.onload = function () {
-            // let spark = new Spark();
-            // spark.append(fileReader.result);
-            // let md5 = spark.end();
-            // net.postJSON('/api/user/checkExistHead', { md5 }, function(res) {
-            //   console.log(res);
-            // });
-            _net2.default.postJSON('/api/user/uploadHead', { img: fileReader.result }, function (res) {});
+            _net2.default.postJSON('/api/user/uploadHead', { img: fileReader.result }, function (res) {
+              if (res.success) {
+                self.head = _util2.default.autoSsl(_util2.default.img144_144(res.url));
+              } else {
+                alert(res.message || _util2.default.ERROR_MESSAGE);
+              }
+              $upload.removeClass('fn-hide');
+            }, function (res) {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+              $upload.removeClass('fn-hide');
+            });
           };
           fileReader.readAsDataURL(file);
         } else {
@@ -438,7 +445,7 @@ var Profile = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
         return this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png';
-      })]]), migi.createVd("div", [["class", "upload"]], [migi.createVd("input", [["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["accept", "image/gif, image/jpeg, image/png"]])])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
+      })]]), migi.createVd("div", [["class", "upload"], ["ref", "upload"]], [migi.createVd("input", [["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["accept", "image/gif, image/jpeg, image/png"]])])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
         return this.name;
       })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["onBlur", new migi.Cb(this, this.blur)]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]])])]);
     }
