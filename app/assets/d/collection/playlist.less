@@ -55,13 +55,29 @@
       line-height:0.46rem;
       cursor:pointer;
       transition:transform 0.2s;
-      small{
-        margin-right:0.1rem;
-        color:#919191;
-        font-size:0.12rem;
+      list-style:decimal inside;
+      color:#919191;
+      overflow:hidden;
+      &:after{
+        position:absolute;
+        left:0.1rem;
+        right:0.1rem;
+        bottom:0;
+        height:2px;
+        background:#EDF3F7;
+        content:' ';
+      }
+      &:last-child,&.cur{
+        &:after{
+          display:none;
+          content:'';
+        }
       }
       .name{
+        margin-left:0.1rem;
         font-size:0.14rem;
+        white-space:nowrap;
+        color:@mainTextColor;
       }
       .icon{
         position:absolute;
@@ -105,6 +121,16 @@
             }
           }
         }
+      }
+    }
+    &.audio{
+      .video{
+        display:none;
+      }
+    }
+    &.video{
+      .audio{
+        display:none;
       }
     }
   }

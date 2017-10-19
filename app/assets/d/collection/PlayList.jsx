@@ -44,7 +44,14 @@ class PlayList extends migi.Component {
     });
   }
   @bind list
-  clickType() {}
+  clickType(e, vd, tvd) {
+    let $li = $(tvd.element);
+    if(!$li.hasClass('cur')) {
+      $(vd.element).find('.cur').removeClass('cur');
+      $li.addClass('cur');
+      this.ref.list.element.className = 'list ' + (tvd.props.rel || '');
+    }
+  }
   clickItem(e, vd, tvd) {
     let $li = $(tvd.element);
     if(!$li.hasClass('cur')) {
@@ -57,17 +64,23 @@ class PlayList extends migi.Component {
   }
   render() {
     return <div class="mod mod-playlist">
-      <ul class="type fn-clear" onClick={ this.clickType }>
-        <li class="video">播放视频</li>
-        <li class="audio">播放音频</li>
+      <ul class="type fn-clear" onClick={ { li: this.clickType } }>
+        <li class="video" rel="video">播放视频</li>
+        <li class="audio" rel="audio">播放音频</li>
         <li class="music cur">播放全部</li>
       </ul>
       <ol class="list" ref="list" onClick={ { li: this.clickItem } }>
         {
           (this.list || []).map(function(item, i) {
-            return <li class={ i ? '' : 'cur' } rel={ i }>
-              <small>{ i + 1 }.</small>
-              <span class="name">{ item.ItemName }</span>
+            let type = '';
+            if(item.ItemType === 1111) {
+              type = 'audio';
+            }
+            else if(item.ItemType === 2110) {
+              type = 'video';
+            }
+            return <li class={ type + (i ? '' : ' cur') } rel={ i }>
+              <span class="name">{ item.ItemName + (item.Tips ? (' ' + item.Tips) : '') }</span>
               <span class="icon"><b class="l1"/><b class="l2"/><b class="l3"/></span>
             </li>;
           })

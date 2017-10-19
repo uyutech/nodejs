@@ -635,7 +635,14 @@ var PlayList = function (_migi$Component) {
 
   _createClass(PlayList, [{
     key: 'clickType',
-    value: function clickType() {}
+    value: function clickType(e, vd, tvd) {
+      var $li = $(tvd.element);
+      if (!$li.hasClass('cur')) {
+        $(vd.element).find('.cur').removeClass('cur');
+        $li.addClass('cur');
+        this.ref.list.element.className = 'list ' + (tvd.props.rel || '');
+      }
+    }
   }, {
     key: 'clickItem',
     value: function clickItem(e, vd, tvd) {
@@ -651,9 +658,15 @@ var PlayList = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod mod-playlist"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", new migi.Cb(this, this.clickType)]], [migi.createVd("li", [["class", "video"]], ["播放视频"]), migi.createVd("li", [["class", "audio"]], ["播放音频"]), migi.createVd("li", [["class", "music cur"]], ["播放全部"])]), migi.createVd("ol", [["class", "list"], ["ref", "list"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickItem)]]]], [new migi.Obj("list", this, function () {
+      return migi.createVd("div", [["class", "mod mod-playlist"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [migi.createVd("li", [["class", "video"], ["rel", "video"]], ["播放视频"]), migi.createVd("li", [["class", "audio"], ["rel", "audio"]], ["播放音频"]), migi.createVd("li", [["class", "music cur"]], ["播放全部"])]), migi.createVd("ol", [["class", "list"], ["ref", "list"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickItem)]]]], [new migi.Obj("list", this, function () {
         return (this.list || []).map(function (item, i) {
-          return migi.createVd("li", [["class", i ? '' : 'cur'], ["rel", i]], [migi.createVd("small", [], [i + 1, "."]), migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
+          var type = '';
+          if (item.ItemType === 1111) {
+            type = 'audio';
+          } else if (item.ItemType === 2110) {
+            type = 'video';
+          }
+          return migi.createVd("li", [["class", type + (i ? '' : ' cur')], ["rel", i]], [migi.createVd("span", [["class", "name"]], [item.ItemName + (item.Tips ? ' ' + item.Tips : '')]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
         });
       })])]);
     }
