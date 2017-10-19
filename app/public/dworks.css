@@ -744,10 +744,6 @@ body {
 .add-label > .c .has li:hover {
   background: #5D99C4;
 }
-.add-label > .c .list li.cur,
-.add-label > .c .has li.cur {
-  cursor: default;
-}
 .add-label > .c .list li.cur:after,
 .add-label > .c .has li.cur:after {
   position: absolute;

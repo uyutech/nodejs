@@ -44,7 +44,7 @@ class AddLabelPanel extends migi.Component {
     $(self.element).removeClass('fn-hide');
     if(first) {
       first = false;
-      net.postJSON('/api/user/labelList', function(res) {
+      net.postJSON('/api/user/labelList', { worksID: self.props.worksID }, function(res) {
         if(res.success) {
           let data = res.data;
           self.list = data.AllLabel;

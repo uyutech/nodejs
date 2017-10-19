@@ -2798,7 +2798,7 @@ var AddLabelPanel = function (_migi$Component) {
       $(self.element).removeClass('fn-hide');
       if (first) {
         first = false;
-        _net2.default.postJSON('/api/user/labelList', function (res) {
+        _net2.default.postJSON('/api/user/labelList', { worksID: self.props.worksID }, function (res) {
           if (res.success) {
             var data = res.data;
             self.list = data.AllLabel;

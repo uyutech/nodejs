@@ -95,8 +95,10 @@ module.exports = app => {
     }
     * labelList(ctx) {
       let uid = ctx.session.uid;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/users/GetLabelList', {
         uid,
+        workid: body.worksID,
       });
       ctx.body = res.data;
     }
@@ -106,7 +108,7 @@ module.exports = app => {
       let res = yield ctx.helper.postServiceJSON('api/users/UserAddWorkLabel', {
         uid,
         workid: body.worksID,
-        labelID: body.labelID,
+        labelID: body.labelID || '',
       });
       ctx.body = res.data;
     }
