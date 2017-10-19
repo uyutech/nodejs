@@ -6,6 +6,7 @@
 
 import Title from '../works/Title.jsx';
 import Timeline from '../works/Timeline.jsx';
+import itemTemplate from '../works/itemTemplate';
 import Media from './Media.jsx';
 import Describe from './Describe.jsx';
 import Author from '../works/Author.jsx';
@@ -13,6 +14,7 @@ import InspComment from '../works/InspComment.jsx';
 import PlayList from './PlayList.jsx';
 import CollectionComment from './CollectionComment.jsx';
 import AddLabelPanel from '../works/AddLabelPanel.jsx';
+import LyricsParser from '../works/LyricsParser.jsx';
 
 class Collection extends migi.Component {
   constructor(...data) {
@@ -25,6 +27,28 @@ class Collection extends migi.Component {
   @bind collectionID
   @bind collectionType
   setWorks(works) {
+    let self = this;
+    let workList = [];
+    works.forEach(function(item) {
+      if(item.ItemType === 1111) {
+        let l = {};
+        if(LyricsParser.isLyrics(item.lrc)) {
+          l.is = true;
+          l.txt = LyricsParser.getTxt(item.lrc);
+          l.data = LyricsParser.parse(item.lrc);
+        }
+        else {
+          l.is = false;
+          l.txt = item.lrc;
+        }
+        item.formatLyrics = l;
+        workList.push(item);
+      }
+      else if(item.ItemType === 2110) {
+        workList.push(item);
+      }
+    });
+    self.workList = workList;
   }
   render() {
     return <div class="collection fn-clear">
@@ -42,10 +66,11 @@ class Collection extends migi.Component {
         </ul>
         <Media ref="media"
                collectionID={ this.collectionID }
-               cover={ this.props.collectionDetail.cover_Pic }/>
+               cover={ this.props.collectionDetail.cover_Pic }
+               workList={ this.workList }/>
         <div class="info">
           <Describe data={ this.props.collectionDetail.Describe }/>
-          <Author/>
+          <Author authorList={ [this.props.collectionDetail.Works_Author] }/>
           <InspComment/>
         </div>
       </div>
@@ -54,7 +79,7 @@ class Collection extends migi.Component {
           <li class="cur">曲目</li>
         </ul>
         <div class="box">
-          <PlayList/>
+          <PlayList workList={ this.workList }/>
         </div>
         <CollectionComment ref="collectionComment"
                            isLogin={ this.props.isLogin }

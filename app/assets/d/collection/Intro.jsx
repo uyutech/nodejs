@@ -9,7 +9,7 @@ class Intro extends migi.Component {
     super(...data);
   }
   render() {
-    return <div class="intro" style={ 'background-image:url(' + this.props.cover + ')'}/>;
+    return <div class="intro fn-hide"/>;
   }
 }
 

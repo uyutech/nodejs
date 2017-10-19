@@ -1,54 +1,65 @@
 /**
- * Created by army8735 on 2017/9/7.
+ * Created by army8735 on 2017/10/19.
  */
 
-import util from '../common/util';
+'use strict';
+
 import net from '../common/net';
+import util from '../common/util';
 
 let isVStart;
 let vOffsetX;
 let isStart;
 let offsetX;
 
-class Video extends migi.Component {
+class Player extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.datas) {
-      self.setData(self.props.datas);
-      if(self.props.show) {
-        self.on(migi.Event.DOM, function() {
-          let uid = window.$CONFIG ? $CONFIG.uid : '';
-          let key = uid + 'volume';
-          self.volume = localStorage[key];
-          self.addMedia();
-          $(self.ref.fn.element).removeClass('fn-hidden');
-        });
-      }
+    if(self.props.workList) {
+      self.setItem(self.props.workList[0]);
       self.on(migi.Event.DOM, function() {
+        let uid = window.$CONFIG ? $CONFIG.uid : '';
+        let key = uid + 'volume';
+        self.volume = localStorage[key];
+        self.addOrAltMedia();
+        $(self.ref.fn.element).removeClass('fn-hidden');
+
         $(document).on('mousemove', this.mousemove.bind(this));
         $(document).on('mouseup', this.mouseup.bind(this));
         $(document).on('mousemove', this.vmousemove.bind(this));
         $(document).on('mouseup', this.vmouseup.bind(this));
       });
+      migi.eventBus.on('chooseMedia', function(item) {
+        self.setItem(item);
+        self.addOrAltMedia();
+      });
     }
   }
-  @bind datas = []
-  @bind index = 0
+  @bind item
+  @bind type
+  @bind workID
+  @bind name
+  @bind url
+  @bind playNum
   @bind isPlaying
-  @bind workIndex = 0
+  @bind hasStart
+  @bind formatLyrics
+  @bind showLyricsMode
+  @bind lyricsIndex = 0
   @bind duration
+  @bind canControl
   @bind muted
-  @bind fnFavor
-  @bind fnLike
+  @bind like
+  @bind favor
   get currentTime() {
     return this._currentTime || 0;
   }
   @bind
   set currentTime(v) {
     this._currentTime = v;
-    if(this.video && v !== this.video.element.currentTime) {
-      this.video.element.currentTime = v;
+    if(v !== this.av.element.currentTime) {
+      this.av.element.currentTime = v;
     }
   }
   get volume() {
@@ -58,49 +69,98 @@ class Video extends migi.Component {
   set volume(v) {
     this._volume = v;
     migi.eventBus.emit('SET_VOLUME', v);
-    if(this.video) {
-      this.video.element.volume = v;
+    if(this.av) {
+      this.av.element.volume = v;
     }
-  }
-  setData(datas) {
-    let self = this;
-    self.datas = datas;
-    return this;
-  }
-  addMedia() {
-    let video = <video ref="video"
-                       src={ this.datas[this.index].FileUrl }
-                       onClick={ this.clickPlay.bind(this) }
-                       onTimeupdate={ this.onTimeupdate.bind(this) }
-                       onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
-                       onPause={ this.onPause.bind(this) }
-                       onPlaying={ this.onPlaying.bind(this) }
-                       preload="meta"
-                       playsinline="true"
-                       webkit-playsinline="true">
-      your browser does not support the video tag
-    </video>;
-    this.video = video;
-    video.prependTo(this.ref.c.element);
-    this.volume = this.volume;
   }
   show() {
     $(this.element).removeClass('fn-hide');
-    let uid = window.$CONFIG ? $CONFIG.uid : '';
-    let key = uid + 'volume';
-    this.volume = localStorage[key];
-    if(!this.video) {
-      this.addMedia();
-    }
-    $(this.ref.fn.element).removeClass('fn-hidden');
-    return this;
   }
   hide() {
     $(this.element).addClass('fn-hide');
-    return this;
+  }
+  setItem(item) {
+    console.log(item);
+    let self = this;
+    self.item = item;
+    self.type = item.ItemType;
+    self.workID = item.ItemID;
+    self.name = item.ItemName;
+    self.url = item.FileUrl;
+    self.playNum = item.PlayHis;
+    self.formatLyrics = item.formatLyrics || {};
+    self.like = item.ISLike;
+    self.favor = item.ISFavor;
+  }
+  addOrAltMedia() {
+    let self = this;
+    let isPlaying = self.isPlaying;
+    self.pause();
+    switch(self.type) {
+      case 1111:
+        if(!self.audio) {
+          self.audio = <audio src={ self.url }
+                              onTimeupdate={ self.onTimeupdate.bind(self) }
+                              onLoadedmetadata={ self.onLoadedmetadata.bind(self) }
+                              onPlaying={ self.onPlaying.bind(self) }
+                              onPause={ self.onPause.bind(self) }
+                              onProgress={ self.onProgress.bind(self) }
+                              preload="meta">
+            your browser does not support the audio tag
+          </audio>;
+          self.audio.appendTo(self.ref.c.element);
+        }
+        else {
+          self.audio.element.src = self.url;
+        }
+        self.av = self.audio;
+        break;
+      case 2110:
+        if(!self.video) {
+          self.video = <video ref="video"
+                              src={ self.url }
+                              onClick={ self.clickPlay.bind(self) }
+                              onTimeupdate={ self.onTimeupdate.bind(self) }
+                              onLoadedmetadata={ self.onLoadedmetadata.bind(self) }
+                              onPause={ self.onPause.bind(self) }
+                              onPlaying={ self.onPlaying.bind(self) }
+                              preload="meta"
+                              playsinline="true"
+                              webkit-playsinline="true">
+            your browser does not support the video tag
+          </video>;
+          self.video.appendTo(self.ref.c.element);
+        }
+        else {
+          self.video.element.src = self.url;
+        }
+        self.av = self.video;
+        break;
+    }
+    if(isPlaying) {
+      self.play();
+    }
+    self.volume = self.volume;
   }
   onTimeupdate(e) {
-    let currentTime = this.currentTime = e.target.currentTime;
+    let self = this;
+    let currentTime = self.currentTime = e.target.currentTime;
+    let formatLyrics = self.formatLyrics;
+    let formatLyricsData = formatLyrics.data;
+    if(formatLyrics.is && formatLyricsData.length) {
+      let tempIndex = this.lyricsIndex;
+      for (let i = 0, len = formatLyricsData.length; i < len; i++) {
+        if(currentTime * 1000 >= formatLyricsData[i].timestamp) {
+          tempIndex = i;
+        }
+        else {
+          break;
+        }
+      }
+      if(tempIndex !== this.lyricsIndex) {
+        this.lyricsIndex = tempIndex;
+      }
+    }
     let percent = currentTime / this.duration;
     this.setBarPercent(percent);
   }
@@ -113,24 +173,21 @@ class Video extends migi.Component {
   onPlaying(e) {
     this.duration = e.target.duration;
   }
-  onPause() {
+  onPause(e) {
   }
   play() {
-    this.video.element.play();
+    this.av && this.av.element.play();
     this.isPlaying = true;
+    this.hasStart = true;
     return this;
   }
   pause() {
-    this.video && this.video.element.pause();
+    this.av && this.av.element.pause();
     this.isPlaying = false;
     return this;
   }
-  clickType(e, vd, tvd) {
-    if(this.index !== tvd.props.rel) {
-      this.index = tvd.props.rel;
-      this.video.element.src = this.datas[this.index].FileUrl;
-      this.emit('switchTo', this.datas[this.index]);
-    }
+  altLyrics() {
+    this.showLyricsMode = !this.showLyricsMode;
   }
   vmousedown(e) {
     e.preventDefault();
@@ -168,28 +225,10 @@ class Video extends migi.Component {
   clickMute(e) {
     this.muted = !this.muted;
     if(this.muted) {
-      this.video.element.volume = 0;
+      this.audio.element.volume = 0;
     }
     else {
-      this.video.element.volume = this.volume;
-    }
-  }
-  clickScreen() {
-    let video = this.video.element;
-    if(video.requestFullscreen) {
-      video.requestFullscreen();
-    }
-    else if(video.mozRequestFullscreen) {
-      video.mozRequestFullscreen();
-    }
-    else if(video.webkitRequestFullscreen) {
-      video.webkitRequestFullscreen();
-    }
-    else if(video.msRequestFullscreen) {
-      video.msRequestFullscreen();
-    }
-    else if(video.webkitEnterFullScreen) {
-      video.webkitEnterFullScreen();
+      this.audio.element.volume = this.volume;
     }
   }
   mousedown(e) {
@@ -229,6 +268,7 @@ class Video extends migi.Component {
   setBarPercent(percent) {
     percent *= 100;
     $(this.ref.vol.element).css('width', percent + '%');
+    $(this.ref.p.element).css('-moz-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('transform', `translateX(${percent}%)`);
   }
@@ -244,11 +284,10 @@ class Video extends migi.Component {
     let $vd = $(vd.element);
     if(!$vd.hasClass('loading')) {
       $vd.addClass('loading');
-      let data = self.datas[self.index];
-      net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
+      let data = self.item;
+      net.postJSON('/api/works/likeWork', { workID: self.workID }, function (res) {
         if(res.success) {
-          data.ISLike = res.data === 211;
-          self.fnLike = null;
+          data.ISLike = self.like = res.data === 211;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -275,10 +314,9 @@ class Video extends migi.Component {
       //
     }
     else if($vd.hasClass('has')) {
-      net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
+      net.postJSON('/api/works/unFavorWork', { workID: self.workID }, function (res) {
         if(res.success) {
-          data.ISFavor = false;
-          self.fnFavor = null;
+          data.ISFavor = self.favor = false;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -293,10 +331,9 @@ class Video extends migi.Component {
       });
     }
     else {
-      net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
+      net.postJSON('/api/works/favorWork', { workID: self.workID }, function (res) {
         if(res.success) {
-          data.ISFavor = true;
-          self.fnFavor = null;
+          data.ISFavor = self.favor = true;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -321,30 +358,37 @@ class Video extends migi.Component {
     migi.eventBus.emit('SHARE', location.href);
   }
   render() {
-    return <div class={ 'video' + (this.props.show ? '' : ' fn-hide') }>
-      <ul class={ 'type fn-clear' + ((this.index, this.datas || []).length === 1 ? ' single' : '') } onClick={ this.clickType }>
-        {
-          (this.index, this.datas || []).map(function(item, index) {
-            return <li class={ this.index === index ? 'cur' : '' } rel={ index }>{ item.Tips || '普通版' }</li>;
-          }.bind(this))
-        }
-      </ul>
-      <h3 ref="title">{ this.datas[this.index].ItemName }</h3>
+    return <div class={ 'player t' + this.type }>
+      <h3>{ this.name }</h3>
       <div class="num">
-        <small class="play">{ this.datas[this.index].PlayHis || 0 }</small>
+        <small class="play">{ this.playNum || 0 }</small>
       </div>
-      <div class="c" ref="c" style={ this.isPlaying ? '' : 'opacity:0.75' }>
+      <div class={ 'c' + (this.isPlaying ? ' playing' : '') } ref="c">
+        <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
+          <div class={ 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide') }>
+            <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
+              {
+                (this.formatLyrics.data || []).map(function(item) {
+                  return <pre>{ item.txt || '&nbsp;' }</pre>
+                })
+              }
+            </div>
+          </div>
+          <div class={ 'line' + (this.showLyricsMode && this.formatLyrics.txt ? '' : ' fn-hide') }>
+            <pre style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>{ this.formatLyrics.txt }</pre>
+          </div>
+        </div>
         <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
       </div>
       <div class="fn fn-hidden" ref="fn">
         <div class="control">
-          <b class="full" onClick={ this.clickScreen }/>
+          <b class={ 'lyrics' + (this.showLyricsMode ? '' : ' roll') } onClick={ this.altLyrics }/>
           <div class="volume" ref="volume" onClick={ this.clickVolume }>
             <b class={ 'icon' + (this.muted ? ' muted' : '') } onClick={ this.clickMute }/>
             <b class="vol" style={ 'width:' + this.volume * 100 + '%' }/>
             <b class="p"
                onMouseDown={ this.vmousedown }
-               style={ 'transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
+               style={ '-moz-transform:translateX(' + this.volume * 100 + '%);-webkit-transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
           </div>
         </div>
         <div class="bar">
@@ -358,11 +402,11 @@ class Video extends migi.Component {
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.datas[this.index].ISLike || this.fnLike ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class={ 'like' + (this.like ? ' has' : '') } onClick={ this.clickLike }/>
+          <li class={ 'favor' + (this.favor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
-            <a href={ this.datas[this.index].FileUrl }
-               download={ this.datas[this.index].FileUrl }
+            <a href={ 1 }
+               download={ 1 }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>
@@ -372,4 +416,4 @@ class Video extends migi.Component {
   }
 }
 
-export default Video;
+export default Player;
