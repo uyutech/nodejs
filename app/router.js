@@ -30,14 +30,17 @@ module.exports = app => {
   app.get('/m/search/:kw', 'm.search.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
+
   app.post('/api/find/hotWorkList', 'api.find.hotWorkList');
   app.post('/api/find/tagB', 'api.find.tagB');
   app.post('/api/find/playList', 'api.find.playList');
+
   app.post('/api/user/updateNickName', app.middlewares.needLoginJson(), 'api.user.updateNickName');
   app.post('/api/user/checkExistHead', app.middlewares.needLoginJson(), 'api.user.checkExistHead');
   app.post('/api/user/uploadHead', app.middlewares.needLoginJson(), 'api.user.uploadHead');
   app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
   app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
+
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');
   app.post('/api/works/likeWork', app.middlewares.needLoginJson(), 'api.works.likeWork');
@@ -49,6 +52,14 @@ module.exports = app => {
   app.post('/api/works/delComment', app.middlewares.needLoginJson(), 'api.works.delComment');
   app.post('/api/works/photoList', 'api.works.photoList');
   app.post('/api/works/addTempLink', app.middlewares.needLoginJson(), 'api.works.addTempLink');
+
+  app.post('/api/collection/commentList', 'api.collection.commentList');
+  app.post('/api/collection/addComment', app.middlewares.needLoginJson(), 'api.collection.addComment');
+  app.post('/api/collection/likeComment', app.middlewares.needLoginJson(), 'api.collection.likeComment');
+  app.post('/api/collection/subCommentList', 'api.collection.subCommentList');
+  app.post('/api/collection/delComment', app.middlewares.needLoginJson(), 'api.collection.delComment');
+  app.post('/api/collection/addTempLink', app.middlewares.needLoginJson(), 'api.collection.addTempLink');
+
   app.post('/api/author/tagB', 'api.author.tagB');
   app.post('/api/author/playList', 'api.author.playList');
   app.post('/api/author/commentList', 'api.author.commentList');
@@ -60,6 +71,7 @@ module.exports = app => {
   app.post('/api/author/delComment', app.middlewares.needLoginJson(), 'api.author.delComment');
   app.post('/api/author/singleComment', 'api.author.singleComment');
   app.post('/api/author/searchWorks', 'api.author.searchWorks');
+
   app.post('/api/activity/commentList', 'api.activity.commentList');
   app.post('/api/activity/addComment', app.middlewares.needLoginJson(), 'api.activity.addComment');
   app.post('/api/activity/likeComment', app.middlewares.needLoginJson(), 'api.activity.likeComment');

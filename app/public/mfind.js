@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 108);
+/******/ 	return __webpack_require__(__webpack_require__.s = 109);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 108:
+/***/ 109:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(109);
+__webpack_require__(110);
 
-var _Find = __webpack_require__(110);
+var _Find = __webpack_require__(111);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -83,14 +83,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 109:
+/***/ 110:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 110:
+/***/ 111:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,7 +102,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -110,7 +110,7 @@ var _net = __webpack_require__(17);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(111);
+var _Banner = __webpack_require__(112);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -265,7 +265,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 111:
+/***/ 112:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -496,42 +496,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ 5:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army on 2017/5/20.
- */
-
-var util = {
-  isIPhone: function isIPhone() {
-    return navigator.appVersion.match(/iphone/gi);
-  },
-  goto: function goto(url) {
-    location.href = url;
-  },
-  img150_150: function img150_150(url) {
-    return url ? url + '-150_150' : url;
-  },
-  img100_100: function img100_100(url) {
-    return url ? url + '-100_100' : url;
-  },
-  img90_90: function img90_90(url) {
-    return url ? url + '-90_90' : url;
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-exports.default = util;
-
-/***/ }),
-
 /***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -544,7 +508,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -806,7 +770,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -1123,7 +1087,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -1176,6 +1140,42 @@ var PlayList = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(PlayList, "PlayList");exports.default = PlayList;
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army on 2017/5/20.
+ */
+
+var util = {
+  isIPhone: function isIPhone() {
+    return navigator.appVersion.match(/iphone/gi);
+  },
+  goto: function goto(url) {
+    location.href = url;
+  },
+  img150_150: function img150_150(url) {
+    return url ? url + '-150_150' : url;
+  },
+  img100_100: function img100_100(url) {
+    return url ? url + '-100_100' : url;
+  },
+  img90_90: function img90_90(url) {
+    return url ? url + '-90_90' : url;
+  },
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+};
+
+exports.default = util;
 
 /***/ })
 

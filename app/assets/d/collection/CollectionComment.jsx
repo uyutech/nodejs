@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2017/9/1.
+ * Created by army8735 on 2017/10/19.
  */
 
 'use strict';
@@ -22,7 +22,7 @@ class WorkComment extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.worksID = self.props.worksID;
+    self.collectionID = self.props.collectionID;
     self.workID = self.props.workID;
     self.on(migi.Event.DOM, function() {
       let subCmt = self.ref.subCmt;
@@ -46,10 +46,10 @@ class WorkComment extends migi.Component {
         subCmt.isCommentSending = true;
         let rootID = self.rootID;
         let parentID = self.parentID;
-        net.postJSON('/api/works/addComment', {
+        net.postJSON('/api/collection/addComment', {
           parentID: parentID,
           rootID: rootID,
-          worksID: self.worksID,
+          collectionID: self.collectionID,
           workID: self.workID,
           barrageTime: self.barrageTime,
           content,
@@ -80,7 +80,7 @@ class WorkComment extends migi.Component {
     });
   }
   @bind loading
-  @bind worksID
+  @bind collectionID
   @bind workID
   @bind rootID = -1
   @bind parentID = -1
@@ -95,7 +95,7 @@ class WorkComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID , skip, take, sortType, myComment, currentCount }, function(res) {
+    ajax = net.postJSON('/api/collection/commentList', { collectionID: self.collectionID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         currentCount = data.Size;
@@ -132,7 +132,7 @@ class WorkComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID , skip, take, sortType, myComment, currentCount }, function(res) {
+    ajax = net.postJSON('/api/collection/commentList', { collectionID: self.collectionID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         skip += take;
@@ -212,9 +212,9 @@ class WorkComment extends migi.Component {
       </div>
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <Comment ref="comment"
-               zanUrl="/api/works/likeComment"
-               subUrl="/api/works/subCommentList"
-               delUrl="/api/works/delComment"
+               zanUrl="/api/collection/likeComment"
+               subUrl="/api/collection/subCommentList"
+               delUrl="/api/collection/delComment"
                data={ this.props.commentData.data }/>
       <SubCmt ref="subCmt"
               placeholder="夸夸这个作品吧"/>

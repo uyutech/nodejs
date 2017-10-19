@@ -9,7 +9,7 @@ class Lyric extends migi.Component {
     super(...data);
   }
   render() {
-    return <div class="mod lyric">
+    return <div class="mod mod-lyric">
       <h5>{ this.props.datas.name }</h5>
       <ul class="c">
         {

@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 174);
+/******/ 	return __webpack_require__(__webpack_require__.s = 175);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 174:
+/***/ 175:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(175);
+__webpack_require__(176);
 
-var _Author = __webpack_require__(176);
+var _Author = __webpack_require__(177);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -83,14 +83,14 @@ var author = migi.preExist(migi.createCp(_Author2.default, [["uid", $CONFIG.uid]
 
 /***/ }),
 
-/***/ 175:
+/***/ 176:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 176:
+/***/ 177:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,7 +102,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(7);
+var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -110,23 +110,23 @@ var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Nav = __webpack_require__(177);
+var _Nav = __webpack_require__(178);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(180);
+var _Home = __webpack_require__(181);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Work = __webpack_require__(182);
+var _Work = __webpack_require__(183);
 
 var _Work2 = _interopRequireDefault(_Work);
 
-var _AuthorComment = __webpack_require__(183);
+var _AuthorComment = __webpack_require__(184);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
-var _SubCmt = __webpack_require__(44);
+var _SubCmt = __webpack_require__(43);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -242,7 +242,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 177:
+/***/ 178:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -254,11 +254,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(178);
+var _Profile = __webpack_require__(179);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(179);
+var _Link = __webpack_require__(180);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -299,7 +299,7 @@ migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
 
-/***/ 178:
+/***/ 179:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -311,7 +311,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(7);
+var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -500,7 +500,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 179:
+/***/ 180:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -615,7 +615,7 @@ migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
 
-/***/ 180:
+/***/ 181:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -639,7 +639,7 @@ var _HotAuthor = __webpack_require__(67);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(181);
+var _Dynamic = __webpack_require__(182);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -708,7 +708,7 @@ migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
 
-/***/ 181:
+/***/ 182:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -787,7 +787,7 @@ migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
 
-/***/ 182:
+/***/ 183:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -799,7 +799,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(7);
+var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -940,7 +940,7 @@ migi.name(Work, "Work");exports.default = Work;
 
 /***/ }),
 
-/***/ 183:
+/***/ 184:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -952,7 +952,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(7);
+var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -960,11 +960,11 @@ var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(42);
+var _Comment = __webpack_require__(41);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(43);
+var _Page = __webpack_require__(42);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -1405,7 +1405,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 42:
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1417,7 +1417,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(7);
+var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -1687,7 +1687,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 43:
+/***/ 42:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1862,7 +1862,7 @@ migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
 
-/***/ 44:
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2007,6 +2007,75 @@ var SubCmt = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by army8735 on 2017/10/6.
+ */
+
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var net = {
+  ajax: function ajax(url, data, _success, _error, type) {
+    var csrfToken = $.cookie('csrfToken');
+    function load() {
+      return $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        crossDomain: true,
+        timeout: 6000,
+        type: type || 'get',
+        headers: {
+          'x-csrf-token': csrfToken
+        },
+        // ajax 跨域设置必须加上
+        beforeSend: function beforeSend(xhr) {
+          xhr.withCredentials = true;
+        },
+        success: function success(data, state, xhr) {
+          _success(data, state, xhr);
+        },
+        error: function error(data) {
+          if (!_error.__hasExec) {
+            _error.__hasExec = true;
+            _error(data || {});
+          }
+        }
+      });
+    }
+    return load();
+  },
+  getJSON: function getJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function () {};
+    return net.ajax(url, data, success, error);
+  },
+  postJSON: function postJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function () {};
+    return net.ajax(url, data, success, error, 'post');
+  }
+};
+
+exports.default = net;
 
 /***/ }),
 
@@ -2607,75 +2676,6 @@ var PlayList = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(PlayList, "PlayList");exports.default = PlayList;
-
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Created by army8735 on 2017/10/6.
- */
-
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var net = {
-  ajax: function ajax(url, data, _success, _error, type) {
-    var csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function beforeSend(xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function success(data, state, xhr) {
-          _success(data, state, xhr);
-        },
-        error: function error(data) {
-          if (!_error.__hasExec) {
-            _error.__hasExec = true;
-            _error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function getJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function postJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error, 'post');
-  }
-};
-
-exports.default = net;
 
 /***/ })
 

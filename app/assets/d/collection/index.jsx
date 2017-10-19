@@ -8,4 +8,8 @@ import './index.less';
 
 import Collection from './Collection.jsx';
 
-let collection = migi.preExist(<Collection/>);
+let collection = migi.preExist(<Collection
+  isLogin={ $CONFIG.isLogin }
+  collectionID={ $CONFIG.collectionID }
+  collectionDetail={ $CONFIG.collectionDetail }
+  commentData={ $CONFIG.commentData }/>);

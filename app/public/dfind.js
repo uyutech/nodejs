@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 148);
+/******/ 	return __webpack_require__(__webpack_require__.s = 149);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 148:
+/***/ 149:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(149);
+__webpack_require__(150);
 
-var _Find = __webpack_require__(150);
+var _Find = __webpack_require__(151);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -83,14 +83,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 149:
+/***/ 150:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 150:
+/***/ 151:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,7 +102,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(7);
+var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -110,7 +110,7 @@ var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(151);
+var _Banner = __webpack_require__(152);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -126,7 +126,7 @@ var _HotAuthor = __webpack_require__(67);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _HotAlubm = __webpack_require__(152);
+var _HotAlubm = __webpack_require__(153);
 
 var _HotAlubm2 = _interopRequireDefault(_HotAlubm);
 
@@ -242,7 +242,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 151:
+/***/ 152:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -350,7 +350,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 152:
+/***/ 153:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -626,6 +626,75 @@ exports.default = {
   code2Data: code2Data,
   label2Code: label2Code
 };
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by army8735 on 2017/10/6.
+ */
+
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var net = {
+  ajax: function ajax(url, data, _success, _error, type) {
+    var csrfToken = $.cookie('csrfToken');
+    function load() {
+      return $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        crossDomain: true,
+        timeout: 6000,
+        type: type || 'get',
+        headers: {
+          'x-csrf-token': csrfToken
+        },
+        // ajax 跨域设置必须加上
+        beforeSend: function beforeSend(xhr) {
+          xhr.withCredentials = true;
+        },
+        success: function success(data, state, xhr) {
+          _success(data, state, xhr);
+        },
+        error: function error(data) {
+          if (!_error.__hasExec) {
+            _error.__hasExec = true;
+            _error(data || {});
+          }
+        }
+      });
+    }
+    return load();
+  },
+  getJSON: function getJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function () {};
+    return net.ajax(url, data, success, error);
+  },
+  postJSON: function postJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function () {};
+    return net.ajax(url, data, success, error, 'post');
+  }
+};
+
+exports.default = net;
 
 /***/ }),
 
@@ -1226,75 +1295,6 @@ var PlayList = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(PlayList, "PlayList");exports.default = PlayList;
-
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Created by army8735 on 2017/10/6.
- */
-
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var net = {
-  ajax: function ajax(url, data, _success, _error, type) {
-    var csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function beforeSend(xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function success(data, state, xhr) {
-          _success(data, state, xhr);
-        },
-        error: function error(data) {
-          if (!_error.__hasExec) {
-            _error.__hasExec = true;
-            _error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function getJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function postJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error, 'post');
-  }
-};
-
-exports.default = net;
 
 /***/ })
 

@@ -106,7 +106,7 @@ class Works extends migi.Component {
     if(unknowList.length) {
       authorTypeList.push(unknowList);
     }
-    self.authorList = authorTypeList;
+    self.authorList = authorTypeList;console.log(authorTypeList)
 
     workList.forEach(function(item) {
       if(item.bigType === 'audio') {

@@ -7,7 +7,16 @@
 import Collection from '../../assets/d/collection/Collection.jsx';
 
 export default function(data) {
-  let collection = migi.preRender(<Collection/>);
+  let isLogin = !!data.ctx.session.uid;
+  let collectionID = data.collectionID;
+  let collectionDetail = data.collectionDetail;
+  let commentData = data.commentData;console.log(collectionDetail)
+
+  let collection = migi.preRender(<Collection
+    isLogin={ isLogin }
+    collectionID={ collectionID }
+    collectionDetail={ collectionDetail }
+    commentData={ commentData }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -21,6 +30,9 @@ export default function(data) {
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
+  $CONFIG.collectionID = ${JSON.stringify(collectionID)};
+  $CONFIG.collectionDetail = ${JSON.stringify(collectionDetail)};
+  $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dcollection.js')}"></script>

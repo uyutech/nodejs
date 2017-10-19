@@ -29,7 +29,7 @@ class Title extends migi.Component {
   }
   render() {
     let hasCover = this.props.detail.cover_Pic;
-    return <div class={ 'title mod-title' + (hasCover ? '' : ' no-cover') }>
+    return <div class={ 'mod mod-title' + (hasCover ? '' : ' no-cover') }>
       {
         hasCover
           ? <div class="pic">

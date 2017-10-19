@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 112);
+/******/ 	return __webpack_require__(__webpack_require__.s = 113);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 112:
+/***/ 113:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(113);
+__webpack_require__(114);
 
-var _Works = __webpack_require__(114);
+var _Works = __webpack_require__(115);
 
 var _Works2 = _interopRequireDefault(_Works);
 
@@ -83,14 +83,14 @@ var works = migi.preExist(migi.createCp(_Works2.default, [["worksID", $CONFIG.wo
 
 /***/ }),
 
-/***/ 113:
+/***/ 114:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 114:
+/***/ 115:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,19 +102,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Media = __webpack_require__(115);
+var _Media = __webpack_require__(116);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _Intro = __webpack_require__(121);
+var _Intro = __webpack_require__(122);
 
 var _Intro2 = _interopRequireDefault(_Intro);
 
-var _WorkComment = __webpack_require__(122);
+var _WorkComment = __webpack_require__(123);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
@@ -360,7 +360,7 @@ migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
 
-/***/ 115:
+/***/ 116:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -372,7 +372,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -380,19 +380,19 @@ var _net = __webpack_require__(17);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Author = __webpack_require__(116);
+var _Author = __webpack_require__(117);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Audio = __webpack_require__(117);
+var _Audio = __webpack_require__(118);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(119);
+var _Video = __webpack_require__(120);
 
 var _Video2 = _interopRequireDefault(_Video);
 
-var _itemTemplate = __webpack_require__(120);
+var _itemTemplate = __webpack_require__(121);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
@@ -722,7 +722,7 @@ migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
 
-/***/ 116:
+/***/ 117:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -816,7 +816,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 117:
+/***/ 118:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -828,7 +828,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -836,7 +836,7 @@ var _net = __webpack_require__(17);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _LyricsParser = __webpack_require__(118);
+var _LyricsParser = __webpack_require__(119);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -1185,7 +1185,7 @@ migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
 
-/***/ 118:
+/***/ 119:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1222,7 +1222,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 119:
+/***/ 120:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1234,7 +1234,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -1541,7 +1541,7 @@ migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
 
-/***/ 120:
+/***/ 121:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1576,7 +1576,7 @@ exports.default = function (workType) {
 
 /***/ }),
 
-/***/ 121:
+/***/ 122:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1655,7 +1655,7 @@ migi.name(Intro, "Intro");exports.default = Intro;
 
 /***/ }),
 
-/***/ 122:
+/***/ 123:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1671,7 +1671,7 @@ var _net = __webpack_require__(17);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -2111,42 +2111,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ 5:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army on 2017/5/20.
- */
-
-var util = {
-  isIPhone: function isIPhone() {
-    return navigator.appVersion.match(/iphone/gi);
-  },
-  goto: function goto(url) {
-    location.href = url;
-  },
-  img150_150: function img150_150(url) {
-    return url ? url + '-150_150' : url;
-  },
-  img100_100: function img100_100(url) {
-    return url ? url + '-100_100' : url;
-  },
-  img90_90: function img90_90(url) {
-    return url ? url + '-90_90' : url;
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-exports.default = util;
-
-/***/ }),
-
 /***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2163,7 +2127,7 @@ var _net = __webpack_require__(17);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(5);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -2448,6 +2412,42 @@ var Comment = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Comment, "Comment");exports.default = Comment;
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army on 2017/5/20.
+ */
+
+var util = {
+  isIPhone: function isIPhone() {
+    return navigator.appVersion.match(/iphone/gi);
+  },
+  goto: function goto(url) {
+    location.href = url;
+  },
+  img150_150: function img150_150(url) {
+    return url ? url + '-150_150' : url;
+  },
+  img100_100: function img100_100(url) {
+    return url ? url + '-100_100' : url;
+  },
+  img90_90: function img90_90(url) {
+    return url ? url + '-90_90' : url;
+  },
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+};
+
+exports.default = util;
 
 /***/ })
 

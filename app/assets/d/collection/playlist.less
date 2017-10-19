@@ -1,0 +1,80 @@
+/**
+ * Created by army8735 on 2017/10/19.
+ */
+
+.mod.mod-playlist{
+  position:relative;
+  border-top-right-radius:0.1rem;
+  .type{
+    padding:0 0.1rem;
+    height:0.35rem;
+    background:@mainColor;
+    border-top-right-radius:0.1rem;
+    li{
+      float:right;
+      margin-top:0.07rem;
+      padding:0 0.1rem 0 0.3rem;
+      height:0.22rem;
+      line-height:0.22rem;
+      color:@thirdTextColor;
+      background-position:0.08rem center;
+      background-repeat:no-repeat;
+      border-radius:0.2rem;
+      cursor:pointer;
+      &:hover{
+        text-decoration:underline;
+      }
+      &.cur{
+        background-color:@secondColor;
+        cursor:default;
+        &:hover{
+          text-decoration:none;
+        }
+      }
+      &.music{
+        background-image:url(music.png);
+        background-size:0.14rem auto;
+      }
+      &.audio{
+        background-image:url(audio.png);
+        background-size:0.14rem auto;
+      }
+      &.video{
+        padding-left:0.2rem;
+        background-image:url(video.png);
+        background-size:0.07rem auto;
+      }
+    }
+  }
+  .list{
+    li{
+      position:relative;
+      padding:0 0.2rem;
+      height:0.46rem;
+      line-height:0.46rem;
+      cursor:pointer;
+      small{
+        margin-right:0.1rem;
+        color:#919191;
+        font-size:0.12rem;
+      }
+      .name{
+        font-size:0.14rem;
+      }
+      .icon{
+        position:absolute;
+        top:0.14rem;
+        right:0.1rem;
+        display:block;
+        width:0.18rem;
+        height:0.18rem;
+        background:url(icon.png) no-repeat center;
+        background-size:contain;
+      }
+      &.cur{
+        background:#EDF3F7;
+        cursor:default;
+      }
+    }
+  }
+}

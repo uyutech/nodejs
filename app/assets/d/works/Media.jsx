@@ -49,7 +49,7 @@ class Media extends migi.Component {
     }
   }
   render() {
-    return <div class="mod-media" style={ `background-image:url(${this.props.cover})` }>
+    return <div class="mod mod-media" style={ `background-image:url(${this.props.cover})` }>
       {
         this.props.audioData
           ? <Audio ref="audio" cover={ this.props.cover } datas={ this.props.audioData } show={ this.props.first === 'audio' }/>

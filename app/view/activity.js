@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 96);
+/******/ 	return __webpack_require__(__webpack_require__.s = 97);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -161,6 +161,74 @@ let util = {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (util);
+
+
+/***/ }),
+
+/***/ 1:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army8735 on 2017/10/6.
+ */
+
+
+
+let net = {
+  ajax: function(url, data, success, error, type) {
+    let csrfToken = $.cookie('csrfToken');
+    function load() {
+      return $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        crossDomain: true,
+        timeout: 6000,
+        type: type || 'get',
+        headers: {
+          'x-csrf-token': csrfToken,
+        },
+        // ajax 跨域设置必须加上
+        beforeSend: function (xhr) {
+          xhr.withCredentials = true;
+        },
+        success: function (data, state, xhr) {
+          success(data, state, xhr);
+        },
+        error: function (data) {
+          if(!error.__hasExec) {
+            error.__hasExec = true;
+            error(data || {});
+          }
+        }
+      });
+    }
+    return load();
+  },
+  getJSON: function(url, data, success, error) {
+    if(typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function() {};
+    return net.ajax(url, data, success, error);
+  },
+  postJSON: function(url, data, success, error) {
+    if(typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function() {};
+    return net.ajax(url, data, success, error, 'post');
+  },
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (net);
 
 
 /***/ }),
@@ -392,74 +460,6 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/10/6.
- */
-
-
-
-let net = {
-  ajax: function(url, data, success, error, type) {
-    let csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken,
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function (xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function (data, state, xhr) {
-          success(data, state, xhr);
-        },
-        error: function (data) {
-          if(!error.__hasExec) {
-            error.__hasExec = true;
-            error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function(url, data, success, error) {
-    if(typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function() {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function(url, data, success, error) {
-    if(typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function() {};
-    return net.ajax(url, data, success, error, 'post');
-  },
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (net);
-
-
-/***/ }),
-
 /***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -472,7 +472,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(2);
+var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -917,7 +917,7 @@ migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
 
-/***/ 96:
+/***/ 97:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -948,7 +948,7 @@ var _TopNav = __webpack_require__(18);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _Activity = __webpack_require__(97);
+var _Activity = __webpack_require__(98);
 
 var _Activity2 = _interopRequireDefault(_Activity);
 
@@ -958,7 +958,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 97:
+/***/ 98:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -970,7 +970,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ActivityComment = __webpack_require__(98);
+var _ActivityComment = __webpack_require__(99);
 
 var _ActivityComment2 = _interopRequireDefault(_ActivityComment);
 
@@ -1011,7 +1011,7 @@ migi.name(Activity, "Activity");exports.default = Activity;
 
 /***/ }),
 
-/***/ 98:
+/***/ 99:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1023,7 +1023,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(2);
+var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
