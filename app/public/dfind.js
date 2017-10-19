@@ -435,6 +435,12 @@ var util = {
     }
     return (url || '').replace(/^https?:\/\//i, '//');
   },
+  img: function img(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
   img192_192: function img192_192(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;

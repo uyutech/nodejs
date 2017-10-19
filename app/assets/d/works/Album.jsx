@@ -10,6 +10,8 @@ import util from '../common/util';
 let skip = 0;
 let take = 12;
 let sortType = 0;
+let list = [];
+let index = 0;
 
 class Album extends migi.Component {
   constructor(...data) {
@@ -79,6 +81,13 @@ class Album extends migi.Component {
           alert(res.message || util.ERROR_MESSAGE);
           $b.removeClass('loading');
         });
+      });
+      $c.on('click', 'li', function(e) {
+        let $li = $(this);
+        if(e.target.nodeName === 'LI' || e.target.nodeName === 'IMG') {
+          let index = $li.attr('rel');
+          migi.eventBus.emit('choosePic', list, index);
+        }
       });
     });
   }
@@ -181,15 +190,16 @@ class Album extends migi.Component {
     });
   }
   genItem(data) {
+    list.push(data);
     if(data.Width <= 144) {
-      return <li>
+      return <li rel={ index++ }>
         <img src={ util.autoSsl(util.img144_(data.FileUrl)) } height={ data.Height }/>
         <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
         <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>
       </li>;
     }
     let height = data.Height * 144 / data.Width;
-    return <li>
+    return <li rel={ index++ }>
       <img src={ util.autoSsl(util.img144_(data.FileUrl)) } height={ height }/>
       <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
       <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>

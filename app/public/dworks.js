@@ -158,6 +158,10 @@ var _AddLabelPanel = __webpack_require__(170);
 
 var _AddLabelPanel2 = _interopRequireDefault(_AddLabelPanel);
 
+var _ImageView = __webpack_require__(526);
+
+var _ImageView2 = _interopRequireDefault(_ImageView);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -267,7 +271,7 @@ var Works = function (_migi$Component) {
       if (unknowList.length) {
         authorTypeList.push(unknowList);
       }
-      self.authorList = authorTypeList;console.log(authorTypeList);
+      self.authorList = authorTypeList;
 
       workList.forEach(function (item) {
         if (item.bigType === 'audio') {
@@ -317,7 +321,7 @@ var Works = function (_migi$Component) {
           return this.worksID;
         })], ["workID", this.workID], ["commentData", this.props.commentData]])]), migi.createCp(_AddLabelPanel2.default, [["ref", "addLabelPanel"], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
-        })]])]);
+        })]]), migi.createCp(_ImageView2.default, [["ref", "imageView"]])]);
       }
       return migi.createVd("div", [["class", new migi.Obj("worksType", this, function () {
         return 'works fn-clear t' + self.worksType;
@@ -2407,6 +2411,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var skip = 0;
 var take = 12;
 var sortType = 0;
+var list = [];
+var index = 0;
 
 var Album = function (_migi$Component) {
   _inherits(Album, _migi$Component);
@@ -2481,6 +2487,13 @@ var Album = function (_migi$Component) {
           alert(res.message || _util2.default.ERROR_MESSAGE);
           $b.removeClass('loading');
         });
+      });
+      $c.on('click', 'li', function (e) {
+        var $li = $(this);
+        if (e.target.nodeName === 'LI' || e.target.nodeName === 'IMG') {
+          var _index = $li.attr('rel');
+          migi.eventBus.emit('choosePic', list, _index);
+        }
       });
     });
     return _this;
@@ -2589,11 +2602,12 @@ var Album = function (_migi$Component) {
   }, {
     key: 'genItem',
     value: function genItem(data) {
+      list.push(data);
       if (data.Width <= 144) {
-        return migi.createVd("li", [], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl))], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+        return migi.createVd("li", [["rel", index++]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl))], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
       }
       var height = data.Height * 144 / data.Width;
-      return migi.createVd("li", [], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl))], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+      return migi.createVd("li", [["rel", index++]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl))], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
     }
   }, {
     key: 'loadImgSize',
@@ -2856,6 +2870,12 @@ var util = {
       return url;
     }
     return (url || '').replace(/^https?:\/\//i, '//');
+  },
+  img: function img(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
   img192_192: function img192_192(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -3722,6 +3742,138 @@ var net = {
 };
 
 exports.default = net;
+
+/***/ }),
+
+/***/ 526:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _util = __webpack_require__(2);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var list = [];
+var index = 0;
+
+var ImageView = function (_migi$Component) {
+  _inherits(ImageView, _migi$Component);
+
+  function ImageView() {
+    var _ref;
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    _classCallCheck(this, ImageView);
+
+    var _this = _possibleConstructorReturn(this, (_ref = ImageView.__proto__ || Object.getPrototypeOf(ImageView)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var $window = $(window);
+      migi.eventBus.on('choosePic', function (l, i) {
+        self.show();
+        self.top = $window.scrollTop();
+        list = l;
+        index = i;
+        var data = list[index];
+        self.url = data.FileUrl;
+        self.width = data.Width;
+      });
+    });
+    return _this;
+  }
+
+  _createClass(ImageView, [{
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'clickPrev',
+    value: function clickPrev() {
+      if (index) {
+        var self = this;
+        self.url = list[--index].FileUrl;
+      }
+    }
+  }, {
+    key: 'clickNext',
+    value: function clickNext() {
+      if (index < list.length - 1) {
+        var self = this;
+        self.url = list[++index].FileUrl;
+      }
+    }
+  }, {
+    key: 'clickClose',
+    value: function clickClose() {
+      this.hide();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "image-view fn-hide"]], [migi.createVd("div", [["class", "c"], ["style", new migi.Obj("top", this, function () {
+        return 'top:' + this.top + 'px';
+      })]], [migi.createVd("img", [["src", new migi.Obj("url", this, function () {
+        return this.url || '//zhuanquan.xin/img/blank.png';
+      })], ["style", new migi.Obj("width", this, function () {
+        return 'width:' + this.width + 'px';
+      })]])]), migi.createVd("b", [["class", "prev"], ["onClick", new migi.Cb(this, this.clickPrev)]]), migi.createVd("b", [["class", "next"], ["onClick", new migi.Cb(this, this.clickNext)]]), migi.createVd("b", [["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])]);
+    }
+  }, {
+    key: 'top',
+    set: function set(v) {
+      this.__setBind("top", v);this.__data("top");
+    },
+    get: function get() {
+      if (this.__initBind("top")) this.__setBind("top", 0);return this.__getBind("top");
+    }
+  }, {
+    key: 'url',
+    set: function set(v) {
+      this.__setBind("url", v);this.__data("url");
+    },
+    get: function get() {
+      return this.__getBind("url");
+    }
+  }, {
+    key: 'width',
+    set: function set(v) {
+      this.__setBind("width", v);this.__data("width");
+    },
+    get: function get() {
+      if (this.__initBind("width")) this.__setBind("width", 1);return this.__getBind("width");
+    }
+  }]);
+
+  return ImageView;
+}(migi.Component);
+
+migi.name(ImageView, "ImageView");exports.default = ImageView;
 
 /***/ }),
 

@@ -16,6 +16,7 @@ import InspComment from './InspComment.jsx';
 import WorkComment from './WorkComment.jsx';
 import Album from './Album.jsx';
 import AddLabelPanel from './AddLabelPanel.jsx';
+import ImageView from './ImageView.jsx';
 
 let first;
 
@@ -106,7 +107,7 @@ class Works extends migi.Component {
     if(unknowList.length) {
       authorTypeList.push(unknowList);
     }
-    self.authorList = authorTypeList;console.log(authorTypeList)
+    self.authorList = authorTypeList;
 
     workList.forEach(function(item) {
       if(item.bigType === 'audio') {
@@ -182,6 +183,7 @@ class Works extends migi.Component {
                        commentData={ this.props.commentData }/>
         </div>
         <AddLabelPanel ref="addLabelPanel" worksID={ this.worksID }/>
+        <ImageView ref="imageView"/>
       </div>;
     }
     return <div class={ 'works fn-clear t' + self.worksType }>

@@ -12,6 +12,12 @@ let util = {
     }
     return (url || '').replace(/^https?:\/\//i, '//');
   },
+  img: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
   img192_192: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;

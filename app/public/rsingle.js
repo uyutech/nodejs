@@ -3240,7 +3240,7 @@ exports.default = function (workType) {
           return weight.indexOf(a.WorksAuthorType) > weight.indexOf(b.WorksAuthorType);
         }
       };
-    case 2111:
+    case 2110:
       return {
         bigType: 'video'
       };
