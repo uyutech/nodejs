@@ -12,9 +12,6 @@ let topNav = migi.preExist(<TopNav userInfo={ $CONFIG.userInfo }/>);
 
 let cIframe;
 
-window.setTop = function(top) {
-  // topNav.setTop(top);
-};
 window.setHash = function(hash) {
   location.hash = hash;
 };
@@ -26,6 +23,12 @@ window.setWidth = function(width) {
   if(diff > 0) {
     topNav.setMarginRight(diff);
   }
+};
+window.upZIndex = function() {
+  $(cIframe.element).addClass('up');
+};
+window.downZIndex = function() {
+  $(cIframe.element).removeClass('up');
 };
 
 function iframeGoto(hash) {

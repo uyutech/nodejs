@@ -4,11 +4,44 @@
 
 'use strict';
 
+function setTranform($elem, n) {
+  $elem.css('-moz-transform', `scaleY(${n})`);
+  $elem.css('-webkit-transform', `scaleY(${n})`);
+  $elem.css('transform', `scaleY(${n})`);
+}
+
+let isPlaying;
+
 class PlayList extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
     self.list = self.props.workList;
+    self.on(migi.Event.DOM, function() {
+      let $l1 = $(self.element).find('.l1');
+      let $l2 = $(self.element).find('.l2');
+      let $l3 = $(self.element).find('.l3');
+      setInterval(function() {
+        if(!isPlaying) {
+          setTranform($l1, 0.1);
+          setTranform($l2, 0.1);
+          setTranform($l3, 0.1);
+          return;
+        }
+        let n1 = Math.random();
+        let n2 = Math.random();
+        let n3 = Math.random();
+        setTranform($l1, n1);
+        setTranform($l2, n2);
+        setTranform($l3, n3);
+      }, 100);
+    });
+    migi.eventBus.on('play', function() {
+      isPlaying = true;
+    });
+    migi.eventBus.on('pause', function() {
+      isPlaying = false;
+    });
   }
   @bind list
   clickType() {}
@@ -35,7 +68,7 @@ class PlayList extends migi.Component {
             return <li class={ i ? '' : 'cur' } rel={ i }>
               <small>{ i + 1 }.</small>
               <span class="name">{ item.ItemName }</span>
-              <span class="icon"><b/></span>
+              <span class="icon"><b class="l1"/><b class="l2"/><b class="l3"/></span>
             </li>;
           })
         }

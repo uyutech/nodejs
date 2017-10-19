@@ -80,7 +80,6 @@ class Player extends migi.Component {
     $(this.element).addClass('fn-hide');
   }
   setItem(item) {
-    console.log(item);
     let self = this;
     self.item = item;
     self.type = item.ItemType;
@@ -179,11 +178,13 @@ class Player extends migi.Component {
     this.av && this.av.element.play();
     this.isPlaying = true;
     this.hasStart = true;
+    migi.eventBus.emit('play');
     return this;
   }
   pause() {
     this.av && this.av.element.pause();
     this.isPlaying = false;
+    migi.eventBus.emit('pause');
     return this;
   }
   altLyrics() {

@@ -25,6 +25,10 @@ class Title extends migi.Component {
   @bind tags
   @bind popular
   clickAdd() {
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
     migi.eventBus.emit('add-label');
   }
   render() {

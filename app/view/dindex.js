@@ -99,13 +99,6 @@ var TopNav = function (_migi$Component) {
   }
 
   _createClass(TopNav, [{
-    key: 'setTop',
-    value: function setTop(top) {
-      top = Math.min(top, 72);
-      $(this.element).css('-webkit-transform', 'translateY(' + -top + 'px)');
-      $(this.element).css('transform', 'translateY(' + -top + 'px)');
-    }
-  }, {
     key: 'setMarginRight',
     value: function setMarginRight(right) {
       $(this.element).css('margin-right', right);

@@ -6,11 +6,6 @@ class TopNav extends migi.Component {
   constructor(...data) {
     super(...data);
   }
-  setTop(top) {
-    top = Math.min(top, 72);
-    $(this.element).css('-webkit-transform', `translateY(${-top}px)`);
-    $(this.element).css('transform', `translateY(${-top}px)`);
-  }
   setMarginRight(right) {
     $(this.element).css('margin-right', right);
   }

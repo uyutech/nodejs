@@ -799,6 +799,17 @@ body {
   background: #CCC;
   cursor: default;
 }
+.add-label > .c .close {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  display: block;
+  width: 0.24rem;
+  height: 0.24rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAElBMVEUAAABOj7FVkrZRl7lOj7FOjrCMRI95AAAABXRSTlMA1BUWxPEh+poAAAB7SURBVDjL5dLBDYAgEERRo1ag8S4dQAe2QP/NmJAf5vBLYE87gXeYZLe15+w14Xi+ue/PnYfW34TSa8DFBhEIMYAEiABMACYAE4AJwARgAjAxoPTo4mmd+gJXEaH0bkJpE0pDBCAGEINBUjJ5EH4ohiSZEExO9nmiS88PPG4VQ42RQYgAAAAASUVORK5CYII=) no-repeat center;
+  background-size: contain;
+  cursor: pointer;
+}
 /**
  * Created by army8735 on 2017/10/18.
  */
@@ -1660,6 +1671,11 @@ body {
   width: 100%;
   height: 100%;
   cursor: pointer;
+  opacity: 0.75;
+}
+.mod.mod-media .audio .c.playing video,
+.mod.mod-media .video .c.playing video {
+  opacity: 1;
 }
 .mod.mod-media .video h3 {
   background: rgba(255, 255, 255, 0.7);

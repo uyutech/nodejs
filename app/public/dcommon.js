@@ -17616,13 +17616,6 @@ if (parent !== window) {
       }
     };
 
-    window.addEventListener('scroll', function () {
-      var top = document.body.scrollTop || document.documentElement.scrollTop;
-      parent.setTop && parent.setTop(top);
-    });
-    var top = document.body.scrollTop || document.documentElement.scrollTop;
-    parent.setTop && parent.setTop(top);
-
     document.body.addEventListener('click', function (e) {
       if (findA(e.target)) {
         e.preventDefault();

@@ -1433,9 +1433,9 @@ var Video = function (_migi$Component) {
         return this.datas[this.index].ItemName;
       })]), migi.createVd("div", [["class", "num"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].PlayHis || 0;
-      })])]), migi.createVd("div", [["class", "c"], ["ref", "c"], ["style", new migi.Obj("isPlaying", this, function () {
-        return this.isPlaying ? '' : 'opacity:0.75';
-      })]], [migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
+      })])]), migi.createVd("div", [["class", new migi.Obj("isPlaying", this, function () {
+        return 'c' + (this.isPlaying ? ' playing' : '');
+      })], ["ref", "c"]], [migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
         return 'start' + (this.isPlaying ? ' fn-hide' : '');
       })], ["onClick", new migi.Cb(this, this.clickStart)]])]), migi.createVd("div", [["class", "fn fn-hidden"], ["ref", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("b", [["class", "full"], ["onClick", new migi.Cb(this, this.clickScreen)]]), migi.createVd("div", [["class", "volume"], ["ref", "volume"], ["onClick", new migi.Cb(this, this.clickVolume)]], [migi.createVd("b", [["class", new migi.Obj("muted", this, function () {
         return 'icon' + (this.muted ? ' muted' : '');
@@ -2821,7 +2821,7 @@ var AddLabelPanel = function (_migi$Component) {
         });
       })]), migi.createVd("b", [["class", "line"]]), migi.createVd("label", [["class", "l2"]], ["已选标签"]), migi.createVd("ul", [["class", "has fn-clear"], ["ref", "has"]]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
         return this.dis ? 'dis' : '';
-      })], ["onClick", new migi.Cb(this, this.clickOK)]], ["选好啦！"])])]);
+      })], ["onClick", new migi.Cb(this, this.clickOK)]], ["选好啦！"]), migi.createVd("b", [["class", "close"], ["onClick", new migi.Cb(this, this.hide)]])])]);
     }
   }, {
     key: 'list',
@@ -3791,7 +3791,7 @@ var ImageView = function (_migi$Component) {
       var $window = $(window);
       migi.eventBus.on('choosePic', function (l, i) {
         self.show();
-        self.top = $window.scrollTop();
+        self.top = $window.scrollTop() + 40;
         list = l;
         index = i;
         var data = list[index];
@@ -3806,11 +3806,19 @@ var ImageView = function (_migi$Component) {
     key: 'show',
     value: function show() {
       $(this.element).removeClass('fn-hide');
+      var parent = window.parent;
+      if (parent !== window && parent.upZIndex) {
+        parent.upZIndex();
+      }
     }
   }, {
     key: 'hide',
     value: function hide() {
       $(this.element).addClass('fn-hide');
+      var parent = window.parent;
+      if (parent !== window && parent.downZIndex) {
+        parent.downZIndex();
+      }
     }
   }, {
     key: 'clickPrev',
@@ -3932,6 +3940,10 @@ var Title = function (_migi$Component) {
   _createClass(Title, [{
     key: 'clickAdd',
     value: function clickAdd() {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
       migi.eventBus.emit('add-label');
     }
   }, {

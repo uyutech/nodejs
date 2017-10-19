@@ -17,7 +17,7 @@ class ImageView extends migi.Component {
       let $window = $(window);
       migi.eventBus.on('choosePic', function(l, i) {
         self.show();
-        self.top = $window.scrollTop();
+        self.top = $window.scrollTop() + 40;
         list = l;
         index = i;
         let data = list[index];
@@ -31,9 +31,17 @@ class ImageView extends migi.Component {
   @bind width = 1
   show() {
     $(this.element).removeClass('fn-hide');
+    let parent = window.parent;
+    if(parent !== window && parent.upZIndex) {
+      parent.upZIndex();
+    }
   }
   hide() {
     $(this.element).addClass('fn-hide');
+    let parent = window.parent;
+    if(parent !== window && parent.downZIndex) {
+      parent.downZIndex();
+    }
   }
   clickPrev() {
     if(index) {

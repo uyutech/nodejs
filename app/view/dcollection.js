@@ -556,6 +556,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function setTranform($elem, n) {
+  $elem.css('-moz-transform', 'scaleY(' + n + ')');
+  $elem.css('-webkit-transform', 'scaleY(' + n + ')');
+  $elem.css('transform', 'scaleY(' + n + ')');
+}
+
+var isPlaying = void 0;
+
 var PlayList = function (_migi$Component) {
   _inherits(PlayList, _migi$Component);
 
@@ -572,14 +580,39 @@ var PlayList = function (_migi$Component) {
 
     var self = _this;
     self.list = self.props.workList;
+    self.on(migi.Event.DOM, function () {
+      var $l1 = $(self.element).find('.l1');
+      var $l2 = $(self.element).find('.l2');
+      var $l3 = $(self.element).find('.l3');
+      setInterval(function () {
+        if (!isPlaying) {
+          setTranform($l1, 0.1);
+          setTranform($l2, 0.1);
+          setTranform($l3, 0.1);
+          return;
+        }
+        var n1 = Math.random();
+        var n2 = Math.random();
+        var n3 = Math.random();
+        setTranform($l1, n1);
+        setTranform($l2, n2);
+        setTranform($l3, n3);
+      }, 100);
+    });
+    migi.eventBus.on('play', function () {
+      isPlaying = true;
+    });
+    migi.eventBus.on('pause', function () {
+      isPlaying = false;
+    });
     return _this;
   }
 
   _createClass(PlayList, [{
-    key: "clickType",
+    key: 'clickType',
     value: function clickType() {}
   }, {
-    key: "clickItem",
+    key: 'clickItem',
     value: function clickItem(e, vd, tvd) {
       var $li = $(tvd.element);
       if (!$li.hasClass('cur')) {
@@ -591,16 +624,16 @@ var PlayList = function (_migi$Component) {
       }
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "mod mod-playlist"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", new migi.Cb(this, this.clickType)]], [migi.createVd("li", [["class", "video"]], ["播放视频"]), migi.createVd("li", [["class", "audio"]], ["播放音频"]), migi.createVd("li", [["class", "music cur"]], ["播放全部"])]), migi.createVd("ol", [["class", "list"], ["ref", "list"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickItem)]]]], [new migi.Obj("list", this, function () {
         return (this.list || []).map(function (item, i) {
-          return migi.createVd("li", [["class", i ? '' : 'cur'], ["rel", i]], [migi.createVd("small", [], [i + 1, "."]), migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [])])]);
+          return migi.createVd("li", [["class", i ? '' : 'cur'], ["rel", i]], [migi.createVd("small", [], [i + 1, "."]), migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
         });
       })])]);
     }
   }, {
-    key: "list",
+    key: 'list',
     set: function set(v) {
       this.__setBind("list", v);this.__data("list");
     },
@@ -699,7 +732,6 @@ var Player = function (_migi$Component) {
   }, {
     key: 'setItem',
     value: function setItem(item) {
-      console.log(item);
       var self = this;
       self.item = item;
       self.type = item.ItemType;
@@ -792,6 +824,7 @@ var Player = function (_migi$Component) {
       this.av && this.av.element.play();
       this.isPlaying = true;
       this.hasStart = true;
+      migi.eventBus.emit('play');
       return this;
     }
   }, {
@@ -799,6 +832,7 @@ var Player = function (_migi$Component) {
     value: function pause() {
       this.av && this.av.element.pause();
       this.isPlaying = false;
+      migi.eventBus.emit('pause');
       return this;
     }
   }, {
@@ -1263,6 +1297,10 @@ var Title = function (_migi$Component) {
   _createClass(Title, [{
     key: 'clickAdd',
     value: function clickAdd() {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
       migi.eventBus.emit('add-label');
     }
   }, {
@@ -1901,7 +1939,7 @@ var AddLabelPanel = function (_migi$Component) {
         });
       })]), migi.createVd("b", [["class", "line"]]), migi.createVd("label", [["class", "l2"]], ["已选标签"]), migi.createVd("ul", [["class", "has fn-clear"], ["ref", "has"]]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
         return this.dis ? 'dis' : '';
-      })], ["onClick", new migi.Cb(this, this.clickOK)]], ["选好啦！"])])]);
+      })], ["onClick", new migi.Cb(this, this.clickOK)]], ["选好啦！"]), migi.createVd("b", [["class", "close"], ["onClick", new migi.Cb(this, this.hide)]])])]);
     }
   }, {
     key: 'list',
@@ -2041,6 +2079,12 @@ var Collection = function (_migi$Component) {
     self.collectionID = self.props.collectionID;
     self.collectionType = self.props.collectionDetail.WorkType;
     self.setWorks(self.props.collectionDetail.Works_Items);
+    self.on(migi.Event.DOM, function () {
+      var addLabel = self.ref.addLabelPanel;
+      migi.eventBus.on('add-label', function () {
+        addLabel.show();
+      });
+    });
     return _this;
   }
 
@@ -2075,7 +2119,9 @@ var Collection = function (_migi$Component) {
         return this.collectionID;
       })], ["cover", this.props.collectionDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("div", [["class", "info"]], [migi.createCp(_Describe2.default, [["data", this.props.collectionDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", [this.props.collectionDetail.Works_Author]]]), migi.createCp(_InspComment2.default, [])])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["曲目"])]), migi.createVd("div", [["class", "box"]], [migi.createCp(_PlayList2.default, [["workList", this.workList]])]), migi.createCp(_CollectionComment2.default, [["ref", "collectionComment"], ["isLogin", this.props.isLogin], ["collectionID", new migi.Obj("collectionID", this, function () {
         return this.collectionID;
-      })], ["workID", this.workID], ["commentData", this.props.commentData]])]), migi.createCp(_AddLabelPanel2.default, [["ref", "addLabelPanel"], ["worksID", this.worksID]])]);
+      })], ["workID", this.workID], ["commentData", this.props.commentData]])]), migi.createCp(_AddLabelPanel2.default, [["ref", "addLabelPanel"], ["worksID", new migi.Obj("collectionID", this, function () {
+        return this.collectionID;
+      })]])]);
     }
   }, {
     key: 'collectionID',

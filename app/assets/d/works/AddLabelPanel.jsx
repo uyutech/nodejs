@@ -106,6 +106,7 @@ class AddLabelPanel extends migi.Component {
         <label class="l2">已选标签</label>
         <ul class="has fn-clear" ref="has"/>
         <button class={ this.dis ? 'dis' : '' } onClick={ this.clickOK }>选好啦！</button>
+        <b class="close" onClick={ this.hide }/>
       </div>
     </div>;
   }

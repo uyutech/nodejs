@@ -10,13 +10,6 @@ if(parent !== window) {
     location.href = '//404.html';
   }
   else {
-    window.addEventListener('scroll', function() {
-      let top = document.body.scrollTop || document.documentElement.scrollTop;
-      parent.setTop && parent.setTop(top);
-    });
-    let top = document.body.scrollTop || document.documentElement.scrollTop;
-    parent.setTop && parent.setTop(top);
-
     function findA(node) {
       if(node && node !== document.body && node.nodeName === 'A') {
         let href = node.getAttribute('href') || '';

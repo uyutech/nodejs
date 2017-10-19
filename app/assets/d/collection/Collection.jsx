@@ -23,6 +23,12 @@ class Collection extends migi.Component {
     self.collectionID = self.props.collectionID;
     self.collectionType = self.props.collectionDetail.WorkType;
     self.setWorks(self.props.collectionDetail.Works_Items);
+    self.on(migi.Event.DOM, function() {
+      let addLabel = self.ref.addLabelPanel;
+      migi.eventBus.on('add-label', function() {
+        addLabel.show();
+      });
+    });
   }
   @bind collectionID
   @bind collectionType
@@ -87,7 +93,7 @@ class Collection extends migi.Component {
                            workID={ this.workID }
                            commentData={ this.props.commentData }/>
       </div>
-      <AddLabelPanel ref="addLabelPanel" worksID={ this.worksID }/>
+      <AddLabelPanel ref="addLabelPanel" worksID={ this.collectionID }/>
     </div>;
   }
 }

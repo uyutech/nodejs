@@ -72,6 +72,9 @@
         height:0.18rem;
         background:url(icon.png) no-repeat center;
         background-size:contain;
+        b{
+          display:none;
+        }
       }
       &:hover{
         transform:scale(1.02);
@@ -80,6 +83,28 @@
         background:#EDF3F7;
         cursor:default;
         transform:none;
+        .icon{
+          background:none;
+          b{
+            position:absolute;
+            left:0;
+            bottom:0;
+            display:block;
+            width:0.04rem;
+            height:100%;
+            background:@secondColor;
+            border-radius:2px;
+            transform:scaleY(0.1);
+            transform-origin:center bottom;
+            transition:transform 0.2s;
+            &.l2{
+              left:0.07rem;
+            }
+            &.l3{
+              left:0.14rem;
+            }
+          }
+        }
       }
     }
   }
