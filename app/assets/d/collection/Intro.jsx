@@ -8,8 +8,14 @@ class Intro extends migi.Component {
   constructor(...data) {
     super(...data);
   }
+  show() {
+    $(this.element).removeClass('fn-hide');
+  }
+  hide() {
+    $(this.element).addClass('fn-hide');
+  }
   render() {
-    return <div class="intro fn-hide"/>;
+    return <div class="intro"/>;
   }
 }
 

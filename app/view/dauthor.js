@@ -452,10 +452,9 @@ var HotWork = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var authorId = this.props.authorId;
       return migi.createVd("div", [["class", "cp-hotwork"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ["未来会根据你的口味进行精准智能的推送！>3&lt;"])]), migi.createVd("div", [["class", "fn fn-clear"]], [migi.createVd("a", [["href", "#"], ["class", "change"], ["onClick", new migi.Cb(this, this.clickChange)]], ["换一批"])]), new migi.Obj("dataList", this, function () {
         return this.dataList && this.dataList.length ? migi.createVd("ul", [["class", "list fn-clear"]], [this.dataList.map(function (item) {
-          return migi.createVd("li", [["worksID", item.WorksID]], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_144(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "ath"]], [''])]), migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "txt"]], [item.Title])]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_144(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "ath"]], [''])]), migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "txt"]], [item.Title])]);
         })]) : migi.createVd("div", [["class", "empty"]]);
       })]);
     }
@@ -548,6 +547,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -566,7 +571,13 @@ var HotCollection = function (_migi$Component) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = HotCollection.__proto__ || Object.getPrototypeOf(HotCollection)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = HotCollection.__proto__ || Object.getPrototypeOf(HotCollection)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    if (self.props.dataList) {
+      self.dataList = self.props.dataList;
+    }
+    return _this;
   }
 
   _createClass(HotCollection, [{
@@ -582,7 +593,11 @@ var HotCollection = function (_migi$Component) {
   }, {
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "cp-hotcollection"]], [migi.createVd("h4", [], [this.props.title]), migi.createVd("div", [["class", "empty"]])]);
+      return migi.createVd("div", [["class", "cp-hotcollection"]], [migi.createVd("h4", [], [this.props.title]), new migi.Obj("dataList", this, function () {
+        return this.dataList && this.dataList.length ? migi.createVd("ul", [["class", "list fn-clear"]], [this.dataList.map(function (item) {
+          return migi.createVd("li", [], [migi.createVd("b", [["class", "bg"]]), migi.createVd("a", [["href", "/collection/" + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_144(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", "/collection/" + item.WorksID], ["class", "txt"]], [item.Title])]);
+        })]) : migi.createVd("div", [["class", "empty"]]);
+      })]);
     }
   }, {
     key: "dataList",

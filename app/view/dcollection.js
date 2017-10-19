@@ -421,9 +421,19 @@ var Intro = function (_migi$Component) {
   }
 
   _createClass(Intro, [{
-    key: "render",
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "intro fn-hide"]]);
+      return migi.createVd("div", [["class", "intro"]]);
     }
   }]);
 
@@ -478,6 +488,21 @@ var Media = function (_migi$Component) {
   }
 
   _createClass(Media, [{
+    key: 'switchType',
+    value: function switchType(type) {
+      var self = this;
+      var intro = self.ref.intro;
+      var player = self.ref.player;
+      if (type === 'intro') {
+        player.hide();
+        player.pause();
+        intro.show();
+      } else if (type === 'player') {
+        intro.hide();
+        player.show();
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "mod mod-media"], ["style", 'background-image:url(' + this.props.cover + ')']], [migi.createCp(_Intro2.default, [["ref", "intro"]]), migi.createCp(_Player2.default, [["ref", "player"], ["workList", this.props.workList]])]);
@@ -777,6 +802,7 @@ var Player = function (_migi$Component) {
         self.play();
       }
       self.volume = self.volume;
+      self.currentTime = 0;
     }
   }, {
     key: 'onTimeupdate',
@@ -1034,16 +1060,14 @@ var Player = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", new migi.Obj("type", this, function () {
-        return 'player t' + this.type;
-      })]], [migi.createVd("h3", [], [new migi.Obj("name", this, function () {
+      return migi.createVd("div", [["class", 'player fn-hide']], [migi.createVd("h3", [], [new migi.Obj("name", this, function () {
         return this.name;
       })]), migi.createVd("div", [["class", "num"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj("playNum", this, function () {
         return this.playNum || 0;
-      })])]), migi.createVd("div", [["class", new migi.Obj("isPlaying", this, function () {
-        return 'c' + (this.isPlaying ? ' playing' : '');
-      })], ["ref", "c"]], [migi.createVd("div", [["class", new migi.Obj("hasStart", this, function () {
-        return 'lyrics' + (this.hasStart ? '' : ' fn-hidden');
+      })])]), migi.createVd("div", [["class", new migi.Obj(["isPlaying", "type"], this, function () {
+        return 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '');
+      })], ["ref", "c"]], [migi.createVd("div", [["class", new migi.Obj(["hasStart", "type"], this, function () {
+        return 'lyrics' + (this.hasStart || this.type === 1111 ? '' : ' fn-hidden');
       })], ["ref", "lyrics"]], [migi.createVd("div", [["class", new migi.Obj(["showLyricsMode", "formatLyrics"], this, function () {
         return 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide');
       })]], [migi.createVd("div", [["class", "c"], ["ref", "lyricsRoll"], ["style", new migi.Obj("lyricsIndex", this, function () {
@@ -1570,71 +1594,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ 64:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  workType: function(type) {
-    switch (type) {
-      case 1111:
-        return {
-          bigType: 'audio',
-          name: '原创音乐',
-        };
-      case 1113:
-        return {
-          bigType: 'audio',
-          name: '原创伴奏',
-        };
-      case 2110:
-        return {
-          bigType: 'video',
-          name: '原创视频',
-        };
-      case 3120:
-        return {
-          bigType: 'poster',
-          name: '海报',
-        };
-      case 4110:
-        return {
-          bigType: 'text',
-          name: '文案',
-        };
-      case 4211:
-        return {
-          bigType: 'lyric',
-          name: '原创歌词',
-          display: '歌词',
-        };
-      default:
-        return {};
-    }
-  },
-  authorType: [
-    [901, 902],
-    [111, 112],
-    [151],
-    [121, 122],
-    [411, 421],
-    [131, 132, 134],
-    [141],
-    [211],
-    [312, 311, 313],
-    [351],
-    [331, 332]
-  ],
-});
-
-
-/***/ }),
-
 /***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2017,10 +1976,6 @@ var _Timeline = __webpack_require__(26);
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 
-var _itemTemplate = __webpack_require__(64);
-
-var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
-
 var _Media = __webpack_require__(103);
 
 var _Media2 = _interopRequireDefault(_Media);
@@ -2113,9 +2068,20 @@ var Collection = function (_migi$Component) {
       self.workList = workList;
     }
   }, {
+    key: 'clickType',
+    value: function clickType(e, vd, tvd) {
+      var $li = $(tvd.element);
+      if (!$li.hasClass('cur')) {
+        $(vd.element).find('.cur').removeClass('cur');
+        $li.addClass('cur');
+        var type = tvd.props.rel;
+        this.ref.media.switchType(type);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "collection fn-clear"]], [migi.createCp(_Title2.default, [["ref", "title"], ["detail", this.props.collectionDetail]]), this.props.collectionDetail.WorkTimeLine && this.props.collectionDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.collectionDetail.WorkTimeLine]]) : '', migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [migi.createVd("li", [["class", "intro cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["class", "play"], ["rel", "play"]], ["播放"])]), migi.createCp(_Media2.default, [["ref", "media"], ["collectionID", new migi.Obj("collectionID", this, function () {
+      return migi.createVd("div", [["class", "collection fn-clear"]], [migi.createCp(_Title2.default, [["ref", "title"], ["detail", this.props.collectionDetail]]), this.props.collectionDetail.WorkTimeLine && this.props.collectionDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.collectionDetail.WorkTimeLine]]) : '', migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [migi.createVd("li", [["class", "intro cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["class", "play"], ["rel", "player"]], ["播放"])]), migi.createCp(_Media2.default, [["ref", "media"], ["collectionID", new migi.Obj("collectionID", this, function () {
         return this.collectionID;
       })], ["cover", this.props.collectionDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("div", [["class", "info"]], [migi.createCp(_Describe2.default, [["data", this.props.collectionDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", [this.props.collectionDetail.Works_Author]]]), migi.createCp(_InspComment2.default, [])])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["曲目"])]), migi.createVd("div", [["class", "box"]], [migi.createCp(_PlayList2.default, [["workList", this.workList]])]), migi.createCp(_CollectionComment2.default, [["ref", "collectionComment"], ["isLogin", this.props.isLogin], ["collectionID", new migi.Obj("collectionID", this, function () {
         return this.collectionID;

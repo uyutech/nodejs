@@ -19,6 +19,7 @@ export default function(data) {
     hotWorkList={ hotWorkList }
     hotAuthorList={ hotAuthorList }
     hotAlbumList={ hotAlbumList }
+    hotCollection={ hotCollection }
     tags={ tags }
     playList={ playList }
     playList2={ playList2 }/>);

@@ -140,6 +140,7 @@ class Player extends migi.Component {
       self.play();
     }
     self.volume = self.volume;
+    self.currentTime = 0;
   }
   onTimeupdate(e) {
     let self = this;
@@ -359,13 +360,13 @@ class Player extends migi.Component {
     migi.eventBus.emit('SHARE', location.href);
   }
   render() {
-    return <div class={ 'player t' + this.type }>
+    return <div class={ 'player fn-hide' }>
       <h3>{ this.name }</h3>
       <div class="num">
         <small class="play">{ this.playNum || 0 }</small>
       </div>
-      <div class={ 'c' + (this.isPlaying ? ' playing' : '') } ref="c">
-        <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
+      <div class={ 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '') } ref="c">
+        <div class={ 'lyrics' + (this.hasStart || this.type === 1111 ? '' : ' fn-hidden') } ref="lyrics">
           <div class={ 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide') }>
             <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
               {

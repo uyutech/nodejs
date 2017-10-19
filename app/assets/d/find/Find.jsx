@@ -85,7 +85,7 @@ class Find extends migi.Component {
       <Banner/>
       <div class="hot">
         <HotWork ref="hotWork" title="推荐作品" dataList={ this.props.hotWorkList }/>
-        <HotCollection ref="hotCollection" title="推荐专辑"/>
+        <HotCollection ref="hotCollection" title="推荐专辑" dataList={ this.props.hotCollection }/>
         <HotAuthor ref="hotAuthor" title="推荐作者" dataList={ this.props.hotAuthorList }/>
         <HotAlbum ref="hotAlbum" title="推荐相册" dataList={ this.props.hotAlbumList }/>
       </div>

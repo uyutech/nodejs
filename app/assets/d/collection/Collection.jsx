@@ -6,7 +6,6 @@
 
 import Title from '../works/Title.jsx';
 import Timeline from '../works/Timeline.jsx';
-import itemTemplate from '../works/itemTemplate';
 import Media from './Media.jsx';
 import Describe from './Describe.jsx';
 import Author from '../works/Author.jsx';
@@ -56,6 +55,15 @@ class Collection extends migi.Component {
     });
     self.workList = workList;
   }
+  clickType(e, vd, tvd) {
+    let $li = $(tvd.element);
+    if(!$li.hasClass('cur')) {
+      $(vd.element).find('.cur').removeClass('cur');
+      $li.addClass('cur');
+      let type = tvd.props.rel;
+      this.ref.media.switchType(type);
+    }
+  }
   render() {
     return <div class="collection fn-clear">
       <Title ref="title"
@@ -68,7 +76,7 @@ class Collection extends migi.Component {
       <div class="main">
         <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
           <li class="intro cur" rel="intro">简介</li>
-          <li class="play" rel="play">播放</li>
+          <li class="play" rel="player">播放</li>
         </ul>
         <Media ref="media"
                collectionID={ this.collectionID }

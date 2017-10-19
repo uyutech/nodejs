@@ -19,28 +19,78 @@
       opacity:0.8;
     }
   }
-  .fn{
-    position:absolute;
-    top:0.05rem;
-    right:0.2rem;
-    font-size:0.12rem;
-    color:@thirdTextColor;
-    .change{
+  .list{
+    margin-top:0.2rem;
+    margin-right:-1.44rem;
+    transform:translateX(0.4rem);
+    li{
       float:left;
       position:relative;
-      margin-left:0.2rem;
-      padding:0 0.1rem;
-      height:0.24rem;
-      line-height:0.24rem;
-      border:1px solid @thirdTextColor;
-      border-radius:0.24rem;
-      color:@thirdTextColor;
+      margin-right:0.5rem;
+      margin-bottom:0.2rem;
+      width:1.44rem;
+      padding-top:0.06rem;
+      .bg{
+        position:absolute;
+        left:0.06rem;
+        top:0;
+        right:0.06rem;
+        height:0.2rem;
+        background:#B1C0C9;
+        border-radius:0.1rem;
+        &:before{
+          position:absolute;
+          left:-0.03rem;
+          top:0.03rem;
+          right:-0.03rem;
+          height:100%;
+          background:#C2D8E4;
+          border-radius:0.1rem;
+          content:' ';
+        }
+      }
+      .pic{
+        position:relative;
+        display:block;
+        width:100%;
+        height:1.44rem;
+        background:#B1C0C9;
+        border-radius:0.1rem;
+        overflow:hidden;
+        box-shadow:@picShadow;
+        &:before{
+          position:absolute;
+          left:0;
+          top:0;
+          width:100%;
+          height:50%;
+          background:linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+          content:' ';
+        }
+        &:after{
+          position:absolute;
+          left:0;
+          bottom:0;
+          width:100%;
+          height:40%;
+          background:linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+          content:' ';
+        }
+        &:hover{
+          box-shadow:@picHoverShadow;
+        }
+      }
+      .txt{
+        display:block;
+        margin:0.05rem 0.1rem;
+        font-size:0.14rem;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
     }
   }
   .empty{
-    margin:0.2rem -0.2rem 0;
-    //transform:translateX(0.5rem);
-    //width:1.92rem;
+    margin:0.2rem -0.2rem;
     height:1.9rem;
     background:url(//zhuanquan.xin/img/bf025c27ab19456dcbdc9f769fbfa3e7.jpg) no-repeat center;
     background-size:contain;
