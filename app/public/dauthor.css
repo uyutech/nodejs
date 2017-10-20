@@ -918,6 +918,7 @@
 }
 .cp-page > * {
   display: inline-block;
+  vertical-align: middle;
 }
 .cp-page .prev,
 .cp-page .next {

@@ -311,6 +311,7 @@
 }
 .cp-page > * {
   display: inline-block;
+  vertical-align: middle;
 }
 .cp-page .prev,
 .cp-page .next {
@@ -926,6 +927,34 @@ body {
   margin: 0.1rem 0.1rem 0 0.1rem;
   text-align: right;
   font-size: 0.12rem;
+}
+.side .mod.mod-comment .cp-page .prev {
+  position: relative;
+  width: 0.2rem;
+  height: 0.2rem;
+  text-indent: 999rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.side .mod.mod-comment .cp-page .prev b {
+  margin: 0;
+  position: absolute;
+  left: 0.07rem;
+  top: 0.06rem;
+}
+.side .mod.mod-comment .cp-page .next {
+  position: relative;
+  width: 0.2rem;
+  height: 0.2rem;
+  text-indent: 999rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.side .mod.mod-comment .cp-page .next b {
+  margin: 0;
+  position: absolute;
+  left: 0.07rem;
+  top: 0.06rem;
 }
 .mod.mod-comment .cp-comment {
   margin: 0.1rem 0.1rem 0 0.1rem;
