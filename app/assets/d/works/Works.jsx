@@ -152,7 +152,7 @@ class Works extends migi.Component {
         <Title ref="title"
                detail={ this.props.worksDetail }/>
         <div class="main">
-          <Album worksID={ this.worksID }/>
+          <Album worksID={ this.worksID } labelList={ this.props.labelList }/>
         </div>
         <div class="side">
           <div class="info">

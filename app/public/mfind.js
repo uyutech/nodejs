@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 109);
+/******/ 	return __webpack_require__(__webpack_require__.s = 113);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 109:
+/***/ 113:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(110);
+__webpack_require__(114);
 
-var _Find = __webpack_require__(111);
+var _Find = __webpack_require__(115);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -83,14 +83,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 110:
+/***/ 114:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 111:
+/***/ 115:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -110,7 +110,7 @@ var _net = __webpack_require__(17);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(112);
+var _Banner = __webpack_require__(116);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -265,7 +265,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 112:
+/***/ 116:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -381,7 +381,7 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 29:
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -861,7 +861,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(29);
+var _authorTemplate = __webpack_require__(30);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 

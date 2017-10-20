@@ -110,6 +110,7 @@ module.exports = app => {
         Skip: body.skip,
         Take: body.take,
         SortType: body.sortType,
+        tagname: body.tagName,
       });
       ctx.body = res.data;
     }

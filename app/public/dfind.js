@@ -60,20 +60,128 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 149);
+/******/ 	return __webpack_require__(__webpack_require__.s = 153);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 149:
+/***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(150);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army on 2017/5/20.
+ */
 
-var _Find = __webpack_require__(151);
+var util = {
+  goto: function goto(url) {
+    location.href = url;
+  },
+  autoSsl: function autoSsl(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return (url || '').replace(/^https?:\/\//i, '//');
+  },
+  img: function img(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
+  img192_192: function img192_192(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-192_192' : url;
+  },
+  img144_: function img144_(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_' : url;
+  },
+  img144_144: function img144_144(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_144' : url;
+  },
+  img100_100: function img100_100(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-100_100' : url;
+  },
+  formatTime: function formatTime(time) {
+    if (!time) {
+      return '00:00';
+    }
+    var res = '';
+    if (time >= 1000 * 60 * 60) {
+      var hour = Math.floor(time / (1000 * 60 * 60));
+      time -= 1000 * 60 * 60 * hour;
+      res += hour + ':';
+    }
+    if (time >= 1000 * 60) {
+      var minute = Math.floor(time / (1000 * 60));
+      time -= 1000 * 60 * minute;
+      if (minute < 10) {
+        minute = '0' + minute;
+      }
+      res += minute + ':';
+    } else {
+      res += '00:';
+    }
+    var second = Math.floor(time / 1000);
+    if (second < 10) {
+      second = '0' + second;
+    }
+    res += second;
+    return res;
+  },
+  formatDate: function formatDate(time) {
+    time = new Date(time);
+    var now = Date.now();
+    var diff = now - time;
+    if (diff >= 1000 * 60 * 60 * 24 * 365) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24 * 30) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
+    }
+    if (diff >= 1000 * 60 * 60) {
+      return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
+    }
+    if (diff >= 1000 * 60) {
+      return Math.floor(diff / (1000 * 60)) + '分钟前';
+    }
+    return '刚刚';
+  },
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+};
+
+exports.default = util;
+
+/***/ }),
+
+/***/ 153:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(154);
+
+var _Find = __webpack_require__(155);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -83,14 +191,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 150:
+/***/ 154:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 151:
+/***/ 155:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -106,11 +214,11 @@ var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(152);
+var _Banner = __webpack_require__(156);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -126,7 +234,7 @@ var _HotAuthor = __webpack_require__(67);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _HotAlubm = __webpack_require__(153);
+var _HotAlubm = __webpack_require__(157);
 
 var _HotAlubm2 = _interopRequireDefault(_HotAlubm);
 
@@ -242,7 +350,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 152:
+/***/ 156:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -350,7 +458,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 153:
+/***/ 157:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -412,115 +520,7 @@ migi.name(HotAlubm, "HotAlubm");exports.default = HotAlubm;
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army on 2017/5/20.
- */
-
-var util = {
-  goto: function goto(url) {
-    location.href = url;
-  },
-  autoSsl: function autoSsl(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return (url || '').replace(/^https?:\/\//i, '//');
-  },
-  img: function img(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
-  },
-  img192_192: function img192_192(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-192_192' : url;
-  },
-  img144_: function img144_(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-144_' : url;
-  },
-  img144_144: function img144_144(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-144_144' : url;
-  },
-  img100_100: function img100_100(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-100_100' : url;
-  },
-  formatTime: function formatTime(time) {
-    if (!time) {
-      return '00:00';
-    }
-    var res = '';
-    if (time >= 1000 * 60 * 60) {
-      var hour = Math.floor(time / (1000 * 60 * 60));
-      time -= 1000 * 60 * 60 * hour;
-      res += hour + ':';
-    }
-    if (time >= 1000 * 60) {
-      var minute = Math.floor(time / (1000 * 60));
-      time -= 1000 * 60 * minute;
-      if (minute < 10) {
-        minute = '0' + minute;
-      }
-      res += minute + ':';
-    } else {
-      res += '00:';
-    }
-    var second = Math.floor(time / 1000);
-    if (second < 10) {
-      second = '0' + second;
-    }
-    res += second;
-    return res;
-  },
-  formatDate: function formatDate(time) {
-    time = new Date(time);
-    var now = Date.now();
-    var diff = now - time;
-    if (diff >= 1000 * 60 * 60 * 24 * 365) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
-    }
-    if (diff >= 1000 * 60 * 60 * 24 * 30) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
-    }
-    if (diff >= 1000 * 60 * 60 * 24) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
-    }
-    if (diff >= 1000 * 60 * 60) {
-      return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
-    }
-    if (diff >= 1000 * 60) {
-      return Math.floor(diff / (1000 * 60)) + '分钟前';
-    }
-    return '刚刚';
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-exports.default = util;
-
-/***/ }),
-
-/***/ 30:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -716,7 +716,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -864,7 +864,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -945,7 +945,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -1026,7 +1026,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(30);
+var _authorTemplate = __webpack_require__(28);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -1250,7 +1250,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 

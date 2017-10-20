@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 31);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -165,7 +165,8 @@ let net = {
 
 
 /***/ }),
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -276,7 +277,6 @@ Object.keys(code2Data).forEach(function(k) {
 
 
 /***/ }),
-/* 5 */,
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -758,7 +758,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(4);
+var _authorTemplate = __webpack_require__(5);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -1048,7 +1048,11 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 /* 24 */,
 /* 25 */,
 /* 26 */,
-/* 27 */
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1079,7 +1083,7 @@ var _BotNav = __webpack_require__(7);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Find = __webpack_require__(28);
+var _Find = __webpack_require__(32);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -1088,7 +1092,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 28 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1108,7 +1112,7 @@ var _net = __webpack_require__(3);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(29);
+var _Banner = __webpack_require__(33);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -1262,7 +1266,7 @@ var Find = function (_migi$Component) {
 migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
-/* 29 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

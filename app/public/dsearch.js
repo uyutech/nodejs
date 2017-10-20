@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 185);
+/******/ 	return __webpack_require__(__webpack_require__.s = 191);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 185:
+/***/ 191:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(186);
+__webpack_require__(192);
 
-var _Search = __webpack_require__(187);
+var _Search = __webpack_require__(193);
 
 var _Search2 = _interopRequireDefault(_Search);
 
@@ -83,14 +83,14 @@ var search = migi.preExist(migi.createCp(_Search2.default, [["kw", $CONFIG.kw], 
 
 /***/ }),
 
-/***/ 186:
+/***/ 192:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 187:
+/***/ 193:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,7 +102,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(30);
+var _authorTemplate = __webpack_require__(28);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -286,7 +286,7 @@ migi.name(Search, "Search");exports.default = Search;
 
 /***/ }),
 
-/***/ 30:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

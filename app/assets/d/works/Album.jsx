@@ -12,6 +12,8 @@ let take = 12;
 let sortType = 0;
 let list = [];
 let index = 0;
+let tagName;
+let ajax;
 
 class Album extends migi.Component {
   constructor(...data) {
@@ -173,7 +175,10 @@ class Album extends migi.Component {
   }
   loadImg(cb) {
     let self = this;
-    net.postJSON('/api/works/photoList', { worksID: this.props.worksID, skip, take, sortType }, function(res) {
+    if(ajax) {
+      ajax.abort();
+    }
+    ajax = net.postJSON('/api/works/photoList', { worksID: this.props.worksID, skip, take, sortType, tagName }, function(res) {
       if(res.success) {
         let data = res.data;
         skip += take;
@@ -234,6 +239,7 @@ class Album extends migi.Component {
     $l2.html('');
     $l3.html('');
     $l4.html('');
+    skip = 0;
     self.loadEnd = false;
   }
   switchType(e, vd) {
@@ -246,12 +252,27 @@ class Album extends migi.Component {
     this.clear();
     this.load($(window));
   }
+  switchType2(e, vd, tvd) {
+    let $li = $(tvd.element);
+    if(!$li.hasClass('cur')) {
+      $(vd.element).find('.cur').removeClass('cur');
+      $li.addClass('cur');
+      tagName = tvd.props.rel;
+      this.clear();
+      this.load($(window));
+    }
+  }
   render() {
     return <div class="mod mod-album">
       <h4>相册</h4>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
-          <li class="cur" rel="0">全部</li>
+          <li class="cur" rel="">全部</li>
+          {
+            (this.props.labelList || []).map(function(item) {
+              return <li rel={ item.Tag_Name }>{ item.Tag_Name }</li>;
+            })
+          }
         </ul>
         <ul class="type2 fn-clear" onClick={ this.switchType }>
           <li class="cur" rel="0">最新</li>

@@ -60,20 +60,128 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 175);
+/******/ 	return __webpack_require__(__webpack_require__.s = 181);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 175:
+/***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(176);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army on 2017/5/20.
+ */
 
-var _Author = __webpack_require__(177);
+var util = {
+  goto: function goto(url) {
+    location.href = url;
+  },
+  autoSsl: function autoSsl(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return (url || '').replace(/^https?:\/\//i, '//');
+  },
+  img: function img(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
+  img192_192: function img192_192(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-192_192' : url;
+  },
+  img144_: function img144_(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_' : url;
+  },
+  img144_144: function img144_144(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_144' : url;
+  },
+  img100_100: function img100_100(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-100_100' : url;
+  },
+  formatTime: function formatTime(time) {
+    if (!time) {
+      return '00:00';
+    }
+    var res = '';
+    if (time >= 1000 * 60 * 60) {
+      var hour = Math.floor(time / (1000 * 60 * 60));
+      time -= 1000 * 60 * 60 * hour;
+      res += hour + ':';
+    }
+    if (time >= 1000 * 60) {
+      var minute = Math.floor(time / (1000 * 60));
+      time -= 1000 * 60 * minute;
+      if (minute < 10) {
+        minute = '0' + minute;
+      }
+      res += minute + ':';
+    } else {
+      res += '00:';
+    }
+    var second = Math.floor(time / 1000);
+    if (second < 10) {
+      second = '0' + second;
+    }
+    res += second;
+    return res;
+  },
+  formatDate: function formatDate(time) {
+    time = new Date(time);
+    var now = Date.now();
+    var diff = now - time;
+    if (diff >= 1000 * 60 * 60 * 24 * 365) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24 * 30) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
+    }
+    if (diff >= 1000 * 60 * 60) {
+      return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
+    }
+    if (diff >= 1000 * 60) {
+      return Math.floor(diff / (1000 * 60)) + '分钟前';
+    }
+    return '刚刚';
+  },
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+};
+
+exports.default = util;
+
+/***/ }),
+
+/***/ 181:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(182);
+
+var _Author = __webpack_require__(183);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -83,14 +191,14 @@ var author = migi.preExist(migi.createCp(_Author2.default, [["uid", $CONFIG.uid]
 
 /***/ }),
 
-/***/ 176:
+/***/ 182:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 177:
+/***/ 183:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -106,23 +214,23 @@ var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Nav = __webpack_require__(178);
+var _Nav = __webpack_require__(184);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(181);
+var _Home = __webpack_require__(187);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Work = __webpack_require__(183);
+var _Work = __webpack_require__(189);
 
 var _Work2 = _interopRequireDefault(_Work);
 
-var _AuthorComment = __webpack_require__(184);
+var _AuthorComment = __webpack_require__(190);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
@@ -242,7 +350,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 178:
+/***/ 184:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -254,11 +362,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(179);
+var _Profile = __webpack_require__(185);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(180);
+var _Link = __webpack_require__(186);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -299,7 +407,7 @@ migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
 
-/***/ 179:
+/***/ 185:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -315,11 +423,11 @@ var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(30);
+var _authorTemplate = __webpack_require__(28);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -500,7 +608,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 180:
+/***/ 186:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -615,7 +723,7 @@ migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
 
-/***/ 181:
+/***/ 187:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -639,7 +747,7 @@ var _HotAuthor = __webpack_require__(67);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(182);
+var _Dynamic = __webpack_require__(188);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -708,7 +816,7 @@ migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
 
-/***/ 182:
+/***/ 188:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -787,7 +895,7 @@ migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
 
-/***/ 183:
+/***/ 189:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -803,7 +911,7 @@ var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -940,7 +1048,7 @@ migi.name(Work, "Work");exports.default = Work;
 
 /***/ }),
 
-/***/ 184:
+/***/ 190:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -956,7 +1064,7 @@ var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -1188,115 +1296,7 @@ migi.name(AuthorComment, "AuthorComment");exports.default = AuthorComment;
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army on 2017/5/20.
- */
-
-var util = {
-  goto: function goto(url) {
-    location.href = url;
-  },
-  autoSsl: function autoSsl(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return (url || '').replace(/^https?:\/\//i, '//');
-  },
-  img: function img(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
-  },
-  img192_192: function img192_192(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-192_192' : url;
-  },
-  img144_: function img144_(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-144_' : url;
-  },
-  img144_144: function img144_144(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-144_144' : url;
-  },
-  img100_100: function img100_100(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-100_100' : url;
-  },
-  formatTime: function formatTime(time) {
-    if (!time) {
-      return '00:00';
-    }
-    var res = '';
-    if (time >= 1000 * 60 * 60) {
-      var hour = Math.floor(time / (1000 * 60 * 60));
-      time -= 1000 * 60 * 60 * hour;
-      res += hour + ':';
-    }
-    if (time >= 1000 * 60) {
-      var minute = Math.floor(time / (1000 * 60));
-      time -= 1000 * 60 * minute;
-      if (minute < 10) {
-        minute = '0' + minute;
-      }
-      res += minute + ':';
-    } else {
-      res += '00:';
-    }
-    var second = Math.floor(time / 1000);
-    if (second < 10) {
-      second = '0' + second;
-    }
-    res += second;
-    return res;
-  },
-  formatDate: function formatDate(time) {
-    time = new Date(time);
-    var now = Date.now();
-    var diff = now - time;
-    if (diff >= 1000 * 60 * 60 * 24 * 365) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
-    }
-    if (diff >= 1000 * 60 * 60 * 24 * 30) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
-    }
-    if (diff >= 1000 * 60 * 60 * 24) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
-    }
-    if (diff >= 1000 * 60 * 60) {
-      return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
-    }
-    if (diff >= 1000 * 60) {
-      return Math.floor(diff / (1000 * 60)) + '分钟前';
-    }
-    return '刚刚';
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-exports.default = util;
-
-/***/ }),
-
-/***/ 30:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1427,7 +1427,7 @@ var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -2097,7 +2097,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -2245,7 +2245,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -2326,7 +2326,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -2407,7 +2407,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(30);
+var _authorTemplate = __webpack_require__(28);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -2631,7 +2631,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 

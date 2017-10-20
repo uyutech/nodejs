@@ -28,10 +28,21 @@ module.exports = app => {
       if(res.commentData.data.success) {
         commentData = res.commentData.data.data;
       }
+      let labelList = [];
+      if(worksDetail.WorkType === 11) {
+        let res = yield ctx.helper.postServiceJSON('api/works/GetPhotoInfo', {
+          uid,
+          WorksID: worksID,
+        });
+        if(res.data.success) {
+          labelList = res.data.data.TipsList || [];
+        }
+      }
       yield ctx.render('dworks', {
         worksID,
         worksDetail,
         commentData,
+        labelList,
       });
     }
   }

@@ -10,4 +10,5 @@ let works = migi.preExist(<Works
   isLogin={ $CONFIG.isLogin }
   worksID={ $CONFIG.worksID }
   worksDetail={ $CONFIG.worksDetail }
+  labelList={ $CONFIG.labelList }
   commentData={ $CONFIG.commentData }/>);

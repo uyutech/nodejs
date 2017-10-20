@@ -11,11 +11,13 @@ export default function(data) {
   let worksID = data.worksID;
   let worksDetail = data.worksDetail;
   let commentData = data.commentData;
+  let labelList = data.labelList;
 
   let works = migi.preRender(<Works
     isLogin={ isLogin }
     worksID={ worksID }
     worksDetail={ worksDetail }
+    labelList={ labelList }
     commentData={ commentData }/>);
 
   return `<!DOCTYPE html>
@@ -32,6 +34,7 @@ ${data.helper.getDBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.worksID = ${JSON.stringify(worksID)};
   $CONFIG.worksDetail = ${JSON.stringify(worksDetail)};
+  $CONFIG.labelList = ${JSON.stringify(labelList)};
   $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>

@@ -60,20 +60,128 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 188);
+/******/ 	return __webpack_require__(__webpack_require__.s = 194);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 188:
+/***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(189);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army on 2017/5/20.
+ */
 
-var _My = __webpack_require__(190);
+var util = {
+  goto: function goto(url) {
+    location.href = url;
+  },
+  autoSsl: function autoSsl(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return (url || '').replace(/^https?:\/\//i, '//');
+  },
+  img: function img(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
+  img192_192: function img192_192(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-192_192' : url;
+  },
+  img144_: function img144_(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_' : url;
+  },
+  img144_144: function img144_144(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_144' : url;
+  },
+  img100_100: function img100_100(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-100_100' : url;
+  },
+  formatTime: function formatTime(time) {
+    if (!time) {
+      return '00:00';
+    }
+    var res = '';
+    if (time >= 1000 * 60 * 60) {
+      var hour = Math.floor(time / (1000 * 60 * 60));
+      time -= 1000 * 60 * 60 * hour;
+      res += hour + ':';
+    }
+    if (time >= 1000 * 60) {
+      var minute = Math.floor(time / (1000 * 60));
+      time -= 1000 * 60 * minute;
+      if (minute < 10) {
+        minute = '0' + minute;
+      }
+      res += minute + ':';
+    } else {
+      res += '00:';
+    }
+    var second = Math.floor(time / 1000);
+    if (second < 10) {
+      second = '0' + second;
+    }
+    res += second;
+    return res;
+  },
+  formatDate: function formatDate(time) {
+    time = new Date(time);
+    var now = Date.now();
+    var diff = now - time;
+    if (diff >= 1000 * 60 * 60 * 24 * 365) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24 * 30) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
+    }
+    if (diff >= 1000 * 60 * 60) {
+      return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
+    }
+    if (diff >= 1000 * 60) {
+      return Math.floor(diff / (1000 * 60)) + '分钟前';
+    }
+    return '刚刚';
+  },
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+};
+
+exports.default = util;
+
+/***/ }),
+
+/***/ 194:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(195);
+
+var _My = __webpack_require__(196);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -83,14 +191,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 189:
+/***/ 195:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 190:
+/***/ 196:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -106,15 +214,15 @@ var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Profile = __webpack_require__(191);
+var _Profile = __webpack_require__(197);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(192);
+var _Follow = __webpack_require__(198);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _Favor = __webpack_require__(193);
+var _Favor = __webpack_require__(199);
 
 var _Favor2 = _interopRequireDefault(_Favor);
 
@@ -167,7 +275,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 191:
+/***/ 197:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -183,7 +291,7 @@ var _net = __webpack_require__(5);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -318,7 +426,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 192:
+/***/ 198:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -380,7 +488,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 193:
+/***/ 199:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -439,114 +547,6 @@ var Favor = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Favor, "Favor");exports.default = Favor;
-
-/***/ }),
-
-/***/ 2:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army on 2017/5/20.
- */
-
-var util = {
-  goto: function goto(url) {
-    location.href = url;
-  },
-  autoSsl: function autoSsl(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return (url || '').replace(/^https?:\/\//i, '//');
-  },
-  img: function img(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
-  },
-  img192_192: function img192_192(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-192_192' : url;
-  },
-  img144_: function img144_(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-144_' : url;
-  },
-  img144_144: function img144_144(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-144_144' : url;
-  },
-  img100_100: function img100_100(url) {
-    if (!/\/\/zhuanquan\./i.test(url)) {
-      return url;
-    }
-    return url ? url + '-100_100' : url;
-  },
-  formatTime: function formatTime(time) {
-    if (!time) {
-      return '00:00';
-    }
-    var res = '';
-    if (time >= 1000 * 60 * 60) {
-      var hour = Math.floor(time / (1000 * 60 * 60));
-      time -= 1000 * 60 * 60 * hour;
-      res += hour + ':';
-    }
-    if (time >= 1000 * 60) {
-      var minute = Math.floor(time / (1000 * 60));
-      time -= 1000 * 60 * minute;
-      if (minute < 10) {
-        minute = '0' + minute;
-      }
-      res += minute + ':';
-    } else {
-      res += '00:';
-    }
-    var second = Math.floor(time / 1000);
-    if (second < 10) {
-      second = '0' + second;
-    }
-    res += second;
-    return res;
-  },
-  formatDate: function formatDate(time) {
-    time = new Date(time);
-    var now = Date.now();
-    var diff = now - time;
-    if (diff >= 1000 * 60 * 60 * 24 * 365) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
-    }
-    if (diff >= 1000 * 60 * 60 * 24 * 30) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
-    }
-    if (diff >= 1000 * 60 * 60 * 24) {
-      return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
-    }
-    if (diff >= 1000 * 60 * 60) {
-      return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
-    }
-    if (diff >= 1000 * 60) {
-      return Math.floor(diff / (1000 * 60)) + '分钟前';
-    }
-    return '刚刚';
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-exports.default = util;
 
 /***/ }),
 
