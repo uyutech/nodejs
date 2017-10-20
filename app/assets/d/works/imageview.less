@@ -10,7 +10,7 @@
     display:block;
     width:100%;
     height:100%;
-    background:rgba(0, 0, 0, 0.5);
+    background:rgba(0, 0, 0, 0.7);
     content:' ';
     z-index:100;
   }
@@ -28,6 +28,7 @@
       margin:0 auto;
       max-width:9rem;
       background:#000;
+      transition:all 0.2s;
     }
   }
   .prev{
@@ -41,6 +42,10 @@
     transform:translateY(-50%) rotateZ(-45deg);
     cursor:pointer;
     z-index:101;
+    opacity:0.7;
+    &:hover{
+      opacity:1;
+    }
   }
   .next{
     position:fixed;
@@ -53,6 +58,10 @@
     transform:translate3d(9.7rem, -50%, 0) rotateZ(45deg);
     cursor:pointer;
     z-index:101;
+    opacity:0.7;
+    &:hover{
+      opacity:1;
+    }
   }
   .close{
     position:fixed;
@@ -68,6 +77,72 @@
     z-index:101;
     &:hover{
       opacity:1;
+    }
+  }
+  .like{
+    position:fixed;
+    top:0.8rem;
+    display:block;
+    width:0.24rem;
+    height:0.24rem;
+    background:url(like-white.png) no-repeat;
+    background-size:contain;
+    cursor:pointer;
+    z-index:101;
+    transform:translateX(9.8rem);
+    &:hover{
+      background-image:url(like-hover.png);
+    }
+    &.has{
+      background-image:url(liked-white.png);
+      &:hover{
+        background-image:url(liked-hover.png);
+      }
+    }
+  }
+  .favor{
+    position:fixed;
+    top:1.1rem;
+    display:block;
+    width:0.24rem;
+    height:0.24rem;
+    background:url(favor-white.png) no-repeat;
+    background-size:contain;
+    cursor:pointer;
+    z-index:101;
+    transform:translateX(9.8rem);
+    &:hover{
+      background-image:url(favor-hover.png);
+    }
+    &.has{
+      background-image:url(favored-white.png);
+      &:hover{
+        background-image:url(favored-hover.png);
+      }
+    }
+    &.loading{
+      opacity:0.7;
+      cursor:wait;
+    }
+  }
+  h3{
+    position:fixed;
+    left:0;
+    top:0.2rem;
+    width:100%;
+    text-align:center;
+    color:#FFF;
+    text-shadow:0 0 2px rgba(0, 0, 0, 0.7);
+    z-index:101;
+    font-size:0.14rem;
+    font-weight:400;
+    small{
+      display:block;
+      font-size:0.12rem;
+    }
+    &.loading{
+      opacity:0.7;
+      cursor:wait;
     }
   }
 }

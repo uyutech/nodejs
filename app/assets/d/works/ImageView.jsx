@@ -5,6 +5,7 @@
 'use strict';
 
 import util from '../common/util';
+import net from '../common/net';
 
 let list = [];
 let index = 0;
@@ -17,18 +18,17 @@ class ImageView extends migi.Component {
       let $window = $(window);
       migi.eventBus.on('choosePic', function(l, i) {
         self.show();
-        self.top = $window.scrollTop() + 40;
+        self.top = $window.scrollTop();
         list = l;
         index = i;
-        let data = list[index];
+        let data = self.data = list[index];
         self.url = data.FileUrl;
         self.width = data.Width;
       });
     });
   }
+  @bind data = {}
   @bind top = 0
-  @bind url
-  @bind width = 1
   show() {
     $(this.element).removeClass('fn-hide');
     let parent = window.parent;
@@ -46,13 +46,13 @@ class ImageView extends migi.Component {
   clickPrev() {
     if(index) {
       let self = this;
-      self.url = list[--index].FileUrl;
+      self.data = list[--index];
     }
   }
   clickNext() {
     if(index < list.length - 1) {
       let self = this;
-      self.url = list[++index].FileUrl;
+      self.data = list[++index];
     }
   }
   clickClose() {
@@ -61,8 +61,9 @@ class ImageView extends migi.Component {
   render() {
     return <div class="image-view fn-hide">
       <div class="c" style={ 'top:' + this.top + 'px' }>
-        <img src={ this.url || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.width + 'px' }/>
+        <img src={ this.data.FileUrl || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.data.Width + 'px' }/>
       </div>
+      <h3>{ this.data.ItemName }<small>{ this.data.Tips }</small></h3>
       <b class="prev" onClick={ this.clickPrev }/>
       <b class="next" onClick={ this.clickNext }/>
       <b class="close" onClick={ this.clickClose }/>

@@ -610,6 +610,7 @@ var net = {
       success = data;
       data = {};
     }
+    success = success || function () {};
     error = error || function () {};
     return net.ajax(url, data, success, error, 'post');
   }

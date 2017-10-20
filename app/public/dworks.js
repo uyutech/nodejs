@@ -2624,6 +2624,10 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
+var _net = __webpack_require__(5);
+
+var _net2 = _interopRequireDefault(_net);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2654,10 +2658,10 @@ var ImageView = function (_migi$Component) {
       var $window = $(window);
       migi.eventBus.on('choosePic', function (l, i) {
         self.show();
-        self.top = $window.scrollTop() + 40;
+        self.top = $window.scrollTop();
         list = l;
         index = i;
-        var data = list[index];
+        var data = self.data = list[index];
         self.url = data.FileUrl;
         self.width = data.Width;
       });
@@ -2688,7 +2692,7 @@ var ImageView = function (_migi$Component) {
     value: function clickPrev() {
       if (index) {
         var self = this;
-        self.url = list[--index].FileUrl;
+        self.data = list[--index];
       }
     }
   }, {
@@ -2696,7 +2700,7 @@ var ImageView = function (_migi$Component) {
     value: function clickNext() {
       if (index < list.length - 1) {
         var self = this;
-        self.url = list[++index].FileUrl;
+        self.data = list[++index];
       }
     }
   }, {
@@ -2709,11 +2713,23 @@ var ImageView = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "image-view fn-hide"]], [migi.createVd("div", [["class", "c"], ["style", new migi.Obj("top", this, function () {
         return 'top:' + this.top + 'px';
-      })]], [migi.createVd("img", [["src", new migi.Obj("url", this, function () {
-        return this.url || '//zhuanquan.xin/img/blank.png';
-      })], ["style", new migi.Obj("width", this, function () {
-        return 'width:' + this.width + 'px';
-      })]])]), migi.createVd("b", [["class", "prev"], ["onClick", new migi.Cb(this, this.clickPrev)]]), migi.createVd("b", [["class", "next"], ["onClick", new migi.Cb(this, this.clickNext)]]), migi.createVd("b", [["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])]);
+      })]], [migi.createVd("img", [["src", new migi.Obj("data", this, function () {
+        return this.data.FileUrl || '//zhuanquan.xin/img/blank.png';
+      })], ["style", new migi.Obj("data", this, function () {
+        return 'width:' + this.data.Width + 'px';
+      })]])]), migi.createVd("h3", [], [new migi.Obj("data", this, function () {
+        return this.data.ItemName;
+      }), migi.createVd("small", [], [new migi.Obj("data", this, function () {
+        return this.data.Tips;
+      })])]), migi.createVd("b", [["class", "prev"], ["onClick", new migi.Cb(this, this.clickPrev)]]), migi.createVd("b", [["class", "next"], ["onClick", new migi.Cb(this, this.clickNext)]]), migi.createVd("b", [["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])]);
+    }
+  }, {
+    key: 'data',
+    set: function set(v) {
+      this.__setBind("data", v);this.__data("data");
+    },
+    get: function get() {
+      if (this.__initBind("data")) this.__setBind("data", {});return this.__getBind("data");
     }
   }, {
     key: 'top',
@@ -2722,22 +2738,6 @@ var ImageView = function (_migi$Component) {
     },
     get: function get() {
       if (this.__initBind("top")) this.__setBind("top", 0);return this.__getBind("top");
-    }
-  }, {
-    key: 'url',
-    set: function set(v) {
-      this.__setBind("url", v);this.__data("url");
-    },
-    get: function get() {
-      return this.__getBind("url");
-    }
-  }, {
-    key: 'width',
-    set: function set(v) {
-      this.__setBind("width", v);this.__data("width");
-    },
-    get: function get() {
-      if (this.__initBind("width")) this.__setBind("width", 1);return this.__getBind("width");
     }
   }]);
 
@@ -3528,6 +3528,7 @@ var net = {
       success = data;
       data = {};
     }
+    success = success || function () {};
     error = error || function () {};
     return net.ajax(url, data, success, error, 'post');
   }
