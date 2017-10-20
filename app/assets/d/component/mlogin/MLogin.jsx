@@ -30,8 +30,8 @@ class NeedLogin extends migi.Component {
   render() {
     return <div class="cp-mlogin fn-hide">
       <div class="c">
-        <h3>您尚未登录...</h3>
-        <p>{ this.message || '登录后即可进行相关操作~' }</p>
+        <h3>还没有登录哦~</h3>
+        <p>{ this.message || '点击下方微博登录按钮登录或注册~' }</p>
         <a href="/oauth/weibo" class="weibo" onClick={ this.clickWeibo }>微博登录</a>
         <a href="#" class="close" onClick={ this.clickClose }/>
       </div>

@@ -36,21 +36,9 @@ module.exports = app => {
       let access_token = data.access_token;
       let weiboUid = data.uid;
       if(access_token && weiboUid) {
-        let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
-          data: {
-            uid: weiboUid,
-            access_token,
-          },
-          dataType: 'json',
-          gzip: true,
-        });
-        userInfo = userInfo.data;
-        let name = userInfo.screen_name || userInfo.name;
-        let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
         let res = yield ctx.helper.postServiceJSON('api/users/WeibouidToUid', {
           openid: weiboUid,
           Token: access_token,
-          Head_Url: head,
         });
         let data = res.data;
         if(data && data.success) {
@@ -58,17 +46,17 @@ module.exports = app => {
           ctx.session.uid = uid;
         }
         else if(data.code === 1002) {
-          // let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
-          //   data: {
-          //     uid: weiboUid,
-          //     access_token,
-          //   },
-          //   dataType: 'json',
-          //   gzip: true,
-          // });
-          // userInfo = userInfo.data;
-          // let name = userInfo.screen_name || userInfo.name;
-          // let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
+          let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
+            data: {
+              uid: weiboUid,
+              access_token,
+            },
+            dataType: 'json',
+            gzip: true,
+          });
+          userInfo = userInfo.data;
+          let name = userInfo.screen_name || userInfo.name;
+          let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
           let create = yield ctx.helper.postServiceJSON('api/users/CreateWeiboUser', {
             openid: weiboUid,
             Token: access_token,
@@ -82,7 +70,9 @@ module.exports = app => {
           }
         }
       }
-      ctx.redirect(ctx.session.goto || '/');
+      let goto = ctx.session.goto || '/';
+      delete ctx.session.goto;
+      ctx.redirect(goto);
     }
     * rhymeWeibo(ctx) {
       const query = ctx.query;
@@ -114,21 +104,9 @@ module.exports = app => {
       let access_token = data.access_token;
       let weiboUid = data.uid;
       if(access_token && weiboUid) {
-        let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
-          data: {
-            uid: weiboUid,
-            access_token,
-          },
-          dataType: 'json',
-          gzip: true,
-        });
-        userInfo = userInfo.data;
-        let name = userInfo.screen_name || userInfo.name;
-        let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
         let res = yield ctx.helper.postServiceJSON('api/users/WeibouidToUid', {
           openid: weiboUid,
           Token: access_token,
-          Head_Url: head,
         });
         let data = res.data;
         if(data && data.success) {
@@ -136,17 +114,17 @@ module.exports = app => {
           ctx.session.uid = uid;
         }
         else if(data.code === 1002) {
-          // let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
-          //   data: {
-          //     uid: weiboUid,
-          //     access_token,
-          //   },
-          //   dataType: 'json',
-          //   gzip: true,
-          // });
-          // userInfo = userInfo.data;
-          // let name = userInfo.screen_name || userInfo.name;
-          // let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
+          let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
+            data: {
+              uid: weiboUid,
+              access_token,
+            },
+            dataType: 'json',
+            gzip: true,
+          });
+          userInfo = userInfo.data;
+          let name = userInfo.screen_name || userInfo.name;
+          let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
           let create = yield ctx.helper.postServiceJSON('api/users/CreateWeiboUser', {
             openid: weiboUid,
             Token: access_token,
@@ -160,7 +138,9 @@ module.exports = app => {
           }
         }
       }
-      ctx.redirect(ctx.session.goto || '/');
+      let goto = ctx.session.goto || '/';
+      delete ctx.session.goto;
+      ctx.redirect(goto);
     }
   }
   return Controller;

@@ -156,13 +156,26 @@ a:hover {
   box-sizing: border-box;
   padding: 0.2rem;
   width: 6rem;
-  background: #fff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  border: 1px solid #fff;
+  background: #FFF;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  border: 1px solid #FFF;
   border-radius: 0.2rem;
-  -webkit-transform: translate3d(-50%, -50%, 0);
-          transform: translate3d(-50%, -50%, 0);
+  -webkit-transform: translate3d(-50%, -60%, 0);
+          transform: translate3d(-50%, -60%, 0);
   z-index: 1005;
+}
+.cp-mlogin .c:before {
+  position: absolute;
+  top: 50%;
+  right: -2rem;
+  display: block;
+  width: 2.45rem;
+  height: 4.81rem;
+  background: url(//zhuanquan.xin/img/c16bdcca4deddf648d9d62da78535fdf.png) no-repeat center;
+  background-size: contain;
+  content: ' ';
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 .cp-mlogin .c h3 {
   text-align: center;
@@ -174,7 +187,7 @@ a:hover {
   text-align: center;
   font-size: 0.16rem;
   line-height: 2;
-  color: #555555;
+  color: #555;
 }
 .cp-mlogin .c p a {
   text-decoration: underline;

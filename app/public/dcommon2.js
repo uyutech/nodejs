@@ -663,7 +663,8 @@ var Element = function (_Event) {
 exports.default = Element;
 
 /***/ }),
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1185,7 +1186,6 @@ var Component = function (_Element) {
 exports.default = Component;
 
 /***/ }),
-/* 5 */,
 /* 6 */,
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1255,7 +1255,7 @@ var _Element2 = __webpack_require__(3);
 
 var _Element3 = _interopRequireDefault(_Element2);
 
-var _Component = __webpack_require__(4);
+var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
@@ -2836,7 +2836,7 @@ var _Event2 = __webpack_require__(1);
 
 var _Event3 = _interopRequireDefault(_Event2);
 
-var _Component = __webpack_require__(4);
+var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
@@ -4828,7 +4828,7 @@ var _Event = __webpack_require__(1);
 
 var _Event2 = _interopRequireDefault(_Event);
 
-var _Component2 = __webpack_require__(4);
+var _Component2 = __webpack_require__(5);
 
 var _Component3 = _interopRequireDefault(_Component2);
 
@@ -5394,7 +5394,7 @@ var _CacheModel = __webpack_require__(26);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
-var _Component = __webpack_require__(4);
+var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
@@ -5992,7 +5992,7 @@ var _Element = __webpack_require__(3);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _Component = __webpack_require__(4);
+var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
@@ -7203,7 +7203,7 @@ var _createClass = function () {
   };
 }();
 
-var _Component2 = __webpack_require__(4);
+var _Component2 = __webpack_require__(5);
 
 var _Component3 = _interopRequireDefault(_Component2);
 
@@ -17323,8 +17323,8 @@ var NeedLogin = function (_migi$Component) {
   }, {
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "cp-mlogin fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("h3", [], ["您尚未登录..."]), migi.createVd("p", [], [new migi.Obj("message", this, function () {
-        return this.message || '登录后即可进行相关操作~';
+      return migi.createVd("div", [["class", "cp-mlogin fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("h3", [], ["还没有登录哦~"]), migi.createVd("p", [], [new migi.Obj("message", this, function () {
+        return this.message || '点击下方微博登录按钮登录或注册~';
       })]), migi.createVd("a", [["href", "/oauth/weibo"], ["class", "weibo"], ["onClick", new migi.Cb(this, this.clickWeibo)]], ["微博登录"]), migi.createVd("a", [["href", "#"], ["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
     }
   }, {
