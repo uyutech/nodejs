@@ -173,7 +173,6 @@ class Works extends migi.Component {
                 : ''
             }
             <InspComment ref="inspComment"
-                         worksID={ this.worksID }
                          commentData={ this.props.worksDetail.WorksAuthorComment }/>
           </div>
           <WorkComment ref="workComment"
@@ -237,7 +236,6 @@ class Works extends migi.Component {
               : ''
           }
           <InspComment ref="inspComment"
-                       worksID={ this.worksID }
                        commentData={ this.props.worksDetail.WorksAuthorComment }/>
           {
             this.posterData

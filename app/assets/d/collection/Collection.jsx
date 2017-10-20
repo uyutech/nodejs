@@ -97,7 +97,8 @@ class Collection extends migi.Component {
         <div class="info">
           <Describe data={ this.props.collectionDetail.Describe }/>
           <Author authorList={ [this.props.collectionDetail.Works_Author] }/>
-          <InspComment/>
+          <InspComment ref="inspComment"
+                       commentData={ this.props.collectionDetail.WorksAuthorComment }/>
         </div>
       </div>
       <div class="side">
