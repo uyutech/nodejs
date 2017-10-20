@@ -2030,27 +2030,9 @@ var Home = function (_migi$Component) {
       $(this.element).addClass('fn-hide');
     }
   }, {
-    key: 'load',
-    value: function load(authorID) {
-      var self = this;
-      var hotWork = self.ref.hotWork;
-      var hotAuthor = self.ref.hotAuthor;
-      util.postJSON('api/author/GetAuthorHomePage', { AuthorID: authorID }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          hotWork.dataList = data.Hot_Works_Items;
-          hotAuthor.dataList = data.AuthorToAuthor;
-        } else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-      }, function (res) {
-        // alert(res.message || util.ERROR_MESSAGE);
-      });
-    }
-  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "home"]], [migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "主打作品"], ["dataList", this.props.homeDetail.Hot_Works_Items]]), migi.createCp(_HotCollection2.default, [["ref", "hotCollection"], ["title", "专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "朋友"], ["dataList", this.props.homeDetail.AuthorToAuthor]]), migi.createCp(_Dynamic2.default, [["title", "全网动态"]])]);
+      return migi.createVd("div", [["class", "home"]], [migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "主打作品"], ["dataList", this.props.homeDetail.Hot_Works_Items]]), migi.createCp(_HotCollection2.default, [["ref", "hotCollection"], ["title", "专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "合作关系"], ["dataList", this.props.homeDetail.AuthorToAuthor]]), migi.createCp(_Dynamic2.default, [["title", "全网动态"]])]);
     }
   }]);
 

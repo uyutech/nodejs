@@ -4,6 +4,8 @@
 
 'use strict';
 
+import util from '../common/util';
+
 class Timeline extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -13,9 +15,10 @@ class Timeline extends migi.Component {
       <ul class="c fn-clear">
         {
           (this.props.datas || []).map(function(item) {
-            return <li>
+            let date = util.formatDate(item.LineDate);
+            return <li title={ item.LineDate.replace(/:\d{2}$/, '') }>
               <span>{ item.Describe }</span>
-              <small>{ item.LineDate }</small>
+              <small>{ date }</small>
             </li>;
           })
         }

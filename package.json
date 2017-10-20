@@ -58,7 +58,7 @@
     "ci": "npm run lint && npm run cov",
     "autod": "autod",
     "webpack": "webpack -p",
-    "pack": "npm install --production && tar -zcvf ../release.tgz ."
+    "pack": "npm install --production &&- tar -zcvf ../release.tgz ."
   },
   "ci": {
     "version": "8"

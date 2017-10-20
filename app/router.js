@@ -21,7 +21,8 @@ module.exports = app => {
   app.get('/d/search/:kw', 'd.search.index');
   app.get('/d/my', app.middlewares.needLogin(), 'd.my.index');
   app.get('/d/login', 'd.login.index');
-  app.get('/d/upload', 'd.upload.index');
+  // app.get('/d/upload', 'd.upload.index');
+  // app.get('/d/guide.index', 'd.guide.index');
 
   app.get('/m', 'm.index.index');
   app.get('/m/find', 'm.find.index');

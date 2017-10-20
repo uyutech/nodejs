@@ -1,4 +1,4 @@
-(function(e, a) { for(var i in a) e[i] = a[i]; }(exports, /******/ (function(modules) { // webpackBootstrap
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -60,12 +60,37 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 56);
+/******/ 	return __webpack_require__(__webpack_require__.s = 207);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 18:
+/***/ 207:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(208);
+
+var _Guide = __webpack_require__(209);
+
+var _Guide2 = _interopRequireDefault(_Guide);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var guide = migi.preExist(migi.createCp(_Guide2.default, []));
+
+/***/ }),
+
+/***/ 208:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 209:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -83,89 +108,42 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var TopNav = function (_migi$Component) {
-  _inherits(TopNav, _migi$Component);
+var Guide = function (_migi$Component) {
+  _inherits(Guide, _migi$Component);
 
-  function TopNav() {
+  function Guide() {
     var _ref;
 
-    _classCallCheck(this, TopNav);
+    _classCallCheck(this, Guide);
 
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
+    return _possibleConstructorReturn(this, (_ref = Guide.__proto__ || Object.getPrototypeOf(Guide)).call.apply(_ref, [this].concat(data)));
   }
 
-  _createClass(TopNav, [{
-    key: 'setMarginRight',
-    value: function setMarginRight(right) {
-      $(this.element).css('margin-right', right);
-    }
-  }, {
-    key: 'submit',
-    value: function submit(e) {
-      e.preventDefault();
-      var v = this.ref.input.element.value.trim();
-      if (v) {
-        this.emit('search', v);
-      }
-    }
-  }, {
-    key: 'click',
-    value: function click(e) {
-      if (!window.$CONFIG.isLogin) {
-        e.preventDefault();
-        migi.eventBus.emit('NEED_LOGIN');
-      } else {
-        location.hash = '/my';
-      }
-    }
-  }, {
-    key: 'render',
+  _createClass(Guide, [{
+    key: "render",
     value: function render() {
-      var userInfo = this.props.userInfo || {};
-      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]),,,, /*<form class="search" onSubmit={ this.submit }>*/
-      /*<input type="text" ref="input" maxlength="16" placeholder="弱弱的初级搜索功能QAQ"/>*/
-      /*</form>*/
-      migi.createVd("div", [["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], [userInfo.NickName || '登陆/注册']), migi.createVd("img", [["src", userInfo.Head_Url || '//zhuanquan.xyz/img/blank.png']])])])]);
+      return migi.createVd("div", [["class", "guide"]], [migi.createVd("pre", [], ["欢迎从异世来到转圈！我是圈娘~\n\
+“转圈”是一款仍在开发中的平台，感谢您参与我们的内测活动，我们联合各位大大为您准备了各种福利，活动详情在活动详情页中查看哦！也欢迎随时在转圈右下角和圈儿互动！\n\
+\n\
+此外我们特别为从异世而来的你准备了一份超大惊喜！\n\
+请点击右侧的播放按钮收听哦~\n\
+异世谣相关的福利活动可以点击右侧活动页面查看~\n\
+福利多多，大家加油哦！\n\
+\n\
+下面的内容中不知可有您喜欢的呢？\n\
+勾选喜欢的标签和作者可以帮助圈儿更好的了解你哦~"])]);
     }
   }]);
 
-  return TopNav;
+  return Guide;
 }(migi.Component);
 
-migi.name(TopNav, "TopNav");exports.default = TopNav;
-
-/***/ }),
-
-/***/ 56:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (data) {
-  var userInfo = data.userInfo;
-
-  var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo]]));
-
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dindex.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dindex.js') + '"></script>\n</body>\n</html>';
-};
-
-var _TopNav = __webpack_require__(18);
-
-var _TopNav2 = _interopRequireDefault(_TopNav);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-;
+migi.name(Guide, "Guide");exports.default = Guide;
 
 /***/ })
 
-/******/ })));
+/******/ });

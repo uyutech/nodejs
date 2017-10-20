@@ -13,6 +13,7 @@ module.exports = {
     dmy: './app/view/d/my.jsx',
     dlogin: './app/view/d/login.jsx',
     dupload: './app/view/d/upload.jsx',
+    dguide: './app/view/d/guide.jsx',
     activity: './app/view/activity.jsx',
     rhyme: './app/view/rhyme.jsx',
     jrjbz: './app/view/jrjbz.jsx',
