@@ -123,8 +123,8 @@ class Album extends migi.Component {
       let i = 0;
       // 先把有高宽的直接加入流中
       for(;i < length; i++) {
-        let item = data.data[i];
-        if(data.Width && data.Height) {
+        let item = data.data[i];console.log(item);
+        if(item.Width && item.Height) {
           let li = self.genItem(item);
           addWaterFall(li);
         }

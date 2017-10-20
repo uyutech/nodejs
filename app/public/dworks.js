@@ -2429,8 +2429,8 @@ var Album = function (_migi$Component) {
         var i = 0;
         // 先把有高宽的直接加入流中
         for (; i < length; i++) {
-          var item = data.data[i];
-          if (data.Width && data.Height) {
+          var item = data.data[i];console.log(item);
+          if (item.Width && item.Height) {
             var li = self.genItem(item);
             addWaterFall(li);
           } else {
