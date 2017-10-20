@@ -1692,7 +1692,8 @@ var Profile = function (_migi$Component) {
     _this.sign = _this.props.authorDetail.Sign;
     _this.headUrl = _this.props.authorDetail.Head_url;
     _this.fansNumber = _this.props.authorDetail.FansNumber;
-    _this.isLike = _this.props.authorDetail.IsLike;
+    _this.like = _this.props.authorDetail.IsLike;
+    _this.settled = _this.props.authorDetail.ISSettled;
     _this.type = _this.props.authorDetail.Authortype;
     return _this;
   }
@@ -1703,10 +1704,10 @@ var Profile = function (_migi$Component) {
       e.preventDefault();
       var self = this;
       self.loading = true;
-      if (self.isLike) {
+      if (self.like) {
         _net2.default.postJSON('/api/author/unFollow', { authorID: self.authorID }, function (res) {
           if (res.success) {
-            self.isLike = false;
+            self.like = false;
             self.fansNumber = res.data.followCount;
             alert('取关成功');
           } else if (res.code === 1000) {
@@ -1722,7 +1723,7 @@ var Profile = function (_migi$Component) {
       } else {
         _net2.default.postJSON('/api/author/follow', { authorID: self.authorID }, function (res) {
           if (res.success) {
-            self.isLike = true;
+            self.like = true;
             self.fansNumber = res.data.followCount;
             alert('关注成功');
           } else if (res.code === 1000) {
@@ -1742,7 +1743,9 @@ var Profile = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("headUrl", this, function () {
         return this.headUrl || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png';
-      })]]), migi.createVd("b", [["class", "v"]])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [["class", "n"]], [migi.createVd("h3", [], [new migi.Obj("authorName", this, function () {
+      })]]), new migi.Obj("settled", this, function () {
+        return this.settled ? migi.createVd("b", [["class", "settled"], ["title", "认证"]]) : '';
+      })]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [["class", "n"]], [migi.createVd("h3", [], [new migi.Obj("authorName", this, function () {
         return this.authorName || '&nbsp;';
       })]), new migi.Obj("authorType", this, function () {
         return this.authorType.map(function (item) {
@@ -1750,10 +1753,10 @@ var Profile = function (_migi$Component) {
         });
       })]), migi.createVd("div", [["class", "rel"]], [migi.createVd("label", [], ["粉丝"]), migi.createVd("span", [], [new migi.Obj("fansNumber", this, function () {
         return this.fansNumber || '0';
-      })]), migi.createVd("a", [["href", "#"], ["class", new migi.Obj(["isLike", "loading"], this, function () {
-        return (this.isLike ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '');
-      })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("isLike", this, function () {
-        return this.isLike ? '取关' : '关注';
+      })]), migi.createVd("a", [["href", "#"], ["class", new migi.Obj(["like", "loading"], this, function () {
+        return (this.like ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '');
+      })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("like", this, function () {
+        return this.like ? '取关' : '关注';
       })])]), migi.createVd("p", [["class", "intro"]], [new migi.Obj("sign", this, function () {
         return this.sign;
       })])])]);
@@ -1807,12 +1810,12 @@ var Profile = function (_migi$Component) {
       return this.__getBind("fansNumber");
     }
   }, {
-    key: 'isLike',
+    key: 'like',
     set: function set(v) {
-      this.__setBind("isLike", v);this.__data("isLike");
+      this.__setBind("like", v);this.__data("like");
     },
     get: function get() {
-      return this.__getBind("isLike");
+      return this.__getBind("like");
     }
   }, {
     key: 'loading',
@@ -1821,6 +1824,14 @@ var Profile = function (_migi$Component) {
     },
     get: function get() {
       if (this.__initBind("loading")) this.__setBind("loading", false);return this.__getBind("loading");
+    }
+  }, {
+    key: 'settled',
+    set: function set(v) {
+      this.__setBind("settled", v);this.__data("settled");
+    },
+    get: function get() {
+      return this.__getBind("settled");
     }
   }, {
     key: 'type',

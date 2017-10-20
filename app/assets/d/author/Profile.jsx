@@ -14,7 +14,8 @@ class Profile extends migi.Component {
     this.sign = this.props.authorDetail.Sign;
     this.headUrl = this.props.authorDetail.Head_url;
     this.fansNumber = this.props.authorDetail.FansNumber;
-    this.isLike = this.props.authorDetail.IsLike;
+    this.like = this.props.authorDetail.IsLike;
+    this.settled = this.props.authorDetail.ISSettled;
     this.type = this.props.authorDetail.Authortype;
   }
   @bind authorID
@@ -23,8 +24,9 @@ class Profile extends migi.Component {
   @bind authorType = []
   @bind headUrl
   @bind fansNumber
-  @bind isLike
+  @bind like
   @bind loading = false
+  @bind settled
   set type(v) {
     v = v || [];
     let hash = {};
@@ -38,10 +40,10 @@ class Profile extends migi.Component {
     e.preventDefault();
     let self = this;
     self.loading = true;
-    if(self.isLike) {
+    if(self.like) {
       net.postJSON('/api/author/unFollow', { authorID: self.authorID }, function(res) {
         if(res.success) {
-          self.isLike = false;
+          self.like = false;
           self.fansNumber = res.data.followCount;
           alert('取关成功');
         }
@@ -60,7 +62,7 @@ class Profile extends migi.Component {
     else {
       net.postJSON('/api/author/follow', { authorID: self.authorID } , function(res) {
         if(res.success) {
-          self.isLike = true;
+          self.like = true;
           self.fansNumber = res.data.followCount;
           alert('关注成功');
         }
@@ -81,7 +83,9 @@ class Profile extends migi.Component {
     return <div class="profile fn-clear">
       <div class="pic">
         <img src={ this.headUrl || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png' }/>
-        <b class="v"/>
+        {
+          this.settled ? <b class="settled" title="认证"/> : ''
+        }
       </div>
       <div class="txt">
         <div class="n">
@@ -95,7 +99,7 @@ class Profile extends migi.Component {
         <div class="rel">
           <label>粉丝</label>
           <span>{ this.fansNumber || '0' }</span>
-          <a href="#" class={ (this.isLike ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '') } onClick={ this.click }>{ this.isLike ? '取关' : '关注' }</a>
+          <a href="#" class={ (this.like ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '') } onClick={ this.click }>{ this.like ? '取关' : '关注' }</a>
         </div>
         <p class="intro">{ this.sign }</p>
       </div>

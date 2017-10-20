@@ -59,15 +59,15 @@
           border:1px solid #FFF;
           border-radius:100%;
         }
-        .v{
+        .settled{
           position:absolute;
           bottom:0;
-          right:-0.05rem;
-          display:none;
-          width:0.24rem;
-          height:0.24rem;
-          background:url(v_logo.png) no-repeat;
-          background-size:cover;
+          right:0;
+          display:block;
+          width:0.29rem;
+          height:0.34rem;
+          background:url(settled.png) no-repeat;
+          background-size:contain;
         }
       }
       .txt{
@@ -170,6 +170,10 @@
             &.baidu{
               background:url(../works/baidu.png) no-repeat center 0.02rem;
               background-size:0.16rem auto;
+            }
+            &.weibo{
+              background:url(../works/weibo.png) no-repeat center 0.02rem;
+              background-size:0.14rem auto;
             }
           }
         }
@@ -314,12 +318,6 @@
       }
     }
     > .cp-collection{
-      margin-top:0.2rem;
-    }
-    > .cp-hotauthor{
-      margin-top:0.2rem;
-    }
-    > .cp-dynamic{
       margin-top:0.2rem;
     }
   }
