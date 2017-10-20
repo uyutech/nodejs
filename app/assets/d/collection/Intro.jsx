@@ -14,8 +14,13 @@ class Intro extends migi.Component {
   hide() {
     $(this.element).addClass('fn-hide');
   }
+  clickStart() {
+    this.emit('start');
+  }
   render() {
-    return <div class="intro"/>;
+    return <div class="intro">
+      <b class="start" onClick={ this.clickStart }/>
+    </div>;
   }
 }
 

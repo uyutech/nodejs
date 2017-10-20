@@ -1344,7 +1344,7 @@ var Audio = function (_migi$Component) {
   }, {
     key: 'onTimeupdate',
     value: function onTimeupdate(e) {
-      var currentTime = this.currentTime = e.target.currentTime;
+      var currentTime = this._currentTime = e.target.currentTime;
       var item = this.datas[this.index];
       var formatLyrics = item.formatLyrics;
       var formatLyricsData = formatLyrics.data;
@@ -1926,7 +1926,7 @@ var Video = function (_migi$Component) {
   }, {
     key: 'onTimeupdate',
     value: function onTimeupdate(e) {
-      var currentTime = this.currentTime = e.target.currentTime;
+      var currentTime = this._currentTime = e.target.currentTime;
       var percent = currentTime / this.duration;
       this.setBarPercent(percent);
     }

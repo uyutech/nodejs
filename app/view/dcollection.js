@@ -431,9 +431,14 @@ var Intro = function (_migi$Component) {
       $(this.element).addClass('fn-hide');
     }
   }, {
+    key: 'clickStart',
+    value: function clickStart() {
+      this.emit('start');
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "intro"]]);
+      return migi.createVd("div", [["class", "intro"]], [migi.createVd("b", [["class", "start"], ["onClick", new migi.Cb(this, this.clickStart)]])]);
     }
   }]);
 
@@ -484,7 +489,21 @@ var Media = function (_migi$Component) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var intro = self.ref.intro;
+      var player = self.ref.player;
+      intro.on('start', function () {
+        self.start();
+      });
+      migi.eventBus.on('chooseMedia', function () {
+        intro.hide();
+        player.show();
+      });
+    });
+    return _this;
   }
 
   _createClass(Media, [{
@@ -501,6 +520,16 @@ var Media = function (_migi$Component) {
         intro.hide();
         player.show();
       }
+    }
+  }, {
+    key: 'start',
+    value: function start() {
+      var self = this;
+      var intro = self.ref.intro;
+      var player = self.ref.player;
+      intro.hide();
+      player.show();
+      player.play();
     }
   }, {
     key: 'render',
@@ -658,7 +687,11 @@ var PlayList = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod mod-playlist"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [migi.createVd("li", [["class", "video"], ["rel", "video"]], ["播放视频"]), migi.createVd("li", [["class", "audio"], ["rel", "audio"]], ["播放音频"]), migi.createVd("li", [["class", "music cur"]], ["播放全部"])]), migi.createVd("ol", [["class", "list"], ["ref", "list"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickItem)]]]], [new migi.Obj("list", this, function () {
+      return migi.createVd("div", [["class", "mod mod-playlist"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [
+        /*<li class="video" rel="video">播放视频</li>*/
+        /*<li class="audio" rel="audio">播放音频</li>*/
+        /*<li class="music cur">播放全部</li>*/
+      ,,]), migi.createVd("ol", [["class", "list"], ["ref", "list"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickItem)]]]], [new migi.Obj("list", this, function () {
         return (this.list || []).map(function (item, i) {
           var type = '';
           if (item.ItemType === 1111) {
@@ -666,7 +699,7 @@ var PlayList = function (_migi$Component) {
           } else if (item.ItemType === 2110) {
             type = 'video';
           }
-          return migi.createVd("li", [["class", type + (i ? '' : ' cur')], ["rel", i]], [migi.createVd("span", [["class", "name"]], [item.ItemName + (item.Tips ? ' ' + item.Tips : '')]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
+          return migi.createVd("li", [["class", type + (i ? '' : ' cur')], ["rel", i]], [migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
         });
       })])]);
     }
@@ -752,6 +785,7 @@ var Player = function (_migi$Component) {
       migi.eventBus.on('chooseMedia', function (item) {
         self.setItem(item);
         self.addOrAltMedia();
+        self.play();
       });
     }
     return _this;
@@ -760,12 +794,17 @@ var Player = function (_migi$Component) {
   _createClass(Player, [{
     key: 'show',
     value: function show() {
-      $(this.element).removeClass('fn-hide');
+      $(this.element).removeClass('fn-hide hidden');
     }
   }, {
     key: 'hide',
     value: function hide() {
       $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'hidden',
+    value: function hidden() {
+      $(this.element).addClass('hidden');
     }
   }, {
     key: 'setItem',
@@ -821,7 +860,7 @@ var Player = function (_migi$Component) {
     key: 'onTimeupdate',
     value: function onTimeupdate(e) {
       var self = this;
-      var currentTime = self.currentTime = e.target.currentTime;
+      var currentTime = self._currentTime = e.target.currentTime;
       var formatLyrics = self.formatLyrics;
       var formatLyricsData = formatLyrics.data;
       if (formatLyrics.is && formatLyricsData.length) {
@@ -1080,7 +1119,7 @@ var Player = function (_migi$Component) {
       })])]), migi.createVd("div", [["class", new migi.Obj(["isPlaying", "type"], this, function () {
         return 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '');
       })], ["ref", "c"]], [migi.createVd("div", [["class", new migi.Obj(["hasStart", "type"], this, function () {
-        return 'lyrics' + (this.hasStart || this.type === 1111 ? '' : ' fn-hidden');
+        return 'lyrics' + (this.hasStart && this.type === 1111 ? '' : ' fn-hide');
       })], ["ref", "lyrics"]], [migi.createVd("div", [["class", new migi.Obj(["showLyricsMode", "formatLyrics"], this, function () {
         return 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide');
       })]], [migi.createVd("div", [["class", "c"], ["ref", "lyricsRoll"], ["style", new migi.Obj("lyricsIndex", this, function () {
@@ -1115,7 +1154,11 @@ var Player = function (_migi$Component) {
         return 'like' + (this.like ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj("favor", this, function () {
         return 'favor' + (this.favor ? ' has' : '');
-      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", 1], ["download", 1], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
+      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("url", this, function () {
+        return this.url;
+      })], ["download", new migi.Obj("url", this, function () {
+        return this.url;
+      })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
     key: 'item',
@@ -2052,6 +2095,18 @@ var Collection = function (_migi$Component) {
       migi.eventBus.on('add-label', function () {
         addLabel.show();
       });
+      var media = self.ref.media;
+      var intro = media.ref.intro;
+      var $type = $(self.ref.type.element);
+      intro.on('start', function () {
+        media.start();
+        $type.find('.intro').removeClass('cur');
+        $type.find('.play').addClass('cur');
+      });
+      migi.eventBus.on('chooseMedia', function () {
+        $type.find('.intro').removeClass('cur');
+        $type.find('.play').addClass('cur');
+      });
     });
     return _this;
   }
@@ -2094,7 +2149,7 @@ var Collection = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "collection fn-clear"]], [migi.createCp(_Title2.default, [["ref", "title"], ["detail", this.props.collectionDetail]]), this.props.collectionDetail.WorkTimeLine && this.props.collectionDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.collectionDetail.WorkTimeLine]]) : '', migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [migi.createVd("li", [["class", "intro cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["class", "play"], ["rel", "player"]], ["播放"])]), migi.createCp(_Media2.default, [["ref", "media"], ["collectionID", new migi.Obj("collectionID", this, function () {
+      return migi.createVd("div", [["class", "collection fn-clear"]], [migi.createCp(_Title2.default, [["ref", "title"], ["detail", this.props.collectionDetail]]), this.props.collectionDetail.WorkTimeLine && this.props.collectionDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.collectionDetail.WorkTimeLine]]) : '', migi.createVd("div", [["class", "main"]], [migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [migi.createVd("li", [["class", "intro cur"], ["rel", "intro"]], ["封面"]), migi.createVd("li", [["class", "play"], ["rel", "player"]], ["播放"])]), migi.createCp(_Media2.default, [["ref", "media"], ["collectionID", new migi.Obj("collectionID", this, function () {
         return this.collectionID;
       })], ["cover", this.props.collectionDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("div", [["class", "info"]], [migi.createCp(_Describe2.default, [["data", this.props.collectionDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", [this.props.collectionDetail.Works_Author]]]), migi.createCp(_InspComment2.default, [])])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["曲目"])]), migi.createVd("div", [["class", "box"]], [migi.createCp(_PlayList2.default, [["workList", this.workList]])]), migi.createCp(_CollectionComment2.default, [["ref", "collectionComment"], ["isLogin", this.props.isLogin], ["collectionID", new migi.Obj("collectionID", this, function () {
         return this.collectionID;

@@ -552,13 +552,12 @@ body {
   position: relative;
 }
 .mod.mod-timeline .c {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0 0.1rem;
   white-space: nowrap;
 }
 .mod.mod-timeline .c:before {
   position: absolute;
-  left: 0.01rem;
+  left: 0.11rem;
   top: 0.03rem;
   width: 0.06rem;
   height: 0.02rem;

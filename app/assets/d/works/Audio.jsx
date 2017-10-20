@@ -114,7 +114,7 @@ class Audio extends migi.Component {
     return this;
   }
   onTimeupdate(e) {
-    let currentTime = this.currentTime = e.target.currentTime;
+    let currentTime = this._currentTime = e.target.currentTime;
     let item = this.datas[this.index];
     let formatLyrics = item.formatLyrics;
     let formatLyricsData = formatLyrics.data;

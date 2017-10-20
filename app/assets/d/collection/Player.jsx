@@ -33,6 +33,7 @@ class Player extends migi.Component {
       migi.eventBus.on('chooseMedia', function(item) {
         self.setItem(item);
         self.addOrAltMedia();
+        self.play();
       });
     }
   }
@@ -74,10 +75,13 @@ class Player extends migi.Component {
     }
   }
   show() {
-    $(this.element).removeClass('fn-hide');
+    $(this.element).removeClass('fn-hide hidden');
   }
   hide() {
     $(this.element).addClass('fn-hide');
+  }
+  hidden() {
+    $(this.element).addClass('hidden');
   }
   setItem(item) {
     let self = this;
@@ -144,7 +148,7 @@ class Player extends migi.Component {
   }
   onTimeupdate(e) {
     let self = this;
-    let currentTime = self.currentTime = e.target.currentTime;
+    let currentTime = self._currentTime = e.target.currentTime;
     let formatLyrics = self.formatLyrics;
     let formatLyricsData = formatLyrics.data;
     if(formatLyrics.is && formatLyricsData.length) {
@@ -366,7 +370,7 @@ class Player extends migi.Component {
         <small class="play">{ this.playNum || 0 }</small>
       </div>
       <div class={ 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '') } ref="c">
-        <div class={ 'lyrics' + (this.hasStart || this.type === 1111 ? '' : ' fn-hidden') } ref="lyrics">
+        <div class={ 'lyrics' + (this.hasStart && this.type === 1111 ? '' : ' fn-hide') } ref="lyrics">
           <div class={ 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide') }>
             <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
               {
@@ -407,8 +411,8 @@ class Player extends migi.Component {
           <li class={ 'like' + (this.like ? ' has' : '') } onClick={ this.clickLike }/>
           <li class={ 'favor' + (this.favor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
-            <a href={ 1 }
-               download={ 1 }
+            <a href={ this.url }
+               download={ this.url }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

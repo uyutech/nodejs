@@ -27,6 +27,18 @@ class Collection extends migi.Component {
       migi.eventBus.on('add-label', function() {
         addLabel.show();
       });
+      let media = self.ref.media;
+      let intro = media.ref.intro;
+      let $type = $(self.ref.type.element);
+      intro.on('start', function() {
+        media.start();
+        $type.find('.intro').removeClass('cur');
+        $type.find('.play').addClass('cur');
+      });
+      migi.eventBus.on('chooseMedia', function() {
+        $type.find('.intro').removeClass('cur');
+        $type.find('.play').addClass('cur');
+      });
     });
   }
   @bind collectionID
@@ -75,7 +87,7 @@ class Collection extends migi.Component {
       }
       <div class="main">
         <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
-          <li class="intro cur" rel="intro">简介</li>
+          <li class="intro cur" rel="intro">封面</li>
           <li class="play" rel="player">播放</li>
         </ul>
         <Media ref="media"

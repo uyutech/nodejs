@@ -65,9 +65,9 @@ class PlayList extends migi.Component {
   render() {
     return <div class="mod mod-playlist">
       <ul class="type fn-clear" onClick={ { li: this.clickType } }>
-        <li class="video" rel="video">播放视频</li>
-        <li class="audio" rel="audio">播放音频</li>
-        <li class="music cur">播放全部</li>
+        {/*<li class="video" rel="video">播放视频</li>*/}
+        {/*<li class="audio" rel="audio">播放音频</li>*/}
+        {/*<li class="music cur">播放全部</li>*/}
       </ul>
       <ol class="list" ref="list" onClick={ { li: this.clickItem } }>
         {
@@ -80,7 +80,7 @@ class PlayList extends migi.Component {
               type = 'video';
             }
             return <li class={ type + (i ? '' : ' cur') } rel={ i }>
-              <span class="name">{ item.ItemName + (item.Tips ? (' ' + item.Tips) : '') }</span>
+              <span class="name">{ item.ItemName }</span>
               <span class="icon"><b class="l1"/><b class="l2"/><b class="l3"/></span>
             </li>;
           })
