@@ -52,7 +52,9 @@ class Title extends migi.Component {
               return <li rel={ item.ID }>{ item.Tag_Name }</li>;
             })
           }
-          <li class="add" onClick={ this.clickAdd }/>
+          {
+            this.type === 1 ? <li class="add" onClick={ this.clickAdd }/> : ''
+          }
         </ul>
       </div>
     </div>;

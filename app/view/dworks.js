@@ -1060,7 +1060,9 @@ var Title = function (_migi$Component) {
         return (this.tags || []).map(function (item) {
           return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
         });
-      }), migi.createVd("li", [["class", "add"], ["onClick", new migi.Cb(this, this.clickAdd)]])])])]);
+      }), new migi.Obj("type", this, function () {
+        return this.type === 1 ? migi.createVd("li", [["class", "add"], ["onClick", new migi.Cb(this, this.clickAdd)]]) : '';
+      })])])]);
     }
   }, {
     key: 'title',
