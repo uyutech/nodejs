@@ -11,7 +11,7 @@ module.exports = app => {
       let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/works/GetWorkDetails', {
         uid,
-        collectionID: body.collectionID,
+        WorksID: body.collectionID,
         WorkID: body.collectionID,
       });
       ctx.body = res.data;
@@ -21,7 +21,7 @@ module.exports = app => {
       let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/works/GetToWorkMessage_List', {
         uid,
-        collectionID: body.collectionID,
+        WorksID: body.collectionID,
         WorkID: body.collectionID,
         Skip: body.skip,
         Take: body.take,

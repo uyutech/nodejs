@@ -1240,6 +1240,7 @@ body {
 }
 .mod.mod-text pre {
   font-size: 0.14rem;
+  white-space: pre-wrap;
 }
 /**
  * Created by army8735 on 2017/10/18.
@@ -1819,6 +1820,9 @@ body {
 .mod.mod-lyric .c {
   padding: 0.1rem;
 }
+.mod.mod-lyric pre {
+  white-space: pre-wrap;
+}
 /**
  * Created by army8735 on 2017/10/19.
  */
@@ -1851,6 +1855,7 @@ body {
   background-repeat: no-repeat;
   background-position: center 0;
   background-size: contain;
+  transition: all 0.2s;
 }
 .image-view .c img {
   position: relative;

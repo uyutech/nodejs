@@ -82,7 +82,7 @@ class Profile extends migi.Component {
   render() {
     return <div class="profile fn-clear">
       <div class="pic">
-        <img src={ this.headUrl || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png' }/>
+        <img src={ util.autoSsl(util.img144_144(this.headUrl)) || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png' }/>
         {
           this.settled ? <b class="settled" title="认证"/> : ''
         }

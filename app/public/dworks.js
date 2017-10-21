@@ -429,9 +429,9 @@ var Works = function (_migi$Component) {
           return 'works fn-clear t' + self.worksType;
         })]], [migi.createCp(_Title2.default, [["ref", "title"], ["detail", this.props.worksDetail]]), migi.createVd("div", [["class", "main"]], [migi.createCp(_Album2.default, [["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
-        })], ["labelList", this.props.labelList]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("div", [["class", "info"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+        })], ["labelList", this.props.labelList]])]), migi.createVd("div", [["class", "side"]], [migi.createVd("div", [["class", "info"]], [migi.createCp(_Author2.default, [["authorList", [this.props.worksDetail.Works_Author]]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
-        })], ["workID", this.workID], ["commentData", this.props.commentData]])]), migi.createCp(_AddLabelPanel2.default, [["ref", "addLabelPanel"], ["worksID", new migi.Obj("worksID", this, function () {
+        })], ["workID", this.workID], ["originTo", this.props.worksDetail.Title], ["commentData", this.props.commentData]])]), migi.createCp(_AddLabelPanel2.default, [["ref", "addLabelPanel"], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })]]), migi.createCp(_ImageView2.default, [["ref", "imageView"]])]);
       }
@@ -3060,16 +3060,20 @@ var Comment = function (_migi$Component) {
       });
       $root.on('click', '.remove', function () {
         var $btn = $(this);
-        var cid = $btn.attr('cid');
-        _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
-          if (res.success) {
-            $btn.closest('li').remove();
-          } else if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          } else {
+        if (window.confirm('确定要删除吗？')) {
+          var cid = $btn.attr('cid');
+          _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
+            if (res.success) {
+              $btn.closest('li').remove();
+            } else if (res.code === 1000) {
+              migi.eventBus.emit('NEED_LOGIN');
+            } else {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+            }
+          }, function (res) {
             alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-        });
+          });
+        }
       });
     });
     return _this;
@@ -3632,9 +3636,10 @@ var Title = function (_migi$Component) {
         return (this.tags || []).map(function (item) {
           return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
         });
-      }), new migi.Obj("type", this, function () {
-        return this.type === 1 ? migi.createVd("li", [["class", "add"], ["onClick", new migi.Cb(this, this.clickAdd)]]) : '';
-      })])])]);
+      })]
+      // this.type === 1 ? <li class="add" onClick={ this.clickAdd }/> : ''
+
+      )])]);
     }
   }, {
     key: 'title',

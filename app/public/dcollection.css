@@ -1240,6 +1240,7 @@ body {
 }
 .mod.mod-text pre {
   font-size: 0.14rem;
+  white-space: pre-wrap;
 }
 /**
  * Created by army8735 on 2017/10/19.

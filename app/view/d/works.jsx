@@ -39,6 +39,7 @@ ${data.helper.getDBotNav()}
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dworks.js')}"></script>
+${data.helper.getStat()}
 </body>
 </html>`;
 };

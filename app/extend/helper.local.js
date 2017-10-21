@@ -40,6 +40,9 @@ module.exports = {
     this.ctx.getLogger('serviceLogger').info('[-/-/%s/%sms POST %s]', this.ctx.traceID, end - start, url);
     return res;
   },
+  getStat() {
+    return '';
+  },
   weiboAppKey: '1987340303',
   weiboAppSecret: 'ae82c745736d8dc78230d96388790b22',
   weiboRedirect: 'http://dev.circling.cc/oauth/login',

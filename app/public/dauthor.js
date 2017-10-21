@@ -517,7 +517,7 @@ var Profile = function (_migi$Component) {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("headUrl", this, function () {
-        return this.headUrl || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png';
+        return _util2.default.autoSsl(_util2.default.img144_144(this.headUrl)) || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png';
       })]]), new migi.Obj("settled", this, function () {
         return this.settled ? migi.createVd("b", [["class", "settled"], ["title", "认证"]]) : '';
       })]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [["class", "n"]], [migi.createVd("h3", [], [new migi.Obj("authorName", this, function () {
@@ -1596,16 +1596,20 @@ var Comment = function (_migi$Component) {
       });
       $root.on('click', '.remove', function () {
         var $btn = $(this);
-        var cid = $btn.attr('cid');
-        _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
-          if (res.success) {
-            $btn.closest('li').remove();
-          } else if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          } else {
+        if (window.confirm('确定要删除吗？')) {
+          var cid = $btn.attr('cid');
+          _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
+            if (res.success) {
+              $btn.closest('li').remove();
+            } else if (res.code === 1000) {
+              migi.eventBus.emit('NEED_LOGIN');
+            } else {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+            }
+          }, function (res) {
             alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-        });
+          });
+        }
       });
     });
     return _this;

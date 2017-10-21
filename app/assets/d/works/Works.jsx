@@ -156,7 +156,7 @@ class Works extends migi.Component {
         </div>
         <div class="side">
           <div class="info">
-            <Author authorList={ this.authorList }/>
+            <Author authorList={ [this.props.worksDetail.Works_Author] }/>
             {
               this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
                 ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
@@ -179,6 +179,7 @@ class Works extends migi.Component {
                        isLogin={ this.props.isLogin }
                        worksID={ this.worksID }
                        workID={ this.workID }
+                       originTo={ this.props.worksDetail.Title }
                        commentData={ this.props.commentData }/>
         </div>
         <AddLabelPanel ref="addLabelPanel" worksID={ this.worksID }/>

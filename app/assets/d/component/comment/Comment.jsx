@@ -95,18 +95,22 @@ class Comment extends migi.Component {
       });
       $root.on('click', '.remove', function() {
         let $btn = $(this);
-        let cid = $btn.attr('cid');
-        net.postJSON(self.props.delUrl, { commentID: cid }, function(res) {
-          if(res.success) {
-            $btn.closest('li').remove();
-          }
-          else if(res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          }
-          else {
+        if(window.confirm('确定要删除吗？')) {
+          let cid = $btn.attr('cid');
+          net.postJSON(self.props.delUrl, {commentID: cid}, function(res) {
+            if(res.success) {
+              $btn.closest('li').remove();
+            }
+            else if(res.code === 1000) {
+              migi.eventBus.emit('NEED_LOGIN');
+            }
+            else {
+              alert(res.message || util.ERROR_MESSAGE);
+            }
+          }, function(res) {
             alert(res.message || util.ERROR_MESSAGE);
-          }
-        });
+          });
+        }
       });
     });
   }

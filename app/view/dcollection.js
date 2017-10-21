@@ -481,9 +481,10 @@ var Title = function (_migi$Component) {
         return (this.tags || []).map(function (item) {
           return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
         });
-      }), new migi.Obj("type", this, function () {
-        return this.type === 1 ? migi.createVd("li", [["class", "add"], ["onClick", new migi.Cb(this, this.clickAdd)]]) : '';
-      })])])]);
+      })]
+      // this.type === 1 ? <li class="add" onClick={ this.clickAdd }/> : ''
+
+      )])]);
     }
   }, {
     key: 'title',
@@ -1096,7 +1097,7 @@ exports.default = function (data) {
 
   var collection = migi.preRender(migi.createCp(_Collection2.default, [["isLogin", isLogin], ["collectionID", collectionID], ["collectionDetail", collectionDetail], ["commentData", commentData]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcollection.css') + '"/>\n</head>\n<body>\n<div id="page">' + collection + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.collectionID = ' + JSON.stringify(collectionID) + ';\n  $CONFIG.collectionDetail = ' + JSON.stringify(collectionDetail) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dcollection.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcollection.css') + '"/>\n</head>\n<body>\n<div id="page">' + collection + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.collectionID = ' + JSON.stringify(collectionID) + ';\n  $CONFIG.collectionDetail = ' + JSON.stringify(collectionDetail) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dcollection.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
 var _Collection = __webpack_require__(75);
@@ -2221,16 +2222,20 @@ var Comment = function (_migi$Component) {
       });
       $root.on('click', '.remove', function () {
         var $btn = $(this);
-        var cid = $btn.attr('cid');
-        _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
-          if (res.success) {
-            $btn.closest('li').remove();
-          } else if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          } else {
+        if (window.confirm('确定要删除吗？')) {
+          var cid = $btn.attr('cid');
+          _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
+            if (res.success) {
+              $btn.closest('li').remove();
+            } else if (res.code === 1000) {
+              migi.eventBus.emit('NEED_LOGIN');
+            } else {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+            }
+          }, function (res) {
             alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-        });
+          });
+        }
       });
     });
     return _this;

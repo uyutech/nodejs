@@ -83,6 +83,9 @@ module.exports = {
       <meta name="wap-font-scale" content="no"/>
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">`;
   },
+  getStat() {
+    return '';
+  },
   weiboAppKey: '2345825162',
   weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
   weiboRedirect: 'https://circling.cc/oauth/login',

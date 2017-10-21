@@ -53,7 +53,7 @@ class Title extends migi.Component {
             })
           }
           {
-            this.type === 1 ? <li class="add" onClick={ this.clickAdd }/> : ''
+            // this.type === 1 ? <li class="add" onClick={ this.clickAdd }/> : ''
           }
         </ul>
       </div>
