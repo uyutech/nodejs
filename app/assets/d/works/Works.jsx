@@ -200,7 +200,7 @@ class Works extends migi.Component {
               ? <li class={ 'audio' + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
               : ''
           }
-          <li class="link" rel="link">站外链接</li>
+          {/*<li class="link" rel="link">站外链接</li>*/}
         </ul>
         <Media ref="media"
                worksID={ this.worksID }
@@ -212,6 +212,7 @@ class Works extends migi.Component {
                      isLogin={ this.props.isLogin }
                      worksID={ this.worksID }
                      workID={ this.workID }
+                     originTo={ this.props.worksDetail.Title }
                      commentData={ this.props.commentData }/>
       </div>
       <div class="side">

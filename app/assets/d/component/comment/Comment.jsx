@@ -54,6 +54,9 @@ class Comment extends migi.Component {
       $root.on('click', '.slide .sub, .slide span', function() {
         self.slide($(this).parent());
       });
+      $root.on('click', '.list>li>.c>pre', function() {
+        $(this).parent().find('.slide .sub').click();
+      });
       $root.on('click', '.more', function() {
         let $message = $(this);
         let rid = $message.attr('rid');
@@ -208,7 +211,7 @@ class Comment extends migi.Component {
     let $ul = $list2.find('ul');
     li.prependTo($ul[0]);
     $list2.css('height', $ul.height());
-    let $num = $comment.find('.slide small');
+    let $num = $comment.find('.slide small.sub');
     $num.text((parseInt($num.text()) || 0) + 1);
   }
   genComment(item) {

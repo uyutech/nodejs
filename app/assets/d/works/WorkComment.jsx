@@ -217,6 +217,7 @@ class WorkComment extends migi.Component {
                delUrl="/api/works/delComment"
                data={ this.props.commentData.data }/>
       <SubCmt ref="subCmt"
+              originTo={ this.props.originTo }
               placeholder="夸夸这个作品吧"/>
     </div>;
   }

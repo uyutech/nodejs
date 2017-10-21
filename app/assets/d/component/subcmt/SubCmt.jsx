@@ -12,6 +12,7 @@ class SubCmt extends migi.Component {
     this.maxlength = this.props.maxlength;
     this.subText = this.props.subText;
     this.placeholder = this.props.placeholder;
+    this.originTo = this.props.originTo;
   }
   @bind hasCommentContent
   @bind isCommentSending
@@ -20,6 +21,7 @@ class SubCmt extends migi.Component {
   @bind subText
   @bind value = ''
   @bind to
+  @bind originTo
   input(e, vd) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
@@ -41,8 +43,8 @@ class SubCmt extends migi.Component {
   }
   render() {
     return <div class="cp-subcmt">
-      <form class={ 'fn-clear' + (this.to ? ' to' : '') } ref="form" onSubmit={ this.submit }>
-        <label>TO: { this.to }</label>
+      <form class={ 'fn-clear' + (this.to || this.originTo ? ' to' : '') } ref="form" onSubmit={ this.submit }>
+        <label>TO: { this.to || this.originTo }</label>
         <input type="text" class="text" ref="input" placeholder={ this.placeholder || '夸夸这个作品吧' }
                onInput={ this.input } onFocus={ this.focus } maxlength={ this.maxlength || 120 }
                value={ this.value }/>

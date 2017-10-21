@@ -1866,6 +1866,9 @@ var Comment = function (_migi$Component) {
       $root.on('click', '.slide .sub, .slide span', function () {
         self.slide($(this).parent());
       });
+      $root.on('click', '.list>li>.c>pre', function () {
+        $(this).parent().find('.slide .sub').click();
+      });
       $root.on('click', '.more', function () {
         var $message = $(this);
         var rid = $message.attr('rid');
@@ -2024,7 +2027,7 @@ var Comment = function (_migi$Component) {
       var $ul = $list2.find('ul');
       li.prependTo($ul[0]);
       $list2.css('height', $ul.height());
-      var $num = $comment.find('.slide small');
+      var $num = $comment.find('.slide small.sub');
       $num.text((parseInt($num.text()) || 0) + 1);
     }
   }, {
@@ -2275,6 +2278,7 @@ var SubCmt = function (_migi$Component) {
     _this.maxlength = _this.props.maxlength;
     _this.subText = _this.props.subText;
     _this.placeholder = _this.props.placeholder;
+    _this.originTo = _this.props.originTo;
     return _this;
   }
 
@@ -2305,10 +2309,10 @@ var SubCmt = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-subcmt"]], [migi.createVd("form", [["class", new migi.Obj("to", this, function () {
-        return 'fn-clear' + (this.to ? ' to' : '');
-      })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("label", [], ["TO: ", new migi.Obj("to", this, function () {
-        return this.to;
+      return migi.createVd("div", [["class", "cp-subcmt"]], [migi.createVd("form", [["class", new migi.Obj(["to", "originTo"], this, function () {
+        return 'fn-clear' + (this.to || this.originTo ? ' to' : '');
+      })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("label", [], ["TO: ", new migi.Obj(["to", "originTo"], this, function () {
+        return this.to || this.originTo;
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj("placeholder", this, function () {
         return this.placeholder || '夸夸这个作品吧';
       })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
@@ -2376,6 +2380,14 @@ var SubCmt = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("to");
+    }
+  }, {
+    key: 'originTo',
+    set: function set(v) {
+      this.__setBind("originTo", v);this.__data("originTo");
+    },
+    get: function get() {
+      return this.__getBind("originTo");
     }
   }]);
 
