@@ -264,7 +264,8 @@ var My = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo]]), migi.createVd("div", [["class", "c"]], [migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]]), migi.createCp(_Favor2.default, [["ref", "favor"], ["list", this.props.favors]])]), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
+      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo]]), migi.createVd("div", [["class", "c"]], [migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]])] /*<Favor ref="favor" list={ this.props.favors }/>*/
+      ), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
     }
   }]);
 
@@ -397,9 +398,14 @@ var Profile = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
         return this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png';
-      })]]), migi.createVd("div", [["class", "upload"], ["ref", "upload"]], [migi.createVd("input", [["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["accept", "image/gif, image/jpeg, image/png"]])])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
+      })]]),,,] /*<div class="upload" ref="upload">*/
+      /*<input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>*/
+      /*</div>*/
+      ), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
         return this.name;
-      })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["onBlur", new migi.Cb(this, this.blur)]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]])])]);
+      })]),,] /*<input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur }/>*/
+      /*<b class="edit" ref="edit" onClick={ this.click }/>*/
+      )]);
     }
   }, {
     key: 'head',

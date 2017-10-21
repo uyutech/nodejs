@@ -558,17 +558,14 @@ body {
 }
 .mod.mod-timeline .c:before {
   position: absolute;
-  left: 0.11rem;
-  top: 0.03rem;
-  width: 0.06rem;
-  height: 0.02rem;
+  top: 0.02rem;
+  left: 0.1rem;
+  display: block;
+  width: 0.04rem;
+  height: 0.04rem;
+  border-radius: 100%;
   background: #9ECDDB;
-  border-radius: 0.02rem;
   content: ' ';
-  -webkit-transform: rotateZ(-45deg);
-          transform: rotateZ(-45deg);
-  -webkit-transform-origin: 0 center;
-          transform-origin: 0 center;
 }
 .mod.mod-timeline .c li {
   float: left;
@@ -611,14 +608,17 @@ body {
 }
 .mod.mod-timeline .c li:last-child span:before {
   position: absolute;
-  top: -0.08rem;
-  right: -0.1rem;
-  display: block;
-  width: 0.04rem;
-  height: 0.04rem;
-  border-radius: 100%;
+  right: -0.12rem;
+  top: -0.11rem;
+  width: 0.06rem;
+  height: 0.02rem;
   background: #9ECDDB;
+  border-radius: 0.02rem;
   content: ' ';
+  -webkit-transform: rotateZ(45deg);
+          transform: rotateZ(45deg);
+  -webkit-transform-origin: 0 center;
+          transform-origin: 0 center;
 }
 /**
  * Created by army8735 on 2017/10/18.

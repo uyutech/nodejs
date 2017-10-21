@@ -157,7 +157,7 @@ class AuthorComment extends migi.Component {
     this.load();
   }
   render() {
-    return <div class="comments fn-hide">
+    return <div class={ 'comments' + (this.props.show ? '' : 'fn-hide') }>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="0">全部评论<small>{ this.props.commentData.Size }</small></li>

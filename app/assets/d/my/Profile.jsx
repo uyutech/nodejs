@@ -84,14 +84,14 @@ class Profile extends migi.Component {
     return <div class="profile fn-clear">
       <div class="pic">
         <img src={ this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
-        <div class="upload" ref="upload">
-          <input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>
-        </div>
+        {/*<div class="upload" ref="upload">*/}
+          {/*<input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>*/}
+        {/*</div>*/}
       </div>
       <div class="txt">
         <strong ref="name">{ this.name }</strong>
-        <input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur }/>
-        <b class="edit" ref="edit" onClick={ this.click }/>
+        {/*<input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur }/>*/}
+        {/*<b class="edit" ref="edit" onClick={ this.click }/>*/}
       </div>
     </div>;
   }

@@ -73,33 +73,43 @@ class Author extends migi.Component {
     let works = self.ref.works;
     let authorComment = self.ref.authorComment;
     home.hide();
-    works.hide();
+    // works.hide();
     authorComment.hide();
     let rel = tvd.props.rel;
     switch(rel) {
       case '0':
         home.show();
         break;
-      case '1':
-        works.show();
-        break;
+      // case '1':
+      //   works.show();
+      //   break;
       case '2':
         authorComment.show();
         break;
     }
   }
-  render() {
+  render() {console.log(this.props.authorDetail)
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
       <ul class="type fn-clear" onClick={ { li: this.clickType } }>
-        <li class="home cur" rel="0">主页</li>
-        <li class="works" rel="1">作品</li>
-        <li class="comments" rel="2">留言</li>
+        {
+          this.props.authorDetail.ISSettled
+            ? <li class="home cur" rel="0">主页</li>
+            : ''
+        }
+        {/*<li class="home cur" rel="0">主页</li>*/}
+        {/*<li class="works" rel="1">作品</li>*/}
+        <li class={ 'comments' + (this.props.authorDetail.ISSettled ? '' : ' cur') } rel="2">留言</li>
       </ul>
-      <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail } playList={ this.props.playList.data }/>
-      <Work ref="works" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList } playList2={ this.props.playList2 }/>
+      {
+        this.props.authorDetail.ISSettled
+          ? <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail } playList={ this.props.playList.data }/>
+          : ''
+      }
+      {/*<Work ref="works" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList } playList2={ this.props.playList2 }/>*/}
       <AuthorComment
         ref="authorComment"
+        show={ !this.props.authorDetail.ISSettled }
         isLogin={ !!this.props.uid }
         authorID={ this.props.authorID }
         commentData={ this.props.commentData }/>

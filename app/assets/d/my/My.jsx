@@ -27,7 +27,7 @@ class My extends migi.Component {
       <Profile userInfo={ this.props.userInfo }/>
       <div class="c">
         <Follow ref="follow" list={ this.props.follows }/>
-        <Favor ref="favor" list={ this.props.favors }/>
+        {/*<Favor ref="favor" list={ this.props.favors }/>*/}
       </div>
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>
     </div>;
