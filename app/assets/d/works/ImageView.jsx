@@ -21,9 +21,7 @@ class ImageView extends migi.Component {
         self.top = $window.scrollTop();
         list = l;
         index = i;
-        let data = self.data = list[index];
-        self.url = data.FileUrl;
-        self.width = data.Width;
+        self.data = list[index];
       });
     });
   }

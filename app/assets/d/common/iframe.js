@@ -16,6 +16,9 @@ if(parent !== window) {
         if(href && href.charAt(0) !== '#') {
           // 外链
           if(/^https?:\/\//.test(href)) {
+            if(node.getAttribute('target') === '_blank') {
+              return false;
+            }
             parent.goto && parent.goto(href);
             return true;
           }

@@ -32,12 +32,13 @@ class HotWork extends migi.Component {
           ? <ul class="list fn-clear">
               {
                 this.dataList.map(function(item) {
+                  let url = item.WorkType === 5 ? `/musicalbum/${item.WorksID}` : `/works/${item.WorksID}`;
                   return <li>
-                    <a href={ `/works/${item.WorksID}` } class="pic">
+                    <a href={ url } class="pic">
                       <img src={ util.autoSsl(util.img144_144(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
                       <div class="ath">{ '' }</div>
                     </a>
-                    <a href={ `/works/${item.WorksID}` } class="txt">{ item.Title }</a>
+                    <a href={ url } class="txt">{ item.Title }</a>
                   </li>;
                 })
               }

@@ -22,7 +22,7 @@ class InspComment extends migi.Component {
                   <img class="pic" src={ item.Head_Url || '//zhuanquan.xin/img/blank.png' }/>
                   <div class="txt">
                     <div>
-                      <span class="name">{ item.AuthorName }</span>
+                      <a href={ `/author/${item.AuthorID}` } class="name">{ item.AuthorName }</a>
                       <small class="time">{ util.formatDate(item.LineDate) }</small>
                     </div>
                     <p>{ item.sign }</p>

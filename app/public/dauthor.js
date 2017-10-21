@@ -672,27 +672,17 @@ var Link = function (_migi$Component) {
   _createClass(Link, [{
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "link"]], [migi.createVd("ul", [], [migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", new migi.Obj("_5SingUrl", this, function () {
-        return this._5SingUrl;
-      })], ["class", new migi.Obj("_5SingUrl", this, function () {
-        return this._5SingUrl ? 'sing5' : 'fn-hide';
-      })]], ["5sing"])]), migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", new migi.Obj("_BilibiliUrl", this, function () {
-        return this._BilibiliUrl;
-      })], ["class", new migi.Obj("_BilibiliUrl", this, function () {
-        return this._BilibiliUrl ? 'bilibili' : 'fn-hide';
-      })]], ["b站"])]), migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", new migi.Obj("_BaiduUrl", this, function () {
-        return this._BaiduUrl;
-      })], ["class", new migi.Obj("_BaiduUrl", this, function () {
-        return this._BaiduUrl ? 'baidu' : 'fn-hide';
-      })]], ["百度"])]), migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", new migi.Obj("_WangyiUrl", this, function () {
-        return this._WangyiUrl;
-      })], ["class", new migi.Obj("_WangyiUrl", this, function () {
-        return this._WangyiUrl ? 'wangyi' : 'fn-hide';
-      })]], ["网易"])]), migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", new migi.Obj("_WeiboUrl", this, function () {
-        return this._WeiboUrl;
-      })], ["class", new migi.Obj("_WeiboUrl", this, function () {
-        return this._WeiboUrl ? 'weibo' : 'fn-hide';
-      })]], ["微博"])])]), migi.createVd("p", [], ["外站主页"])]);
+      return migi.createVd("div", [["class", "link"]], [migi.createVd("ul", [], [new migi.Obj("_5SingUrl", this, function () {
+        return this._5SingUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._5SingUrl], ["class", "sing5"]], ["5sing"])]) : '';
+      }), new migi.Obj("_BilibiliUrl", this, function () {
+        return this._BilibiliUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._BilibiliUrl], ["class", "bilibili"]], ["b站"])]) : '';
+      }), new migi.Obj("_BaiduUrl", this, function () {
+        return this._BaiduUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._BaiduUrl], ["class", "baidu"]], ["百度"])]) : '';
+      }), new migi.Obj("_WangyiUrl", this, function () {
+        return this._WangyiUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._WangyiUrl], ["class", "wangyi"]], ["网易"])]) : '';
+      }), new migi.Obj("_WeiboUrl", this, function () {
+        return this._WeiboUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._WeiboUrl], ["class", "weibo"]], ["微博"])]) : '';
+      })]), migi.createVd("p", [], ["外站主页"])]);
     }
   }, {
     key: "_5SingUrl",
@@ -2167,7 +2157,8 @@ var HotWork = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "cp-hotwork"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ["未来会根据你的口味进行精准智能的推送！>3&lt;"])]), migi.createVd("div", [["class", "fn fn-clear"]], [migi.createVd("a", [["href", "#"], ["class", "change"], ["onClick", new migi.Cb(this, this.clickChange)]], ["换一批"])]), new migi.Obj("dataList", this, function () {
         return this.dataList && this.dataList.length ? migi.createVd("ul", [["class", "list fn-clear"]], [this.dataList.map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_144(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "ath"]], [''])]), migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "txt"]], [item.Title])]);
+          var url = item.WorkType === 5 ? '/musicalbum/' + item.WorksID : '/works/' + item.WorksID;
+          return migi.createVd("li", [], [migi.createVd("a", [["href", url], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_144(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "ath"]], [''])]), migi.createVd("a", [["href", url], ["class", "txt"]], [item.Title])]);
         })]) : migi.createVd("div", [["class", "empty"]]);
       })]);
     }
