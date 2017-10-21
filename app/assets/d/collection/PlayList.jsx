@@ -73,7 +73,7 @@ class PlayList extends migi.Component {
         {
           (this.list || []).map(function(item, i) {
             let type = '';
-            if(item.ItemType === 1111) {
+            if(item.ItemType === 1111 || item.ItemType === 1113) {
               type = 'audio';
             }
             else if(item.ItemType === 2110) {

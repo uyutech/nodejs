@@ -64,9 +64,17 @@ class AddLabelPanel extends migi.Component {
         alert(res.message || util.ERROR_MESSAGE);
       });
     }
+    let parent = window.parent;
+    if(parent !== window && parent.upZIndex) {
+      parent.upZIndex();
+    }
   }
   hide() {
     $(this.element).addClass('fn-hide');
+    let parent = window.parent;
+    if(parent !== window && parent.downZIndex) {
+      parent.downZIndex();
+    }
   }
   clickOK() {
     let self = this;

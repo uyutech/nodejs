@@ -91,6 +91,11 @@ class Author extends migi.Component {
   render() {
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
+      {
+        this.props.authorDetail.ISSettled
+          ? ''
+          : <img class="no-settled" src="//zhuanquan.xin/img/dc5828468e40e5d1c882fe1a35e97b1b.jpg"/>
+      }
       <ul class="type fn-clear" onClick={ { li: this.clickType } }>
         {
           this.props.authorDetail.ISSettled

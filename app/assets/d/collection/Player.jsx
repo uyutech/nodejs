@@ -16,7 +16,7 @@ class Player extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.workList) {
+    if(self.props.workList && self.props.workList.length) {
       self.setItem(self.props.workList[0]);
       self.on(migi.Event.DOM, function() {
         let uid = window.$CONFIG ? $CONFIG.uid : '';
@@ -45,7 +45,7 @@ class Player extends migi.Component {
   @bind playNum
   @bind isPlaying
   @bind hasStart
-  @bind formatLyrics
+  @bind formatLyrics = {}
   @bind showLyricsMode
   @bind lyricsIndex = 0
   @bind duration
@@ -53,13 +53,14 @@ class Player extends migi.Component {
   @bind muted
   @bind like
   @bind favor
+  @bind cover
   get currentTime() {
     return this._currentTime || 0;
   }
   @bind
   set currentTime(v) {
     this._currentTime = v;
-    if(v !== this.av.element.currentTime) {
+    if(this.av && v !== this.av.element.currentTime) {
       this.av.element.currentTime = v;
     }
   }
@@ -94,6 +95,7 @@ class Player extends migi.Component {
     self.formatLyrics = item.formatLyrics || {};
     self.like = item.ISLike;
     self.favor = item.ISFavor;
+    self.cover = item.ItemCoverPic;
   }
   addOrAltMedia() {
     let self = this;
@@ -101,6 +103,7 @@ class Player extends migi.Component {
     self.pause();
     switch(self.type) {
       case 1111:
+      case 1113:
         if(!self.audio) {
           self.audio = <audio src={ self.url }
                               onTimeupdate={ self.onTimeupdate.bind(self) }
@@ -148,7 +151,7 @@ class Player extends migi.Component {
   }
   onTimeupdate(e) {
     let self = this;
-    let currentTime = self._currentTime = e.target.currentTime;
+    let currentTime = self.currentTime = e.target.currentTime;
     let formatLyrics = self.formatLyrics;
     let formatLyricsData = formatLyrics.data;
     if(formatLyrics.is && formatLyricsData.length) {
@@ -364,13 +367,13 @@ class Player extends migi.Component {
     migi.eventBus.emit('SHARE', location.href);
   }
   render() {
-    return <div class={ 'player fn-hide' }>
+    return <div class={ 'player fn-hide' } style={ 'background-image:url("' + (this.cover || '//zhuanquan.xin/img/blank.png') + '")' }>
       <h3>{ this.name }</h3>
       <div class="num">
         <small class="play">{ this.playNum || 0 }</small>
       </div>
       <div class={ 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '') } ref="c">
-        <div class={ 'lyrics' + (this.hasStart && this.type === 1111 ? '' : ' fn-hide') } ref="lyrics">
+        <div class={ 'lyrics' + (this.hasStart && this.type === 2110 ? ' fn-hide' : '') } ref="lyrics">
           <div class={ 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide') }>
             <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
               {

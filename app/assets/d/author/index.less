@@ -159,9 +159,9 @@
               background:url(../works/5sing.png) no-repeat center 0.05rem;
               background-size:0.14rem auto;
             }
-            &.bili{
+            &.bilibili{
               background:url(../works/bilibili.png) no-repeat center 0.02rem;
-              background-size:0.14rem auto;
+              background-size:0.17rem auto;
             }
             &.wangyi{
               background:url(../works/163.png) no-repeat center 0.02rem;
@@ -234,6 +234,14 @@
         }
       }
     }
+  }
+  > .no-settled{
+    display:block;
+    margin-top:0.2rem;
+    width:100%;
+    height:0.8rem;
+    box-shadow:1px 1px 5px rgba(0,0,0,0.3);
+    border-radius:0.1rem;
   }
   > .type{
     margin-top:0.2rem;
@@ -343,7 +351,7 @@
       line-height:0.3rem;
       font-size:0.13rem;
       color:#B9B9B9;
-      border-top-left-radius:0.1rem;
+      background:@mainColor;
       border-top-right-radius:0.1rem;
       border-bottom:0.04rem solid #F0F0F0;
       .type{
@@ -360,11 +368,12 @@
           height:100%;
           line-height:0.3rem;
           cursor:pointer;
+          color:@thirdTextColor;
           &:last-child{
             margin:0;
           }
           &.cur{
-            color:#808080;
+            color:@mainTextColor;
             cursor:default;
             &:after{
               position:absolute;
@@ -373,7 +382,7 @@
               bottom:0.02rem;
               display:block;
               height:0.02rem;
-              background:#58A2CE;
+              background:@mainTextColor;
               border-radius:0.02rem;
               content:' ';
             }

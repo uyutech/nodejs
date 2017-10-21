@@ -47,7 +47,7 @@ class Collection extends migi.Component {
     let self = this;
     let workList = [];
     works.forEach(function(item) {
-      if(item.ItemType === 1111) {
+      if(item.ItemType === 1111 || item.ItemType === 1113) {
         let l = {};
         if(LyricsParser.isLyrics(item.lrc)) {
           l.is = true;

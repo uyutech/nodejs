@@ -46,7 +46,7 @@ class Media extends migi.Component {
     player.play();
   }
   render() {
-    return <div class="mod mod-media" style={ 'background-image:url(' + this.props.cover + ')'}>
+    return <div class="mod mod-media" style={ 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")'}>
       <Intro ref="intro"/>
       <Player ref="player" workList={ this.props.workList }/>
     </div>;

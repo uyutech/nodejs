@@ -100,7 +100,7 @@ class Video extends migi.Component {
     return this;
   }
   onTimeupdate(e) {
-    let currentTime = this._currentTime = e.target.currentTime;
+    let currentTime = this.currentTime = e.target.currentTime;
     let percent = currentTime / this.duration;
     this.setBarPercent(percent);
   }

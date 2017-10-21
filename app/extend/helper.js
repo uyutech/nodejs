@@ -9,7 +9,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?3';
+    return '/public' + url + '?4';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -85,7 +85,7 @@ module.exports = {
   },
   weiboAppKey: '2345825162',
   weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
-  weiboRedirect: 'http://test.circling.cc/oauth/login',
+  weiboRedirect: 'https://circling.cc/oauth/login',
   $CONFIG: 'var $CONFIG = {}; $CONFIG.startTime = Date.now();',
   rhymeAppKey: '4139489763',
   rhymeAppSecret: '1152af67bb15530c50d91728f86c43df',

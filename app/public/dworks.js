@@ -537,12 +537,12 @@ var Media = function (_migi$Component) {
       var video = self.ref.video;
       var link = self.ref.link;
       if (type === 'audio') {
-        link.hide();
+        // link.hide();
         video && video.pause().hide();
         audio.show();
         self.emit('switchTo', audio.datas[audio.index]);
       } else if (type === 'video') {
-        link.hide();
+        // link.hide();
         audio && audio.pause().hide();
         video.show();
         self.emit('switchTo', video.datas[video.index]);
@@ -691,7 +691,7 @@ var Audio = function (_migi$Component) {
   }, {
     key: 'onTimeupdate',
     value: function onTimeupdate(e) {
-      var currentTime = this._currentTime = e.target.currentTime;
+      var currentTime = this.currentTime = e.target.currentTime;
       var item = this.datas[this.index];
       var formatLyrics = item.formatLyrics;
       var formatLyricsData = formatLyrics.data;
@@ -958,7 +958,7 @@ var Audio = function (_migi$Component) {
         return 'type fn-clear' + ((this.index, this.datas || []).length === 1 ? ' single' : '');
       })], ["onClick", new migi.Cb(this, this.clickType)]], [new migi.Obj(["index", "datas"], this, function () {
         return (this.index, this.datas || []).map(function (item, index) {
-          return migi.createVd("li", [["class", this.index === index ? 'cur' : ''], ["rel", index]], [item.Tips || '普通版']);
+          return migi.createVd("li", [["class", this.index === index ? 'cur' : ''], ["rel", index]], [item.Tips || '歌曲']);
         }.bind(this));
       })]), migi.createVd("h3", [], [new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].ItemName;
@@ -1236,7 +1236,7 @@ var Video = function (_migi$Component) {
   }, {
     key: 'onTimeupdate',
     value: function onTimeupdate(e) {
-      var currentTime = this._currentTime = e.target.currentTime;
+      var currentTime = this.currentTime = e.target.currentTime;
       var percent = currentTime / this.duration;
       this.setBarPercent(percent);
     }
@@ -4036,11 +4036,19 @@ var AddLabelPanel = function (_migi$Component) {
           alert(res.message || _util2.default.ERROR_MESSAGE);
         });
       }
+      var parent = window.parent;
+      if (parent !== window && parent.upZIndex) {
+        parent.upZIndex();
+      }
     }
   }, {
     key: 'hide',
     value: function hide() {
       $(this.element).addClass('fn-hide');
+      var parent = window.parent;
+      if (parent !== window && parent.downZIndex) {
+        parent.downZIndex();
+      }
     }
   }, {
     key: 'clickOK',

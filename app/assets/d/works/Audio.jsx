@@ -114,7 +114,7 @@ class Audio extends migi.Component {
     return this;
   }
   onTimeupdate(e) {
-    let currentTime = this._currentTime = e.target.currentTime;
+    let currentTime = this.currentTime = e.target.currentTime;
     let item = this.datas[this.index];
     let formatLyrics = item.formatLyrics;
     let formatLyricsData = formatLyrics.data;
@@ -343,7 +343,7 @@ class Audio extends migi.Component {
       <ul class={ 'type fn-clear' + ((this.index, this.datas || []).length === 1 ? ' single' : '') } onClick={ this.clickType }>
         {
           (this.index, this.datas || []).map(function(item, index) {
-            return <li class={ this.index === index ? 'cur' : '' } rel={ index }>{ item.Tips || '普通版' }</li>;
+            return <li class={ this.index === index ? 'cur' : '' } rel={ index }>{ item.Tips || '歌曲' }</li>;
           }.bind(this))
         }
       </ul>

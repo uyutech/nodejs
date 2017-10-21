@@ -10,7 +10,7 @@ export default function(data) {
   let isLogin = !!data.ctx.session.uid;
   let collectionID = data.collectionID;
   let collectionDetail = data.collectionDetail;
-  let commentData = data.commentData;console.log(collectionDetail)
+  let commentData = data.commentData;
 
   let collection = migi.preRender(<Collection
     isLogin={ isLogin }

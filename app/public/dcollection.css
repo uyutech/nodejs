@@ -1289,6 +1289,9 @@ body {
   opacity: 1;
 }
 .mod.mod-media .player {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 0.35rem;
   overflow: hidden;
 }
 .mod.mod-media .player:before {
@@ -1720,6 +1723,7 @@ body {
 }
 .mod.mod-describe pre {
   padding: 0.1rem;
+  white-space: pre-wrap;
 }
 /**
  * Created by army8735 on 2017/10/19.

@@ -31,13 +31,13 @@ class Media extends migi.Component {
     let video = self.ref.video;
     let link = self.ref.link;
     if(type === 'audio') {
-      link.hide();
+      // link.hide();
       video && video.pause().hide();
       audio.show();
       self.emit('switchTo', audio.datas[audio.index]);
     }
     else if(type === 'video') {
-      link.hide();
+      // link.hide();
       audio && audio.pause().hide();
       video.show();
       self.emit('switchTo', video.datas[video.index]);
