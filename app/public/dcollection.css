@@ -1347,6 +1347,9 @@ body {
 .mod.mod-media .player .c.tvideo video {
   display: block;
 }
+.mod.mod-media .player .c.tvideo .lyrics {
+  display: none;
+}
 .mod.mod-media .player .c.playing video {
   opacity: 1;
 }
@@ -1660,6 +1663,10 @@ body {
   width: 0.24rem;
   height: 0.24rem;
   cursor: pointer;
+}
+.mod.mod-media .player .fn .btn li a {
+  display: block;
+  height: 100%;
 }
 .mod.mod-media .player .fn .btn li:last-child {
   margin-right: 0;

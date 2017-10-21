@@ -16,7 +16,7 @@ module.exports = app => {
   app.get('/d', 'd.index.index');
   app.get('/d/find', 'd.find.index');
   app.get('/d/works/:worksID', 'd.works.index');
-  app.get('/d/collection/:collectionID', 'd.collection.index');
+  app.get('/d/musicalbum/:collectionID', 'd.collection.index');
   app.get('/d/author/:authorID', 'd.author.index');
   app.get('/d/search/:kw', 'd.search.index');
   app.get('/d/my', app.middlewares.needLogin(), 'd.my.index');

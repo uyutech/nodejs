@@ -1636,6 +1636,10 @@ body {
   height: 0.24rem;
   cursor: pointer;
 }
+.mod.mod-media .fn .btn li a {
+  display: block;
+  height: 100%;
+}
 .mod.mod-media .fn .btn li:last-child {
   margin-right: 0;
 }

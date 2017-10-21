@@ -1573,7 +1573,7 @@ var Player = function (_migi$Component) {
     value: function onTimeupdate(e) {
       var self = this;
       var currentTime = self.currentTime = e.target.currentTime;
-      var formatLyrics = self.formatLyrics;
+      var formatLyrics = self.formatLyrics || {};
       var formatLyricsData = formatLyrics.data;
       if (formatLyrics.is && formatLyricsData.length) {
         var tempIndex = this.lyricsIndex;
@@ -1832,8 +1832,8 @@ var Player = function (_migi$Component) {
         return this.playNum || 0;
       })])]), migi.createVd("div", [["class", new migi.Obj(["isPlaying", "type"], this, function () {
         return 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '');
-      })], ["ref", "c"]], [migi.createVd("div", [["class", new migi.Obj(["hasStart", "type"], this, function () {
-        return 'lyrics' + (this.hasStart && this.type === 2110 ? ' fn-hide' : '');
+      })], ["ref", "c"]], [migi.createVd("div", [["class", new migi.Obj("hasStart", this, function () {
+        return 'lyrics' + (this.hasStart ? '' : ' fn-hide');
       })], ["ref", "lyrics"]], [migi.createVd("div", [["class", new migi.Obj(["showLyricsMode", "formatLyrics"], this, function () {
         return 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide');
       })]], [migi.createVd("div", [["class", "c"], ["ref", "lyricsRoll"], ["style", new migi.Obj("lyricsIndex", this, function () {
@@ -1870,8 +1870,8 @@ var Player = function (_migi$Component) {
         return 'favor' + (this.favor ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("url", this, function () {
         return this.url;
-      })], ["download", new migi.Obj("url", this, function () {
-        return this.url;
+      })], ["download", new migi.Obj(["name", "url"], this, function () {
+        return this.name + (/\.\w+$/.exec(this.url)[0] || '');
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {

@@ -152,7 +152,7 @@ class Player extends migi.Component {
   onTimeupdate(e) {
     let self = this;
     let currentTime = self.currentTime = e.target.currentTime;
-    let formatLyrics = self.formatLyrics;
+    let formatLyrics = self.formatLyrics || {};
     let formatLyricsData = formatLyrics.data;
     if(formatLyrics.is && formatLyricsData.length) {
       let tempIndex = this.lyricsIndex;
@@ -373,7 +373,7 @@ class Player extends migi.Component {
         <small class="play">{ this.playNum || 0 }</small>
       </div>
       <div class={ 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '') } ref="c">
-        <div class={ 'lyrics' + (this.hasStart && this.type === 2110 ? ' fn-hide' : '') } ref="lyrics">
+        <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hide') } ref="lyrics">
           <div class={ 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide') }>
             <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
               {
@@ -415,7 +415,7 @@ class Player extends migi.Component {
           <li class={ 'favor' + (this.favor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.url }
-               download={ this.url }
+               download={ this.name + (/\.\w+$/.exec(this.url)[0] || '') }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>
