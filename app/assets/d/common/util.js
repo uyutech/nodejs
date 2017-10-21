@@ -42,6 +42,12 @@ let util = {
     }
     return url ? url + '-100_100' : url;
   },
+  img__60: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-__60' : url;
+  },
   formatTime: function(time) {
     if(!time) {
       return '00:00';

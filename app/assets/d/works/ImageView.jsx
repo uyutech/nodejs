@@ -61,7 +61,8 @@ class ImageView extends migi.Component {
   render() {
     return <div class="image-view fn-hide">
       <div class="c" style={ 'top:' + this.top + 'px' }>
-        <img src={ this.data.FileUrl || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.data.Width + 'px' }/>
+        <b class="bg" style={ 'height:' + this.data.Height + 'px;background-image:url("' + util.autoSsl(util.img__60(this.data.FileUrl)) + '");background-size:' + this.data.Width + 'px auto;' }/>
+        <img src={ util.autoSsl(this.data.FileUrl) || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.data.Width + 'px' }/>
       </div>
       <h3>{ this.data.ItemName }<small>{ this.data.Tips }</small></h3>
       <b class="prev" onClick={ this.clickPrev }/>

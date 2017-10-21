@@ -118,6 +118,12 @@ var util = {
     }
     return url ? url + '-100_100' : url;
   },
+  img__60: function img__60(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-__60' : url;
+  },
   formatTime: function formatTime(time) {
     if (!time) {
       return '00:00';
@@ -2509,17 +2515,17 @@ var Album = function (_migi$Component) {
     value: function genItem(data) {
       list.push(data);
       if (data.Width <= 144) {
-        return migi.createVd("li", [["rel", index++]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl))], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+        return migi.createVd("li", [["rel", index++]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
       }
       var height = data.Height * 144 / data.Width;
-      return migi.createVd("li", [["rel", index++]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl))], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+      return migi.createVd("li", [["rel", index++]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
     }
   }, {
     key: 'loadImgSize',
     value: function loadImgSize(data, cb) {
       var img = document.createElement('img');
       img.className = 'temp';
-      img.src = data.FileUrl;
+      img.src = _util2.default.autoSsl(_util2.default.img__60(data.FileUrl));
       img.onload = function () {
         data.Width = img.width;
         data.Height = img.height;
@@ -2711,8 +2717,10 @@ var ImageView = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "image-view fn-hide"]], [migi.createVd("div", [["class", "c"], ["style", new migi.Obj("top", this, function () {
         return 'top:' + this.top + 'px';
-      })]], [migi.createVd("img", [["src", new migi.Obj("data", this, function () {
-        return this.data.FileUrl || '//zhuanquan.xin/img/blank.png';
+      })]], [migi.createVd("b", [["class", "bg"], ["style", new migi.Obj("data", this, function () {
+        return 'height:' + this.data.Height + 'px;background-image:url("' + _util2.default.autoSsl(_util2.default.img__60(this.data.FileUrl)) + '");background-size:' + this.data.Width + 'px auto;';
+      })]]), migi.createVd("img", [["src", new migi.Obj("data", this, function () {
+        return _util2.default.autoSsl(this.data.FileUrl) || '//zhuanquan.xin/img/blank.png';
       })], ["style", new migi.Obj("data", this, function () {
         return 'width:' + this.data.Width + 'px';
       })]])]), migi.createVd("h3", [], [new migi.Obj("data", this, function () {
@@ -3621,9 +3629,8 @@ var Title = function (_migi$Component) {
         return this.subTitle ? '' : 'fn-hide';
       })]], [new migi.Obj("subTitle", this, function () {
         return this.subTitle;
-      })]), migi.createVd("small", [["class", "pop"]], [new migi.Obj("popular", this, function () {
-        return this.popular;
-      })]), migi.createVd("ul", [["class", 'tags fn-clear']], [new migi.Obj("tags", this, function () {
+      })]),, /*<small class="pop">{ this.popular }</small>*/
+      migi.createVd("ul", [["class", 'tags fn-clear']], [new migi.Obj("tags", this, function () {
         return (this.tags || []).map(function (item) {
           return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
         });

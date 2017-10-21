@@ -114,6 +114,12 @@ let util = {
     }
     return url ? url + '-100_100' : url;
   },
+  img__60: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-__60' : url;
+  },
   formatTime: function(time) {
     if(!time) {
       return '00:00';
@@ -470,9 +476,8 @@ var Title = function (_migi$Component) {
         return this.subTitle ? '' : 'fn-hide';
       })]], [new migi.Obj("subTitle", this, function () {
         return this.subTitle;
-      })]), migi.createVd("small", [["class", "pop"]], [new migi.Obj("popular", this, function () {
-        return this.popular;
-      })]), migi.createVd("ul", [["class", 'tags fn-clear']], [new migi.Obj("tags", this, function () {
+      })]),, /*<small class="pop">{ this.popular }</small>*/
+      migi.createVd("ul", [["class", 'tags fn-clear']], [new migi.Obj("tags", this, function () {
         return (this.tags || []).map(function (item) {
           return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
         });

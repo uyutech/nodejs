@@ -1844,11 +1844,19 @@ body {
           transform: translateX(-50%);
   z-index: 101;
 }
+.image-view .c .bg {
+  position: absolute;
+  display: block;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center 0;
+  background-size: contain;
+}
 .image-view .c img {
+  position: relative;
   display: block;
   margin: 0 auto;
   max-width: 9rem;
-  background: #000;
   transition: all 0.2s;
 }
 .image-view .prev {

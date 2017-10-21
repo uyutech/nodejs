@@ -198,14 +198,14 @@ class Album extends migi.Component {
     list.push(data);
     if(data.Width <= 144) {
       return <li rel={ index++ }>
-        <img src={ util.autoSsl(util.img144_(data.FileUrl)) } height={ data.Height }/>
+        <img src={ util.autoSsl(util.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } height={ data.Height }/>
         <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
         <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>
       </li>;
     }
     let height = data.Height * 144 / data.Width;
     return <li rel={ index++ }>
-      <img src={ util.autoSsl(util.img144_(data.FileUrl)) } height={ height }/>
+      <img src={ util.autoSsl(util.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } height={ height }/>
       <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
       <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>
     </li>;
@@ -213,7 +213,7 @@ class Album extends migi.Component {
   loadImgSize(data, cb) {
     let img = document.createElement('img');
     img.className = 'temp';
-    img.src = data.FileUrl;
+    img.src = util.autoSsl(util.img__60(data.FileUrl));
     img.onload = function() {
       data.Width = img.width;
       data.Height = img.height;

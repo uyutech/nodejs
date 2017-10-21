@@ -45,7 +45,7 @@ class Title extends migi.Component {
         <h3>{ TYPE_NAME[this.type] }</h3>
         <h1>{ this.title }</h1>
         <h2 class={ this.subTitle ? '' : 'fn-hide' }>{ this.subTitle }</h2>
-        <small class="pop">{ this.popular }</small>
+        {/*<small class="pop">{ this.popular }</small>*/}
         <ul class={ 'tags fn-clear' }>
           {
             (this.tags || []).map(function(item) {
