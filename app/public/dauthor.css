@@ -617,9 +617,6 @@
 .cp-comment {
   position: relative;
 }
-.cp-comment .list > li {
-  padding: 0 0.05rem;
-}
 .cp-comment .list > li.empty {
   text-align: center;
   color: #999;
@@ -1468,18 +1465,92 @@ body {
   font-size: 0.12rem;
   white-space: nowrap;
   overflow: hidden;
+  cursor: pointer;
 }
 .author > .comments > .fn .type2 li.cur {
   color: #2D4D67;
-  cursor: pointer;
 }
 .author > .comments .cp-page {
   margin-top: 0.1rem;
+  padding: 0 0.1rem;
   text-align: right;
 }
 .author > .comments .cp-comment {
   margin: 0.1rem 0.1rem 0 0.1rem;
   min-height: 1rem;
+}
+.author > .comments .warn {
+  padding: 0 0.1rem;
+}
+.author > .comments .warn > .t {
+  position: relative;
+  padding-right: 1rem;
+}
+.author > .comments .warn > .t .pic {
+  float: left;
+  display: block;
+  margin-right: 0.05rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+}
+.author > .comments .warn > .t .txt {
+  float: left;
+  line-height: 1;
+}
+.author > .comments .warn > .t .txt .name {
+  display: inline-block;
+  margin-right: 0.1rem;
+}
+.author > .comments .warn > .t .txt .time {
+  display: inline-block;
+  color: #B1C0C9;
+  font-size: 0.12rem;
+}
+.author > .comments .warn > .c {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+  margin: 0.1rem 0;
+  padding: 0.05rem 0.1rem;
+  background: #FFF;
+  border: 1px solid #D9D9D9;
+  border-radius: 0.1rem;
+  color: #B1C0C9;
+}
+.author > .comments .warn > .c .arrow {
+  position: absolute;
+  left: 0.1rem;
+  top: -1px;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  border-top: 1px solid #FFF;
+}
+.author > .comments .warn > .c .arrow:after {
+  position: absolute;
+  left: 0;
+  top: -0.06rem;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  border: 1px solid #D9D9D9;
+  border-left: none;
+  border-bottom: none;
+  -webkit-transform: scaleX(0.7) rotateZ(-45deg);
+          transform: scaleX(0.7) rotateZ(-45deg);
+  content: ' ';
+}
+.author > .comments .warn > .c > pre {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.author > .comments .warn > .c > pre .placeholder {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.1rem;
 }
 .cp-doublecheck .l1 {
   position: relative;

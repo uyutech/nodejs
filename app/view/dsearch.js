@@ -80,6 +80,11 @@ let code2Data = {
     display: '出品',
     css: 'producer',
   },
+  '902': {
+    name: '策划',
+    display: '策划',
+    css: 'producer',
+  },
   '111': {
     name: '演唱',
     display: '演唱',

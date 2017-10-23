@@ -95,7 +95,7 @@ class Comment extends migi.Component {
       });
       $root.on('click', '.remove', function() {
         let $btn = $(this);
-        if(window.confirm('确定要删除吗？')) {
+        if(window.confirm('会删除子留言哦，确定要删除吗？')) {
           let cid = $btn.attr('cid');
           net.postJSON(self.props.delUrl, {commentID: cid}, function(res) {
             if(res.success) {
@@ -126,8 +126,7 @@ class Comment extends migi.Component {
     let $message = $list2.find('.message');
     let rid = $slide.attr('rid');
     if($lastSlide && $lastSlide[0] !== $slide[0] && $lastSlide.hasClass('on')) {
-      $lastSlide.removeClass('on').closest('li').find('.list2').css('height', 0);
-      $lastSlide = null;
+      self.hideLast();
     }
     if($slide.hasClass('on')) {
       $slide.removeClass('on');
@@ -179,6 +178,12 @@ class Comment extends migi.Component {
       }
     }
   }
+  slideOn(cid) {
+    let $slide = $(this.element).find('#comment_' + cid).find('.slide');
+    if(!$slide.hasClass('on')) {
+      $slide.find('.sub').click();
+    }
+  }
   clearData() {
     if(ajax) {
       ajax.abort();
@@ -209,12 +214,17 @@ class Comment extends migi.Component {
     this.genComment(item).prependTo(this.ref.list.element);
   }
   prependChild(item) {
-    let li = this.genChildComment(item);
     let $comment = $('#comment_' + item.RootID);
     let $list2 = $comment.find('.list2');
     let $ul = $list2.find('ul');
-    li.prependTo($ul[0]);
-    $list2.css('height', $ul.height());
+    let state = subLoadHash[item.RootID];
+    if(state === HAS_LOADED || state === IS_LOADING) {
+      let li = this.genChildComment(item);
+      li.prependTo($ul[0]);
+    }
+    if($ul.closest('li').find('.slide').hasClass('on')) {
+      $list2.css('height', $ul.height());
+    }
     let $num = $comment.find('.slide small.sub');
     $num.text((parseInt($num.text()) || 0) + 1);
   }
@@ -276,6 +286,12 @@ class Comment extends migi.Component {
         <b class="arrow"/>
       </div>
     </li>;
+  }
+  hideLast() {
+    if($lastSlide && $lastSlide.hasClass('on')) {
+      $lastSlide.removeClass('on').closest('li').find('.list2').css('height', 0);
+    }
+    $lastSlide = null;
   }
   render() {
     return <div class="cp-comment">

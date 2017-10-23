@@ -9,7 +9,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?4';
+    return '/public' + url + '?5';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -21,6 +21,8 @@ module.exports = {
     if(url.indexOf('//') === -1) {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
     }
+    url += url.indexOf('?') > -1 ? '&' : '?';
+    url += 'traceID=' + this.ctx.traceID || '';
     let start = Date.now();
     let res;
     try {

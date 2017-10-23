@@ -93,9 +93,6 @@
 .cp-comment {
   position: relative;
 }
-.cp-comment .list > li {
-  padding: 0 0.05rem;
-}
 .cp-comment .list > li.empty {
   text-align: center;
   color: #999;

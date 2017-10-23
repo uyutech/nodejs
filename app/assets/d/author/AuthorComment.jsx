@@ -30,12 +30,10 @@ class AuthorComment extends migi.Component {
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
-        // self.emit('replayName', name);
       });
       comment.on('closeSubComment', function() {
         self.rootID = -1;
         self.parentID = -1;
-        // self.emit('replayName', '');
       });
     });
   }
@@ -173,6 +171,26 @@ class AuthorComment extends migi.Component {
         </ul>
       </div>
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
+      <div class="warn">
+        <div class="t fn-clear">
+          <img class="pic" src="//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"/>
+          <div class="txt">
+            <div>
+              <span class="name">圈儿</span>
+              <small class="time">{ util.formatDate(1508739460298) }</small>
+            </div>
+          </div>
+        </div>
+        <div class="c">
+          <pre>自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m
+
+转圈系统运用了人工智能算法，所以会根据大家留言内容不同对积分数量进行相应地微调。所以请尽量不要发表重复或没有意义的留言哦( •̥́ ˍ •̀ )
+此外，短时间内在同一页面的留言将视为大家对之前留言的补充说明，为了便于今后的索引，将自动折叠为之前留言的子留言。˵ •́ o •̀ ˵
+
+希望大家转圈开心，都能得想要的福利∗ ❛ั ɞ ❛ั ∗很快会有越来越多的新功能解锁哦！</pre>
+          <b class="arrow"/>
+        </div>
+      </div>
       <Comment ref="comment"
                zanUrl="/api/author/likeComment"
                subUrl="/api/author/subCommentList"

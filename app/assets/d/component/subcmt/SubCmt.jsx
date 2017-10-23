@@ -8,26 +8,25 @@ class SubCmt extends migi.Component {
   constructor(...data) {
     super(...data);
     this.value = this.props.value || '';
-    this.hasCommentContent = this.value.trim().length;
+    this.invalid = this.value.trim().length < 3;
     this.maxlength = this.props.maxlength;
     this.subText = this.props.subText;
     this.placeholder = this.props.placeholder;
     this.originTo = this.props.originTo;
   }
-  @bind hasCommentContent
-  @bind isCommentSending
   @bind maxlength
   @bind placeholder
   @bind subText
   @bind value = ''
   @bind to
   @bind originTo
+  @bind invalid = true
   input(e, vd) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
     }
     else {
-      this.hasCommentContent = $(vd.element).val().trim().length;
+      this.invalid = $(vd.element).val().trim().length < 3;
     }
   }
   focus() {
@@ -37,7 +36,7 @@ class SubCmt extends migi.Component {
   }
   submit(e) {
     e.preventDefault();
-    if(this.hasCommentContent) {
+    if(!this.invalid) {
       this.emit('submit', this.value);
     }
   }
@@ -45,12 +44,16 @@ class SubCmt extends migi.Component {
     return <div class="cp-subcmt">
       <form class={ 'fn-clear' + (this.to || this.originTo ? ' to' : '') } ref="form" onSubmit={ this.submit }>
         <label>TO: { this.to || this.originTo }</label>
-        <input type="text" class="text" ref="input" placeholder={ this.placeholder || '夸夸这个作品吧' }
+        <input type="text" class="text" ref="input" placeholder={ this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个作品吧' }
                onInput={ this.input } onFocus={ this.focus } maxlength={ this.maxlength || 120 }
                value={ this.value }/>
         <input type="submit"
-               class={ 'submit' + (this.hasCommentContent && !this.isCommentSending ? '' : ' dis') }
-               value={ this.subText || '发布评论' }/>
+               class={ 'submit' + (this.invalid ? ' dis' : '') }
+               value={ this.value.trim().length
+                 ? this.value.trim().length < 3
+                   ? '再输' + (3 - this.value.trim().length) + '个字'
+                   : this.subText || '发布评论'
+                 : '最少3个字哦' }/>
       </form>
     </div>;
   }

@@ -713,7 +713,7 @@ var Comment = function (_migi$Component) {
       });
       $root.on('click', '.remove', function () {
         var $btn = $(this);
-        if (window.confirm('确定要删除吗？')) {
+        if (window.confirm('会删除子留言哦，确定要删除吗？')) {
           var cid = $btn.attr('cid');
           _net2.default.postJSON(self.props.delUrl, { commentID: cid }, function (res) {
             if (res.success) {
@@ -745,8 +745,7 @@ var Comment = function (_migi$Component) {
       var $message = $list2.find('.message');
       var rid = $slide.attr('rid');
       if ($lastSlide && $lastSlide[0] !== $slide[0] && $lastSlide.hasClass('on')) {
-        $lastSlide.removeClass('on').closest('li').find('.list2').css('height', 0);
-        $lastSlide = null;
+        self.hideLast();
       }
       if ($slide.hasClass('on')) {
         $slide.removeClass('on');
@@ -795,6 +794,14 @@ var Comment = function (_migi$Component) {
       }
     }
   }, {
+    key: 'slideOn',
+    value: function slideOn(cid) {
+      var $slide = $(this.element).find('#comment_' + cid).find('.slide');
+      if (!$slide.hasClass('on')) {
+        $slide.find('.sub').click();
+      }
+    }
+  }, {
     key: 'clearData',
     value: function clearData() {
       if (ajax) {
@@ -834,12 +841,17 @@ var Comment = function (_migi$Component) {
   }, {
     key: 'prependChild',
     value: function prependChild(item) {
-      var li = this.genChildComment(item);
       var $comment = $('#comment_' + item.RootID);
       var $list2 = $comment.find('.list2');
       var $ul = $list2.find('ul');
-      li.prependTo($ul[0]);
-      $list2.css('height', $ul.height());
+      var state = subLoadHash[item.RootID];
+      if (state === HAS_LOADED || state === IS_LOADING) {
+        var li = this.genChildComment(item);
+        li.prependTo($ul[0]);
+      }
+      if ($ul.closest('li').find('.slide').hasClass('on')) {
+        $list2.css('height', $ul.height());
+      }
       var $num = $comment.find('.slide small.sub');
       $num.text((parseInt($num.text()) || 0) + 1);
     }
@@ -852,6 +864,14 @@ var Comment = function (_migi$Component) {
     key: 'genChildComment',
     value: function genChildComment(item) {
       return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name2 fn-hide"]], [item.Send_ToUserName]), migi.createVd("b", [["class", "arrow fn-hide"]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+    }
+  }, {
+    key: 'hideLast',
+    value: function hideLast() {
+      if ($lastSlide && $lastSlide.hasClass('on')) {
+        $lastSlide.removeClass('on').closest('li').find('.list2').css('height', 0);
+      }
+      $lastSlide = null;
     }
   }, {
     key: 'render',
@@ -1087,7 +1107,7 @@ var SubCmt = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = SubCmt.__proto__ || Object.getPrototypeOf(SubCmt)).call.apply(_ref, [this].concat(data)));
 
     _this.value = _this.props.value || '';
-    _this.hasCommentContent = _this.value.trim().length;
+    _this.invalid = _this.value.trim().length < 3;
     _this.maxlength = _this.props.maxlength;
     _this.subText = _this.props.subText;
     _this.placeholder = _this.props.placeholder;
@@ -1101,7 +1121,7 @@ var SubCmt = function (_migi$Component) {
       if (!$CONFIG.isLogin) {
         migi.eventBus.emit('NEED_LOGIN');
       } else {
-        this.hasCommentContent = $(vd.element).val().trim().length;
+        this.invalid = $(vd.element).val().trim().length < 3;
       }
     }
   }, {
@@ -1115,7 +1135,7 @@ var SubCmt = function (_migi$Component) {
     key: 'submit',
     value: function submit(e) {
       e.preventDefault();
-      if (this.hasCommentContent) {
+      if (!this.invalid) {
         this.emit('submit', this.value);
       }
     }
@@ -1126,33 +1146,17 @@ var SubCmt = function (_migi$Component) {
         return 'fn-clear' + (this.to || this.originTo ? ' to' : '');
       })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("label", [], ["TO: ", new migi.Obj(["to", "originTo"], this, function () {
         return this.to || this.originTo;
-      })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj("placeholder", this, function () {
-        return this.placeholder || '夸夸这个作品吧';
+      })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
+        return this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个作品吧';
       })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
         return this.maxlength || 120;
       })], ["value", new migi.Obj("value", this, function () {
         return this.value;
-      })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj(["hasCommentContent", "isCommentSending"], this, function () {
-        return 'submit' + (this.hasCommentContent && !this.isCommentSending ? '' : ' dis');
-      })], ["value", new migi.Obj("subText", this, function () {
-        return this.subText || '发布评论';
+      })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj("invalid", this, function () {
+        return 'submit' + (this.invalid ? ' dis' : '');
+      })], ["value", new migi.Obj(["value", "subText"], this, function () {
+        return this.value.trim().length ? this.value.trim().length < 3 ? '再输' + (3 - this.value.trim().length) + '个字' : this.subText || '发布评论' : '最少3个字哦';
       })]])])]);
-    }
-  }, {
-    key: 'hasCommentContent',
-    set: function set(v) {
-      this.__setBind("hasCommentContent", v);this.__data("hasCommentContent");
-    },
-    get: function get() {
-      return this.__getBind("hasCommentContent");
-    }
-  }, {
-    key: 'isCommentSending',
-    set: function set(v) {
-      this.__setBind("isCommentSending", v);this.__data("isCommentSending");
-    },
-    get: function get() {
-      return this.__getBind("isCommentSending");
     }
   }, {
     key: 'maxlength',
@@ -1201,6 +1205,14 @@ var SubCmt = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("originTo");
+    }
+  }, {
+    key: 'invalid',
+    set: function set(v) {
+      this.__setBind("invalid", v);this.__data("invalid");
+    },
+    get: function get() {
+      if (this.__initBind("invalid")) this.__setBind("invalid", true);return this.__getBind("invalid");
     }
   }]);
 

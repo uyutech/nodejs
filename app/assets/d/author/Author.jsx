@@ -18,8 +18,9 @@ class Author extends migi.Component {
       let authorComment = self.ref.authorComment;
       let comment = self.ref.authorComment.ref.comment;
       let subCmt = self.ref.subCmt;
+      let page = self.ref.authorComment.ref.page;
       subCmt.on('submit', function(content) {
-        subCmt.isCommentSending = true;
+        subCmt.invalid = true;
         let rootID = authorComment.rootID;
         let parentID = authorComment.parentID;
         net.postJSON('/api/author/addComment', {
@@ -29,32 +30,40 @@ class Author extends migi.Component {
           content,
         }, function(res) {
           if(res.success) {
+            let data = res.data;
             subCmt.value = '';
-            subCmt.hasCommentContent = false;
-            if(rootID === -1) {
-              comment.prependData(res.data);
+            if(rootID === -1 && data.RootID === -1) {
+              comment.prependData(data);
               comment.message = '';
             }
             else {
-              comment.prependChild(res.data);
+              comment.prependChild(data);
+            }
+            // 特殊处理最近连续回复变为二级评论自动展开
+            if(rootID === -1 && data.RootID !== -1) {
+              comment.slideOn(data.RootID);
             }
           }
           else if(res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
           }
           else {
             alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
           }
-          subCmt.isCommentSending = false;
         }, function(res) {
           alert(res.message || util.ERROR_MESSAGE);
-          subCmt.isCommentSending = false;
+          subCmt.invalid = false;
         });
       });
       comment.on('chooseSubComment', function(rid, cid, name) {
         subCmt.to = name;
       });
       comment.on('closeSubComment', function() {
+        subCmt.to = '';
+      });
+      page.on('page', function() {
         subCmt.to = '';
       });
       // self.ref.home.hide();
@@ -91,11 +100,6 @@ class Author extends migi.Component {
   render() {
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
-      {
-        this.props.authorDetail.ISSettled
-          ? ''
-          : <img class="no-settled" src="//zhuanquan.xin/img/dc5828468e40e5d1c882fe1a35e97b1b.jpg"/>
-      }
       <ul class="type fn-clear" onClick={ { li: this.clickType } }>
         {
           this.props.authorDetail.ISSettled

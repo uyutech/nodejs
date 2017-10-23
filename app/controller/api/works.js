@@ -34,6 +34,8 @@ module.exports = app => {
     * addComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
+      // let test = yield ctx.service.green.textScan(body.content);ctx.body = test;return;
+      // console.log(test);
       let res = yield ctx.helper.postServiceJSON('api/works/AddComment', {
         uid,
         ParentID: body.parentID,

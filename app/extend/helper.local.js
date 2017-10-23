@@ -21,6 +21,8 @@ module.exports = {
     if(url.indexOf('//') === -1) {
       url = 'http://192.168.0.3/' + url.replace(/^\//, '');
     }
+    url += url.indexOf('?') > -1 ? '&' : '?';
+    url += 'traceID=' + this.ctx.traceID || '';
     let start = Date.now();
     let res;
     try {
