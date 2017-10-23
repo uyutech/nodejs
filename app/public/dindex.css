@@ -147,6 +147,9 @@ body {
   font-size: 0.14rem;
   opacity: 0.8;
 }
+.quaniang .txt pre {
+  white-space: pre-wrap;
+}
 .quaniang .txt p {
   font-size: 0.12rem;
   opacity: 0.8;

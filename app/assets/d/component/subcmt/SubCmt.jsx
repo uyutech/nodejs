@@ -51,9 +51,9 @@ class SubCmt extends migi.Component {
                class={ 'submit' + (this.invalid ? ' dis' : '') }
                value={ this.value.trim().length
                  ? this.value.trim().length < 3
-                   ? '再输' + (3 - this.value.trim().length) + '个字'
+                   ? '还少' + (3 - this.value.trim().length) + '个字哦'
                    : this.subText || '发布评论'
-                 : '最少3个字哦' }/>
+                 : '发布评论' }/>
       </form>
     </div>;
   }

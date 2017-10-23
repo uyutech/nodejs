@@ -327,7 +327,7 @@ var SubCmt = function (_migi$Component) {
       })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj("invalid", this, function () {
         return 'submit' + (this.invalid ? ' dis' : '');
       })], ["value", new migi.Obj(["value", "subText"], this, function () {
-        return this.value.trim().length ? this.value.trim().length < 3 ? '再输' + (3 - this.value.trim().length) + '个字' : this.subText || '发布评论' : '最少3个字哦';
+        return this.value.trim().length ? this.value.trim().length < 3 ? '还少' + (3 - this.value.trim().length) + '个字哦' : this.subText || '发布评论' : '发布评论';
       })]])])]);
     }
   }, {

@@ -17582,6 +17582,13 @@ migi.eventBus.on('SET_VOLUME', function (v) {
   localStorage[key] = v;
 });
 
+migi.eventBus.on('COMMENT', function (type) {
+  var parent = window.parent;
+  if (parent !== window) {
+    parent.comment && parent.comment(type);
+  }
+});
+
 /***/ }),
 /* 144 */
 /***/ (function(module, exports, __webpack_require__) {

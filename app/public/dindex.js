@@ -91,6 +91,10 @@ var topNav = migi.preExist(migi.createCp(_TopNav2.default, [["userInfo", $CONFIG
 
 var cIframe = void 0;
 
+var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, []), document.body);
+
+migi.render(migi.createVd("div", [["class", "info"]]), document.body);
+
 window.setHash = function (hash) {
   location.hash = hash;
 };
@@ -108,6 +112,20 @@ window.upZIndex = function () {
 };
 window.downZIndex = function () {
   $(cIframe.element).removeClass('up');
+};
+var commentType = {};
+window.comment = function (type) {
+  commentType[type] = commentType[type] || [];
+  var list = commentType[type];
+  var now = Date.now();
+  if (list.length) {
+    var last = list[list.length - 1];
+    if (now - last < 1000 * 60) {
+      quanNiang.message = '为了方便其他小伙伴和大大们阅读，请尽量将每次想说的话在一条留言中发布哦~\n将一句留言在短时间内拆成多条发送，所获得的积分并没有作为一条完整留言发送所获得的积分多哦˵ •́ o •̀ ˵';
+      quanNiang.show();
+    }
+  }
+  list.push(now);
 };
 
 function iframeGoto(hash) {
@@ -132,10 +150,6 @@ iframeGoto(location.hash);
 topNav.on('search', function (kw) {
   location.hash = '/search/' + kw;
 });
-
-migi.render(migi.createCp(_QuanNiang2.default, []), document.body);
-
-migi.render(migi.createVd("div", [["class", "info"]]), document.body);
 
 /***/ }),
 
@@ -229,9 +243,20 @@ var QuanNiang = function (_migi$Component) {
   }
 
   _createClass(QuanNiang, [{
-    key: 'click',
+    key: "click",
     value: function click(e) {
       e.preventDefault();
+      this.show();
+    }
+  }, {
+    key: "clickClose",
+    value: function clickClose(e) {
+      e.preventDefault();
+      $(this.ref.txt.element).addClass('fn-hide');
+    }
+  }, {
+    key: "show",
+    value: function show() {
       var $txt = $(this.ref.txt.element);
       $txt.removeClass('fn-hide');
       timeout = setTimeout(function () {
@@ -239,15 +264,19 @@ var QuanNiang = function (_migi$Component) {
       }, 5000);
     }
   }, {
-    key: 'clickClose',
-    value: function clickClose(e) {
-      e.preventDefault();
-      $(this.ref.txt.element).addClass('fn-hide');
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "quaniang"]], [migi.createVd("a", [["href", "#"], ["class", "pic"], ["onClick", new migi.Cb(this, this.click)]]), migi.createVd("div", [["class", "txt fn-hide"], ["ref", "txt"]], [migi.createVd("h5", [], ["圈娘："]), migi.createVd("pre", [], [new migi.Obj("message", this, function () {
+        return this.message || '感谢参与转圈内测，现在我们还只有最基础的功能，程序员小哥哥们还在加班加点进行建设。\n欢迎随处逛逛，也欢迎给我们提出宝贵建议！我们一定会做得更好=3=';
+      })]), migi.createVd("p", [], ["欢迎点击右侧给我们留言！", migi.createVd("a", [["href", "http://weibo.com/u/6259241863"], ["target", "_blank"]], ["@转圈circling"])]), migi.createVd("a", [["class", "close"], ["href", "#"], ["onClick", new migi.Cb(this, this.clickClose)]], ["好的"])])]);
     }
   }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "quaniang"]], [migi.createVd("a", [["href", "#"], ["class", "pic"], ["onClick", new migi.Cb(this, this.click)]]), migi.createVd("div", [["class", "txt fn-hide"], ["ref", "txt"]], [migi.createVd("h5", [], ["圈娘："]), migi.createVd("p", [], ["感谢参与转圈内测，现在我们还只有最基础的功能，程序员小哥哥们还在加班加点进行建设。"]), migi.createVd("p", [], ["欢迎随处逛逛，也欢迎给我们提出宝贵建议！我们一定会做得更好=3="]), migi.createVd("p", [], ["欢迎点击右侧给我们留言！", migi.createVd("a", [["href", "http://weibo.com/u/6259241863"], ["target", "_blank"]], ["@转圈circling"])]), migi.createVd("a", [["class", "close"], ["href", "#"], ["onClick", new migi.Cb(this, this.clickClose)]], ["好的"])])]);
+    key: "message",
+    set: function set(v) {
+      this.__setBind("message", v);this.__data("message");
+    },
+    get: function get() {
+      return this.__getBind("message");
     }
   }]);
 

@@ -16,7 +16,7 @@ class Follow extends migi.Component {
           (this.list || []).map(function(item) {
             return <li>
               <a href={ '/author/' + item.AuthorID } class="pic">
-                <img src={ item.Head_url }/>
+                <img src={ item.Head_url || '//zhuanquan.xin/head/0d90e4f2e6f7ef48992df6b49f54cf40.png' }/>
               </a>
               <a href="#" class="txt">{ item.AuthorName }</a>
               <div class="info">{ item.FansNumber }粉丝</div>

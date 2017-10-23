@@ -36,3 +36,10 @@ migi.eventBus.on('SET_VOLUME', function(v) {
   let key = uid + 'volume';
   localStorage[key] = v;
 });
+
+migi.eventBus.on('COMMENT', function(type) {
+  let parent = window.parent;
+  if(parent !== window) {
+    parent.comment && parent.comment(type);
+  }
+});

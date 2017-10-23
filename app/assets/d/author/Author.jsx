@@ -39,10 +39,11 @@ class Author extends migi.Component {
             else {
               comment.prependChild(data);
             }
-            // 特殊处理最近连续回复变为二级评论自动展开
-            if(rootID === -1 && data.RootID !== -1) {
-              comment.slideOn(data.RootID);
+            let $tag = $(self.ref.type.element).find('.comments');
+            if(!$tag.hasClass('cur')) {
+              $tag.click();
             }
+            migi.eventBus.emit('COMMENT', 'work');
           }
           else if(res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
@@ -100,7 +101,7 @@ class Author extends migi.Component {
   render() {
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
-      <ul class="type fn-clear" onClick={ { li: this.clickType } }>
+      <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
         {
           this.props.authorDetail.ISSettled
             ? <li class="home cur" rel="0">主页</li>
