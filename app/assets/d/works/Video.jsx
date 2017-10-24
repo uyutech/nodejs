@@ -330,7 +330,7 @@ class Video extends migi.Component {
         }
       </ul>
       <h3 ref="title">{ this.datas[this.index].ItemName }</h3>
-      <div class="num">
+      <div class="num fn-hide">
         <small class="play">{ this.datas[this.index].PlayHis || 0 }</small>
       </div>
       <div class={ 'c' + ( this.isPlaying ? ' playing' : '') } ref="c">

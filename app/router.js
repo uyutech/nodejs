@@ -24,8 +24,8 @@ module.exports = app => {
   // app.get('/d/upload', 'd.upload.index');
   // app.get('/d/guide.index', 'd.guide.index');
 
-  app.get('/m', 'm.index.index');
-  app.get('/m/find', 'm.find.index');
+  // app.get('/m', 'm.index.index');
+  // app.get('/m/find', 'm.find.index');
   app.get('/m/works/:worksID', 'm.works.index');
   app.get('/m/author/:authorID', 'm.author.index');
   app.get('/m/search/:kw', 'm.search.index');

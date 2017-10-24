@@ -13,7 +13,7 @@ let loadingMore;
 let ajax;
 let HASH = {
   'hetu': {
-    skip: -1,
+    skip: 0,
     authorId: window.HETU_ID,
     state: window.FOLLOW.FOLLOW_HETU,
     img: `//zhuanquan.xyz/rhymesland/hetu_a.png`,
@@ -22,7 +22,7 @@ let HASH = {
     n: 181
   },
   'sixia': {
-    skip: -1,
+    skip: 0,
     authorId: window.SIXIA_ID,
     state: window.FOLLOW.FOLLOW_SIXIA,
     // img: `//192.168.0.7/sixia_a.png`,
@@ -32,7 +32,7 @@ let HASH = {
     n: 181
   },
   'muhan': {
-    skip: -1,
+    skip: 0,
     authorId: window.MUHAN_ID,
     state: window.FOLLOW.FOLLOW_MUHAN,
     // img: `//192.168.0.7/muhan_a.png`,
@@ -42,7 +42,7 @@ let HASH = {
     n: 181
   },
   'mi': {
-    skip: -1,
+    skip: 0,
     authorId: window.MI_ID,
     state: window.FOLLOW.FOLLOW_MI,
     // img: '//192.168.0.7/mi_a.png',
@@ -52,7 +52,7 @@ let HASH = {
     n: 181
   },
   'jiemeng': {
-    skip: -1,
+    skip: 0,
     authorId: window.JIEMENG_ID,
     state: window.FOLLOW.FOLLOW_JIEMENG,
   }
@@ -154,7 +154,7 @@ class Character extends migi.Component{
     skip = 0;
     currentCount = 0;
     Object.keys(HASH).forEach(function(key) {
-      HASH[key].skip = -1;
+      HASH[key].skip = 0;
       HASH[key].end = false;
     });
     showAnimate = false;
@@ -214,7 +214,7 @@ class Character extends migi.Component{
     this.ref.comment.showComment();
     skip = 0;
     currentCount = 0;
-    HASH[this.name].skip = -1;
+    HASH[this.name].skip = 0;
     HASH[this.name].end = false;
     this.rootId = null;
     this.replayId = null;
@@ -230,7 +230,7 @@ class Character extends migi.Component{
     ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.name].authorId , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        currentCount = data.Size;
+        // currentCount = data.Size;
         skip += take;
         if(data.Size) {
           self.ref.comment.message = '';
@@ -265,7 +265,7 @@ class Character extends migi.Component{
       ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.name].authorId, skip, take, sortType, myComment, currentCount }, function(res) {
         if(res.success) {
           let data = res.data;
-          currentCount = data.Size;
+          // currentCount = data.Size;
           skip += take;
           if(data.data.length) {
             self.ref.comment.addMore(data.data);
@@ -353,7 +353,7 @@ class Character extends migi.Component{
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    HASH[this.name].skip = -1;
+    HASH[this.name].skip = 0;
     HASH[this.name].end = false;
     currentCount = 0;
     sortType = rel;
@@ -367,7 +367,7 @@ class Character extends migi.Component{
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    HASH[this.name].skip = -1;
+    HASH[this.name].skip = 0;
     HASH[this.name].end = false;
     currentCount = 0;
     myComment = rel;

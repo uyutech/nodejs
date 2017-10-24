@@ -4,7 +4,7 @@
 
 import Comment from '../character/Comment.jsx';
 
-let skip = -1;
+let skip = 0;
 let take = 10;
 let sortType = 0;
 let myComment = 0;
@@ -40,7 +40,7 @@ class WorkComment extends migi.Component {
     let self = this;
     $(self.element).addClass('fn-hide');
     self.showComment = false;
-    skip = -1;
+    skip = 0;
   }
   @bind showComment
   @bind rootId = null
@@ -60,7 +60,7 @@ class WorkComment extends migi.Component {
     ajax = util.postJSON('/api/works/commentList', { worksID: self.id , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        currentCount = data.Size;
+        // currentCount = data.Size;
         skip += take;
         if(data.data.length) {
           self.ref.comment.message = '';
@@ -101,7 +101,7 @@ class WorkComment extends migi.Component {
       ajax = util.postJSON('/api/works/commentList', { worksID: self.id , skip, take, sortType, myComment, currentCount }, function(res) {
         if(res.success) {
           let data = res.data;
-          currentCount = data.Size;
+          // currentCount = data.Size;
           skip += take;
           if(data.data.length) {
             self.ref.comment.addMore(data.data);

@@ -6,21 +6,21 @@
 
 module.exports = () => {
   return function* (next) {
-    // let ua = this.get('user-agent');
-    // if(/(iPhone|iPod|Android|ios|iPad)/i.test(ua)) {
-    //   this.body = `<!DOCTYPE html><html>
-    //     <head>
-    //     ${this.helper.getMTopNav()}
-    //     <script>
-    //       var hash = location.hash;
-    //       hash = hash || '#/find';
-    //       hash = hash.replace(/^#/, '').replace(/^\\//, '');
-    //       location.replace('//m.' + location.host + '/' + hash);
-    //     </script>
-    //     </head>
-    //     <body></body></html>`;
-    //   return;
-    // }
+    let ua = this.get('user-agent');
+    if(/(iPhone|iPod|Android|ios|iPad)/i.test(ua)) {
+      this.body = `<!DOCTYPE html><html>
+        <head>
+        ${this.helper.getMTopNav()}
+        <script>
+          var hash = location.hash;
+          hash = hash || '#/find';
+          hash = hash.replace(/^#/, '').replace(/^\\//, '');
+          location.replace('//m.' + location.host + '/' + hash);
+        </script>
+        </head>
+        <body></body></html>`;
+      return;
+    }
     yield next;
   };
 };

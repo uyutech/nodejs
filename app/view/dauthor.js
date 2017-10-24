@@ -2599,7 +2599,7 @@ var AuthorComment = function (_migi$Component) {
       ajax = _net2.default.postJSON('/api/author/commentList', { authorID: self.authorID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          currentCount = data.Size;
+          // currentCount = data.Size;
           skip += take;
           if (data.data.length) {
             comment.message = '';

@@ -2389,7 +2389,7 @@ var Audio = function (_migi$Component) {
         }.bind(this));
       })]), migi.createVd("h3", [], [new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].ItemName;
-      })]), migi.createVd("div", [["class", "num"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj(["datas", "index"], this, function () {
+      })]), migi.createVd("div", [["class", "num fn-hide"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].PlayHis || 0;
       })])]), migi.createVd("div", [["class", "c"]], [migi.createVd("div", [["class", new migi.Obj("hasStart", this, function () {
         return 'lyrics' + (this.hasStart ? '' : ' fn-hidden');
@@ -2926,7 +2926,7 @@ var Video = function (_migi$Component) {
         }.bind(this));
       })]), migi.createVd("h3", [["ref", "title"]], [new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].ItemName;
-      })]), migi.createVd("div", [["class", "num"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj(["datas", "index"], this, function () {
+      })]), migi.createVd("div", [["class", "num fn-hide"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].PlayHis || 0;
       })])]), migi.createVd("div", [["class", new migi.Obj("isPlaying", this, function () {
         return 'c' + (this.isPlaying ? ' playing' : '');
@@ -3553,7 +3553,7 @@ var WorkComment = function (_migi$Component) {
       ajax = _net2.default.postJSON('/api/works/commentList', { worksID: self.worksID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          currentCount = data.Size;
+          // currentCount = data.Size;
           skip += take;
           if (data.data.length) {
             comment.message = '';

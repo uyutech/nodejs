@@ -1132,7 +1132,7 @@ var loadingMore = void 0;
 var ajax = void 0;
 var HASH = {
   'hetu': {
-    skip: -1,
+    skip: 0,
     authorId: window.HETU_ID,
     state: window.FOLLOW.FOLLOW_HETU,
     img: '//zhuanquan.xyz/rhymesland/hetu_a.png',
@@ -1141,7 +1141,7 @@ var HASH = {
     n: 181
   },
   'sixia': {
-    skip: -1,
+    skip: 0,
     authorId: window.SIXIA_ID,
     state: window.FOLLOW.FOLLOW_SIXIA,
     // img: `//192.168.0.7/sixia_a.png`,
@@ -1151,7 +1151,7 @@ var HASH = {
     n: 181
   },
   'muhan': {
-    skip: -1,
+    skip: 0,
     authorId: window.MUHAN_ID,
     state: window.FOLLOW.FOLLOW_MUHAN,
     // img: `//192.168.0.7/muhan_a.png`,
@@ -1161,7 +1161,7 @@ var HASH = {
     n: 181
   },
   'mi': {
-    skip: -1,
+    skip: 0,
     authorId: window.MI_ID,
     state: window.FOLLOW.FOLLOW_MI,
     // img: '//192.168.0.7/mi_a.png',
@@ -1171,7 +1171,7 @@ var HASH = {
     n: 181
   },
   'jiemeng': {
-    skip: -1,
+    skip: 0,
     authorId: window.JIEMENG_ID,
     state: window.FOLLOW.FOLLOW_JIEMENG
   }
@@ -1284,7 +1284,7 @@ var Character = function (_migi$Component) {
       skip = 0;
       currentCount = 0;
       Object.keys(HASH).forEach(function (key) {
-        HASH[key].skip = -1;
+        HASH[key].skip = 0;
         HASH[key].end = false;
       });
       showAnimate = false;
@@ -1345,7 +1345,7 @@ var Character = function (_migi$Component) {
       this.ref.comment.showComment();
       skip = 0;
       currentCount = 0;
-      HASH[this.name].skip = -1;
+      HASH[this.name].skip = 0;
       HASH[this.name].end = false;
       this.rootId = null;
       this.replayId = null;
@@ -1363,7 +1363,7 @@ var Character = function (_migi$Component) {
       ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.name].authorId, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          currentCount = data.Size;
+          // currentCount = data.Size;
           skip += take;
           if (data.Size) {
             self.ref.comment.message = '';
@@ -1398,7 +1398,7 @@ var Character = function (_migi$Component) {
         ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.name].authorId, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
           if (res.success) {
             var data = res.data;
-            currentCount = data.Size;
+            // currentCount = data.Size;
             skip += take;
             if (data.data.length) {
               self.ref.comment.addMore(data.data);
@@ -1491,7 +1491,7 @@ var Character = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      HASH[this.name].skip = -1;
+      HASH[this.name].skip = 0;
       HASH[this.name].end = false;
       currentCount = 0;
       sortType = rel;
@@ -1507,7 +1507,7 @@ var Character = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      HASH[this.name].skip = -1;
+      HASH[this.name].skip = 0;
       HASH[this.name].end = false;
       currentCount = 0;
       myComment = rel;
@@ -3361,7 +3361,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var skip = -1;
+var skip = 0;
 var take = 10;
 var sortType = 0;
 var myComment = 0;
@@ -3414,7 +3414,7 @@ var WorkComment = function (_migi$Component) {
       var self = this;
       $(self.element).addClass('fn-hide');
       self.showComment = false;
-      skip = -1;
+      skip = 0;
     }
   }, {
     key: 'load',
@@ -3429,7 +3429,7 @@ var WorkComment = function (_migi$Component) {
       ajax = util.postJSON('/api/works/commentList', { worksID: self.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          currentCount = data.Size;
+          // currentCount = data.Size;
           skip += take;
           if (data.data.length) {
             self.ref.comment.message = '';
@@ -3469,7 +3469,7 @@ var WorkComment = function (_migi$Component) {
         ajax = util.postJSON('/api/works/commentList', { worksID: self.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
           if (res.success) {
             var data = res.data;
-            currentCount = data.Size;
+            // currentCount = data.Size;
             skip += take;
             if (data.data.length) {
               self.ref.comment.addMore(data.data);
@@ -4248,7 +4248,7 @@ var Comment = function (_migi$Component) {
         } else {
           $list2.css('height', 'auto');
           subLoadHash[rid] = IS_LOADING;
-          ajax = util.postJSON(self.props.subUrl, { rootID: rid, skip: -1, take: take }, function (res) {
+          ajax = util.postJSON(self.props.subUrl, { rootID: rid, skip: 0, take: take }, function (res) {
             if (res.success) {
               subLoadHash[rid] = HAS_LOADED;
               var s = '';

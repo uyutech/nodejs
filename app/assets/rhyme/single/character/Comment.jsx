@@ -163,7 +163,7 @@ class Comment extends migi.Component {
       else {
         $list2.css('height', 'auto');
         subLoadHash[rid] = IS_LOADING;
-        ajax = util.postJSON(self.props.subUrl, { rootID: rid, skip: -1, take }, function(res) {
+        ajax = util.postJSON(self.props.subUrl, { rootID: rid, skip: 0, take }, function(res) {
           if(res.success) {
             subLoadHash[rid] = HAS_LOADED;
             let s = '';

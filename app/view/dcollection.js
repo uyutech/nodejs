@@ -1833,7 +1833,7 @@ var Player = function (_migi$Component) {
         return 'background-image:url("' + (this.cover || '//zhuanquan.xin/img/blank.png') + '")';
       })]], [migi.createVd("h3", [], [new migi.Obj("name", this, function () {
         return this.name;
-      })]), migi.createVd("div", [["class", "num"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj("playNum", this, function () {
+      })]), migi.createVd("div", [["class", "num fn-hide"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj("playNum", this, function () {
         return this.playNum || 0;
       })])]), migi.createVd("div", [["class", new migi.Obj(["isPlaying", "type"], this, function () {
         return 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '');
@@ -2669,7 +2669,7 @@ var WorkComment = function (_migi$Component) {
       ajax = _net2.default.postJSON('/api/collection/commentList', { collectionID: self.collectionID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          currentCount = data.Size;
+          // currentCount = data.Size;
           skip += take;
           if (data.data.length) {
             comment.message = '';
