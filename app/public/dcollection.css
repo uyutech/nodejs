@@ -668,6 +668,7 @@ body {
   border-radius: 0.24rem;
   height: 0.24rem;
   text-align: center;
+  font-size: 0.12rem;
 }
 .mod.mod-author ul li a.item {
   display: inline-block;
@@ -963,6 +964,7 @@ body {
   text-overflow: ellipsis;
 }
 .mod.mod-comment .warn {
+  margin-top: 0.1rem;
   padding: 0 0.1rem;
 }
 .mod.mod-comment .warn > .t {

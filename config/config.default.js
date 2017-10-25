@@ -3,7 +3,7 @@
 const path = require('path');
 
 module.exports = appInfo => {
-  const config = {};
+  let config = {};
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = 'circling_1506760927505_8735';
@@ -11,6 +11,7 @@ module.exports = appInfo => {
   config.session = {
     key: 'sessionid',
     maxAge: 30 * 24 * 3600 * 1000,
+    domain: '.circling.cc',
   };
 
   // add your config here

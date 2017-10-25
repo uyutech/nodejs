@@ -65,7 +65,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 18:
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -155,10 +155,10 @@ exports.default = function (data) {
 
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDTopNav() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dindex.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dindex.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dindex.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dindex.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _TopNav = __webpack_require__(18);
+var _TopNav = __webpack_require__(24);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 

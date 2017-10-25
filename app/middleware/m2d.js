@@ -10,7 +10,7 @@ module.exports = () => {
     if(!/(iPhone|iPod|Android|ios|iPad)/i.test(ua)) {
       this.body = `<!DOCTYPE html><html>
         <head>
-        ${this.helper.getDTopNav()}
+        ${this.helper.getDHead()}
         <script>
           var pathname = location.pathname;
           location.replace('//' + location.host.replace('m.', '') + '/#' + pathname);

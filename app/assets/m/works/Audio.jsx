@@ -4,7 +4,6 @@
 
 import util from '../common/util';
 import net from '../common/net';
-import LyricsParser from './LyricsParser.jsx';
 
 let lyricsIndex = -1;
 let lyricsHeight = [];

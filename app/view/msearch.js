@@ -65,6 +65,53 @@
 /************************************************************************/
 /******/ ({
 
+/***/ 10:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BotNav = function (_migi$Component) {
+  _inherits(BotNav, _migi$Component);
+
+  function BotNav() {
+    var _ref;
+
+    _classCallCheck(this, BotNav);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = BotNav.__proto__ || Object.getPrototypeOf(BotNav)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(BotNav, [{
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-botnav"]], ["All Rights Reserved 转圈circling 浙ICP备17029501号-2"]);
+    }
+  }]);
+
+  return BotNav;
+}(migi.Component);
+
+migi.name(BotNav, "BotNav");exports.default = BotNav;
+
+/***/ }),
+
 /***/ 2:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -98,7 +145,7 @@ let util = {
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -166,118 +213,6 @@ let net = {
 
 /***/ }),
 
-/***/ 5:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-let code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer',
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer',
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer',
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician',
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician',
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer',
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer',
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental',
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video',
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter',
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter',
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter',
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer',
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer',
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting',
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer',
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer',
-  },
-};
-
-let label2Code = {};
-Object.keys(code2Data).forEach(function(k) {
-  let v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  code2Data,
-  label2Code,
-});
-
-
-/***/ }),
-
 /***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -296,14 +231,14 @@ exports.default = function (data) {
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["kw", kw]]));
   var botNav = migi.preRender(migi.createCp(_BotNav2.default, []));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMTopNav({ title: kw }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/msearch.css') + '"/>\n</head>\n<body>\n<div id="page">' + search + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.kw = ' + JSON.stringify(kw) + ';\n  $CONFIG.datas = ' + JSON.stringify(datas) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/msearch.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: kw }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/msearch.css') + '"/>\n</head>\n<body>\n<div id="page">' + search + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.kw = ' + JSON.stringify(kw) + ';\n  $CONFIG.datas = ' + JSON.stringify(datas) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/msearch.js') + '"></script>\n</body>\n</html>';
 };
 
-var _TopNav = __webpack_require__(6);
+var _TopNav = __webpack_require__(9);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _BotNav = __webpack_require__(7);
+var _BotNav = __webpack_require__(10);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
@@ -329,7 +264,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(3);
+var _net = __webpack_require__(4);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -337,7 +272,7 @@ var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(5);
+var _authorTemplate = __webpack_require__(8);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -521,7 +456,119 @@ migi.name(Search, "Search");exports.default = Search;
 
 /***/ }),
 
-/***/ 6:
+/***/ 8:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+let code2Data = {
+  '901': {
+    name: '出品',
+    display: '出品',
+    css: 'producer',
+  },
+  '111': {
+    name: '演唱',
+    display: '演唱',
+    css: 'singer',
+  },
+  '112': {
+    name: '和声',
+    display: '和声',
+    css: 'singer',
+  },
+  '121': {
+    name: '作曲',
+    display: '作曲',
+    css: 'musician',
+  },
+  '122': {
+    name: '编曲',
+    display: '编曲',
+    css: 'musician',
+  },
+  '131': {
+    name: '混音',
+    display: '混音',
+    css: 'mixer',
+  },
+  '134': {
+    name: '修音',
+    display: '修音',
+    css: 'mixer',
+  },
+  '141': {
+    name: '演奏',
+    display: '', //直接显示乐器名。
+    css: 'instrumental',
+  },
+  '211': {
+    name: '视频',
+    display: '视频',
+    css: 'video',
+  },
+  '311': {
+    name: '立绘',
+    display: '立绘',
+    css: 'painter',
+  },
+  '312': {
+    name: 'CG',
+    display: 'CG',
+    css: 'painter',
+  },
+  '313': {
+    name: '场景',
+    display: '场景',
+    css: 'painter',
+  },
+  '331': {
+    name: '设计',
+    display: '设计',
+    css: 'designer',
+  },
+  '332': {
+    name: '海报',
+    display: '海报',
+    css: 'designer',
+  },
+  '351': {
+    name: '书法',
+    display: '书法',
+    css: 'handwriting',
+  },
+  '411': {
+    name: '作词',
+    display: '作词',
+    css: 'writer',
+  },
+  '421': {
+    name: '文案',
+    display: '文案',
+    css: 'writer',
+  },
+};
+
+let label2Code = {};
+Object.keys(code2Data).forEach(function(k) {
+  let v = code2Data[k];
+  label2Code[v.css] = label2Code[v.css] || [];
+  label2Code[v.css].push(k);
+});
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  code2Data,
+  label2Code,
+});
+
+
+/***/ }),
+
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -582,7 +629,10 @@ var TopNav = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "top-nav"]], [migi.createVd("a", [["href", "/"], ["class", "logo"]]), migi.createVd("form", [["class", "form"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["action", "/search/"]], [migi.createVd("input", [["ref", "input"], ["type", "text"], ["maxlength", "16"], ["placeholder", "新歌《燃尽人间色发布》"], ["value", this.props.kw || ''], ["onFocus", new migi.Cb(this, this.focus)]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)]], ["确认"]), migi.createVd("a", [["href", "/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.clickUser)]], [migi.createVd("img", [["src", this.props.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])])]);
+      return migi.createVd("div", [["class", "top-nav"]], [migi.createVd("a", [["href", "/"], ["class", "logo"]]), migi.createVd("form", [["class", "form"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["action", "/search/"]], [
+        /*<input ref="input" type="text" maxlength="16" placeholder="新歌《燃尽人间色发布》" value={ this.props.kw || '' } onFocus={ this.focus }/>*/
+      ]),, /*<button onClick={ this.click }>确认</button>*/
+      migi.createVd("a", [["href", "/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.clickUser)]], [migi.createVd("img", [["src", this.props.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']])])]);
     }
   }]);
 
@@ -590,53 +640,6 @@ var TopNav = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(TopNav, "TopNav");exports.default = TopNav;
-
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var BotNav = function (_migi$Component) {
-  _inherits(BotNav, _migi$Component);
-
-  function BotNav() {
-    var _ref;
-
-    _classCallCheck(this, BotNav);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = BotNav.__proto__ || Object.getPrototypeOf(BotNav)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(BotNav, [{
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-botnav"]], ["All Rights Reserved 转圈circling 浙ICP备17029501号-2"]);
-    }
-  }]);
-
-  return BotNav;
-}(migi.Component);
-
-migi.name(BotNav, "BotNav");exports.default = BotNav;
 
 /***/ })
 

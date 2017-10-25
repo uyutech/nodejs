@@ -45,7 +45,7 @@ module.exports = {
   autoSsl: function(url) {
     return (url || '').replace(/^https?:\/\//i, '//');
   },
-  getDTopNav: function(data) {
+  getDHead: function(data) {
     data = data || {};
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
@@ -70,7 +70,7 @@ module.exports = {
       </div>
     </div>`;
   },
-  getMTopNav: function(data) {
+  getMHead: function(data) {
     data = data || {};
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
@@ -84,6 +84,19 @@ module.exports = {
       <meta name="format-detection" content="email=no"/>
       <meta name="wap-font-scale" content="no"/>
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">`;
+  },
+  getMTopNav: function(data) {
+    data = data || {};
+    return `<div class="top-nav">
+      <a href="/" class="logo"></a>
+      <a href="/my" class="user">
+        <span>${data.uid ? '' : '登录/注册'}</span>
+        <img src=${data.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>
+      </a>
+    </div>`;
+  },
+  getMBotNav: function() {
+    return `<div class="cp-botnav">All Rights Reserved 转圈circling 浙ICP备17029501号-2</div>`;
   },
   getStat() {
     return '';

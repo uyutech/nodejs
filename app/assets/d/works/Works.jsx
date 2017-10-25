@@ -2,8 +2,6 @@
  * Created by army8735 on 2017/9/21.
  */
 
-import net from '../common/net';
-import util from '../common/util';
 import Title from './Title.jsx';
 import Media from './Media.jsx';
 import itemTemplate from './itemTemplate';
@@ -107,7 +105,11 @@ class Works extends migi.Component {
     if(unknowList.length) {
       authorTypeList.push(unknowList);
     }
-    self.authorList = authorTypeList;
+    self.authorList = [];
+    if(self.props.worksDetail.Works_Author && self.props.worksDetail.Works_Author.length) {
+      self.authorList.push(self.props.worksDetail.Works_Author);
+    }
+    self.authorList = self.authorList.concat(authorTypeList);
 
     workList.forEach(function(item) {
       if(item.bigType === 'audio') {

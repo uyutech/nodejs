@@ -19,7 +19,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getMTopNav({title:kw})}
+  ${data.helper.getMHead({title:kw})}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/msearch.css')}"/>
 </head>

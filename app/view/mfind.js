@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -98,7 +98,8 @@ let util = {
 
 
 /***/ }),
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -165,8 +166,10 @@ let net = {
 
 
 /***/ }),
-/* 4 */,
-/* 5 */
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -277,7 +280,7 @@ Object.keys(code2Data).forEach(function(k) {
 
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -338,7 +341,10 @@ var TopNav = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "top-nav"]], [migi.createVd("a", [["href", "/"], ["class", "logo"]]), migi.createVd("form", [["class", "form"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["action", "/search/"]], [migi.createVd("input", [["ref", "input"], ["type", "text"], ["maxlength", "16"], ["placeholder", "新歌《燃尽人间色发布》"], ["value", this.props.kw || ''], ["onFocus", new migi.Cb(this, this.focus)]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)]], ["确认"]), migi.createVd("a", [["href", "/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.clickUser)]], [migi.createVd("img", [["src", this.props.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])])]);
+      return migi.createVd("div", [["class", "top-nav"]], [migi.createVd("a", [["href", "/"], ["class", "logo"]]), migi.createVd("form", [["class", "form"], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["action", "/search/"]], [
+        /*<input ref="input" type="text" maxlength="16" placeholder="新歌《燃尽人间色发布》" value={ this.props.kw || '' } onFocus={ this.focus }/>*/
+      ]),, /*<button onClick={ this.click }>确认</button>*/
+      migi.createVd("a", [["href", "/my"], ["class", "user"], ["onClick", new migi.Cb(this, this.clickUser)]], [migi.createVd("img", [["src", this.props.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']])])]);
     }
   }]);
 
@@ -348,7 +354,7 @@ var TopNav = function (_migi$Component) {
 migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -394,10 +400,10 @@ var BotNav = function (_migi$Component) {
 migi.name(BotNav, "BotNav");exports.default = BotNav;
 
 /***/ }),
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -413,7 +419,7 @@ var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(12);
+var _AuthorType = __webpack_require__(15);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -527,7 +533,7 @@ var HotWork = function (_migi$Component) {
 migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
-/* 12 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -586,7 +592,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -656,7 +662,7 @@ var HotCollection = function (_migi$Component) {
 migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
-/* 14 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -746,7 +752,7 @@ var HotAuthor = function (_migi$Component) {
 migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
-/* 15 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -758,7 +764,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(5);
+var _authorTemplate = __webpack_require__(8);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -971,7 +977,7 @@ var DoubleCheck = function (_migi$Component) {
 migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
-/* 16 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1038,9 +1044,6 @@ var PlayList = function (_migi$Component) {
 migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
-/* 17 */,
-/* 18 */,
-/* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
@@ -1052,7 +1055,10 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 /* 28 */,
 /* 29 */,
 /* 30 */,
-/* 31 */
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1072,18 +1078,18 @@ exports.default = function (data) {
   var topNav = migi.preRender(migi.createCp(_TopNav2.default, []));
   var botNav = migi.preRender(migi.createCp(_BotNav2.default, []));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMTopNav({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mfind.js') + '"></script>\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + topNav + '\n' + botNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mfind.js') + '"></script>\n</body>\n</html>';
 };
 
-var _TopNav = __webpack_require__(6);
+var _TopNav = __webpack_require__(9);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _BotNav = __webpack_require__(7);
+var _BotNav = __webpack_require__(10);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Find = __webpack_require__(32);
+var _Find = __webpack_require__(35);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -1092,7 +1098,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1108,31 +1114,31 @@ var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _net = __webpack_require__(3);
+var _net = __webpack_require__(4);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(33);
+var _Banner = __webpack_require__(36);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(11);
+var _HotWork = __webpack_require__(14);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotCollection = __webpack_require__(13);
+var _HotCollection = __webpack_require__(16);
 
 var _HotCollection2 = _interopRequireDefault(_HotCollection);
 
-var _HotAuthor = __webpack_require__(14);
+var _HotAuthor = __webpack_require__(17);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _DoubleCheck = __webpack_require__(15);
+var _DoubleCheck = __webpack_require__(18);
 
 var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
 
-var _PlayList = __webpack_require__(16);
+var _PlayList = __webpack_require__(19);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -1266,7 +1272,7 @@ var Find = function (_migi$Component) {
 migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

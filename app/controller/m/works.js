@@ -7,30 +7,19 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
+      let uid = ctx.session.uid;
       let worksID = ctx.params.worksID;
       let worksDetail = {};
       let commentData = {};
       let res = yield {
-        worksDetail: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetWorkDetails'), {
-          method: 'POST',
-          data: {
-            WorksID: worksID,
-          },
-          dataType: 'json',
-          gzip: true,
+        worksDetail: ctx.helper.postServiceJSON('api/works/GetWorkDetails', {
+          uid,
+          WorksID: worksID,
         }),
-        commentData: ctx.curl(ctx.helper.getRemoteUrl('api/works/GetToWorkMessage_List'), {
-          method: 'POST',
-          data: {
-            WorkID: worksID,
-            Skip: 0,
-            Take: 10,
-            SortType: 0,
-            MyComment: 0,
-            CurrentCount: 0,
-          },
-          dataType: 'json',
-          gzip: true,
+        commentData: ctx.helper.postServiceJSON('api/works/GetToWorkMessage_List', {
+          uid,
+          WorkID: worksID,
+          WorksID: worksID,
         }),
       };
       if(res.worksDetail.data.success) {
@@ -39,10 +28,21 @@ module.exports = app => {
       if(res.commentData.data.success) {
         commentData = res.commentData.data.data;
       }
+      let labelList = [];
+      if(worksDetail.WorkType === 11) {
+        let res = yield ctx.helper.postServiceJSON('api/works/GetPhotoInfo', {
+          uid,
+          WorksID: worksID,
+        });
+        if(res.data.success) {
+          labelList = res.data.data.TipsList || [];
+        }
+      }
       yield ctx.render('mworks', {
         worksID,
         worksDetail,
         commentData,
+        labelList,
       });
     }
   }

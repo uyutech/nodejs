@@ -27,11 +27,11 @@ class TopNav extends migi.Component {
     return <div class="top-nav">
       <a href="/" class="logo"/>
       <form class="form" ref="form" onSubmit={ this.submit } action="/search/">
-        <input ref="input" type="text" maxlength="16" placeholder="新歌《燃尽人间色发布》" value={ this.props.kw || '' } onFocus={ this.focus }/>
+        {/*<input ref="input" type="text" maxlength="16" placeholder="新歌《燃尽人间色发布》" value={ this.props.kw || '' } onFocus={ this.focus }/>*/}
       </form>
-      <button onClick={ this.click }>确认</button>
+      {/*<button onClick={ this.click }>确认</button>*/}
       <a href="/my" class="user" onClick={ this.clickUser }>
-        <img src={ this.props.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
+        <img src={ this.props.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
       </a>
     </div>;
   }

@@ -60,28 +60,28 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 149);
+/******/ 	return __webpack_require__(__webpack_require__.s = 147);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 149:
+/***/ 147:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(150);
+__webpack_require__(148);
 
-var _TopNav = __webpack_require__(63);
+var _TopNav = __webpack_require__(69);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(151);
+var _CIframe = __webpack_require__(149);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(152);
+var _QuanNiang = __webpack_require__(150);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
@@ -153,14 +153,14 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 150:
+/***/ 148:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 151:
+/***/ 149:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -207,7 +207,7 @@ migi.name(CIframe, "CIframe");exports.default = CIframe;
 
 /***/ }),
 
-/***/ 152:
+/***/ 150:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -287,7 +287,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 63:
+/***/ 69:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

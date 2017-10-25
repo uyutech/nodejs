@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 194);
+/******/ 	return __webpack_require__(__webpack_require__.s = 188);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -179,15 +179,15 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 194:
+/***/ 188:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(195);
+__webpack_require__(189);
 
-var _My = __webpack_require__(196);
+var _My = __webpack_require__(190);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -197,14 +197,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 195:
+/***/ 189:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 196:
+/***/ 190:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -216,19 +216,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(4);
+var _net = __webpack_require__(3);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Profile = __webpack_require__(197);
+var _Profile = __webpack_require__(191);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(198);
+var _Follow = __webpack_require__(192);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _Favor = __webpack_require__(199);
+var _Favor = __webpack_require__(193);
 
 var _Favor2 = _interopRequireDefault(_Favor);
 
@@ -282,7 +282,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 197:
+/***/ 191:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -294,7 +294,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(4);
+var _net = __webpack_require__(3);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -438,7 +438,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 198:
+/***/ 192:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -500,7 +500,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 199:
+/***/ 193:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -562,7 +562,7 @@ migi.name(Favor, "Favor");exports.default = Favor;
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

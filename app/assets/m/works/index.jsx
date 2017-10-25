@@ -6,4 +6,9 @@ import './index.less';
 
 import Works from './Works.jsx';
 
-let works = migi.preExist(<Works worksID={ $CONFIG.worksID } worksDetail={ $CONFIG.worksDetail } commentData={ $CONFIG.commentData }/>);
+let works = migi.preExist(<Works
+  isLogin={ $CONFIG.isLogin }
+  worksID={ $CONFIG.worksID }
+  worksDetail={ $CONFIG.worksDetail }
+  labelList={ $CONFIG.labelList }
+  commentData={ $CONFIG.commentData }/>);

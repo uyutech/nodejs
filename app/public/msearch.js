@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 139);
+/******/ 	return __webpack_require__(__webpack_require__.s = 137);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 139:
+/***/ 137:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(140);
+__webpack_require__(138);
 
-var _Search = __webpack_require__(141);
+var _Search = __webpack_require__(139);
 
 var _Search2 = _interopRequireDefault(_Search);
 
@@ -83,14 +83,14 @@ var search = migi.preExist(migi.createCp(_Search2.default, [["kw", $CONFIG.kw], 
 
 /***/ }),
 
-/***/ 140:
+/***/ 138:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 141:
+/***/ 139:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,15 +102,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(17);
+var _net = __webpack_require__(28);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(6);
+var _util = __webpack_require__(9);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(30);
+var _authorTemplate = __webpack_require__(43);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -294,7 +294,7 @@ migi.name(Search, "Search");exports.default = Search;
 
 /***/ }),
 
-/***/ 17:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -363,7 +363,7 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 30:
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -478,7 +478,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 6:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

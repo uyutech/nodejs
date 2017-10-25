@@ -12,7 +12,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDTopNav()}
+  ${data.helper.getDHead()}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dguide.css')}"/>
 </head>

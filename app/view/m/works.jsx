@@ -4,38 +4,43 @@
 
 'use strict';
 
-import TopNav from '../../assets/m/component/topnav/TopNav.jsx';
-import BotNav from '../../assets/m/component/botnav/BotNav.jsx';
 import Works from '../../assets/m/works/Works.jsx';
 
 export default function(data) {
+  let isLogin = !!data.ctx.session.uid;
   let worksID = data.worksID;
   let worksDetail = data.worksDetail;
   let commentData = data.commentData;
+  let labelList = data.labelList;
 
-  let works = migi.preRender(<Works worksID={ worksID } worksDetail={ worksDetail } commentData={ commentData }/>);
-  let topNav = migi.preRender(<TopNav/>);
-  let botNav = migi.preRender(<BotNav/>);
+  let works = migi.preRender(<Works
+    isLogin={ isLogin }
+    worksID={ worksID }
+    worksDetail={ worksDetail }
+    labelList={ labelList }
+    commentData={ commentData }/>);
 
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getMTopNav({title:worksDetail.Title})}
+  ${data.helper.getMHead({title:worksDetail.Title})}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mworks.css')}"/>
 </head>
 <body>
 <div id="page">${works}</div>
-${topNav}
-${botNav}
+${data.helper.getMTopNav()}
+${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.worksID = ${JSON.stringify(worksID)};
   $CONFIG.worksDetail = ${JSON.stringify(worksDetail)};
+  $CONFIG.labelList = ${JSON.stringify(labelList)};
   $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mworks.js')}"></script>
+${data.helper.getStat()}
 </body>
 </html>`;
 };

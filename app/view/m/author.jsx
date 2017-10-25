@@ -29,7 +29,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getMTopNav({title:authorDetail.AuthorName})}
+  ${data.helper.getMHead({title:authorDetail.AuthorName})}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mauthor.css')}"/>
 </head>

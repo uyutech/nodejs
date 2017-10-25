@@ -10,7 +10,7 @@ module.exports = () => {
     if(/(iPhone|iPod|Android|ios|iPad)/i.test(ua)) {
       this.body = `<!DOCTYPE html><html>
         <head>
-        ${this.helper.getMTopNav()}
+        ${this.helper.getMHead()}
         <script>
           var hash = location.hash;
           hash = hash || '#/find';
