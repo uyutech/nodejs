@@ -12,16 +12,32 @@ module.exports = app => {
         let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
           uid,
         });
-        let userInfo = res.data.data || {};
-        yield ctx.render('dindex', {
-          userInfo,
-        });
+        if(res.data.success) {
+          let userInfo = res.data.data || {};
+          let authorInfo = {};
+          if(ctx.session.authorID) {
+            let res2 = yield ctx.helper.postServiceJSON('api/users/GetAuthorRelevant', {
+              uid,
+              AuthorID: ctx.session.authorID,
+              HotWork_Skip: 0,
+              HotWork_Take: 2,
+              ToAuthorSkip: 0,
+              ToAuthorTake: 2,
+            });
+            if(res2.data.success) {
+              authorInfo = res2.data.data;
+            }
+          }
+          return yield ctx.render('dindex', {
+            userInfo,
+            authorInfo,
+          });
+        }
       }
-      else {
-        yield ctx.render('dindex', {
-          userInfo: {},
-        });
-      }
+      yield ctx.render('dindex', {
+        userInfo: {},
+        authorInfo: {},
+      });
     }
   }
   return Controller;

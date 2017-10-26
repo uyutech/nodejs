@@ -44,7 +44,18 @@ module.exports = app => {
         if(data && data.success) {
           let uid = data.data;
           ctx.session.uid = uid;
+          let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+            uid,
+          });
+          let data2 = res.data;
+          if(data2 && data2.success) {
+            let userInfo = data2.data;
+            if(userInfo.ISAuthor) {
+              ctx.session.authorID = userInfo.AuthorID;
+            }
+          }
         }
+        // uid不存在需要创建新用户
         else if(data.code === 1002) {
           let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
             data: {
@@ -67,6 +78,16 @@ module.exports = app => {
           if(create && create.success) {
             let uid = create.data;
             ctx.session.uid = uid;
+            let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+              uid,
+            });
+            let data2 = res.data;
+            if(data2 && data2.success) {
+              let userInfo = data2.data;
+              if(userInfo.ISAuthor) {
+                ctx.session.authorID = userInfo.AuthorID;
+              }
+            }
           }
         }
       }

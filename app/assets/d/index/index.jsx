@@ -7,6 +7,7 @@ import './index.less';
 import TopNav from '../component/topnav/TopNav.jsx';
 import CIframe from '../component/ciframe/CIframe.jsx';
 import QuanNiang from './QuanNiang.jsx';
+import Welcome from './Welcome.jsx';
 
 let topNav = migi.preExist(<TopNav userInfo={ $CONFIG.userInfo }/>);
 
@@ -21,6 +22,13 @@ migi.render(
   <div class="info"/>,
   document.body
 );
+
+if($CONFIG.userInfo.User_Reg_Stat !== 99) {
+  migi.render(
+    <Welcome userInfo={ $CONFIG.userInfo } authorInfo={ $CONFIG.authorInfo }/>,
+    document.body
+  );
+}
 
 window.setHash = function(hash) {
   location.hash = hash;

@@ -50,13 +50,18 @@
           height:0.24rem;
           border-radius:100%;
           vertical-align:top;
-          box-shadow:0 0 1px rgba(0, 0, 0, 0.3);
+          box-shadow:@headShadow;
         }
         span{
           display:inline-block;
           max-width:1rem;
           overflow:hidden;
           text-overflow:ellipsis;
+        }
+        &:hover{
+          img{
+            box-shadow:@headHoverShadow;
+          }
         }
       }
       > .item{

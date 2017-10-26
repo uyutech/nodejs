@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 94);
+/******/ 	return __webpack_require__(__webpack_require__.s = 97);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7281,8 +7281,7 @@ exports.default = NonVisualComponent;
 /* 48 */,
 /* 49 */,
 /* 50 */,
-/* 51 */,
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7293,6 +7292,7 @@ var core = __webpack_require__(107);
 module.exports = core;
 
 /***/ }),
+/* 52 */,
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7381,7 +7381,10 @@ module.exports = event;
 /* 91 */,
 /* 92 */,
 /* 93 */,
-/* 94 */
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7452,9 +7455,6 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 95 */,
-/* 96 */,
-/* 97 */,
 /* 98 */,
 /* 99 */,
 /* 100 */,
@@ -7479,7 +7479,7 @@ module.exports = ajax;
 "use strict";
 
 
-var $ = __webpack_require__(52),
+var $ = __webpack_require__(51),
     util = __webpack_require__(53);
 
 __webpack_require__(54);
@@ -8308,7 +8308,7 @@ module.exports = Yocto;
 "use strict";
 
 
-var $ = __webpack_require__(52);
+var $ = __webpack_require__(51);
 
 // Event Module
 var _zid = 1,
@@ -8573,7 +8573,7 @@ module.exports = $;
 "use strict";
 
 
-var $ = __webpack_require__(52),
+var $ = __webpack_require__(51),
     util = __webpack_require__(53);
 
 __webpack_require__(54);
@@ -8644,7 +8644,7 @@ module.exports = $;
 "use strict";
 
 
-var $ = __webpack_require__(52),
+var $ = __webpack_require__(51),
     util = __webpack_require__(53);
 
 __webpack_require__(54);

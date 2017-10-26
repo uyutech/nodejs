@@ -106,7 +106,7 @@ module.exports = {
   weiboAppKey: '2345825162',
   weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
   weiboRedirect: 'https://circling.cc/oauth/login',
-  $CONFIG: 'var $CONFIG = {}; $CONFIG.startTime = Date.now();',
+  $CONFIG: 'var $CONFIG = {};\n',
   rhymeAppKey: '4139489763',
   rhymeAppSecret: '1152af67bb15530c50d91728f86c43df',
   rhymeRedirect: 'http://rhymesland.com/oauth/rhymeLogin',

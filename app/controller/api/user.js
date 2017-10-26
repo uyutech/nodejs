@@ -12,6 +12,13 @@ module.exports = app => {
     * updateNickName(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
+      let length = (body.nickName || '').length;
+      if(length < 4 || length > 8) {
+        return ctx.body = {
+          success: false,
+          message: '昵称长度需要在4~8个字之间哦！',
+        };
+      }
       let res = yield ctx.helper.postServiceJSON('api/users/UpdateNickName', {
         uid,
         NickName: body.nickName,
@@ -111,6 +118,117 @@ module.exports = app => {
         labelID: body.labelID || '',
       });
       ctx.body = res.data;
+    }
+    * settle(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      // 不入驻，设置状态为10走普通用户流程
+      if(body.settle === 'false') {
+        let res = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+          uid,
+          User_Reg_Stat: 10,
+        });
+        return ctx.body = res.data;
+      }
+      // 入驻，设置状态为1，走设置马甲昵称流程
+      else if(body.settle === 'true') {
+        let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
+          uid,
+          AuthorID: body.authorID,
+          SettledType: 0,
+        });
+        if(res.data.success) {
+          let res2 = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+            uid,
+            User_Reg_Stat: 1,
+          });
+          return ctx.body = res2.data;
+        }
+      }
+      ctx.body = {
+        success: false,
+      };
+    }
+    * settleShadowName(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let length = (body.nickName || '').length;
+      if(length < 4 || length > 8) {
+        return ctx.body = {
+          success: false,
+          message: '昵称长度需要在4~8个字之间哦！',
+        };
+      }
+      let scan = yield ctx.service.green.textScan(body.nickName);
+      if(scan.data.code === 200 && scan.data.data[0].code === 200) {
+        let suggestion = scan.data.data[0].results[0].suggestion;
+        if(suggestion !== 'pass') {
+          return ctx.body = {
+            success: false,
+            message: '昵称中可能含有违规信息，请尝试换一个哦~',
+          };
+        }
+        let res = yield ctx.helper.postServiceJSON('api/users/UpdateNickName', {
+          uid,
+          NickName: body.nickName,
+        });
+        if(res.data.success) {
+          let res2 = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+            uid,
+            User_Reg_Stat: 10,
+          });
+          return ctx.body = res2.data;
+        }
+      }
+      ctx.body = {
+        success: false,
+      };
+    }
+    * guideSuggest(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield {
+        tags: ctx.helper.postServiceJSON('api/users/GetTag', {
+          uid,
+          Skip: 0,
+          Take: 10,
+        }),
+        authors: ctx.helper.postServiceJSON('api/users/GetAuthor', {
+          uid,
+          Skip: 0,
+          Take: 10,
+        }),
+      };
+      ctx.body = {
+        success: true,
+        data: {
+          tags: res.tags.data.data || {},
+          authors: res.authors.data.data || {},
+        },
+      };
+    }
+    * guideSave(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let tags = body.tags || [];
+      let authors = body.authors || [];
+      // 关注接口降级
+      if(tags.length) {
+        yield ctx.helper.postServiceJSON('api/users/SaveTagToUser', {
+          uid,
+          TaglID: tags.join(',')
+        });
+      }
+      if(authors.length) {
+        yield ctx.helper.postServiceJSON('api/users/SaveAuthorToUser', {
+          uid,
+          AuthorID: authors.join(',')
+        });
+      }
+      let res = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+        uid,
+        User_Reg_Stat: 99,
+      });
+      return ctx.body = res.data;
     }
   }
   return Controller;

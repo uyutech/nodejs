@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 166);
+/******/ 	return __webpack_require__(__webpack_require__.s = 167);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -179,15 +179,15 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 166:
+/***/ 167:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(167);
+__webpack_require__(168);
 
-var _Collection = __webpack_require__(168);
+var _Collection = __webpack_require__(169);
 
 var _Collection2 = _interopRequireDefault(_Collection);
 
@@ -197,14 +197,14 @@ var collection = migi.preExist(migi.createCp(_Collection2.default, [["isLogin", 
 
 /***/ }),
 
-/***/ 167:
+/***/ 168:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 168:
+/***/ 169:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -224,11 +224,11 @@ var _Timeline = __webpack_require__(45);
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 
-var _Media = __webpack_require__(169);
+var _Media = __webpack_require__(170);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _Describe = __webpack_require__(172);
+var _Describe = __webpack_require__(173);
 
 var _Describe2 = _interopRequireDefault(_Describe);
 
@@ -240,11 +240,11 @@ var _InspComment = __webpack_require__(46);
 
 var _InspComment2 = _interopRequireDefault(_InspComment);
 
-var _PlayList = __webpack_require__(173);
+var _PlayList = __webpack_require__(174);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
-var _CollectionComment = __webpack_require__(174);
+var _CollectionComment = __webpack_require__(175);
 
 var _CollectionComment2 = _interopRequireDefault(_CollectionComment);
 
@@ -371,102 +371,6 @@ var Collection = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Collection, "Collection");exports.default = Collection;
-
-/***/ }),
-
-/***/ 169:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _Intro = __webpack_require__(170);
-
-var _Intro2 = _interopRequireDefault(_Intro);
-
-var _Player = __webpack_require__(171);
-
-var _Player2 = _interopRequireDefault(_Player);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Media = function (_migi$Component) {
-  _inherits(Media, _migi$Component);
-
-  function Media() {
-    var _ref;
-
-    _classCallCheck(this, Media);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.on(migi.Event.DOM, function () {
-      var intro = self.ref.intro;
-      var player = self.ref.player;
-      intro.on('start', function () {
-        self.start();
-      });
-      migi.eventBus.on('chooseMedia', function () {
-        intro.hide();
-        player.show();
-      });
-    });
-    return _this;
-  }
-
-  _createClass(Media, [{
-    key: 'switchType',
-    value: function switchType(type) {
-      var self = this;
-      var intro = self.ref.intro;
-      var player = self.ref.player;
-      if (type === 'intro') {
-        player.hide();
-        player.pause();
-        intro.show();
-      } else if (type === 'player') {
-        intro.hide();
-        player.show();
-      }
-    }
-  }, {
-    key: 'start',
-    value: function start() {
-      var self = this;
-      var intro = self.ref.intro;
-      var player = self.ref.player;
-      intro.hide();
-      player.show();
-      player.play();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "mod mod-media"], ["style", 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")']], [migi.createCp(_Intro2.default, [["ref", "intro"]]), migi.createCp(_Player2.default, [["ref", "player"], ["workList", this.props.workList]])]);
-    }
-  }]);
-
-  return Media;
-}(migi.Component);
-
-migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
 
@@ -602,6 +506,102 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Intro = __webpack_require__(171);
+
+var _Intro2 = _interopRequireDefault(_Intro);
+
+var _Player = __webpack_require__(172);
+
+var _Player2 = _interopRequireDefault(_Player);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Media = function (_migi$Component) {
+  _inherits(Media, _migi$Component);
+
+  function Media() {
+    var _ref;
+
+    _classCallCheck(this, Media);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var intro = self.ref.intro;
+      var player = self.ref.player;
+      intro.on('start', function () {
+        self.start();
+      });
+      migi.eventBus.on('chooseMedia', function () {
+        intro.hide();
+        player.show();
+      });
+    });
+    return _this;
+  }
+
+  _createClass(Media, [{
+    key: 'switchType',
+    value: function switchType(type) {
+      var self = this;
+      var intro = self.ref.intro;
+      var player = self.ref.player;
+      if (type === 'intro') {
+        player.hide();
+        player.pause();
+        intro.show();
+      } else if (type === 'player') {
+        intro.hide();
+        player.show();
+      }
+    }
+  }, {
+    key: 'start',
+    value: function start() {
+      var self = this;
+      var intro = self.ref.intro;
+      var player = self.ref.player;
+      intro.hide();
+      player.show();
+      player.play();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "mod mod-media"], ["style", 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")']], [migi.createCp(_Intro2.default, [["ref", "intro"]]), migi.createCp(_Player2.default, [["ref", "player"], ["workList", this.props.workList]])]);
+    }
+  }]);
+
+  return Media;
+}(migi.Component);
+
+migi.name(Media, "Media");exports.default = Media;
+
+/***/ }),
+
+/***/ 171:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -652,7 +652,7 @@ migi.name(Intro, "Intro");exports.default = Intro;
 
 /***/ }),
 
-/***/ 171:
+/***/ 172:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1266,7 +1266,7 @@ migi.name(Player, "Player");exports.default = Player;
 
 /***/ }),
 
-/***/ 172:
+/***/ 173:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1313,7 +1313,7 @@ migi.name(Describe, "Describe");exports.default = Describe;
 
 /***/ }),
 
-/***/ 173:
+/***/ 174:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1441,7 +1441,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
 
-/***/ 174:
+/***/ 175:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

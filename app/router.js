@@ -18,7 +18,7 @@ module.exports = app => {
   app.get('/d/works/:worksID', 'd.works.index');
   app.get('/d/musicalbum/:collectionID', 'd.collection.index');
   app.get('/d/author/:authorID', 'd.author.index');
-  app.get('/d/search/:kw', 'd.search.index');
+  // app.get('/d/search/:kw', 'd.search.index');
   app.get('/d/my', app.middlewares.needLogin(), 'd.my.index');
   app.get('/d/login', 'd.login.index');
   // app.get('/d/upload', 'd.upload.index');
@@ -28,7 +28,7 @@ module.exports = app => {
   app.get('/m/find', 'm.find.index');
   app.get('/m/works/:worksID', 'm.works.index');
   app.get('/m/author/:authorID', 'm.author.index');
-  app.get('/m/search/:kw', 'm.search.index');
+  // app.get('/m/search/:kw', 'm.search.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 
@@ -36,11 +36,15 @@ module.exports = app => {
   app.post('/api/find/tagB', 'api.find.tagB');
   app.post('/api/find/playList', 'api.find.playList');
 
-  app.post('/api/user/updateNickName', app.middlewares.needLoginJson(), 'api.user.updateNickName');
-  app.post('/api/user/checkExistHead', app.middlewares.needLoginJson(), 'api.user.checkExistHead');
-  app.post('/api/user/uploadHead', app.middlewares.needLoginJson(), 'api.user.uploadHead');
-  app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
-  app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
+  app.post('/api/user/settle', app.middlewares.needLoginJson(), 'api.user.settle');
+  app.post('/api/user/settleShadowName', app.middlewares.needLoginJson(), 'api.user.settleShadowName');
+  app.post('/api/user/guideSuggest', app.middlewares.needLoginJson(), 'api.user.guideSuggest');
+  app.post('/api/user/guideSave', app.middlewares.needLoginJson(), 'api.user.guideSave');
+  // app.post('/api/user/updateNickName', app.middlewares.needLoginJson(), 'api.user.updateNickName');
+  // app.post('/api/user/checkExistHead', app.middlewares.needLoginJson(), 'api.user.checkExistHead');
+  // app.post('/api/user/uploadHead', app.middlewares.needLoginJson(), 'api.user.uploadHead');
+  // app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
+  // app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
 
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');

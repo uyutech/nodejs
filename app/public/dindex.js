@@ -65,6 +65,120 @@
 /************************************************************************/
 /******/ ({
 
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army on 2017/5/20.
+ */
+
+var util = {
+  goto: function goto(url) {
+    location.href = url;
+  },
+  autoSsl: function autoSsl(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return (url || '').replace(/^https?:\/\//i, '//');
+  },
+  img: function img(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
+  img192_192: function img192_192(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-192_192' : url;
+  },
+  img144_: function img144_(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_' : url;
+  },
+  img144_144: function img144_144(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_144' : url;
+  },
+  img100_100: function img100_100(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-100_100' : url;
+  },
+  img__60: function img__60(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-__60' : url;
+  },
+  formatTime: function formatTime(time) {
+    if (!time) {
+      return '00:00';
+    }
+    var res = '';
+    if (time >= 1000 * 60 * 60) {
+      var hour = Math.floor(time / (1000 * 60 * 60));
+      time -= 1000 * 60 * 60 * hour;
+      res += hour + ':';
+    }
+    if (time >= 1000 * 60) {
+      var minute = Math.floor(time / (1000 * 60));
+      time -= 1000 * 60 * minute;
+      if (minute < 10) {
+        minute = '0' + minute;
+      }
+      res += minute + ':';
+    } else {
+      res += '00:';
+    }
+    var second = Math.floor(time / 1000);
+    if (second < 10) {
+      second = '0' + second;
+    }
+    res += second;
+    return res;
+  },
+  formatDate: function formatDate(time) {
+    time = new Date(time);
+    var now = Date.now();
+    var diff = now - time;
+    if (diff >= 1000 * 60 * 60 * 24 * 365) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365)) + '年前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24 * 30) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 30)) + '月前';
+    }
+    if (diff >= 1000 * 60 * 60 * 24) {
+      return Math.floor(diff / (1000 * 60 * 60 * 24)) + '天前';
+    }
+    if (diff >= 1000 * 60 * 60) {
+      return Math.floor(diff / (1000 * 60 * 60)) + '小时前';
+    }
+    if (diff >= 1000 * 60) {
+      return Math.floor(diff / (1000 * 60)) + '分钟前';
+    }
+    return '刚刚';
+  },
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+};
+
+exports.default = util;
+
+/***/ }),
+
 /***/ 147:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -85,6 +199,10 @@ var _QuanNiang = __webpack_require__(150);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
+var _Welcome = __webpack_require__(151);
+
+var _Welcome2 = _interopRequireDefault(_Welcome);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var topNav = migi.preExist(migi.createCp(_TopNav2.default, [["userInfo", $CONFIG.userInfo]]));
@@ -94,6 +212,10 @@ var cIframe = void 0;
 var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, []), document.body);
 
 migi.render(migi.createVd("div", [["class", "info"]]), document.body);
+
+if ($CONFIG.userInfo.User_Reg_Stat !== 99) {
+  migi.render(migi.createCp(_Welcome2.default, [["userInfo", $CONFIG.userInfo], ["authorInfo", $CONFIG.authorInfo]]), document.body);
+}
 
 window.setHash = function (hash) {
   location.hash = hash;
@@ -284,6 +406,372 @@ var QuanNiang = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
+
+/***/ }),
+
+/***/ 151:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _net = __webpack_require__(3);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Welcome = function (_migi$Component) {
+  _inherits(Welcome, _migi$Component);
+
+  function Welcome() {
+    var _ref;
+
+    _classCallCheck(this, Welcome);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Welcome.__proto__ || Object.getPrototypeOf(Welcome)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.step = self.props.userInfo.User_Reg_Stat;
+    self.authorID = self.props.userInfo.AuthorID;
+    self.on(migi.Event.DOM, function () {
+      if (self.step === 10) {
+        self.load();
+      }
+      var $tags = $(self.ref.tags.element);
+      $tags.on('click', 'li', function (e) {
+        var $li = $(this);
+        $li.toggleClass('cur');
+      });
+      var $authors = $(self.ref.authors.element);
+      $authors.on('click', 'li', function (e) {
+        var $li = $(this);
+        $li.toggleClass('cur');
+      });
+    });
+    return _this;
+  }
+
+  _createClass(Welcome, [{
+    key: 'clickEnterPublic',
+    value: function clickEnterPublic(e) {
+      var self = this;
+      _net2.default.postJSON('/api/user/settle', { settle: true, public: true, authorID: this.authorID }, function (res) {
+        if (res.success) {
+          self.step = $CONFIG.userInfo.User_Reg_Stat = 10;
+          self.load();
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+      });
+    }
+  }, {
+    key: 'clickEnterShadow',
+    value: function clickEnterShadow(e) {
+      var self = this;
+      _net2.default.postJSON('/api/user/settle', { settle: true, public: false, authorID: this.authorID }, function (res) {
+        if (res.success) {
+          self.step = $CONFIG.userInfo.User_Reg_Stat = 1;
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+      });
+    }
+  }, {
+    key: 'clickNotEnter',
+    value: function clickNotEnter(e) {
+      var self = this;
+      _net2.default.postJSON('/api/user/settle', { settle: false }, function (res) {
+        if (res.success) {
+          self.step = $CONFIG.userInfo.User_Reg_Stat = 10;
+          self.load();
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+      });
+    }
+  }, {
+    key: 'clickNickName',
+    value: function clickNickName(e) {
+      var self = this;
+      var nickName = $(self.ref.name.element).val().trim();
+      var length = nickName.length;
+      if (length < 4 || length > 8) {
+        alert('昵称长度需要在4~8个字之间哦！');
+        return;
+      }
+      _net2.default.postJSON('/api/user/settleShadowName', { nickName: nickName }, function (res) {
+        if (res.success) {
+          self.step = $CONFIG.userInfo.User_Reg_Stat = 10;
+          $CONFIG.userInfo.userName = nickName;
+          self.load();
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+      });
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      var self = this;
+      _net2.default.postJSON('/api/user/guideSuggest', function (res) {
+        if (res.success) {
+          var data = res.data;
+          self.tags = data.tags.data;
+          self.authors = data.authors.data;
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+      });
+    }
+  }, {
+    key: 'change',
+    value: function change(e) {
+      this.dis = !e.target.checked;
+    }
+  }, {
+    key: 'clickOK',
+    value: function clickOK(e, vd) {
+      var self = this;
+      if (!self.dis) {
+        var $tags = $(self.ref.tags.element);
+        var $authors = $(self.ref.authors.element);
+        var tags = [];
+        var authors = [];
+        $tags.find('li.cur').each(function (i, o) {
+          tags.push($(o).attr('rel'));
+        });
+        $authors.find('li.cur').each(function (i, o) {
+          authors.push($(o).attr('rel'));
+        });
+        _net2.default.postJSON('/api/user/guideSave', { tags: tags, authors: authors }, function (res) {
+          if (res.success) {
+            self.step = $CONFIG.userInfo.User_Reg_Stat = 99;
+            self.hide();
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        });
+      }
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var userInfo = this.props.userInfo;
+      var authorInfo = this.props.authorInfo;
+      if ($CONFIG.isAuthor) {
+        var authorTip = '\u554A\u2026\u2026\u5708\u513F\u773C\u62D9\uFF0C\u624D\u53D1\u73B0\u60A8\u5C31\u662F\u4F20\u8BF4\u4E2D\u7684<strong>' + userInfo.AuthorName + '</strong>!<br/>';
+        if (authorInfo.Hot_Works_Items && authorInfo.Hot_Works_Items.length) {
+          authorTip += '\u4F5C\u4E3A\u4E00\u53EA\u7ACB\u5FD7\u6210\u4E3A\u521B\u4F5C\u5708\u767E\u79D1\u5168\u4E66\u7684\u5154\uFF0C\u5708\u513F\u6B23\u8D4F\u8FC7\u60A8\u53C2\u4E0E\u521B\u4F5C\u7684';
+          authorTip += authorInfo.Hot_Works_Items.map(function (item) {
+            return migi.createVd("strong", [], [item.Title]);
+          });
+          authorTip += '！<br/>';
+        }
+        if (authorInfo.AuthorToAuthor && authorInfo.AuthorToAuthor.length) {
+          authorTip += '\u60A8\u5408\u4F5C\u8FC7\u7684';
+          authorTip += authorInfo.AuthorToAuthor.map(function (item) {
+            return migi.createVd("strong", [], [item.AuthorName]);
+          });
+          authorTip += '等作者也入驻了转圈哦。<br/>';
+        }
+        authorTip += '\u4E0D\u77E5\u60A8\u662F\u5426\u613F\u610F\u5728\u8F6C\u5708\u5165\u9A7B\uFF1F<br/>\n\u5165\u9A7B\u4E4B\u540E\u5C06\u5F00\u542F\u60A8\u7684\u4E2A\u4EBA\u4F5C\u8005\u9875\u9762\uFF0C\u4E4B\u540E\u60A8\u5C06\u53EF\u4EE5\u4E0A\u4F20\u3001\u7F16\u8F91\u3001\u60A8\u7684\u4F5C\u54C1\uFF0C\u672A\u6765\u8FD8\u4F1A\u6709\u4E00\u7CFB\u5217\u7C89\u4E1D\u4E92\u52A8\u53CA\u7EA6\u7A3F\u63A5\u7A3F\u529F\u80FD\uFF01';
+        return migi.createVd("div", [["class", "welcome"]], [migi.createVd("div", [["class", new migi.Obj("step", this, function () {
+          return 'c step' + this.step;
+        })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step0"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [["dangerouslySetInnerHTML", authorTip]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterPublic)]], ["我要公开入驻"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterShadow)]], ["我要入驻，但是我想披个马甲"]), migi.createVd("br", []), migi.createVd("small", [], ["（您依然可以进行作者相关的操作，但将以普通用户的身份进行评论等互动，别人不会知道你就是", userInfo.AuthorName, "）"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNotEnter)]], ["我放弃入驻"])]), migi.createVd("div", [["class", "step step1"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [], ["给马甲想个名字吧！"]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("input", [["ref", "name"], ["class", "name"], ["type", "text"], ["placeholder", "请输入昵称"], ["maxLength", "8"]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName)]], ["就这个啦！"])]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎从异世来到转圈！我是圈娘~\n\
+“转圈”是一款仍在开发中的平台，感谢您参与我们的内测活动，我们联合各位大大为您准备了各种福利，活动详情在活动详情页中查看哦！也欢迎随时在转圈右下角和圈儿互动！\n\
+\n\
+此外我们特别为从异世而来的你准备了一份超大惊喜！\n\
+请点击右侧的播放按钮收听哦~\n\
+异世谣相关的福利活动可以点击右侧活动页面查看~\n\
+福利多多，大家加油哦！\n\
+\n\
+下面的内容中不知可有您喜欢的呢？\n\
+勾选喜欢的标签和作者可以帮助圈儿更好的了解你哦~"]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("h4", [], ["风格"]), migi.createVd("ul", [["class", "tags fn-clear"], ["ref", "tags"]], [new migi.Obj("tags", this, function () {
+          return (this.tags || []).map(function (item) {
+            return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
+          });
+        })]), migi.createVd("h4", [], ["作者"]), migi.createVd("ul", [["class", "tags fn-clear"], ["ref", "authors"]], [new migi.Obj("authors", this, function () {
+          return (this.authors || []).map(function (item) {
+            return migi.createVd("li", [["rel", item.AuthorID]], [item.AuthorName]);
+          });
+        })]), migi.createVd("label", [], [migi.createVd("input", [["type", "checkbox"], ["checked", "checked"], ["onChange", new migi.Cb(this, this.change)]]), "我已阅读并同意转圈用户规约"]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
+          return 'center' + (this.dis ? ' dis' : '');
+        })], ["onClick", new migi.Cb(this, this.clickOK)]], ["好的~我要开始转圈啦！"])])])]);
+      }
+
+      // 非作者初始情况转换为10，0为初始值，1为作者改昵称，有可能在1的时候变为非作者
+      if (this.step === 0 || this.step === 1) {
+        this.step = 10;
+      }
+      return migi.createVd("div", [["class", "welcome"]], [migi.createVd("div", [["class", new migi.Obj("step", this, function () {
+        return 'c step' + this.step;
+      })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎从异世来到转圈！我是圈娘~\n\
+“转圈”是一款仍在开发中的平台，感谢您参与我们的内测活动，我们联合各位大大为您准备了各种福利，活动详情在活动详情页中查看哦！也欢迎随时在转圈右下角和圈儿互动！\n\
+\n\
+此外我们特别为从异世而来的你准备了一份超大惊喜！\n\
+请点击右侧的播放按钮收听哦~\n\
+异世谣相关的福利活动可以点击右侧活动页面查看~\n\
+福利多多，大家加油哦！\n\
+\n\
+下面的内容中不知可有您喜欢的呢？\n\
+勾选喜欢的标签和作者可以帮助圈儿更好的了解你哦~"]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("h4", [], ["风格"]), migi.createVd("ul", [["class", "tags fn-clear"], ["ref", "tags"]], [new migi.Obj("tags", this, function () {
+        return (this.tags || []).map(function (item) {
+          return migi.createVd("li", [["rel", item.ID]], [item.Tag_Name]);
+        });
+      })]), migi.createVd("h4", [], ["作者"]), migi.createVd("ul", [["class", "tags fn-clear"], ["ref", "authors"]], [new migi.Obj("authors", this, function () {
+        return (this.authors || []).map(function (item) {
+          return migi.createVd("li", [["rel", item.AuthorID]], [item.AuthorName]);
+        });
+      })]), migi.createVd("label", [], [migi.createVd("input", [["type", "checkbox"], ["checked", "checked"], ["onChange", new migi.Cb(this, this.change)]]), "我已阅读并同意转圈用户规约"]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
+        return 'center' + (this.dis ? ' dis' : '');
+      })], ["onClick", new migi.Cb(this, this.clickOK)]], ["好的~我要开始转圈啦！"])])])]);
+    }
+  }, {
+    key: 'step',
+    set: function set(v) {
+      this.__setBind("step", v);this.__data("step");
+    },
+    get: function get() {
+      return this.__getBind("step");
+    }
+  }, {
+    key: 'tags',
+    set: function set(v) {
+      this.__setBind("tags", v);this.__data("tags");
+    },
+    get: function get() {
+      return this.__getBind("tags");
+    }
+  }, {
+    key: 'authors',
+    set: function set(v) {
+      this.__setBind("authors", v);this.__data("authors");
+    },
+    get: function get() {
+      return this.__getBind("authors");
+    }
+  }, {
+    key: 'dis',
+    set: function set(v) {
+      this.__setBind("dis", v);this.__data("dis");
+    },
+    get: function get() {
+      return this.__getBind("dis");
+    }
+  }]);
+
+  return Welcome;
+}(migi.Component);
+
+migi.name(Welcome, "Welcome");exports.default = Welcome;
+
+/***/ }),
+
+/***/ 3:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by army8735 on 2017/10/6.
+ */
+
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var net = {
+  ajax: function ajax(url, data, _success, _error, type) {
+    var csrfToken = $.cookie('csrfToken');
+    function load() {
+      return $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        crossDomain: true,
+        timeout: 6000,
+        type: type || 'get',
+        headers: {
+          'x-csrf-token': csrfToken
+        },
+        // ajax 跨域设置必须加上
+        beforeSend: function beforeSend(xhr) {
+          xhr.withCredentials = true;
+        },
+        success: function success(data, state, xhr) {
+          _success(data, state, xhr);
+        },
+        error: function error(data) {
+          if (!_error.__hasExec) {
+            _error.__hasExec = true;
+            _error(data || {});
+          }
+        }
+      });
+    }
+    return load();
+  },
+  getJSON: function getJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function () {};
+    return net.ajax(url, data, success, error);
+  },
+  postJSON: function postJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    success = success || function () {};
+    error = error || function () {};
+    return net.ajax(url, data, success, error, 'post');
+  }
+};
+
+exports.default = net;
 
 /***/ }),
 
