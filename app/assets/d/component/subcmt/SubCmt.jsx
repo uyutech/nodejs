@@ -11,12 +11,14 @@ class SubCmt extends migi.Component {
     this.invalid = this.value.trim().length < 3;
     this.maxlength = this.props.maxlength;
     this.subText = this.props.subText;
+    this.tipText = this.props.tipText;
     this.placeholder = this.props.placeholder;
     this.originTo = this.props.originTo;
   }
   @bind maxlength
   @bind placeholder
   @bind subText
+  @bind tipText
   @bind value = ''
   @bind to
   @bind originTo
@@ -51,9 +53,11 @@ class SubCmt extends migi.Component {
                class={ 'submit' + (this.invalid ? ' dis' : '') }
                value={ this.value.trim().length
                  ? this.value.trim().length < 3
-                   ? '还少' + (3 - this.value.trim().length) + '个字哦'
+                   ? this.tipText
+                     ? this.tipText.replace('${n}', (3 - this.value.trim().length))
+                     : '还少' + (3 - this.value.trim().length) + '个字哦'
                    : this.subText || '发布评论'
-                 : '发布评论' }/>
+                 : this.subText || '发布评论' }/>
       </form>
     </div>;
   }

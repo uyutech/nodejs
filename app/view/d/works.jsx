@@ -23,7 +23,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead()}
+  ${data.helper.getDHead({ title: worksDetail.Title })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dworks.css')}"/>
 </head>

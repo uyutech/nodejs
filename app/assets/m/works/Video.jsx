@@ -5,6 +5,9 @@
 import util from '../../d/common/util';
 import net from '../../d/common/net';
 
+let isStart;
+let offsetX;
+
 class Video extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -23,7 +26,6 @@ class Video extends migi.Component {
   @bind isPlaying
   @bind workIndex = 0
   @bind duration
-  @bind muted
   @bind fnFavor
   @bind fnLike
   get currentTime() {
@@ -34,17 +36,6 @@ class Video extends migi.Component {
     this._currentTime = v;
     if(this.video && v !== this.video.element.currentTime) {
       this.video.element.currentTime = v;
-    }
-  }
-  get volume() {
-    return this._volume || 0.5;
-  }
-  @bind
-  set volume(v) {
-    this._volume = v;
-    migi.eventBus.emit('SET_VOLUME', v);
-    if(this.video) {
-      this.video.element.volume = v;
     }
   }
   setData(datas) {
@@ -67,13 +58,9 @@ class Video extends migi.Component {
     </video>;
     this.video = video;
     video.prependTo(this.ref.c.element);
-    this.volume = this.volume;
   }
   show() {
     $(this.element).removeClass('fn-hide');
-    let uid = window.$CONFIG ? $CONFIG.uid : '';
-    let key = uid + 'volume';
-    this.volume = localStorage[key];
     if(!this.video) {
       this.addMedia();
     }
@@ -120,25 +107,6 @@ class Video extends migi.Component {
   clickStart(e) {
     this.play();
   }
-  clickVolume(e) {
-    let cn = e.target.className;
-    if(cn !== 'p' && cn.indexOf('icon') === -1) {
-      let $volume = $(this.ref.volume.element);
-      let left = $volume.offset().left;
-      let x = e.pageX - left;
-      let percent = x / $volume.width();
-      this.volume = percent;
-    }
-  }
-  clickMute(e) {
-    this.muted = !this.muted;
-    if(this.muted) {
-      this.video.element.volume = 0;
-    }
-    else {
-      this.video.element.volume = this.volume;
-    }
-  }
   clickScreen() {
     let video = this.video.element;
     if(video.requestFullscreen) {
@@ -156,6 +124,30 @@ class Video extends migi.Component {
     else if(video.webkitEnterFullScreen) {
       video.webkitEnterFullScreen();
     }
+  }
+  touchStart(e) {
+    e.preventDefault();
+    if(this.canControl && e.touches.length === 1) {
+      isStart = true;
+      offsetX = $(this.ref.progress.element).offset().left;
+      this.pause();
+    }
+  }
+  touchMove(e) {
+    if(isStart && e.touches.length === 1) {
+      e.preventDefault();
+      let x = e.touches[0].pageX;
+      let diff = x - offsetX;
+      let width = $(this.ref.progress.element).width();
+      diff = Math.max(0, diff);
+      diff = Math.min(width, diff);
+      let percent = diff / width;
+      this.setBarPercent(percent);
+      this.currentTime = Math.floor(this.duration * percent);
+    }
+  }
+  touchEnd(e) {
+    isStart = false;
   }
   clickProgress(e) {
     if(this.canControl && e.target.className !== 'p') {
@@ -183,16 +175,15 @@ class Video extends migi.Component {
       </div>
       <div class="fn" ref="fn">
         <div class="control">
-          <b class="full" onClick={ this.clickScreen }/>
           <small class="time">{ util.formatTime(this.currentTime * 1000) } / { util.formatTime(this.duration * 1000) }</small>
-          <b class={ 'vol' + (this.muted ? ' muted' : '') } onClick={ this.clickMute }/>
+          <b class="full" onClick={ this.clickScreen }/>
         </div>
         <div class="bar">
           <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
           <div class="progress" ref="progress" onClick={ this.clickProgress }>
             <b class="load"/>
             <b class="vol" ref="vol"/>
-            <b class="p" ref="p" onMouseDown={ this.mousedown }/>
+            <b class="p" ref="p" onTouchStart={ this.touchStart } onTouchMove={ this.touchMove } onTouchEnd={ this.touchEnd }/>
           </div>
         </div>
         <ul class="btn">

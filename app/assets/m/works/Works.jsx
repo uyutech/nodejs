@@ -27,15 +27,68 @@ class Works extends migi.Component {
     self.on(migi.Event.DOM, function() {
       let media = self.ref.media;
       let workComment = self.ref.workComment;
+      let comment = workComment.ref.comment;
+      let subCmt = self.ref.subCmt;
       if(media) {
         media.on('switchTo', function(data) {
           workComment.workID = data.ItemID;
         });
       }
+      comment.on('chooseSubComment', function(rid, cid, name) {
+        self.rootID = rid;
+        self.parentID = cid;
+        subCmt.to = name;
+      });
+      comment.on('closeSubComment', function() {
+        self.rootID = -1;
+        self.parentID = -1;
+        subCmt.to = '';
+      });
+      subCmt.on('submit', function(content) {
+        subCmt.invalid = true;
+        let rootID = self.rootID;
+        let parentID = self.parentID;
+        net.postJSON('/api/works/addComment', {
+          parentID: parentID,
+          rootID: rootID,
+          worksID: self.worksID,
+          workID: self.workID,
+          barrageTime: self.barrageTime,
+          content,
+        }, function(res) {
+          if(res.success) {
+            let data = res.data;
+            subCmt.value = '';
+            if(rootID === -1 && data.RootID === -1) {
+              comment.prependData(data);
+              comment.message = '';
+            }
+            else {
+              comment.prependChild(data);
+            }
+            migi.eventBus.emit('COMMENT', 'work');
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
+          }
+        }, function(res) {
+          alert(res.message || util.ERROR_MESSAGE);
+          subCmt.invalid = false;
+        });
+      });
     });
   }
   @bind worksID
+  @bind workID
   @bind worksType
+  @bind rootID = -1
+  @bind parentID = -1
+  @bind barrageTime = 0
   setWorks(works) {
     let self = this;
     let workHash = {};
@@ -196,6 +249,8 @@ class Works extends migi.Component {
       </div>
       <SubCmt ref="subCmt"
               originTo={ this.props.worksDetail.Title }
+              subText="发送"
+              tipText="-${n}"
               placeholder="夸夸这个作品吧"/>
     </div>;
   }

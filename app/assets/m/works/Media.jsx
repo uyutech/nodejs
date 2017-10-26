@@ -25,23 +25,23 @@ class Media extends migi.Component {
       <div class="type fn-clear">
       {
         this.props.videoData
-          ? <dl class="video fn-clear cur">
+          ? <dl class={ 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '') }>
             <dt>视频</dt>
             {
-              this.props.videoData.map(function(item) {
-                return <dd>{ item.ItemName }</dd>;
-              })
+              this.props.videoData.map(function(item, i) {
+                return <dd class={ this.props.first === 'video' && !i }>{ item.ItemName }</dd>;
+              }.bind(this))
             }
           </dl>
           : ''
       }
       {
         this.props.audioData
-          ? <dl class="audio fn-clear">
+          ? <dl class={ 'audio fn-clear' + (this.props.first === 'audio' ? ' cur' : '') }>
             <dt>音频</dt>
             {
-              this.props.videoData.map(function(item) {
-                return <dd>{ item.ItemName }</dd>;
+              this.props.audioData.map(function(item, i) {
+                return <dd class={ this.props.first === 'audio' && !i }>{ item.ItemName }</dd>;
               })
             }
           </dl>

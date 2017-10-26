@@ -47,9 +47,10 @@ module.exports = {
   },
   getDHead: function(data) {
     data = data || {};
+    let title = data.title ? ('转圈-' + data.title) : '转圈';
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
-      <title>${data.title || '转圈'}</title>
+      <title>${title}</title>
       <link rel="icon" href="//zhuanquan.xin/img/526ac77cd8f453867cb378b4d22cffda.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>
@@ -72,9 +73,10 @@ module.exports = {
   },
   getMHead: function(data) {
     data = data || {};
+    let title = data.title ? ('转圈-' + data.title) : '转圈';
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
-      <title>${data.title || '转圈'}</title>
+      <title>${title}</title>
       <link rel="icon" href="//zhuanquan.xyz/img/526ac77cd8f453867cb378b4d22cffda.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>

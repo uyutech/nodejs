@@ -879,6 +879,7 @@ var SubCmt = function (_migi$Component) {
     _this.invalid = _this.value.trim().length < 3;
     _this.maxlength = _this.props.maxlength;
     _this.subText = _this.props.subText;
+    _this.tipText = _this.props.tipText;
     _this.placeholder = _this.props.placeholder;
     _this.originTo = _this.props.originTo;
     return _this;
@@ -923,8 +924,8 @@ var SubCmt = function (_migi$Component) {
         return this.value;
       })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj("invalid", this, function () {
         return 'submit' + (this.invalid ? ' dis' : '');
-      })], ["value", new migi.Obj(["value", "subText"], this, function () {
-        return this.value.trim().length ? this.value.trim().length < 3 ? '还少' + (3 - this.value.trim().length) + '个字哦' : this.subText || '发布评论' : '发布评论';
+      })], ["value", new migi.Obj(["value", "tipText", "subText"], this, function () {
+        return this.value.trim().length ? this.value.trim().length < 3 ? this.tipText ? this.tipText.replace('${n}', 3 - this.value.trim().length) : '还少' + (3 - this.value.trim().length) + '个字哦' : this.subText || '发布评论' : this.subText || '发布评论';
       })]])])]);
     }
   }, {
@@ -950,6 +951,14 @@ var SubCmt = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("subText");
+    }
+  }, {
+    key: 'tipText',
+    set: function set(v) {
+      this.__setBind("tipText", v);this.__data("tipText");
+    },
+    get: function get() {
+      return this.__getBind("tipText");
     }
   }, {
     key: 'value',
@@ -1819,7 +1828,7 @@ exports.default = function (data) {
 
   var works = migi.preRender(migi.createCp(_Works2.default, [["isLogin", isLogin], ["worksID", worksID], ["worksDetail", worksDetail], ["labelList", labelList], ["commentData", commentData]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.labelList = ' + JSON.stringify(labelList) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dworks.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: worksDetail.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.labelList = ' + JSON.stringify(labelList) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dworks.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
 var _Works = __webpack_require__(62);
