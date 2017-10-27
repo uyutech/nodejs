@@ -229,6 +229,40 @@ class Comment extends migi.Component {
     $num.text((parseInt($num.text()) || 0) + 1);
   }
   genComment(item) {
+    if(item.IsAuthor) {
+      return <li class="author" id={ 'comment_' + item.AuthorID }>
+        <div class="t">
+          <div class="profile fn-clear">
+            <img class="pic" src={ item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+            <div class="txt">
+              <div>
+                <span class="name">{ item.Send_AuthorName }</span>
+                <small class="time">{ util.formatDate(item.Send_Time) }</small>
+              </div>
+              <p>{ item.sign }</p>
+            </div>
+          </div>
+          <div class="fn fn-clear">
+            {
+              item.ISOwn ? <span cid={ item.Send_ID } class="remove">删除</span> : ''
+            }
+          </div>
+        </div>
+        <div class="c">
+          <pre>{ item.Send_Content }<span class="placeholder"/></pre>
+          <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_UserName }>
+            <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
+            <small class="sub">{ item.sub_Count }</small>
+            <span>收起</span>
+          </div>
+          <b class="arrow"/>
+        </div>
+        <div class="list2">
+          <ul class="fn-hide"/>
+          <p class="message" cid={ item.Send_ID } rid={ item.Send_ID }>读取中...</p>
+        </div>
+      </li>;
+    }
     return <li id={ 'comment_' + item.Send_ID }>
       <div class="t">
         <div class="profile fn-clear">
