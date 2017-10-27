@@ -80,7 +80,7 @@ class Author extends migi.Component {
     $li.addClass('cur');
     let self = this;
     let home = self.ref.home;
-    let works = self.ref.works;
+    // let works = self.ref.works;
     let authorComment = self.ref.authorComment;
     home.hide();
     // works.hide();

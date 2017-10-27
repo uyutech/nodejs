@@ -118,6 +118,12 @@ var util = {
     }
     return url ? url + '-100_100' : url;
   },
+  img90_90: function img90_90(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
+  },
   img__60: function img__60(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;

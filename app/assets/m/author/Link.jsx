@@ -1,7 +1,7 @@
 /**
  * Created by army on 2017/6/18.
  */
- 
+
 class Link extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -11,16 +11,6 @@ class Link extends migi.Component {
     self._BaiduUrl = self.props.authorDetail._BaiduUrl;
     self._WangyiUrl = self.props.authorDetail._WangyiUrl;
     self._WeiboUrl = self.props.authorDetail._WeiboUrl;
-    self.on(migi.Event.DOM, function() {
-      self.autoWidth();
-    });
-  }
-  autoWidth() {
-    let $root = $(this.element);
-    let $c = $root.find('.c');
-    $c.css('width', '9999rem');
-    let $ul = $c.find('ul');
-    $c.css('width', $ul.width() + 1);
   }
   @bind _5SingUrl
   @bind _BilibiliUrl
@@ -29,15 +19,23 @@ class Link extends migi.Component {
   @bind _WeiboUrl
   render() {
     return <div class="link">
-      <div class="c">
-        <ul>
-          <li><a target="_blank" href={ this._5SingUrl } class={ this._5SingUrl ? '' : 'fn-hide' }><span>5sing</span></a></li>
-          <li><a target="_blank" href={ this._BilibiliUrl } class={ this._BilibiliUrl ? 'bili' : 'fn-hide' }><span>b站</span></a></li>
-          <li><a target="_blank" href={ this._BaiduUrl } class={ this._BaiduUrl ? 'baidu' : 'fn-hide' }><span>百度</span></a></li>
-          <li><a target="_blank" href={ this._WangyiUrl } class={ this._WangyiUrl ? 'wangyi' : 'fn-hide' }><span>网易</span></a></li>
-          <li><a target="_blank" href={ this._WeiboUrl } class={ this._WeiboUrl ? 'weibo' : 'fn-hide' }><span>微博</span></a></li>
-        </ul>
-      </div>
+      <ul>
+        {
+          this._5SingUrl ? <li><a target="_blank" href={ this._5SingUrl } class="sing5">5sing</a></li> : ''
+        }
+        {
+          this._BilibiliUrl ? <li><a target="_blank" href={ this._BilibiliUrl } class="bilibili">b站</a></li> : ''
+        }
+        {
+          this._BaiduUrl ? <li><a target="_blank" href={ this._BaiduUrl } class="baidu">百度</a></li> : ''
+        }
+        {
+          this._WangyiUrl ? <li><a target="_blank" href={ this._WangyiUrl } class="wangyi">网易</a></li> : ''
+        }
+        {
+          this._WeiboUrl ? <li><a target="_blank" href={ this._WeiboUrl } class="weibo">微博</a></li> : ''
+        }
+      </ul>
     </div>;
   }
 }

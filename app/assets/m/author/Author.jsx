@@ -11,78 +11,55 @@ class Author extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function() {
-      let nav = self.ref.nav;
-      let tags = nav.ref.tags;
-      let home = self.ref.home;
-      let work = self.ref.work;
-      let authorComment = self.ref.authorComment;
-      tags.on('change', function(i) {
-        home && home.hide();
-        work && work.hide();
-        authorComment && authorComment.hide();
-        switch (i) {
-          case '0':
-            home.show();
-            break;
-          case '1':
-            work.show();
-            break;
-          case '2':
-            authorComment.show();
-            break;
-        }
-      });
-      // setTimeout(function() {
-      //   tags.emit('change', '1');
-      // }, 100);
     });
   }
-  @bind authorID
-  setID(authorID) {
+  clickType(e, vd ,tvd) {
+    let $li = $(tvd.element);
+    if($li.hasClass('cur')) {
+      return;
+    }
+    $(vd.element).find('.cur').removeClass('cur');
+    $li.addClass('cur');
     let self = this;
-    self.authorID = authorID;
-  }
-  load() {
-    let self = this;
-    let nav = self.ref.nav;
-    let profile = nav.ref.profile;
-    let link = nav.ref.link;
-    util.postJSON('api/author/GetAuthorDetails', { AuthorID: self.authorID }, function (res) {
-      if(res.success) {
-        let data = res.data;
-
-        profile.headUrl = data.Head_url;
-        profile.authorID = data.AuthorID;
-        profile.authorName = data.AuthorName;
-        profile.type = data.Authortype;
-        profile.sign = data.Sign;
-        profile.fansNumber = data.FansNumber;
-        profile.isLike = data.IsLike;
-        profile.loading = false;
-
-        link._5SingUrl = data._5SingUrl;
-        link._BilibiliUrl = data._BilibiliUrl;
-        link._BaiduUrl = data._BaiduUrl;
-        link._WangyiUrl = data._WangyiUrl;
-        link._WeiboUrl = data._WeiboUrl;
-        link.autoWidth();
-      }
-      else {
-        alert(res.message || util.ERROR_MESSAGE);
-      }
-    }, function(res) {
-      // alert(res.message || util.ERROR_MESSAGE);
-    });
     let home = self.ref.home;
-    home.load(self.authorID);
+    // let works = self.ref.works;
+    let authorComment = self.ref.authorComment;
+    home.hide();
+    // works.hide();
+    authorComment.hide();
+    let rel = tvd.props.rel;
+    switch(rel) {
+      case '0':
+        home.show();
+        break;
+      // case '1':
+      //   works.show();
+      //   break;
+      case '2':
+        authorComment.show();
+        break;
+    }
   }
   render() {
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
-      <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }/>
-      <Work ref="work" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList}/>
+      <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
+        {
+          this.props.authorDetail.ISSettled
+            ? <li class="home cur" rel="0">主页</li>
+            : ''
+        }
+        {/*<li class="home cur" rel="0">主页</li>*/}
+        {/*<li class="works" rel="1">作品</li>*/}
+        <li class={ 'comments' + (this.props.authorDetail.ISSettled ? '' : ' cur') } rel="2">留言</li>
+      </ul>
+      {
+        this.props.authorDetail.ISSettled
+          ? <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail } playList={ this.props.playList.data }/>
+          : ''
+      }
+      {/*<Work ref="work" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList}/>*/}
       <AuthorComment ref="authorComment" authorID={ this.props.authorID } commentData={ this.props.commentData }/>
     </div>;
   }

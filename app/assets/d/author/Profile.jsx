@@ -25,7 +25,7 @@ class Profile extends migi.Component {
   @bind headUrl
   @bind fansNumber
   @bind like
-  @bind loading = false
+  @bind loading
   @bind settled
   set type(v) {
     v = v || [];
@@ -38,6 +38,10 @@ class Profile extends migi.Component {
   }
   click(e) {
     e.preventDefault();
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
     let self = this;
     self.loading = true;
     if(self.like) {

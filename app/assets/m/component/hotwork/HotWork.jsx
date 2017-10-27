@@ -2,7 +2,7 @@
  * Created by army8735 on 2017/8/8.
  */
 
-import util from '../../common/util';
+import util from '../../../d/common/util';
 import AuthorType from '../author/AuthorType.jsx';
 
 class HotWork extends migi.Component {
@@ -22,9 +22,8 @@ class HotWork extends migi.Component {
     $c.css('width', $ul.width() + 1);
   }
   render() {
-    let authorId = this.props.authorId;
     return <div class="cp-hotwork">
-      <h3>{ this.props.title }</h3>
+      <h4>{ this.props.title }</h4>
       <div class="list" ref="list">
         <div class="c">
           {
@@ -32,59 +31,12 @@ class HotWork extends migi.Component {
               ? <ul>
                 {
                   this.dataList.map(function(item) {
-                    // let myAuthor;
-                    // let workAuthors = '';
-                    // let authorList = item.Works_Items[0].Works_Item_Author;
-                    // authorList.forEach(function(item) {
-                    //   if(item.ID === authorId) {
-                    //     myAuthor = item;
-                    //   }
-                    // });
-                    // if(myAuthor) {
-                    //   // 如果是歌手，将其它歌手&链接并加上with
-                    //   if(myAuthor.WorksAuthorType === AuthorType.CODE.演唱) {
-                    //     let authors = [];
-                    //     authorList.forEach(function(item) {
-                    //       if(item.ID !== authorId) {
-                    //         authors.push(item.AuthName);
-                    //       }
-                    //     });
-                    //     if(authors.length) {
-                    //       workAuthors = 'with ' + authors.join('&');
-                    //     }
-                    //   }
-                    //   // 其它类型将歌手全部展示
-                    //   else {
-                    //     let authors = [];
-                    //     authorList.forEach(function(item) {
-                    //       if(item.ID !== authorId) {
-                    //         authors.push(item.AuthName);
-                    //       }
-                    //     });
-                    //     if(authors.length) {
-                    //       workAuthors = authors.join('&');
-                    //     }
-                    //   }
-                    // }
-                    // // 其它类型将歌手全部展示
-                    // else {
-                    //   let authors = [];
-                    //   authorList.forEach(function(item) {
-                    //     if(item.AuthorID !== authorId) {
-                    //       authors.push(item.AuthName);
-                    //     }
-                    //   });
-                    //   if(authors.length) {
-                    //     workAuthors = authors.join('&');
-                    //   }
-                    // }
+                    let url = item.WorkType === 5 ? `/musicalbum/${item.WorksID}` : `/works/${item.WorksID}`;
                     return <li>
-                      <a href={ '/works/' + item.WorksID } class="pic">
-                        <img src={ util.img150_150(item.cover_Pic) || '//zhuanquan.xin/img/blank.png' }/>
-                        <div class="num"><b class="audio"/>{ item.Popular }</div>
-                        <div class="ath">{ '' }</div>
+                      <a href={ url } class="pic">
+                        <img src={ util.autoSsl(util.img100_100(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
                       </a>
-                      <a href={ '/works/' + item.WorksID } class="txt">{ item.Title }</a>
+                      <a href={ url } class="txt">{ item.Title }</a>
                     </li>;
                   })
                 }

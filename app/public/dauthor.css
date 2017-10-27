@@ -1124,7 +1124,6 @@ body {
   margin-right: 0.08rem;
   display: inline-block;
   font-size: 0.24rem;
-  color: #2D4D67;
   font-weight: 400;
   vertical-align: middle;
 }
@@ -1176,7 +1175,6 @@ body {
 .author > .nav > .link ul li {
   display: inline-block;
   margin-right: 0.1rem;
-  border-radius: 0.1rem;
 }
 .author > .nav > .link ul li:last-child {
   margin-right: 0;

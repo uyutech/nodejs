@@ -118,6 +118,12 @@ var util = {
     }
     return url ? url + '-100_100' : url;
   },
+  img90_90: function img90_90(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
+  },
   img__60: function img__60(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -187,7 +193,7 @@ exports.default = util;
 
 __webpack_require__(148);
 
-var _TopNav = __webpack_require__(69);
+var _TopNav = __webpack_require__(70);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
@@ -775,7 +781,7 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 69:
+/***/ 70:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -5,37 +5,34 @@
 
 .cp-hotcollection{
   position:relative;
-  padding-top:0;
-  padding-left:0.25rem;
-  min-height:0.75rem;
-  background:#fff;
-  h3{
-    position:absolute;
-    left:0;
-    top:0;
-    display:flex;
-    padding-left:0.02rem;
-    width:0.16rem;
-    height:0.75rem;
-    background:#4E8EB0;
-    border-top-right-radius:0.05rem;
-    border-bottom-right-radius:0.05rem;
-    color:#fff;
-    word-wrap:break-word;
-    word-break:break-all;
+  h4{
+    position:relative;
+    margin-left:0.1rem;
+    padding-left:0.05rem;
     font-size:0.12rem;
-    line-height:1.2;
-    align-items:center;
+    &:before{
+      position:absolute;
+      left:0;
+      top:0.02rem;
+      bottom:0.02rem;
+      width:0.02rem;
+      background:@secondColor;
+      content:' ';
+      border-radius:0.05rem;
+    }
   }
   .list{
+    margin-top:0.05rem;
+    min-height:1rem;
     overflow:auto;
+    transform:translate3d(0,0,0);
     .c{
       //width:9999rem;
       //height:1rem;
-      overflow:hidden;
+      //overflow:hidden;
       .empty{
-        height:0.75rem;
-        background:url(//zhuanquan.xin/img/bf025c27ab19456dcbdc9f769fbfa3e7.jpg) no-repeat center;
+        height:1rem;
+        background:url(//zhuanquan.xin/img/fcff9f4b2a8c100cc79b1f2bbb45f4b6.jpg) no-repeat center;
         background-size:cover;
         border-radius:0.05rem;
       }

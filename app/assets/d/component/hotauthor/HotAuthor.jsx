@@ -9,7 +9,7 @@ class HotAuthor extends migi.Component {
     super(...data);
     this.dataList = this.props.dataList;
   }
-  @bind dataList = []
+  @bind dataList
   clickPrev(e) {
     e.preventDefault();
   }

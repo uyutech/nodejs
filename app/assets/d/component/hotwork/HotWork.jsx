@@ -24,9 +24,6 @@ class HotWork extends migi.Component {
   render() {
     return <div class="cp-hotwork">
       <h4>{ this.props.title }<small>未来会根据你的口味进行精准智能的推送！>3&lt;</small></h4>
-      <div class="fn fn-clear">
-        <a href="#" class="change" onClick={ this.clickChange }>换一批</a>
-      </div>
       {
         this.dataList && this.dataList.length
           ? <ul class="list fn-clear">
@@ -36,7 +33,6 @@ class HotWork extends migi.Component {
                   return <li>
                     <a href={ url } class="pic">
                       <img src={ util.autoSsl(util.img144_144(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
-                      <div class="ath">{ '' }</div>
                     </a>
                     <a href={ url } class="txt">{ item.Title }</a>
                   </li>;

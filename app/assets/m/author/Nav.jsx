@@ -4,7 +4,6 @@
 
 import Profile from './Profile.jsx';
 import Link from './Link.jsx';
-import Tags from './Tags.jsx';
 
 class Nav extends migi.Component {
   constructor(...data) {
@@ -12,10 +11,8 @@ class Nav extends migi.Component {
   }
   render() {
     return <div class="nav">
-      <div class="bg"/>
       <Profile ref="profile" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
       <Link ref="link" authorDetail={ this.props.authorDetail }/>
-      <Tags ref="tags"/>
     </div>;
   }
 }

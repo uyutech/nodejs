@@ -7,9 +7,6 @@ class Dynamics extends migi.Component {
     super(...data);
   }
   @bind list = []
-  click(e, vd, tvd) {
-    let url = tvd.props.href;
-  }
   render() {
     return <div class="cp-dynamic">
       <h4>{ this.props.title }<small>等这个功能上线，就再也不用担心特关是死的啦！>3&lt;</small></h4>

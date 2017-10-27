@@ -2,17 +2,17 @@
  * Created by army8735 on 2017/8/9.
  */
 
-import util from '../../common/util';
+import util from '../../../d/common/util';
 
 class HotAuthor extends migi.Component {
   constructor(...data) {
     super(...data);
-    this.dataList = this.props.dataList || [];
+    this.dataList = this.props.dataList;
     this.on(migi.Event.DOM, function() {
       this.autoWidth();
     });
   }
-  @bind dataList = []
+  @bind dataList
   autoWidth() {
     let $list = $(this.ref.list.element);
     let $c = $list.find('.c');
@@ -20,15 +20,9 @@ class HotAuthor extends migi.Component {
     let $ul = $c.find('ul');
     $c.css('width', $ul.width() + 1);
   }
-  click(e, vd, tvd) {
-    let authorID = tvd.props.authorID;
-    if(authorID) {
-      util.goto('/author/' + authorID);
-    }
-  }
   render() {
     return <div class="cp-hotauthor">
-      <h3>{ this.props.title }</h3>
+      <h4>{ this.props.title }</h4>
       <div class="list" ref="list">
         <div class="c">
           {
@@ -39,7 +33,7 @@ class HotAuthor extends migi.Component {
                     let types = item.WorksType || [];
                     return <li>
                       <a href={ `/author/${item.AuthorID}` } class="pic">
-                        <img src={ util.img90_90(item.Head_url) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
+                        <img src={ util.autoSsl(util.img90_90(item.Head_url)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
                         {
                           types.slice(0, 2).map(function(item) {
                             return <b class={ `cp-author_type${item}` }/>;
