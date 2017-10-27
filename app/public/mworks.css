@@ -497,6 +497,97 @@ body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
 }
+.mod.mod-media .lyrics {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: #2D4D67;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.7);
+}
+.mod.mod-media .lyrics .roll {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.mod.mod-media .lyrics .roll:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 40%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0) 100%);
+  content: ' ';
+}
+.mod.mod-media .lyrics .roll:after {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 0.2rem;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+  content: ' ';
+  -webkit-transform: translateY(-0.1rem);
+          transform: translateY(-0.1rem);
+}
+.mod.mod-media .lyrics .roll .c {
+  position: relative;
+  top: 50%;
+  padding: 0;
+  transition: -webkit-transform 0.2s ease-out;
+  transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
+  z-index: 3;
+}
+.mod.mod-media .lyrics .roll .c pre {
+  margin: 0;
+  font-size: 0.12rem;
+  line-height: 0.2rem;
+  text-align: center;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  -webkit-transform: translateY(-0.1rem);
+          transform: translateY(-0.1rem);
+}
+.mod.mod-media .lyrics .line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: -0.2rem;
+  margin: 0;
+  height: 0.2rem;
+  overflow: hidden;
+  text-align: center;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.7);
+}
+.mod.mod-media .lyrics .line:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 0.2rem;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+  content: ' ';
+}
+.mod.mod-media .lyrics .line pre {
+  margin: 0;
+  padding: 0;
+  display: block;
+  font-size: 0.12rem;
+  line-height: 0.2rem;
+  transition: -webkit-transform 0.2s ease-out;
+  transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
+}
 .mod.mod-media .fn {
   padding: 0.1rem 0.1rem 0;
   background: linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 30%, rgba(255, 255, 255, 0.7) 100%);
@@ -657,24 +748,33 @@ body {
 .mod.mod-media .type dl {
   float: left;
 }
+.mod.mod-media .type dl.cur dt {
+  background: #8BBDE1;
+  color: #FFF;
+}
 .mod.mod-media .type dl.cur dd {
   display: block;
 }
-.mod.mod-media .type dt {
+.mod.mod-media .type dl dt {
   float: left;
   margin-right: 0.05rem;
   padding: 0 0.1rem;
-  height: 0.24rem;
-  line-height: 0.24rem;
-  background: #8BBDE1;
-  border-radius: 0.24rem;
-  color: #FFF;
+  height: 0.22rem;
+  line-height: 0.22rem;
+  border: 1px solid #8BBDE1;
+  color: #2D4D67;
+  border-radius: 0.22rem;
 }
-.mod.mod-media .type dd {
+.mod.mod-media .type dl dd {
   float: left;
-  display: none;
   margin-right: 0.05rem;
   line-height: 0.24rem;
+  color: #2D4D67;
+  opacity: 0.5;
+}
+.mod.mod-media .type dl dd.cur {
+  text-decoration: underline;
+  opacity: 1;
 }
 /**
  * Created by army8735 on 2017/10/18.
@@ -1179,7 +1279,7 @@ body {
   border-top-left-radius: 0.16rem;
   border-top-right-radius: 0.16rem;
   color: #B1C0C9;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.7);
   line-height: 0.32rem;
   cursor: pointer;
   font-size: 0.12rem;

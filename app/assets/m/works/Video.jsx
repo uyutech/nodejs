@@ -24,8 +24,8 @@ class Video extends migi.Component {
   @bind datas = []
   @bind index = 0
   @bind isPlaying
-  @bind workIndex = 0
   @bind duration
+  @bind canControl
   @bind fnFavor
   @bind fnLike
   get currentTime() {
@@ -58,6 +58,15 @@ class Video extends migi.Component {
     </video>;
     this.video = video;
     video.prependTo(this.ref.c.element);
+  }
+  switchTo(index) {
+    this.index = index;
+    if(!this.video) {
+      this.addMedia();
+    }
+    this.video.element.src = this.datas[this.index].FileUrl;
+    this.pause();
+    this.emit('switchTo', this.datas[this.index]);
   }
   show() {
     $(this.element).removeClass('fn-hide');

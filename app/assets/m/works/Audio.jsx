@@ -2,8 +2,9 @@
  * Created by army on 2017/6/11.
  */
 
-import util from '../common/util';
-import net from '../common/net';
+import util from '../../d/common/util';
+import net from '../../d/common/net';
+import LyricsParser from '../../d/works/LyricsParser.jsx';
 
 let lyricsIndex = -1;
 let lyricsHeight = [];
@@ -13,17 +14,39 @@ class Audio extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.data) {
-      self.setData(self.props.data);
+    if(self.props.datas) {
+      self.setData(self.props.datas);
+      if(self.props.show) {
+        self.on(migi.Event.DOM, function() {
+          self.addMedia();
+        });
+      }
     }
   }
-  setData(data) {
+  @bind datas = []
+  @bind index = 0
+  @bind isPlaying
+  @bind hasStart
+  @bind showLyricsMode
+  @bind lyricsIndex = 0
+  @bind duration
+  @bind canControl
+  @bind fnFavor
+  @bind fnLike
+  get currentTime() {
+    return this._currentTime || 0;
+  }
+  @bind
+  set currentTime(v) {
+    this._currentTime = v;
+    if(this.audio && v !== this.audio.element.currentTime) {
+      this.audio.element.currentTime = v;
+    }
+  }
+  setData(datas) {
     let self = this;
-    self.data = data;
-    self.isLike = data[0].ISLike;
-    self.isFavor = data[0].ISFavor;
-    self.fileUrl = data[0].FileUrl;
-    data.forEach(function(item) {
+    self.datas = datas;
+    datas.forEach(function(item) {
       let l = {};
       if(LyricsParser.isLyrics(item.lrc)) {
         l.is = true;
@@ -36,33 +59,49 @@ class Audio extends migi.Component {
       }
       item.formatLyrics = l;
     });
-    self.rollLyrics = data[0].formatLyrics.data;
-    self.on(migi.Event.DOM, function() {
-      let count = 0;
-      $lyricsRoll = $(self.ref.lyricsRoll.element);
-      $lyricsRoll.find('pre').each(function() {
-        lyricsHeight.push(count);
-        count += 20;
-      });
-    });
     return this;
+  }
+  addMedia() {
+    let audio = <audio src={ this.datas[0].FileUrl }
+                       onTimeupdate={ this.onTimeupdate.bind(this) }
+                       onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
+                       onPlaying={ this.onPlaying.bind(this) }
+                       onPause={ this.onPause.bind(this) }
+                       onProgress={ this.onProgress.bind(this) }
+                       preload="meta">
+      your browser does not support the audio tag
+    </audio>;
+    this.audio = audio;
+    audio.appendTo(this.element);
+  }
+  switchTo(index) {
+    this.index = index;
+    if(!this.audio) {
+      this.addMedia();
+    }
+    this.audio.element.src = this.datas[this.index].FileUrl;
+    this.pause();
+    this.emit('switchTo', this.datas[this.index]);
   }
   show() {
     $(this.element).removeClass('fn-hide');
+    if(!this.audio) {
+      this.addMedia();
+    }
+    $(this.ref.fn.element).removeClass('fn-hidden');
     return this;
   }
   hide() {
     $(this.element).addClass('fn-hide');
     return this;
   }
-  timeupdate(e) {
-    let currentTime = e.target.currentTime;
-    // console.log(currentTime);
-    let item = this.data[this.workIndex];
+  onTimeupdate(e) {
+    let currentTime = this.currentTime = e.target.currentTime;
+    let item = this.datas[this.index];
     let formatLyrics = item.formatLyrics;
     let formatLyricsData = formatLyrics.data;
     if(formatLyrics.is && formatLyricsData.length) {
-      let tempIndex = lyricsIndex;
+      let tempIndex = this.lyricsIndex;
       for (let i = 0, len = formatLyricsData.length; i < len; i++) {
         if(currentTime * 1000 >= formatLyricsData[i].timestamp) {
           tempIndex = i;
@@ -71,54 +110,63 @@ class Audio extends migi.Component {
           break;
         }
       }
-      if(tempIndex !== lyricsIndex) {
-        // console.log(lyricsIndex, tempIndex);
-        lyricsIndex = tempIndex;
-        this.lineLyrics = formatLyricsData[lyricsIndex].txt;
-        $lyricsRoll.find('.cur').removeClass('cur');
-        $lyricsRoll.find('pre').eq(lyricsIndex).addClass('cur');
-        $lyricsRoll.css('-webkit-transform', `translate3d(0,${-lyricsHeight[lyricsIndex]}px,0)`);
-        $lyricsRoll.css('transform', `translate3d(0,${-lyricsHeight[lyricsIndex]}px,0)`);
+      if(tempIndex !== this.lyricsIndex) {
+        this.lyricsIndex = tempIndex;
       }
     }
-    this.emit('timeupdate', currentTime);
+    let percent = currentTime / this.duration;
+    this.setBarPercent(percent);
   }
-  loadedmetadata(e) {
-    let duration = this.duration = e.target.duration;
-    this.hasLoaded = true;
-    this.emit('loadedmetadata', {
-      duration,
-    });
+  onProgress(e) {
   }
-  playing(e) {
-    let duration = this.duration = e.target.duration;
-    this.emit('playing', {
-      duration,
-    });
+  onLoadedmetadata(e) {
+    this.duration = e.target.duration;
+    this.canControl = true;
+  }
+  onPlaying(e) {
+    this.duration = e.target.duration;
+  }
+  onPause(e) {
   }
   play() {
-    this.ref.audio.element.play();
+    this.audio.element.play();
+    this.isPlaying = true;
+    this.hasStart = true;
     return this;
   }
   pause() {
-    this.ref.audio.element.pause();
+    this.audio && this.audio.element.pause();
+    this.isPlaying = false;
     return this;
   }
-  currentTime(t) {
-    this.ref.audio.element.currentTime = t;
-    return this;
+  altLyrics() {
+    this.showLyricsMode = !this.showLyricsMode;
   }
-  @bind fileUrl
-  @bind isLike
-  @bind isFavor
-  @bind workIndex = 0
-  @bind lineLyrics
-  @bind rollLyrics = []
-  @bind showLyricsMode
-  @bind duration
-  @bind hasLoaded
+  clickStart(e) {
+    this.play();
+  }
+  clickProgress(e) {
+    if(this.canControl && e.target.className !== 'p') {
+      let $progress = $(this.ref.progress.element);
+      let left = $progress.offset().left;
+      let x = e.pageX - left;
+      let percent = x / $progress.width();
+      let currentTime = Math.floor(this.duration * percent);
+      this.currentTime = currentTime;
+    }
+  }
+  setBarPercent(percent) {
+    percent *= 100;
+    $(this.ref.vol.element).css('width', percent + '%');
+    $(this.ref.p.element).css('-moz-transform', `translateX(${percent}%)`);
+    $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
+    $(this.ref.p.element).css('transform', `translateX(${percent}%)`);
+  }
+  clickPlay(e) {
+    this.isPlaying ? this.pause() : this.play();
+  }
   clickLike(e, vd) {
-    if(!window.$CONFIG.isLogin) {
+    if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
@@ -126,9 +174,11 @@ class Audio extends migi.Component {
     let $vd = $(vd.element);
     if(!$vd.hasClass('loading')) {
       $vd.addClass('loading');
-      net.postJSON('api/works/AddLikeBehavior', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
+      let data = self.datas[self.index];
+      net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
-          self.isLike = res.data === 211;
+          data.ISLike = res.data === 211;
+          self.fnLike = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -144,19 +194,21 @@ class Audio extends migi.Component {
     }
   }
   clickFavor(e, vd) {
-    if(!window.$CONFIG.isLogin) {
+    if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
     let self = this;
     let $vd = $(vd.element);
+    let data = self.datas[self.index];
     if($vd.hasClass('loading')) {
       //
     }
     else if($vd.hasClass('has')) {
-      net.postJSON('api/works/RemoveCollection', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
+      net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
-          self.isFavor = false;
+          data.ISFavor = false;
+          self.fnFavor = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -171,9 +223,10 @@ class Audio extends migi.Component {
       });
     }
     else {
-      net.postJSON('api/works/AddCollection', { WorkItemsID: self.data[self.workIndex].ItemID }, function (res) {
+      net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
-          self.isFavor = true;
+          data.ISFavor = true;
+          self.fnFavor = null;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
@@ -189,53 +242,56 @@ class Audio extends migi.Component {
     }
   }
   clickDownload(e) {
-    if(!window.$CONFIG.isLogin) {
+    if(!$CONFIG.isLogin) {
       e.preventDefault();
       migi.eventBus.emit('NEED_LOGIN');
     }
   }
-  altLyrics() {
-    this.showLyricsMode = !this.showLyricsMode;
-  }
-  clickShare(e) {
-    migi.eventBus.emit('share');
-  }
-  clear() {
-    this.duration = 0;
-    this.fileUrl = '';
-    this.lineLyrics = '';
-    this.rollLyrics = [];
-    this.hasLoaded = false;
-    return this;
+  clickShare() {
+    migi.eventBus.emit('SHARE', location.href);
   }
   render() {
     return <div class={ 'audio' + (this.props.show ? '' : ' fn-hide') }>
-      <audio ref="audio"
-        onTimeupdate={ this.timeupdate }
-        onLoadedmetadata={ this.loadedmetadata }
-        onPlaying={ this.playing }
-        preload="meta"
-        src={ this.fileUrl }>
-        your browser does not support the audio tag
-      </audio>
-      <ul class="btn">
-        <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }/>
-        <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }/>
-        <li class="download"><a href={ this.fileUrl } download={ this.fileUrl } onClick={ this.clickDownload }/></li>
-        <li class="share" onClick={ this.clickShare }/>
-      </ul>
-      <div class="lyrics-con">
-        <div class={ 'lyrics-roll' + (!this.showLyricsMode ? '' : ' fn-hide') }>
-          <div class="c" ref="lyricsRoll">
-            {
-              (this.rollLyrics || []).map(function(item) {
-                return <pre>{ item.txt || '&nbsp;' }</pre>
-              })
-            }
+      <div class="c">
+        <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
+          <div class={ 'roll' + (!this.showLyricsMode && this.datas[this.index].formatLyrics.data ? '' : ' fn-hide') }>
+            <div class="c" ref="lyricsRoll" style={ '-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
+              {
+                (this.datas[this.index].formatLyrics.data || []).map(function(item) {
+                  return <pre>{ item.txt || '&nbsp;' }</pre>
+                })
+              }
+            </div>
+          </div>
+          <div class={ 'line' + (this.showLyricsMode && this.datas[this.index].formatLyrics.txt ? '' : ' fn-hide') }>
+            <pre style={ '-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>{ this.datas[this.index].formatLyrics.txt }</pre>
           </div>
         </div>
-        <pre class={ 'lyrics-line' + (this.showLyricsMode ? '' : ' fn-hide') }>{ this.lineLyrics }</pre>
-        <span class={ 'lyrics' + (this.showLyricsMode ? '' : ' alt') } onClick={ this.altLyrics }/>
+        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
+      </div>
+      <div class="fn" ref="fn">
+        <div class="control">
+          <b class={ 'lyrics' + (this.showLyricsMode ? '' : ' roll') } onClick={ this.altLyrics }/>
+          <small class="time">{ util.formatTime(this.currentTime * 1000) } / { util.formatTime(this.duration * 1000) }</small>
+        </div>
+        <div class="bar">
+          <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
+          <div class="progress" ref="progress" onClick={ this.clickProgress }>
+            <b class="load"/>
+            <b class="vol" ref="vol"/>
+            <b class="p" ref="p" onTouchStart={ this.touchStart } onTouchMove={ this.touchMove } onTouchEnd={ this.touchEnd }/>
+          </div>
+        </div>
+        <ul class="btn">
+          <li class={ 'like' + (this.datas[this.index].ISLike || this.fnLike ? ' has' : '') } onClick={ this.clickLike }/>
+          <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class="download">
+            <a href={ this.datas[this.index].FileUrl }
+               download={ this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl)[0] || '') }
+               onClick={ this.clickDownload }/>
+          </li>
+          <li class="share" onClick={ this.clickShare }/>
+        </ul>
       </div>
     </div>;
   }

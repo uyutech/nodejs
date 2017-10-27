@@ -161,6 +161,7 @@ class Audio extends migi.Component {
     if(this.index !== tvd.props.rel) {
       this.index = tvd.props.rel;
       this.audio.element.src = this.datas[this.index].FileUrl;
+      this.pause();
       this.emit('switchTo', this.datas[this.index]);
     }
   }

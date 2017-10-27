@@ -36,8 +36,8 @@ class Video extends migi.Component {
   @bind datas = []
   @bind index = 0
   @bind isPlaying
-  @bind workIndex = 0
   @bind duration
+  @bind canControl
   @bind muted
   @bind fnFavor
   @bind fnLike
@@ -129,6 +129,7 @@ class Video extends migi.Component {
     if(this.index !== tvd.props.rel) {
       this.index = tvd.props.rel;
       this.video.element.src = this.datas[this.index].FileUrl;
+      this.pause();
       this.emit('switchTo', this.datas[this.index]);
     }
   }

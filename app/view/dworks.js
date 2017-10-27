@@ -2388,6 +2388,7 @@ var Audio = function (_migi$Component) {
       if (this.index !== tvd.props.rel) {
         this.index = tvd.props.rel;
         this.audio.element.src = this.datas[this.index].FileUrl;
+        this.pause();
         this.emit('switchTo', this.datas[this.index]);
       }
     }
@@ -2915,6 +2916,7 @@ var Video = function (_migi$Component) {
       if (this.index !== tvd.props.rel) {
         this.index = tvd.props.rel;
         this.video.element.src = this.datas[this.index].FileUrl;
+        this.pause();
         this.emit('switchTo', this.datas[this.index]);
       }
     }
@@ -3191,20 +3193,20 @@ var Video = function (_migi$Component) {
       return this.__getBind("isPlaying");
     }
   }, {
-    key: 'workIndex',
-    set: function set(v) {
-      this.__setBind("workIndex", v);this.__data("workIndex");
-    },
-    get: function get() {
-      if (this.__initBind("workIndex")) this.__setBind("workIndex", 0);return this.__getBind("workIndex");
-    }
-  }, {
     key: 'duration',
     set: function set(v) {
       this.__setBind("duration", v);this.__data("duration");
     },
     get: function get() {
       return this.__getBind("duration");
+    }
+  }, {
+    key: 'canControl',
+    set: function set(v) {
+      this.__setBind("canControl", v);this.__data("canControl");
+    },
+    get: function get() {
+      return this.__getBind("canControl");
     }
   }, {
     key: 'muted',

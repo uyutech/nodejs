@@ -213,7 +213,7 @@ var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, []), document.bod
 
 migi.render(migi.createVd("div", [["class", "info"]]), document.body);
 
-if ($CONFIG.userInfo.User_Reg_Stat !== 99) {
+if ($CONFIG.isLogin && $CONFIG.userInfo.User_Reg_Stat !== 99) {
   migi.render(migi.createCp(_Welcome2.default, [["userInfo", $CONFIG.userInfo], ["authorInfo", $CONFIG.authorInfo]]), document.body);
 }
 

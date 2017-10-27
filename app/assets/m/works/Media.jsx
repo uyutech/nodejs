@@ -13,7 +13,44 @@ class Media extends migi.Component {
     let self = this;
 
     self.on(migi.Event.DOM, function() {
+
     });
+  }
+  clickType(e, vd, tvd) {
+    let self = this;
+    let $dd = $(tvd.element);
+    if(!$dd.hasClass('cur')) {
+      let $parent = $dd.parent();
+      let type = $parent.attr('rel');
+      let index = tvd.props.rel;
+      let audio = self.ref.audio;
+      let video = self.ref.video;
+      if($parent.hasClass('cur')) {
+        $parent.find('.cur').removeClass('cur');
+        if(type === 'audio') {
+          audio.switchTo(index);
+        }
+        else if(type === 'video') {
+          video.switchTo(index);
+        }
+      }
+      else {
+        let $type = $(vd.element);
+        $type.find('.cur').removeClass('cur');
+        $parent.addClass('cur');
+        if(type === 'audio') {
+          video && video.pause().hide();
+          audio.show();
+          audio.switchTo(index);
+        }
+        else if(type === 'video') {
+          audio && audio.pause().hide();
+          video.show();
+          video.switchTo(index);
+        }
+      }
+      $dd.addClass('cur');
+    }
   }
   render() {
     return <div class="mod mod-media fn-clear" style={ `background-image:url(${this.props.cover || '//zhuanquan.xin/img/blank.png'})` }>
@@ -22,14 +59,19 @@ class Media extends migi.Component {
           ? <Video ref="video" cover={ this.props.cover } datas={ this.props.videoData } show={ this.props.first === 'video' }/>
           : ''
       }
-      <div class="type fn-clear">
+      {
+        this.props.audioData
+          ? <Audio ref="audio" cover={ this.props.cover } datas={ this.props.audioData } show={ this.props.first === 'audio' }/>
+          : ''
+      }
+      <div class="type fn-clear" ref="type" onClick={ { dd: this.clickType } }>
       {
         this.props.videoData
-          ? <dl class={ 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '') }>
+          ? <dl class={ 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '') } rel="video">
             <dt>视频</dt>
             {
               this.props.videoData.map(function(item, i) {
-                return <dd class={ this.props.first === 'video' && !i }>{ item.ItemName }</dd>;
+                return <dd class={ this.props.first === 'video' && !i ? 'cur' : '' } rel={ i }>{ item.ItemName }</dd>;
               }.bind(this))
             }
           </dl>
@@ -37,12 +79,12 @@ class Media extends migi.Component {
       }
       {
         this.props.audioData
-          ? <dl class={ 'audio fn-clear' + (this.props.first === 'audio' ? ' cur' : '') }>
+          ? <dl class={ 'audio fn-clear' + (this.props.first === 'audio' ? ' cur' : '') } rel="audio">
             <dt>音频</dt>
             {
               this.props.audioData.map(function(item, i) {
-                return <dd class={ this.props.first === 'audio' && !i }>{ item.ItemName }</dd>;
-              })
+                return <dd class={ this.props.first === 'audio' && !i ? 'cur' : '' } rel={ i }>{ item.ItemName }</dd>;
+              }.bind(this))
             }
           </dl>
           : ''
