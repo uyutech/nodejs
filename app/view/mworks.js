@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 37);
+/******/ 	return __webpack_require__(__webpack_require__.s = 36);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1551,8 +1551,7 @@ migi.name(Poster, "Poster");exports.default = Poster;
 /* 33 */,
 /* 34 */,
 /* 35 */,
-/* 36 */,
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1574,7 +1573,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: worksDetail.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.labelList = ' + JSON.stringify(labelList) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mworks.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Works = __webpack_require__(38);
+var _Works = __webpack_require__(37);
 
 var _Works2 = _interopRequireDefault(_Works);
 
@@ -1583,7 +1582,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1603,7 +1602,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Media = __webpack_require__(39);
+var _Media = __webpack_require__(38);
 
 var _Media2 = _interopRequireDefault(_Media);
 
@@ -1635,7 +1634,7 @@ var _Poster = __webpack_require__(23);
 
 var _Poster2 = _interopRequireDefault(_Poster);
 
-var _WorkComment = __webpack_require__(42);
+var _WorkComment = __webpack_require__(41);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
@@ -1906,7 +1905,7 @@ var Works = function (_migi$Component) {
 migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1926,11 +1925,11 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Audio = __webpack_require__(40);
+var _Audio = __webpack_require__(39);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(41);
+var _Video = __webpack_require__(40);
 
 var _Video2 = _interopRequireDefault(_Video);
 
@@ -1979,7 +1978,7 @@ var Media = function (_migi$Component) {
 migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2343,7 +2342,7 @@ var Audio = function (_migi$Component) {
 migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2654,7 +2653,7 @@ var Video = function (_migi$Component) {
 migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

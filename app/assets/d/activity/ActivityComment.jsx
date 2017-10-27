@@ -4,11 +4,11 @@
 
 'use strict';
 
-import net from '../d/common/net';
-import util from '../d/common/util';
-import Comment from '../d/component/comment/Comment.jsx';
-import Page from '../d/component/page/Page.jsx';
-import SubCmt from '../d/component/subcmt/SubCmt.jsx';
+import net from '../common/net';
+import util from '../common/util';
+import Comment from '../component/comment/Comment.jsx';
+import Page from '../component/page/Page.jsx';
+import SubCmt from '../component/subcmt/SubCmt.jsx';
 
 let skip = 0;
 let take = 10;

@@ -60,12 +60,41 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 56);
+/******/ 	return __webpack_require__(__webpack_require__.s = 55);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 24:
+/***/ 55:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (data) {
+  var userInfo = data.userInfo;
+  var authorInfo = data.authorInfo;
+
+  var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo], ["authorInfo", authorInfo]]));
+
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dindex.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n  $CONFIG.authorInfo = ' + JSON.stringify(authorInfo) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dindex.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+};
+
+var _TopNav = __webpack_require__(56);
+
+var _TopNav2 = _interopRequireDefault(_TopNav);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+;
+
+/***/ }),
+
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -137,35 +166,6 @@ var TopNav = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(TopNav, "TopNav");exports.default = TopNav;
-
-/***/ }),
-
-/***/ 56:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (data) {
-  var userInfo = data.userInfo;
-  var authorInfo = data.authorInfo;
-
-  var topNav = migi.preRender(migi.createCp(_TopNav2.default, [["userInfo", userInfo], ["authorInfo", authorInfo]]));
-
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dindex.css') + '"/>\n</head>\n<body>\n' + topNav + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n  $CONFIG.authorInfo = ' + JSON.stringify(authorInfo) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dindex.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
-};
-
-var _TopNav = __webpack_require__(24);
-
-var _TopNav2 = _interopRequireDefault(_TopNav);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-;
 
 /***/ })
 

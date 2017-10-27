@@ -14,7 +14,7 @@ module.exports = {
     dlogin: './app/view/d/login.jsx',
     dupload: './app/view/d/upload.jsx',
     dguide: './app/view/d/guide.jsx',
-    activity: './app/view/activity.jsx',
+    dactivity: './app/view/d/activity.jsx',
     rhyme: './app/view/rhyme.jsx',
     jrjbz: './app/view/jrjbz.jsx',
   },

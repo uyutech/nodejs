@@ -21,7 +21,7 @@ module.exports = {
     dlogin: './app/assets/d/login/index.jsx',
     dupload: './app/assets/d/upload/index.jsx',
     dguide: './app/assets/d/guide/index.jsx',
-    activity: './app/assets/activity/index.jsx',
+    dactivity: './app/assets/d/activity/index.jsx',
     rcommon: './app/assets/rhyme/common/index.js',
     rsingle: './app/assets/rhyme/single/index.jsx',
     jrjbz: './app/assets/rhyme/jrjbz/index.jsx',

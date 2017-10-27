@@ -23,6 +23,7 @@ module.exports = app => {
   app.get('/d/login', 'd.login.index');
   // app.get('/d/upload', 'd.upload.index');
   // app.get('/d/guide.index', 'd.guide.index');
+  app.get('/d/activity/:id', 'd.activity.index');
 
   app.get('/m', 'm.index.index');
   app.get('/m/find', 'm.find.index');
@@ -85,6 +86,4 @@ module.exports = app => {
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
-
-  app.get('/activity/:id', 'activity.index');
 };

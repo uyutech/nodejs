@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 43);
+/******/ 	return __webpack_require__(__webpack_require__.s = 42);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1066,8 +1066,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 /* 39 */,
 /* 40 */,
 /* 41 */,
-/* 42 */,
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1100,7 +1099,7 @@ var _BotNav = __webpack_require__(10);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Author = __webpack_require__(44);
+var _Author = __webpack_require__(43);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -1109,7 +1108,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1121,19 +1120,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Nav = __webpack_require__(45);
+var _Nav = __webpack_require__(44);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(49);
+var _Home = __webpack_require__(48);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Work = __webpack_require__(51);
+var _Work = __webpack_require__(50);
 
 var _Work2 = _interopRequireDefault(_Work);
 
-var _AuthorComment = __webpack_require__(52);
+var _AuthorComment = __webpack_require__(51);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
@@ -1252,7 +1251,7 @@ var Author = function (_migi$Component) {
 migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1264,15 +1263,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(46);
+var _Profile = __webpack_require__(45);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(47);
+var _Link = __webpack_require__(46);
 
 var _Link2 = _interopRequireDefault(_Link);
 
-var _Tags = __webpack_require__(48);
+var _Tags = __webpack_require__(47);
 
 var _Tags2 = _interopRequireDefault(_Tags);
 
@@ -1312,7 +1311,7 @@ var Nav = function (_migi$Component) {
 migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1516,7 +1515,7 @@ var Profile = function (_migi$Component) {
 migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1642,7 +1641,7 @@ var Link = function (_migi$Component) {
 migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1700,7 +1699,7 @@ var Tags = function (_migi$Component) {
 migi.name(Tags, "Tags");exports.default = Tags;
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1732,7 +1731,7 @@ var _HotAuthor = __webpack_require__(17);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(50);
+var _Dynamic = __webpack_require__(49);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -1802,7 +1801,7 @@ var Home = function (_migi$Component) {
 migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1881,7 +1880,7 @@ var Dynamics = function (_migi$Component) {
 migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2041,7 +2040,7 @@ var Work = function (_migi$Component) {
 migi.name(Work, "Work");exports.default = Work;
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2061,7 +2060,7 @@ var _util = __webpack_require__(2);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(53);
+var _Comment = __webpack_require__(52);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -2393,7 +2392,7 @@ var AuthorComment = function (_migi$Component) {
 migi.name(AuthorComment, "AuthorComment");exports.default = AuthorComment;
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

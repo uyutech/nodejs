@@ -40,30 +40,13 @@ module.exports = app => {
       if(res.commentData.data.success) {
         commentData = res.commentData.data.data;
       }
-      if(uid) {
-        let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
-          uid,
-        });
-        let userInfo = res.data.data || {};
-        yield ctx.render('activity', {
-          isLogin: true,
-          userInfo,
-          id,
-          list,
-          postData,
-          commentData,
-        });
-      }
-      else {
-        yield ctx.render('activity', {
-          isLogin: false,
-          userInfo: {},
-          id,
-          list,
-          postData,
-          commentData,
-        });
-      }
+      yield ctx.render('dactivity', {
+        isLogin: !!uid,
+        id,
+        list,
+        postData,
+        commentData,
+      });
     }
   }
   return Controller;

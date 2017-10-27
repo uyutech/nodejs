@@ -1448,8 +1448,7 @@ migi.name(Poster, "Poster");exports.default = Poster;
 /* 27 */,
 /* 28 */,
 /* 29 */,
-/* 30 */,
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1580,7 +1579,7 @@ var Title = function (_migi$Component) {
 migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1616,7 +1615,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1785,6 +1784,7 @@ var AddLabelPanel = function (_migi$Component) {
 migi.name(AddLabelPanel, "AddLabelPanel");exports.default = AddLabelPanel;
 
 /***/ }),
+/* 33 */,
 /* 34 */,
 /* 35 */,
 /* 36 */,
@@ -1855,7 +1855,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(31);
+var _Title = __webpack_require__(30);
 
 var _Title2 = _interopRequireDefault(_Title);
 
@@ -1899,7 +1899,7 @@ var _Album = __webpack_require__(68);
 
 var _Album2 = _interopRequireDefault(_Album);
 
-var _AddLabelPanel = __webpack_require__(33);
+var _AddLabelPanel = __webpack_require__(32);
 
 var _AddLabelPanel2 = _interopRequireDefault(_AddLabelPanel);
 
@@ -2226,7 +2226,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _LyricsParser = __webpack_require__(32);
+var _LyricsParser = __webpack_require__(31);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 

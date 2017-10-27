@@ -4,19 +4,15 @@
 
 'use strict';
 
-import TopNav from '../assets/d/component/topnav/TopNav.jsx';
-import Activity from '../assets/activity/Activity.jsx';
+import Activity from '../../assets/d/activity/Activity.jsx';
 
 export default function(data) {
   migi.Element.resetUid();
-  let userInfo = data.userInfo;
   let isLogin = data.isLogin;
   let id = data.id;
   let postData = data.postData;
   let commentData = data.commentData;
-  let list = data.list;
 
-  let topNav = migi.preRender(<TopNav userInfo={ userInfo }/>);
   let activity = migi.preRender(<Activity
     isLogin={ isLogin }
     id={ id }
@@ -29,23 +25,20 @@ export default function(data) {
   ${data.helper.getDHead({
     title: postData.Title,
   })}
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon2.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/activity.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dactivity.css')}"/>
 </head>
 <body>
-${topNav}
 <div id="page">${ activity }</div>
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.userInfo = ${JSON.stringify(userInfo)};
-  $CONFIG.isLogin = ${JSON.stringify(isLogin)};
   $CONFIG.id = ${JSON.stringify(id)};
   $CONFIG.postData = ${JSON.stringify(postData)};
   $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon2.js')}"></script>
-<script src="${data.helper.getAssetUrl('/activity.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dactivity.js')}"></script>
 </body>
 </html>`;
 };
