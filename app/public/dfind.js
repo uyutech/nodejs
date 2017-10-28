@@ -611,7 +611,7 @@ migi.name(HotAlubm, "HotAlubm");exports.default = HotAlubm;
 
 /***/ }),
 
-/***/ 31:
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -687,7 +687,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(31);
+var _AuthorType = __webpack_require__(30);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 

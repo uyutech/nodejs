@@ -300,8 +300,7 @@ Object.keys(code2Data).forEach(function(k) {
 /***/ }),
 /* 3 */,
 /* 4 */,
-/* 5 */,
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -360,6 +359,7 @@ exports.default = {
 };
 
 /***/ }),
+/* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */
@@ -424,7 +424,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(6);
+var _AuthorType = __webpack_require__(5);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 

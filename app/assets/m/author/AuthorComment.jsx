@@ -5,9 +5,8 @@
 import util from '../../d/common/util';
 import net from '../../d/common/net';
 import Comment from '../../d/component/comment/Comment.jsx';
-import Page from '../../d/component/page/Page.jsx';
 
-let skip = 0;
+let skip = 10;
 let take = 10;
 let sortType = 0;
 let myComment = 0;
@@ -21,11 +20,11 @@ class AuthorComment extends migi.Component {
     let self = this;
     self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function() {
-      let page = self.ref.page;
-      page.on('page', function(i) {
-        skip = (i - 1) * take;
-        self.loadPage();
+      let $window = $(window);
+      $window.on('scroll', function() {
+        self.checkMore($window);
       });
+
       let comment = self.ref.comment;
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
@@ -38,6 +37,7 @@ class AuthorComment extends migi.Component {
     });
   }
   @bind loading
+  @bind loadEnd
   @bind authorID
   @bind rootID = -1
   @bind parentID = -1
@@ -48,14 +48,20 @@ class AuthorComment extends migi.Component {
   hide() {
     let self = this;
     $(self.element).addClass('fn-hide');
-    skip = -1;
+  }
+  checkMore($window) {
+    let self = this;
+    let WIN_HEIGHT = $window.height();
+    let HEIGHT = $(document.body).height();
+    let bool;
+    bool = !$(self.element).hasClass('fn-hide') && $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
+    if(!self.loading && !self.loadEnd && bool) {
+      self.load();
+    }
   }
   load() {
     let self = this;
     let comment = self.ref.comment;
-    let page = self.ref.page;
-    comment.message = '读取中...';
-    page.total = 1;
     if(ajax) {
       ajax.abort();
     }
@@ -63,53 +69,17 @@ class AuthorComment extends migi.Component {
     ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        currentCount = data.Size;
-        skip += take;
-        if(data.data.length) {
-          comment.message = '';
-          comment.appendData(res.data.data);
-          page.total = Math.ceil(currentCount / take);
-        }
-        else {
-          comment.appendData(res.data.data);
-          comment.message = '暂无评论';
-          loadEnd = true;
-        }
-      }
-      else {
-        if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        comment.message = res.message || util.ERROR_MESSAGE;
-      }
-      self.loading = false;
-    }, function(res) {
-      comment.message = res.message || util.ERROR_MESSAGE;
-      self.loading = false;
-    });
-  }
-  loadPage() {
-    let self = this;
-    let comment = self.ref.comment;
-    comment.message = '读取中...';
-    comment.setData();
-    if(ajax) {
-      ajax.abort();
-    }
-    self.loading = true;
-    ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment, currentCount }, function(res) {
-      if(res.success) {
-        let data = res.data;
-        skip += take;
+        // currentCount = data.Size;
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
         }
         else {
           comment.appendData(res.data.data);
-          comment.message = '暂无评论';
-          loadEnd = true;
+          comment.message = skip === 0 ? '暂无评论' : '已经到底了';
+          self.loadEnd = true;
         }
+        skip += take;
       }
       else {
         if(res.code === 1000) {
@@ -171,7 +141,6 @@ class AuthorComment extends migi.Component {
           <li rel="1">最热</li>
         </ul>
       </div>
-      <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <div class="warn">
         <div class="t fn-clear">
           <img class="pic" src="//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"/>

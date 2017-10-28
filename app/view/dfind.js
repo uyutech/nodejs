@@ -395,7 +395,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(6);
+var _AuthorType = __webpack_require__(5);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -935,7 +935,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
 
-/***/ 6:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
