@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 28);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -775,7 +775,8 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 /* 24 */,
 /* 25 */,
 /* 26 */,
-/* 27 */
+/* 27 */,
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -806,7 +807,7 @@ var _BotNav = __webpack_require__(8);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Find = __webpack_require__(28);
+var _Find = __webpack_require__(29);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -815,7 +816,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -835,7 +836,7 @@ var _net = __webpack_require__(!(function webpackMissingModule() { var e = new E
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(29);
+var _Banner = __webpack_require__(30);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -989,7 +990,7 @@ var Find = function (_migi$Component) {
 migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -17,12 +17,16 @@ class NeedLogin extends migi.Component {
     e.preventDefault();
     this.hide();
   }
+  clickWeibo(e) {
+    e.preventDefault();
+    location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);
+  }
   render() {
     return <div class="cp-mlogin fn-hide">
       <div class="c">
         <h3>您尚未登录...</h3>
         <p>{ this.message || '登录后即可进行相关操作~' }</p>
-        <a href={ window.$CONFIG.loginUrl } class="weibo">微博登录</a>
+        <a href="/oauth/weibo" class="weibo" onClick={ this.clickWeibo }>微博登录</a>
         <a href="#" class="close" onClick={ this.clickClose }/>
       </div>
     </div>;

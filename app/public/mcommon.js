@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 75);
+/******/ 	return __webpack_require__(__webpack_require__.s = 87);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7281,7 +7281,7 @@ exports.default = NonVisualComponent;
 "use strict";
 
 
-var core = __webpack_require__(90);
+var core = __webpack_require__(92);
 
 module.exports = core;
 
@@ -7331,7 +7331,7 @@ module.exports = {
 "use strict";
 
 
-var event = __webpack_require__(91);
+var event = __webpack_require__(93);
 
 module.exports = event;
 
@@ -7362,7 +7362,19 @@ module.exports = event;
 /* 72 */,
 /* 73 */,
 /* 74 */,
-/* 75 */
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7372,13 +7384,13 @@ __webpack_require__(31);
 
 __webpack_require__(32);
 
-var _animaYoctoAjax = __webpack_require__(88);
+var _animaYoctoAjax = __webpack_require__(90);
 
 var _animaYoctoAjax2 = _interopRequireDefault(_animaYoctoAjax);
 
-__webpack_require__(94);
-
 __webpack_require__(96);
+
+__webpack_require__(98);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7433,30 +7445,20 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
-/* 86 */,
-/* 87 */,
-/* 88 */
+/* 88 */,
+/* 89 */,
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ajax = __webpack_require__(89);
+var ajax = __webpack_require__(91);
 
 module.exports = ajax;
 
 /***/ }),
-/* 89 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7467,14 +7469,14 @@ var $ = __webpack_require__(45),
 
 __webpack_require__(48);
 
-__webpack_require__(92);
+__webpack_require__(94);
 
-__webpack_require__(93);
+__webpack_require__(95);
 
 module.exports = $;
 
 /***/ }),
-/* 90 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8285,7 +8287,7 @@ var Yocto = function () {
 module.exports = Yocto;
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8550,7 +8552,7 @@ $.Event = function (type, props) {
 module.exports = $;
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8621,7 +8623,7 @@ $.ajaxJSONP = function (options, deferred) {
 module.exports = $;
 
 /***/ }),
-/* 93 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8870,13 +8872,13 @@ $.param = function (obj, traditional) {
 module.exports = $;
 
 /***/ }),
-/* 94 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _MLogin = __webpack_require__(95);
+var _MLogin = __webpack_require__(97);
 
 var _MLogin2 = _interopRequireDefault(_MLogin);
 
@@ -8891,10 +8893,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     mlogin.show();
   });
+
+  $('#topNav span.user').on('click', function () {
+    migi.eventBus.emit('NEED_LOGIN');
+  });
 });
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8944,11 +8950,17 @@ var NeedLogin = function (_migi$Component) {
       this.hide();
     }
   }, {
+    key: "clickWeibo",
+    value: function clickWeibo(e) {
+      e.preventDefault();
+      location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);
+    }
+  }, {
     key: "render",
     value: function render() {
       return migi.createVd("div", [["class", "cp-mlogin fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("h3", [], ["您尚未登录..."]), migi.createVd("p", [], [new migi.Obj("message", this, function () {
         return this.message || '登录后即可进行相关操作~';
-      })]), migi.createVd("a", [["href", window.$CONFIG.loginUrl], ["class", "weibo"]], ["微博登录"]), migi.createVd("a", [["href", "#"], ["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
+      })]), migi.createVd("a", [["href", "/oauth/weibo"], ["class", "weibo"], ["onClick", new migi.Cb(this, this.clickWeibo)]], ["微博登录"]), migi.createVd("a", [["href", "#"], ["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
     }
   }, {
     key: "message",
@@ -8966,7 +8978,7 @@ var NeedLogin = function (_migi$Component) {
 migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
 
 /***/ }),
-/* 96 */
+/* 98 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -9,7 +9,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?5';
+    return '/public' + url + '?6';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -89,11 +89,20 @@ module.exports = {
   },
   getMTopNav: function() {
     let session = this.ctx.session || {};
-    return `<div class="top-nav">
-      <a href="/" class="logo"></a>
+    if(session.uid) {
+      return `<div class="top-nav" id="topNav">
+      <a href="#" class="logo"></a>
       <a href="/my" class="user">
-        <span>${session.uid ? session.uname : '登录/注册'}</span>
+        <span>${session.uname}</span>
         <img src=${session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>
+      </a>
+    </div>`;
+    }
+    return `<div class="top-nav" id="topNav">
+      <a href="#" class="logo"></a>
+      <span class="user">
+        <span>登录/注册</span>
+        <img src="//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png">
       </a>
     </div>`;
   },

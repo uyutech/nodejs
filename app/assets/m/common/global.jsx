@@ -16,4 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     mlogin.show();
   });
+
+  $('#topNav span.user').on('click', function() {
+    migi.eventBus.emit('NEED_LOGIN');
+  });
 });
