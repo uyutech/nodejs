@@ -212,9 +212,9 @@ class Works extends migi.Component {
             <li class="player" rel="player">播放</li>
           </ul>
           <MusicAlbum ref="musicAlbum"
-                 collectionID={ this.worksID }
-                 cover={ this.props.worksDetail.cover_Pic }
-                 workList={ this.workList }/>
+                      worksID={ this.worksID }
+                      cover={ this.props.worksDetail.cover_Pic }
+                      workList={ this.workList }/>
           <div class="box">
             <Describe data={ this.props.worksDetail.Describe }/>
             <Author authorList={ [this.props.worksDetail.Works_Author] }/>
@@ -227,7 +227,7 @@ class Works extends migi.Component {
             <li class="cur">曲目</li>
           </ul>
           <div class="box box-fn-top-left">
-            <PlayList workList={ this.workList }/>
+            <PlayList ref="playList" workList={ this.workList }/>
           </div>
           <WorkComment ref="workComment"
                        isLogin={ this.props.isLogin }

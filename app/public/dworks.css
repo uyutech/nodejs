@@ -2060,7 +2060,6 @@ body {
   padding: 0 0.1rem;
   height: 0.35rem;
   background: #8BBDE1;
-  border-top-right-radius: 0.1rem;
 }
 .mod.mod-playlist .type li {
   float: right;
@@ -2185,7 +2184,6 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 0.35rem;
-  overflow: hidden;
 }
 .mod.mod-musicalbum .cover {
   position: relative;

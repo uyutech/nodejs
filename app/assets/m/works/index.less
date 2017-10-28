@@ -14,7 +14,9 @@
 @import '../../d/works/insp';
 @import '../../d/works/poster';
 @import './comment';
-@import './album';
+@import './photoalbum';
+@import './musicalbum';
+@import '../../d/works/playlist';
 
 .works{
   > .sel{
@@ -47,6 +49,18 @@
   }
   &.t1 .sel{
     margin-top:-0.3rem;
+  }
+  &.t5{
+    .sel{
+      margin-top:-0.3rem;
+    }
+    .intro:before{
+      display:block;
+      margin-bottom:0.1rem;
+      height:0.35rem;
+      background:@mainColor;
+      content:' ';
+    }
   }
   &.t11 .sel{
     margin-top:0.1rem;

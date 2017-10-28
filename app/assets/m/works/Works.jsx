@@ -6,7 +6,7 @@ import util from '../../d/common/util';
 import net from '../../d/common/net';
 import Media from './Media.jsx';
 import itemTemplate from '../../d/works/itemTemplate';
-import Album from './Album.jsx';
+import PhotoAlbum from './PhotoAlbum.jsx';
 import Author from '../../d/works/Author.jsx';
 import Timeline from '../../d/works/Timeline.jsx';
 import Text from '../../d/works/Text.jsx';
@@ -16,6 +16,9 @@ import Poster from '../../d/works/Poster.jsx';
 import WorkComment from './WorkComment.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 import WorksTypeEnum from '../../d/works/WorksTypeEnum';
+import LyricsParser from '../../d/works/LyricsParser.jsx';
+import MusicAlbum from './MusicAlbum.jsx';
+import PlayList from '../../d/works/PlayList.jsx';
 
 let first;
 
@@ -27,11 +30,11 @@ class Works extends migi.Component {
     self.worksType = self.props.worksDetail.WorkType;
     self.setWorks(self.props.worksDetail.Works_Items);
     self.on(migi.Event.DOM, function() {
-      let media = self.ref.media;
       let workComment = self.ref.workComment;
       let comment = workComment.ref.comment;
       let subCmt = self.ref.subCmt;
-      if(media) {
+      if(self.worksType === WorksTypeEnum.TYPE.originMusic) {
+        let media = self.ref.media;
         media.on('switchTo', function(data) {
           workComment.workID = data.ItemID;
         });
@@ -94,8 +97,31 @@ class Works extends migi.Component {
   @bind barrageTime = 0
   setWorks(works) {
     let self = this;
-    let workHash = {};
     let workList = [];
+    if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+      works.forEach(function(item) {
+        if(item.ItemType === 1111 || item.ItemType === 1113) {
+          let l = {};
+          if(LyricsParser.isLyrics(item.lrc)) {
+            l.is = true;
+            l.txt = LyricsParser.getTxt(item.lrc);
+            l.data = LyricsParser.parse(item.lrc);
+          }
+          else {
+            l.is = false;
+            l.txt = item.lrc;
+          }
+          item.formatLyrics = l;
+          workList.push(item);
+        }
+        else if(item.ItemType === 2110) {
+          workList.push(item);
+        }
+      });
+      self.workList = workList;
+      return;
+    }
+    let workHash = {};
     let authorList = [];
     let authorHash = {};
     works.forEach(function(item) {
@@ -196,33 +222,94 @@ class Works extends migi.Component {
       $(vd.element).find('.cur').removeClass('cur');
       $li.addClass('cur');
       let rel = tvd.props.rel;
-      if(rel === 'album') {
-        $(self.ref.workComment.element).addClass('fn-hide');
-        $(self.ref.intro.element).addClass('fn-hide');
-        $(self.ref.album.element).removeClass('fn-hide');
+      if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+        if(rel === 'playList') {
+          $(self.ref.workComment.element).addClass('fn-hide');
+          $(self.ref.intro.element).addClass('fn-hide');
+          $(self.ref.playList.element).removeClass('fn-hide');
+        }
+        else if(rel === 'intro') {
+          $(self.ref.workComment.element).addClass('fn-hide');
+          $(self.ref.playList.element).addClass('fn-hide');
+          $(self.ref.intro.element).removeClass('fn-hide');
+        }
+        else if(rel === 'comment') {
+          $(self.ref.intro.element).addClass('fn-hide');
+          $(self.ref.playList.element).addClass('fn-hide');
+          $(self.ref.workComment.element).removeClass('fn-hide');
+        }
       }
-      else if(rel === 'intro') {
-        $(self.ref.workComment.element).addClass('fn-hide');
-        self.ref.album && $(self.ref.album.element).addClass('fn-hide');
-        $(self.ref.intro.element).removeClass('fn-hide');
+      else if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
+        if(rel === 'photoAlbum') {
+          $(self.ref.workComment.element).addClass('fn-hide');
+          $(self.ref.intro.element).addClass('fn-hide');
+          $(self.ref.photoAlbum.element).removeClass('fn-hide');
+        }
+        else if(rel === 'intro') {
+          $(self.ref.workComment.element).addClass('fn-hide');
+          $(self.ref.photoAlbum.element).addClass('fn-hide');
+          $(self.ref.intro.element).removeClass('fn-hide');
+        }
+        else if(rel === 'comment') {
+          $(self.ref.intro.element).addClass('fn-hide');
+          $(self.ref.photoAlbum.element).addClass('fn-hide');
+          $(self.ref.workComment.element).removeClass('fn-hide');
+        }
       }
-      else if(rel === 'comment') {
-        $(self.ref.intro.element).addClass('fn-hide');
-        self.ref.album && $(self.ref.album.element).addClass('fn-hide');
-        $(self.ref.workComment.element).removeClass('fn-hide');
+      else if(self.worksType === WorksTypeEnum.TYPE.originMusic) {
+        if(rel === 'intro') {
+          $(self.ref.workComment.element).addClass('fn-hide');
+          $(self.ref.intro.element).removeClass('fn-hide');
+        }
+        else if(rel === 'comment') {
+          $(self.ref.intro.element).addClass('fn-hide');
+          $(self.ref.workComment.element).removeClass('fn-hide');
+        }
       }
     }
   }
   render() {
     let self = this;
-    if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
-      return <div class={ 'works t' + self.worksType }>
+    if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+      return <div class={'works t' + self.worksType}>
+        <MusicAlbum ref="musicAlbum"
+                    worksID={ this.worksID }
+                    cover={ this.props.worksDetail.cover_Pic }
+                    workList={ this.workList }/>
         <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
-          <li class="cur" rel="album">相册</li>
+          <li class="cur" rel="playList">曲目</li>
           <li rel="intro">简介</li>
           <li rel="comment">留言</li>
         </ul>
-        <Album ref="album" worksID={ this.worksID } labelList={ this.props.labelList }/>
+        <PlayList ref="playList" workList={ this.workList }/>
+        <div class="intro fn-hide" ref="intro">
+          {
+            this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
+              ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+              : ''
+          }
+        </div>
+        <WorkComment ref="workComment"
+                     isLogin={ this.props.isLogin }
+                     worksID={ this.worksID }
+                     workID={ this.workID }
+                     originTo={ this.props.worksDetail.Title }
+                     commentData={ this.props.commentData }/>
+        <SubCmt ref="subCmt"
+                originTo={ this.props.worksDetail.Title }
+                subText="发送"
+                tipText="-${n}"
+                placeholder="夸夸这个作品吧"/>
+      </div>;
+    }
+    if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
+      return <div class={ 'works t' + self.worksType }>
+        <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
+          <li class="cur" rel="photoAlbum">相册</li>
+          <li rel="intro">简介</li>
+          <li rel="comment">留言</li>
+        </ul>
+        <PhotoAlbum ref="photoAlbum" worksID={ this.worksID } labelList={ this.props.labelList }/>
         <div class="intro fn-hide" ref="intro">
           <Author authorList={ [this.props.worksDetail.Works_Author] }/>
           {

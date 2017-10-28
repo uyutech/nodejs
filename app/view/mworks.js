@@ -1586,9 +1586,9 @@ var _itemTemplate = __webpack_require__(14);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
-var _Album = __webpack_require__(35);
+var _PhotoAlbum = __webpack_require__(35);
 
-var _Album2 = _interopRequireDefault(_Album);
+var _PhotoAlbum2 = _interopRequireDefault(_PhotoAlbum);
 
 var _Author = __webpack_require__(15);
 
@@ -1626,6 +1626,18 @@ var _WorksTypeEnum = __webpack_require__(7);
 
 var _WorksTypeEnum2 = _interopRequireDefault(_WorksTypeEnum);
 
+var _LyricsParser = __webpack_require__(6);
+
+var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
+
+var _MusicAlbum = __webpack_require__(37);
+
+var _MusicAlbum2 = _interopRequireDefault(_MusicAlbum);
+
+var _PlayList = __webpack_require__(71);
+
+var _PlayList2 = _interopRequireDefault(_PlayList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1655,11 +1667,11 @@ var Works = function (_migi$Component) {
     self.worksType = self.props.worksDetail.WorkType;
     self.setWorks(self.props.worksDetail.Works_Items);
     self.on(migi.Event.DOM, function () {
-      var media = self.ref.media;
       var workComment = self.ref.workComment;
       var comment = workComment.ref.comment;
       var subCmt = self.ref.subCmt;
-      if (media) {
+      if (self.worksType === _WorksTypeEnum2.default.TYPE.originMusic) {
+        var media = self.ref.media;
         media.on('switchTo', function (data) {
           workComment.workID = data.ItemID;
         });
@@ -1717,8 +1729,29 @@ var Works = function (_migi$Component) {
     key: 'setWorks',
     value: function setWorks(works) {
       var self = this;
-      var workHash = {};
       var workList = [];
+      if (self.worksType === _WorksTypeEnum2.default.TYPE.musicAlbum) {
+        works.forEach(function (item) {
+          if (item.ItemType === 1111 || item.ItemType === 1113) {
+            var l = {};
+            if (_LyricsParser2.default.isLyrics(item.lrc)) {
+              l.is = true;
+              l.txt = _LyricsParser2.default.getTxt(item.lrc);
+              l.data = _LyricsParser2.default.parse(item.lrc);
+            } else {
+              l.is = false;
+              l.txt = item.lrc;
+            }
+            item.formatLyrics = l;
+            workList.push(item);
+          } else if (item.ItemType === 2110) {
+            workList.push(item);
+          }
+        });
+        self.workList = workList;
+        return;
+      }
+      var workHash = {};
       var authorList = [];
       var authorHash = {};
       works.forEach(function (item) {
@@ -1815,18 +1848,42 @@ var Works = function (_migi$Component) {
         $(vd.element).find('.cur').removeClass('cur');
         $li.addClass('cur');
         var rel = tvd.props.rel;
-        if (rel === 'album') {
-          $(self.ref.workComment.element).addClass('fn-hide');
-          $(self.ref.intro.element).addClass('fn-hide');
-          $(self.ref.album.element).removeClass('fn-hide');
-        } else if (rel === 'intro') {
-          $(self.ref.workComment.element).addClass('fn-hide');
-          self.ref.album && $(self.ref.album.element).addClass('fn-hide');
-          $(self.ref.intro.element).removeClass('fn-hide');
-        } else if (rel === 'comment') {
-          $(self.ref.intro.element).addClass('fn-hide');
-          self.ref.album && $(self.ref.album.element).addClass('fn-hide');
-          $(self.ref.workComment.element).removeClass('fn-hide');
+        if (self.worksType === _WorksTypeEnum2.default.TYPE.musicAlbum) {
+          if (rel === 'playList') {
+            $(self.ref.workComment.element).addClass('fn-hide');
+            $(self.ref.intro.element).addClass('fn-hide');
+            $(self.ref.playList.element).removeClass('fn-hide');
+          } else if (rel === 'intro') {
+            $(self.ref.workComment.element).addClass('fn-hide');
+            $(self.ref.playList.element).addClass('fn-hide');
+            $(self.ref.intro.element).removeClass('fn-hide');
+          } else if (rel === 'comment') {
+            $(self.ref.intro.element).addClass('fn-hide');
+            $(self.ref.playList.element).addClass('fn-hide');
+            $(self.ref.workComment.element).removeClass('fn-hide');
+          }
+        } else if (self.worksType === _WorksTypeEnum2.default.TYPE.photoAlbum) {
+          if (rel === 'photoAlbum') {
+            $(self.ref.workComment.element).addClass('fn-hide');
+            $(self.ref.intro.element).addClass('fn-hide');
+            $(self.ref.photoAlbum.element).removeClass('fn-hide');
+          } else if (rel === 'intro') {
+            $(self.ref.workComment.element).addClass('fn-hide');
+            $(self.ref.photoAlbum.element).addClass('fn-hide');
+            $(self.ref.intro.element).removeClass('fn-hide');
+          } else if (rel === 'comment') {
+            $(self.ref.intro.element).addClass('fn-hide');
+            $(self.ref.photoAlbum.element).addClass('fn-hide');
+            $(self.ref.workComment.element).removeClass('fn-hide');
+          }
+        } else if (self.worksType === _WorksTypeEnum2.default.TYPE.originMusic) {
+          if (rel === 'intro') {
+            $(self.ref.workComment.element).addClass('fn-hide');
+            $(self.ref.intro.element).removeClass('fn-hide');
+          } else if (rel === 'comment') {
+            $(self.ref.intro.element).addClass('fn-hide');
+            $(self.ref.workComment.element).removeClass('fn-hide');
+          }
         }
       }
     }
@@ -1834,10 +1891,21 @@ var Works = function (_migi$Component) {
     key: 'render',
     value: function render() {
       var self = this;
+      if (self.worksType === _WorksTypeEnum2.default.TYPE.musicAlbum) {
+        return migi.createVd("div", [["class", new migi.Obj("worksType", this, function () {
+          return 'works t' + self.worksType;
+        })]], [migi.createCp(_MusicAlbum2.default, [["ref", "musicAlbum"], ["worksID", new migi.Obj("worksID", this, function () {
+          return this.worksID;
+        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "playList"]], ["曲目"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["workList", this.workList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+          return this.worksID;
+        })], ["workID", new migi.Obj("workID", this, function () {
+          return this.workID;
+        })], ["originTo", this.props.worksDetail.Title], ["commentData", this.props.commentData]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["originTo", this.props.worksDetail.Title], ["subText", "发送"], ["tipText", "-${n}"], ["placeholder", "夸夸这个作品吧"]])]);
+      }
       if (self.worksType === _WorksTypeEnum2.default.TYPE.photoAlbum) {
         return migi.createVd("div", [["class", new migi.Obj("worksType", this, function () {
           return 'works t' + self.worksType;
-        })]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "album"]], ["相册"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_Album2.default, [["ref", "album"], ["worksID", new migi.Obj("worksID", this, function () {
+        })]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "photoAlbum"]], ["相册"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_PhotoAlbum2.default, [["ref", "photoAlbum"], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["labelList", this.props.labelList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createCp(_Author2.default, [["authorList", [this.props.worksDetail.Works_Author]]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
@@ -2809,19 +2877,19 @@ var index = 0;
 var tagName = '';
 var ajax = void 0;
 
-var Album = function (_migi$Component) {
-  _inherits(Album, _migi$Component);
+var PhotoAlbum = function (_migi$Component) {
+  _inherits(PhotoAlbum, _migi$Component);
 
-  function Album() {
+  function PhotoAlbum() {
     var _ref;
 
-    _classCallCheck(this, Album);
+    _classCallCheck(this, PhotoAlbum);
 
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
 
-    var _this = _possibleConstructorReturn(this, (_ref = Album.__proto__ || Object.getPrototypeOf(Album)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = PhotoAlbum.__proto__ || Object.getPrototypeOf(PhotoAlbum)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
     self.on(migi.Event.DOM, function () {
@@ -2894,7 +2962,7 @@ var Album = function (_migi$Component) {
     return _this;
   }
 
-  _createClass(Album, [{
+  _createClass(PhotoAlbum, [{
     key: 'load',
     value: function load($window) {
       var self = this;
@@ -3056,7 +3124,7 @@ var Album = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod mod-album"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", ""]], ["全部"]), (this.props.labelList || []).map(function (item) {
+      return migi.createVd("div", [["class", "mod mod-photoalbum"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", ""]], ["全部"]), (this.props.labelList || []).map(function (item) {
         return migi.createVd("li", [["rel", item.Tag_Name]], [item.Tag_Name]);
       })]), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", new migi.Cb(this, this.switchType)]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createVd("div", [["class", "c"], ["ref", "c"]], [migi.createVd("div", [], [migi.createVd("ul", [["ref", "l1"]])]), migi.createVd("div", [], [migi.createVd("ul", [["ref", "l2"]])])])]);
     }
@@ -3078,10 +3146,10 @@ var Album = function (_migi$Component) {
     }
   }]);
 
-  return Album;
+  return PhotoAlbum;
 }(migi.Component);
 
-migi.name(Album, "Album");exports.default = Album;
+migi.name(PhotoAlbum, "PhotoAlbum");exports.default = PhotoAlbum;
 
 /***/ }),
 /* 36 */
@@ -3331,6 +3399,653 @@ var WorkComment = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MusicAlbum = function (_migi$Component) {
+  _inherits(MusicAlbum, _migi$Component);
+
+  function MusicAlbum() {
+    var _ref;
+
+    _classCallCheck(this, MusicAlbum);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = MusicAlbum.__proto__ || Object.getPrototypeOf(MusicAlbum)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    if (self.props.workList && self.props.workList.length) {
+      self.setItem(self.props.workList[0]);
+      self.on(migi.Event.DOM, function () {
+        self.addOrAltMedia();
+      });
+      migi.eventBus.on('chooseMusic', function (item) {
+        self.currentTime = 0;
+        self.setItem(item);
+        self.addOrAltMedia();
+      });
+    }
+    return _this;
+  }
+
+  _createClass(MusicAlbum, [{
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide hidden');
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'setItem',
+    value: function setItem(item) {
+      var self = this;
+      self.item = item;
+      self.type = item.ItemType;
+      self.workID = item.ItemID;
+      self.name = item.ItemName;
+      self.url = item.FileUrl;
+      self.playNum = item.PlayHis;
+      self.formatLyrics = item.formatLyrics || {};
+      self.like = item.ISLike;
+      self.favor = item.ISFavor;
+      self.cover = item.ItemCoverPic;
+    }
+  }, {
+    key: 'addOrAltMedia',
+    value: function addOrAltMedia() {
+      var self = this;
+      var isPlaying = self.isPlaying;
+      self.pause();
+      switch (self.type) {
+        case 1111:
+        case 1113:
+          if (!self.audio) {
+            self.audio = migi.createVd("audio", [["src", self.url], ["onTimeupdate", self.onTimeupdate.bind(self)], ["onLoadedmetadata", self.onLoadedmetadata.bind(self)], ["onPlaying", self.onPlaying.bind(self)], ["onPause", self.onPause.bind(self)], ["onProgress", self.onProgress.bind(self)], ["preload", "meta"]], ["\n\
+            your browser does not support the audio tag\n\
+          "]);
+            self.audio.appendTo(self.ref.c.element);
+          } else {
+            self.audio.element.src = self.url;
+          }
+          self.av = self.audio;
+          break;
+        case 2110:
+          if (!self.video) {
+            self.video = migi.createVd("video", [["ref", "video"], ["src", self.url], ["onClick", self.clickPlay.bind(self)], ["onTimeupdate", self.onTimeupdate.bind(self)], ["onLoadedmetadata", self.onLoadedmetadata.bind(self)], ["onPause", self.onPause.bind(self)], ["onPlaying", self.onPlaying.bind(self)], ["preload", "meta"], ["playsinline", "true"], ["webkit-playsinline", "true"]], ["\n\
+            your browser does not support the video tag\n\
+          "]);
+            self.video.appendTo(self.ref.c.element);
+          } else {
+            self.video.element.src = self.url;
+          }
+          self.av = self.video;
+          break;
+      }
+      self.volume = self.volume;
+      self.currentTime = 0;
+      if (isPlaying) {
+        self.play();
+      }
+    }
+  }, {
+    key: 'onTimeupdate',
+    value: function onTimeupdate(e) {
+      var self = this;
+      var currentTime = self.currentTime = e.target.currentTime;
+      var formatLyrics = self.formatLyrics || {};
+      var formatLyricsData = formatLyrics.data;
+      if (formatLyrics.is && formatLyricsData.length) {
+        var tempIndex = this.lyricsIndex;
+        for (var i = 0, len = formatLyricsData.length; i < len; i++) {
+          if (currentTime * 1000 >= formatLyricsData[i].timestamp) {
+            tempIndex = i;
+          } else {
+            break;
+          }
+        }
+        if (tempIndex !== this.lyricsIndex) {
+          this.lyricsIndex = tempIndex;
+        }
+      }
+      var percent = currentTime / this.duration;
+      this.setBarPercent(percent);
+    }
+  }, {
+    key: 'onProgress',
+    value: function onProgress(e) {}
+  }, {
+    key: 'onLoadedmetadata',
+    value: function onLoadedmetadata(e) {
+      this.duration = e.target.duration;
+      this.canControl = true;
+    }
+  }, {
+    key: 'onPlaying',
+    value: function onPlaying(e) {
+      this.duration = e.target.duration;
+    }
+  }, {
+    key: 'onPause',
+    value: function onPause(e) {}
+  }, {
+    key: 'play',
+    value: function play() {
+      this.av && this.av.element.play();
+      this.isPlaying = true;
+      this.hasStart = true;
+      migi.eventBus.emit('play');
+      return this;
+    }
+  }, {
+    key: 'pause',
+    value: function pause() {
+      this.av && this.av.element.pause();
+      this.isPlaying = false;
+      migi.eventBus.emit('pause');
+      return this;
+    }
+  }, {
+    key: 'altLyrics',
+    value: function altLyrics() {
+      this.showLyricsMode = !this.showLyricsMode;
+    }
+  }, {
+    key: 'clickStart',
+    value: function clickStart(e) {
+      this.play();
+    }
+  }, {
+    key: 'clickProgress',
+    value: function clickProgress(e) {
+      if (this.canControl && e.target.className !== 'p') {
+        var $progress = $(this.ref.progress.element);
+        var left = $progress.offset().left;
+        var x = e.pageX - left;
+        var percent = x / $progress.width();
+        var currentTime = Math.floor(this.duration * percent);
+        this.currentTime = currentTime;
+      }
+    }
+  }, {
+    key: 'setBarPercent',
+    value: function setBarPercent(percent) {
+      percent *= 100;
+      $(this.ref.vol.element).css('width', percent + '%');
+      $(this.ref.p.element).css('-moz-transform', 'translateX(' + percent + '%)');
+      $(this.ref.p.element).css('-webkit-transform', 'translateX(' + percent + '%)');
+      $(this.ref.p.element).css('transform', 'translateX(' + percent + '%)');
+    }
+  }, {
+    key: 'clickPlay',
+    value: function clickPlay(e) {
+      this.isPlaying ? this.pause() : this.play();
+    }
+  }, {
+    key: 'clickLike',
+    value: function clickLike(e, vd) {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
+      var self = this;
+      var $vd = $(vd.element);
+      if (!$vd.hasClass('loading')) {
+        $vd.addClass('loading');
+        var data = self.item;
+        net.postJSON('/api/works/likeWork', { workID: self.workID }, function (res) {
+          if (res.success) {
+            data.ISLike = self.like = res.data === 211;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      }
+    }
+  }, {
+    key: 'clickFavor',
+    value: function clickFavor(e, vd) {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
+      var self = this;
+      var $vd = $(vd.element);
+      var data = self.datas[self.index];
+      if ($vd.hasClass('loading')) {
+        //
+      } else if ($vd.hasClass('has')) {
+        net.postJSON('/api/works/unFavorWork', { workID: self.workID }, function (res) {
+          if (res.success) {
+            data.ISFavor = self.favor = false;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      } else {
+        net.postJSON('/api/works/favorWork', { workID: self.workID }, function (res) {
+          if (res.success) {
+            data.ISFavor = self.favor = true;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      }
+    }
+  }, {
+    key: 'clickDownload',
+    value: function clickDownload(e) {
+      if (!$CONFIG.isLogin) {
+        e.preventDefault();
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+    }
+  }, {
+    key: 'clickShare',
+    value: function clickShare() {
+      migi.eventBus.emit('SHARE', location.href);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "mod mod-musicalbum"], ["style", 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")']], [migi.createVd("div", [["class", "cover"], ["ref", "cover"], ["style", new migi.Obj("cover", this, function () {
+        return this.cover ? 'background-image:url("' + this.cover + '")' : '';
+      })]]), migi.createVd("div", [["class", new migi.Obj(["isPlaying", "type"], this, function () {
+        return 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '');
+      })], ["ref", "c"]], [migi.createVd("div", [["class", new migi.Obj("hasStart", this, function () {
+        return 'lyrics' + (this.hasStart ? '' : ' fn-hide');
+      })], ["ref", "lyrics"]], [migi.createVd("div", [["class", new migi.Obj(["showLyricsMode", "formatLyrics"], this, function () {
+        return 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide');
+      })]], [migi.createVd("div", [["class", "c"], ["ref", "lyricsRoll"], ["style", new migi.Obj("lyricsIndex", this, function () {
+        return '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)';
+      })]], [new migi.Obj("formatLyrics", this, function () {
+        return (this.formatLyrics.data || []).map(function (item) {
+          return migi.createVd("pre", [], [item.txt || '&nbsp;']);
+        });
+      })])]), migi.createVd("div", [["class", new migi.Obj(["showLyricsMode", "formatLyrics"], this, function () {
+        return 'line' + (this.showLyricsMode && this.formatLyrics.txt ? '' : ' fn-hide');
+      })]], [migi.createVd("pre", [["style", new migi.Obj("lyricsIndex", this, function () {
+        return '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)';
+      })]], [new migi.Obj("formatLyrics", this, function () {
+        return this.formatLyrics.txt;
+      })])])]), migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
+        return 'start' + (this.isPlaying ? ' fn-hide' : '');
+      })], ["onClick", new migi.Cb(this, this.clickStart)]])]), migi.createVd("div", [["class", "fn"], ["ref", "fn"]], [migi.createVd("div", [["class", "control"]], [migi.createVd("small", [["class", "time"]], [new migi.Obj("currentTime", this, function () {
+        return _util2.default.formatTime(this.currentTime * 1000);
+      }), " / ", new migi.Obj("duration", this, function () {
+        return _util2.default.formatTime(this.duration * 1000);
+      })]), migi.createVd("b", [["class", "full"], ["onClick", new migi.Cb(this, this.clickScreen)]])]), migi.createVd("div", [["class", "bar"]], [migi.createVd("b", [["class", new migi.Obj("isPlaying", this, function () {
+        return 'play' + (this.isPlaying ? ' pause' : '');
+      })], ["onClick", new migi.Cb(this, this.clickPlay)]]), migi.createVd("div", [["class", "progress"], ["ref", "progress"], ["onClick", new migi.Cb(this, this.clickProgress)]], [migi.createVd("b", [["class", "load"]]), migi.createVd("b", [["class", "vol"], ["ref", "vol"]]), migi.createVd("b", [["class", "p"], ["ref", "p"], ["onTouchStart", new migi.Cb(this, this.touchStart)], ["onTouchMove", new migi.Cb(this, this.touchMove)], ["onTouchEnd", new migi.Cb(this, this.touchEnd)]])])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj("like", this, function () {
+        return 'like' + (this.like ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj("favor", this, function () {
+        return 'favor' + (this.favor ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("url", this, function () {
+        return this.url;
+      })], ["download", new migi.Obj(["name", "url"], this, function () {
+        return this.name + (/\.\w+$/.exec(this.url)[0] || '');
+      })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
+    }
+  }, {
+    key: 'item',
+    set: function set(v) {
+      this.__setBind("item", v);this.__data("item");
+    },
+    get: function get() {
+      return this.__getBind("item");
+    }
+  }, {
+    key: 'type',
+    set: function set(v) {
+      this.__setBind("type", v);this.__data("type");
+    },
+    get: function get() {
+      return this.__getBind("type");
+    }
+  }, {
+    key: 'workID',
+    set: function set(v) {
+      this.__setBind("workID", v);this.__data("workID");
+    },
+    get: function get() {
+      return this.__getBind("workID");
+    }
+  }, {
+    key: 'name',
+    set: function set(v) {
+      this.__setBind("name", v);this.__data("name");
+    },
+    get: function get() {
+      return this.__getBind("name");
+    }
+  }, {
+    key: 'url',
+    set: function set(v) {
+      this.__setBind("url", v);this.__data("url");
+    },
+    get: function get() {
+      return this.__getBind("url");
+    }
+  }, {
+    key: 'playNum',
+    set: function set(v) {
+      this.__setBind("playNum", v);this.__data("playNum");
+    },
+    get: function get() {
+      return this.__getBind("playNum");
+    }
+  }, {
+    key: 'isPlaying',
+    set: function set(v) {
+      this.__setBind("isPlaying", v);this.__data("isPlaying");
+    },
+    get: function get() {
+      return this.__getBind("isPlaying");
+    }
+  }, {
+    key: 'hasStart',
+    set: function set(v) {
+      this.__setBind("hasStart", v);this.__data("hasStart");
+    },
+    get: function get() {
+      return this.__getBind("hasStart");
+    }
+  }, {
+    key: 'formatLyrics',
+    set: function set(v) {
+      this.__setBind("formatLyrics", v);this.__data("formatLyrics");
+    },
+    get: function get() {
+      if (this.__initBind("formatLyrics")) this.__setBind("formatLyrics", {});return this.__getBind("formatLyrics");
+    }
+  }, {
+    key: 'showLyricsMode',
+    set: function set(v) {
+      this.__setBind("showLyricsMode", v);this.__data("showLyricsMode");
+    },
+    get: function get() {
+      return this.__getBind("showLyricsMode");
+    }
+  }, {
+    key: 'lyricsIndex',
+    set: function set(v) {
+      this.__setBind("lyricsIndex", v);this.__data("lyricsIndex");
+    },
+    get: function get() {
+      if (this.__initBind("lyricsIndex")) this.__setBind("lyricsIndex", 0);return this.__getBind("lyricsIndex");
+    }
+  }, {
+    key: 'duration',
+    set: function set(v) {
+      this.__setBind("duration", v);this.__data("duration");
+    },
+    get: function get() {
+      return this.__getBind("duration");
+    }
+  }, {
+    key: 'canControl',
+    set: function set(v) {
+      this.__setBind("canControl", v);this.__data("canControl");
+    },
+    get: function get() {
+      return this.__getBind("canControl");
+    }
+  }, {
+    key: 'muted',
+    set: function set(v) {
+      this.__setBind("muted", v);this.__data("muted");
+    },
+    get: function get() {
+      return this.__getBind("muted");
+    }
+  }, {
+    key: 'like',
+    set: function set(v) {
+      this.__setBind("like", v);this.__data("like");
+    },
+    get: function get() {
+      return this.__getBind("like");
+    }
+  }, {
+    key: 'favor',
+    set: function set(v) {
+      this.__setBind("favor", v);this.__data("favor");
+    },
+    get: function get() {
+      return this.__getBind("favor");
+    }
+  }, {
+    key: 'cover',
+    set: function set(v) {
+      this.__setBind("cover", v);this.__data("cover");
+    },
+    get: function get() {
+      return this.__getBind("cover");
+    }
+  }, {
+    key: 'currentTime',
+    get: function get() {
+      return this._currentTime || 0;
+    },
+    set: function set(v) {
+      this._currentTime = v;
+      if (this.av && v !== this.av.element.currentTime) {
+        this.av.element.currentTime = v;
+      }
+      ;this.__array("currentTime", v);this.__data("currentTime");
+    }
+  }]);
+
+  return MusicAlbum;
+}(migi.Component);
+
+migi.name(MusicAlbum, "MusicAlbum");exports.default = MusicAlbum;
+
+/***/ }),
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function setTranform($elem, n) {
+  $elem.css('-moz-transform', 'scaleY(' + n + ')');
+  $elem.css('-webkit-transform', 'scaleY(' + n + ')');
+  $elem.css('transform', 'scaleY(' + n + ')');
+}
+
+var isPlaying = void 0;
+
+var PlayList = function (_migi$Component) {
+  _inherits(PlayList, _migi$Component);
+
+  function PlayList() {
+    var _ref;
+
+    _classCallCheck(this, PlayList);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = PlayList.__proto__ || Object.getPrototypeOf(PlayList)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.list = self.props.workList;
+    self.on(migi.Event.DOM, function () {
+      var $l1 = $(self.element).find('.l1');
+      var $l2 = $(self.element).find('.l2');
+      var $l3 = $(self.element).find('.l3');
+      setInterval(function () {
+        if (!isPlaying) {
+          setTranform($l1, 0.1);
+          setTranform($l2, 0.1);
+          setTranform($l3, 0.1);
+          return;
+        }
+        var n1 = Math.random();
+        var n2 = Math.random();
+        var n3 = Math.random();
+        setTranform($l1, n1);
+        setTranform($l2, n2);
+        setTranform($l3, n3);
+      }, 100);
+    });
+    migi.eventBus.on('play', function () {
+      isPlaying = true;
+    });
+    migi.eventBus.on('pause', function () {
+      isPlaying = false;
+    });
+    return _this;
+  }
+
+  _createClass(PlayList, [{
+    key: 'clickType',
+    value: function clickType(e, vd, tvd) {
+      var $li = $(tvd.element);
+      if (!$li.hasClass('cur')) {
+        $(vd.element).find('.cur').removeClass('cur');
+        $li.addClass('cur');
+        this.ref.list.element.className = 'list ' + (tvd.props.rel || '');
+      }
+    }
+  }, {
+    key: 'clickItem',
+    value: function clickItem(e, vd, tvd) {
+      var $li = $(tvd.element);
+      if (!$li.hasClass('cur')) {
+        var $ol = $(vd.element);
+        $ol.find('.cur').removeClass('cur');
+        $li.addClass('cur');
+        var i = tvd.props.rel;
+        migi.eventBus.emit('chooseMusic', this.list[i]);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "mod mod-playlist"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [
+        /*<li class="video" rel="video">播放视频</li>*/
+        /*<li class="audio" rel="audio">播放音频</li>*/
+        /*<li class="music cur">播放全部</li>*/
+      ,,]), migi.createVd("ol", [["class", "list"], ["ref", "list"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickItem)]]]], [new migi.Obj("list", this, function () {
+        return (this.list || []).map(function (item, i) {
+          var type = '';
+          if (item.ItemType === 1111 || item.ItemType === 1113) {
+            type = 'audio';
+          } else if (item.ItemType === 2110) {
+            type = 'video';
+          }
+          return migi.createVd("li", [["class", type + (i ? '' : ' cur')], ["rel", i]], [migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
+        });
+      })])]);
+    }
+  }, {
+    key: 'list',
+    set: function set(v) {
+      this.__setBind("list", v);this.__data("list");
+    },
+    get: function get() {
+      return this.__getBind("list");
+    }
+  }]);
+
+  return PlayList;
+}(migi.Component);
+
+migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ })
 /******/ ])));

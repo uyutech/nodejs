@@ -1,34 +1,19 @@
 /**
- * Created by army8735 on 2017/10/19.
+ * Created by army8735 on 2017/10/28.
  */
 
 'use strict';
 
-import net from '../common/net';
-import util from '../common/util';
+import util from '../../d/common/util';
 
-let isVStart;
-let vOffsetX;
-let isStart;
-let offsetX;
-
-class Player extends migi.Component {
+class MusicAlbum extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
     if(self.props.workList && self.props.workList.length) {
       self.setItem(self.props.workList[0]);
       self.on(migi.Event.DOM, function() {
-        let uid = window.$CONFIG ? $CONFIG.uid : '';
-        let key = uid + 'volume';
-        self.volume = localStorage[key];
         self.addOrAltMedia();
-        $(self.ref.fn.element).removeClass('fn-hidden');
-
-        $(document).on('mousemove', this.mousemove.bind(this));
-        $(document).on('mouseup', this.mouseup.bind(this));
-        $(document).on('mousemove', this.vmousemove.bind(this));
-        $(document).on('mouseup', this.vmouseup.bind(this));
       });
       migi.eventBus.on('chooseMusic', function(item) {
         self.currentTime = 0;
@@ -64,25 +49,11 @@ class Player extends migi.Component {
       this.av.element.currentTime = v;
     }
   }
-  get volume() {
-    return this._volume || 0.5;
-  }
-  @bind
-  set volume(v) {
-    this._volume = v;
-    migi.eventBus.emit('SET_VOLUME', v);
-    if(this.av) {
-      this.av.element.volume = v;
-    }
-  }
   show() {
     $(this.element).removeClass('fn-hide hidden');
   }
   hide() {
     $(this.element).addClass('fn-hide');
-  }
-  hidden() {
-    $(this.element).addClass('hidden');
   }
   setItem(item) {
     let self = this;
@@ -144,7 +115,7 @@ class Player extends migi.Component {
         break;
     }
     self.volume = self.volume;
-    self.av.element.currentTime = self.currentTime = 0;
+    self.currentTime = 0;
     if(isPlaying) {
       self.play();
     }
@@ -198,71 +169,8 @@ class Player extends migi.Component {
   altLyrics() {
     this.showLyricsMode = !this.showLyricsMode;
   }
-  vmousedown(e) {
-    e.preventDefault();
-    isVStart = true;
-    vOffsetX = $(this.ref.volume.element).offset().left;
-  }
-  vmousemove(e) {
-    if(isVStart) {
-      e.preventDefault();
-      let x = e.pageX;
-      let diff = x - vOffsetX;
-      let width = $(this.ref.volume.element).width();
-      diff = Math.max(0, diff);
-      diff = Math.min(width, diff);
-      let percent = diff / width;
-      this.volume = percent;
-    }
-  }
-  vmouseup() {
-    isVStart = false;
-  }
   clickStart(e) {
     this.play();
-  }
-  clickVolume(e) {
-    let cn = e.target.className;
-    if(cn !== 'p' && cn.indexOf('icon') === -1) {
-      let $volume = $(this.ref.volume.element);
-      let left = $volume.offset().left;
-      let x = e.pageX - left;
-      let percent = x / $volume.width();
-      this.volume = percent;
-    }
-  }
-  clickMute(e) {
-    this.muted = !this.muted;
-    if(this.muted) {
-      this.audio.element.volume = 0;
-    }
-    else {
-      this.audio.element.volume = this.volume;
-    }
-  }
-  mousedown(e) {
-    e.preventDefault();
-    if(this.canControl) {
-      isStart = true;
-      offsetX = $(this.ref.progress.element).offset().left;
-      this.pause();
-    }
-  }
-  mousemove(e) {
-    if(isStart) {
-      e.preventDefault();
-      let x = e.pageX;
-      let diff = x - offsetX;
-      let width = $(this.ref.progress.element).width();
-      diff = Math.max(0, diff);
-      diff = Math.min(width, diff);
-      let percent = diff / width;
-      this.setBarPercent(percent);
-      this.currentTime = Math.floor(this.duration * percent);
-    }
-  }
-  mouseup() {
-    isStart = false;
   }
   clickProgress(e) {
     if(this.canControl && e.target.className !== 'p') {
@@ -367,11 +275,8 @@ class Player extends migi.Component {
     migi.eventBus.emit('SHARE', location.href);
   }
   render() {
-    return <div class={ 'player fn-hide' } style={ 'background-image:url("' + (this.cover || '//zhuanquan.xin/img/blank.png') + '")' }>
-      <h3>{ this.name }</h3>
-      <div class="num fn-hide">
-        <small class="play">{ this.playNum || 0 }</small>
-      </div>
+    return <div class="mod mod-musicalbum" style={ 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")'}>
+      <div class="cover" ref="cover" style={ this.cover ? 'background-image:url("' + this.cover + '")' : '' }/>
       <div class={ 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '') } ref="c">
         <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hide') } ref="lyrics">
           <div class={ 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide') }>
@@ -389,25 +294,17 @@ class Player extends migi.Component {
         </div>
         <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
       </div>
-      <div class="fn fn-hidden" ref="fn">
+      <div class="fn" ref="fn">
         <div class="control">
-          <b class={ 'lyrics' + (this.showLyricsMode ? '' : ' roll') } onClick={ this.altLyrics }/>
-          <div class="volume" ref="volume" onClick={ this.clickVolume }>
-            <b class={ 'icon' + (this.muted ? ' muted' : '') } onClick={ this.clickMute }/>
-            <b class="vol" style={ 'width:' + this.volume * 100 + '%' }/>
-            <b class="p"
-               onMouseDown={ this.vmousedown }
-               style={ '-moz-transform:translateX(' + this.volume * 100 + '%);-webkit-transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
-          </div>
+          <small class="time">{ util.formatTime(this.currentTime * 1000) } / { util.formatTime(this.duration * 1000) }</small>
+          <b class="full" onClick={ this.clickScreen }/>
         </div>
         <div class="bar">
           <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
-          <small class="time">{ util.formatTime(this.currentTime * 1000) }</small>
-          <small class="time end">{ util.formatTime(this.duration * 1000) }</small>
           <div class="progress" ref="progress" onClick={ this.clickProgress }>
             <b class="load"/>
             <b class="vol" ref="vol"/>
-            <b class="p" ref="p" onMouseDown={ this.mousedown }/>
+            <b class="p" ref="p" onTouchStart={ this.touchStart } onTouchMove={ this.touchMove } onTouchEnd={ this.touchEnd }/>
           </div>
         </div>
         <ul class="btn">
@@ -425,4 +322,4 @@ class Player extends migi.Component {
   }
 }
 
-export default Player;
+export default MusicAlbum;
