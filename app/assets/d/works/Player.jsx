@@ -30,7 +30,7 @@ class Player extends migi.Component {
         $(document).on('mousemove', this.vmousemove.bind(this));
         $(document).on('mouseup', this.vmouseup.bind(this));
       });
-      migi.eventBus.on('chooseMedia', function(item) {
+      migi.eventBus.on('chooseMusic', function(item) {
         self.setItem(item);
         self.addOrAltMedia();
         self.play();

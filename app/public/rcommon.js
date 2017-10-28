@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 206);
+/******/ 	return __webpack_require__(__webpack_require__.s = 198);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -860,183 +860,25 @@ function nth(idx, n) {
 
 /***/ }),
 
-/***/ 2:
+/***/ 198:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+__webpack_require__(31);
 
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
+__webpack_require__(32);
 
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-var Event = function () {
-  function Event() {
-    _classCallCheck(this, Event);
-
-    this.__hash = {};
-  }
-
-  _createClass(Event, [{
-    key: 'on',
-    value: function on(id, handle) {
-      var self = this;
-      if (Array.isArray(id)) {
-        for (var i = 0, len = id.length; i < len; i++) {
-          self.on(id[i], handle);
-        }
-      } else if (handle) {
-        if (!self.__hash.hasOwnProperty(id)) {
-          self.__hash[id] = [];
-        }
-        //遍历防止此handle被侦听过了
-        for (var i = 0, item = self.__hash[id], len = item.length; i < len; i++) {
-          if (item[i] === handle) {
-            return self;
-          }
-        }
-        self.__hash[id].push(handle);
-      }
-      return self;
-    }
-  }, {
-    key: 'once',
-    value: function once(id, handle) {
-      var self = this;
-      if (Array.isArray(id)) {
-        for (var i = 0, len = id.length; i < len; i++) {
-          self.once(id[i], handle);
-        }
-      } else if (handle) {
-        var _cb = function _cb() {
-          for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-            data[_key] = arguments[_key];
-          }
-
-          handle.apply(this, data);
-          self.off(id, _cb);
-        };
-
-        self.on(id, _cb);
-      }
-      return this;
-    }
-  }, {
-    key: 'off',
-    value: function off(id, handle) {
-      var self = this;
-      if (Array.isArray(id)) {
-        for (var i = 0, len = id.length; i < len; i++) {
-          self.off(id[i], handle);
-        }
-      } else if (self.__hash.hasOwnProperty(id)) {
-        if (handle) {
-          for (var i = 0, item = self.__hash[id], len = item.length; i < len; i++) {
-            if (item[i] === handle) {
-              item.splice(i, 1);
-              break;
-            }
-          }
-        }
-        //未定义为全部清除
-        else {
-            delete self.__hash[id];
-          }
-      }
-      return this;
-    }
-  }, {
-    key: 'emit',
-    value: function emit(id) {
-      var self = this;
-
-      for (var _len2 = arguments.length, data = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        data[_key2 - 1] = arguments[_key2];
-      }
-
-      if (Array.isArray(id)) {
-        for (var i = 0, len = id.length; i < len; i++) {
-          self.emit(id[i], data);
-        }
-      } else {
-        if (self.__hash.hasOwnProperty(id)) {
-          var list = self.__hash[id];
-          if (list.length) {
-            list = list.slice();
-            for (var i = 0, len = list.length; i < len; i++) {
-              list[i].apply(self, data);
-            }
-          }
-        }
-      }
-      return this;
-    }
-  }], [{
-    key: 'mix',
-    value: function mix() {
-      for (var _len3 = arguments.length, obj = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        obj[_key3] = arguments[_key3];
-      }
-
-      for (var i = obj.length - 1; i >= 0; i--) {
-        var o = obj[i];
-        var event = new Event();
-        o.__hash = {};
-        var fns = ['on', 'once', 'off', 'emit'];
-        for (var j = fns.length - 1; j >= 0; j--) {
-          var fn = fns[j];
-          o[fn] = event[fn];
-        }
-      }
-    }
-  }]);
-
-  return Event;
-}();
-
-Event.DOM = 'DOM';
-Event.DESTROY = 'DESTROY';
-Event.DATA = 'DATA';
-
-exports.default = Event;
-
-/***/ }),
-
-/***/ 206:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(34);
-
-__webpack_require__(35);
-
-var _jquery = __webpack_require__(207);
+var _jquery = __webpack_require__(199);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _util = __webpack_require__(209);
+var _util = __webpack_require__(201);
 
 var _util2 = _interopRequireDefault(_util);
 
-__webpack_require__(211);
+__webpack_require__(203);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1172,7 +1014,7 @@ window.util = _util2.default;
 
 /***/ }),
 
-/***/ 207:
+/***/ 199:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3451,7 +3293,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return 1 === arguments.length ? this.off(a, "**") : this.off(b, a || "**", c);
     } }), r.holdReady = function (a) {
     a ? r.readyWait++ : r.ready(!0);
-  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(208) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(200) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return r;
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));var Vb = a.jQuery,
@@ -3459,21 +3301,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return a.$ === r && (a.$ = Wb), b && a.jQuery === r && (a.jQuery = Vb), r;
   }, b || (a.jQuery = a.$ = r), r;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(61)(module)))
 
 /***/ }),
 
-/***/ 208:
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-
-/***/ 209:
+/***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3483,7 +3315,175 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(210);
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+var Event = function () {
+  function Event() {
+    _classCallCheck(this, Event);
+
+    this.__hash = {};
+  }
+
+  _createClass(Event, [{
+    key: 'on',
+    value: function on(id, handle) {
+      var self = this;
+      if (Array.isArray(id)) {
+        for (var i = 0, len = id.length; i < len; i++) {
+          self.on(id[i], handle);
+        }
+      } else if (handle) {
+        if (!self.__hash.hasOwnProperty(id)) {
+          self.__hash[id] = [];
+        }
+        //遍历防止此handle被侦听过了
+        for (var i = 0, item = self.__hash[id], len = item.length; i < len; i++) {
+          if (item[i] === handle) {
+            return self;
+          }
+        }
+        self.__hash[id].push(handle);
+      }
+      return self;
+    }
+  }, {
+    key: 'once',
+    value: function once(id, handle) {
+      var self = this;
+      if (Array.isArray(id)) {
+        for (var i = 0, len = id.length; i < len; i++) {
+          self.once(id[i], handle);
+        }
+      } else if (handle) {
+        var _cb = function _cb() {
+          for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+            data[_key] = arguments[_key];
+          }
+
+          handle.apply(this, data);
+          self.off(id, _cb);
+        };
+
+        self.on(id, _cb);
+      }
+      return this;
+    }
+  }, {
+    key: 'off',
+    value: function off(id, handle) {
+      var self = this;
+      if (Array.isArray(id)) {
+        for (var i = 0, len = id.length; i < len; i++) {
+          self.off(id[i], handle);
+        }
+      } else if (self.__hash.hasOwnProperty(id)) {
+        if (handle) {
+          for (var i = 0, item = self.__hash[id], len = item.length; i < len; i++) {
+            if (item[i] === handle) {
+              item.splice(i, 1);
+              break;
+            }
+          }
+        }
+        //未定义为全部清除
+        else {
+            delete self.__hash[id];
+          }
+      }
+      return this;
+    }
+  }, {
+    key: 'emit',
+    value: function emit(id) {
+      var self = this;
+
+      for (var _len2 = arguments.length, data = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        data[_key2 - 1] = arguments[_key2];
+      }
+
+      if (Array.isArray(id)) {
+        for (var i = 0, len = id.length; i < len; i++) {
+          self.emit(id[i], data);
+        }
+      } else {
+        if (self.__hash.hasOwnProperty(id)) {
+          var list = self.__hash[id];
+          if (list.length) {
+            list = list.slice();
+            for (var i = 0, len = list.length; i < len; i++) {
+              list[i].apply(self, data);
+            }
+          }
+        }
+      }
+      return this;
+    }
+  }], [{
+    key: 'mix',
+    value: function mix() {
+      for (var _len3 = arguments.length, obj = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        obj[_key3] = arguments[_key3];
+      }
+
+      for (var i = obj.length - 1; i >= 0; i--) {
+        var o = obj[i];
+        var event = new Event();
+        o.__hash = {};
+        var fns = ['on', 'once', 'off', 'emit'];
+        for (var j = fns.length - 1; j >= 0; j--) {
+          var fn = fns[j];
+          o[fn] = event[fn];
+        }
+      }
+    }
+  }]);
+
+  return Event;
+}();
+
+Event.DOM = 'DOM';
+Event.DESTROY = 'DESTROY';
+Event.DATA = 'DATA';
+
+exports.default = Event;
+
+/***/ }),
+
+/***/ 200:
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+
+/***/ 201:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _sort = __webpack_require__(202);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3554,38 +3554,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 21:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
-
-/***/ 210:
+/***/ 202:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3652,10 +3621,41 @@ function swap(arr, a, b) {
 
 /***/ }),
 
-/***/ 211:
+/***/ 203:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 21:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 /***/ }),
 
@@ -5443,7 +5443,7 @@ exports.default = CacheComponent;
 
 /***/ }),
 
-/***/ 34:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5765,17 +5765,17 @@ defineProperties(Number, {
 
 /***/ }),
 
-/***/ 35:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(36)['default'];
+module.exports = __webpack_require__(33)['default'];
 
 /***/ }),
 
-/***/ 36:
+/***/ 33:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5813,7 +5813,7 @@ var _VirtualDom = __webpack_require__(7);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _NonVisualComponent = __webpack_require__(43);
+var _NonVisualComponent = __webpack_require__(40);
 
 var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
 
@@ -5925,7 +5925,7 @@ exports.default = migi;
 
 /***/ }),
 
-/***/ 37:
+/***/ 34:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6387,7 +6387,7 @@ exports.default = match;
 
 /***/ }),
 
-/***/ 38:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7173,7 +7173,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 39:
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7361,6 +7361,241 @@ exports.default = {
     }
   }
 };
+
+/***/ }),
+
+/***/ 37:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (vd, name, cb, listener) {
+  if (!hasInitGlobal) {
+    hasInitGlobal = true;
+    initGlobal();
+  }
+  listener.push(['touchstart', onTouchStart]);
+
+  var elem = vd.element;
+
+  elem.addEventListener('touchstart', onTouchStart);
+
+  function onTouchStart(e) {
+    //有可能组件内父子多个使用了手势，冒泡触发了多个
+    if (touch.first) {
+      touchList.push({
+        vd: vd,
+        name: name,
+        cb: cb
+      });
+      return;
+    }
+
+    firstTouch = e.touches[0];
+    if (e.touches && e.touches.length === 1 && touch.x2) {
+      // Clear out touch movement data if we have it sticking around
+      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
+      touch.x2 = undefined;
+      touch.y2 = undefined;
+    }
+
+    touch = {
+      vd: vd,
+      name: name,
+      cb: cb,
+      first: true,
+      x1: firstTouch.pageX,
+      y1: firstTouch.pageY
+    };
+    lastTouch = touch;
+
+    now = Date.now();
+    delta = now - lastTime;
+    lastTime = now;
+    if (delta > 0 && delta < 250) {
+      touch.isDoubleTap = true;
+    }
+  }
+};
+
+/**
+ * Thanks to zepto-touch.js
+ * https://github.com/madrobby/zepto/blob/master/src/touch.js
+ */
+
+var touchList = [];
+var touch = {};
+var lastTouch;
+var tapTimeout;
+var swipeTimeout;
+var longTapDelay = 750;
+var lastTime = 0;
+var now;
+var delta;
+var deltaX = 0;
+var deltaY = 0;
+var firstTouch;
+
+function swipeDirection(x1, x2, y1, y2) {
+  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
+}
+
+function cancelAll() {
+  if (tapTimeout) {
+    clearTimeout(tapTimeout);
+  }
+  if (swipeTimeout) {
+    clearTimeout(swipeTimeout);
+  }
+  tapTimeout = swipeTimeout = null;
+  touch = {};
+  touchList = [];
+}
+
+var hasInitGlobal;
+
+function initGlobal() {
+  document.addEventListener('touchmove', onTouchMove, true);
+  document.addEventListener('touchend', onTouchEnd, true);
+  document.addEventListener('touchcancel', cancelAll, true);
+
+  window.addEventListener('scroll', cancelAll);
+  window.addEventListener('blur', cancelAll);
+}
+
+function onTouchMove(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  firstTouch = e.touches[0];
+  touch.x2 = firstTouch.pageX;
+  touch.y2 = firstTouch.pageY;
+
+  deltaX += Math.abs(touch.x1 - touch.x2);
+  deltaY += Math.abs(touch.y1 - touch.y2);
+}
+
+function onTouchEnd(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  // swipe
+  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
+    swipeTimeout = setTimeout(function () {
+      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
+      if (touch.name == 'swipe' || touch.name == type) {
+        touch.cb(e);
+      }
+      touchList.forEach(function (touch) {
+        if (touch.name == 'swipe' || touch.name == type) {
+          touch.cb(e);
+        }
+      });
+      touch = {};
+      touchList = [];
+    }, 0);
+  }
+  // don't fire tap when delta position changed by more than 30 pixels,
+  // for instance when moving to a point and back to origin
+  else if (deltaX < 30 && deltaY < 30) {
+      tapTimeout = setTimeout(function () {
+        var isLongTap = Date.now() - lastTime > longTapDelay;
+        if (isLongTap) {
+          if (touch.name == 'longtap') {
+            touch.cb(e);
+          }
+          touchList.forEach(function (touch) {
+            if (touch.name == 'longtap') {
+              touch.cb(e);
+            }
+          });
+        }
+        // trigger double tap immediately
+        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
+            if (touch.name == 'doubletap') {
+              touch.cb(e);
+            }
+            touchList.forEach(function (touch) {
+              if (touch.name == 'doubletap') {
+                touch.cb(e);
+              }
+            });
+          }
+        touch = {};
+        touchList = [];
+      }, 0);
+    } else {
+      touch = {};
+      touchList = [];
+    }
+  deltaX = deltaY = 0;
+}
+
+;
+
+/***/ }),
+
+/***/ 38:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  domactivate: 'DOMActivate',
+  domfocusin: 'DOMFocusIn',
+  msgestureend: 'MSGestureEnd',
+  mspointerdown: 'MSPointerDown',
+  mspointermove: 'MSPointerMove',
+  mspointerup: 'MSPointerUp',
+  mspointercancel: 'MSPointerCancel'
+};
+
+/***/ }),
+
+/***/ 39:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var arrayProto = Array.prototype;
+var arrayMethods = Object.create(arrayProto);
+
+['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
+  var original = arrayProto[method];
+  Object.defineProperty(arrayMethods, method, {
+    value: function value() {
+      var i = arguments.length;
+      var args = new Array(i);
+      while (i--) {
+        args[i] = arguments[i];
+      }
+      var result = original.apply(this, args);
+      if (Array.isArray(this.__cb__)) {
+        this.__cb__.forEach(function (cb) {
+          cb();
+        });
+      }
+      return result;
+    }
+  });
+});
+
+exports.default = arrayMethods;
 
 /***/ }),
 
@@ -7648,241 +7883,6 @@ exports.default = Element;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (vd, name, cb, listener) {
-  if (!hasInitGlobal) {
-    hasInitGlobal = true;
-    initGlobal();
-  }
-  listener.push(['touchstart', onTouchStart]);
-
-  var elem = vd.element;
-
-  elem.addEventListener('touchstart', onTouchStart);
-
-  function onTouchStart(e) {
-    //有可能组件内父子多个使用了手势，冒泡触发了多个
-    if (touch.first) {
-      touchList.push({
-        vd: vd,
-        name: name,
-        cb: cb
-      });
-      return;
-    }
-
-    firstTouch = e.touches[0];
-    if (e.touches && e.touches.length === 1 && touch.x2) {
-      // Clear out touch movement data if we have it sticking around
-      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
-      touch.x2 = undefined;
-      touch.y2 = undefined;
-    }
-
-    touch = {
-      vd: vd,
-      name: name,
-      cb: cb,
-      first: true,
-      x1: firstTouch.pageX,
-      y1: firstTouch.pageY
-    };
-    lastTouch = touch;
-
-    now = Date.now();
-    delta = now - lastTime;
-    lastTime = now;
-    if (delta > 0 && delta < 250) {
-      touch.isDoubleTap = true;
-    }
-  }
-};
-
-/**
- * Thanks to zepto-touch.js
- * https://github.com/madrobby/zepto/blob/master/src/touch.js
- */
-
-var touchList = [];
-var touch = {};
-var lastTouch;
-var tapTimeout;
-var swipeTimeout;
-var longTapDelay = 750;
-var lastTime = 0;
-var now;
-var delta;
-var deltaX = 0;
-var deltaY = 0;
-var firstTouch;
-
-function swipeDirection(x1, x2, y1, y2) {
-  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
-}
-
-function cancelAll() {
-  if (tapTimeout) {
-    clearTimeout(tapTimeout);
-  }
-  if (swipeTimeout) {
-    clearTimeout(swipeTimeout);
-  }
-  tapTimeout = swipeTimeout = null;
-  touch = {};
-  touchList = [];
-}
-
-var hasInitGlobal;
-
-function initGlobal() {
-  document.addEventListener('touchmove', onTouchMove, true);
-  document.addEventListener('touchend', onTouchEnd, true);
-  document.addEventListener('touchcancel', cancelAll, true);
-
-  window.addEventListener('scroll', cancelAll);
-  window.addEventListener('blur', cancelAll);
-}
-
-function onTouchMove(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  firstTouch = e.touches[0];
-  touch.x2 = firstTouch.pageX;
-  touch.y2 = firstTouch.pageY;
-
-  deltaX += Math.abs(touch.x1 - touch.x2);
-  deltaY += Math.abs(touch.y1 - touch.y2);
-}
-
-function onTouchEnd(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  // swipe
-  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
-    swipeTimeout = setTimeout(function () {
-      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
-      if (touch.name == 'swipe' || touch.name == type) {
-        touch.cb(e);
-      }
-      touchList.forEach(function (touch) {
-        if (touch.name == 'swipe' || touch.name == type) {
-          touch.cb(e);
-        }
-      });
-      touch = {};
-      touchList = [];
-    }, 0);
-  }
-  // don't fire tap when delta position changed by more than 30 pixels,
-  // for instance when moving to a point and back to origin
-  else if (deltaX < 30 && deltaY < 30) {
-      tapTimeout = setTimeout(function () {
-        var isLongTap = Date.now() - lastTime > longTapDelay;
-        if (isLongTap) {
-          if (touch.name == 'longtap') {
-            touch.cb(e);
-          }
-          touchList.forEach(function (touch) {
-            if (touch.name == 'longtap') {
-              touch.cb(e);
-            }
-          });
-        }
-        // trigger double tap immediately
-        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
-            if (touch.name == 'doubletap') {
-              touch.cb(e);
-            }
-            touchList.forEach(function (touch) {
-              if (touch.name == 'doubletap') {
-                touch.cb(e);
-              }
-            });
-          }
-        touch = {};
-        touchList = [];
-      }, 0);
-    } else {
-      touch = {};
-      touchList = [];
-    }
-  deltaX = deltaY = 0;
-}
-
-;
-
-/***/ }),
-
-/***/ 41:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  domactivate: 'DOMActivate',
-  domfocusin: 'DOMFocusIn',
-  msgestureend: 'MSGestureEnd',
-  mspointerdown: 'MSPointerDown',
-  mspointermove: 'MSPointerMove',
-  mspointerup: 'MSPointerUp',
-  mspointercancel: 'MSPointerCancel'
-};
-
-/***/ }),
-
-/***/ 42:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var arrayProto = Array.prototype;
-var arrayMethods = Object.create(arrayProto);
-
-['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
-  var original = arrayProto[method];
-  Object.defineProperty(arrayMethods, method, {
-    value: function value() {
-      var i = arguments.length;
-      var args = new Array(i);
-      while (i--) {
-        args[i] = arguments[i];
-      }
-      var result = original.apply(this, args);
-      if (Array.isArray(this.__cb__)) {
-        this.__cb__.forEach(function (cb) {
-          cb();
-        });
-      }
-      return result;
-    }
-  });
-});
-
-exports.default = arrayMethods;
-
-/***/ }),
-
-/***/ 43:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
@@ -8042,7 +8042,7 @@ var _Fastclick = __webpack_require__(28);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
-var _array = __webpack_require__(42);
+var _array = __webpack_require__(39);
 
 var _array2 = _interopRequireDefault(_array);
 
@@ -8514,7 +8514,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 63:
+/***/ 61:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8611,11 +8611,11 @@ var _range = __webpack_require__(22);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _match = __webpack_require__(37);
+var _match = __webpack_require__(34);
 
 var _match2 = _interopRequireDefault(_match);
 
-var _domDiff = __webpack_require__(38);
+var _domDiff = __webpack_require__(35);
 
 var _domDiff2 = _interopRequireDefault(_domDiff);
 
@@ -8627,7 +8627,7 @@ var _fixEvent = __webpack_require__(25);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _attr = __webpack_require__(39);
+var _attr = __webpack_require__(36);
 
 var _attr2 = _interopRequireDefault(_attr);
 
@@ -8635,7 +8635,7 @@ var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _touch = __webpack_require__(40);
+var _touch = __webpack_require__(37);
 
 var _touch2 = _interopRequireDefault(_touch);
 
@@ -8647,7 +8647,7 @@ var _matchUtil = __webpack_require__(16);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
-var _eventCaseName = __webpack_require__(41);
+var _eventCaseName = __webpack_require__(38);
 
 var _eventCaseName2 = _interopRequireDefault(_eventCaseName);
 

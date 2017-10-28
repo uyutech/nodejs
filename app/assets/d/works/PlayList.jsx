@@ -59,7 +59,7 @@ class PlayList extends migi.Component {
       $ol.find('.cur').removeClass('cur');
       $li.addClass('cur');
       let i = tvd.props.rel;
-      migi.eventBus.emit('chooseMedia', this.list[i]);
+      migi.eventBus.emit('chooseMusic', this.list[i]);
     }
   }
   render() {

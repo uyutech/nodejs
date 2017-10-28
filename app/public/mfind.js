@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 104);
+/******/ 	return __webpack_require__(__webpack_require__.s = 97);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -185,207 +185,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 104:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(105);
-
-var _Find = __webpack_require__(106);
-
-var _Find2 = _interopRequireDefault(_Find);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.hotWorkList], ["hotAuthorList", $CONFIG.hotAuthorList], ["tags", $CONFIG.tags], ["playList", $CONFIG.playList]]));
-
-/***/ }),
-
-/***/ 105:
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed: ModuleBuildError: Module build failed: variable @secondColor is undefined\n @ /Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/component/hotwork/index.less (line 18, column 17)\n near lines:\n         width:0.02rem;\n         background:@secondColor;\n         content:' ';\n    at runLoaders (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_webpack@3.7.1@webpack/lib/NormalModule.js:195:19)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:364:11\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:230:18\n    at context.callback (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:111:13)\n    at less.render (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less-loader@3.0.0@less-loader/lib/loader.js:55:13)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/render.js:33:38\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parse.js:63:17\n    at ImportVisitor.finish [as _finish] (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parser/parser.js:183:28)\n    at ImportVisitor._onSequencerEmpty (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-visitor.js:35:14)\n    at ImportSequencer.tryRun (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-sequencer.js:50:14)");
-
-/***/ }),
-
-/***/ 106:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _util = __webpack_require__(31);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _net = __webpack_require__(44);
-
-var _net2 = _interopRequireDefault(_net);
-
-var _Banner = __webpack_require__(107);
-
-var _Banner2 = _interopRequireDefault(_Banner);
-
-var _HotWork = __webpack_require__(54);
-
-var _HotWork2 = _interopRequireDefault(_HotWork);
-
-var _HotCollection = __webpack_require__(55);
-
-var _HotCollection2 = _interopRequireDefault(_HotCollection);
-
-var _HotAuthor = __webpack_require__(56);
-
-var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
-
-var _DoubleCheck = __webpack_require__(57);
-
-var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
-
-var _PlayList = __webpack_require__(58);
-
-var _PlayList2 = _interopRequireDefault(_PlayList);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ajax = void 0;
-var SortType = '1';
-var Parameter = '';
-var ajaxL2 = void 0;
-
-var Find = function (_migi$Component) {
-  _inherits(Find, _migi$Component);
-
-  function Find() {
-    var _ref;
-
-    _classCallCheck(this, Find);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Find.__proto__ || Object.getPrototypeOf(Find)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.on(migi.Event.DOM, function () {
-      var doubleCheck = self.ref.doubleCheck;
-      doubleCheck.on('changeL1', function (param) {
-        if (ajaxL2) {
-          ajaxL2.abort();
-        }
-        doubleCheck.isLoadindL2 = true;
-        _net2.default.postJSON('/api/find/tagB', { tagA: param }, function (res) {
-          if (res.success) {
-            var _data = res.data;
-            doubleCheck.tagList2 = _data;
-            doubleCheck.autoWidth2();
-            doubleCheck.setCacheL2(param, _data);
-            doubleCheck.checkL2();
-          }
-          doubleCheck.isLoadindL2 = false;
-        }, function () {
-          doubleCheck.isLoadindL2 = false;
-        });
-      });
-      doubleCheck.on('change', function (lA, lB) {
-        var temp = lA.concat(lB);
-        temp = temp.length ? JSON.stringify(temp) : '';
-        if (temp !== Parameter) {
-          Parameter = temp;
-          self.loadPlayList();
-        }
-      });
-    });
-    return _this;
-  }
-
-  _createClass(Find, [{
-    key: 'show',
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-    }
-  }, {
-    key: 'load',
-    value: function load() {
-      var self = this;
-      _net2.default.postJSON('api/find/Hot_works_List', function (res) {
-        if (res.success) {
-          var data = res.data;
-          self.ref.hotWork.dataList = data;
-          self.ref.hotWork.autoWidth();
-        }
-      });
-      _net2.default.postJSON('api/find/Hot_Author_List', function (res) {
-        if (res.success) {
-          var data = res.data;
-          self.ref.hotAuthor.dataList = data;
-          self.ref.hotAuthor.autoWidth();
-        }
-      });
-      _net2.default.postJSON('api/find/GetTag', { Skip: 0, Take: 10 }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          data.FilterlevelA = [{
-            ID: 0,
-            TagName: '音乐',
-            TagType: 0,
-            TagCount: 3957,
-            Filterlevel: "A"
-          }];
-          self.ref.doubleCheck.setData(data);
-        }
-        self.loadPlayList();
-      });
-    }
-  }, {
-    key: 'loadPlayList',
-    value: function loadPlayList() {
-      var self = this;
-      if (ajax) {
-        ajax.abort();
-      }
-      ajax = _net2.default.postJSON('/api/find/playList', { Parameter: Parameter, Skip: 0, Take: 10, SortType: SortType }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          self.ref.playList.setData(data.data);
-        }
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "推荐作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotCollection2.default, [["ref", "hotCollection"], ["title", "推荐专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "推荐作者"], ["dataList", this.props.hotAuthorList]]), migi.createCp(_DoubleCheck2.default, [["ref", "doubleCheck"], ["tags", this.props.tags]]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["dataList", this.props.playList.data]])]);
-    }
-  }]);
-
-  return Find;
-}(migi.Component);
-
-migi.name(Find, "Find");exports.default = Find;
-
-/***/ }),
-
-/***/ 107:
+/***/ 100:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -432,23 +232,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 31:
-/***/ (function(module, exports) {
-
-"use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/common/util.js'");
-
-/***/ }),
-
-/***/ 44:
-/***/ (function(module, exports) {
-
-"use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/common/net.js'");
-
-/***/ }),
-
-/***/ 54:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -533,7 +317,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 55:
+/***/ 50:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -604,7 +388,7 @@ migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
 
-/***/ 56:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -687,7 +471,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 57:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -913,7 +697,7 @@ migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
 
-/***/ 58:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -925,7 +709,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(31);
+var _util = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../common/util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -978,6 +762,206 @@ var PlayList = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(PlayList, "PlayList");exports.default = PlayList;
+
+/***/ }),
+
+/***/ 97:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(98);
+
+var _Find = __webpack_require__(99);
+
+var _Find2 = _interopRequireDefault(_Find);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.hotWorkList], ["hotAuthorList", $CONFIG.hotAuthorList], ["tags", $CONFIG.tags], ["playList", $CONFIG.playList]]));
+
+/***/ }),
+
+/***/ 98:
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: ModuleBuildError: Module build failed: variable @secondColor is undefined\n @ /Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/component/hotwork/index.less (line 18, column 17)\n near lines:\n         width:0.02rem;\n         background:@secondColor;\n         content:' ';\n    at runLoaders (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_webpack@3.7.1@webpack/lib/NormalModule.js:195:19)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:364:11\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:230:18\n    at context.callback (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:111:13)\n    at less.render (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less-loader@3.0.0@less-loader/lib/loader.js:55:13)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/render.js:33:38\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parse.js:63:17\n    at ImportVisitor.finish [as _finish] (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parser/parser.js:183:28)\n    at ImportVisitor._onSequencerEmpty (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-visitor.js:35:14)\n    at ImportSequencer.tryRun (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-sequencer.js:50:14)");
+
+/***/ }),
+
+/***/ 99:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _util = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../common/util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+var _util2 = _interopRequireDefault(_util);
+
+var _net = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../common/net\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+var _net2 = _interopRequireDefault(_net);
+
+var _Banner = __webpack_require__(100);
+
+var _Banner2 = _interopRequireDefault(_Banner);
+
+var _HotWork = __webpack_require__(49);
+
+var _HotWork2 = _interopRequireDefault(_HotWork);
+
+var _HotCollection = __webpack_require__(50);
+
+var _HotCollection2 = _interopRequireDefault(_HotCollection);
+
+var _HotAuthor = __webpack_require__(51);
+
+var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
+
+var _DoubleCheck = __webpack_require__(52);
+
+var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
+
+var _PlayList = __webpack_require__(53);
+
+var _PlayList2 = _interopRequireDefault(_PlayList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ajax = void 0;
+var SortType = '1';
+var Parameter = '';
+var ajaxL2 = void 0;
+
+var Find = function (_migi$Component) {
+  _inherits(Find, _migi$Component);
+
+  function Find() {
+    var _ref;
+
+    _classCallCheck(this, Find);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Find.__proto__ || Object.getPrototypeOf(Find)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var doubleCheck = self.ref.doubleCheck;
+      doubleCheck.on('changeL1', function (param) {
+        if (ajaxL2) {
+          ajaxL2.abort();
+        }
+        doubleCheck.isLoadindL2 = true;
+        _net2.default.postJSON('/api/find/tagB', { tagA: param }, function (res) {
+          if (res.success) {
+            var _data = res.data;
+            doubleCheck.tagList2 = _data;
+            doubleCheck.autoWidth2();
+            doubleCheck.setCacheL2(param, _data);
+            doubleCheck.checkL2();
+          }
+          doubleCheck.isLoadindL2 = false;
+        }, function () {
+          doubleCheck.isLoadindL2 = false;
+        });
+      });
+      doubleCheck.on('change', function (lA, lB) {
+        var temp = lA.concat(lB);
+        temp = temp.length ? JSON.stringify(temp) : '';
+        if (temp !== Parameter) {
+          Parameter = temp;
+          self.loadPlayList();
+        }
+      });
+    });
+    return _this;
+  }
+
+  _createClass(Find, [{
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'load',
+    value: function load() {
+      var self = this;
+      _net2.default.postJSON('api/find/Hot_works_List', function (res) {
+        if (res.success) {
+          var data = res.data;
+          self.ref.hotWork.dataList = data;
+          self.ref.hotWork.autoWidth();
+        }
+      });
+      _net2.default.postJSON('api/find/Hot_Author_List', function (res) {
+        if (res.success) {
+          var data = res.data;
+          self.ref.hotAuthor.dataList = data;
+          self.ref.hotAuthor.autoWidth();
+        }
+      });
+      _net2.default.postJSON('api/find/GetTag', { Skip: 0, Take: 10 }, function (res) {
+        if (res.success) {
+          var data = res.data;
+          data.FilterlevelA = [{
+            ID: 0,
+            TagName: '音乐',
+            TagType: 0,
+            TagCount: 3957,
+            Filterlevel: "A"
+          }];
+          self.ref.doubleCheck.setData(data);
+        }
+        self.loadPlayList();
+      });
+    }
+  }, {
+    key: 'loadPlayList',
+    value: function loadPlayList() {
+      var self = this;
+      if (ajax) {
+        ajax.abort();
+      }
+      ajax = _net2.default.postJSON('/api/find/playList', { Parameter: Parameter, Skip: 0, Take: 10, SortType: SortType }, function (res) {
+        if (res.success) {
+          var data = res.data;
+          self.ref.playList.setData(data.data);
+        }
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "推荐作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotCollection2.default, [["ref", "hotCollection"], ["title", "推荐专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "推荐作者"], ["dataList", this.props.hotAuthorList]]), migi.createCp(_DoubleCheck2.default, [["ref", "doubleCheck"], ["tags", this.props.tags]]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["dataList", this.props.playList.data]])]);
+    }
+  }]);
+
+  return Find;
+}(migi.Component);
+
+migi.name(Find, "Find");exports.default = Find;
 
 /***/ })
 

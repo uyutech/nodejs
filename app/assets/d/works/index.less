@@ -2,22 +2,25 @@
  * Created by army8735 on 2017/9/21.
  */
 
-@import '../common/var.less';
-@import '../component/comment/index.less';
-@import '../component/page/index.less';
-@import '../component/subcmt/index.less';
+@import '../common/var';
+@import '../component/comment/index';
+@import '../component/page/index';
+@import '../component/subcmt/index';
 @import './title';
 @import './timeline';
 @import './poster';
 @import './author';
 @import './add-label';
 @import './comment';
-@import './album';
+@import './photoalbum';
 @import './insp';
 @import './text';
 @import './media';
 @import './lyric';
 @import './imageview';
+@import './playlist';
+@import './musicalbum';
+@import './describe';
 
 .works{
   padding:0 0 0.2rem;
@@ -26,7 +29,10 @@
     float:left;
     width:6.48rem;
     > .type{
+      padding-top:1px;
+      box-sizing:border-box;
       height:0.4rem;
+      overflow:hidden;
       li{
         position:relative;
         float:left;
@@ -81,6 +87,32 @@
             background-image:url(link-hover.png);
           }
         }
+        &.cover{
+          background-image:url(cover.png);
+          background-size:0.24rem auto;
+          &.cur{
+            background-image:url(cover.png);
+            &:hover{
+              background-image:url(cover.png);
+            }
+          }
+          &:hover{
+            background-image:url(cover.png);
+          }
+        }
+        &.player{
+          background-image:url(player.png);
+          background-size:0.24rem auto;
+          &.cur{
+            background-image:url(player.png);
+            &:hover{
+              background-image:url(player.png);
+            }
+          }
+          &:hover{
+            background-image:url(player.png);
+          }
+        }
         &:hover{
           text-decoration:underline;
         }
@@ -99,8 +131,11 @@
     width:3.3rem;
     font-size:0.14rem;
     > .sel{
+      padding-top:1px;
+      box-sizing:border-box;
       height:0.4rem;
       text-align:center;
+      overflow:hidden;
       li{
         position:relative;
         float:left;
@@ -127,17 +162,20 @@
         }
       }
     }
-    > .info{
-      position:relative;
-      font-size:0.14rem;
-      box-shadow:@boxShadow;
-      border-radius:0.1rem;
-      border-top-left-radius:0;
-      overflow:hidden;
-      .mod:first-child h5{
-        padding-top:0.06rem;
-        padding-bottom:0.05rem;
+  }
+  &.t1{
+    > .side{
+      .box:first-of-type{
+        h5{
+          padding-top:0.06rem;
+          padding-bottom:0.05rem;
+        }
       }
+    }
+  }
+  &.t5{
+    > .mod-timeline{
+      margin-bottom:0.2rem;
     }
   }
   &.t11{
@@ -163,6 +201,15 @@
   pre{
     margin:0;
     padding:0;
+  }
+}
+.box{
+  margin-bottom:0.2rem;
+  border-radius:0.1rem;
+  box-shadow:@boxShadow;
+  overflow:hidden;
+  &.box-fn-top-left{
+    border-top-left-radius:0;
   }
 }
 

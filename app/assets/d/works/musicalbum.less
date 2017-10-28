@@ -1,19 +1,16 @@
 /**
- * Created by army8735 on 2017/10/19.
+ * Created by army8735 on 2017/10/28.
  */
 
-.mod.mod-media{
+.mod.mod-musicalbum{
   position:relative;
   background:@secondTextColor;
-  border-top-right-radius:0.1rem;
-  border-bottom-left-radius:0.1rem;
-  border-bottom-right-radius:0.1rem;
   box-shadow:@boxShadow;
   background-size:cover;
   background-repeat:no-repeat;
   background-position:center 0.35rem;
   overflow:hidden;
-  .intro{
+  .cover{
     position:relative;
     z-index:2;
     &:before{
@@ -33,7 +30,7 @@
       display:block;
       width:100%;
       height:100%;
-      background:url(../works/start.png) no-repeat center;
+      background:url(start.png) no-repeat center;
       background-size:1.2rem auto;
       transform:translateX(-50%) translateY(-50%);
       cursor:pointer;
@@ -83,7 +80,7 @@
         right:0.1rem;
         top:0;
         padding-left:0.15rem;
-        background:url(../works/play.png) no-repeat 0 center;
+        background:url(play.png) no-repeat 0 center;
         background-size:auto 0.12rem;
       }
     }
@@ -118,7 +115,7 @@
         display:block;
         width:100%;
         height:100%;
-        background:url(../works/start.png) no-repeat center;
+        background:url(start.png) no-repeat center;
         background-size:1.2rem auto;
         transform:translateX(-50%) translateY(-50%);
         cursor:pointer;
@@ -226,16 +223,16 @@
           display:block;
           width:0.24rem;
           height:0.24rem;
-          background:url(../works/lyrics.png) no-repeat center;
+          background:url(lyrics.png) no-repeat center;
           background-size:contain;
           cursor:pointer;
           &:hover{
-            background-image:url(../works/lyrics-hover.png);
+            background-image:url(lyrics-hover.png);
           }
           &.roll{
-            background-image:url(../works/lyrics-roll.png);
+            background-image:url(lyrics-roll.png);
             &:hover{
-              background-image:url(../works/lyrics-roll-hover.png);
+              background-image:url(lyrics-roll-hover.png);
             }
           }
         }
@@ -246,11 +243,11 @@
           display:block;
           width:0.24rem;
           height:0.24rem;
-          background:url(../works/fullscreen.png) no-repeat center;
+          background:url(fullscreen.png) no-repeat center;
           background-size:contain;
           cursor:pointer;
           &:hover{
-            background-image:url(../works/fullscreen-hover.png);
+            background-image:url(fullscreen-hover.png);
           }
         }
         .volume{
@@ -269,16 +266,16 @@
             top:-0.1rem;
             width:0.24rem;
             height:0.24rem;
-            background:url(../works/volume.png) no-repeat 0 center;
+            background:url(volume.png) no-repeat 0 center;
             background-size:contain;
             cursor:pointer;
             &:hover{
-              background-image:url(../works/volume-hover.png);
+              background-image:url(volume-hover.png);
             }
             &.muted{
-              background-image:url(../works/volume-mute.png);
+              background-image:url(volume-mute.png);
               &:hover{
-                background-image:url(../works/volume-mute-hover.png);
+                background-image:url(volume-mute-hover.png);
               }
             }
           }
@@ -321,16 +318,16 @@
           display:block;
           width:0.24rem;
           height:0.24rem;
-          background:url(../works/play.png) no-repeat center;
+          background:url(play.png) no-repeat center;
           background-size:contain;
           cursor:pointer;
           &:hover{
-            background-image:url(../works/play-hover.png);
+            background-image:url(play-hover.png);
           }
           &.pause{
-            background-image:url(../works/pause.png);
+            background-image:url(pause.png);
             &:hover{
-              background-image:url(../works/pause-hover.png);
+              background-image:url(pause-hover.png);
             }
           }
         }
@@ -421,43 +418,43 @@
             margin-right:0;
           }
           &.like{
-            background:url(../works/like.png) no-repeat center;
+            background:url(like.png) no-repeat center;
             background-size:contain;
             &:hover{
-              background-image:url(../works/like-hover.png);
+              background-image:url(like-hover.png);
             }
             &.has{
-              background-image:url(../works/liked.png);
+              background-image:url(liked.png);
               &:hover{
-                background-image:url(../works/liked-hover.png);
+                background-image:url(liked-hover.png);
               }
             }
           }
           &.favor{
-            background:url(../works/favor.png) no-repeat center;
+            background:url(favor.png) no-repeat center;
             background-size:contain;
             &:hover{
-              background-image:url(../works/favor-hover.png);
+              background-image:url(favor-hover.png);
             }
             &.has{
-              background-image:url(../works/favored.png);
+              background-image:url(favored.png);
               &:hover{
-                background-image:url(../works/favored-hover.png);
+                background-image:url(favored-hover.png);
               }
             }
           }
           &.download{
-            background:url(../works/download.png) no-repeat center;
+            background:url(download.png) no-repeat center;
             background-size:contain;
             &:hover{
-              background-image:url(../works/download-hover.png);
+              background-image:url(download-hover.png);
             }
           }
           &.share{
-            background:url(../works/share.png) no-repeat center;
+            background:url(share.png) no-repeat center;
             background-size:contain;
             &:hover{
-              background-image:url(../works/share-hover.png);
+              background-image:url(share-hover.png);
             }
           }
         }

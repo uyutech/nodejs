@@ -197,7 +197,7 @@ class WorkComment extends migi.Component {
     }
   }
   render() {
-    return <div class="mod mod-comment">
+    return <div class="mod mod-comment box">
       <h4>评论</h4>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>

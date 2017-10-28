@@ -3,12 +3,7 @@
  */
 
 import util from '../common/util';
-
-const TYPE_NAME = {
-  1: '原创音乐',
-  5: '音乐专辑',
-  11: '相册',
-};
+import WorksTypeEnum from './WorksTypeEnum';
 
 class Title extends migi.Component {
   constructor(...data) {
@@ -42,7 +37,7 @@ class Title extends migi.Component {
           : ''
       }
       <div class="txt">
-        <h3>{ TYPE_NAME[this.type] }</h3>
+        <h3>{ WorksTypeEnum.NAME[this.type] }</h3>
         <h1>{ this.title }</h1>
         <h2 class={ this.subTitle ? '' : 'fn-hide' }>{ this.subTitle }</h2>
         {/*<small class="pop">{ this.popular }</small>*/}

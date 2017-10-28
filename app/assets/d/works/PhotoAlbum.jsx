@@ -15,7 +15,7 @@ let index = 0;
 let tagName;
 let ajax;
 
-class Album extends migi.Component {
+class PhotoAlbum extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
@@ -261,7 +261,7 @@ class Album extends migi.Component {
     }
   }
   render() {
-    return <div class="mod mod-album">
+    return <div class="mod mod-photoalbum box">
       <h4>相册</h4>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
@@ -287,4 +287,4 @@ class Album extends migi.Component {
   }
 }
 
-export default Album;
+export default PhotoAlbum;

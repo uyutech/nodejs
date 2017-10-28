@@ -66,6 +66,10 @@ window.comment = function(type) {
 function iframeGoto(hash) {
   hash = hash || '';
   hash = hash.replace(/^#/, '');
+  if(hash.indexOf('/musicalbum/') === 0) {
+    location.hash = '#/works/' + hash.slice(12);
+    return;
+  }
   if(!hash || hash === '/') {
     hash = '/find';
   }

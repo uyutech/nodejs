@@ -15,6 +15,7 @@ import InspComment from '../../d/works/InspComment.jsx';
 import Poster from '../../d/works/Poster.jsx';
 import WorkComment from './WorkComment.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
+import WorksTypeEnum from '../../d/works/WorksTypeEnum';
 
 let first;
 
@@ -214,7 +215,7 @@ class Works extends migi.Component {
   }
   render() {
     let self = this;
-    if(self.worksType === 11) {
+    if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
       return <div class={ 'works t' + self.worksType }>
         <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
           <li class="cur" rel="album">相册</li>

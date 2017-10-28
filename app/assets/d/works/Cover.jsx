@@ -1,10 +1,10 @@
 /**
- * Created by army8735 on 2017/10/19.
+ * Created by army8735 on 2017/10/28.
  */
 
 'use strict';
 
-class Intro extends migi.Component {
+class Cover extends migi.Component {
   constructor(...data) {
     super(...data);
   }
@@ -18,10 +18,10 @@ class Intro extends migi.Component {
     this.emit('start');
   }
   render() {
-    return <div class="intro">
+    return <div class="cover">
       <b class="start" onClick={ this.clickStart }/>
     </div>;
   }
 }
 
-export default Intro;
+export default Cover;

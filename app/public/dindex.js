@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 143);
+/******/ 	return __webpack_require__(__webpack_require__.s = 137);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,27 +264,27 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 143:
+/***/ 137:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(144);
+__webpack_require__(138);
 
-var _TopNav = __webpack_require__(145);
+var _TopNav = __webpack_require__(139);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(146);
+var _CIframe = __webpack_require__(140);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(147);
+var _QuanNiang = __webpack_require__(141);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
-var _Welcome = __webpack_require__(148);
+var _Welcome = __webpack_require__(142);
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
@@ -338,6 +338,10 @@ window.comment = function (type) {
 function iframeGoto(hash) {
   hash = hash || '';
   hash = hash.replace(/^#/, '');
+  if (hash.indexOf('/musicalbum/') === 0) {
+    location.hash = '#/works/' + hash.slice(12);
+    return;
+  }
   if (!hash || hash === '/') {
     hash = '/find';
   }
@@ -360,14 +364,14 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 144:
+/***/ 138:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 145:
+/***/ 139:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -442,7 +446,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 146:
+/***/ 140:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -489,7 +493,7 @@ migi.name(CIframe, "CIframe");exports.default = CIframe;
 
 /***/ }),
 
-/***/ 147:
+/***/ 141:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -569,7 +573,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 148:
+/***/ 142:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -1,10 +1,10 @@
 /**
- * Created by army8735 on 2017/10/19.
+ * Created by army8735 on 2017/10/28.
  */
 
 'use strict';
 
-import Intro from './Intro.jsx';
+import Cover from './Cover.jsx';
 import Player from './Player.jsx';
 
 class Media extends migi.Component {
@@ -12,42 +12,42 @@ class Media extends migi.Component {
     super(...data);
     let self = this;
     self.on(migi.Event.DOM, function() {
-      let intro = self.ref.intro;
+      let cover = self.ref.cover;
       let player = self.ref.player;
-      intro.on('start', function() {
+      cover.on('start', function() {
         self.start();
       });
-      migi.eventBus.on('chooseMedia', function() {
-        intro.hide();
+      migi.eventBus.on('chooseMusic', function() {
+        cover.hide();
         player.show();
       });
     });
   }
   switchType(type) {
     let self = this;
-    let intro = self.ref.intro;
+    let cover = self.ref.cover;
     let player = self.ref.player;
-    if(type === 'intro') {
+    if(type === 'cover') {
       player.hide();
       player.pause();
-      intro.show();
+      cover.show();
     }
     else if(type === 'player') {
-      intro.hide();
+      cover.hide();
       player.show();
     }
   }
   start() {
     let self = this;
-    let intro = self.ref.intro;
+    let cover = self.ref.cover;
     let player = self.ref.player;
-    intro.hide();
+    cover.hide();
     player.show();
     player.play();
   }
   render() {
-    return <div class="mod mod-media" style={ 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")'}>
-      <Intro ref="intro"/>
+    return <div class="mod mod-musicalbum box box-fn-top-left" style={ 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")'}>
+      <Cover ref="cover"/>
       <Player ref="player" workList={ this.props.workList }/>
     </div>;
   }

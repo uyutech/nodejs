@@ -12,9 +12,14 @@ import Poster from './Poster.jsx';
 import Timeline from './Timeline.jsx';
 import InspComment from './InspComment.jsx';
 import WorkComment from './WorkComment.jsx';
-import Album from './Album.jsx';
+import PhotoAlbum from './PhotoAlbum.jsx';
 import AddLabelPanel from './AddLabelPanel.jsx';
 import ImageView from './ImageView.jsx';
+import WorksTypeEnum from './WorksTypeEnum';
+import LyricsParser from './LyricsParser.jsx';
+import PlayList from './PlayList.jsx';
+import MusicAlbum from './MusicAlbum.jsx';
+import Describe from './Describe.jsx';
 
 let first;
 
@@ -26,25 +31,62 @@ class Works extends migi.Component {
     self.worksType = self.props.worksDetail.WorkType;
     self.setWorks(self.props.worksDetail.Works_Items);
     self.on(migi.Event.DOM, function() {
-      let media = self.ref.media;
       let workComment = self.ref.workComment;
-      if(media) {
+      if(self.worksType === WorksTypeEnum.TYPE.originMusic) {
+        let media = self.ref.media;
         media.on('switchTo', function(data) {
           workComment.workID = data.ItemID;
         });
       }
-      let addLabel = self.ref.addLabelPanel;
-      migi.eventBus.on('add-label', function() {
-        addLabel.show();
-      });
+      else if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+        let musicAlbum = self.ref.musicAlbum;
+        let cover = musicAlbum.ref.cover;
+        let $type = $(self.ref.type.element);
+        cover.on('start', function() {
+          musicAlbum.start();
+          $type.find('.cover').removeClass('cur');
+          $type.find('.player').addClass('cur');
+        });
+        migi.eventBus.on('chooseMusic', function() {
+          $type.find('.cover').removeClass('cur');
+          $type.find('.player').addClass('cur');
+        });
+      }
+      // let addLabel = self.ref.addLabelPanel;
+      // migi.eventBus.on('add-label', function() {
+      //   addLabel.show();
+      // });
     });
   }
   @bind worksID
   @bind worksType
   setWorks(works) {
     let self = this;
-    let workHash = {};
     let workList = [];
+    if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+      works.forEach(function(item) {
+        if(item.ItemType === 1111 || item.ItemType === 1113) {
+          let l = {};
+          if(LyricsParser.isLyrics(item.lrc)) {
+            l.is = true;
+            l.txt = LyricsParser.getTxt(item.lrc);
+            l.data = LyricsParser.parse(item.lrc);
+          }
+          else {
+            l.is = false;
+            l.txt = item.lrc;
+          }
+          item.formatLyrics = l;
+          workList.push(item);
+        }
+        else if(item.ItemType === 2110) {
+          workList.push(item);
+        }
+      });
+      self.workList = workList;
+      return;
+    }
+    let workHash = {};
     let authorList = [];
     let authorHash = {};
     works.forEach(function(item) {
@@ -139,25 +181,72 @@ class Works extends migi.Component {
     }
   }
   clickType(e, vd, tvd) {
+    let self = this;
     let $li = $(tvd.element);
     if(!$li.hasClass('cur')) {
       $(vd.element).find('.cur').removeClass('cur');
       $li.addClass('cur');
       let type = tvd.props.rel;
-      this.ref.media.switchType(type);
+      if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+        self.ref.musicAlbum.switchType(type);
+      }
+      else {
+        self.ref.media.switchType(type);
+      }
     }
   }
   render() {
     let self = this;
-    if(self.worksType === 11) {
+    if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+      return <div class={ 'works fn-clear t' + self.worksType }>
+        <Title ref="title"
+               detail={ this.props.worksDetail }/>
+        {
+          this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
+            ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+            : ''
+        }
+        <div class="main">
+          <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
+            <li class="cover cur" rel="intro">封面</li>
+            <li class="player" rel="player">播放</li>
+          </ul>
+          <MusicAlbum ref="musicAlbum"
+                 collectionID={ this.worksID }
+                 cover={ this.props.worksDetail.cover_Pic }
+                 workList={ this.workList }/>
+          <div class="box">
+            <Describe data={ this.props.worksDetail.Describe }/>
+            <Author authorList={ [this.props.worksDetail.Works_Author] }/>
+            <InspComment ref="inspComment"
+                         commentData={ this.props.worksDetail.WorksAuthorComment }/>
+          </div>
+        </div>
+        <div class="side">
+          <ul class="sel fn-clear" ref="sel">
+            <li class="cur">曲目</li>
+          </ul>
+          <div class="box box-fn-top-left">
+            <PlayList workList={ this.workList }/>
+          </div>
+          <WorkComment ref="workComment"
+                       isLogin={ this.props.isLogin }
+                       worksID={ this.worksID }
+                       workID={ this.workID }
+                       originTo={ this.props.worksDetail.Title }
+                       commentData={ this.props.commentData }/>
+        </div>
+      </div>;
+    }
+    if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
       return <div class={ 'works fn-clear t' + self.worksType }>
         <Title ref="title"
                detail={ this.props.worksDetail }/>
         <div class="main">
-          <Album worksID={ this.worksID } labelList={ this.props.labelList }/>
+          <PhotoAlbum worksID={ this.worksID } labelList={ this.props.labelList }/>
         </div>
         <div class="side">
-          <div class="info">
+          <div class="box">
             <Author authorList={ [this.props.worksDetail.Works_Author] }/>
             {
               this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
@@ -222,7 +311,7 @@ class Works extends migi.Component {
         <ul class="sel fn-clear" ref="sel">
           <li class="cur">简介</li>
         </ul>
-        <div class="info">
+        <div class="box box-fn-top-left">
           <Author authorList={ this.authorList }/>
           {
             this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length

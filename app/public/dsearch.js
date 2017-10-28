@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 183);
+/******/ 	return __webpack_require__(__webpack_require__.s = 175);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 183:
+/***/ 175:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(184);
+__webpack_require__(176);
 
-var _Search = __webpack_require__(185);
+var _Search = __webpack_require__(177);
 
 var _Search2 = _interopRequireDefault(_Search);
 
@@ -83,14 +83,14 @@ var search = migi.preExist(migi.createCp(_Search2.default, [["kw", $CONFIG.kw], 
 
 /***/ }),
 
-/***/ 184:
+/***/ 176:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 185:
+/***/ 177:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
