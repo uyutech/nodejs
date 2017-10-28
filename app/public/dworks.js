@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 157);
+/******/ 	return __webpack_require__(__webpack_require__.s = 154);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -201,12 +201,21 @@ Object.defineProperty(exports, "__esModule", {
 var net = {
   ajax: function ajax(url, data, _success, _error, type) {
     var csrfToken = $.cookie('csrfToken');
+    Object.keys(data).forEach(function (k) {
+      if (data[k] === undefined || data[k] === null) {
+        delete data[k];
+      }
+    });
+    if (url.indexOf('?') === -1) {
+      url += '?_=' + Date.now();
+    } else {
+      url += '&_=' + Date.now();
+    }
     function load() {
       return $.ajax({
         url: url,
         data: data,
         dataType: 'json',
-        cache: false,
         crossDomain: true,
         timeout: 6000,
         type: type || 'get',
@@ -255,15 +264,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 157:
+/***/ 154:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(158);
+__webpack_require__(155);
 
-var _Works = __webpack_require__(159);
+var _Works = __webpack_require__(156);
 
 var _Works2 = _interopRequireDefault(_Works);
 
@@ -273,14 +282,14 @@ var works = migi.preExist(migi.createCp(_Works2.default, [["isLogin", $CONFIG.is
 
 /***/ }),
 
-/***/ 158:
+/***/ 155:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 159:
+/***/ 156:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -292,55 +301,55 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(72);
+var _Title = __webpack_require__(70);
 
 var _Title2 = _interopRequireDefault(_Title);
 
-var _Media = __webpack_require__(160);
+var _Media = __webpack_require__(157);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _itemTemplate = __webpack_require__(61);
+var _itemTemplate = __webpack_require__(59);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
-var _Author = __webpack_require__(47);
+var _Author = __webpack_require__(46);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Text = __webpack_require__(62);
+var _Text = __webpack_require__(60);
 
 var _Text2 = _interopRequireDefault(_Text);
 
-var _Lyric = __webpack_require__(63);
+var _Lyric = __webpack_require__(61);
 
 var _Lyric2 = _interopRequireDefault(_Lyric);
 
-var _Poster = __webpack_require__(64);
+var _Poster = __webpack_require__(62);
 
 var _Poster2 = _interopRequireDefault(_Poster);
 
-var _Timeline = __webpack_require__(48);
+var _Timeline = __webpack_require__(47);
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 
-var _InspComment = __webpack_require__(49);
+var _InspComment = __webpack_require__(48);
 
 var _InspComment2 = _interopRequireDefault(_InspComment);
 
-var _WorkComment = __webpack_require__(164);
+var _WorkComment = __webpack_require__(161);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
-var _Album = __webpack_require__(165);
+var _Album = __webpack_require__(162);
 
 var _Album2 = _interopRequireDefault(_Album);
 
-var _AddLabelPanel = __webpack_require__(73);
+var _AddLabelPanel = __webpack_require__(71);
 
 var _AddLabelPanel2 = _interopRequireDefault(_AddLabelPanel);
 
-var _ImageView = __webpack_require__(166);
+var _ImageView = __webpack_require__(163);
 
 var _ImageView2 = _interopRequireDefault(_ImageView);
 
@@ -543,7 +552,7 @@ migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
 
-/***/ 160:
+/***/ 157:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -555,15 +564,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Audio = __webpack_require__(161);
+var _Audio = __webpack_require__(158);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(162);
+var _Video = __webpack_require__(159);
 
 var _Video2 = _interopRequireDefault(_Video);
 
-var _Link = __webpack_require__(163);
+var _Link = __webpack_require__(160);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -645,7 +654,7 @@ migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
 
-/***/ 161:
+/***/ 158:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -665,7 +674,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _LyricsParser = __webpack_require__(46);
+var _LyricsParser = __webpack_require__(45);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -1207,7 +1216,7 @@ migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
 
-/***/ 162:
+/***/ 159:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1706,7 +1715,7 @@ migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
 
-/***/ 163:
+/***/ 160:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1864,7 +1873,7 @@ migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
 
-/***/ 164:
+/***/ 161:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1963,7 +1972,7 @@ var WorkComment = function (_migi$Component) {
           if (res.success) {
             var _data = res.data;
             subCmt.value = '';
-            if (rootID === -1 && _data.RootID === -1) {
+            if (rootID === -1) {
               comment.prependData(_data);
               comment.message = '';
             } else {
@@ -2165,7 +2174,7 @@ migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
 
-/***/ 165:
+/***/ 162:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2328,11 +2337,9 @@ var Album = function (_migi$Component) {
         var num = length - i;
         var count = 0;
         var j = i;
-        var WIN_HEIGHT = $window.height();
-        var HEIGHT = $(document.body).height();
         if (num === 0) {
           self.loading = false;
-          if (HEIGHT <= WIN_HEIGHT && !self.loadEnd) {
+          if ($(document.body).height() <= $window.height() && !self.loadEnd) {
             self.load($window);
           }
         }
@@ -2347,7 +2354,7 @@ var Album = function (_migi$Component) {
                 addWaterFall(_li);
               }
               self.loading = false;
-              if (HEIGHT <= WIN_HEIGHT && !self.loadEnd) {
+              if ($(document.body).height() <= $window.height() && !self.loadEnd) {
                 self.load($window);
               }
             }
@@ -2362,7 +2369,7 @@ var Album = function (_migi$Component) {
       var WIN_HEIGHT = $window.height();
       var HEIGHT = $(document.body).height();
       var bool = void 0;
-      bool = $window.scrollTop() + HEIGHT + 30 > WIN_HEIGHT;
+      bool = $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
       if (!self.loading && !self.loadEnd && bool) {
         self.load($window);
       }
@@ -2491,7 +2498,7 @@ migi.name(Album, "Album");exports.default = Album;
 
 /***/ }),
 
-/***/ 166:
+/***/ 163:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2717,7 +2724,7 @@ var Comment = function (_migi$Component) {
         self.slide($(this).parent());
       });
       $root.on('click', '.list>li>.c>pre', function () {
-        $(this).parent().find('.slide .sub').click();
+        self.slide($(this).parent().find('.slide'));
       });
       $root.on('click', '.more', function () {
         var $message = $(this);
@@ -2900,7 +2907,7 @@ var Comment = function (_migi$Component) {
     key: 'genComment',
     value: function genComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.AuthorID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.AuthorID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
       }
       return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
     }
@@ -3276,7 +3283,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 46:
+/***/ 45:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3313,7 +3320,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 47:
+/***/ 46:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3427,7 +3434,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 48:
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3483,7 +3490,7 @@ migi.name(Timeline, "Timeline");exports.default = Timeline;
 
 /***/ }),
 
-/***/ 49:
+/***/ 48:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3538,7 +3545,7 @@ migi.name(InspComment, "InspComment");exports.default = InspComment;
 
 /***/ }),
 
-/***/ 61:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3594,7 +3601,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 62:
+/***/ 60:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3643,7 +3650,7 @@ migi.name(Text, "Text");exports.default = Text;
 
 /***/ }),
 
-/***/ 63:
+/***/ 61:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3692,7 +3699,7 @@ migi.name(Lyric, "Lyric");exports.default = Lyric;
 
 /***/ }),
 
-/***/ 64:
+/***/ 62:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3741,7 +3748,7 @@ migi.name(Poster, "Poster");exports.default = Poster;
 
 /***/ }),
 
-/***/ 72:
+/***/ 70:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3873,7 +3880,7 @@ migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
 
-/***/ 73:
+/***/ 71:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -23,7 +23,6 @@ class WorkComment extends migi.Component {
     self.workID = self.props.workID;
     self.on(migi.Event.DOM, function() {
       let page = self.ref.page;
-      let comment = self.ref.comment;
       page.on('page', function(i) {
         skip = (i - 1) * take;
         self.loadPage();
@@ -145,7 +144,7 @@ class WorkComment extends migi.Component {
     }
   }
   render() {
-    return <div class="comments">
+    return <div class="mod mod-comment fn-hide">
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="0">全部<small>{ this.props.commentData.Size }</small></li>

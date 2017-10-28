@@ -1,18 +1,18 @@
 /**
- * Created by army8735 on 2017/10/17.
+ * Created by army8735 on 2017/10/28.
  */
 
 'use strict';
 
-import net from '../common/net';
-import util from '../common/util';
+import net from '../../d/common/net';
+import util from '../../d/common/util';
 
 let skip = 0;
 let take = 12;
 let sortType = 0;
 let list = [];
 let index = 0;
-let tagName;
+let tagName = '';
 let ajax;
 
 class Album extends migi.Component {
@@ -103,18 +103,10 @@ class Album extends migi.Component {
     self.loading = true;
     let $l1 = $(self.ref.l1.element);
     let $l2 = $(self.ref.l2.element);
-    let $l3 = $(self.ref.l3.element);
-    let $l4 = $(self.ref.l4.element);
     function addWaterFall(li) {
       let $min = $l1;
       if($l2.height() < $min.height()) {
         $min = $l2;
-      }
-      if($l3.height() < $min.height()) {
-        $min = $l3;
-      }
-      if($l4.height() < $min.height()) {
-        $min = $l4;
       }
       li.appendTo($min[0]);
     }
@@ -231,12 +223,8 @@ class Album extends migi.Component {
     let self = this;
     let $l1 = $(self.ref.l1.element);
     let $l2 = $(self.ref.l2.element);
-    let $l3 = $(self.ref.l3.element);
-    let $l4 = $(self.ref.l4.element);
     $l1.html('');
     $l2.html('');
-    $l3.html('');
-    $l4.html('');
     skip = 0;
     self.loadEnd = false;
   }
@@ -262,7 +250,6 @@ class Album extends migi.Component {
   }
   render() {
     return <div class="mod mod-album">
-      <h4>相册</h4>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="">全部</li>
@@ -277,11 +264,13 @@ class Album extends migi.Component {
           <li rel="1">最热</li>
         </ul>
       </div>
-      <div class="c fn-clear" ref="c">
-        <ul ref="l1"/>
-        <ul ref="l2"/>
-        <ul ref="l3"/>
-        <ul ref="l4"/>
+      <div class="c" ref="c">
+        <div>
+          <ul ref="l1"/>
+        </div>
+        <div>
+          <ul ref="l2"/>
+        </div>
       </div>
     </div>;
   }

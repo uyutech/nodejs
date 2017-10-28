@@ -1035,25 +1035,8 @@ body {
   max-width: 100%;
 }
 /**
- * Created by army8735 on 2017/10/18.
+ * Created by army8735 on 2017/10/28.
  */
-.mod.mod-comment {
-  margin-top: 0.2rem;
-  padding-bottom: 0.1rem;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 0.1rem;
-}
-.mod.mod-comment h4 {
-  padding-left: 0.4rem;
-  height: 0.36rem;
-  line-height: 0.36rem;
-  background: #8BBDE1 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAA4VBMVEUAAAAfYYIgYYIfYII+fa4fYIIgYYMnZIQfYYEgYYEfYYIgYYMkZIcfYYIfYIEfYYEfYYIfYIEfYIIgYIIgYYMgYYMiYIAhY4QlY4ImY4IfYYIgYYIgYYIfYIEgYYMgYYIgYYMrWHYfYoIiYoMnXX0iX4AkX4EuXIAxZI8fYIEfYYIfYIEgYYIgYYIhYoMqWHUgYoIhYoMkXn4mZ4ggYYIqVnQqVnQfYIEgYIIrV3QtVnUqVnQqV3QrVnUqV3QfYIIqVnQgYIIqVnUqVnQrWHYrWHUsWXctWXUhYoMfYIEqVnRDkUPNAAAASXRSTlMAi3T2BN1hFvKHglYc+u/i08Kxj2tbSTEjIOvZqaN9eGdjUEM6NikSCue8nJVvZVw/PS8P8O/m17l9T/7g2LasqZ+df3drVj8nYVE2BAAAAbZJREFUSMftk9d6gkAQhYcgHSxYY+/GWBLTe29n3/+BsgbcTwKC3vtfnR3O2TLfQHuIytbMkATGzCrHuc+mGYQYTzdl7AaATD3fOhC08nUFQOMwyl/SIefLEcdKMvRuuH4APNsbjq4Drf/FYrAW3k0NVgYy5hSDCqcfKGSRp1gk1FKBDRS+jCNVQ3ttqcCiBLrIkKDMF4koGAhtYpockGAIfYxScqCH3FqPhr767px7ot8Z+Q3vaJ6oQBGBNHxbh7HHv3adMPZwtBR39+zKix5BFoGLVeCJMXa2FC9c9JfijYtSKHC9utIHY1d/G38ydjnyj7rUxJXCjz659Sf567biibv3YfjRRuxgCJMk9ABKcqCGBQky6Cb5Sxivrdq4TiUEspgFZ9GI95v/5vnUQTHOb8HpBSttOIXN/rmD0Ncm8KpF27UJYEacKkM3K+H6YVOHHHnfHxdAdmIWeuJlBXOSBeAOKZp+owqOXPH3lsFJNxZx//pCbeaQW41YrqmepiiJ0dhryRxVjbaiC53PrH0Bi7akjhsiFy5ti1aFWkRao63hbp6hHXDBb7ULdlq3aSfUNu0R/AITmD8xUtdi+wAAAABJRU5ErkJggg==) no-repeat 0.1rem center;
-  background-size: 0.24rem auto;
-  font-size: 0.14rem;
-  font-weight: 400;
-  border-top-left-radius: 0.1rem;
-  border-top-right-radius: 0.1rem;
-}
 .mod.mod-comment > .fn {
   position: relative;
   padding-bottom: 0.05rem;
@@ -1061,8 +1044,7 @@ body {
   line-height: 0.3rem;
   font-size: 0.13rem;
   color: #B9B9B9;
-  border-top-left-radius: 0.1rem;
-  border-top-right-radius: 0.1rem;
+  background: #8BBDE1;
   border-bottom: 0.04rem solid #F0F0F0;
 }
 .mod.mod-comment > .fn .type {
@@ -1080,12 +1062,13 @@ body {
   height: 100%;
   line-height: 0.3rem;
   cursor: pointer;
+  color: #FFF;
 }
 .mod.mod-comment > .fn .type li:last-child {
   margin: 0;
 }
 .mod.mod-comment > .fn .type li.cur {
-  color: #808080;
+  color: #2D4D67;
   cursor: default;
 }
 .mod.mod-comment > .fn .type li.cur:after {
@@ -1095,7 +1078,7 @@ body {
   bottom: 0.02rem;
   display: block;
   height: 0.02rem;
-  background: #58A2CE;
+  background: #2D4D67;
   border-radius: 0.02rem;
   content: ' ';
 }
@@ -1147,57 +1130,19 @@ body {
 .mod.mod-comment > .fn .type2 li.cur {
   color: #2D4D67;
 }
-.mod.mod-comment .cp-page {
+.mod.mod-comment > .cp-page {
   margin: 0.1rem 0.1rem 0 0.1rem;
   text-align: right;
-  font-size: 0.12rem;
 }
-.side .mod.mod-comment .cp-page .prev {
-  position: relative;
-  width: 0.2rem;
-  height: 0.2rem;
-  text-indent: 999rem;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.side .mod.mod-comment .cp-page .prev b {
-  margin: 0;
-  position: absolute;
-  left: 0.07rem;
-  top: 0.06rem;
-}
-.side .mod.mod-comment .cp-page .next {
-  position: relative;
-  width: 0.2rem;
-  height: 0.2rem;
-  text-indent: 999rem;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.side .mod.mod-comment .cp-page .next b {
-  margin: 0;
-  position: absolute;
-  left: 0.07rem;
-  top: 0.06rem;
-}
-.mod.mod-comment .cp-comment {
-  margin: 0.1rem 0.1rem 0 0.1rem;
-}
-.side .mod.mod-comment .cp-comment .list > li > .t > .profile .txt .name {
-  max-width: 1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.mod.mod-comment .warn {
+.mod.mod-comment > .warn {
   margin-top: 0.1rem;
   padding: 0 0.1rem;
 }
-.mod.mod-comment .warn > .t {
+.mod.mod-comment > .warn > .t {
   position: relative;
   padding-right: 1rem;
 }
-.mod.mod-comment .warn > .t .pic {
+.mod.mod-comment > .warn > .t .pic {
   float: left;
   display: block;
   margin-right: 0.05rem;
@@ -1206,20 +1151,20 @@ body {
   border-radius: 0.3rem;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
 }
-.mod.mod-comment .warn > .t .txt {
+.mod.mod-comment > .warn > .t .txt {
   float: left;
   line-height: 1;
 }
-.mod.mod-comment .warn > .t .txt .name {
+.mod.mod-comment > .warn > .t .txt .name {
   display: inline-block;
   margin-right: 0.1rem;
 }
-.mod.mod-comment .warn > .t .txt .time {
+.mod.mod-comment > .warn > .t .txt .time {
   display: inline-block;
   color: #B1C0C9;
   font-size: 0.12rem;
 }
-.mod.mod-comment .warn > .c {
+.mod.mod-comment > .warn > .c {
   display: inline-block;
   max-width: 100%;
   position: relative;
@@ -1230,7 +1175,7 @@ body {
   border-radius: 0.1rem;
   color: #B1C0C9;
 }
-.mod.mod-comment .warn > .c .arrow {
+.mod.mod-comment > .warn > .c .arrow {
   position: absolute;
   left: 0.1rem;
   top: -1px;
@@ -1239,7 +1184,7 @@ body {
   height: 0.1rem;
   border-top: 1px solid #FFF;
 }
-.mod.mod-comment .warn > .c .arrow:after {
+.mod.mod-comment > .warn > .c .arrow:after {
   position: absolute;
   left: 0;
   top: -0.06rem;
@@ -1253,28 +1198,197 @@ body {
           transform: scaleX(0.7) rotateZ(-45deg);
   content: ' ';
 }
-.mod.mod-comment .warn > .c > pre {
+.mod.mod-comment > .warn > .c > pre {
   word-break: break-all;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
-.mod.mod-comment .warn > .c > pre .placeholder {
+.mod.mod-comment > .warn > .c > pre .placeholder {
   display: inline-block;
   width: 0.7rem;
   height: 0.1rem;
 }
-.works > .sel {
-  margin-top: -0.3rem;
-  padding-left: 0.1rem;
+.mod.mod-comment > .cp-comment {
+  margin: 0.1rem 0.1rem 0 0.1rem;
+}
+/**
+ * Created by army8735 on 2017/10/28.
+ */
+.mod.mod-album {
+  position: relative;
+}
+.mod.mod-album > .fn {
+  position: relative;
+  padding-bottom: 0.05rem;
   height: 0.3rem;
+  line-height: 0.3rem;
+  font-size: 0.13rem;
+  color: #B9B9B9;
+  background: #8BBDE1;
+  border-bottom: 0.04rem solid #F0F0F0;
+}
+.mod.mod-album > .fn .type {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0 0.1rem 0.05rem 0.1rem;
+  height: 0.3rem;
+  border-radius: 0.18rem;
+}
+.mod.mod-album > .fn .type li {
+  position: relative;
+  margin-right: 0.1rem;
+  float: left;
+  height: 100%;
+  line-height: 0.3rem;
+  cursor: pointer;
+  color: #FFF;
+}
+.mod.mod-album > .fn .type li:last-child {
+  margin: 0;
+}
+.mod.mod-album > .fn .type li.cur {
+  color: #2D4D67;
+  cursor: default;
+}
+.mod.mod-album > .fn .type li.cur:after {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 0.02rem;
+  display: block;
+  height: 0.02rem;
+  background: #2D4D67;
+  border-radius: 0.02rem;
+  content: ' ';
+}
+.mod.mod-album > .fn .type li small {
+  position: absolute;
+  left: 100%;
+  padding-left: 0.05rem;
+  color: #58A2CE;
+  font-size: 0.12rem;
+}
+.mod.mod-album > .fn .type2 {
+  position: absolute;
+  top: 0.05rem;
+  right: 0.1rem;
+  border-radius: 0.24rem;
+  color: #FFF;
+  background: #B1C0C9;
+}
+.mod.mod-album > .fn .type2:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0.44rem;
+  height: 100%;
+  background: #F1F6F9;
+  border-radius: 0.24rem;
+  content: ' ';
+  transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s;
+}
+.mod.mod-album > .fn .type2.alt:before {
+  -webkit-transform: translateX(100%);
+          transform: translateX(100%);
+}
+.mod.mod-album > .fn .type2 li {
+  position: relative;
+  float: left;
+  padding: 0 0.1rem;
+  width: 0.24rem;
+  height: 0.24rem;
+  line-height: 0.24rem;
+  border-radius: 0.24rem;
+  font-size: 0.12rem;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+.mod.mod-album > .fn .type2 li.cur {
+  color: #2D4D67;
+}
+.mod.mod-album > .c {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0.1rem;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.mod.mod-album > .c div {
+  overflow: hidden;
+}
+.mod.mod-album > .c div:first-child {
+  margin-right: 0.1rem;
+}
+.mod.mod-album > .c ul li {
+  position: relative;
+  display: block;
+  margin-bottom: 0.1rem;
+  background: #B1C0C9;
+  border-radius: 0.06rem;
+}
+.mod.mod-album > .c ul li:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+  content: ' ';
+  border-radius: 0.06rem;
+}
+.mod.mod-album > .c ul li img {
+  display: block;
+  max-width: 100%;
+  border-radius: 0.06rem;
+}
+.mod.mod-album > .c ul li .like {
+  position: absolute;
+  top: 0.02rem;
+  right: 0.3rem;
+  display: block;
+  width: 0.24rem;
+  height: 0.24rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAASFBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////neHiwAAAAF3RSTlMA5RvHSPS9qfnWXSKUgXFlOu22CzS+EBOhCGEAAADcSURBVEjH7VRJEoMwDINAFih7af3/n1aAO5QhZXSFQRddJCwvJLkgyixIKHzH6mtR+CelfwT5IuMCyYqaNeDTXQEOhokkABo2KbhhSgwQVuCG7SKHsNBSljEYCNMEmMbFTHbUCokwBs3uNVLPRPI6nRL8YgzTOEdwxW1uHc60uZzctAO/ZQubtTH5miSXHZzZ7AvZU0RwmqSTiGPb67KwHmTmUnbv+E0lMxaOHsCgt8UZ9GQsb1DFbbgNpzAcnDf3A+kvCj5AG3kE/IHeRUv3//Um3pzXVPuH7EL4AFtyM33t+xsSAAAAAElFTkSuQmCC) no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+.mod.mod-album > .c ul li .like.has {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAASFBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////neHiwAAAAF3RSTlMA5KVJ7RzIWfj03YhnLiIUCbCYdVE+OjIcBvkAAACRSURBVEjH7dTLCoMwEIVhJ6bealt7Pe//pkVzNkIKZ4ouhPyrIfARQkiq0l+FDkD/qNRapEYvGFQwRYpWFWeCRgUXsKsIbmDvvXYYkYryxRHcVTAQPL1n/ojghVQ3bXtvtQFWz1ODXBZOa2DL6jz1yBfXAkuc8gUvMC9AAQUcBpgXhB9P1LQnyk+AU/4TKOl9AWrkRtmrUsAiAAAAAElFTkSuQmCC);
+}
+.mod.mod-album > .c ul li .favor {
+  position: absolute;
+  top: 0.02rem;
+  right: 0.02rem;
+  display: block;
+  width: 0.24rem;
+  height: 0.24rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAb1BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8v0wLRAAAAJHRSTlMABviDz7Gp6t/YOSFhx5h4UCkRaTDxu5+LQRsMklpG5BfBblcIBTdQAAABxklEQVRIx8VV2YKDIAwUwap439W19uL/v3EJoqUF1L7szkOlcYbgmETn3/DzHb0nzH98wacu48iOCwgDuNFRfs5mpEcFCScHkOJ28Ilh9xoU+Jig5VTPqfhvc8jcGhJQB/lHjTpx4p1fM3710T4/ggQTX5QNX1T7gpTTiFidway9FCiGBBexHuB9d6WNWtIYeyFwWIjWZJCkHat++Dg3vvvshX7ZQwk2JO1XfuwyBe5zvVEETEW37K/yr2mkdgUmqiKeo9W8MTnhmJa6DUWedUkjON5L4PY79g3hSxAJL4Ztu0/KkRwsvNxUCH6C3v6GG9XfrQQ1ISmt5aIdGnlbilHwwW5NYWyYs3g/0acNLYRPBr4oR7/QjbuLTtPjvs6XZQBVMBpnjltbx1GiRbF9QFGrAGaB5ek8LfqQdW2xD2vRSeQ1woNuNk4R3yyAAjbYAe1lLAHEOJDszWzEkzL7qW1EBvOqZYAwX0s5Ngku0qSIMyQSKn09a+z1xm18GyFeITeyNFWFm5nYZp0UpjmczvZZkCQywYODzTJ2NWeQCJaXQZMlRDY+hf4DKbFwDmbW0mjwe9Oh6gp9ZRn6xXPS7yD6rJ0/xS/6qkXElWL6pwAAAABJRU5ErkJggg==) no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+.mod.mod-album > .c ul li .favor.has {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAY1BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+aRQ2gAAAAIHRSTlMA8jD37OG4OiUZEJV2YgjEsYhVTdnTpY6DbV1CC+WeaNI4NUwAAAELSURBVEjH7dTZcoMwDAVQb2w2GAgQoGTR/39lp6njkkYC5TWT86yLB8uS+IjyWh5Pgs/3AHAUfDP8UPxAAvDSEV/wK+cGhhBwzPoOAl3wAjXctaz6DCJpOYEU/pSM+gOsyJ2LslnVwAPtDgp9I0VXXmoDuCR18+IfvtzALjmuAjv1zzeggSNdt4pjEpHiHJFY7PnQzjnRLoIJ9dyEUcTUECQ2rtVGfSYwV2595IhAJQiKOEBQCkD1O8NJnsC/J3J5jERgoccfd6VXKm4k6k/k5JBtICTk0o6GuZsMRB4PTPGLt7dgWw3be78NfSr9vfOXEFAbjdatXf/W7aZ7L3ClObv/XV0aMyjxXr4BkJplIb3PaCcAAAAASUVORK5CYII=);
+}
+.works > .sel {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 1px 0 0 0.1rem;
+  height: 0.3rem;
+  box-sizing: border-box;
   text-align: center;
   overflow: hidden;
 }
 .works > .sel li {
   position: relative;
-  float: left;
   padding: 0 0.2rem;
-  height: 0.3rem;
+  height: 100%;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   border-top-left-radius: 0.16rem;
   border-top-right-radius: 0.16rem;
@@ -1291,179 +1405,11 @@ body {
   font-size: 0.14rem;
   z-index: 2;
 }
-.works > .comments > .fn {
-  position: relative;
-  padding-bottom: 0.05rem;
-  height: 0.3rem;
-  line-height: 0.3rem;
-  font-size: 0.13rem;
-  color: #B9B9B9;
-  background: #8BBDE1;
-  border-bottom: 0.04rem solid #F0F0F0;
+.works.t1 .sel {
+  margin-top: -0.3rem;
 }
-.works > .comments > .fn .type {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 0 0.1rem 0.05rem 0.1rem;
-  height: 0.3rem;
-  border-radius: 0.18rem;
-}
-.works > .comments > .fn .type li {
-  position: relative;
-  margin-right: 0.5rem;
-  float: left;
-  height: 100%;
-  line-height: 0.3rem;
-  cursor: pointer;
-  color: #FFF;
-}
-.works > .comments > .fn .type li:last-child {
-  margin: 0;
-}
-.works > .comments > .fn .type li.cur {
-  color: #2D4D67;
-  cursor: default;
-}
-.works > .comments > .fn .type li.cur:after {
-  position: absolute;
-  left: 20%;
-  right: 20%;
-  bottom: 0.02rem;
-  display: block;
-  height: 0.02rem;
-  background: #2D4D67;
-  border-radius: 0.02rem;
-  content: ' ';
-}
-.works > .comments > .fn .type li small {
-  position: absolute;
-  left: 100%;
-  padding-left: 0.05rem;
-  color: #58A2CE;
-  font-size: 0.12rem;
-}
-.works > .comments > .fn .type2 {
-  position: absolute;
-  top: 0.05rem;
-  right: 0.1rem;
-  border-radius: 0.24rem;
-  color: #FFF;
-  background: #B1C0C9;
-}
-.works > .comments > .fn .type2:before {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0.44rem;
-  height: 100%;
-  background: #F1F6F9;
-  border-radius: 0.24rem;
-  content: ' ';
-  transition: -webkit-transform 0.2s;
-  transition: transform 0.2s;
-  transition: transform 0.2s, -webkit-transform 0.2s;
-}
-.works > .comments > .fn .type2.alt:before {
-  -webkit-transform: translateX(100%);
-          transform: translateX(100%);
-}
-.works > .comments > .fn .type2 li {
-  position: relative;
-  float: left;
-  padding: 0 0.1rem;
-  width: 0.24rem;
-  height: 0.24rem;
-  line-height: 0.24rem;
-  border-radius: 0.24rem;
-  font-size: 0.12rem;
-  white-space: nowrap;
-  overflow: hidden;
-  cursor: pointer;
-}
-.works > .comments > .fn .type2 li.cur {
-  color: #2D4D67;
-}
-.works > .comments > .cp-page {
-  margin: 0.1rem 0.1rem 0 0.1rem;
-  text-align: right;
-}
-.works > .comments > .warn {
+.works.t11 .sel {
   margin-top: 0.1rem;
-  padding: 0 0.1rem;
-}
-.works > .comments > .warn > .t {
-  position: relative;
-  padding-right: 1rem;
-}
-.works > .comments > .warn > .t .pic {
-  float: left;
-  display: block;
-  margin-right: 0.05rem;
-  width: 0.3rem;
-  height: 0.3rem;
-  border-radius: 0.3rem;
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
-}
-.works > .comments > .warn > .t .txt {
-  float: left;
-  line-height: 1;
-}
-.works > .comments > .warn > .t .txt .name {
-  display: inline-block;
-  margin-right: 0.1rem;
-}
-.works > .comments > .warn > .t .txt .time {
-  display: inline-block;
-  color: #B1C0C9;
-  font-size: 0.12rem;
-}
-.works > .comments > .warn > .c {
-  display: inline-block;
-  max-width: 100%;
-  position: relative;
-  margin: 0.1rem 0;
-  padding: 0.05rem 0.1rem;
-  background: #FFF;
-  border: 1px solid #D9D9D9;
-  border-radius: 0.1rem;
-  color: #B1C0C9;
-}
-.works > .comments > .warn > .c .arrow {
-  position: absolute;
-  left: 0.1rem;
-  top: -1px;
-  display: block;
-  width: 0.1rem;
-  height: 0.1rem;
-  border-top: 1px solid #FFF;
-}
-.works > .comments > .warn > .c .arrow:after {
-  position: absolute;
-  left: 0;
-  top: -0.06rem;
-  display: block;
-  width: 0.1rem;
-  height: 0.1rem;
-  border: 1px solid #D9D9D9;
-  border-left: none;
-  border-bottom: none;
-  -webkit-transform: scaleX(0.7) rotateZ(-45deg);
-          transform: scaleX(0.7) rotateZ(-45deg);
-  content: ' ';
-}
-.works > .comments > .warn > .c > pre {
-  word-break: break-all;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-.works > .comments > .warn > .c > pre .placeholder {
-  display: inline-block;
-  width: 0.7rem;
-  height: 0.1rem;
-}
-.works > .comments > .cp-comment {
-  margin: 0.1rem 0.1rem 0 0.1rem;
 }
 .works h5 {
   padding: 0 0.2rem;
@@ -1476,4 +1422,11 @@ body {
 .works pre {
   margin: 0;
   padding: 0;
+}
+img.temp {
+  display: block;
+  position: absolute;
+  left: 1000%;
+  top: -9999rem;
+  visibility: hidden;
 }

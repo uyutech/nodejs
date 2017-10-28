@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 189);
+/******/ 	return __webpack_require__(__webpack_require__.s = 186);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -201,12 +201,21 @@ Object.defineProperty(exports, "__esModule", {
 var net = {
   ajax: function ajax(url, data, _success, _error, type) {
     var csrfToken = $.cookie('csrfToken');
+    Object.keys(data).forEach(function (k) {
+      if (data[k] === undefined || data[k] === null) {
+        delete data[k];
+      }
+    });
+    if (url.indexOf('?') === -1) {
+      url += '?_=' + Date.now();
+    } else {
+      url += '&_=' + Date.now();
+    }
     function load() {
       return $.ajax({
         url: url,
         data: data,
         dataType: 'json',
-        cache: false,
         crossDomain: true,
         timeout: 6000,
         type: type || 'get',
@@ -255,15 +264,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 189:
+/***/ 186:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(190);
+__webpack_require__(187);
 
-var _My = __webpack_require__(191);
+var _My = __webpack_require__(188);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -273,14 +282,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 190:
+/***/ 187:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 191:
+/***/ 188:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -296,15 +305,15 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Profile = __webpack_require__(192);
+var _Profile = __webpack_require__(189);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(193);
+var _Follow = __webpack_require__(190);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _Favor = __webpack_require__(194);
+var _Favor = __webpack_require__(191);
 
 var _Favor2 = _interopRequireDefault(_Favor);
 
@@ -360,7 +369,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 192:
+/***/ 189:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -516,7 +525,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 193:
+/***/ 190:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -578,7 +587,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 194:
+/***/ 191:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

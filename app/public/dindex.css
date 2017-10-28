@@ -173,6 +173,7 @@ body {
   height: 1.95rem;
   background: url(//zhuanquan.xin/img/0c0fc82bb554410dc14a488b26a0408b.png) no-repeat center;
   background-size: contain;
+  z-index: 999;
 }
 .cp-ciframe.up {
   z-index: 1000;

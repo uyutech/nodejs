@@ -7,7 +7,7 @@
 module.exports = () => {
   return function* (next) {
     let ua = this.get('user-agent');
-    if(/(iPhone|iPod|Android|ios|iPad)/i.test(ua)) {
+    if(/(iPhone|iPod|Android|ios)/i.test(ua)) {
       this.body = `<!DOCTYPE html><html>
         <head>
         ${this.helper.getMHead()}

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 32);
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -187,220 +187,24 @@ let util = {
 /* 4 */,
 /* 5 */,
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army on 2017/5/20.
- */
-
-let util = {
-  isIPhone: function(){
-    return navigator.appVersion.match(/iphone/gi);
-  },
-  goto: function(url) {
-    location.href = url;
-  },
-  img150_150: function(url) {
-    return url ? url + '-150_150' : url;
-  },
-  img100_100: function(url) {
-    return url ? url + '-100_100' : url;
-  },
-  img90_90: function(url) {
-    return url ? url + '-90_90' : url;
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (util);
-
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/common/util.js'");
 
 /***/ }),
 /* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/10/2.
- */
-
-
-
-let net = {
-  ajax: function(url, data, success, error, type) {
-    let csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken,
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function (xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function (data, state, xhr) {
-          success(data, state, xhr);
-        },
-        error: function (data) {
-          if(!error.__hasExec) {
-            error.__hasExec = true;
-            error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function(url, data, success, error) {
-    if(typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function() {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function(url, data, success, error) {
-    if(typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function() {};
-    return net.ajax(url, data, success, error, 'post');
-  },
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (net);
-
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/common/net.js'");
 
 /***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-let code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer',
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer',
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer',
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician',
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician',
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer',
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer',
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental',
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video',
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter',
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter',
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter',
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer',
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer',
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting',
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer',
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer',
-  },
-};
-
-let label2Code = {};
-Object.keys(code2Data).forEach(function(k) {
-  let v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  code2Data,
-  label2Code,
-});
-
-
-/***/ }),
+/* 8 */,
 /* 9 */,
 /* 10 */,
 /* 11 */,
-/* 12 */,
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -446,7 +250,7 @@ var BotNav = function (_migi$Component) {
 migi.name(BotNav, "BotNav");exports.default = BotNav;
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -462,7 +266,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(15);
+var _AuthorType = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../author/AuthorType.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -530,66 +334,7 @@ var HotWork = function (_migi$Component) {
 migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var TYPE = {
-  111: '演唱',
-  112: '和声',
-  113: '伴唱',
-  114: '戏腔',
-  121: '作曲',
-  122: '编曲',
-  123: '和声编写',
-  131: '混音',
-  132: '母带',
-  133: '录音',
-  134: '修音',
-  135: '剧情混音',
-  141: '乐器实录',
-  151: '配音',
-  211: '视频',
-  212: '合成',
-  213: '压制',
-  311: '立绘',
-  312: 'CG',
-  313: '场景',
-  314: 'logo设计',
-  315: '线稿',
-  316: '上色',
-  317: '手绘',
-  321: '3D建模',
-  322: '打光',
-  323: '动画',
-  324: '骨骼绑定',
-  331: '设计',
-  332: '海报',
-  333: 'logo',
-  334: '分镜',
-  341: '漫画',
-  411: '作词',
-  421: '文案',
-  422: '剧本',
-  423: '小说'
-};
-
-var CODE = {
-  '演唱': 111
-};
-
-exports.default = {
-  TYPE: TYPE,
-  CODE: CODE
-};
-
-/***/ }),
-/* 16 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -659,7 +404,7 @@ var HotCollection = function (_migi$Component) {
 migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
-/* 17 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -741,7 +486,7 @@ var HotAuthor = function (_migi$Component) {
 migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
-/* 18 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -753,7 +498,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(8);
+var _authorTemplate = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../author/authorTemplate\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -966,7 +711,7 @@ var DoubleCheck = function (_migi$Component) {
 migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
-/* 19 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1033,6 +778,8 @@ var PlayList = function (_migi$Component) {
 migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
+/* 18 */,
+/* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
@@ -1043,9 +790,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 /* 27 */,
 /* 28 */,
 /* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1072,11 +817,11 @@ var _TopNav = __webpack_require__(!(function webpackMissingModule() { var e = ne
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _BotNav = __webpack_require__(13);
+var _BotNav = __webpack_require__(12);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Find = __webpack_require__(33);
+var _Find = __webpack_require__(31);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -1085,7 +830,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 33 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1105,27 +850,27 @@ var _net = __webpack_require__(7);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(34);
+var _Banner = __webpack_require__(32);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(14);
+var _HotWork = __webpack_require__(13);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotCollection = __webpack_require__(16);
+var _HotCollection = __webpack_require__(14);
 
 var _HotCollection2 = _interopRequireDefault(_HotCollection);
 
-var _HotAuthor = __webpack_require__(17);
+var _HotAuthor = __webpack_require__(15);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _DoubleCheck = __webpack_require__(18);
+var _DoubleCheck = __webpack_require__(16);
 
 var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
 
-var _PlayList = __webpack_require__(19);
+var _PlayList = __webpack_require__(17);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -1259,7 +1004,7 @@ var Find = function (_migi$Component) {
 migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
-/* 34 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

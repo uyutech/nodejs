@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 91);
+/******/ 	return __webpack_require__(__webpack_require__.s = 89);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -197,12 +197,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 let net = {
   ajax: function(url, data, success, error, type) {
     let csrfToken = $.cookie('csrfToken');
+    Object.keys(data).forEach(function(k) {
+      if(data[k] === undefined || data[k] === null) {
+        delete data[k];
+      }
+    });
+    if(url.indexOf('?') === -1) {
+      url += '?_=' + Date.now();
+    }
+    else {
+      url += '&_=' + Date.now();
+    }
     function load() {
       return $.ajax({
         url: url,
         data: data,
         dataType: 'json',
-        cache: false,
         crossDomain: true,
         timeout: 6000,
         type: type || 'get',
@@ -252,7 +262,7 @@ let net = {
 
 /***/ }),
 
-/***/ 91:
+/***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -272,7 +282,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dmy.css') + '"/>\n</head>\n<body>\n<div id="page">' + my + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n  $CONFIG.follows = ' + JSON.stringify(follows) + ';\n  $CONFIG.favors = ' + JSON.stringify(favors) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dmy.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _My = __webpack_require__(92);
+var _My = __webpack_require__(90);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -282,7 +292,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 92:
+/***/ 90:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -298,15 +308,15 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Profile = __webpack_require__(93);
+var _Profile = __webpack_require__(91);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(94);
+var _Follow = __webpack_require__(92);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _Favor = __webpack_require__(95);
+var _Favor = __webpack_require__(93);
 
 var _Favor2 = _interopRequireDefault(_Favor);
 
@@ -362,7 +372,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 93:
+/***/ 91:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -518,7 +528,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 94:
+/***/ 92:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -580,7 +590,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 95:
+/***/ 93:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

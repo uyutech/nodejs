@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 146);
+/******/ 	return __webpack_require__(__webpack_require__.s = 143);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -201,12 +201,21 @@ Object.defineProperty(exports, "__esModule", {
 var net = {
   ajax: function ajax(url, data, _success, _error, type) {
     var csrfToken = $.cookie('csrfToken');
+    Object.keys(data).forEach(function (k) {
+      if (data[k] === undefined || data[k] === null) {
+        delete data[k];
+      }
+    });
+    if (url.indexOf('?') === -1) {
+      url += '?_=' + Date.now();
+    } else {
+      url += '&_=' + Date.now();
+    }
     function load() {
       return $.ajax({
         url: url,
         data: data,
         dataType: 'json',
-        cache: false,
         crossDomain: true,
         timeout: 6000,
         type: type || 'get',
@@ -255,27 +264,27 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 146:
+/***/ 143:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(147);
+__webpack_require__(144);
 
-var _TopNav = __webpack_require__(148);
+var _TopNav = __webpack_require__(145);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(149);
+var _CIframe = __webpack_require__(146);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(150);
+var _QuanNiang = __webpack_require__(147);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
-var _Welcome = __webpack_require__(151);
+var _Welcome = __webpack_require__(148);
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
@@ -351,14 +360,14 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 147:
+/***/ 144:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 148:
+/***/ 145:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -433,7 +442,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 149:
+/***/ 146:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -480,7 +489,7 @@ migi.name(CIframe, "CIframe");exports.default = CIframe;
 
 /***/ }),
 
-/***/ 150:
+/***/ 147:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -560,7 +569,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 151:
+/***/ 148:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

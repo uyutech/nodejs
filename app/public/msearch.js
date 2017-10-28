@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 128);
+/******/ 	return __webpack_require__(__webpack_require__.s = 125);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 128:
+/***/ 125:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(129);
+__webpack_require__(126);
 
-var _Search = __webpack_require__(130);
+var _Search = __webpack_require__(127);
 
 var _Search2 = _interopRequireDefault(_Search);
 
@@ -83,14 +83,14 @@ var search = migi.preExist(migi.createCp(_Search2.default, [["kw", $CONFIG.kw], 
 
 /***/ }),
 
-/***/ 129:
+/***/ 126:
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed: ModuleBuildError: Module build failed: Can't resolve '../component/author/index.less' in '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/search'\n @ /Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/search/index.less (line 6, column 0)\n near lines:\n   @import '../common/var.less';\n   @import '../component/author/index.less';\n   \n    at runLoaders (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_webpack@3.7.1@webpack/lib/NormalModule.js:195:19)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:364:11\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:230:18\n    at context.callback (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:111:13)\n    at less.render (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less-loader@3.0.0@less-loader/lib/loader.js:55:13)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/render.js:26:35\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parse.js:62:33\n    at ImportVisitor.finish [as _finish] (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parser/parser.js:180:28)\n    at ImportVisitor._onSequencerEmpty (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-visitor.js:35:14)\n    at ImportSequencer.tryRun (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-sequencer.js:50:14)");
 
 /***/ }),
 
-/***/ 130:
+/***/ 127:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -110,7 +110,7 @@ var _util = __webpack_require__(31);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(45);
+var _authorTemplate = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../component/author/authorTemplate\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -295,222 +295,18 @@ migi.name(Search, "Search");exports.default = Search;
 /***/ }),
 
 /***/ 31:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army on 2017/5/20.
- */
-
-var util = {
-  isIPhone: function isIPhone() {
-    return navigator.appVersion.match(/iphone/gi);
-  },
-  goto: function goto(url) {
-    location.href = url;
-  },
-  img150_150: function img150_150(url) {
-    return url ? url + '-150_150' : url;
-  },
-  img100_100: function img100_100(url) {
-    return url ? url + '-100_100' : url;
-  },
-  img90_90: function img90_90(url) {
-    return url ? url + '-90_90' : url;
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-exports.default = util;
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/common/util.js'");
 
 /***/ }),
 
 /***/ 44:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
 "use strict";
-/**
- * Created by army8735 on 2017/10/2.
- */
-
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var net = {
-  ajax: function ajax(url, data, _success, _error, type) {
-    var csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function beforeSend(xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function success(data, state, xhr) {
-          _success(data, state, xhr);
-        },
-        error: function error(data) {
-          if (!_error.__hasExec) {
-            _error.__hasExec = true;
-            _error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function getJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function postJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error, 'post');
-  }
-};
-
-exports.default = net;
-
-/***/ }),
-
-/***/ 45:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-var code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer'
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer'
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer'
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician'
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician'
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer'
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer'
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental'
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video'
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter'
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter'
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter'
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer'
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer'
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting'
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer'
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer'
-  }
-};
-
-var label2Code = {};
-Object.keys(code2Data).forEach(function (k) {
-  var v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-exports.default = {
-  code2Data: code2Data,
-  label2Code: label2Code
-};
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/common/net.js'");
 
 /***/ })
 

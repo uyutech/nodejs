@@ -9,12 +9,12 @@
     padding:0.2rem 0;
     box-sizing:border-box;
     width:12.7rem;
-    height:6.87rem;
-    background:url(//zhuanquan.xyz/rhymesland/src/single/rhyme/fg.png) no-repeat center;
+    height:9rem;
+    background:url(//zhuanquan.xyz/rhymesland/src/single/rhyme/fg2.png) no-repeat center;
     background-size:contain;
     .rjrjs{
       position:absolute;
-      bottom:0.76rem;
+      bottom:1.49rem;
       right:1.95rem;
       display:block;
       width:1.29rem;
@@ -42,7 +42,7 @@
     }
     .jrj{
       position:absolute;
-      bottom:3.16rem;
+      bottom:3.89rem;
       left:1.2rem;
       display:block;
       width:1.29rem;
@@ -60,6 +60,34 @@
         display:block;
         content:' ';
         background:url(jrj_on.jpg) no-repeat center;
+        background-size:contain;
+        opacity:0;
+        transition:opacity 0.2s;
+      }
+      &:hover:after{
+        opacity:1;
+      }
+    }
+    .wsffl{
+      position:absolute;
+      top:1.53rem;
+      right:2.17rem;
+      display:block;
+      width:1.29rem;
+      height:1.29rem;
+      border-radius:100%;
+      background:url(wsffl.jpg) no-repeat center;
+      background-size:contain;
+      &:after{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+        border-radius:100%;
+        display:block;
+        content:' ';
+        background:url(wsffl_on.jpg) no-repeat center;
         background-size:contain;
         opacity:0;
         transition:opacity 0.2s;

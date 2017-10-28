@@ -32,7 +32,7 @@ class Author extends migi.Component {
           if(res.success) {
             let data = res.data;
             subCmt.value = '';
-            if(rootID === -1 && data.RootID === -1) {
+            if(rootID === -1) {
               comment.prependData(data);
               comment.message = '';
             }

@@ -55,7 +55,7 @@ class Comment extends migi.Component {
         self.slide($(this).parent());
       });
       $root.on('click', '.list>li>.c>pre', function() {
-        $(this).parent().find('.slide .sub').click();
+        self.slide($(this).parent().find('.slide'));
       });
       $root.on('click', '.more', function() {
         let $message = $(this);
@@ -250,7 +250,7 @@ class Comment extends migi.Component {
         </div>
         <div class="c">
           <pre>{ item.Send_Content }<span class="placeholder"/></pre>
-          <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_UserName }>
+          <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_AuthorName }>
             <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
             <small class="sub">{ item.sub_Count }</small>
             <span>收起</span>

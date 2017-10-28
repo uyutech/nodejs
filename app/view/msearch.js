@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 50);
+/******/ 	return __webpack_require__(__webpack_require__.s = 48);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 13:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -112,7 +112,7 @@ migi.name(BotNav, "BotNav");exports.default = BotNav;
 
 /***/ }),
 
-/***/ 50:
+/***/ 48:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -137,11 +137,11 @@ var _TopNav = __webpack_require__(!(function webpackMissingModule() { var e = ne
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _BotNav = __webpack_require__(13);
+var _BotNav = __webpack_require__(12);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Search = __webpack_require__(51);
+var _Search = __webpack_require__(49);
 
 var _Search2 = _interopRequireDefault(_Search);
 
@@ -151,7 +151,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 51:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -171,7 +171,7 @@ var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(8);
+var _authorTemplate = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../component/author/authorTemplate\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -356,215 +356,18 @@ migi.name(Search, "Search");exports.default = Search;
 /***/ }),
 
 /***/ 6:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army on 2017/5/20.
- */
-
-let util = {
-  isIPhone: function(){
-    return navigator.appVersion.match(/iphone/gi);
-  },
-  goto: function(url) {
-    location.href = url;
-  },
-  img150_150: function(url) {
-    return url ? url + '-150_150' : url;
-  },
-  img100_100: function(url) {
-    return url ? url + '-100_100' : url;
-  },
-  img90_90: function(url) {
-    return url ? url + '-90_90' : url;
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (util);
-
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/common/util.js'");
 
 /***/ }),
 
 /***/ 7:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/10/2.
- */
-
-
-
-let net = {
-  ajax: function(url, data, success, error, type) {
-    let csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken,
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function (xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function (data, state, xhr) {
-          success(data, state, xhr);
-        },
-        error: function (data) {
-          if(!error.__hasExec) {
-            error.__hasExec = true;
-            error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function(url, data, success, error) {
-    if(typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function() {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function(url, data, success, error) {
-    if(typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function() {};
-    return net.ajax(url, data, success, error, 'post');
-  },
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (net);
-
-
-/***/ }),
-
-/***/ 8:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-let code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer',
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer',
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer',
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician',
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician',
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer',
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer',
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental',
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video',
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter',
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter',
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter',
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer',
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer',
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting',
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer',
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer',
-  },
-};
-
-let label2Code = {};
-Object.keys(code2Data).forEach(function(k) {
-  let v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  code2Data,
-  label2Code,
-});
-
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/common/net.js'");
 
 /***/ })
 
