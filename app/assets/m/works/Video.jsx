@@ -34,9 +34,6 @@ class Video extends migi.Component {
   @bind
   set currentTime(v) {
     this._currentTime = v;
-    if(this.video && v !== this.video.element.currentTime) {
-      this.video.element.currentTime = v;
-    }
   }
   setData(datas) {
     let self = this;
@@ -152,7 +149,7 @@ class Video extends migi.Component {
       diff = Math.min(width, diff);
       let percent = diff / width;
       this.setBarPercent(percent);
-      this.currentTime = Math.floor(this.duration * percent);
+      this.video.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
     }
   }
   touchEnd(e) {
@@ -165,7 +162,7 @@ class Video extends migi.Component {
       let x = e.pageX - left;
       let percent = x / $progress.width();
       let currentTime = Math.floor(this.duration * percent);
-      this.currentTime = currentTime;
+      this.video.element.currentTime = this.currentTime = currentTime;
     }
   }
   setBarPercent(percent) {

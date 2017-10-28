@@ -685,6 +685,7 @@ body {
   left: 0;
   top: -0.03rem;
   width: 100%;
+  overflow: visible;
 }
 .mod.mod-media .fn .bar .progress .p:before {
   position: absolute;

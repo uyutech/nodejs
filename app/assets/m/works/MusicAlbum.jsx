@@ -6,6 +6,9 @@
 
 import util from '../../d/common/util';
 
+let isStart;
+let offsetX;
+
 class MusicAlbum extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -16,7 +19,7 @@ class MusicAlbum extends migi.Component {
         self.addOrAltMedia();
       });
       migi.eventBus.on('chooseMusic', function(item) {
-        self.currentTime = 0;
+        self.av.element.currentTime = self.currentTime = 0;
         self.setItem(item);
         self.addOrAltMedia();
       });
@@ -45,9 +48,6 @@ class MusicAlbum extends migi.Component {
   @bind
   set currentTime(v) {
     this._currentTime = v;
-    if(this.av && v !== this.av.element.currentTime) {
-      this.av.element.currentTime = v;
-    }
   }
   show() {
     $(this.element).removeClass('fn-hide hidden');
@@ -115,7 +115,7 @@ class MusicAlbum extends migi.Component {
         break;
     }
     self.volume = self.volume;
-    self.currentTime = 0;
+    self.av.element.currentTime = self.currentTime = 0;
     if(isPlaying) {
       self.play();
     }
@@ -172,6 +172,30 @@ class MusicAlbum extends migi.Component {
   clickStart(e) {
     this.play();
   }
+  touchStart(e) {
+    e.preventDefault();
+    if(this.canControl && e.touches.length === 1) {
+      isStart = true;
+      offsetX = $(this.ref.progress.element).offset().left;
+      this.pause();
+    }
+  }
+  touchMove(e) {
+    if(isStart && e.touches.length === 1) {
+      e.preventDefault();
+      let x = e.touches[0].pageX;
+      let diff = x - offsetX;
+      let width = $(this.ref.progress.element).width();
+      diff = Math.max(0, diff);
+      diff = Math.min(width, diff);
+      let percent = diff / width;
+      this.setBarPercent(percent);
+      this.video.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
+    }
+  }
+  touchEnd(e) {
+    isStart = false;
+  }
   clickProgress(e) {
     if(this.canControl && e.target.className !== 'p') {
       let $progress = $(this.ref.progress.element);
@@ -179,7 +203,7 @@ class MusicAlbum extends migi.Component {
       let x = e.pageX - left;
       let percent = x / $progress.width();
       let currentTime = Math.floor(this.duration * percent);
-      this.currentTime = currentTime;
+      this.av.element.currentTime = this.currentTime = currentTime;
     }
   }
   setBarPercent(percent) {

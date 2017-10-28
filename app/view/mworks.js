@@ -2246,9 +2246,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var lyricsIndex = -1;
-var lyricsHeight = [];
-var $lyricsRoll = void 0;
+var isStart = void 0;
+var offsetX = void 0;
 
 var Audio = function (_migi$Component) {
   _inherits(Audio, _migi$Component);
@@ -2397,6 +2396,36 @@ var Audio = function (_migi$Component) {
       this.play();
     }
   }, {
+    key: 'touchStart',
+    value: function touchStart(e) {
+      e.preventDefault();console.log(this.canControl, e.touches.length);
+      if (this.canControl && e.touches.length === 1) {
+        isStart = true;
+        offsetX = $(this.ref.progress.element).offset().left;
+        this.pause();
+      }
+    }
+  }, {
+    key: 'touchMove',
+    value: function touchMove(e) {
+      if (isStart && e.touches.length === 1) {
+        e.preventDefault();
+        var x = e.touches[0].pageX;
+        var diff = x - offsetX;
+        var width = $(this.ref.progress.element).width();
+        diff = Math.max(0, diff);
+        diff = Math.min(width, diff);
+        var percent = diff / width;
+        this.setBarPercent(percent);
+        this.audio.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
+      }
+    }
+  }, {
+    key: 'touchEnd',
+    value: function touchEnd(e) {
+      isStart = false;
+    }
+  }, {
     key: 'clickProgress',
     value: function clickProgress(e) {
       if (this.canControl && e.target.className !== 'p') {
@@ -2405,7 +2434,7 @@ var Audio = function (_migi$Component) {
         var x = e.pageX - left;
         var percent = x / $progress.width();
         var currentTime = Math.floor(this.duration * percent);
-        this.currentTime = currentTime;
+        this.audio.element.currentTime = this.currentTime = currentTime;
       }
     }
   }, {
@@ -2633,9 +2662,6 @@ var Audio = function (_migi$Component) {
     },
     set: function set(v) {
       this._currentTime = v;
-      if (this.audio && v !== this.audio.element.currentTime) {
-        this.audio.element.currentTime = v;
-      }
       ;this.__array("currentTime", v);this.__data("currentTime");
     }
   }]);
@@ -2836,7 +2862,7 @@ var Video = function (_migi$Component) {
         diff = Math.min(width, diff);
         var percent = diff / width;
         this.setBarPercent(percent);
-        this.currentTime = Math.floor(this.duration * percent);
+        this.video.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
       }
     }
   }, {
@@ -2853,7 +2879,7 @@ var Video = function (_migi$Component) {
         var x = e.pageX - left;
         var percent = x / $progress.width();
         var currentTime = Math.floor(this.duration * percent);
-        this.currentTime = currentTime;
+        this.video.element.currentTime = this.currentTime = currentTime;
       }
     }
   }, {
@@ -2955,9 +2981,6 @@ var Video = function (_migi$Component) {
     },
     set: function set(v) {
       this._currentTime = v;
-      if (this.video && v !== this.video.element.currentTime) {
-        this.video.element.currentTime = v;
-      }
       ;this.__array("currentTime", v);this.__data("currentTime");
     }
   }]);
@@ -3552,6 +3575,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var isStart = void 0;
+var offsetX = void 0;
+
 var MusicAlbum = function (_migi$Component) {
   _inherits(MusicAlbum, _migi$Component);
 
@@ -3573,7 +3599,7 @@ var MusicAlbum = function (_migi$Component) {
         self.addOrAltMedia();
       });
       migi.eventBus.on('chooseMusic', function (item) {
-        self.currentTime = 0;
+        self.av.element.currentTime = self.currentTime = 0;
         self.setItem(item);
         self.addOrAltMedia();
       });
@@ -3638,7 +3664,7 @@ var MusicAlbum = function (_migi$Component) {
           break;
       }
       self.volume = self.volume;
-      self.currentTime = 0;
+      self.av.element.currentTime = self.currentTime = 0;
       if (isPlaying) {
         self.play();
       }
@@ -3711,6 +3737,36 @@ var MusicAlbum = function (_migi$Component) {
       this.play();
     }
   }, {
+    key: 'touchStart',
+    value: function touchStart(e) {
+      e.preventDefault();
+      if (this.canControl && e.touches.length === 1) {
+        isStart = true;
+        offsetX = $(this.ref.progress.element).offset().left;
+        this.pause();
+      }
+    }
+  }, {
+    key: 'touchMove',
+    value: function touchMove(e) {
+      if (isStart && e.touches.length === 1) {
+        e.preventDefault();
+        var x = e.touches[0].pageX;
+        var diff = x - offsetX;
+        var width = $(this.ref.progress.element).width();
+        diff = Math.max(0, diff);
+        diff = Math.min(width, diff);
+        var percent = diff / width;
+        this.setBarPercent(percent);
+        this.video.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
+      }
+    }
+  }, {
+    key: 'touchEnd',
+    value: function touchEnd(e) {
+      isStart = false;
+    }
+  }, {
     key: 'clickProgress',
     value: function clickProgress(e) {
       if (this.canControl && e.target.className !== 'p') {
@@ -3719,7 +3775,7 @@ var MusicAlbum = function (_migi$Component) {
         var x = e.pageX - left;
         var percent = x / $progress.width();
         var currentTime = Math.floor(this.duration * percent);
-        this.currentTime = currentTime;
+        this.av.element.currentTime = this.currentTime = currentTime;
       }
     }
   }, {
@@ -4002,9 +4058,6 @@ var MusicAlbum = function (_migi$Component) {
     },
     set: function set(v) {
       this._currentTime = v;
-      if (this.av && v !== this.av.element.currentTime) {
-        this.av.element.currentTime = v;
-      }
       ;this.__array("currentTime", v);this.__data("currentTime");
     }
   }]);
