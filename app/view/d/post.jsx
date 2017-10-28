@@ -4,7 +4,7 @@
 
 'use strict';
 
-import Activity from '../../assets/d/activity/Activity.jsx';
+import Post from '../../assets/d/post/Post.jsx';
 
 export default function(data) {
   let isLogin = data.isLogin;
@@ -12,7 +12,7 @@ export default function(data) {
   let postData = data.postData;
   let commentData = data.commentData;
 
-  let activity = migi.preRender(<Activity
+  let post = migi.preRender(<Post
     isLogin={ isLogin }
     id={ id }
     postData={ postData }
@@ -25,10 +25,10 @@ export default function(data) {
     title: postData.Title,
   })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dactivity.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dpost.css')}"/>
 </head>
 <body>
-<div id="page">${ activity }</div>
+<div id="page">${post}</div>
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
@@ -37,7 +37,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dactivity.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dpost.js')}"></script>
 </body>
 </html>`;
 };

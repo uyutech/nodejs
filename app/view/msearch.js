@@ -90,7 +90,7 @@ var _TopNav = __webpack_require__(!(function webpackMissingModule() { var e = ne
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _BotNav = __webpack_require__(8);
+var _BotNav = __webpack_require__(9);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
@@ -308,7 +308,7 @@ migi.name(Search, "Search");exports.default = Search;
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

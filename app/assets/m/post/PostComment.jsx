@@ -4,11 +4,11 @@
 
 'use strict';
 
-import net from '../common/net';
-import util from '../common/util';
-import Comment from '../component/comment/Comment.jsx';
-import Page from '../component/page/Page.jsx';
-import SubCmt from '../component/subcmt/SubCmt.jsx';
+import net from '../../d/common/net';
+import util from '../../d/common/util';
+import Comment from '../../d/component/comment/Comment.jsx';
+import Page from '../../d/component/page/Page.jsx';
+import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 
 let skip = 0;
 let take = 10;
@@ -18,7 +18,7 @@ let currentCount = 0;
 let ajax;
 let loadEnd;
 
-class ActivityComment extends migi.Component {
+class PostComment extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
@@ -44,10 +44,10 @@ class ActivityComment extends migi.Component {
         subCmt.isCommentSending = true;
         let rootID = self.rootID;
         let parentID = self.parentID;
-        net.postJSON('/api/activity/addComment', {
+        net.postJSON('/api/post/addComment', {
           parentID,
           rootID,
-          activityID: self.props.id,
+          postID: self.props.id,
           content,
         }, function(res) {
           if(res.success) {
@@ -88,7 +88,7 @@ class ActivityComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = net.postJSON('/api/activity/commentList', { activityID: self.props.id , skip, take, sortType, myComment, currentCount }, function(res) {
+    ajax = net.postJSON('/api/post/commentList', { postID: self.props.id , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         // currentCount = data.Size;
@@ -125,7 +125,7 @@ class ActivityComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = net.postJSON('/api/activity/commentList', { activityID: self.props.id , skip, take, sortType, myComment, currentCount }, function(res) {
+    ajax = net.postJSON('/api/post/commentList', { postID: self.props.id , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         skip += take;
@@ -205,9 +205,9 @@ class ActivityComment extends migi.Component {
       </div>
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <Comment ref="comment"
-               zanUrl="/api/activity/likeComment"
-               subUrl="/api/activity/subCommentList"
-               delUrl="/api/activity/delComment"
+               zanUrl="/api/post/likeComment"
+               subUrl="/api/post/subCommentList"
+               delUrl="/api/post/delComment"
                data={ this.props.commentData.data }/>
       <SubCmt ref="subCmt"
               placeholder="夸夸这个活动吧"/>
@@ -215,4 +215,4 @@ class ActivityComment extends migi.Component {
   }
 }
 
-export default ActivityComment;
+export default PostComment;

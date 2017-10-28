@@ -6,9 +6,9 @@
 
 import './index.less';
 
-import Activity from './Activity.jsx';
+import Post from './Post.jsx';
 
-let activity = migi.preExist(<Activity
+let post = migi.preExist(<Post
   postData={ $CONFIG.postData }
   id={ $CONFIG.id }
   commentData={ $CONFIG.commentData }

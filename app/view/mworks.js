@@ -1017,7 +1017,8 @@ var SubCmt = function (_migi$Component) {
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
-/* 6 */
+/* 6 */,
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1053,7 +1054,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1082,13 +1083,13 @@ NAME[TYPE.photoAlbum] = '相册';
 
 
 /***/ }),
-/* 8 */,
 /* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
 /* 13 */,
-/* 14 */
+/* 14 */,
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1152,7 +1153,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1265,7 +1266,7 @@ var Author = function (_migi$Component) {
 migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1320,7 +1321,7 @@ var Timeline = function (_migi$Component) {
 migi.name(Timeline, "Timeline");exports.default = Timeline;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1368,7 +1369,7 @@ var Text = function (_migi$Component) {
 migi.name(Text, "Text");exports.default = Text;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1416,7 +1417,7 @@ var Lyric = function (_migi$Component) {
 migi.name(Lyric, "Lyric");exports.default = Lyric;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1470,7 +1471,7 @@ var InspComment = function (_migi$Component) {
 migi.name(InspComment, "InspComment");exports.default = InspComment;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1518,7 +1519,7 @@ var Poster = function (_migi$Component) {
 migi.name(Poster, "Poster");exports.default = Poster;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1645,7 +1646,6 @@ var PlayList = function (_migi$Component) {
 migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
-/* 22 */,
 /* 23 */,
 /* 24 */,
 /* 25 */,
@@ -1709,7 +1709,7 @@ var _Media = __webpack_require__(33);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _itemTemplate = __webpack_require__(14);
+var _itemTemplate = __webpack_require__(15);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
@@ -1717,27 +1717,27 @@ var _PhotoAlbum = __webpack_require__(36);
 
 var _PhotoAlbum2 = _interopRequireDefault(_PhotoAlbum);
 
-var _Author = __webpack_require__(15);
+var _Author = __webpack_require__(16);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Timeline = __webpack_require__(16);
+var _Timeline = __webpack_require__(17);
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 
-var _Text = __webpack_require__(17);
+var _Text = __webpack_require__(18);
 
 var _Text2 = _interopRequireDefault(_Text);
 
-var _Lyric = __webpack_require__(18);
+var _Lyric = __webpack_require__(19);
 
 var _Lyric2 = _interopRequireDefault(_Lyric);
 
-var _InspComment = __webpack_require__(19);
+var _InspComment = __webpack_require__(20);
 
 var _InspComment2 = _interopRequireDefault(_InspComment);
 
-var _Poster = __webpack_require__(20);
+var _Poster = __webpack_require__(21);
 
 var _Poster2 = _interopRequireDefault(_Poster);
 
@@ -1749,11 +1749,11 @@ var _SubCmt = __webpack_require__(5);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
-var _WorksTypeEnum = __webpack_require__(7);
+var _WorksTypeEnum = __webpack_require__(8);
 
 var _WorksTypeEnum2 = _interopRequireDefault(_WorksTypeEnum);
 
-var _LyricsParser = __webpack_require__(6);
+var _LyricsParser = __webpack_require__(7);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -1761,7 +1761,7 @@ var _MusicAlbum = __webpack_require__(38);
 
 var _MusicAlbum2 = _interopRequireDefault(_MusicAlbum);
 
-var _PlayList = __webpack_require__(21);
+var _PlayList = __webpack_require__(22);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -2234,7 +2234,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _LyricsParser = __webpack_require__(6);
+var _LyricsParser = __webpack_require__(7);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 

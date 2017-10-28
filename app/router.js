@@ -23,7 +23,7 @@ module.exports = app => {
   app.get('/d/login', 'd.login.index');
   // app.get('/d/upload', 'd.upload.index');
   // app.get('/d/guide.index', 'd.guide.index');
-  app.get('/d/activity/:id', 'd.activity.index');
+  app.get('/d/post/:id', 'd.post.index');
 
   app.get('/m', 'm.index.index');
   app.get('/m/find', 'm.find.index');
@@ -32,7 +32,7 @@ module.exports = app => {
   // app.get('/m/search/:kw', 'm.search.index');
   app.get('/m/my', app.middlewares.needLogin(), 'm.my.index');
   app.get('/m/login', 'm.login.index');
-  app.get('/m/activity/:id', 'm.activity.index');
+  app.get('/m/post/:id', 'm.post.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 
@@ -81,11 +81,11 @@ module.exports = app => {
   app.post('/api/author/singleComment', 'api.author.singleComment');
   app.post('/api/author/searchWorks', 'api.author.searchWorks');
 
-  app.post('/api/activity/commentList', 'api.activity.commentList');
-  app.post('/api/activity/addComment', app.middlewares.needLoginJson(), 'api.activity.addComment');
-  app.post('/api/activity/likeComment', app.middlewares.needLoginJson(), 'api.activity.likeComment');
-  app.post('/api/activity/subCommentList', 'api.activity.subCommentList');
-  app.post('/api/activity/delComment', app.middlewares.needLoginJson(), 'api.activity.delComment');
+  app.post('/api/post/commentList', 'api.post.commentList');
+  app.post('/api/post/addComment', app.middlewares.needLoginJson(), 'api.post.addComment');
+  app.post('/api/post/likeComment', app.middlewares.needLoginJson(), 'api.post.likeComment');
+  app.post('/api/post/subCommentList', 'api.post.subCommentList');
+  app.post('/api/post/delComment', app.middlewares.needLoginJson(), 'api.post.delComment');
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');

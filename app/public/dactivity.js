@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 198);
+/******/ 	return __webpack_require__(__webpack_require__.s = 200);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,7 +264,7 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 18:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -576,7 +576,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 19:
+/***/ 18:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -751,32 +751,7 @@ migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
 
-/***/ 198:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(199);
-
-var _Activity = __webpack_require__(200);
-
-var _Activity2 = _interopRequireDefault(_Activity);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var activity = migi.preExist(migi.createCp(_Activity2.default, [["postData", $CONFIG.postData], ["id", $CONFIG.id], ["commentData", $CONFIG.commentData], ["isLogin", $CONFIG.isLogin]]));
-
-/***/ }),
-
-/***/ 199:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 20:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -940,13 +915,38 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 "use strict";
 
 
+__webpack_require__(201);
+
+var _Activity = __webpack_require__(202);
+
+var _Activity2 = _interopRequireDefault(_Activity);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var activity = migi.preExist(migi.createCp(_Activity2.default, [["postData", $CONFIG.postData], ["id", $CONFIG.id], ["commentData", $CONFIG.commentData], ["isLogin", $CONFIG.isLogin]]));
+
+/***/ }),
+
+/***/ 201:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 202:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ActivityComment = __webpack_require__(201);
+var _ActivityComment = __webpack_require__(203);
 
 var _ActivityComment2 = _interopRequireDefault(_ActivityComment);
 
@@ -987,7 +987,7 @@ migi.name(Activity, "Activity");exports.default = Activity;
 
 /***/ }),
 
-/***/ 201:
+/***/ 203:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1007,15 +1007,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(18);
+var _Comment = __webpack_require__(17);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(19);
+var _Page = __webpack_require__(18);
 
 var _Page2 = _interopRequireDefault(_Page);
 
-var _SubCmt = __webpack_require__(20);
+var _SubCmt = __webpack_require__(19);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 

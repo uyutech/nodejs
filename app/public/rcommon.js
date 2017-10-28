@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 202);
+/******/ 	return __webpack_require__(__webpack_require__.s = 204);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1018,25 +1018,25 @@ exports.default = Event;
 
 /***/ }),
 
-/***/ 202:
+/***/ 204:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(31);
+__webpack_require__(35);
 
-__webpack_require__(32);
+__webpack_require__(36);
 
-var _jquery = __webpack_require__(203);
+var _jquery = __webpack_require__(205);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _util = __webpack_require__(205);
+var _util = __webpack_require__(207);
 
 var _util2 = _interopRequireDefault(_util);
 
-__webpack_require__(207);
+__webpack_require__(209);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1172,7 +1172,7 @@ window.util = _util2.default;
 
 /***/ }),
 
-/***/ 203:
+/***/ 205:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3451,7 +3451,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return 1 === arguments.length ? this.off(a, "**") : this.off(b, a || "**", c);
     } }), r.holdReady = function (a) {
     a ? r.readyWait++ : r.ready(!0);
-  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(204) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(206) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return r;
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));var Vb = a.jQuery,
@@ -3459,11 +3459,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return a.$ === r && (a.$ = Wb), b && a.jQuery === r && (a.jQuery = Vb), r;
   }, b || (a.jQuery = a.$ = r), r;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(62)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63)(module)))
 
 /***/ }),
 
-/***/ 204:
+/***/ 206:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -3473,7 +3473,7 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 
-/***/ 205:
+/***/ 207:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3483,7 +3483,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(206);
+var _sort = __webpack_require__(208);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3554,7 +3554,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 206:
+/***/ 208:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3621,7 +3621,7 @@ function swap(arr, a, b) {
 
 /***/ }),
 
-/***/ 207:
+/***/ 209:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -3673,11 +3673,11 @@ var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _VirtualDom = __webpack_require__(7);
+var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _Obj = __webpack_require__(8);
+var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -5443,7 +5443,7 @@ exports.default = CacheComponent;
 
 /***/ }),
 
-/***/ 31:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5765,17 +5765,17 @@ defineProperties(Number, {
 
 /***/ }),
 
-/***/ 32:
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(33)['default'];
+module.exports = __webpack_require__(37)['default'];
 
 /***/ }),
 
-/***/ 33:
+/***/ 37:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5809,11 +5809,11 @@ var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _VirtualDom = __webpack_require__(7);
+var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _NonVisualComponent = __webpack_require__(40);
+var _NonVisualComponent = __webpack_require__(44);
 
 var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
 
@@ -5821,7 +5821,7 @@ var _CacheComponent = __webpack_require__(30);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
-var _Obj = __webpack_require__(8);
+var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -5925,7 +5925,7 @@ exports.default = migi;
 
 /***/ }),
 
-/***/ 34:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5935,7 +5935,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _VirtualDom = __webpack_require__(7);
+var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -6387,7 +6387,7 @@ exports.default = match;
 
 /***/ }),
 
-/***/ 35:
+/***/ 39:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7173,432 +7173,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ 36:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _util = __webpack_require__(3);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var NUM = 0;
-var STR = 1;
-var BOOL = 2;
-
-var RENDER_EXIST = 1;
-var RENDER_DOM = 2;
-
-var SPECIALS = {
-  button: {
-    disabled: RENDER_EXIST
-  },
-  input: {
-    autofocus: RENDER_EXIST,
-    checked: RENDER_EXIST,
-    defaultChecked: RENDER_DOM,
-    defaultchecked: RENDER_DOM,
-    defaultValue: RENDER_DOM,
-    defaultvalue: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    multiple: RENDER_EXIST,
-    readOnly: RENDER_EXIST,
-    readonly: RENDER_EXIST,
-    required: RENDER_EXIST
-  },
-  link: {
-    disabled: RENDER_EXIST
-  },
-  option: {
-    defaultSelected: RENDER_DOM,
-    defaultselected: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    selected: RENDER_EXIST,
-    text: RENDER_DOM
-  },
-  select: {
-    autofocus: RENDER_EXIST,
-    disabled: RENDER_EXIST,
-    multiple: RENDER_EXIST,
-    selectedIndex: RENDER_DOM,
-    selectedindex: RENDER_DOM
-  },
-  textarea: {
-    autofocus: RENDER_EXIST,
-    defaultValue: RENDER_DOM,
-    defaultvalue: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    readOnly: RENDER_EXIST,
-    readonly: RENDER_EXIST
-  }
-};
-
-var SETS = {
-  button: {
-    disabled: BOOL
-  },
-  input: {
-    autofocus: BOOL,
-    checked: BOOL,
-    defaultChecked: BOOL,
-    defaultchecked: BOOL,
-    defaultValue: STR,
-    defaultvalue: STR,
-    disabled: BOOL,
-    readOnly: BOOL,
-    readonly: BOOL,
-    required: BOOL,
-    value: STR
-  },
-  link: {
-    checked: BOOL
-  },
-  option: {
-    defaultSelected: BOOL,
-    defaultselected: BOOL,
-    disabled: BOOL,
-    selected: BOOL,
-    text: STR
-  },
-  select: {
-    autofocus: BOOL,
-    disabled: BOOL,
-    required: BOOL,
-    selectedIndex: NUM,
-    selectedindex: NUM,
-    value: STR
-  },
-  textarea: {
-    autofocus: BOOL,
-    defaultValue: STR,
-    defaultvalue: STR,
-    disabled: BOOL,
-    readOnly: BOOL,
-    readonly: BOOL,
-    required: BOOL,
-    value: STR
-  }
-};
-
-var lowerCase = {
-  defaultchecked: 'defaultChecked',
-  defaultselected: 'defaultSelected',
-  defaultvalue: 'defautlValue',
-  readonly: 'readOnly',
-  selectindex: 'selectIndex'
-};
-
-exports.default = {
-  RENDER_EXIST: RENDER_EXIST,
-  RENDER_DOM: RENDER_DOM,
-  special: function special(name, prop) {
-    if (SPECIALS.hasOwnProperty(name)) {
-      var o = SPECIALS[name];
-      if (o.hasOwnProperty(prop)) {
-        return o[prop];
-      }
-    }
-  },
-  update: function update(name, element, k, v, jaw) {
-    //特殊对待的prop，用js赋值
-    if (SETS.hasOwnProperty(name)) {
-      var o = SETS[name];
-      if (o.hasOwnProperty(k)) {
-        o = o[k];
-        k = lowerCase[k] || k;
-        switch (o) {
-          case NUM:
-            v = parseInt(v);
-            element[k] = v || 0;
-            break;
-          case STR:
-            v = _util2.default.stringify(v);
-            element[k] = v;
-            break;
-          case BOOL:
-            v = !!v;
-            element[k] = v;
-            break;
-        }
-        return;
-      }
-    }
-    //普通的setAttribute
-    switch (k) {
-      case 'className':
-        k = 'class';
-        break;
-      case 'htmlFor':
-        k = 'for';
-        break;
-    }
-    //jaw导入style时改写migi-前缀
-    if (jaw) {
-      switch (k) {
-        case 'id':
-        case 'class':
-          k = 'migi-' + k;
-          break;
-      }
-    }
-    if (v === null || v === void 0) {
-      element.removeAttribute(k);
-    } else if (k == 'id') {
-      element[k] = v;
-    } else if (k == 'class') {
-      element.className = v;
-    } else {
-      element.setAttribute(k, v);
-    }
-  }
-};
-
-/***/ }),
-
-/***/ 37:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (vd, name, cb, listener) {
-  if (!hasInitGlobal) {
-    hasInitGlobal = true;
-    initGlobal();
-  }
-  listener.push(['touchstart', onTouchStart]);
-
-  var elem = vd.element;
-
-  elem.addEventListener('touchstart', onTouchStart);
-
-  function onTouchStart(e) {
-    //有可能组件内父子多个使用了手势，冒泡触发了多个
-    if (touch.first) {
-      touchList.push({
-        vd: vd,
-        name: name,
-        cb: cb
-      });
-      return;
-    }
-
-    firstTouch = e.touches[0];
-    if (e.touches && e.touches.length === 1 && touch.x2) {
-      // Clear out touch movement data if we have it sticking around
-      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
-      touch.x2 = undefined;
-      touch.y2 = undefined;
-    }
-
-    touch = {
-      vd: vd,
-      name: name,
-      cb: cb,
-      first: true,
-      x1: firstTouch.pageX,
-      y1: firstTouch.pageY
-    };
-    lastTouch = touch;
-
-    now = Date.now();
-    delta = now - lastTime;
-    lastTime = now;
-    if (delta > 0 && delta < 250) {
-      touch.isDoubleTap = true;
-    }
-  }
-};
-
-/**
- * Thanks to zepto-touch.js
- * https://github.com/madrobby/zepto/blob/master/src/touch.js
- */
-
-var touchList = [];
-var touch = {};
-var lastTouch;
-var tapTimeout;
-var swipeTimeout;
-var longTapDelay = 750;
-var lastTime = 0;
-var now;
-var delta;
-var deltaX = 0;
-var deltaY = 0;
-var firstTouch;
-
-function swipeDirection(x1, x2, y1, y2) {
-  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
-}
-
-function cancelAll() {
-  if (tapTimeout) {
-    clearTimeout(tapTimeout);
-  }
-  if (swipeTimeout) {
-    clearTimeout(swipeTimeout);
-  }
-  tapTimeout = swipeTimeout = null;
-  touch = {};
-  touchList = [];
-}
-
-var hasInitGlobal;
-
-function initGlobal() {
-  document.addEventListener('touchmove', onTouchMove, true);
-  document.addEventListener('touchend', onTouchEnd, true);
-  document.addEventListener('touchcancel', cancelAll, true);
-
-  window.addEventListener('scroll', cancelAll);
-  window.addEventListener('blur', cancelAll);
-}
-
-function onTouchMove(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  firstTouch = e.touches[0];
-  touch.x2 = firstTouch.pageX;
-  touch.y2 = firstTouch.pageY;
-
-  deltaX += Math.abs(touch.x1 - touch.x2);
-  deltaY += Math.abs(touch.y1 - touch.y2);
-}
-
-function onTouchEnd(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  // swipe
-  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
-    swipeTimeout = setTimeout(function () {
-      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
-      if (touch.name == 'swipe' || touch.name == type) {
-        touch.cb(e);
-      }
-      touchList.forEach(function (touch) {
-        if (touch.name == 'swipe' || touch.name == type) {
-          touch.cb(e);
-        }
-      });
-      touch = {};
-      touchList = [];
-    }, 0);
-  }
-  // don't fire tap when delta position changed by more than 30 pixels,
-  // for instance when moving to a point and back to origin
-  else if (deltaX < 30 && deltaY < 30) {
-      tapTimeout = setTimeout(function () {
-        var isLongTap = Date.now() - lastTime > longTapDelay;
-        if (isLongTap) {
-          if (touch.name == 'longtap') {
-            touch.cb(e);
-          }
-          touchList.forEach(function (touch) {
-            if (touch.name == 'longtap') {
-              touch.cb(e);
-            }
-          });
-        }
-        // trigger double tap immediately
-        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
-            if (touch.name == 'doubletap') {
-              touch.cb(e);
-            }
-            touchList.forEach(function (touch) {
-              if (touch.name == 'doubletap') {
-                touch.cb(e);
-              }
-            });
-          }
-        touch = {};
-        touchList = [];
-      }, 0);
-    } else {
-      touch = {};
-      touchList = [];
-    }
-  deltaX = deltaY = 0;
-}
-
-;
-
-/***/ }),
-
-/***/ 38:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  domactivate: 'DOMActivate',
-  domfocusin: 'DOMFocusIn',
-  msgestureend: 'MSGestureEnd',
-  mspointerdown: 'MSPointerDown',
-  mspointermove: 'MSPointerMove',
-  mspointerup: 'MSPointerUp',
-  mspointercancel: 'MSPointerCancel'
-};
-
-/***/ }),
-
-/***/ 39:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var arrayProto = Array.prototype;
-var arrayMethods = Object.create(arrayProto);
-
-['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
-  var original = arrayProto[method];
-  Object.defineProperty(arrayMethods, method, {
-    value: function value() {
-      var i = arguments.length;
-      var args = new Array(i);
-      while (i--) {
-        args[i] = arguments[i];
-      }
-      var result = original.apply(this, args);
-      if (Array.isArray(this.__cb__)) {
-        this.__cb__.forEach(function (cb) {
-          cb();
-        });
-      }
-      return result;
-    }
-  });
-});
-
-exports.default = arrayMethods;
-
-/***/ }),
-
 /***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7883,6 +7457,432 @@ exports.default = Element;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _util = __webpack_require__(3);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var NUM = 0;
+var STR = 1;
+var BOOL = 2;
+
+var RENDER_EXIST = 1;
+var RENDER_DOM = 2;
+
+var SPECIALS = {
+  button: {
+    disabled: RENDER_EXIST
+  },
+  input: {
+    autofocus: RENDER_EXIST,
+    checked: RENDER_EXIST,
+    defaultChecked: RENDER_DOM,
+    defaultchecked: RENDER_DOM,
+    defaultValue: RENDER_DOM,
+    defaultvalue: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    multiple: RENDER_EXIST,
+    readOnly: RENDER_EXIST,
+    readonly: RENDER_EXIST,
+    required: RENDER_EXIST
+  },
+  link: {
+    disabled: RENDER_EXIST
+  },
+  option: {
+    defaultSelected: RENDER_DOM,
+    defaultselected: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    selected: RENDER_EXIST,
+    text: RENDER_DOM
+  },
+  select: {
+    autofocus: RENDER_EXIST,
+    disabled: RENDER_EXIST,
+    multiple: RENDER_EXIST,
+    selectedIndex: RENDER_DOM,
+    selectedindex: RENDER_DOM
+  },
+  textarea: {
+    autofocus: RENDER_EXIST,
+    defaultValue: RENDER_DOM,
+    defaultvalue: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    readOnly: RENDER_EXIST,
+    readonly: RENDER_EXIST
+  }
+};
+
+var SETS = {
+  button: {
+    disabled: BOOL
+  },
+  input: {
+    autofocus: BOOL,
+    checked: BOOL,
+    defaultChecked: BOOL,
+    defaultchecked: BOOL,
+    defaultValue: STR,
+    defaultvalue: STR,
+    disabled: BOOL,
+    readOnly: BOOL,
+    readonly: BOOL,
+    required: BOOL,
+    value: STR
+  },
+  link: {
+    checked: BOOL
+  },
+  option: {
+    defaultSelected: BOOL,
+    defaultselected: BOOL,
+    disabled: BOOL,
+    selected: BOOL,
+    text: STR
+  },
+  select: {
+    autofocus: BOOL,
+    disabled: BOOL,
+    required: BOOL,
+    selectedIndex: NUM,
+    selectedindex: NUM,
+    value: STR
+  },
+  textarea: {
+    autofocus: BOOL,
+    defaultValue: STR,
+    defaultvalue: STR,
+    disabled: BOOL,
+    readOnly: BOOL,
+    readonly: BOOL,
+    required: BOOL,
+    value: STR
+  }
+};
+
+var lowerCase = {
+  defaultchecked: 'defaultChecked',
+  defaultselected: 'defaultSelected',
+  defaultvalue: 'defautlValue',
+  readonly: 'readOnly',
+  selectindex: 'selectIndex'
+};
+
+exports.default = {
+  RENDER_EXIST: RENDER_EXIST,
+  RENDER_DOM: RENDER_DOM,
+  special: function special(name, prop) {
+    if (SPECIALS.hasOwnProperty(name)) {
+      var o = SPECIALS[name];
+      if (o.hasOwnProperty(prop)) {
+        return o[prop];
+      }
+    }
+  },
+  update: function update(name, element, k, v, jaw) {
+    //特殊对待的prop，用js赋值
+    if (SETS.hasOwnProperty(name)) {
+      var o = SETS[name];
+      if (o.hasOwnProperty(k)) {
+        o = o[k];
+        k = lowerCase[k] || k;
+        switch (o) {
+          case NUM:
+            v = parseInt(v);
+            element[k] = v || 0;
+            break;
+          case STR:
+            v = _util2.default.stringify(v);
+            element[k] = v;
+            break;
+          case BOOL:
+            v = !!v;
+            element[k] = v;
+            break;
+        }
+        return;
+      }
+    }
+    //普通的setAttribute
+    switch (k) {
+      case 'className':
+        k = 'class';
+        break;
+      case 'htmlFor':
+        k = 'for';
+        break;
+    }
+    //jaw导入style时改写migi-前缀
+    if (jaw) {
+      switch (k) {
+        case 'id':
+        case 'class':
+          k = 'migi-' + k;
+          break;
+      }
+    }
+    if (v === null || v === void 0) {
+      element.removeAttribute(k);
+    } else if (k == 'id') {
+      element[k] = v;
+    } else if (k == 'class') {
+      element.className = v;
+    } else {
+      element.setAttribute(k, v);
+    }
+  }
+};
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (vd, name, cb, listener) {
+  if (!hasInitGlobal) {
+    hasInitGlobal = true;
+    initGlobal();
+  }
+  listener.push(['touchstart', onTouchStart]);
+
+  var elem = vd.element;
+
+  elem.addEventListener('touchstart', onTouchStart);
+
+  function onTouchStart(e) {
+    //有可能组件内父子多个使用了手势，冒泡触发了多个
+    if (touch.first) {
+      touchList.push({
+        vd: vd,
+        name: name,
+        cb: cb
+      });
+      return;
+    }
+
+    firstTouch = e.touches[0];
+    if (e.touches && e.touches.length === 1 && touch.x2) {
+      // Clear out touch movement data if we have it sticking around
+      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
+      touch.x2 = undefined;
+      touch.y2 = undefined;
+    }
+
+    touch = {
+      vd: vd,
+      name: name,
+      cb: cb,
+      first: true,
+      x1: firstTouch.pageX,
+      y1: firstTouch.pageY
+    };
+    lastTouch = touch;
+
+    now = Date.now();
+    delta = now - lastTime;
+    lastTime = now;
+    if (delta > 0 && delta < 250) {
+      touch.isDoubleTap = true;
+    }
+  }
+};
+
+/**
+ * Thanks to zepto-touch.js
+ * https://github.com/madrobby/zepto/blob/master/src/touch.js
+ */
+
+var touchList = [];
+var touch = {};
+var lastTouch;
+var tapTimeout;
+var swipeTimeout;
+var longTapDelay = 750;
+var lastTime = 0;
+var now;
+var delta;
+var deltaX = 0;
+var deltaY = 0;
+var firstTouch;
+
+function swipeDirection(x1, x2, y1, y2) {
+  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
+}
+
+function cancelAll() {
+  if (tapTimeout) {
+    clearTimeout(tapTimeout);
+  }
+  if (swipeTimeout) {
+    clearTimeout(swipeTimeout);
+  }
+  tapTimeout = swipeTimeout = null;
+  touch = {};
+  touchList = [];
+}
+
+var hasInitGlobal;
+
+function initGlobal() {
+  document.addEventListener('touchmove', onTouchMove, true);
+  document.addEventListener('touchend', onTouchEnd, true);
+  document.addEventListener('touchcancel', cancelAll, true);
+
+  window.addEventListener('scroll', cancelAll);
+  window.addEventListener('blur', cancelAll);
+}
+
+function onTouchMove(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  firstTouch = e.touches[0];
+  touch.x2 = firstTouch.pageX;
+  touch.y2 = firstTouch.pageY;
+
+  deltaX += Math.abs(touch.x1 - touch.x2);
+  deltaY += Math.abs(touch.y1 - touch.y2);
+}
+
+function onTouchEnd(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  // swipe
+  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
+    swipeTimeout = setTimeout(function () {
+      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
+      if (touch.name == 'swipe' || touch.name == type) {
+        touch.cb(e);
+      }
+      touchList.forEach(function (touch) {
+        if (touch.name == 'swipe' || touch.name == type) {
+          touch.cb(e);
+        }
+      });
+      touch = {};
+      touchList = [];
+    }, 0);
+  }
+  // don't fire tap when delta position changed by more than 30 pixels,
+  // for instance when moving to a point and back to origin
+  else if (deltaX < 30 && deltaY < 30) {
+      tapTimeout = setTimeout(function () {
+        var isLongTap = Date.now() - lastTime > longTapDelay;
+        if (isLongTap) {
+          if (touch.name == 'longtap') {
+            touch.cb(e);
+          }
+          touchList.forEach(function (touch) {
+            if (touch.name == 'longtap') {
+              touch.cb(e);
+            }
+          });
+        }
+        // trigger double tap immediately
+        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
+            if (touch.name == 'doubletap') {
+              touch.cb(e);
+            }
+            touchList.forEach(function (touch) {
+              if (touch.name == 'doubletap') {
+                touch.cb(e);
+              }
+            });
+          }
+        touch = {};
+        touchList = [];
+      }, 0);
+    } else {
+      touch = {};
+      touchList = [];
+    }
+  deltaX = deltaY = 0;
+}
+
+;
+
+/***/ }),
+
+/***/ 42:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  domactivate: 'DOMActivate',
+  domfocusin: 'DOMFocusIn',
+  msgestureend: 'MSGestureEnd',
+  mspointerdown: 'MSPointerDown',
+  mspointermove: 'MSPointerMove',
+  mspointerup: 'MSPointerUp',
+  mspointercancel: 'MSPointerCancel'
+};
+
+/***/ }),
+
+/***/ 43:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var arrayProto = Array.prototype;
+var arrayMethods = Object.create(arrayProto);
+
+['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function (method) {
+  var original = arrayProto[method];
+  Object.defineProperty(arrayMethods, method, {
+    value: function value() {
+      var i = arguments.length;
+      var args = new Array(i);
+      while (i--) {
+        args[i] = arguments[i];
+      }
+      var result = original.apply(this, args);
+      if (Array.isArray(this.__cb__)) {
+        this.__cb__.forEach(function (cb) {
+          cb();
+        });
+      }
+      return result;
+    }
+  });
+});
+
+exports.default = arrayMethods;
+
+/***/ }),
+
+/***/ 44:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
@@ -8014,7 +8014,7 @@ var _Element2 = __webpack_require__(4);
 
 var _Element3 = _interopRequireDefault(_Element2);
 
-var _VirtualDom = __webpack_require__(7);
+var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -8022,7 +8022,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Obj = __webpack_require__(8);
+var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -8042,7 +8042,7 @@ var _Fastclick = __webpack_require__(28);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
-var _array = __webpack_require__(39);
+var _array = __webpack_require__(43);
 
 var _array2 = _interopRequireDefault(_array);
 
@@ -8514,7 +8514,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 62:
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8545,7 +8545,7 @@ module.exports = function (module) {
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8599,7 +8599,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Obj = __webpack_require__(8);
+var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -8611,11 +8611,11 @@ var _range = __webpack_require__(22);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _match = __webpack_require__(34);
+var _match = __webpack_require__(38);
 
 var _match2 = _interopRequireDefault(_match);
 
-var _domDiff = __webpack_require__(35);
+var _domDiff = __webpack_require__(39);
 
 var _domDiff2 = _interopRequireDefault(_domDiff);
 
@@ -8627,7 +8627,7 @@ var _fixEvent = __webpack_require__(25);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _attr = __webpack_require__(36);
+var _attr = __webpack_require__(40);
 
 var _attr2 = _interopRequireDefault(_attr);
 
@@ -8635,7 +8635,7 @@ var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _touch = __webpack_require__(37);
+var _touch = __webpack_require__(41);
 
 var _touch2 = _interopRequireDefault(_touch);
 
@@ -8647,7 +8647,7 @@ var _matchUtil = __webpack_require__(16);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
-var _eventCaseName = __webpack_require__(38);
+var _eventCaseName = __webpack_require__(42);
 
 var _eventCaseName2 = _interopRequireDefault(_eventCaseName);
 
@@ -9846,7 +9846,7 @@ exports.default = VirtualDom;
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
