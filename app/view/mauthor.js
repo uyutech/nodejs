@@ -1036,7 +1036,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../author/AuthorType.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+var _AuthorType = __webpack_require__(23);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -1268,7 +1268,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../author/authorTemplate\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+var _authorTemplate = __webpack_require__(2);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -1493,7 +1493,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../common/util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -1557,7 +1557,65 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 /* 20 */,
 /* 21 */,
 /* 22 */,
-/* 23 */,
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var TYPE = {
+  111: '演唱',
+  112: '和声',
+  113: '伴唱',
+  114: '戏腔',
+  121: '作曲',
+  122: '编曲',
+  123: '和声编写',
+  131: '混音',
+  132: '母带',
+  133: '录音',
+  134: '修音',
+  135: '剧情混音',
+  141: '乐器实录',
+  151: '配音',
+  211: '视频',
+  212: '合成',
+  213: '压制',
+  311: '立绘',
+  312: 'CG',
+  313: '场景',
+  314: 'logo设计',
+  315: '线稿',
+  316: '上色',
+  317: '手绘',
+  321: '3D建模',
+  322: '打光',
+  323: '动画',
+  324: '骨骼绑定',
+  331: '设计',
+  332: '海报',
+  333: 'logo',
+  334: '分镜',
+  341: '漫画',
+  411: '作词',
+  421: '文案',
+  422: '剧本',
+  423: '小说'
+};
+
+var CODE = {
+  '演唱': 111
+};
+
+exports.default = {
+  TYPE: TYPE,
+  CODE: CODE
+};
+
+/***/ }),
 /* 24 */,
 /* 25 */,
 /* 26 */,
@@ -2253,11 +2311,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../common/net\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../common/util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 

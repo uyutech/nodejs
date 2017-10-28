@@ -2,8 +2,8 @@
  * Created by army on 2017/6/24.
  */
 
-import net from '../common/net';
-import util from '../common/util';
+import net from '../../d/common/net';
+import util from '../../d/common/util';
 import DoubleCheck from '../component/doublecheck/DoubleCheck.jsx';
 import PlayList from '../component/playlist/PlayList.jsx';
 

@@ -2,7 +2,7 @@
  * Created by army on 2017/7/1.
  */
 
-import util from '../../common/util';
+import util from '../../../d/common/util';
 
 class PlayList extends migi.Component {
   constructor(...data) {

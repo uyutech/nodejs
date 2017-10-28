@@ -2,7 +2,7 @@
  * Created by army8735 on 2017/9/19.
  */
 
-import authorTemplate from '../author/authorTemplate';
+import authorTemplate from '../../../d/component/author/authorTemplate';
 
 let choosedL2 = {};
 let all;

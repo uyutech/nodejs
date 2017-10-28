@@ -3,7 +3,7 @@
  */
 
 import util from '../../../d/common/util';
-import AuthorType from '../author/AuthorType.jsx';
+import AuthorType from '../../../d/component/author/AuthorType.jsx';
 
 class HotWork extends migi.Component {
   constructor(...data) {
