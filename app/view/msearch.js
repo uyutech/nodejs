@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 52);
+/******/ 	return __webpack_require__(__webpack_require__.s = 50);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -112,40 +112,7 @@ migi.name(BotNav, "BotNav");exports.default = BotNav;
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army on 2017/5/20.
- */
-
-let util = {
-  isIPhone: function(){
-    return navigator.appVersion.match(/iphone/gi);
-  },
-  goto: function(url) {
-    location.href = url;
-  },
-  img150_150: function(url) {
-    return url ? url + '-150_150' : url;
-  },
-  img100_100: function(url) {
-    return url ? url + '-100_100' : url;
-  },
-  img90_90: function(url) {
-    return url ? url + '-90_90' : url;
-  },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (util);
-
-
-/***/ }),
-
-/***/ 52:
+/***/ 50:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -174,7 +141,7 @@ var _BotNav = __webpack_require__(13);
 
 var _BotNav2 = _interopRequireDefault(_BotNav);
 
-var _Search = __webpack_require__(53);
+var _Search = __webpack_require__(51);
 
 var _Search2 = _interopRequireDefault(_Search);
 
@@ -184,7 +151,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 53:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -200,7 +167,7 @@ var _net = __webpack_require__(7);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _util = __webpack_require__(2);
+var _util = __webpack_require__(6);
 
 var _util2 = _interopRequireDefault(_util);
 
@@ -385,6 +352,39 @@ var Search = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Search, "Search");exports.default = Search;
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army on 2017/5/20.
+ */
+
+let util = {
+  isIPhone: function(){
+    return navigator.appVersion.match(/iphone/gi);
+  },
+  goto: function(url) {
+    location.href = url;
+  },
+  img150_150: function(url) {
+    return url ? url + '-150_150' : url;
+  },
+  img100_100: function(url) {
+    return url ? url + '-100_100' : url;
+  },
+  img90_90: function(url) {
+    return url ? url + '-90_90' : url;
+  },
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (util);
+
 
 /***/ }),
 

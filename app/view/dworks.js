@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 60);
+/******/ 	return __webpack_require__(__webpack_require__.s = 63);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -249,8 +249,7 @@ let net = {
 
 
 /***/ }),
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -366,7 +365,7 @@ Object.keys(code2Data).forEach(function(k) {
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -677,7 +676,7 @@ var Comment = function (_migi$Component) {
 migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -851,7 +850,7 @@ var Page = function (_migi$Component) {
 migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1008,6 +1007,7 @@ var SubCmt = function (_migi$Component) {
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
+/* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */
@@ -1062,7 +1062,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(3);
+var _authorTemplate = __webpack_require__(2);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -1817,7 +1817,10 @@ migi.name(AddLabelPanel, "AddLabelPanel");exports.default = AddLabelPanel;
 /* 57 */,
 /* 58 */,
 /* 59 */,
-/* 60 */
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1839,7 +1842,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: worksDetail.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.labelList = ' + JSON.stringify(labelList) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dworks.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Works = __webpack_require__(61);
+var _Works = __webpack_require__(64);
 
 var _Works2 = _interopRequireDefault(_Works);
 
@@ -1848,7 +1851,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1864,7 +1867,7 @@ var _Title = __webpack_require__(30);
 
 var _Title2 = _interopRequireDefault(_Title);
 
-var _Media = __webpack_require__(62);
+var _Media = __webpack_require__(65);
 
 var _Media2 = _interopRequireDefault(_Media);
 
@@ -1896,11 +1899,11 @@ var _InspComment = __webpack_require__(12);
 
 var _InspComment2 = _interopRequireDefault(_InspComment);
 
-var _WorkComment = __webpack_require__(66);
+var _WorkComment = __webpack_require__(69);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
-var _Album = __webpack_require__(67);
+var _Album = __webpack_require__(70);
 
 var _Album2 = _interopRequireDefault(_Album);
 
@@ -1908,7 +1911,7 @@ var _AddLabelPanel = __webpack_require__(31);
 
 var _AddLabelPanel2 = _interopRequireDefault(_AddLabelPanel);
 
-var _ImageView = __webpack_require__(68);
+var _ImageView = __webpack_require__(71);
 
 var _ImageView2 = _interopRequireDefault(_ImageView);
 
@@ -2110,7 +2113,7 @@ var Works = function (_migi$Component) {
 migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2122,15 +2125,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Audio = __webpack_require__(63);
+var _Audio = __webpack_require__(66);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(64);
+var _Video = __webpack_require__(67);
 
 var _Video2 = _interopRequireDefault(_Video);
 
-var _Link = __webpack_require__(65);
+var _Link = __webpack_require__(68);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -2211,7 +2214,7 @@ var Media = function (_migi$Component) {
 migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2772,7 +2775,7 @@ var Audio = function (_migi$Component) {
 migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3270,7 +3273,7 @@ var Video = function (_migi$Component) {
 migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3427,7 +3430,7 @@ var Link = function (_migi$Component) {
 migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3447,15 +3450,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(4);
+var _Comment = __webpack_require__(3);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(5);
+var _Page = __webpack_require__(4);
 
 var _Page2 = _interopRequireDefault(_Page);
 
-var _SubCmt = __webpack_require__(6);
+var _SubCmt = __webpack_require__(5);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -3727,7 +3730,7 @@ var WorkComment = function (_migi$Component) {
 migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4052,7 +4055,7 @@ var Album = function (_migi$Component) {
 migi.name(Album, "Album");exports.default = Album;
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 100);
+/******/ 	return __webpack_require__(__webpack_require__.s = 103);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -252,7 +252,7 @@ let net = {
 
 /***/ }),
 
-/***/ 100:
+/***/ 103:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -276,7 +276,7 @@ exports.default = function (data) {
   }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dactivity.css') + '"/>\n</head>\n<body>\n<div id="page">' + activity + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.id = ' + JSON.stringify(id) + ';\n  $CONFIG.postData = ' + JSON.stringify(postData) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dactivity.js') + '"></script>\n</body>\n</html>';
 };
 
-var _Activity = __webpack_require__(101);
+var _Activity = __webpack_require__(104);
 
 var _Activity2 = _interopRequireDefault(_Activity);
 
@@ -286,7 +286,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 101:
+/***/ 104:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -298,7 +298,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ActivityComment = __webpack_require__(102);
+var _ActivityComment = __webpack_require__(105);
 
 var _ActivityComment2 = _interopRequireDefault(_ActivityComment);
 
@@ -339,7 +339,7 @@ migi.name(Activity, "Activity");exports.default = Activity;
 
 /***/ }),
 
-/***/ 102:
+/***/ 105:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -359,15 +359,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(4);
+var _Comment = __webpack_require__(3);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(5);
+var _Page = __webpack_require__(4);
 
 var _Page2 = _interopRequireDefault(_Page);
 
-var _SubCmt = __webpack_require__(6);
+var _SubCmt = __webpack_require__(5);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -602,7 +602,7 @@ migi.name(ActivityComment, "ActivityComment");exports.default = ActivityComment;
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -914,7 +914,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 5:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1089,7 +1089,7 @@ migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
 
-/***/ 6:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

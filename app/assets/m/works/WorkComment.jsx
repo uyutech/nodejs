@@ -145,7 +145,7 @@ class WorkComment extends migi.Component {
     }
   }
   render() {
-    return <div class="mod mod-comment">
+    return <div class="comments">
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="0">全部<small>{ this.props.commentData.Size }</small></li>

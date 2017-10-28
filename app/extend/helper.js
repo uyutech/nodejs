@@ -87,13 +87,13 @@ module.exports = {
       <meta name="wap-font-scale" content="no"/>
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">`;
   },
-  getMTopNav: function(data) {
-    data = data || {};
+  getMTopNav: function() {
+    let session = this.ctx.session || {};
     return `<div class="top-nav">
       <a href="/" class="logo"></a>
       <a href="/my" class="user">
-        <span>${data.uid ? '' : '登录/注册'}</span>
-        <img src=${data.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>
+        <span>${session.uid ? session.uname : '登录/注册'}</span>
+        <img src=${session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>
       </a>
     </div>`;
   },

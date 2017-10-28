@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 56);
+/******/ 	return __webpack_require__(__webpack_require__.s = 59);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -248,6 +248,123 @@ let net = {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (net);
+
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+let code2Data = {
+  '901': {
+    name: '出品',
+    display: '出品',
+    css: 'producer',
+  },
+  '902': {
+    name: '策划',
+    display: '策划',
+    css: 'producer',
+  },
+  '111': {
+    name: '演唱',
+    display: '演唱',
+    css: 'singer',
+  },
+  '112': {
+    name: '和声',
+    display: '和声',
+    css: 'singer',
+  },
+  '121': {
+    name: '作曲',
+    display: '作曲',
+    css: 'musician',
+  },
+  '122': {
+    name: '编曲',
+    display: '编曲',
+    css: 'musician',
+  },
+  '131': {
+    name: '混音',
+    display: '混音',
+    css: 'mixer',
+  },
+  '134': {
+    name: '修音',
+    display: '修音',
+    css: 'mixer',
+  },
+  '141': {
+    name: '演奏',
+    display: '', //直接显示乐器名。
+    css: 'instrumental',
+  },
+  '211': {
+    name: '视频',
+    display: '视频',
+    css: 'video',
+  },
+  '311': {
+    name: '立绘',
+    display: '立绘',
+    css: 'painter',
+  },
+  '312': {
+    name: 'CG',
+    display: 'CG',
+    css: 'painter',
+  },
+  '313': {
+    name: '场景',
+    display: '场景',
+    css: 'painter',
+  },
+  '331': {
+    name: '设计',
+    display: '设计',
+    css: 'designer',
+  },
+  '332': {
+    name: '海报',
+    display: '海报',
+    css: 'designer',
+  },
+  '351': {
+    name: '书法',
+    display: '书法',
+    css: 'handwriting',
+  },
+  '411': {
+    name: '作词',
+    display: '作词',
+    css: 'writer',
+  },
+  '421': {
+    name: '文案',
+    display: '文案',
+    css: 'writer',
+  },
+};
+
+let label2Code = {};
+Object.keys(code2Data).forEach(function(k) {
+  let v = code2Data[k];
+  label2Code[v.css] = label2Code[v.css] || [];
+  label2Code[v.css].push(k);
+});
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  code2Data,
+  label2Code,
+});
 
 
 /***/ }),
@@ -575,7 +692,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(3);
+var _authorTemplate = __webpack_require__(2);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -868,124 +985,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
 
-/***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-let code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer',
-  },
-  '902': {
-    name: '策划',
-    display: '策划',
-    css: 'producer',
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer',
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer',
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician',
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician',
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer',
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer',
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental',
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video',
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter',
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter',
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter',
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer',
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer',
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting',
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer',
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer',
-  },
-};
-
-let label2Code = {};
-Object.keys(code2Data).forEach(function(k) {
-  let v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  code2Data,
-  label2Code,
-});
-
-
-/***/ }),
-
-/***/ 56:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1009,7 +1009,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.hotAlbumList = ' + JSON.stringify(hotAlbumList) + ';\n  $CONFIG.hotCollection = ' + JSON.stringify(hotCollection) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n  $CONFIG.playList2 = ' + JSON.stringify(playList2) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Find = __webpack_require__(57);
+var _Find = __webpack_require__(60);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -1019,7 +1019,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 57:
+/***/ 60:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1039,7 +1039,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(58);
+var _Banner = __webpack_require__(61);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -1055,7 +1055,7 @@ var _HotAuthor = __webpack_require__(27);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _HotAlubm = __webpack_require__(59);
+var _HotAlubm = __webpack_require__(62);
 
 var _HotAlubm2 = _interopRequireDefault(_HotAlubm);
 
@@ -1171,7 +1171,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 58:
+/***/ 61:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1279,7 +1279,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 59:
+/***/ 62:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

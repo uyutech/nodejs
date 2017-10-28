@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 77);
+/******/ 	return __webpack_require__(__webpack_require__.s = 80);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -248,6 +248,123 @@ let net = {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (net);
+
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+let code2Data = {
+  '901': {
+    name: '出品',
+    display: '出品',
+    css: 'producer',
+  },
+  '902': {
+    name: '策划',
+    display: '策划',
+    css: 'producer',
+  },
+  '111': {
+    name: '演唱',
+    display: '演唱',
+    css: 'singer',
+  },
+  '112': {
+    name: '和声',
+    display: '和声',
+    css: 'singer',
+  },
+  '121': {
+    name: '作曲',
+    display: '作曲',
+    css: 'musician',
+  },
+  '122': {
+    name: '编曲',
+    display: '编曲',
+    css: 'musician',
+  },
+  '131': {
+    name: '混音',
+    display: '混音',
+    css: 'mixer',
+  },
+  '134': {
+    name: '修音',
+    display: '修音',
+    css: 'mixer',
+  },
+  '141': {
+    name: '演奏',
+    display: '', //直接显示乐器名。
+    css: 'instrumental',
+  },
+  '211': {
+    name: '视频',
+    display: '视频',
+    css: 'video',
+  },
+  '311': {
+    name: '立绘',
+    display: '立绘',
+    css: 'painter',
+  },
+  '312': {
+    name: 'CG',
+    display: 'CG',
+    css: 'painter',
+  },
+  '313': {
+    name: '场景',
+    display: '场景',
+    css: 'painter',
+  },
+  '331': {
+    name: '设计',
+    display: '设计',
+    css: 'designer',
+  },
+  '332': {
+    name: '海报',
+    display: '海报',
+    css: 'designer',
+  },
+  '351': {
+    name: '书法',
+    display: '书法',
+    css: 'handwriting',
+  },
+  '411': {
+    name: '作词',
+    display: '作词',
+    css: 'writer',
+  },
+  '421': {
+    name: '文案',
+    display: '文案',
+    css: 'writer',
+  },
+};
+
+let label2Code = {};
+Object.keys(code2Data).forEach(function(k) {
+  let v = code2Data[k];
+  label2Code[v.css] = label2Code[v.css] || [];
+  label2Code[v.css].push(k);
+});
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  code2Data,
+  label2Code,
+});
 
 
 /***/ }),
@@ -575,7 +692,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(3);
+var _authorTemplate = __webpack_require__(2);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -869,123 +986,6 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 /***/ }),
 
 /***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-let code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer',
-  },
-  '902': {
-    name: '策划',
-    display: '策划',
-    css: 'producer',
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer',
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer',
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician',
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician',
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer',
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer',
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental',
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video',
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter',
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter',
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter',
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer',
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer',
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting',
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer',
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer',
-  },
-};
-
-let label2Code = {};
-Object.keys(code2Data).forEach(function(k) {
-  let v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  code2Data,
-  label2Code,
-});
-
-
-/***/ }),
-
-/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1297,7 +1297,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 5:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1472,7 +1472,7 @@ migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
 
-/***/ 6:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1630,7 +1630,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 77:
+/***/ 80:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1655,7 +1655,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dauthor.css') + '"/>\n</head>\n<body>\n<div id="page">' + author + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.authorID = ' + JSON.stringify(authorID) + ';\n  $CONFIG.authorDetail = ' + JSON.stringify(authorDetail) + ';\n  $CONFIG.homeDetail = ' + JSON.stringify(homeDetail) + ';\n  $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  $CONFIG.playList = ' + JSON.stringify(playList) + ';\n  $CONFIG.playList2 = ' + JSON.stringify(playList2) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dauthor.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Author = __webpack_require__(78);
+var _Author = __webpack_require__(81);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -1665,7 +1665,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 78:
+/***/ 81:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1685,23 +1685,23 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Nav = __webpack_require__(79);
+var _Nav = __webpack_require__(82);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(82);
+var _Home = __webpack_require__(85);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Work = __webpack_require__(84);
+var _Work = __webpack_require__(87);
 
 var _Work2 = _interopRequireDefault(_Work);
 
-var _AuthorComment = __webpack_require__(85);
+var _AuthorComment = __webpack_require__(88);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
-var _SubCmt = __webpack_require__(6);
+var _SubCmt = __webpack_require__(5);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -1830,7 +1830,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 79:
+/***/ 82:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1842,11 +1842,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(80);
+var _Profile = __webpack_require__(83);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(81);
+var _Link = __webpack_require__(84);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -1887,7 +1887,7 @@ migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
 
-/***/ 80:
+/***/ 83:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1907,7 +1907,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(3);
+var _authorTemplate = __webpack_require__(2);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -2103,7 +2103,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 81:
+/***/ 84:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2208,7 +2208,7 @@ migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
 
-/***/ 82:
+/***/ 85:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2232,7 +2232,7 @@ var _HotAuthor = __webpack_require__(27);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(83);
+var _Dynamic = __webpack_require__(86);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -2283,7 +2283,7 @@ migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
 
-/***/ 83:
+/***/ 86:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2357,7 +2357,7 @@ migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
 
-/***/ 84:
+/***/ 87:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2510,7 +2510,7 @@ migi.name(Work, "Work");exports.default = Work;
 
 /***/ }),
 
-/***/ 85:
+/***/ 88:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2530,11 +2530,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(4);
+var _Comment = __webpack_require__(3);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(5);
+var _Page = __webpack_require__(4);
 
 var _Page2 = _interopRequireDefault(_Page);
 

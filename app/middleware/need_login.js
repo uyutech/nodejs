@@ -8,7 +8,7 @@ module.exports = () => {
   return function* (next) {
     let ctx = this;
     if(!ctx.session.uid) {
-      return ctx.redirect('/d/login');
+      return ctx.redirect('/login');
     }
     yield next;
   };

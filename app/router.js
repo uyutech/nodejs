@@ -30,6 +30,8 @@ module.exports = app => {
   app.get('/m/works/:worksID', 'm.works.index');
   app.get('/m/author/:authorID', 'm.author.index');
   // app.get('/m/search/:kw', 'm.search.index');
+  app.get('/m/my', app.middlewares.needLogin(), 'm.my.index');
+  app.get('/m/login', 'm.login.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 

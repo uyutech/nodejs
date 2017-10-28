@@ -2,10 +2,13 @@
  * Created by army8735 on 2017/9/18.
  */
 
+import net from '../../d/common/net';
+import util from '../../d/common/util';
 import Nav from './Nav.jsx';
 import Home from './Home.jsx';
 import Work from './Work.jsx';
 import AuthorComment from './AuthorComment.jsx';
+import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 
 class Author extends migi.Component {
   constructor(...data) {
@@ -60,7 +63,17 @@ class Author extends migi.Component {
           : ''
       }
       {/*<Work ref="work" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList}/>*/}
-      <AuthorComment ref="authorComment" authorID={ this.props.authorID } commentData={ this.props.commentData }/>
+      <AuthorComment
+        ref="authorComment"
+        show={ !this.props.authorDetail.ISSettled }
+        isLogin={ !!this.props.uid }
+        authorID={ this.props.authorID }
+        commentData={ this.props.commentData }/>
+      <SubCmt ref="subCmt"
+              originTo={ this.props.authorDetail.AuthorName }
+              subText="发送"
+              tipText="-${n}"
+              placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
     </div>;
   }
 }

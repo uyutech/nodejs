@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 114);
+/******/ 	return __webpack_require__(__webpack_require__.s = 107);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -185,15 +185,15 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 114:
+/***/ 107:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(115);
+__webpack_require__(108);
 
-var _Find = __webpack_require__(116);
+var _Find = __webpack_require__(109);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -203,14 +203,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 115:
+/***/ 108:
 /***/ (function(module, exports) {
 
 throw new Error("Module build failed: ModuleBuildError: Module build failed: variable @secondColor is undefined\n @ /Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/component/hotwork/index.less (line 18, column 17)\n near lines:\n         width:0.02rem;\n         background:@secondColor;\n         content:' ';\n    at runLoaders (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_webpack@3.7.1@webpack/lib/NormalModule.js:195:19)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:364:11\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:230:18\n    at context.callback (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:111:13)\n    at less.render (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less-loader@3.0.0@less-loader/lib/loader.js:55:13)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/render.js:33:38\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parse.js:63:17\n    at ImportVisitor.finish [as _finish] (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parser/parser.js:183:28)\n    at ImportVisitor._onSequencerEmpty (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-visitor.js:35:14)\n    at ImportSequencer.tryRun (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-sequencer.js:50:14)");
 
 /***/ }),
 
-/***/ 116:
+/***/ 109:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -222,35 +222,35 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(16);
+var _util = __webpack_require__(31);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _net = __webpack_require__(32);
+var _net = __webpack_require__(44);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(117);
+var _Banner = __webpack_require__(110);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(56);
+var _HotWork = __webpack_require__(55);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotCollection = __webpack_require__(58);
+var _HotCollection = __webpack_require__(57);
 
 var _HotCollection2 = _interopRequireDefault(_HotCollection);
 
-var _HotAuthor = __webpack_require__(59);
+var _HotAuthor = __webpack_require__(58);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _DoubleCheck = __webpack_require__(60);
+var _DoubleCheck = __webpack_require__(59);
 
 var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
 
-var _PlayList = __webpack_require__(61);
+var _PlayList = __webpack_require__(60);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -385,7 +385,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 117:
+/***/ 110:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -432,7 +432,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 16:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -468,7 +468,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 32:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -537,7 +537,7 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 43:
+/***/ 45:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -652,7 +652,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 56:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -668,7 +668,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(57);
+var _AuthorType = __webpack_require__(56);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -737,7 +737,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 57:
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -797,7 +797,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 58:
+/***/ 57:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -868,7 +868,7 @@ migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
 
-/***/ 59:
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -951,7 +951,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 60:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -963,7 +963,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _authorTemplate = __webpack_require__(43);
+var _authorTemplate = __webpack_require__(45);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -1177,7 +1177,7 @@ migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
 
-/***/ 61:
+/***/ 60:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1189,7 +1189,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _util = __webpack_require__(16);
+var _util = __webpack_require__(31);
 
 var _util2 = _interopRequireDefault(_util);
 

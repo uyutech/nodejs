@@ -4,6 +4,8 @@ module.exports = {
     mworks: './app/view/m/works.jsx',
     mauthor: './app/view/m/author.jsx',
     msearch: './app/view/m/search.jsx',
+    mmy: './app/view/m/my.jsx',
+    mlogin: './app/view/m/login.jsx',
     dindex: './app/view/d/index.jsx',
     dfind: './app/view/d/find.jsx',
     dworks: './app/view/d/works.jsx',

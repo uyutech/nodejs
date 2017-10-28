@@ -58,19 +58,19 @@
   overflow: hidden;
   cursor: pointer;
 }
-.my h4 {
+.my > .c {
+  margin-top: 0.2rem;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 0.1rem;
+  overflow: hidden;
+}
+.my > .c h4 {
   padding: 0 0.2rem;
   height: 0.36rem;
   line-height: 0.36rem;
   background: #8BBDE1;
   font-size: 0.14rem;
   font-weight: 400;
-}
-.my > .c {
-  margin-top: 0.2rem;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 0.1rem;
-  overflow: hidden;
 }
 .my > .c > .follow {
   position: relative;

@@ -1,11 +1,12 @@
 /**
- * Created by army8735 on 2017/9/22.
+ * Created by army8735 on 2017/10/27.
  */
 
-import net from '../common/net';
-import Profile from './Profile.jsx';
+'use strict';
+
+import net from '../../d/common/net';
+import util from '../../d/common/util';
 import Follow from './Follow.jsx';
-import Favor from './Favor.jsx';
 
 class My extends migi.Component {
   constructor(...data) {
@@ -14,19 +15,13 @@ class My extends migi.Component {
   clickOut(e) {
     e.preventDefault();
     net.postJSON('/api/login/loginOut', function(res) {
-      if(parent && parent !== window && parent.goto) {
-        parent.goto('/login');
-      }
-      else {
-        location.href = '/login';
-      }
+      location.href = '/login';
     }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
     });
   }
   render() {
     return <div class="my">
-      <Profile userInfo={ this.props.userInfo }/>
       <div class="c">
         <Follow ref="follow" list={ this.props.follows }/>
         {/*<Favor ref="favor" list={ this.props.favors }/>*/}

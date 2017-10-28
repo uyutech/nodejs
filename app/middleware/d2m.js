@@ -12,10 +12,16 @@ module.exports = () => {
         <head>
         ${this.helper.getMHead()}
         <script>
-          var hash = location.hash;
-          hash = hash || '#/find';
-          hash = hash.replace(/^#/, '').replace(/^\\//, '');
-          location.replace('//m.' + location.host + '/' + hash);
+          var pathname = location.pathname;
+          if(pathname && pathname !== '/') {
+            location.replace('//m.' + location.host + pathname);
+          }
+          else {
+            var hash = location.hash;
+            hash = hash || '#/find';
+            hash = hash.replace(/^#/, '').replace(/^\\//, '');
+            location.replace('//m.' + location.host + '/' + hash);
+          }
         </script>
         </head>
         <body></body></html>`;

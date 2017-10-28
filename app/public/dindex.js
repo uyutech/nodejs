@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 147);
+/******/ 	return __webpack_require__(__webpack_require__.s = 146);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -185,15 +185,85 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 147:
+/***/ 1:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by army8735 on 2017/10/6.
+ */
+
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var net = {
+  ajax: function ajax(url, data, _success, _error, type) {
+    var csrfToken = $.cookie('csrfToken');
+    function load() {
+      return $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        crossDomain: true,
+        timeout: 6000,
+        type: type || 'get',
+        headers: {
+          'x-csrf-token': csrfToken
+        },
+        // ajax 跨域设置必须加上
+        beforeSend: function beforeSend(xhr) {
+          xhr.withCredentials = true;
+        },
+        success: function success(data, state, xhr) {
+          _success(data, state, xhr);
+        },
+        error: function error(data) {
+          if (!_error.__hasExec) {
+            _error.__hasExec = true;
+            _error(data || {});
+          }
+        }
+      });
+    }
+    return load();
+  },
+  getJSON: function getJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    error = error || function () {};
+    return net.ajax(url, data, success, error);
+  },
+  postJSON: function postJSON(url, data, success, error) {
+    if (typeof data === 'function') {
+      error = success;
+      success = data;
+      data = {};
+    }
+    success = success || function () {};
+    error = error || function () {};
+    return net.ajax(url, data, success, error, 'post');
+  }
+};
+
+exports.default = net;
+
+/***/ }),
+
+/***/ 146:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(148);
+__webpack_require__(147);
 
-var _TopNav = __webpack_require__(70);
+var _TopNav = __webpack_require__(148);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
@@ -281,10 +351,85 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 148:
+/***/ 147:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 148:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TopNav = function (_migi$Component) {
+  _inherits(TopNav, _migi$Component);
+
+  function TopNav() {
+    var _ref;
+
+    _classCallCheck(this, TopNav);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(TopNav, [{
+    key: 'setMarginRight',
+    value: function setMarginRight(right) {
+      $(this.element).css('margin-right', right);
+    }
+  }, {
+    key: 'submit',
+    value: function submit(e) {
+      e.preventDefault();
+      var v = this.ref.input.element.value.trim();
+      if (v) {
+        this.emit('search', v);
+      }
+    }
+  }, {
+    key: 'click',
+    value: function click(e) {
+      if (!window.$CONFIG.isLogin) {
+        e.preventDefault();
+        migi.eventBus.emit('NEED_LOGIN');
+      } else {
+        location.hash = '/my';
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var userInfo = this.props.userInfo || {};
+      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]),,,, /*<form class="search" onSubmit={ this.submit }>*/
+      /*<input type="text" ref="input" maxlength="16" placeholder="弱弱的初级搜索功能QAQ"/>*/
+      /*</form>*/
+      migi.createVd("div", [["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], [userInfo.NickName || '登陆/注册']), migi.createVd("img", [["src", userInfo.Head_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']])])])]);
+    }
+  }]);
+
+  return TopNav;
+}(migi.Component);
+
+migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
@@ -427,7 +572,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(3);
+var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
@@ -708,151 +853,6 @@ var Welcome = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Welcome, "Welcome");exports.default = Welcome;
-
-/***/ }),
-
-/***/ 3:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Created by army8735 on 2017/10/6.
- */
-
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var net = {
-  ajax: function ajax(url, data, _success, _error, type) {
-    var csrfToken = $.cookie('csrfToken');
-    function load() {
-      return $.ajax({
-        url: url,
-        data: data,
-        dataType: 'json',
-        cache: false,
-        crossDomain: true,
-        timeout: 6000,
-        type: type || 'get',
-        headers: {
-          'x-csrf-token': csrfToken
-        },
-        // ajax 跨域设置必须加上
-        beforeSend: function beforeSend(xhr) {
-          xhr.withCredentials = true;
-        },
-        success: function success(data, state, xhr) {
-          _success(data, state, xhr);
-        },
-        error: function error(data) {
-          if (!_error.__hasExec) {
-            _error.__hasExec = true;
-            _error(data || {});
-          }
-        }
-      });
-    }
-    return load();
-  },
-  getJSON: function getJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    error = error || function () {};
-    return net.ajax(url, data, success, error);
-  },
-  postJSON: function postJSON(url, data, success, error) {
-    if (typeof data === 'function') {
-      error = success;
-      success = data;
-      data = {};
-    }
-    success = success || function () {};
-    error = error || function () {};
-    return net.ajax(url, data, success, error, 'post');
-  }
-};
-
-exports.default = net;
-
-/***/ }),
-
-/***/ 70:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TopNav = function (_migi$Component) {
-  _inherits(TopNav, _migi$Component);
-
-  function TopNav() {
-    var _ref;
-
-    _classCallCheck(this, TopNav);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(TopNav, [{
-    key: 'setMarginRight',
-    value: function setMarginRight(right) {
-      $(this.element).css('margin-right', right);
-    }
-  }, {
-    key: 'submit',
-    value: function submit(e) {
-      e.preventDefault();
-      var v = this.ref.input.element.value.trim();
-      if (v) {
-        this.emit('search', v);
-      }
-    }
-  }, {
-    key: 'click',
-    value: function click(e) {
-      if (!window.$CONFIG.isLogin) {
-        e.preventDefault();
-        migi.eventBus.emit('NEED_LOGIN');
-      } else {
-        location.hash = '/my';
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var userInfo = this.props.userInfo || {};
-      return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]),,,, /*<form class="search" onSubmit={ this.submit }>*/
-      /*<input type="text" ref="input" maxlength="16" placeholder="弱弱的初级搜索功能QAQ"/>*/
-      /*</form>*/
-      migi.createVd("div", [["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], [userInfo.NickName || '登陆/注册']), migi.createVd("img", [["src", userInfo.Head_Url || '//zhuanquan.xyz/img/blank.png']])])])]);
-    }
-  }]);
-
-  return TopNav;
-}(migi.Component);
-
-migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ })
 

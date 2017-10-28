@@ -249,8 +249,7 @@ let net = {
 
 
 /***/ }),
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -366,7 +365,7 @@ Object.keys(code2Data).forEach(function(k) {
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -677,7 +676,7 @@ var Comment = function (_migi$Component) {
 migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -851,7 +850,7 @@ var Page = function (_migi$Component) {
 migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1008,6 +1007,7 @@ var SubCmt = function (_migi$Component) {
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
+/* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */
@@ -1062,7 +1062,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(3);
+var _authorTemplate = __webpack_require__(2);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -1581,7 +1581,7 @@ var _WorkComment = __webpack_require__(40);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
-var _SubCmt = __webpack_require__(6);
+var _SubCmt = __webpack_require__(5);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -1773,11 +1773,11 @@ var Works = function (_migi$Component) {
         $li.addClass('cur');
         var rel = tvd.props.rel;
         if (rel === 'intro') {
-          $(this.ref.comments.element).addClass('fn-hide');
+          $(this.ref.workComment.element).addClass('fn-hide');
           $(this.ref.intro.element).removeClass('fn-hide');
         } else {
           $(this.ref.intro.element).addClass('fn-hide');
-          $(this.ref.comments.element).removeClass('fn-hide');
+          $(this.ref.workComment.element).removeClass('fn-hide');
         }
       }
     }
@@ -1786,11 +1786,11 @@ var Works = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "works"]], [migi.createCp(_Media2.default, [["ref", "media"], ["worksID", new migi.Obj("worksID", this, function () {
         return this.worksID;
-      })], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createVd("ul", [["class", "sel fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comments"]], ["留言"])]), migi.createVd("div", [["class", "intro"], ["ref", "intro"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : '']), migi.createVd("div", [["class", "comments fn-hide"], ["ref", "comments"]], [migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+      })], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createVd("ul", [["class", "sel fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comments"]], ["留言"])]), migi.createVd("div", [["class", "intro"], ["ref", "intro"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
         return this.worksID;
       })], ["workID", new migi.Obj("workID", this, function () {
         return this.workID;
-      })], ["originTo", this.props.worksDetail.Title], ["commentData", this.props.commentData]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["originTo", this.props.worksDetail.Title], ["subText", "发送"], ["tipText", "-${n}"], ["placeholder", "夸夸这个作品吧"]])]);
+      })], ["originTo", this.props.worksDetail.Title], ["commentData", this.props.commentData]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["originTo", this.props.worksDetail.Title], ["subText", "发送"], ["tipText", "-${n}"], ["placeholder", "夸夸这个作品吧"]])]);
     }
   }, {
     key: 'worksID',
@@ -2730,11 +2730,11 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Comment = __webpack_require__(4);
+var _Comment = __webpack_require__(3);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(5);
+var _Page = __webpack_require__(4);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -2897,7 +2897,7 @@ var WorkComment = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod mod-comment"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / take)]]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(1508739460298)])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m\n\
+      return migi.createVd("div", [["class", "comments"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / take)]]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(1508739460298)])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m\n\
 \n\
 转圈系统运用了人工智能算法，所以会根据大家留言内容不同对积分数量进行相应地微调。所以请尽量不要发表重复或没有意义的留言哦( •̥́ ˍ •̀ )\n\
 也建议大家不要把一段内容在短时间内拆开分多条发布，悄悄告诉大家，这样获得的积分反而比合在一起的要少哦~\n\

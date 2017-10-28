@@ -9,7 +9,7 @@ module.exports = app => {
     * weibo(ctx) {
       const query = ctx.query;
       let goto = query.goto;
-      ctx.session.goto = goto || '/';
+      ctx.session.goto = goto;
       let appKey = ctx.helper.weiboAppKey;
       let redirect = ctx.helper.weiboRedirect;
       ctx.redirect(`https://api.weibo.com/oauth2/authorize?client_id=${appKey}&response_type=code&redirect_uri=${redirect}`);
@@ -50,8 +50,11 @@ module.exports = app => {
           let data2 = res.data;
           if(data2 && data2.success) {
             let userInfo = data2.data;
+            ctx.session.uname = userInfo.NickName;
+            ctx.session.head = userInfo.Head_Url;
             if(userInfo.ISAuthor) {
               ctx.session.authorID = userInfo.AuthorID;
+              ctx.session.authorName = userInfo.AuthorName;
             }
           }
         }
@@ -84,14 +87,17 @@ module.exports = app => {
             let data2 = res.data;
             if(data2 && data2.success) {
               let userInfo = data2.data;
+              ctx.session.uname = userInfo.NickName;
+              ctx.session.head = userInfo.Head_Url;
               if(userInfo.ISAuthor) {
                 ctx.session.authorID = userInfo.AuthorID;
+                ctx.session.authorName = userInfo.AuthorName;
               }
             }
           }
         }
       }
-      let goto = ctx.session.goto || '/';
+      let goto = ctx.session.goto || '/my';
       delete ctx.session.goto;
       ctx.redirect(goto);
     }

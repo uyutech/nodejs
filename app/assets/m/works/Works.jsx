@@ -193,12 +193,12 @@ class Works extends migi.Component {
       $li.addClass('cur');
       let rel = tvd.props.rel;
       if(rel === 'intro') {
-        $(this.ref.comments.element).addClass('fn-hide');
+        $(this.ref.workComment.element).addClass('fn-hide');
         $(this.ref.intro.element).removeClass('fn-hide');
       }
       else {
         $(this.ref.intro.element).addClass('fn-hide');
-        $(this.ref.comments.element).removeClass('fn-hide');
+        $(this.ref.workComment.element).removeClass('fn-hide');
       }
     }
   }
@@ -239,14 +239,12 @@ class Works extends migi.Component {
             : ''
         }
       </div>
-      <div class="comments fn-hide" ref="comments">
-        <WorkComment ref="workComment"
-                     isLogin={ this.props.isLogin }
-                     worksID={ this.worksID }
-                     workID={ this.workID }
-                     originTo={ this.props.worksDetail.Title }
-                     commentData={ this.props.commentData }/>
-      </div>
+      <WorkComment ref="workComment"
+                   isLogin={ this.props.isLogin }
+                   worksID={ this.worksID }
+                   workID={ this.workID }
+                   originTo={ this.props.worksDetail.Title }
+                   commentData={ this.props.commentData }/>
       <SubCmt ref="subCmt"
               originTo={ this.props.worksDetail.Title }
               subText="发送"

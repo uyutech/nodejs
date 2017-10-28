@@ -92,9 +92,6 @@ body {
   min-height: 100%;
   overflow-x: hidden;
 }
-body::-webkit-scrollbar {
-  display: block;
-}
 a,
 img {
   -webkit-touch-callout: none;

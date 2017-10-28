@@ -35,7 +35,7 @@ class TopNav extends migi.Component {
         {/*</form>*/}
         <div class="user" onClick={ this.click }>
           <span>{ userInfo.NickName || '登陆/注册' }</span>
-          <img src={ userInfo.Head_Url || '//zhuanquan.xyz/img/blank.png' }/>
+          <img src={ userInfo.Head_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
         </div>
       </div>
     </div>;
