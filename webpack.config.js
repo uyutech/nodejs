@@ -11,6 +11,7 @@ module.exports = {
     msearch: './app/assets/m/search/index.jsx',
     mmy: './app/assets/m/my/index.jsx',
     mlogin: './app/assets/m/login/index.jsx',
+    mactivity: './app/assets/m/activity/index.jsx',
     dcommon: './app/assets/d/common/index.js',
     dindex: './app/assets/d/index/index.jsx',
     dfind: './app/assets/d/find/index.jsx',

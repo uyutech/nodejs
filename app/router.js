@@ -32,6 +32,7 @@ module.exports = app => {
   // app.get('/m/search/:kw', 'm.search.index');
   app.get('/m/my', app.middlewares.needLogin(), 'm.my.index');
   app.get('/m/login', 'm.login.index');
+  app.get('/m/activity/:id', 'm.activity.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 

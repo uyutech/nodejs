@@ -1,10 +1,10 @@
 /**
- * Created by army8735 on 2017/10/11.
+ * Created by army8735 on 2017/10/28.
  */
 
 'use strict';
 
-import Activity from '../../assets/d/activity/Activity.jsx';
+import Activity from '../../assets/m/activity/Activity.jsx';
 
 export default function(data) {
   let isLogin = data.isLogin;
@@ -21,23 +21,23 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead({
-    title: postData.Title,
-  })}
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dactivity.css')}"/>
+  ${data.helper.getMHead({ title:postData.Title })}
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/mactivity.css')}"/>
 </head>
 <body>
-<div id="page">${ activity }</div>
-${data.helper.getDBotNav()}
+<div id="page">${activity}</div>
+${data.helper.getMTopNav()}
+${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.id = ${JSON.stringify(id)};
   $CONFIG.postData = ${JSON.stringify(postData)};
   $CONFIG.commentData = ${JSON.stringify(commentData)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dactivity.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mactivity.js')}"></script>
+${data.helper.getStat()}
 </body>
 </html>`;
 };

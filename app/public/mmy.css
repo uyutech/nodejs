@@ -1,0 +1,126 @@
+/**
+ * Created by army8735 on 2017/10/27.
+ */
+/**
+ * Created by army8735 on 2017/9/1.
+ */
+/**
+ * Created by army8735 on 2017/8/9.
+ */
+.cp-hotauthor {
+  position: relative;
+}
+.cp-hotauthor h4 {
+  position: relative;
+  margin-left: 0.1rem;
+  padding-left: 0.05rem;
+  font-size: 0.12rem;
+}
+.cp-hotauthor h4:before {
+  position: absolute;
+  left: 0;
+  top: 0.02rem;
+  bottom: 0.02rem;
+  width: 0.02rem;
+  background: #5D99C4;
+  content: ' ';
+  border-radius: 0.05rem;
+}
+.cp-hotauthor .list {
+  margin-top: 0.05rem;
+  min-height: 0.85rem;
+  overflow: auto;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+.cp-hotauthor .list .c {
+  width: 999rem;
+}
+.cp-hotauthor .list .c .empty {
+  margin-left: 0.12rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  background-color: #E1E3E4;
+  border-radius: 100%;
+}
+.cp-hotauthor .list .c ul {
+  display: inline-block;
+  padding-left: 0.1rem;
+}
+.cp-hotauthor .list .c ul li {
+  display: inline-block;
+  margin-right: 0.05rem;
+  width: 0.6rem;
+  vertical-align: top;
+  overflow: hidden;
+}
+.cp-hotauthor .list .c ul li .pic {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  width: 0.45rem;
+  height: 0.45rem;
+  background-color: #E1E3E4;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.cp-hotauthor .list .c ul li .pic img {
+  display: block;
+  width: 0.45rem;
+  height: 0.45rem;
+}
+.cp-hotauthor .list .c ul li .pic b {
+  position: absolute;
+  display: block;
+  width: 0.18rem;
+  height: 0.18rem;
+}
+.cp-hotauthor .list .c ul li .pic b:nth-of-type(1) {
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+}
+.cp-hotauthor .list .c ul li .pic b:nth-of-type(2) {
+  right: -0.09rem;
+  bottom: 0.1rem;
+  z-index: 2;
+}
+.cp-hotauthor .list .c ul li .pic b:nth-of-type(3) {
+  right: -0.04rem;
+  bottom: 0.22rem;
+}
+.cp-hotauthor .list .c ul li .txt {
+  display: block;
+  margin-top: 0.04rem;
+  font-size: 0.1rem;
+  color: #2A2A2A;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.cp-hotauthor .list .c ul li .info {
+  font-size: 0.1rem;
+  color: #B1C0C9;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.my > .c .cp-hotauthor {
+  margin-top: 0.1rem;
+}
+.my > .loginout {
+  display: block;
+  margin: 0.2rem auto;
+  width: 1.5rem;
+  line-height: 0.42rem;
+  font-size: 0.16rem;
+  color: #FFF;
+  border-radius: 0.12rem;
+  background: #B65A58;
+  text-align: center;
+}
+.my > .loginout:hover {
+  color: #0AE;
+}

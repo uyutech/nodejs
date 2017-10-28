@@ -6,6 +6,7 @@ module.exports = {
     msearch: './app/view/m/search.jsx',
     mmy: './app/view/m/my.jsx',
     mlogin: './app/view/m/login.jsx',
+    mactivity: './app/view/m/activity.jsx',
     dindex: './app/view/d/index.jsx',
     dfind: './app/view/d/find.jsx',
     dworks: './app/view/d/works.jsx',

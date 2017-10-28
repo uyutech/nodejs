@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 93);
+/******/ 	return __webpack_require__(__webpack_require__.s = 53);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 93:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -78,10 +78,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (data) {
   var login = migi.preRender(migi.createCp(_Login2.default, []));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dlogin.css') + '"/>\n</head>\n<body>\n<div id="page">' + login + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dlogin.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: '登录' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mlogin.css') + '"/>\n</head>\n<body>\n<div id="page">' + login + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mlogin.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Login = __webpack_require__(94);
+var _Login = __webpack_require__(54);
 
 var _Login2 = _interopRequireDefault(_Login);
 
@@ -91,7 +91,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 94:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -125,20 +125,9 @@ var Login = function (_migi$Component) {
   }
 
   _createClass(Login, [{
-    key: 'clickWeibo',
-    value: function clickWeibo(e) {
-      e.preventDefault();
-      var parent = window.parent;
-      if (parent !== window && parent.goto) {
-        parent.goto('/oauth/weibo');
-      } else {
-        location.href = '/oauth/weibo';
-      }
-    }
-  }, {
-    key: 'render',
+    key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "login"]], [migi.createVd("a", [["href", "#"], ["class", "weibo"], ["onClick", new migi.Cb(this, this.clickWeibo)]], ["微博登录"])]);
+      return migi.createVd("div", [["class", "login"]], [migi.createVd("a", [["href", "/oauth/weibo"], ["class", "weibo"], ["onClick", new migi.Cb(this, this.clickWeibo)]], ["微博登录"])]);
     }
   }]);
 
