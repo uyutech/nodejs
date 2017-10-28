@@ -1767,7 +1767,7 @@ var Author = function (_migi$Component) {
       return migi.createVd("div", [["class", "author"]], [migi.createCp(_Nav2.default, [["ref", "nav"], ["authorID", this.props.authorID], ["authorDetail", this.props.authorDetail]]), migi.createVd("ul", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.props.authorDetail.ISSettled ? migi.createVd("li", [["class", "home cur"], ["rel", "0"]], ["主页"]) : '',,, /*<li class="home cur" rel="0">主页</li>*/
       /*<li class="works" rel="1">作品</li>*/
       migi.createVd("li", [["class", 'comments' + (this.props.authorDetail.ISSettled ? '' : ' cur')], ["rel", "2"]], ["留言"])]), this.props.authorDetail.ISSettled ? migi.createCp(_Home2.default, [["ref", "home"], ["authorID", this.props.authorID], ["homeDetail", this.props.homeDetail], ["playList", this.props.playList.data]]) : '',, /*<Work ref="work" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList}/>*/
-      migi.createCp(_AuthorComment2.default, [["ref", "authorComment"], ["show", !this.props.authorDetail.ISSettled], ["isLogin", !!this.props.uid], ["authorID", this.props.authorID], ["commentData", this.props.commentData]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["originTo", this.props.authorDetail.AuthorName], ["subText", "发送"], ["tipText", "-${n}"], ["placeholder", '给' + this.props.authorDetail.AuthorName + '留个言吧']])]);
+      migi.createCp(_AuthorComment2.default, [["ref", "authorComment"], ["show", !this.props.authorDetail.ISSettled], ["isLogin", this.props.isLogin], ["authorID", this.props.authorID], ["commentData", this.props.commentData]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["originTo", this.props.authorDetail.AuthorName], ["subText", "发送"], ["tipText", "-${n}"], ["placeholder", '给' + this.props.authorDetail.AuthorName + '留个言吧']])]);
     }
   }]);
 
@@ -2566,7 +2566,7 @@ var AuthorComment = function (_migi$Component) {
       ajax = _net2.default.postJSON('/api/author/commentList', { authorID: self.authorID, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          // currentCount = data.Size;
+          currentCount = data.Size;
           skip += take;
           if (data.data.length) {
             comment.message = '';

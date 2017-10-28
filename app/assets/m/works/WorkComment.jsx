@@ -48,7 +48,7 @@ class WorkComment extends migi.Component {
     ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        // currentCount = data.Size;
+        currentCount = data.Size;
         skip += take;
         if(data.data.length) {
           comment.message = '';

@@ -62,7 +62,7 @@ class AuthorComment extends migi.Component {
     ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        // currentCount = data.Size;
+        currentCount = data.Size;
         skip += take;
         if(data.data.length) {
           comment.message = '';

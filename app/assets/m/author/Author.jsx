@@ -66,7 +66,7 @@ class Author extends migi.Component {
       <AuthorComment
         ref="authorComment"
         show={ !this.props.authorDetail.ISSettled }
-        isLogin={ !!this.props.uid }
+        isLogin={ this.props.isLogin }
         authorID={ this.props.authorID }
         commentData={ this.props.commentData }/>
       <SubCmt ref="subCmt"
