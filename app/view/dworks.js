@@ -1143,7 +1143,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   authorType: [
     [901, 902],
-    [111, 112],
+    [111, 113, 112],
     [151],
     [121, 122],
     [411, 421],
