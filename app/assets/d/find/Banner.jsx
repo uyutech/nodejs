@@ -47,7 +47,7 @@ class Banner extends migi.Component {
         pic: '//zhuanquan.xin/pic/b1284084f38e8cac0c35eddd60948af1.jpg'
       },
       {
-        url: '//rhymesland.com/',
+        url: 'http://weibo.com/6284548625/FrrsUbDyo',
         pic: '//zhuanquan.xin/pic/7dc30aca98d4975fd6c3a5b23d1abf8d.jpg'
       }
     ];

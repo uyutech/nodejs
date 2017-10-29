@@ -4,23 +4,23 @@
 
 'use strict';
 
-import TopNav from '../../assets/m/component/topnav/TopNav.jsx';
-import BotNav from '../../assets/m/component/botnav/BotNav.jsx';
 import Find from '../../assets/m/find/Find.jsx';
 
 export default function(data) {
   let hotWorkList = data.hotWorkList;
   let hotAuthorList = data.hotAuthorList;
+  let hotMusicAlbumList = data.hotMusicAlbumList;
+  let hotPhotoAlbumList = data.hotPhotoAlbumList;
   let tags = data.tags;
   let playList = data.playList;
 
   let find = migi.preRender(<Find
     hotWorkList={ hotWorkList }
     hotAuthorList={ hotAuthorList }
+    hotMusicAlbumList={ hotMusicAlbumList }
+    hotPhotoAlbumList={ hotPhotoAlbumList }
     tags={ tags }
     playList={ playList }/>);
-  let topNav = migi.preRender(<TopNav/>);
-  let botNav = migi.preRender(<BotNav/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -31,17 +31,18 @@ export default function(data) {
 </head>
 <body>
 <div id="page">${ find }</div>
-${ topNav }
-${ botNav }
+${data.helper.getMTopNav()}
+${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.hotWorkList = ${JSON.stringify(hotWorkList)};
   $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
-  $CONFIG.tags = ${JSON.stringify(tags)};
-  $CONFIG.playList = ${JSON.stringify(playList)};
+  $CONFIG.hotMusicAlbumList = ${JSON.stringify(hotMusicAlbumList)};
+  $CONFIG.hotPhotoAlbumList = ${JSON.stringify(hotPhotoAlbumList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mfind.js')}"></script>
+${data.helper.getStat()}
 </body>
 </html>`;
 };

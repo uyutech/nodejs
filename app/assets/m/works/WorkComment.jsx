@@ -6,7 +6,7 @@ import util from '../../d/common/util';
 import net from '../../d/common/net';
 import Comment from '../../d/component/comment/Comment.jsx';
 
-let skip = 0;
+let skip = 10;
 let take = 10;
 let sortType = 0;
 let myComment = 0;

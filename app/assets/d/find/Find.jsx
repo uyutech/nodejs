@@ -6,11 +6,11 @@ import net from '../common/net';
 import util from '../common/util';
 import Banner from './Banner.jsx';
 import HotWork from '../component/hotwork/HotWork.jsx';
-import HotCollection from '../component/hotcollection/HotCollection.jsx';
+import HotPhotoAlbum from '../component/hotphotoalbum/HotPhotoAlbum.jsx';
 import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
-import HotAlbum from '../component/hotalbum/HotAlubm.jsx';
-import DoubleCheck from '../component/doublecheck/DoubleCheck.jsx';
-import PlayList from '../component/playlist/PlayList.jsx';
+import HotMusicAlbum from '../component/hotmusicalbum/HotMusicAlbum.jsx';
+// import DoubleCheck from '../component/doublecheck/DoubleCheck.jsx';
+// import PlayList from '../component/playlist/PlayList.jsx';
 
 let ajax;
 let SortType = '1';
@@ -22,75 +22,73 @@ class Find extends migi.Component {
     super(...data);
     let self = this;
     self.on(migi.Event.DOM, function() {
-      let doubleCheck = self.ref.doubleCheck;
-      doubleCheck.on('changeL1', function(param) {
-        if(param) {
-          if(ajaxL2) {
-            ajaxL2.abort();
-          }
-          doubleCheck.isLoadindL2 = true;
-          net.postJSON('api/find/GetAuthorFilterlevelB', { FilterlevelA: param }, function (res) {
-            if(res.success) {
-              let data = res.data;
-              doubleCheck.tagList2 = data;
-              // doubleCheck.autoWidth2();
-              doubleCheck.setCacheL2(param, data);
-              doubleCheck.checkL2();
-            }
-            doubleCheck.isLoadindL2 = false;
-          }, function() {
-            doubleCheck.isLoadindL2 = false;
-          });
-        }
-      });
-      doubleCheck.on('change', function(lA, lB) {
-        let temp = lA.concat(lB);
-        temp = temp.length ? JSON.stringify(temp) : '';
-        if(temp !== Parameter) {
-          Parameter = temp;
-          self.loadPlayList();
-        }
-      });
-      let hotWork = self.ref.hotWork;
-      hotWork.on('change', function() {
-        net.postJSON('/api/find/hotWorkList', function(res) {
-          if(res.success) {
-            let data = res.data;
-            hotWork.dataList = data;
-          }
-        });
-      });
+      // let doubleCheck = self.ref.doubleCheck;
+      // doubleCheck.on('changeL1', function(param) {
+      //   if(param) {
+      //     if(ajaxL2) {
+      //       ajaxL2.abort();
+      //     }
+      //     doubleCheck.isLoadindL2 = true;
+      //     net.postJSON('api/find/GetAuthorFilterlevelB', { FilterlevelA: param }, function (res) {
+      //       if(res.success) {
+      //         let data = res.data;
+      //         doubleCheck.tagList2 = data;
+      //         // doubleCheck.autoWidth2();
+      //         doubleCheck.setCacheL2(param, data);
+      //         doubleCheck.checkL2();
+      //       }
+      //       doubleCheck.isLoadindL2 = false;
+      //     }, function() {
+      //       doubleCheck.isLoadindL2 = false;
+      //     });
+      //   }
+      // });
+      // doubleCheck.on('change', function(lA, lB) {
+      //   let temp = lA.concat(lB);
+      //   temp = temp.length ? JSON.stringify(temp) : '';
+      //   if(temp !== Parameter) {
+      //     Parameter = temp;
+      //     self.loadPlayList();
+      //   }
+      // });
+      // let hotWork = self.ref.hotWork;
+      // hotWork.on('change', function() {
+      //   net.postJSON('/api/find/hotWorkList', function(res) {
+      //     if(res.success) {
+      //       let data = res.data;
+      //       hotWork.dataList = data;
+      //     }
+      //   });
+      // });
     });
   }
-  loadPlayList() {
-    let self = this;
-    if(ajax) {
-      ajax.abort();
-    }
-    ajax = net.postJSON('/api/find/playList', { Parameter, Skip: 0, Take: 10, SortType }, function(res) {
-      if(res.success) {
-        let data = res.data;
-        self.ref.playList.dataList = data.playList;
-        self.ref.playList.dataList2 = data.playList2;
-      }
-      else {
-        alert(res.message || util.ERROR_MESSAGE);
-      }
-    }, function(res) {
-      alert(res.message || util.ERROR_MESSAGE);
-    });
-  }
+  // loadPlayList() {
+  //   let self = this;
+  //   if(ajax) {
+  //     ajax.abort();
+  //   }
+  //   ajax = net.postJSON('/api/find/playList', { Parameter, Skip: 0, Take: 10, SortType }, function(res) {
+  //     if(res.success) {
+  //       let data = res.data;
+  //       self.ref.playList.dataList = data.playList;
+  //       self.ref.playList.dataList2 = data.playList2;
+  //     }
+  //     else {
+  //       alert(res.message || util.ERROR_MESSAGE);
+  //     }
+  //   }, function(res) {
+  //     alert(res.message || util.ERROR_MESSAGE);
+  //   });
+  // }
   render() {
     return <div class="find">
       <Banner/>
       <div class="hot">
         <HotWork ref="hotWork" title="推荐作品" dataList={ this.props.hotWorkList }/>
-        <HotCollection ref="hotCollection" title="推荐专辑" dataList={ this.props.hotCollection }/>
+        <HotMusicAlbum ref="hotMusicAlbum" title="推荐专辑" dataList={ this.props.hotMusicAlbumList }/>
         <HotAuthor ref="hotAuthor" title="推荐作者" dataList={ this.props.hotAuthorList }/>
-        <HotAlbum ref="hotAlbum" title="推荐相册" dataList={ this.props.hotAlbumList }/>
+        <HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList }/>
       </div>
-      <DoubleCheck ref="doubleCheck" tags={ this.props.tags }/>
-      <PlayList ref="playList" dataList={ this.props.playList.data } dataList2={ this.props.playList2.data }/>
     </div>;
   }
 }

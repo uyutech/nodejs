@@ -4,14 +4,14 @@
 
 'use strict';
 
-class HotAlubm extends migi.Component {
+class HotPhotoAlbum extends migi.Component {
   constructor(...data) {
     super(...data);
     this.dataList = this.props.dataList;
   }
   @bind dataList
   render() {
-    return <div class="cp-hotalbum">
+    return <div class="cp-hotphotoalbum">
       <h4>{ this.props.title }<small>我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3&lt;</small></h4>
       {
         this.dataList && this.dataList.length
@@ -34,4 +34,4 @@ class HotAlubm extends migi.Component {
   }
 }
 
-export default HotAlubm;
+export default HotPhotoAlbum;

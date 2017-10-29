@@ -3,7 +3,7 @@
  */
 
 import HotWork from '../component/hotwork/HotWork.jsx';
-import HotCollection from '../component/hotcollection/HotCollection.jsx';
+import HotCollection from '../component/hotmusicalbum/HotCollection.jsx';
 import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
 import Dynamic from '../component/dynamic/Dynamic.jsx';
 

@@ -2,9 +2,11 @@
  * Created by army8735 on 2017/9/18.
  */
 
+'use strict';
+
 import util from '../../common/util';
 
-class HotCollection extends migi.Component {
+class HotMusicAlbum extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
@@ -20,8 +22,8 @@ class HotCollection extends migi.Component {
     e.preventDefault();
   }
   render() {
-    return <div class="cp-hotcollection">
-      <h4>{ this.props.title }</h4>
+    return <div class="cp-hotmusicalbum">
+      <h4>{ this.props.title }<small>我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3&lt;</small></h4>
       {
         this.dataList && this.dataList.length
           ? <ul class="list fn-clear">
@@ -43,4 +45,4 @@ class HotCollection extends migi.Component {
   }
 }
 
-export default HotCollection;
+export default HotMusicAlbum;

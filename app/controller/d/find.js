@@ -9,8 +9,8 @@ module.exports = app => {
     * index(ctx) {
       let hotWorkList = [];
       let hotAuthorList = [];
-      let hotAlbumList = [];
-      let hotCollection = [];
+      let hotMusicAlbumList = [];
+      let hotPhotoAlbumList = [];
       let tags = {};
       let playList = [];
       let playList2 = [];
@@ -23,27 +23,27 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
-        hotAlbumList: ctx.helper.postServiceJSON('api/find/Hot_PHOTO_List', {
+        hotPhotoAlbumList: ctx.helper.postServiceJSON('api/find/Hot_PHOTO_List', {
           Skip: 0,
           Take: 10,
         }),
-        hotCollection: ctx.helper.postServiceJSON('api/find/Hot_album_List', {
+        hotMusicAlbumList: ctx.helper.postServiceJSON('api/find/Hot_album_List', {
           Skip: 0,
           Take: 10,
         }),
-        tags: ctx.helper.postServiceJSON('api/find/GetTag'),
-        playList: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
-          Parameter: '',
-          Skip: 0,
-          Take: 10,
-          SortType: 1,
-        }),
-        playList2: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
-          Parameter: '',
-          Skip: 0,
-          Take: 10,
-          SortType: 0,
-        }),
+        // tags: ctx.helper.postServiceJSON('api/find/GetTag'),
+        // playList: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
+        //   Parameter: '',
+        //   Skip: 0,
+        //   Take: 10,
+        //   SortType: 1,
+        // }),
+        // playList2: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
+        //   Parameter: '',
+        //   Skip: 0,
+        //   Take: 10,
+        //   SortType: 0,
+        // }),
       };
       if(res.hotWorkList.data.success) {
         hotWorkList = res.hotWorkList.data.data;
@@ -51,34 +51,34 @@ module.exports = app => {
       if(res.hotAuthorList.data.success) {
         hotAuthorList = res.hotAuthorList.data.data;
       }
-      if(res.hotAlbumList.data.success) {
-        hotAlbumList = res.hotAlbumList.data.data;
+      if(res.hotMusicAlbumList.data.success) {
+        hotMusicAlbumList = res.hotMusicAlbumList.data.data;
       }
-      if(res.hotCollection.data.success) {
-        hotCollection = res.hotCollection.data.data;
+      if(res.hotPhotoAlbumList.data.success) {
+        hotPhotoAlbumList = res.hotPhotoAlbumList.data.data;
       }
-      if(res.tags.data.success) {
-        tags = res.tags.data.data;
-      }
-      if(res.playList.data.success) {
-        playList = res.playList.data.data;
-      }
-      if(res.playList2.data.success) {
-        playList2 = res.playList2.data.data;
-      }
-      tags.FilterlevelA = [{
-        ID: 0,
-        TagName: '音乐',
-        TagType: 0,
-        TagCount: 3957,
-        Filterlevel: "A",
-      }];
+      // if(res.tags.data.success) {
+      //   tags = res.tags.data.data;
+      // }
+      // if(res.playList.data.success) {
+      //   playList = res.playList.data.data;
+      // }
+      // if(res.playList2.data.success) {
+      //   playList2 = res.playList2.data.data;
+      // }
+      // tags.FilterlevelA = [{
+      //   ID: 0,
+      //   TagName: '音乐',
+      //   TagType: 0,
+      //   TagCount: 3957,
+      //   Filterlevel: "A",
+      // }];
 
       yield ctx.render('dfind', {
         hotWorkList,
         hotAuthorList,
-        hotAlbumList,
-        hotCollection,
+        hotMusicAlbumList,
+        hotPhotoAlbumList,
         tags,
         playList,
         playList2,

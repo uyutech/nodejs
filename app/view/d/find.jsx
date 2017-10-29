@@ -9,8 +9,8 @@ import Find from '../../assets/d/find/Find.jsx';
 export default function(data) {
   let hotWorkList = data.hotWorkList;
   let hotAuthorList = data.hotAuthorList;
-  let hotAlbumList = data.hotAlbumList;
-  let hotCollection = data.hotCollection;
+  let hotMusicAlbumList = data.hotMusicAlbumList;
+  let hotPhotoAlbumList = data.hotPhotoAlbumList;
   let tags = data.tags;
   let playList = data.playList;
   let playList2 = data.playList;
@@ -18,8 +18,8 @@ export default function(data) {
   let find = migi.preRender(<Find
     hotWorkList={ hotWorkList }
     hotAuthorList={ hotAuthorList }
-    hotAlbumList={ hotAlbumList }
-    hotCollection={ hotCollection }
+    hotMusicAlbumList={ hotMusicAlbumList }
+    hotPhotoAlbumList={ hotPhotoAlbumList }
     tags={ tags }
     playList={ playList }
     playList2={ playList2 }/>);
@@ -27,7 +27,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead()}
+  ${data.helper.getDHead({title:'发现'})}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dfind.css')}"/>
 </head>
@@ -38,11 +38,11 @@ ${data.helper.getDBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.hotWorkList = ${JSON.stringify(hotWorkList)};
   $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
-  $CONFIG.hotAlbumList = ${JSON.stringify(hotAlbumList)};
-  $CONFIG.hotCollection = ${JSON.stringify(hotCollection)};
-  $CONFIG.tags = ${JSON.stringify(tags)};
-  $CONFIG.playList = ${JSON.stringify(playList)};
-  $CONFIG.playList2 = ${JSON.stringify(playList2)};
+  $CONFIG.hotMusicAlbumList = ${JSON.stringify(hotMusicAlbumList)};
+  $CONFIG.hotPhotoAlbumList = ${JSON.stringify(hotPhotoAlbumList)};
+  // $CONFIG.tags = ${JSON.stringify(tags)};
+  // $CONFIG.playList = ${JSON.stringify(playList)};
+  // $CONFIG.playList2 = ${JSON.stringify(playList2)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dfind.js')}"></script>

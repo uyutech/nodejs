@@ -10,5 +10,5 @@ import Find from './Find.jsx';
 let find = migi.preExist(<Find
   hotWorkList={ $CONFIG.hotWorkList }
   hotAuthorList={ $CONFIG.hotAuthorList }
-  tags={ $CONFIG.tags }
-  playList={ $CONFIG.playList }/>);
+  hotMusicAlbumList={ $CONFIG.hotMusicAlbumList }
+  hotPhotoAlbumList={ $CONFIG.hotPhotoAlbumList }/>);

@@ -282,7 +282,7 @@ class Video extends migi.Component {
           <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.datas[this.index].FileUrl }
-               download={ this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl || '')[0] || '') }
+               download={ this.datas[this.index].ItemName + this.datas[this.index].FileUrl ? (/\.\w+$/.exec(this.datas[this.index].FileUrl)[0] || '') : '' }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

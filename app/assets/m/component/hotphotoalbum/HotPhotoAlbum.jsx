@@ -1,11 +1,8 @@
 /**
- * Created by army8735 on 2017/8/8.
+ * Created by army8735 on 2017/9/18.
  */
 
-import util from '../../../d/common/util';
-import AuthorType from '../../../d/component/author/AuthorType.jsx';
-
-class HotWork extends migi.Component {
+class HotPhotoAlbum extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
@@ -20,12 +17,12 @@ class HotWork extends migi.Component {
   autoWidth() {
     let $list = $(this.ref.list.element);
     let $c = $list.find('.c');
-    $c.css('width', '9999rem');
+    $c.width('css', '9999rem');
     let $ul = $c.find('ul');
     $c.css('width', $ul.width() + 1);
   }
   render() {
-    return <div class="cp-hotwork">
+    return <div class="cp-hotphotoalbum">
       <h4>{ this.props.title }</h4>
       <div class="list" ref="list">
         <div class="c">
@@ -35,10 +32,11 @@ class HotWork extends migi.Component {
                 {
                   this.dataList.map(function(item) {
                     return <li>
+                      <b class="bg"/>
                       <a href={ `/works/${item.WorksID}` } class="pic">
-                        <img src={ util.autoSsl(util.img100_100(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
+                        <img src={ item.cover_Pic || '//zhuanquan.xin/img/blank.png' }/>
                       </a>
-                      <a href={ `/works/${item.WorksID}` } class="txt">{ item.Title }</a>
+                      <a href="#" class="txt">{ item.Title }</a>
                     </li>;
                   })
                 }
@@ -51,4 +49,4 @@ class HotWork extends migi.Component {
   }
 }
 
-export default HotWork;
+export default HotPhotoAlbum;
