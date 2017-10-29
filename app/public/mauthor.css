@@ -580,16 +580,16 @@ body {
 /**
  * Created by army8735 on 2017/9/18.
  */
-.cp-hotphotoalbum {
+.cp-hotmusicalbum {
   position: relative;
 }
-.cp-hotphotoalbum h4 {
+.cp-hotmusicalbum h4 {
   position: relative;
   margin-left: 0.1rem;
   padding-left: 0.05rem;
   font-size: 0.12rem;
 }
-.cp-hotphotoalbum h4:before {
+.cp-hotmusicalbum h4:before {
   position: absolute;
   left: 0;
   top: 0.02rem;
@@ -599,17 +599,17 @@ body {
   content: ' ';
   border-radius: 0.05rem;
 }
-.cp-hotphotoalbum .list {
+.cp-hotmusicalbum .list {
   margin-top: 0.05rem;
   min-height: 1rem;
   overflow: auto;
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
 }
-.cp-hotphotoalbum .list .c {
+.cp-hotmusicalbum .list .c {
   width: 999rem;
 }
-.cp-hotphotoalbum .list .c .empty {
+.cp-hotmusicalbum .list .c .empty {
   margin-left: 0.1rem;
   width: 1rem;
   height: 1rem;
@@ -617,11 +617,11 @@ body {
   background-size: contain;
   border-radius: 0.05rem;
 }
-.cp-hotphotoalbum .list .c ul {
+.cp-hotmusicalbum .list .c ul {
   display: inline-block;
   padding-left: 0.1rem;
 }
-.cp-hotphotoalbum .list .c ul li {
+.cp-hotmusicalbum .list .c ul li {
   display: inline-block;
   margin-right: 0.1rem;
   width: 1rem;
@@ -629,7 +629,7 @@ body {
   vertical-align: top;
   overflow: hidden;
 }
-.cp-hotphotoalbum .list .c ul li .pic {
+.cp-hotmusicalbum .list .c ul li .pic {
   position: relative;
   display: block;
   width: 1rem;
@@ -640,12 +640,12 @@ body {
   color: #fff;
   overflow: hidden;
 }
-.cp-hotphotoalbum .list .c ul li .pic img {
+.cp-hotmusicalbum .list .c ul li .pic img {
   display: block;
   width: 100%;
   height: 100%;
 }
-.cp-hotphotoalbum .list .c ul li .pic .ath {
+.cp-hotmusicalbum .list .c ul li .pic .ath {
   position: absolute;
   left: 0.02rem;
   right: 0.02rem;
@@ -655,7 +655,7 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.cp-hotphotoalbum .list .c ul li .txt {
+.cp-hotmusicalbum .list .c ul li .txt {
   display: block;
   font-size: 0.1rem;
   white-space: nowrap;

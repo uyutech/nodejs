@@ -3,7 +3,7 @@
  */
 
 import HotWork from '../component/hotwork/HotWork.jsx';
-import HotCollection from '../component/hotmusicalbum/HotCollection.jsx';
+import HotMusicAlbum from '../component/hotmusicalbum/HotMusicAlbum.jsx';
 import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
 import Dynamic from '../component/dynamic/Dynamic.jsx';
 
@@ -20,7 +20,7 @@ class Home extends migi.Component {
   render() {
     return <div class="home">
       <HotWork ref="hotWork" title="主打作品" dataList={ this.props.homeDetail.Hot_Works_Items }/>
-      <HotCollection ref="hotCollection" title="专辑"/>
+      <HotMusicAlbum ref="hotCollection" title="专辑"/>
       <HotAuthor ref="hotAuthor" title="合作关系" dataList={ this.props.homeDetail.AuthorToAuthor }/>
       <Dynamic title="全网动态"/>
     </div>;

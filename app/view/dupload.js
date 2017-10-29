@@ -60,109 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 97);
+/******/ 	return __webpack_require__(__webpack_require__.s = 98);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 97:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (data) {
-  var upload = migi.preRender(migi.createCp(_Upload2.default, []));
-
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dupload.css') + '"/>\n</head>\n<body>\n<div id="page">' + upload + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dupload.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
-};
-
-var _Upload = __webpack_require__(98);
-
-var _Upload2 = _interopRequireDefault(_Upload);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-;
-
-/***/ }),
-
-/***/ 98:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Spark = __webpack_require__(99);
-
-var Upload = function (_migi$Component) {
-  _inherits(Upload, _migi$Component);
-
-  function Upload() {
-    var _ref;
-
-    _classCallCheck(this, Upload);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Upload.__proto__ || Object.getPrototypeOf(Upload)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.on(migi.Event.DOM, function () {
-      var $input = $(self.element).find('input');
-    });
-    return _this;
-  }
-
-  _createClass(Upload, [{
-    key: 'change',
-    value: function change(e) {
-      var file = e.target.files[0];
-      var size = file.size;
-      if (size && size !== 0 && size < 1024 * 1024 * 100) {
-        var fileReader = new FileReader();
-        fileReader.onload = function () {
-          var spark = new Spark.ArrayBuffer();
-          spark.append(fileReader.result);
-          var md5 = spark.end();
-          console.log(md5);
-        };
-        fileReader.readAsArrayBuffer(file);
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [], [migi.createVd("input", [["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["value", ""]])]);
-    }
-  }]);
-
-  return Upload;
-}(migi.Component);
-
-migi.name(Upload, "Upload");exports.default = Upload;
-
-/***/ }),
-
-/***/ 99:
+/***/ 100:
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (factory) {
@@ -917,6 +820,103 @@ migi.name(Upload, "Upload");exports.default = Upload;
     return SparkMD5;
 }));
 
+
+/***/ }),
+
+/***/ 98:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (data) {
+  var upload = migi.preRender(migi.createCp(_Upload2.default, []));
+
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dupload.css') + '"/>\n</head>\n<body>\n<div id="page">' + upload + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dupload.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+};
+
+var _Upload = __webpack_require__(99);
+
+var _Upload2 = _interopRequireDefault(_Upload);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+;
+
+/***/ }),
+
+/***/ 99:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Spark = __webpack_require__(100);
+
+var Upload = function (_migi$Component) {
+  _inherits(Upload, _migi$Component);
+
+  function Upload() {
+    var _ref;
+
+    _classCallCheck(this, Upload);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Upload.__proto__ || Object.getPrototypeOf(Upload)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var $input = $(self.element).find('input');
+    });
+    return _this;
+  }
+
+  _createClass(Upload, [{
+    key: 'change',
+    value: function change(e) {
+      var file = e.target.files[0];
+      var size = file.size;
+      if (size && size !== 0 && size < 1024 * 1024 * 100) {
+        var fileReader = new FileReader();
+        fileReader.onload = function () {
+          var spark = new Spark.ArrayBuffer();
+          spark.append(fileReader.result);
+          var md5 = spark.end();
+          console.log(md5);
+        };
+        fileReader.readAsArrayBuffer(file);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [], [migi.createVd("input", [["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["value", ""]])]);
+    }
+  }]);
+
+  return Upload;
+}(migi.Component);
+
+migi.name(Upload, "Upload");exports.default = Upload;
 
 /***/ })
 
