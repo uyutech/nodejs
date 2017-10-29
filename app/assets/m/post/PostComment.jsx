@@ -7,7 +7,6 @@
 import net from '../../d/common/net';
 import util from '../../d/common/util';
 import Comment from '../../d/component/comment/Comment.jsx';
-import Page from '../../d/component/page/Page.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 
 let skip = 0;
@@ -25,10 +24,9 @@ class PostComment extends migi.Component {
     self.on(migi.Event.DOM, function() {
       let subCmt = self.ref.subCmt;
       let comment = self.ref.comment;
-      let page = self.ref.page;
-      page.on('page', function(i) {
-        skip = (i - 1) * take;
-        self.loadPage();
+      let $window = $(window);
+      $window.on('scroll', function() {
+        self.checkMore($window);
       });
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
@@ -75,15 +73,13 @@ class PostComment extends migi.Component {
       });
     });
   }
+  @bind loading
+  @bind loadEnd
   @bind rootID = -1
   @bind parentID = -1
-  @bind loading
   load() {
     let self = this;
     let comment = self.ref.comment;
-    let page = self.ref.page;
-    comment.message = '读取中...';
-    page.total = 1;
     if(ajax) {
       ajax.abort();
     }
@@ -92,17 +88,17 @@ class PostComment extends migi.Component {
       if(res.success) {
         let data = res.data;
         // currentCount = data.Size;
-        skip += take;
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
-          page.total = Math.ceil(currentCount / take);
         }
         else {
           comment.appendData(res.data.data);
           comment.message = '暂无评论';
-          loadEnd = true;
+          comment.message = skip === 0 ? '暂无评论' : '已经到底了';
+          self.loadEnd = true;
         }
+        skip += take;
       }
       else {
         if(res.code === 1000) {
@@ -116,40 +112,15 @@ class PostComment extends migi.Component {
       self.loading = false;
     });
   }
-  loadPage() {
+  checkMore($window) {
     let self = this;
-    let comment = self.ref.comment;
-    comment.message = '读取中...';
-    comment.setData();
-    if(ajax) {
-      ajax.abort();
+    let WIN_HEIGHT = $window.height();
+    let HEIGHT = $(document.body).height();
+    let bool;
+    bool = !$(self.element).hasClass('fn-hide') && $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
+    if(!self.loading && !self.loadEnd && bool) {
+      self.load();
     }
-    self.loading = true;
-    ajax = net.postJSON('/api/post/commentList', { postID: self.props.id , skip, take, sortType, myComment, currentCount }, function(res) {
-      if(res.success) {
-        let data = res.data;
-        skip += take;
-        if(data.data.length) {
-          comment.message = '';
-          comment.appendData(res.data.data);
-        }
-        else {
-          comment.appendData(res.data.data);
-          comment.message = '暂无评论';
-          loadEnd = true;
-        }
-      }
-      else {
-        if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        comment.message = res.message || util.ERROR_MESSAGE;
-      }
-      self.loading = false;
-    }, function(res) {
-      comment.message = res.message || util.ERROR_MESSAGE;
-      self.loading = false;
-    });
   }
   switchType(e, vd) {
     let $ul = $(vd.element);
@@ -203,14 +174,15 @@ class PostComment extends migi.Component {
           <li rel="1">最热</li>
         </ul>
       </div>
-      <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <Comment ref="comment"
                zanUrl="/api/post/likeComment"
                subUrl="/api/post/subCommentList"
                delUrl="/api/post/delComment"
                data={ this.props.commentData.data }/>
       <SubCmt ref="subCmt"
-              placeholder="夸夸这个活动吧"/>
+              subText="发送"
+              tipText="-${n}"
+              placeholder="夸夸这个帖子吧"/>
     </div>;
   }
 }

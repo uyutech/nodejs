@@ -853,6 +853,42 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = {
+  isLyrics: function isLyrics(s) {
+    return (/\[\d{2,}:\d{2}\.\d{2,3}]/.test(s)
+    );
+  },
+  parse: function parse(s) {
+    var match = s.match(/\[\d{2,}:\d{2}\.\d{2,3}].*/g);
+    return match.map(function (item) {
+      var time = item.slice(1, item.indexOf(']'));
+      var times = time.split(/[^\d]/g);
+      var ms = times[2];
+      var timestamp = parseInt(times[0]) * 60 * 1000 + parseInt(times[1]) * 1000 + (ms.length === 3 ? parseInt(ms) : parseInt(ms) * 10);
+      var txt = item.slice(item.indexOf(']') + 1);
+      // console.log(time, timestamp, txt);
+      return {
+        time: time,
+        timestamp: timestamp,
+        txt: txt
+      };
+    });
+  },
+  getTxt: function getTxt(s) {
+    return s.replace(/\[\d{2,}:\d{2}\.\d{2,3}]/g, '').replace(/\[\w+:\w+]/g, '');
+  }
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1016,42 +1052,6 @@ var Page = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Page, "Page");exports.default = Page;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  isLyrics: function isLyrics(s) {
-    return (/\[\d{2,}:\d{2}\.\d{2,3}]/.test(s)
-    );
-  },
-  parse: function parse(s) {
-    var match = s.match(/\[\d{2,}:\d{2}\.\d{2,3}].*/g);
-    return match.map(function (item) {
-      var time = item.slice(1, item.indexOf(']'));
-      var times = time.split(/[^\d]/g);
-      var ms = times[2];
-      var timestamp = parseInt(times[0]) * 60 * 1000 + parseInt(times[1]) * 1000 + (ms.length === 3 ? parseInt(ms) : parseInt(ms) * 10);
-      var txt = item.slice(item.indexOf(']') + 1);
-      // console.log(time, timestamp, txt);
-      return {
-        time: time,
-        timestamp: timestamp,
-        txt: txt
-      };
-    });
-  },
-  getTxt: function getTxt(s) {
-    return s.replace(/\[\d{2,}:\d{2}\.\d{2,3}]/g, '').replace(/\[\w+:\w+]/g, '');
-  }
-};
 
 /***/ }),
 /* 8 */
@@ -1786,7 +1786,7 @@ var _WorksTypeEnum = __webpack_require__(8);
 
 var _WorksTypeEnum2 = _interopRequireDefault(_WorksTypeEnum);
 
-var _LyricsParser = __webpack_require__(7);
+var _LyricsParser = __webpack_require__(6);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -2298,7 +2298,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _LyricsParser = __webpack_require__(7);
+var _LyricsParser = __webpack_require__(6);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -3518,7 +3518,7 @@ var _Comment = __webpack_require__(3);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(6);
+var _Page = __webpack_require__(7);
 
 var _Page2 = _interopRequireDefault(_Page);
 

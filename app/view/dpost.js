@@ -372,7 +372,7 @@ var _Comment = __webpack_require__(3);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(6);
+var _Page = __webpack_require__(7);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -1083,7 +1083,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -29,10 +29,10 @@ class HotCollection extends migi.Component {
               this.dataList.map(function(item) {
                 return <li>
                   <b class="bg"/>
-                  <a href={ `/collection/${item.WorksID}` } class="pic">
+                  <a href={ `/works/${item.WorksID}` } class="pic">
                     <img src={ util.autoSsl(util.img144_144(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
                   </a>
-                  <a href={ `/collection/${item.WorksID}` } class="txt">{ item.Title }</a>
+                  <a href={ `/works/${item.WorksID}` } class="txt">{ item.Title }</a>
                 </li>;
               })
             }

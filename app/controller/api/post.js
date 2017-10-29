@@ -11,7 +11,7 @@ module.exports = app => {
       let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
         uid,
-        PostID: body.activityID,
+        PostID: body.postID,
         Skip: body.skip,
         Take: body.take,
         SortType: body.sortType,
@@ -28,7 +28,7 @@ module.exports = app => {
         ParentID: body.parentID,
         RootID: body.rootID,
         Content: body.content,
-        PostID: body.activityID,
+        PostID: body.postID,
       });
       ctx.body = res.data;
     }

@@ -844,8 +844,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 /* 5 */,
-/* 6 */,
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -881,6 +880,7 @@ exports.default = {
 };
 
 /***/ }),
+/* 7 */,
 /* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1580,7 +1580,7 @@ var _WorksTypeEnum = __webpack_require__(8);
 
 var _WorksTypeEnum2 = _interopRequireDefault(_WorksTypeEnum);
 
-var _LyricsParser = __webpack_require__(7);
+var _LyricsParser = __webpack_require__(6);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -2061,7 +2061,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _LyricsParser = __webpack_require__(7);
+var _LyricsParser = __webpack_require__(6);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 

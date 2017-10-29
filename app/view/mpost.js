@@ -748,7 +748,7 @@ exports.default = function (data) {
   var postData = data.postData;
   var commentData = data.commentData;
 
-  var post = migi.preRender(migi.createCp(Post, [["isLogin", isLogin], ["id", id], ["postData", postData], ["commentData", commentData]]));
+  var post = migi.preRender(migi.createCp(_Post2.default, [["isLogin", isLogin], ["id", id], ["postData", postData], ["commentData", commentData]]));
 
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: postData.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mpost.css') + '"/>\n</head>\n<body>\n<div id="page">' + post + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.id = ' + JSON.stringify(id) + ';\n  $CONFIG.postData = ' + JSON.stringify(postData) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mpost.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
@@ -840,10 +840,6 @@ var _Comment = __webpack_require__(3);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _Page = __webpack_require__(6);
-
-var _Page2 = _interopRequireDefault(_Page);
-
 var _SubCmt = __webpack_require__(4);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
@@ -882,10 +878,9 @@ var PostComment = function (_migi$Component) {
     self.on(migi.Event.DOM, function () {
       var subCmt = self.ref.subCmt;
       var comment = self.ref.comment;
-      var page = self.ref.page;
-      page.on('page', function (i) {
-        skip = (i - 1) * take;
-        self.loadPage();
+      var $window = $(window);
+      $window.on('scroll', function () {
+        self.checkMore($window);
       });
       comment.on('chooseSubComment', function (rid, cid, name) {
         self.rootID = rid;
@@ -936,9 +931,6 @@ var PostComment = function (_migi$Component) {
     value: function load() {
       var self = this;
       var comment = self.ref.comment;
-      var page = self.ref.page;
-      comment.message = '读取中...';
-      page.total = 1;
       if (ajax) {
         ajax.abort();
       }
@@ -947,16 +939,16 @@ var PostComment = function (_migi$Component) {
         if (res.success) {
           var data = res.data;
           // currentCount = data.Size;
-          skip += take;
           if (data.data.length) {
             comment.message = '';
             comment.appendData(res.data.data);
-            page.total = Math.ceil(currentCount / take);
           } else {
             comment.appendData(res.data.data);
             comment.message = '暂无评论';
-            loadEnd = true;
+            comment.message = skip === 0 ? '暂无评论' : '已经到底了';
+            self.loadEnd = true;
           }
+          skip += take;
         } else {
           if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
@@ -970,39 +962,16 @@ var PostComment = function (_migi$Component) {
       });
     }
   }, {
-    key: 'loadPage',
-    value: function loadPage() {
+    key: 'checkMore',
+    value: function checkMore($window) {
       var self = this;
-      var comment = self.ref.comment;
-      comment.message = '读取中...';
-      comment.setData();
-      if (ajax) {
-        ajax.abort();
+      var WIN_HEIGHT = $window.height();
+      var HEIGHT = $(document.body).height();
+      var bool = void 0;
+      bool = !$(self.element).hasClass('fn-hide') && $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
+      if (!self.loading && !self.loadEnd && bool) {
+        self.load();
       }
-      self.loading = true;
-      ajax = _net2.default.postJSON('/api/post/commentList', { postID: self.props.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          skip += take;
-          if (data.data.length) {
-            comment.message = '';
-            comment.appendData(res.data.data);
-          } else {
-            comment.appendData(res.data.data);
-            comment.message = '暂无评论';
-            loadEnd = true;
-          }
-        } else {
-          if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          }
-          comment.message = res.message || _util2.default.ERROR_MESSAGE;
-        }
-        self.loading = false;
-      }, function (res) {
-        comment.message = res.message || _util2.default.ERROR_MESSAGE;
-        self.loading = false;
-      });
     }
   }, {
     key: 'switchType',
@@ -1046,7 +1015,23 @@ var PostComment = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "comments"]], [migi.createVd("h4", [], ["评论"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论"]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / take)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.commentData.data]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["placeholder", "夸夸这个活动吧"]])]);
+      return migi.createVd("div", [["class", "comments"]], [migi.createVd("h4", [], ["评论"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论"]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.commentData.data]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "发送"], ["tipText", "-${n}"], ["placeholder", "夸夸这个帖子吧"]])]);
+    }
+  }, {
+    key: 'loading',
+    set: function set(v) {
+      this.__setBind("loading", v);this.__data("loading");
+    },
+    get: function get() {
+      return this.__getBind("loading");
+    }
+  }, {
+    key: 'loadEnd',
+    set: function set(v) {
+      this.__setBind("loadEnd", v);this.__data("loadEnd");
+    },
+    get: function get() {
+      return this.__getBind("loadEnd");
     }
   }, {
     key: 'rootID',
@@ -1064,195 +1049,12 @@ var PostComment = function (_migi$Component) {
     get: function get() {
       if (this.__initBind("parentID")) this.__setBind("parentID", -1);return this.__getBind("parentID");
     }
-  }, {
-    key: 'loading',
-    set: function set(v) {
-      this.__setBind("loading", v);this.__data("loading");
-    },
-    get: function get() {
-      return this.__getBind("loading");
-    }
   }]);
 
   return PostComment;
 }(migi.Component);
 
 migi.name(PostComment, "PostComment");exports.default = PostComment;
-
-/***/ }),
-
-/***/ 6:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Page = function (_migi$Component) {
-  _inherits(Page, _migi$Component);
-
-  function Page() {
-    var _ref;
-
-    _classCallCheck(this, Page);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Page.__proto__ || Object.getPrototypeOf(Page)).call.apply(_ref, [this].concat(data)));
-
-    _this._index = _this.props.index;
-    _this._total = _this.props.total;
-    _this.update();
-    return _this;
-  }
-
-  _createClass(Page, [{
-    key: "update",
-    value: function update() {
-      var list = [];
-      list.push(migi.createVd("li", [], [this.index == 1 ? migi.createVd("span", [], ["1"]) : migi.createVd("a", [["href", "#"]], ["1"])]));
-      if (this.total > 1) {
-        if (this.index > 4) {
-          list.push(migi.createVd("li", [], ["..."]));
-        }
-        for (var i = Math.max(2, this.index - 2); i < this.index; i++) {
-          list.push(migi.createVd("li", [], [this.index == i ? migi.createVd("span", [], [i]) : migi.createVd("a", [["href", "#"]], [i])]));
-        }
-        if (this.index > 1) {
-          list.push(migi.createVd("li", [], [migi.createVd("span", [], [this.index])]));
-        }
-        for (var i = this.index + 1; i < Math.min(this.total, this.index + 3); i++) {
-          list.push(migi.createVd("li", [], [this.index == i ? migi.createVd("span", [], [i]) : migi.createVd("a", [["href", "#"]], [i])]));
-        }
-        if (this.index < this.total - 3) {
-          list.push(migi.createVd("li", [], ["..."]));
-        }
-        if (this.index < this.total) {
-          list.push(migi.createVd("li", [], [migi.createVd("a", [["href", "#"]], [this.total])]));
-        }
-      }
-      this.list = list;
-    }
-  }, {
-    key: "submit",
-    value: function submit(e) {
-      e.preventDefault();
-      var index = parseInt(this.num) || 1;
-      if (index < 1) {
-        index = 1;
-      } else if (index > this.total) {
-        index = this.total;
-      }
-      this.num = index;
-      if (index && index != this.index) {
-        this.index = index;
-        this.emit('page', this.index);
-      }
-    }
-  }, {
-    key: "click",
-    value: function click(e) {
-      e.preventDefault();
-      var index = e.target.innerHTML;
-      if (index && index != this.index) {
-        this.index = parseInt(index);
-        this.emit('page', this.index);
-      }
-    }
-  }, {
-    key: "prev",
-    value: function prev(e) {
-      e.preventDefault();
-      if (this.index > 1) {
-        this.index--;
-        this.emit('page', this.index);
-      }
-    }
-  }, {
-    key: "next",
-    value: function next(e) {
-      e.preventDefault();
-      if (this.index < this.total) {
-        this.index++;
-        this.emit('page', this.index);
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return migi.createVd("form", [["class", "cp-page"], ["onSubmit", new migi.Cb(this, this.submit)], ["onSwipeLeft", new migi.Cb(this, this.prev)], ["onSwipeRight", new migi.Cb(this, this.next)]], [migi.createVd("a", [["href", "#"], ["class", new migi.Obj("index", this, function () {
-        return this.index == 1 ? 'prev dis' : 'prev';
-      })], ["onClick", new migi.Cb(this, this.prev)]], [migi.createVd("b", [], []), "上一页"]), migi.createVd("ol", [["onClick", [[{ "a": { "_v": true } }, new migi.Cb(this, this.click)]]]], [new migi.Obj("list", this, function () {
-        return this.list;
-      })]), migi.createVd("a", [["href", "#"], ["class", new migi.Obj(["index", "total"], this, function () {
-        return this.index == this.total ? 'next dis' : 'next';
-      })], ["onClick", new migi.Cb(this, this.next)]], ["下一页", migi.createVd("b", [], [])]), migi.createVd("span", [], [new migi.Obj("index", this, function () {
-        return this.index;
-      }), "/", new migi.Obj("total", this, function () {
-        return this.total;
-      }), " 页"]), migi.createVd("input", [["type", "number"], ["class", "num"], ["name", "page"], ["value", new migi.Obj("num", this, function () {
-        return this.num;
-      })], ["min", "1"], ["max", new migi.Obj("total", this, function () {
-        return this.total;
-      })]]), migi.createVd("input", [["type", "submit"], ["class", "sub"], ["value", "跳转"]])]);
-    }
-  }, {
-    key: "index",
-    get: function get() {
-      return this._index || 1;
-    },
-    set: function set(v) {
-      this._index = v;
-      this.update();
-      ;this.__array("index", v);this.__data("index");
-    }
-  }, {
-    key: "total",
-    get: function get() {
-      return this._total || 1;
-    },
-    set: function set(v) {
-      this._total = v;
-      this.index = 1;
-      ;this.__array("total", v);this.__data("total");
-    }
-  }, {
-    key: "list",
-    get: function get() {
-      return this._list || [];
-    },
-    set: function set(v) {
-      this._list = v;
-      ;this.__array("list", v);this.__data("list");
-    }
-  }, {
-    key: "num",
-    get: function get() {
-      return this._num;
-    },
-    set: function set(v) {
-      this._num = v;
-      ;this.__array("num", v);this.__data("num");
-    }
-  }]);
-
-  return Page;
-}(migi.Component);
-
-migi.name(Page, "Page");exports.default = Page;
 
 /***/ })
 

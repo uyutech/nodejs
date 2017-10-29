@@ -62,13 +62,6 @@ module.exports = app => {
   app.post('/api/works/photoList', 'api.works.photoList');
   app.post('/api/works/addTempLink', app.middlewares.needLoginJson(), 'api.works.addTempLink');
 
-  app.post('/api/collection/commentList', 'api.collection.commentList');
-  app.post('/api/collection/addComment', app.middlewares.needLoginJson(), 'api.collection.addComment');
-  app.post('/api/collection/likeComment', app.middlewares.needLoginJson(), 'api.collection.likeComment');
-  app.post('/api/collection/subCommentList', 'api.collection.subCommentList');
-  app.post('/api/collection/delComment', app.middlewares.needLoginJson(), 'api.collection.delComment');
-  app.post('/api/collection/addTempLink', app.middlewares.needLoginJson(), 'api.collection.addTempLink');
-
   app.post('/api/author/tagB', 'api.author.tagB');
   app.post('/api/author/playList', 'api.author.playList');
   app.post('/api/author/commentList', 'api.author.commentList');

@@ -357,7 +357,7 @@ var _WorksTypeEnum = __webpack_require__(47);
 
 var _WorksTypeEnum2 = _interopRequireDefault(_WorksTypeEnum);
 
-var _LyricsParser = __webpack_require__(45);
+var _LyricsParser = __webpack_require__(44);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -840,7 +840,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _LyricsParser = __webpack_require__(45);
+var _LyricsParser = __webpack_require__(44);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
@@ -3125,7 +3125,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 45:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

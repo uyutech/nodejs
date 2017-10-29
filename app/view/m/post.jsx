@@ -4,7 +4,7 @@
 
 'use strict';
 
-import Activity from '../../assets/m/post/Post.jsx';
+import Post from '../../assets/m/post/Post.jsx';
 
 export default function(data) {
   let isLogin = data.isLogin;
