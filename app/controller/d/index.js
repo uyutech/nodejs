@@ -14,6 +14,16 @@ module.exports = app => {
         });
         if(res.data.success) {
           let userInfo = res.data.data || {};
+          ctx.session.uname = userInfo.NickName;
+          ctx.session.head = userInfo.Head_Url;
+          if(userInfo.ISAuthor) {
+            ctx.session.authorID = userInfo.AuthorID;
+            ctx.session.authorName = userInfo.AuthorName;
+            // 没有经过主动登录，session未过期时，js_config中间件没有添加信息，需要补上
+            if(ctx.helper.$CONFIG.indexOf('$CONFIG.isAuthor') === -1) {
+              ctx.helper.$CONFIG += `$CONFIG.isAuthor = true;\n$CONFIG.authorID = '${ctx.session.authorID}';\n`;
+            }
+          }
           let authorInfo = {};
           if(ctx.session.authorID) {
             let res2 = yield ctx.helper.postServiceJSON('api/users/GetAuthorRelevant', {

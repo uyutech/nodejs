@@ -152,7 +152,7 @@ class Welcome extends migi.Component {
         authorTip += authorInfo.Hot_Works_Items.map(function(item) {
           return <strong>{ item.Title }</strong>;
         });
-        authorTip += '！<br/>';
+        authorTip += '等作品！<br/>';
       }
       if(authorInfo.AuthorToAuthor && authorInfo.AuthorToAuthor.length) {
         authorTip += `您合作过的`;
@@ -213,11 +213,11 @@ class Welcome extends migi.Component {
             <ul class="tags fn-clear" ref="authors">
               {
                 (this.authors || []).map(function(item) {
-                  return <li rel={ item.AuthorID }>{ item.AuthorName }</li>;
+                  return <li rel={ item.AuthorID } class={ item.ISlike ? 'cur' : '' }>{ item.AuthorName }</li>;
                 })
               }
             </ul>
-            <label><input type="checkbox" checked="checked" onChange={ this.change }/>我已阅读并同意转圈用户规约</label>
+            <label><input type="checkbox" checked="checked" onChange={ this.change }/>我已阅读并同意<a href="http://zhuanquan.xyz/temp/d3a4c4114dd2ded956b0d6876bd745eb.html" target="_blank">《转圈用户规约》</a></label>
             <button class={ 'center' + (this.dis ? ' dis' : '') } onClick={ this.clickOK }>好的~我要开始转圈啦！</button>
           </div>
         </div>
@@ -261,7 +261,7 @@ class Welcome extends migi.Component {
               })
             }
           </ul>
-          <label><input type="checkbox" checked="checked" onChange={ this.change }/>我已阅读并同意转圈用户规约</label>
+          <label><input type="checkbox" checked="checked" onChange={ this.change }/>我已阅读并同意<a href="http://zhuanquan.xyz/temp/d3a4c4114dd2ded956b0d6876bd745eb.html" target="_blank">《转圈用户规约》</a></label>
           <button class={ 'center' + (this.dis ? ' dis' : '') } onClick={ this.clickOK }>好的~我要开始转圈啦！</button>
         </div>
       </div>

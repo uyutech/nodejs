@@ -767,7 +767,7 @@ var Welcome = function (_migi$Component) {
           authorTip += authorInfo.Hot_Works_Items.map(function (item) {
             return migi.createVd("strong", [], [item.Title]);
           });
-          authorTip += '！<br/>';
+          authorTip += '等作品！<br/>';
         }
         if (authorInfo.AuthorToAuthor && authorInfo.AuthorToAuthor.length) {
           authorTip += '\u60A8\u5408\u4F5C\u8FC7\u7684';
@@ -794,9 +794,9 @@ var Welcome = function (_migi$Component) {
           });
         })]), migi.createVd("h4", [], ["作者"]), migi.createVd("ul", [["class", "tags fn-clear"], ["ref", "authors"]], [new migi.Obj("authors", this, function () {
           return (this.authors || []).map(function (item) {
-            return migi.createVd("li", [["rel", item.AuthorID]], [item.AuthorName]);
+            return migi.createVd("li", [["rel", item.AuthorID], ["class", item.ISlike ? 'cur' : '']], [item.AuthorName]);
           });
-        })]), migi.createVd("label", [], [migi.createVd("input", [["type", "checkbox"], ["checked", "checked"], ["onChange", new migi.Cb(this, this.change)]]), "我已阅读并同意转圈用户规约"]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
+        })]), migi.createVd("label", [], [migi.createVd("input", [["type", "checkbox"], ["checked", "checked"], ["onChange", new migi.Cb(this, this.change)]]), "我已阅读并同意", migi.createVd("a", [["href", "http://zhuanquan.xyz/temp/d3a4c4114dd2ded956b0d6876bd745eb.html"], ["target", "_blank"]], ["《转圈用户规约》"])]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
           return 'center' + (this.dis ? ' dis' : '');
         })], ["onClick", new migi.Cb(this, this.clickOK)]], ["好的~我要开始转圈啦！"])])])]);
       }
@@ -824,7 +824,7 @@ var Welcome = function (_migi$Component) {
         return (this.authors || []).map(function (item) {
           return migi.createVd("li", [["rel", item.AuthorID]], [item.AuthorName]);
         });
-      })]), migi.createVd("label", [], [migi.createVd("input", [["type", "checkbox"], ["checked", "checked"], ["onChange", new migi.Cb(this, this.change)]]), "我已阅读并同意转圈用户规约"]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
+      })]), migi.createVd("label", [], [migi.createVd("input", [["type", "checkbox"], ["checked", "checked"], ["onChange", new migi.Cb(this, this.change)]]), "我已阅读并同意", migi.createVd("a", [["href", "http://zhuanquan.xyz/temp/d3a4c4114dd2ded956b0d6876bd745eb.html"], ["target", "_blank"]], ["《转圈用户规约》"])]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
         return 'center' + (this.dis ? ' dis' : '');
       })], ["onClick", new migi.Cb(this, this.clickOK)]], ["好的~我要开始转圈啦！"])])])]);
     }
