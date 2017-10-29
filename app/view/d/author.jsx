@@ -29,7 +29,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead()}
+  ${data.helper.getDHead({ title: authorDetail.AuthorName })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dauthor.css')}"/>
 </head>
