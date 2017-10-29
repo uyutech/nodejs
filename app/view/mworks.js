@@ -2022,16 +2022,25 @@ var Media = function (_migi$Component) {
           }
         }
         $dd.addClass('cur');
+        if (tvd.name.toLowerCase() === 'dt') {
+          $dd.next().addClass('cur');
+        }
       }
     }
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod mod-media fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', migi.createVd("div", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "dd": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.props.videoData ? migi.createVd("dl", [["class", 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '')], ["rel", "video"]], [migi.createVd("dt", [], ["视频"]), this.props.videoData.map(function (item, i) {
-        return migi.createVd("dd", [["class", this.props.first === 'video' && !i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
-      }.bind(this))]) : '', this.props.audioData ? migi.createVd("dl", [["class", 'audio fn-clear' + (this.props.first === 'audio' ? ' cur' : '')], ["rel", "audio"]], [migi.createVd("dt", [], ["音频"]), this.props.audioData.map(function (item, i) {
-        return migi.createVd("dd", [["class", this.props.first === 'audio' && !i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
-      }.bind(this))]) : ''])]);
+      var showLabel = this.props.videoData && this.props.audioData;
+      var videoLabelNum = this.props.videoData ? this.props.videoData.length : 0;
+      var audioLabelNum = this.props.audioData ? this.props.audioData.length : 0;
+      if (showLabel) {
+        return migi.createVd("div", [["class", "mod mod-media fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', migi.createVd("div", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "dt": { "_v": true } }, new migi.Cb(this, this.clickType)], [{ "dd": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.props.videoData ? migi.createVd("dl", [["class", 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '')], ["rel", "video"]], [migi.createVd("dt", [["rel", 0]], ["视频"]), this.props.videoData.length && this.props.videoData.length > 1 ? this.props.videoData.map(function (item, i) {
+          return migi.createVd("dd", [["class", this.props.first === 'video' && !i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
+        }.bind(this)) : '']) : '', this.props.audioData ? migi.createVd("dl", [["class", 'audio fn-clear' + (this.props.first === 'audio' ? ' cur' : '')], ["rel", "audio"]], [migi.createVd("dt", [["rel", 0]], ["音频"]), this.props.audioData.length && this.props.audioData.length > 1 ? this.props.audioData.map(function (item, i) {
+          return migi.createVd("dd", [["class", this.props.first === 'audio' && !i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
+        }.bind(this)) : '']) : ''])]);
+      }
+      return migi.createVd("div", [["class", "mod mod-media fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '']);
     }
   }]);
 

@@ -11,6 +11,13 @@ export default function(authorType) {
         css: 'chang',
         labelType: 11,
       };
+    case 113:
+      return {
+        name: '伴唱',
+        abbr: '唱',
+        css: 'chang',
+        labelType: 11,
+      };
     case 121:
       return {
         name: '作曲',

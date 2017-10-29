@@ -266,7 +266,7 @@ midaho：是何人谓我 如蜉蝣 未敢越东岱
         <p>作曲/编曲：<a href="http://weibo.com/u/2423021884 " target="_blank">月千宸</a></p>
         <p>作词：<a href="http://weibo.com/redmirror2005" target="_blank">腾云驾雾琉璃仙 </a></p>
         <p>混音：<a href="http://weibo.com/ichigolily" target="_blank">Midaho</a></p>
-         <p>笛箫：<a href="http://weibo.com/ellen0411" target="_blank">Midaho</a></p>
+         <p>笛箫：<a href="http://weibo.com/ellen0411" target="_blank">水玥儿</a></p>
         <p>PV：<a href="http://weibo.com/moirajia" target="_blank">冰镇甜豆浆</a>
         	<a href="http://weibo.com/zzstarsound" target="_blank">中梓星音</a></p>
         <p>曲绘：<a href="http://weibo.com/pudding131" target="_blank">黑色布丁_酱</a>&nbsp;
