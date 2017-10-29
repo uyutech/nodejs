@@ -40,7 +40,7 @@ module.exports = app => {
       if(res.commentData.data.success) {
         commentData = res.commentData.data.data;
       }
-      yield ctx.render('mactivity', {
+      yield ctx.render('mpost', {
         isLogin: !!uid,
         id,
         list,
