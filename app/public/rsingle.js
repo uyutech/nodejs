@@ -1652,7 +1652,7 @@ var Rhyme = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "main rhyme"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["href", "#work2015000000000006"], ["class", "rjrjs"]]), migi.createVd("a", [["href", "#grid"], ["class", "jrj"]]), migi.createVd("a", [["href", "#work2015000000000006"], ["class", "wsffl"]])])]);
+      return migi.createVd("div", [["class", "main rhyme"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["href", "#work2015000000000006"], ["class", "rjrjs"]]), migi.createVd("a", [["href", "#grid"], ["class", "jrj"]]), migi.createVd("a", [["href", "#work2015000000001368"], ["class", "wsffl"]])])]);
     }
   }]);
 
