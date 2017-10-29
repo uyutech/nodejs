@@ -4,6 +4,7 @@
 
 'use strict';
 
+import net from '../../d/common/net';
 import util from '../../d/common/util';
 
 let isStart;
@@ -250,7 +251,7 @@ class MusicAlbum extends migi.Component {
     }
     let self = this;
     let $vd = $(vd.element);
-    let data = self.datas[self.index];
+    let data = self.item;
     if($vd.hasClass('loading')) {
       //
     }

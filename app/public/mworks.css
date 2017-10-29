@@ -1523,6 +1523,7 @@ body {
   transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
 }
 .mod.mod-musicalbum .fn {
+  position: relative;
   padding: 0.1rem 0.1rem 0.4rem;
   background: linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 20%, rgba(255, 255, 255, 0.7) 100%);
 }

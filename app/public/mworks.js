@@ -1503,6 +1503,91 @@ var Video = function (_migi$Component) {
       this.isPlaying ? this.pause() : this.play();
     }
   }, {
+    key: 'clickLike',
+    value: function clickLike(e, vd) {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
+      var self = this;
+      var $vd = $(vd.element);
+      if (!$vd.hasClass('loading')) {
+        $vd.addClass('loading');
+        var data = self.datas[self.index];
+        _net2.default.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
+          if (res.success) {
+            data.ISLike = res.data === 211;
+            self.fnLike = null;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      }
+    }
+  }, {
+    key: 'clickFavor',
+    value: function clickFavor(e, vd) {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
+      var self = this;
+      var $vd = $(vd.element);
+      var data = self.datas[self.index];
+      if ($vd.hasClass('loading')) {
+        //
+      } else if ($vd.hasClass('has')) {
+        _net2.default.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
+          if (res.success) {
+            data.ISFavor = false;
+            self.fnFavor = null;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      } else {
+        _net2.default.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
+          if (res.success) {
+            data.ISFavor = true;
+            self.fnFavor = null;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      }
+    }
+  }, {
+    key: 'clickDownload',
+    value: function clickDownload(e) {
+      if (!$CONFIG.isLogin) {
+        e.preventDefault();
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+    }
+  }, {
+    key: 'clickShare',
+    value: function clickShare() {
+      migi.eventBus.emit('SHARE', location.href);
+    }
+  }, {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", 'video' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("div", [["class", new migi.Obj("isPlaying", this, function () {
@@ -2149,6 +2234,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
 var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
@@ -2390,7 +2479,7 @@ var MusicAlbum = function (_migi$Component) {
       if (!$vd.hasClass('loading')) {
         $vd.addClass('loading');
         var data = self.item;
-        net.postJSON('/api/works/likeWork', { workID: self.workID }, function (res) {
+        _net2.default.postJSON('/api/works/likeWork', { workID: self.workID }, function (res) {
           if (res.success) {
             data.ISLike = self.like = res.data === 211;
           } else if (res.code === 1000) {
@@ -2414,11 +2503,11 @@ var MusicAlbum = function (_migi$Component) {
       }
       var self = this;
       var $vd = $(vd.element);
-      var data = self.datas[self.index];
+      var data = self.item;
       if ($vd.hasClass('loading')) {
         //
       } else if ($vd.hasClass('has')) {
-        net.postJSON('/api/works/unFavorWork', { workID: self.workID }, function (res) {
+        _net2.default.postJSON('/api/works/unFavorWork', { workID: self.workID }, function (res) {
           if (res.success) {
             data.ISFavor = self.favor = false;
           } else if (res.code === 1000) {
@@ -2432,7 +2521,7 @@ var MusicAlbum = function (_migi$Component) {
           $vd.removeClass('loading');
         });
       } else {
-        net.postJSON('/api/works/favorWork', { workID: self.workID }, function (res) {
+        _net2.default.postJSON('/api/works/favorWork', { workID: self.workID }, function (res) {
           if (res.success) {
             data.ISFavor = self.favor = true;
           } else if (res.code === 1000) {

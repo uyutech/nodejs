@@ -43,6 +43,7 @@ export default function(data) {
 <div id="page" class="page"></div>
 <script src="/public/rcommon.js?1"></script>
 <script src="/public/rsingle.js?1"></script>
+<div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1266706529'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1266706529' type='text/javascript'%3E%3C/script%3E"));</script></div>
 </body>
 </html>`;
 };

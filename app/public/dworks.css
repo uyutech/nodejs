@@ -2388,6 +2388,7 @@ body {
   transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
 }
 .mod.mod-musicalbum .player .fn {
+  position: relative;
   padding: 0.2rem;
   background: linear-gradient(rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 40%, rgba(255, 255, 255, 0.7) 100%);
   border-bottom-left-radius: 0.1rem;

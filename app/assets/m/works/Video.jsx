@@ -174,6 +174,91 @@ class Video extends migi.Component {
   clickPlay(e) {
     this.isPlaying ? this.pause() : this.play();
   }
+  clickLike(e, vd) {
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
+    let self = this;
+    let $vd = $(vd.element);
+    if(!$vd.hasClass('loading')) {
+      $vd.addClass('loading');
+      let data = self.datas[self.index];
+      net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
+        if(res.success) {
+          data.ISLike = res.data === 211;
+          self.fnLike = null;
+        }
+        else if(res.code === 1000) {
+          migi.eventBus.emit('NEED_LOGIN');
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $vd.removeClass('loading');
+      }, function () {
+        alert(res.message || util.ERROR_MESSAGE);
+        $vd.removeClass('loading');
+      });
+    }
+  }
+  clickFavor(e, vd) {
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
+    let self = this;
+    let $vd = $(vd.element);
+    let data = self.datas[self.index];
+    if($vd.hasClass('loading')) {
+      //
+    }
+    else if($vd.hasClass('has')) {
+      net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
+        if(res.success) {
+          data.ISFavor = false;
+          self.fnFavor = null;
+        }
+        else if(res.code === 1000) {
+          migi.eventBus.emit('NEED_LOGIN');
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $vd.removeClass('loading');
+      }, function () {
+        alert(res.message || util.ERROR_MESSAGE);
+        $vd.removeClass('loading');
+      });
+    }
+    else {
+      net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
+        if(res.success) {
+          data.ISFavor = true;
+          self.fnFavor = null;
+        }
+        else if(res.code === 1000) {
+          migi.eventBus.emit('NEED_LOGIN');
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $vd.removeClass('loading');
+      }, function () {
+        alert(res.message || util.ERROR_MESSAGE);
+        $vd.removeClass('loading');
+      });
+    }
+  }
+  clickDownload(e) {
+    if(!$CONFIG.isLogin) {
+      e.preventDefault();
+      migi.eventBus.emit('NEED_LOGIN');
+    }
+  }
+  clickShare() {
+    migi.eventBus.emit('SHARE', location.href);
+  }
   render() {
     return <div class={ 'video' + (this.props.show ? '' : ' fn-hide') }>
       <div class={ 'c' + ( this.isPlaying ? ' playing' : '') } ref="c">
