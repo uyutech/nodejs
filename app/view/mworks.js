@@ -1046,7 +1046,7 @@ var Author = function (_migi$Component) {
               temp = [];
             }
             var type = _authorTemplate2.default.code2Data[item.WorksAuthorType];
-            var label = item.Tips || type.display;
+            var label = item.Tips || (type ? type.display : '其它');
             temp.push(migi.createVd("span", [["class", "item"]], [migi.createVd("small", [], [label]), migi.createVd("a", [["class", "item"], ["href", '/author/' + item.ID], ["title", item.AuthName]], [migi.createVd("img", [["src", _util2.default.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("span", [], [item.AuthName])])]));
           } else {
             temp.push(migi.createVd("a", [["class", "item"], ["href", '/author/' + item.ID]], [migi.createVd("img", [["src", _util2.default.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("span", [], [item.AuthName])]));
@@ -2399,7 +2399,7 @@ var Audio = function (_migi$Component) {
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].FileUrl;
       })], ["download", new migi.Obj(["datas", "index"], this, function () {
-        return this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl)[0] || '');
+        return this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl || '')[0] || '');
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
@@ -2827,7 +2827,7 @@ var Video = function (_migi$Component) {
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].FileUrl;
       })], ["download", new migi.Obj(["datas", "index"], this, function () {
-        return this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl)[0] || '');
+        return this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl || '')[0] || '');
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
@@ -3804,7 +3804,7 @@ var MusicAlbum = function (_migi$Component) {
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("url", this, function () {
         return this.url;
       })], ["download", new migi.Obj(["name", "url"], this, function () {
-        return this.name + (/\.\w+$/.exec(this.url)[0] || '');
+        return this.name + (/\.\w+$/.exec(this.url || '')[0] || '');
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {

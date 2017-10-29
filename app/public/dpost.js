@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 200);
+/******/ 	return __webpack_require__(__webpack_require__.s = 201);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -734,15 +734,15 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 200:
+/***/ 201:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(201);
+__webpack_require__(202);
 
-var _Post = __webpack_require__(202);
+var _Post = __webpack_require__(203);
 
 var _Post2 = _interopRequireDefault(_Post);
 
@@ -752,14 +752,14 @@ var post = migi.preExist(migi.createCp(_Post2.default, [["postData", $CONFIG.pos
 
 /***/ }),
 
-/***/ 201:
+/***/ 202:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 202:
+/***/ 203:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -771,7 +771,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _PostComment = __webpack_require__(203);
+var _PostComment = __webpack_require__(204);
 
 var _PostComment2 = _interopRequireDefault(_PostComment);
 
@@ -812,7 +812,7 @@ migi.name(Post, "Post");exports.default = Post;
 
 /***/ }),
 
-/***/ 203:
+/***/ 204:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

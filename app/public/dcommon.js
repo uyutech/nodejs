@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 136);
+/******/ 	return __webpack_require__(__webpack_require__.s = 138);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7280,7 +7280,85 @@ exports.default = NonVisualComponent;
 /* 47 */,
 /* 48 */,
 /* 49 */,
-/* 50 */,
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Share = function (_migi$Component) {
+  _inherits(Share, _migi$Component);
+
+  function Share() {
+    var _ref;
+
+    _classCallCheck(this, Share);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = Share.__proto__ || Object.getPrototypeOf(Share)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(Share, [{
+    key: "show",
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      var input = this.ref.share.element;
+      input.focus();
+      input.setSelectionRange(0, 9999);
+      try {
+        document.execCommand('copy');
+        alert('分享链接已复制成功，可以分享给亲朋好友啦！如没有复制成功，也可以直接复制输入框中的网址哦！');
+      } catch (err) {
+        alert('分享链接已复制成功，可以分享给亲朋好友啦！如没有复制成功，也可以直接复制输入框中的网址哦！');
+      }
+    }
+  }, {
+    key: "clickClose",
+    value: function clickClose() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-share fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("label", [], ["页面地址"]), migi.createVd("input", [["class", "share"], ["ref", "share"], ["type", "text"], ["value", new migi.Obj("url", this, function () {
+        return this.url;
+      })]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)]], ["复制"]), migi.createVd("span", [["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
+    }
+  }, {
+    key: "url",
+    set: function set(v) {
+      this.__setBind("url", v);this.__data("url");
+    },
+    get: function get() {
+      return this.__getBind("url");
+    }
+  }]);
+
+  return Share;
+}(migi.Component);
+
+migi.name(Share, "Share");exports.default = Share;
+
+/***/ }),
 /* 51 */,
 /* 52 */,
 /* 53 */,
@@ -7293,7 +7371,8 @@ exports.default = NonVisualComponent;
 /* 60 */,
 /* 61 */,
 /* 62 */,
-/* 63 */
+/* 63 */,
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7323,7 +7402,6 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 64 */,
 /* 65 */,
 /* 66 */,
 /* 67 */,
@@ -7395,7 +7473,9 @@ module.exports = function (module) {
 /* 133 */,
 /* 134 */,
 /* 135 */,
-/* 136 */
+/* 136 */,
+/* 137 */,
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7410,17 +7490,17 @@ __webpack_require__(34);
 
 __webpack_require__(35);
 
-var _jquery = __webpack_require__(137);
+var _jquery = __webpack_require__(139);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _cookie = __webpack_require__(138);
+var _cookie = __webpack_require__(140);
 
 var _cookie2 = _interopRequireDefault(_cookie);
 
-__webpack_require__(139);
+__webpack_require__(141);
 
-__webpack_require__(143);
+__webpack_require__(144);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7435,7 +7515,7 @@ window.requestAnimationFrame = function () {
 window.$ = _jquery2.default;
 
 /***/ }),
-/* 137 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17268,10 +17348,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)(module)))
 
 /***/ }),
-/* 138 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17377,19 +17457,19 @@ exports.default = function ($) {
 };
 
 /***/ }),
-/* 139 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(140);
+__webpack_require__(142);
 
-var _MLogin = __webpack_require__(141);
+var _MLogin = __webpack_require__(143);
 
 var _MLogin2 = _interopRequireDefault(_MLogin);
 
-var _Share = __webpack_require__(142);
+var _Share = __webpack_require__(50);
 
 var _Share2 = _interopRequireDefault(_Share);
 
@@ -17426,7 +17506,7 @@ migi.eventBus.on('COMMENT', function (type) {
 });
 
 /***/ }),
-/* 140 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17480,7 +17560,7 @@ if (parent !== window) {
 }
 
 /***/ }),
-/* 141 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17563,86 +17643,7 @@ var NeedLogin = function (_migi$Component) {
 migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
 
 /***/ }),
-/* 142 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Share = function (_migi$Component) {
-  _inherits(Share, _migi$Component);
-
-  function Share() {
-    var _ref;
-
-    _classCallCheck(this, Share);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = Share.__proto__ || Object.getPrototypeOf(Share)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(Share, [{
-    key: "show",
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-    }
-  }, {
-    key: "click",
-    value: function click() {
-      var input = this.ref.share.element;
-      input.focus();
-      input.setSelectionRange(0, 9999);
-      try {
-        document.execCommand('copy');
-        alert('分享链接已复制成功，可以分享给亲朋好友啦！如没有复制成功，也可以直接复制输入框中的网址哦！');
-      } catch (err) {
-        alert('分享链接已复制成功，可以分享给亲朋好友啦！如没有复制成功，也可以直接复制输入框中的网址哦！');
-      }
-    }
-  }, {
-    key: "clickClose",
-    value: function clickClose() {
-      $(this.element).addClass('fn-hide');
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-share fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("label", [], ["页面地址"]), migi.createVd("input", [["class", "share"], ["ref", "share"], ["type", "text"], ["value", new migi.Obj("url", this, function () {
-        return this.url;
-      })]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)]], ["复制"]), migi.createVd("span", [["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
-    }
-  }, {
-    key: "url",
-    set: function set(v) {
-      this.__setBind("url", v);this.__data("url");
-    },
-    get: function get() {
-      return this.__getBind("url");
-    }
-  }]);
-
-  return Share;
-}(migi.Component);
-
-migi.name(Share, "Share");exports.default = Share;
-
-/***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 99);
+/******/ 	return __webpack_require__(__webpack_require__.s = 101);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -185,14 +185,32 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 100:
+/***/ 101:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(102);
+
+var _Find = __webpack_require__(103);
+
+var _Find2 = _interopRequireDefault(_Find);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.hotWorkList], ["hotAuthorList", $CONFIG.hotAuthorList], ["tags", $CONFIG.tags], ["playList", $CONFIG.playList]]));
+
+/***/ }),
+
+/***/ 102:
 /***/ (function(module, exports) {
 
 throw new Error("Module build failed: ModuleBuildError: Module build failed: variable @secondColor is undefined\n @ /Users/army8735/Sites/github/zhuanq/nodejs/app/assets/m/component/hotwork/index.less (line 18, column 17)\n near lines:\n         width:0.02rem;\n         background:@secondColor;\n         content:' ';\n    at runLoaders (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_webpack@3.7.1@webpack/lib/NormalModule.js:195:19)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:364:11\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:230:18\n    at context.callback (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_loader-runner@2.3.0@loader-runner/lib/LoaderRunner.js:111:13)\n    at less.render (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less-loader@3.0.0@less-loader/lib/loader.js:55:13)\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/render.js:33:38\n    at /Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parse.js:63:17\n    at ImportVisitor.finish [as _finish] (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/parser/parser.js:183:28)\n    at ImportVisitor._onSequencerEmpty (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-visitor.js:35:14)\n    at ImportSequencer.tryRun (/Users/army8735/Sites/github/zhuanq/nodejs/node_modules/_less@2.7.2@less/lib/less/visitors/import-sequencer.js:50:14)");
 
 /***/ }),
 
-/***/ 101:
+/***/ 103:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -212,27 +230,27 @@ var _net = __webpack_require__(!(function webpackMissingModule() { var e = new E
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Banner = __webpack_require__(102);
+var _Banner = __webpack_require__(104);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(50);
+var _HotWork = __webpack_require__(51);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotCollection = __webpack_require__(51);
+var _HotCollection = __webpack_require__(52);
 
 var _HotCollection2 = _interopRequireDefault(_HotCollection);
 
-var _HotAuthor = __webpack_require__(52);
+var _HotAuthor = __webpack_require__(53);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _DoubleCheck = __webpack_require__(53);
+var _DoubleCheck = __webpack_require__(54);
 
 var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
 
-var _PlayList = __webpack_require__(54);
+var _PlayList = __webpack_require__(55);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -367,7 +385,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 102:
+/***/ 104:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -474,7 +492,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 50:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -559,7 +577,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 51:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -630,7 +648,7 @@ migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
 
-/***/ 52:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -713,7 +731,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 53:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -939,7 +957,7 @@ migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
 
-/***/ 54:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1124,24 +1142,6 @@ exports.default = {
   code2Data: code2Data,
   label2Code: label2Code
 };
-
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(100);
-
-var _Find = __webpack_require__(101);
-
-var _Find2 = _interopRequireDefault(_Find);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.hotWorkList], ["hotAuthorList", $CONFIG.hotAuthorList], ["tags", $CONFIG.tags], ["playList", $CONFIG.playList]]));
 
 /***/ })
 

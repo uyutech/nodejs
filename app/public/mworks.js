@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 103);
+/******/ 	return __webpack_require__(__webpack_require__.s = 105);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,15 +264,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 103:
+/***/ 105:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(104);
+__webpack_require__(106);
 
-var _Works = __webpack_require__(105);
+var _Works = __webpack_require__(107);
 
 var _Works2 = _interopRequireDefault(_Works);
 
@@ -282,14 +282,14 @@ var works = migi.preExist(migi.createCp(_Works2.default, [["isLogin", $CONFIG.is
 
 /***/ }),
 
-/***/ 104:
+/***/ 106:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 105:
+/***/ 107:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -309,43 +309,43 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Media = __webpack_require__(106);
+var _Media = __webpack_require__(108);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _itemTemplate = __webpack_require__(55);
+var _itemTemplate = __webpack_require__(56);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
-var _PhotoAlbum = __webpack_require__(109);
+var _PhotoAlbum = __webpack_require__(111);
 
 var _PhotoAlbum2 = _interopRequireDefault(_PhotoAlbum);
 
-var _Author = __webpack_require__(56);
+var _Author = __webpack_require__(57);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Timeline = __webpack_require__(57);
+var _Timeline = __webpack_require__(58);
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 
-var _Text = __webpack_require__(58);
+var _Text = __webpack_require__(59);
 
 var _Text2 = _interopRequireDefault(_Text);
 
-var _Lyric = __webpack_require__(59);
+var _Lyric = __webpack_require__(60);
 
 var _Lyric2 = _interopRequireDefault(_Lyric);
 
-var _InspComment = __webpack_require__(60);
+var _InspComment = __webpack_require__(61);
 
 var _InspComment2 = _interopRequireDefault(_InspComment);
 
-var _Poster = __webpack_require__(61);
+var _Poster = __webpack_require__(62);
 
 var _Poster2 = _interopRequireDefault(_Poster);
 
-var _WorkComment = __webpack_require__(110);
+var _WorkComment = __webpack_require__(112);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
@@ -361,11 +361,11 @@ var _LyricsParser = __webpack_require__(44);
 
 var _LyricsParser2 = _interopRequireDefault(_LyricsParser);
 
-var _MusicAlbum = __webpack_require__(111);
+var _MusicAlbum = __webpack_require__(113);
 
 var _MusicAlbum2 = _interopRequireDefault(_MusicAlbum);
 
-var _PlayList = __webpack_require__(62);
+var _PlayList = __webpack_require__(63);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -711,7 +711,7 @@ migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
 
-/***/ 106:
+/***/ 108:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -731,11 +731,11 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Audio = __webpack_require__(107);
+var _Audio = __webpack_require__(109);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(108);
+var _Video = __webpack_require__(110);
 
 var _Video2 = _interopRequireDefault(_Video);
 
@@ -820,7 +820,7 @@ migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
 
-/***/ 107:
+/***/ 109:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1178,7 +1178,7 @@ var Audio = function (_migi$Component) {
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].FileUrl;
       })], ["download", new migi.Obj(["datas", "index"], this, function () {
-        return this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl)[0] || '');
+        return this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl || '')[0] || '');
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
@@ -1279,7 +1279,7 @@ migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
 
-/***/ 108:
+/***/ 110:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1607,7 +1607,7 @@ var Video = function (_migi$Component) {
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj(["datas", "index"], this, function () {
         return this.datas[this.index].FileUrl;
       })], ["download", new migi.Obj(["datas", "index"], this, function () {
-        return this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl)[0] || '');
+        return this.datas[this.index].ItemName + (/\.\w+$/.exec(this.datas[this.index].FileUrl || '')[0] || '');
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
@@ -1684,7 +1684,7 @@ migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
 
-/***/ 109:
+/***/ 111:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1996,7 +1996,7 @@ migi.name(PhotoAlbum, "PhotoAlbum");exports.default = PhotoAlbum;
 
 /***/ }),
 
-/***/ 110:
+/***/ 112:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2222,7 +2222,7 @@ migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
 
-/***/ 111:
+/***/ 113:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2587,7 +2587,7 @@ var MusicAlbum = function (_migi$Component) {
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("url", this, function () {
         return this.url;
       })], ["download", new migi.Obj(["name", "url"], this, function () {
-        return this.name + (/\.\w+$/.exec(this.url)[0] || '');
+        return this.name + (/\.\w+$/.exec(this.url || '')[0] || '');
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
@@ -3282,7 +3282,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 55:
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3338,7 +3338,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 56:
+/***/ 57:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3404,7 +3404,7 @@ var Author = function (_migi$Component) {
               temp = [];
             }
             var type = _authorTemplate2.default.code2Data[item.WorksAuthorType];
-            var label = item.Tips || type.display;
+            var label = item.Tips || (type ? type.display : '其它');
             temp.push(migi.createVd("span", [["class", "item"]], [migi.createVd("small", [], [label]), migi.createVd("a", [["class", "item"], ["href", '/author/' + item.ID], ["title", item.AuthName]], [migi.createVd("img", [["src", _util2.default.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("span", [], [item.AuthName])])]));
           } else {
             temp.push(migi.createVd("a", [["class", "item"], ["href", '/author/' + item.ID]], [migi.createVd("img", [["src", _util2.default.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("span", [], [item.AuthName])]));
@@ -3452,7 +3452,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 57:
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3508,7 +3508,7 @@ migi.name(Timeline, "Timeline");exports.default = Timeline;
 
 /***/ }),
 
-/***/ 58:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3557,7 +3557,7 @@ migi.name(Text, "Text");exports.default = Text;
 
 /***/ }),
 
-/***/ 59:
+/***/ 60:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3606,7 +3606,7 @@ migi.name(Lyric, "Lyric");exports.default = Lyric;
 
 /***/ }),
 
-/***/ 60:
+/***/ 61:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3661,7 +3661,7 @@ migi.name(InspComment, "InspComment");exports.default = InspComment;
 
 /***/ }),
 
-/***/ 61:
+/***/ 62:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3710,7 +3710,7 @@ migi.name(Poster, "Poster");exports.default = Poster;
 
 /***/ }),
 
-/***/ 62:
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

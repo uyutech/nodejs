@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 125);
+/******/ 	return __webpack_require__(__webpack_require__.s = 127);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,15 +264,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 125:
+/***/ 127:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(126);
+__webpack_require__(128);
 
-var _My = __webpack_require__(127);
+var _My = __webpack_require__(129);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -282,14 +282,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["follows", $CONFIG.follows]
 
 /***/ }),
 
-/***/ 126:
+/***/ 128:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 127:
+/***/ 129:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -309,7 +309,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Follow = __webpack_require__(128);
+var _Follow = __webpack_require__(130);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
@@ -361,7 +361,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 128:
+/***/ 130:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

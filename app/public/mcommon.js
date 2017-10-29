@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 75);
+/******/ 	return __webpack_require__(__webpack_require__.s = 82);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7282,7 +7282,7 @@ exports.default = NonVisualComponent;
 "use strict";
 
 
-var core = __webpack_require__(92);
+var core = __webpack_require__(94);
 
 module.exports = core;
 
@@ -7332,12 +7332,90 @@ module.exports = {
 "use strict";
 
 
-var event = __webpack_require__(93);
+var event = __webpack_require__(95);
 
 module.exports = event;
 
 /***/ }),
-/* 50 */,
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Share = function (_migi$Component) {
+  _inherits(Share, _migi$Component);
+
+  function Share() {
+    var _ref;
+
+    _classCallCheck(this, Share);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = Share.__proto__ || Object.getPrototypeOf(Share)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(Share, [{
+    key: "show",
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      var input = this.ref.share.element;
+      input.focus();
+      input.setSelectionRange(0, 9999);
+      try {
+        document.execCommand('copy');
+        alert('分享链接已复制成功，可以分享给亲朋好友啦！如没有复制成功，也可以直接复制输入框中的网址哦！');
+      } catch (err) {
+        alert('分享链接已复制成功，可以分享给亲朋好友啦！如没有复制成功，也可以直接复制输入框中的网址哦！');
+      }
+    }
+  }, {
+    key: "clickClose",
+    value: function clickClose() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-share fn-hide"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("label", [], ["页面地址"]), migi.createVd("input", [["class", "share"], ["ref", "share"], ["type", "text"], ["value", new migi.Obj("url", this, function () {
+        return this.url;
+      })]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.click)]], ["复制"]), migi.createVd("span", [["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])])]);
+    }
+  }, {
+    key: "url",
+    set: function set(v) {
+      this.__setBind("url", v);this.__data("url");
+    },
+    get: function get() {
+      return this.__getBind("url");
+    }
+  }]);
+
+  return Share;
+}(migi.Component);
+
+migi.name(Share, "Share");exports.default = Share;
+
+/***/ }),
 /* 51 */,
 /* 52 */,
 /* 53 */,
@@ -7362,7 +7440,14 @@ module.exports = event;
 /* 72 */,
 /* 73 */,
 /* 74 */,
-/* 75 */
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7372,13 +7457,13 @@ __webpack_require__(34);
 
 __webpack_require__(35);
 
-var _animaYoctoAjax = __webpack_require__(90);
+var _animaYoctoAjax = __webpack_require__(92);
 
 var _animaYoctoAjax2 = _interopRequireDefault(_animaYoctoAjax);
 
-__webpack_require__(96);
-
 __webpack_require__(98);
+
+__webpack_require__(100);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7433,13 +7518,6 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
 /* 83 */,
 /* 84 */,
 /* 85 */,
@@ -7447,18 +7525,20 @@ window.$ = _animaYoctoAjax2.default;
 /* 87 */,
 /* 88 */,
 /* 89 */,
-/* 90 */
+/* 90 */,
+/* 91 */,
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ajax = __webpack_require__(91);
+var ajax = __webpack_require__(93);
 
 module.exports = ajax;
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7469,14 +7549,14 @@ var $ = __webpack_require__(46),
 
 __webpack_require__(49);
 
-__webpack_require__(94);
+__webpack_require__(96);
 
-__webpack_require__(95);
+__webpack_require__(97);
 
 module.exports = $;
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8287,7 +8367,7 @@ var Yocto = function () {
 module.exports = Yocto;
 
 /***/ }),
-/* 93 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8552,7 +8632,7 @@ $.Event = function (type, props) {
 module.exports = $;
 
 /***/ }),
-/* 94 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8623,7 +8703,7 @@ $.ajaxJSONP = function (options, deferred) {
 module.exports = $;
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8872,35 +8952,47 @@ $.param = function (obj, traditional) {
 module.exports = $;
 
 /***/ }),
-/* 96 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _MLogin = __webpack_require__(97);
+var _MLogin = __webpack_require__(99);
 
 var _MLogin2 = _interopRequireDefault(_MLogin);
 
+var _Share = __webpack_require__(50);
+
+var _Share2 = _interopRequireDefault(_Share);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var mlogin = void 0;
+migi.eventBus.on('NEED_LOGIN', function () {
+  if (!mlogin) {
+    mlogin = migi.render(migi.createCp(_MLogin2.default, []), document.body);
+  }
+  mlogin.show();
+});
+
+var share = void 0;
+migi.eventBus.on('SHARE', function (url) {
+  if (!share) {
+    share = migi.render(migi.createCp(_Share2.default, []), document.body);
+  }
+  share.url = url;
+  share.show();
+});
+
 document.addEventListener('DOMContentLoaded', function () {
-  var mlogin = void 0;
-
-  migi.eventBus.on('NEED_LOGIN', function () {
-    if (!mlogin) {
-      mlogin = migi.render(migi.createCp(_MLogin2.default, []), document.body);
-    }
-    mlogin.show();
-  });
-
   $('#topNav span.user').on('click', function () {
     migi.eventBus.emit('NEED_LOGIN');
   });
 });
 
 /***/ }),
-/* 97 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8978,7 +9070,7 @@ var NeedLogin = function (_migi$Component) {
 migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
 
 /***/ }),
-/* 98 */
+/* 100 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

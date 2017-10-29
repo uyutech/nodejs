@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 193);
+/******/ 	return __webpack_require__(__webpack_require__.s = 194);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 193:
+/***/ 194:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(194);
+__webpack_require__(195);
 
-var _Upload = __webpack_require__(195);
+var _Upload = __webpack_require__(196);
 
 var _Upload2 = _interopRequireDefault(_Upload);
 
@@ -83,14 +83,14 @@ var upload = migi.preExist(migi.createCp(_Upload2.default, []));
 
 /***/ }),
 
-/***/ 194:
+/***/ 195:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 195:
+/***/ 196:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -108,7 +108,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Spark = __webpack_require__(196);
+var Spark = __webpack_require__(197);
 
 var Upload = function (_migi$Component) {
   _inherits(Upload, _migi$Component);
@@ -161,7 +161,7 @@ migi.name(Upload, "Upload");exports.default = Upload;
 
 /***/ }),
 
-/***/ 196:
+/***/ 197:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 144);
+/******/ 	return __webpack_require__(__webpack_require__.s = 145);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,27 +264,27 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 144:
+/***/ 145:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(145);
+__webpack_require__(146);
 
-var _TopNav = __webpack_require__(146);
+var _TopNav = __webpack_require__(147);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(147);
+var _CIframe = __webpack_require__(148);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(148);
+var _QuanNiang = __webpack_require__(149);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
-var _Welcome = __webpack_require__(149);
+var _Welcome = __webpack_require__(150);
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
@@ -364,14 +364,14 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 145:
+/***/ 146:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 146:
+/***/ 147:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -446,7 +446,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 147:
+/***/ 148:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -493,7 +493,7 @@ migi.name(CIframe, "CIframe");exports.default = CIframe;
 
 /***/ }),
 
-/***/ 148:
+/***/ 149:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -573,7 +573,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 149:
+/***/ 150:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -779,13 +779,8 @@ var Welcome = function (_migi$Component) {
         authorTip += '\u4E0D\u77E5\u60A8\u662F\u5426\u613F\u610F\u5728\u8F6C\u5708\u5165\u9A7B\uFF1F<br/>\n\u5165\u9A7B\u4E4B\u540E\u5C06\u5F00\u542F\u60A8\u7684\u4E2A\u4EBA\u4F5C\u8005\u9875\u9762\uFF0C\u4E4B\u540E\u60A8\u5C06\u53EF\u4EE5\u4E0A\u4F20\u3001\u7F16\u8F91\u3001\u60A8\u7684\u4F5C\u54C1\uFF0C\u672A\u6765\u8FD8\u4F1A\u6709\u4E00\u7CFB\u5217\u7C89\u4E1D\u4E92\u52A8\u53CA\u7EA6\u7A3F\u63A5\u7A3F\u529F\u80FD\uFF01';
         return migi.createVd("div", [["class", "welcome"]], [migi.createVd("div", [["class", new migi.Obj("step", this, function () {
           return 'c step' + this.step;
-        })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step0"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [["dangerouslySetInnerHTML", authorTip]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterPublic)]], ["我要公开入驻"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterShadow)]], ["我要入驻，但是我想披个马甲"]), migi.createVd("br", []), migi.createVd("small", [], ["（您依然可以进行作者相关的操作，但将以普通用户的身份进行评论等互动，别人不会知道你就是", userInfo.AuthorName, "）"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNotEnter)]], ["我放弃入驻"])]), migi.createVd("div", [["class", "step step1"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [], ["给马甲想个名字吧！"]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("input", [["ref", "name"], ["class", "name"], ["type", "text"], ["placeholder", "请输入昵称"], ["maxLength", "8"]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName)]], ["就这个啦！"])]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎从异世来到转圈！我是圈娘~\n\
+        })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step0"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [["dangerouslySetInnerHTML", authorTip]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterPublic)]], ["我要公开入驻"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterShadow)]], ["我要入驻，但是我想披个马甲"]), migi.createVd("br", []), migi.createVd("small", [], ["（您依然可以进行作者相关的操作，但将以普通用户的身份进行评论等互动，别人不会知道你就是", userInfo.AuthorName, "）"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNotEnter)]], ["我放弃入驻"])]), migi.createVd("div", [["class", "step step1"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [], ["给马甲想个名字吧！"]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("input", [["ref", "name"], ["class", "name"], ["type", "text"], ["placeholder", "请输入昵称"], ["maxLength", "8"]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName)]], ["就这个啦！"])]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎来到转圈！我是圈娘~\n\
 “转圈”是一款仍在开发中的平台，感谢您参与我们的内测活动，我们联合各位大大为您准备了各种福利，活动详情在活动详情页中查看哦！也欢迎随时在转圈右下角和圈儿互动！\n\
-\n\
-此外我们特别为从异世而来的你准备了一份超大惊喜！\n\
-请点击右侧的播放按钮收听哦~\n\
-异世谣相关的福利活动可以点击右侧活动页面查看~\n\
-福利多多，大家加油哦！\n\
 \n\
 下面的内容中不知可有您喜欢的呢？\n\
 勾选喜欢的标签和作者可以帮助圈儿更好的了解你哦~"]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("h4", [], ["风格"]), migi.createVd("ul", [["class", "tags fn-clear"], ["ref", "tags"]], [new migi.Obj("tags", this, function () {

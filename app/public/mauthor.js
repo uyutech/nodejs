@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 112);
+/******/ 	return __webpack_require__(__webpack_require__.s = 114);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,15 +264,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 112:
+/***/ 114:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(113);
+__webpack_require__(115);
 
-var _Author = __webpack_require__(114);
+var _Author = __webpack_require__(116);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -282,14 +282,14 @@ var author = migi.preExist(migi.createCp(_Author2.default, [["isLogin", $CONFIG.
 
 /***/ }),
 
-/***/ 113:
+/***/ 115:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 114:
+/***/ 116:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -309,19 +309,19 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Nav = __webpack_require__(115);
+var _Nav = __webpack_require__(117);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(118);
+var _Home = __webpack_require__(120);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Work = __webpack_require__(120);
+var _Work = __webpack_require__(122);
 
 var _Work2 = _interopRequireDefault(_Work);
 
-var _AuthorComment = __webpack_require__(121);
+var _AuthorComment = __webpack_require__(123);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
@@ -402,7 +402,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 115:
+/***/ 117:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -414,11 +414,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(116);
+var _Profile = __webpack_require__(118);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(117);
+var _Link = __webpack_require__(119);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -459,7 +459,7 @@ migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
 
-/***/ 116:
+/***/ 118:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -675,7 +675,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 117:
+/***/ 119:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -780,7 +780,7 @@ migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
 
-/***/ 118:
+/***/ 120:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -792,19 +792,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _HotWork = __webpack_require__(50);
+var _HotWork = __webpack_require__(51);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotCollection = __webpack_require__(51);
+var _HotCollection = __webpack_require__(52);
 
 var _HotCollection2 = _interopRequireDefault(_HotCollection);
 
-var _HotAuthor = __webpack_require__(52);
+var _HotAuthor = __webpack_require__(53);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(119);
+var _Dynamic = __webpack_require__(121);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -855,7 +855,7 @@ migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
 
-/***/ 119:
+/***/ 121:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -929,7 +929,7 @@ migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
 
-/***/ 120:
+/***/ 122:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -949,11 +949,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _DoubleCheck = __webpack_require__(53);
+var _DoubleCheck = __webpack_require__(54);
 
 var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
 
-var _PlayList = __webpack_require__(54);
+var _PlayList = __webpack_require__(55);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -1090,7 +1090,7 @@ migi.name(Work, "Work");exports.default = Work;
 
 /***/ }),
 
-/***/ 121:
+/***/ 123:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1848,7 +1848,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 50:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1933,7 +1933,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 51:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2004,7 +2004,7 @@ migi.name(HotCollection, "HotCollection");exports.default = HotCollection;
 
 /***/ }),
 
-/***/ 52:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2087,7 +2087,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 53:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2313,7 +2313,7 @@ migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
 
 /***/ }),
 
-/***/ 54:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

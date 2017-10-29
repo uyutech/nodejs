@@ -33,7 +33,7 @@ class Author extends migi.Component {
             temp = [];
           }
           let type = authorTemplate.code2Data[item.WorksAuthorType];
-          let label = item.Tips || type.display;
+          let label = item.Tips || (type ? type.display : '其它');
           temp.push(<span class="item">
             <small>{ label }</small>
             <a class="item" href={ `/author/${item.ID}` } title={ item.AuthName }>

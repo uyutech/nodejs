@@ -10,7 +10,7 @@ module.exports = appInfo => {
     session: {
       key: 'sessionid',
       maxAge: 24 * 3600 * 1000,
-      domain: '.dev.circling.cc',
+      domain: 'dev.circling.cc2',
     },
   };
 };
