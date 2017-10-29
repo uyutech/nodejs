@@ -807,13 +807,8 @@ var Welcome = function (_migi$Component) {
       }
       return migi.createVd("div", [["class", "welcome"]], [migi.createVd("div", [["class", new migi.Obj("step", this, function () {
         return 'c step' + this.step;
-      })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎从异世来到转圈！我是圈娘~\n\
+      })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎来到转圈！我是圈娘~\n\
 “转圈”是一款仍在开发中的平台，感谢您参与我们的内测活动，我们联合各位大大为您准备了各种福利，活动详情在活动详情页中查看哦！也欢迎随时在转圈右下角和圈儿互动！\n\
-\n\
-此外我们特别为从异世而来的你准备了一份超大惊喜！\n\
-请点击右侧的播放按钮收听哦~\n\
-异世谣相关的福利活动可以点击右侧活动页面查看~\n\
-福利多多，大家加油哦！\n\
 \n\
 下面的内容中不知可有您喜欢的呢？\n\
 勾选喜欢的标签和作者可以帮助圈儿更好的了解你哦~"]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("h4", [], ["风格"]), migi.createVd("ul", [["class", "tags fn-clear"], ["ref", "tags"]], [new migi.Obj("tags", this, function () {
@@ -822,7 +817,7 @@ var Welcome = function (_migi$Component) {
         });
       })]), migi.createVd("h4", [], ["作者"]), migi.createVd("ul", [["class", "tags fn-clear"], ["ref", "authors"]], [new migi.Obj("authors", this, function () {
         return (this.authors || []).map(function (item) {
-          return migi.createVd("li", [["rel", item.AuthorID]], [item.AuthorName]);
+          return migi.createVd("li", [["rel", item.AuthorID], ["class", item.ISlike ? 'cur' : '']], [item.AuthorName]);
         });
       })]), migi.createVd("label", [], [migi.createVd("input", [["type", "checkbox"], ["checked", "checked"], ["onChange", new migi.Cb(this, this.change)]]), "我已阅读并同意", migi.createVd("a", [["href", "http://zhuanquan.xyz/temp/d3a4c4114dd2ded956b0d6876bd745eb.html"], ["target", "_blank"]], ["《转圈用户规约》"])]), migi.createVd("button", [["class", new migi.Obj("dis", this, function () {
         return 'center' + (this.dis ? ' dis' : '');

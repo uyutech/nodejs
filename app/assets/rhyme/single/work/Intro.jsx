@@ -259,6 +259,77 @@ midaho：是何人谓我 如蜉蝣 未敢越东岱
 枕惊澜烟波 问百岁几何
 黄粱中可曾有我
 </pre>`,
+  '2015000000001368': `<p>演唱：<a href="http://weibo.com/740120222" target="_blank">慕寒</a></p>
+         <p>童声：<a href="http://weibo.com/ichigolily" target="_blank">Midaho</a></p>
+        <p>和声：<a href="http://weibo.com/740120222" target="_blank">慕寒</a>
+       		<a href="http://weibo.com/u/2423021884 " target="_blank">月千宸</a></p>
+        <p>作曲/编曲：<a href="http://weibo.com/u/2423021884 " target="_blank">月千宸</a></p>
+        <p>作词：<a href="http://weibo.com/redmirror2005" target="_blank">腾云驾雾琉璃仙 </a></p>
+        <p>混音：<a href="http://weibo.com/ichigolily" target="_blank">Midaho</a></p>
+         <p>笛箫：<a href="http://weibo.com/ellen0411" target="_blank">Midaho</a></p>
+        <p>PV：<a href="http://weibo.com/moirajia" target="_blank">冰镇甜豆浆</a>
+        	<a href="http://weibo.com/zzstarsound" target="_blank">中梓星音</a></p>
+        <p>曲绘：<a href="http://weibo.com/pudding131" target="_blank">黑色布丁_酱</a>&nbsp;
+        <a href="http://weibo.com/muweiervv" target="_blank">VV丶SAMA</a>
+		<a href="http://weibo.com/yukiart" target="_blank">木美人</a></p>
+		<p>海报：<a href="http://weibo.com/seoyutsuki" target="_blank">青凌</a></p>
+        <pre>
+
+文案：
+当日月于神明永生
+当星辰与此心同授
+那双眼，从古至今温柔凝视
+诚心以求，温然给予
+若以大爱为心，世间种种，必不相负。
+
+
+
+吟唱：
+一愿稻香燕雀忙
+二愿有情初成双
+三愿长生登仙乡
+四海升平万世芳
+
+夜，三更未央，烛火轻摇晃
+梦，半明半昧，檐外结初霜
+恍惚间，谁在吟唱
+穿过雾茫茫
+记不清，许下什么愿望
+
+邂春花 初见一场
+忆冬雪 莫失莫忘
+他拈指 竟数不清那欲望
+
+寄鸿鹄 英魂归乡
+至白头 红颜不往
+他看过 人间百态皆是寻常
+
+赐一斛天命 万物孕莽莽
+予一瞬白驹 九天御凤翔
+他阖目 闻百鸟鸣唱
+生双翼 佑万世芬芳
+唯以悲喜笑泪 换一捧阳光
+
+愿作星 驱散仓惶
+愿为雨 将梦滋养
+他的心 是风是火是霞光
+
+曾以爱 温柔沧桑
+也以怒 横对执妄
+他的眼 是日是月是洪荒
+
+赐一斛天命 万物孕莽莽
+予一瞬白驹 九天御凤翔
+他阖目 闻百鸟鸣唱
+生双翼 佑万世芬芳
+唯以悲喜笑泪 换一捧阳光
+
+明月照古今 今人说古长
+魂梦如相授 不辞赴仙乡
+他披上朦胧的月光
+祈一场生命的怒放
+千年寂寞太长 却念念不忘
+</pre>`,
 };
 
 class Intro extends migi.Component {

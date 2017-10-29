@@ -190,7 +190,7 @@ module.exports = app => {
         tags: ctx.helper.postServiceJSON('api/users/GetTag', {
           uid,
           Skip: 0,
-          Take: 10,
+          Take: 20,
         }),
         authors: ctx.helper.postServiceJSON('api/users/GetAuthor', {
           uid,
