@@ -2415,6 +2415,11 @@ var code2Data = {
     display: '和声',
     css: 'singer'
   },
+  '113': {
+    name: '伴唱',
+    display: '伴唱',
+    css: 'singer'
+  },
   '121': {
     name: '作曲',
     display: '作曲',

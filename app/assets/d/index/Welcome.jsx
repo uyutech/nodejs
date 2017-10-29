@@ -126,7 +126,7 @@ class Welcome extends migi.Component {
       $authors.find('li.cur').each(function(i, o) {
         authors.push($(o).attr('rel'));
       });
-      net.postJSON('/api/user/guideSave', { tags, authors }, function(res) {
+      net.postJSON('/api/user/guideSave', { tags, authors, isAuthor: $CONFIG.isAuthor }, function(res) {
         if(res.success) {
           self.step = $CONFIG.userInfo.User_Reg_Stat = 99;
           self.hide();

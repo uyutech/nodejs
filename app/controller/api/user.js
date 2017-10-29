@@ -226,7 +226,7 @@ module.exports = app => {
       }
       let res = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
         uid,
-        User_Reg_Stat: 99,
+        User_Reg_Stat: body.isAuthor ? 100 : 99,
       });
       return ctx.body = res.data;
     }

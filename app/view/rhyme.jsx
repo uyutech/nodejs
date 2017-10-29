@@ -20,8 +20,8 @@ export default function(data) {
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
   <title>异世谣</title>
   <link rel="icon" href="//zhuanquan.xin/img/ba2257a30816928629e0b47f9e6f7b38.png" type="image/x-icon">
-  <link rel="stylesheet" href="/public/rcommon.css?1"/>
-  <link rel="stylesheet" href="/public/rsingle.css?1"/>
+  <link rel="stylesheet" href="/public/rcommon.css?2"/>
+  <link rel="stylesheet" href="/public/rsingle.css?2"/>
 </head>
 <body>
 <script>
@@ -41,8 +41,8 @@ export default function(data) {
   var JIEMENG_ID = '2017000000000002';
 </script>
 <div id="page" class="page"></div>
-<script src="/public/rcommon.js?1"></script>
-<script src="/public/rsingle.js?1"></script>
+<script src="/public/rcommon.js?2"></script>
+<script src="/public/rsingle.js?2"></script>
 <div style="display:none"><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1266706529'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1266706529' type='text/javascript'%3E%3C/script%3E"));</script></div>
 </body>
 </html>`;

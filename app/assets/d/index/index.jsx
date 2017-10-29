@@ -23,7 +23,7 @@ migi.render(
   document.body
 );
 
-if($CONFIG.isLogin && $CONFIG.userInfo.User_Reg_Stat !== 99) {
+if($CONFIG.isLogin && $CONFIG.userInfo.User_Reg_Stat !== 99 && $CONFIG.userInfo.User_Reg_Stat !== 100) {
   migi.render(
     <Welcome userInfo={ $CONFIG.userInfo } authorInfo={ $CONFIG.authorInfo }/>,
     document.body

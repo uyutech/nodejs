@@ -298,7 +298,7 @@ var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, []), document.bod
 
 migi.render(migi.createVd("div", [["class", "info"]]), document.body);
 
-if ($CONFIG.isLogin && $CONFIG.userInfo.User_Reg_Stat !== 99) {
+if ($CONFIG.isLogin && $CONFIG.userInfo.User_Reg_Stat !== 99 && $CONFIG.userInfo.User_Reg_Stat !== 100) {
   migi.render(migi.createCp(_Welcome2.default, [["userInfo", $CONFIG.userInfo], ["authorInfo", $CONFIG.authorInfo]]), document.body);
 }
 
@@ -738,7 +738,7 @@ var Welcome = function (_migi$Component) {
         $authors.find('li.cur').each(function (i, o) {
           authors.push($(o).attr('rel'));
         });
-        _net2.default.postJSON('/api/user/guideSave', { tags: tags, authors: authors }, function (res) {
+        _net2.default.postJSON('/api/user/guideSave', { tags: tags, authors: authors, isAuthor: $CONFIG.isAuthor }, function (res) {
           if (res.success) {
             self.step = $CONFIG.userInfo.User_Reg_Stat = 99;
             self.hide();
