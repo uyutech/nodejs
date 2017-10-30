@@ -703,6 +703,21 @@ var Welcome = function (_migi$Component) {
       });
     }
   }, {
+    key: 'clickNickName2',
+    value: function clickNickName2(e) {
+      var self = this;
+      _net2.default.postJSON('/api/user/settleShadow', function (res) {
+        if (res.success) {
+          self.step = $CONFIG.userInfo.User_Reg_Stat = 10;
+          self.load();
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+      });
+    }
+  }, {
     key: 'load',
     value: function load() {
       var self = this;
@@ -779,7 +794,7 @@ var Welcome = function (_migi$Component) {
         authorTip += '\u4E0D\u77E5\u60A8\u662F\u5426\u613F\u610F\u5728\u8F6C\u5708\u5165\u9A7B\uFF1F<br/>\n\u5165\u9A7B\u4E4B\u540E\u5C06\u5F00\u542F\u60A8\u7684\u4E2A\u4EBA\u4F5C\u8005\u9875\u9762\uFF0C\u4E4B\u540E\u60A8\u5C06\u53EF\u4EE5\u4E0A\u4F20\u3001\u7F16\u8F91\u3001\u60A8\u7684\u4F5C\u54C1\uFF0C\u672A\u6765\u8FD8\u4F1A\u6709\u4E00\u7CFB\u5217\u7C89\u4E1D\u4E92\u52A8\u53CA\u7EA6\u7A3F\u63A5\u7A3F\u529F\u80FD\uFF01';
         return migi.createVd("div", [["class", "welcome"]], [migi.createVd("div", [["class", new migi.Obj("step", this, function () {
           return 'c step' + this.step;
-        })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step0"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [["dangerouslySetInnerHTML", authorTip]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterPublic)]], ["我要公开入驻"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterShadow)]], ["我要入驻，但是我想披个马甲"]), migi.createVd("br", []), migi.createVd("small", [], ["（您依然可以进行作者相关的操作，但将以普通用户的身份进行评论等互动，别人不会知道你就是", userInfo.AuthorName, "）"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNotEnter)]], ["我放弃入驻"])]), migi.createVd("div", [["class", "step step1"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [], ["给马甲想个名字吧！"]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("input", [["ref", "name"], ["class", "name"], ["type", "text"], ["placeholder", "请输入昵称"], ["maxLength", "8"]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName)]], ["就这个啦！"])]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎来到转圈！我是圈娘~\n\
+        })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step0"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [["dangerouslySetInnerHTML", authorTip]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterPublic)]], ["我要公开入驻"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterShadow)]], ["我要入驻，但是我想披个马甲"]), migi.createVd("br", []), migi.createVd("small", [], ["（您依然可以进行作者相关的操作，但将以普通用户的身份进行评论等互动，别人不会知道你就是", userInfo.AuthorName, "）"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNotEnter)]], ["我放弃入驻"])]), migi.createVd("div", [["class", "step step1"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [], ["给马甲想个名字吧！", migi.createVd("br", []), "现在的名字是", migi.createVd("strong", [], [$CONFIG.userInfo.NickName])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("input", [["ref", "name"], ["class", "name"], ["type", "text"], ["placeholder", "请输入昵称"], ["maxLength", "8"]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName)]], ["就这个啦！"]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName2)]], ["不改了"])]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎来到转圈！我是圈娘~\n\
 “转圈”是一款仍在开发中的平台，感谢您参与我们的内测活动，我们联合各位大大为您准备了各种福利，活动详情在活动详情页中查看哦！也欢迎随时在转圈右下角和圈儿互动！\n\
 \n\
 下面的内容中不知可有您喜欢的呢？\n\

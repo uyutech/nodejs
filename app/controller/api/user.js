@@ -223,6 +223,14 @@ module.exports = app => {
         success: false,
       };
     }
+    * settleShadow(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+        uid,
+        User_Reg_Stat: 10,
+      });
+      return ctx.body = res.data;
+    }
     * guideSuggest(ctx) {
       let uid = ctx.session.uid;
       let res = yield {

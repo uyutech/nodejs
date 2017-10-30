@@ -95,6 +95,20 @@ class Welcome extends migi.Component {
       alert(res.message || util.ERROR_MESSAGE);
     });
   }
+  clickNickName2(e) {
+    let self = this;
+    net.postJSON('/api/user/settleShadow', function(res) {
+      if(res.success) {
+        self.step = $CONFIG.userInfo.User_Reg_Stat = 10;
+        self.load();
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+    });
+  }
   load() {
     let self = this;
     net.postJSON('/api/user/guideSuggest', function(res) {
@@ -181,11 +195,12 @@ class Welcome extends migi.Component {
           </div>
           <div class="step step1">
             <div class="con">
-              <p>给马甲想个名字吧！</p>
+              <p>给马甲想个名字吧！<br/>现在的名字是<strong>{ $CONFIG.userInfo.NickName }</strong></p>
               <b class="arrow"/>
             </div>
             <input ref="name" class="name" type="text" placeholder="请输入昵称" maxLength="8"/>
             <button onClick={ this.clickNickName }>就这个啦！</button>
+            <button onClick={ this.clickNickName2 }>不改了</button>
           </div>
           <div class="step step10">
             <div class="con">
