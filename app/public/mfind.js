@@ -792,6 +792,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var interval = void 0;
+
 var Banner = function (_migi$Component) {
   _inherits(Banner, _migi$Component);
 
@@ -804,13 +806,95 @@ var Banner = function (_migi$Component) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = Banner.__proto__ || Object.getPrototypeOf(Banner)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = Banner.__proto__ || Object.getPrototypeOf(Banner)).call.apply(_ref, [this].concat(data)));
+
+    _this.on(migi.Event.DOM, function () {
+      this.addInterval();
+    });
+    return _this;
   }
 
   _createClass(Banner, [{
+    key: "clickTag",
+    value: function clickTag(e, vd, tvd) {
+      this.index = tvd.props.rel;
+      this.setOffset(Math.floor(this.index * $(window).width()));
+      this.addInterval();
+    }
+  }, {
+    key: "setOffset",
+    value: function setOffset(x) {
+      var $list = $(this.ref.list.element);
+      $list.css('-moz-transform', 'translateX(-' + x + 'px)');
+      $list.css('-webkit-transform', 'translateX(-' + x + 'px)');
+      $list.css('transform', 'translateX(-' + x + 'px)');
+    }
+  }, {
+    key: "addInterval",
+    value: function addInterval() {
+      if (interval) {
+        clearInterval(interval);
+      }
+      var self = this;
+      interval = setInterval(function () {
+        self.index++;
+        if (self.index >= 4) {
+          self.index = 0;
+        }
+        self.setOffset(self.index * $(window).width());
+      }, 5000);
+    }
+  }, {
+    key: "left",
+    value: function left() {
+      this.index++;
+      if (this.index > 3) {
+        this.index = 3;
+      }
+      this.setOffset(Math.floor(this.index * $(window).width()));
+      this.addInterval();
+    }
+  }, {
+    key: "right",
+    value: function right() {
+      this.index--;
+      if (this.index < 0) {
+        this.index = 0;
+      }
+      this.setOffset(Math.floor(this.index * $(window).width()));
+      this.addInterval();
+    }
+  }, {
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "banner"], ["style", "background-image:url(http://zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_)"]], [migi.createVd("a", [["href", "/works/2015000000000001"]], [migi.createVd("img", [["src", "http://zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_"]])])]);
+      var datas = [{
+        url: '/works/2015000000001368',
+        pic: '//zhuanquan.xin/pic/379af10b78315ded5948e813d2e64a69.jpg-750_'
+      }, {
+        url: '/works/2015000000000001',
+        pic: '//zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_'
+      }, {
+        url: '/works/2015000000000002',
+        pic: '//zhuanquan.xin/pic/b1284084f38e8cac0c35eddd60948af1.jpg-750_'
+      }, {
+        url: 'http://weibo.com/6284548625/FrrsUbDyo',
+        pic: '//zhuanquan.xin/pic/7dc30aca98d4975fd6c3a5b23d1abf8d.jpg-750_'
+      }];
+      return migi.createVd("div", [["class", "banner"], ["onSwipeLeft", new migi.Cb(this, this.left)], ["onSwipeRight", new migi.Cb(this, this.right)]], [migi.createVd("ul", [["class", "list fn-clear"], ["ref", "list"]], [datas.map(function (item) {
+        return migi.createVd("li", [], [migi.createVd("a", [["href", item.url], ["target", "_blank"]], [migi.createVd("img", [["src", item.pic]])])]);
+      })]), migi.createVd("ul", [["class", "tags"], ["ref", "tags"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickTag)]]]], [new migi.Obj("index", this, function () {
+        return (this.index, datas).map(function (item, index) {
+          return migi.createVd("li", [["class", index === this.index ? 'cur' : ''], ["rel", index]], [index + 1]);
+        }.bind(this));
+      })])]);
+    }
+  }, {
+    key: "index",
+    set: function set(v) {
+      this.__setBind("index", v);this.__data("index");
+    },
+    get: function get() {
+      if (this.__initBind("index")) this.__setBind("index", 0);return this.__getBind("index");
     }
   }]);
 

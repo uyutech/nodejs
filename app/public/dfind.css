@@ -402,9 +402,10 @@
   height: 3rem;
   overflow: hidden;
   border-radius: 0.1rem;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 .find > .banner .list {
-  width: 300%;
+  width: 400%;
   height: 100%;
   transition: -webkit-transform 0.2s;
   transition: transform 0.2s;

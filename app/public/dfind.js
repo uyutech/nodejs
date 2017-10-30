@@ -500,7 +500,7 @@ var Banner = function (_migi$Component) {
       var self = this;
       interval = setInterval(function () {
         self.index++;
-        if (self.index >= 3) {
+        if (self.index >= 4) {
           self.index = 0;
         }
         self.setOffset(self.index * 1000);
@@ -510,6 +510,9 @@ var Banner = function (_migi$Component) {
     key: "render",
     value: function render() {
       var datas = [{
+        url: '/works/2015000000001368',
+        pic: '//zhuanquan.xin/pic/379af10b78315ded5948e813d2e64a69.jpg'
+      }, {
         url: '/works/2015000000000001',
         pic: '//zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg'
       }, {
@@ -521,7 +524,7 @@ var Banner = function (_migi$Component) {
       }];
       return migi.createVd("div", [["class", "banner"]], [migi.createVd("ul", [["class", "list fn-clear"], ["ref", "list"]], [datas.map(function (item) {
         return migi.createVd("li", [], [migi.createVd("a", [["href", item.url], ["target", "_blank"]], [migi.createVd("img", [["src", item.pic]])])]);
-      })]), migi.createVd("ul", [["class", "tags"], ["ref", "tags"], ["onClick", new migi.Cb(this, this.clickTag)]], [new migi.Obj("index", this, function () {
+      })]), migi.createVd("ul", [["class", "tags"], ["ref", "tags"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickTag)]]]], [new migi.Obj("index", this, function () {
         return (this.index, datas).map(function (item, index) {
           return migi.createVd("li", [["class", index === this.index ? 'cur' : ''], ["rel", index]], [index + 1]);
         }.bind(this));

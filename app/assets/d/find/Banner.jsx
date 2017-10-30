@@ -30,7 +30,7 @@ class Banner extends migi.Component {
     let self = this;
     interval = setInterval(function() {
       self.index++;
-      if(self.index >= 3) {
+      if(self.index >= 4) {
         self.index = 0;
       }
       self.setOffset(self.index * 1000);
@@ -38,6 +38,10 @@ class Banner extends migi.Component {
   }
   render() {
     let datas = [
+      {
+        url: '/works/2015000000001368',
+        pic: '//zhuanquan.xin/pic/379af10b78315ded5948e813d2e64a69.jpg'
+      },
       {
         url: '/works/2015000000000001',
         pic: '//zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg'
@@ -59,7 +63,7 @@ class Banner extends migi.Component {
           })
         }
       </ul>
-      <ul class="tags" ref="tags" onClick={ this.clickTag }>
+      <ul class="tags" ref="tags" onClick={ { li: this.clickTag } }>
         {
           (this.index, datas).map(function(item, index) {
             return <li class={ index === this.index ? 'cur' : '' } rel={ index }>{ index + 1 }</li>;

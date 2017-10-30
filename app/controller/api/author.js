@@ -59,14 +59,14 @@ module.exports = app => {
     }
     * addComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      const body = ctx.request.body;console.log(body);
       let res = yield ctx.helper.postServiceJSON('api/author/AddComment', {
         uid,
         ParentID: body.parentID,
         RootID: body.rootID,
         Content: body.content,
         AuthorCommentID: body.authorID,
-      });
+      });console.log(res);
       ctx.body = res.data;
     }
     * likeComment(ctx) {

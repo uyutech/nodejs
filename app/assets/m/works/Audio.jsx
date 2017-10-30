@@ -142,7 +142,7 @@ class Audio extends migi.Component {
     this.play();
   }
   touchStart(e) {
-    e.preventDefault();console.log(this.canControl, e.touches.length)
+    e.preventDefault();
     if(this.canControl && e.touches.length === 1) {
       isStart = true;
       offsetX = $(this.ref.progress.element).offset().left;
