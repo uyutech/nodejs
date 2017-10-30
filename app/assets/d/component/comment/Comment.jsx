@@ -10,7 +10,7 @@ const IS_LOADING = 1;
 const HAS_LOADED = 2;
 let subLoadHash = {};
 let subSkipHash = {};
-let $lastSlide;
+let $last;
 let take = 10;
 let ajax;
 
@@ -52,10 +52,10 @@ class Comment extends migi.Component {
         });
       });
       $root.on('click', '.slide .sub, .slide span', function() {
-        self.slide($(this).parent());
+        self.slide($(this).closest('li'));
       });
       $root.on('click', '.list>li>.c>pre', function() {
-        self.slide($(this).parent().find('.slide'));
+        self.slide($(this).closest('li'));
       });
       $root.on('click', '.more', function() {
         let $message = $(this);
@@ -115,31 +115,31 @@ class Comment extends migi.Component {
     });
   }
   @bind message
-  slide($slide) {
+  slide($li) {
+    let self = this;
     if(ajax) {
       ajax.abort();
     }
-    let self = this;
-    let $li = $slide.closest('li');
+    let $slide = $li.find('.slide');
     let $list2 = $li.find('.list2');
     let $ul = $list2.find('ul');
     let $message = $list2.find('.message');
     let rid = $slide.attr('rid');
-    if($lastSlide && $lastSlide[0] !== $slide[0] && $lastSlide.hasClass('on')) {
+    if($last && $last[0] !== $li[0] && $last.hasClass('on')) {
       self.hideLast();
     }
-    if($slide.hasClass('on')) {
-      $slide.removeClass('on');
+    if($li.hasClass('on')) {
+      $li.removeClass('on');
       $list2.css('height', 0);
       self.emit('closeSubComment');
-      $lastSlide = null;
+      $last = null;
       if(subLoadHash[rid] === IS_LOADING) {
         subLoadHash[rid] = NOT_LOADED;
       }
     }
     else {
-      $lastSlide = $slide;
-      $slide.addClass('on');
+      $last = $li;
+      $li.addClass('on');
       self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'));
       let state = subLoadHash[rid];
       if(state === HAS_LOADED || state === IS_LOADING) {
@@ -192,7 +192,7 @@ class Comment extends migi.Component {
     this.setData();
     subLoadHash = {};
     subSkipHash = {};
-    $lastSlide = null;
+    $last = null;
   }
   setData(data) {
     let self = this;
@@ -230,7 +230,7 @@ class Comment extends migi.Component {
   }
   genComment(item) {
     if(item.IsAuthor) {
-      return <li class="author" id={ 'comment_' + item.AuthorID }>
+      return <li class="author" id={ 'comment_' + item.Send_ID }>
         <div class="t">
           <div class="profile fn-clear">
             <img class="pic" src={ item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
@@ -322,10 +322,10 @@ class Comment extends migi.Component {
     </li>;
   }
   hideLast() {
-    if($lastSlide && $lastSlide.hasClass('on')) {
-      $lastSlide.removeClass('on').closest('li').find('.list2').css('height', 0);
+    if($last && $last.hasClass('on')) {
+      $last.removeClass('on').find('.list2').css('height', 0);
     }
-    $lastSlide = null;
+    $last = null;
   }
   render() {
     return <div class="cp-comment">

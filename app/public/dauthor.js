@@ -297,7 +297,7 @@ var IS_LOADING = 1;
 var HAS_LOADED = 2;
 var subLoadHash = {};
 var subSkipHash = {};
-var $lastSlide = void 0;
+var $last = void 0;
 var take = 10;
 var ajax = void 0;
 
@@ -347,10 +347,10 @@ var Comment = function (_migi$Component) {
         });
       });
       $root.on('click', '.slide .sub, .slide span', function () {
-        self.slide($(this).parent());
+        self.slide($(this).closest('li'));
       });
       $root.on('click', '.list>li>.c>pre', function () {
-        self.slide($(this).parent().find('.slide'));
+        self.slide($(this).closest('li'));
       });
       $root.on('click', '.more', function () {
         var $message = $(this);
@@ -408,30 +408,30 @@ var Comment = function (_migi$Component) {
 
   _createClass(Comment, [{
     key: 'slide',
-    value: function slide($slide) {
+    value: function slide($li) {
+      var self = this;
       if (ajax) {
         ajax.abort();
       }
-      var self = this;
-      var $li = $slide.closest('li');
+      var $slide = $li.find('.slide');
       var $list2 = $li.find('.list2');
       var $ul = $list2.find('ul');
       var $message = $list2.find('.message');
       var rid = $slide.attr('rid');
-      if ($lastSlide && $lastSlide[0] !== $slide[0] && $lastSlide.hasClass('on')) {
+      if ($last && $last[0] !== $li[0] && $last.hasClass('on')) {
         self.hideLast();
       }
-      if ($slide.hasClass('on')) {
-        $slide.removeClass('on');
+      if ($li.hasClass('on')) {
+        $li.removeClass('on');
         $list2.css('height', 0);
         self.emit('closeSubComment');
-        $lastSlide = null;
+        $last = null;
         if (subLoadHash[rid] === IS_LOADING) {
           subLoadHash[rid] = NOT_LOADED;
         }
       } else {
-        $lastSlide = $slide;
-        $slide.addClass('on');
+        $last = $li;
+        $li.addClass('on');
         self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'));
         var state = subLoadHash[rid];
         if (state === HAS_LOADED || state === IS_LOADING) {
@@ -485,7 +485,7 @@ var Comment = function (_migi$Component) {
       this.setData();
       subLoadHash = {};
       subSkipHash = {};
-      $lastSlide = null;
+      $last = null;
     }
   }, {
     key: 'setData',
@@ -533,7 +533,7 @@ var Comment = function (_migi$Component) {
     key: 'genComment',
     value: function genComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.AuthorID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
       }
       return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
     }
@@ -545,10 +545,10 @@ var Comment = function (_migi$Component) {
   }, {
     key: 'hideLast',
     value: function hideLast() {
-      if ($lastSlide && $lastSlide.hasClass('on')) {
-        $lastSlide.removeClass('on').closest('li').find('.list2').css('height', 0);
+      if ($last && $last.hasClass('on')) {
+        $last.removeClass('on').find('.list2').css('height', 0);
       }
-      $lastSlide = null;
+      $last = null;
     }
   }, {
     key: 'render',

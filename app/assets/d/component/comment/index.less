@@ -10,6 +10,11 @@
         text-align:center;
         color:#999;
       }
+      &.author{
+        > .t > .profile .txt .name{
+          color:#C93;
+        }
+      }
       > .t{
         position:relative;
         padding-right:1rem;
@@ -150,13 +155,20 @@
               transform:translateY(0.03rem);
             }
           }
-          &.on{
-            .sub{
-              display:none;
-            }
-            span{
-              display:inline-block;
-            }
+        }
+      }
+      &.on > .c{
+        background:#FFE;
+        .arrow:after{
+          background:#FFE;
+        }
+        > .slide{
+          background:#FFE;
+          .sub{
+            display:none;
+          }
+          span{
+            display:inline-block;
           }
         }
       }

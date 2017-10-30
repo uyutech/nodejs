@@ -97,6 +97,9 @@
   text-align: center;
   color: #999;
 }
+.cp-comment .list > li.author > .t > .profile .txt .name {
+  color: #C93;
+}
 .cp-comment .list > li > .t {
   position: relative;
   padding-right: 1rem;
@@ -238,10 +241,19 @@
   -webkit-transform: translateY(0.03rem);
           transform: translateY(0.03rem);
 }
-.cp-comment .list > li > .c > .slide.on .sub {
+.cp-comment .list > li.on > .c {
+  background: #FFE;
+}
+.cp-comment .list > li.on > .c .arrow:after {
+  background: #FFE;
+}
+.cp-comment .list > li.on > .c > .slide {
+  background: #FFE;
+}
+.cp-comment .list > li.on > .c > .slide .sub {
   display: none;
 }
-.cp-comment .list > li > .c > .slide.on span {
+.cp-comment .list > li.on > .c > .slide span {
   display: inline-block;
 }
 .cp-comment .list > li > .list2 {

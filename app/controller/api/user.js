@@ -242,7 +242,7 @@ module.exports = app => {
         authors: ctx.helper.postServiceJSON('api/users/GetAuthor', {
           uid,
           Skip: 0,
-          Take: 10,
+          Take: 20,
         }),
       };
       ctx.body = {
