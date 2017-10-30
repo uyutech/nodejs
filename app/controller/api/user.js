@@ -9,6 +9,13 @@ const Spark = require('spark-md5');
 
 module.exports = app => {
   class Controller extends app.Controller {
+    * lastUpdateNickNameTime(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
+        uid,
+      });
+      ctx.body = res.data;
+    }
     * updateNickName(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
@@ -16,14 +23,37 @@ module.exports = app => {
       if(length < 4 || length > 8) {
         return ctx.body = {
           success: false,
-          message: '昵称长度需要在4~8个字之间哦！',
+          message: '昵称长度需要在4~8个字之间哦~',
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/UpdateNickName', {
+      let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
         uid,
-        NickName: body.nickName,
       });
-      ctx.body = res.data;
+      if(lastUpdateNickNameTime.data && lastUpdateNickNameTime.data.success) {
+        let now = Date.now();
+        lastUpdateNickNameTime = lastUpdateNickNameTime.data.data;
+        if(lastUpdateNickNameTime) {
+          lastUpdateNickNameTime = new Date(lastUpdateNickNameTime);
+        }
+        else {
+          lastUpdateNickNameTime = now;
+        }
+        let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
+        if(updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
+          return ctx.body = {
+            success: false,
+            message: '昵称一天只能修改一次哦~',
+          };
+        }
+        let res = yield ctx.helper.postServiceJSON('api/users/UpdateNickName', {
+          uid,
+          NickName: body.nickName,
+        });
+        return ctx.body = res.data;
+      }
+      ctx.body = {
+        success: false,
+      };
     }
     * checkExistHead(ctx) {
       let uid = ctx.session.uid;
@@ -178,6 +208,15 @@ module.exports = app => {
             User_Reg_Stat: 10,
           });
           return ctx.body = res2.data;
+        }
+        else if(res.data.code === 1006) {
+          return ctx.body = {
+            success: false,
+            message: '昵称已被占用，换个名字试试吧~',
+          }
+        }
+        else {
+          return ctx.body = res.data;
         }
       }
       ctx.body = {

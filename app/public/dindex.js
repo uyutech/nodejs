@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 139);
+/******/ 	return __webpack_require__(__webpack_require__.s = 140);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,27 +264,27 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 139:
+/***/ 140:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(140);
+__webpack_require__(141);
 
-var _TopNav = __webpack_require__(141);
+var _TopNav = __webpack_require__(142);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(142);
+var _CIframe = __webpack_require__(143);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(143);
+var _QuanNiang = __webpack_require__(144);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
-var _Welcome = __webpack_require__(144);
+var _Welcome = __webpack_require__(145);
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
@@ -364,14 +364,14 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 140:
+/***/ 141:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 141:
+/***/ 142:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -446,7 +446,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 142:
+/***/ 143:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -493,7 +493,7 @@ migi.name(CIframe, "CIframe");exports.default = CIframe;
 
 /***/ }),
 
-/***/ 143:
+/***/ 144:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -573,7 +573,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 144:
+/***/ 145:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -740,7 +740,7 @@ var Welcome = function (_migi$Component) {
         });
         _net2.default.postJSON('/api/user/guideSave', { tags: tags, authors: authors, isAuthor: $CONFIG.isAuthor }, function (res) {
           if (res.success) {
-            self.step = $CONFIG.userInfo.User_Reg_Stat = 99;
+            self.step = $CONFIG.userInfo.User_Reg_Stat = $CONFIG.isAuthor ? 100 : 99;
             self.hide();
           } else {
             alert(res.message || _util2.default.ERROR_MESSAGE);

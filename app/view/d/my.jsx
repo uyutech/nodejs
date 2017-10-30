@@ -10,8 +10,17 @@ export default function(data) {
   let userInfo = data.userInfo;
   let follows = data.follows;
   let favors = data.favors;
+  let now = Date.now();
+  let lastUpdateNickNameTime = data.lastUpdateNickNameTime;
+  if(lastUpdateNickNameTime) {
+    lastUpdateNickNameTime = new Date(lastUpdateNickNameTime);
+  }
+  else {
+    lastUpdateNickNameTime = now;
+  }
+  let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
 
-  let my = migi.preRender(<My userInfo={ userInfo } follows={ follows } favors={ favors }/>);
+  let my = migi.preRender(<My userInfo={ userInfo } follows={ follows } favors={ favors } updateNickNameTimeDiff={ updateNickNameTimeDiff }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -28,6 +37,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.userInfo = ${JSON.stringify(userInfo)};
   $CONFIG.follows = ${JSON.stringify(follows)};
   $CONFIG.favors = ${JSON.stringify(favors)};
+  $CONFIG.updateNickNameTimeDiff = ${JSON.stringify(updateNickNameTimeDiff)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dmy.js')}"></script>

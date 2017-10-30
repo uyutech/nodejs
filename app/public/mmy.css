@@ -62,6 +62,7 @@
   height: 0.45rem;
   background-color: #E1E3E4;
   border-radius: 100%;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 .cp-hotauthor .list .c ul li .pic img {
@@ -107,7 +108,66 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.my > .c .cp-hotauthor {
+.my > .profile {
+  margin-top: 0.1rem;
+}
+.my > .profile h4 {
+  position: relative;
+  margin-bottom: 0.1rem;
+  margin-left: 0.1rem;
+  padding-left: 0.05rem;
+  font-size: 0.12rem;
+}
+.my > .profile h4:before {
+  position: absolute;
+  left: 0;
+  top: 0.02rem;
+  bottom: 0.02rem;
+  width: 0.02rem;
+  background: #5D99C4;
+  content: ' ';
+  border-radius: 0.05rem;
+}
+.my > .profile .pic {
+  position: relative;
+  float: left;
+  margin-left: 0.1rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  overflow: hidden;
+}
+.my > .profile .pic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+}
+.my > .profile .txt {
+  float: left;
+  margin-left: 0.2rem;
+  margin-top: 0.2rem;
+}
+.my > .profile .txt strong {
+  font-size: 0.18rem;
+  font-weight: 400;
+}
+.my > .profile .txt input {
+  width: 1rem;
+  font-size: 0.18rem;
+  border: 1px solid #EEE;
+}
+.my > .profile .txt .edit {
+  display: inline-block;
+  margin-left: 0.1rem;
+  width: 0.2rem;
+  height: 0.2rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAOVBMVEUAAABtkrZPjrBTjrJOj7FPjrFOj7BPj7NPj7BPj7JOj7FPj7BOj7JOj7FOj7FPkbRSlLNiibFOjrBxHPmDAAAAEnRSTlMAB+ortrT7SuSCpuzazYY6Mg3KTV+QAAAAq0lEQVQ4y83P2wqDMBCE4Zi4OXioOu//sE2hMEhwN0gL/tcfO6z7YVvoYoMArx43Yo6UmvMhRVjrR67OhRmbcW9BTC54iLkbkZPHOFjO79X2uOD2iNzjgsdydDnuCsDk2jmcYesIjV1CwxEajtB2hAJAFNdAxXG6cSoUOhUmOh0WFDoNTpgKnfL1ippUZ8G8TiU1hPDcg6BIJwRuQMFFcg9q/RWafaHYTj7uDaz+Fh3uQPLUAAAAAElFTkSuQmCC) no-repeat center;
+  background-size: contain;
+  text-indent: 999rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+.my .cp-hotauthor {
   margin-top: 0.1rem;
 }
 .my > .loginout {

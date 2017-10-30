@@ -3,9 +3,10 @@
  */
 
 import net from '../common/net';
+import util from '../common/util';
 import Profile from './Profile.jsx';
 import Follow from './Follow.jsx';
-import Favor from './Favor.jsx';
+// import Favor from './Favor.jsx';
 
 class My extends migi.Component {
   constructor(...data) {
@@ -26,7 +27,7 @@ class My extends migi.Component {
   }
   render() {
     return <div class="my">
-      <Profile userInfo={ this.props.userInfo }/>
+      <Profile userInfo={ this.props.userInfo } updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }/>
       <div class="c">
         <Follow ref="follow" list={ this.props.follows }/>
         {/*<Favor ref="favor" list={ this.props.favors }/>*/}

@@ -128,7 +128,7 @@ class Welcome extends migi.Component {
       });
       net.postJSON('/api/user/guideSave', { tags, authors, isAuthor: $CONFIG.isAuthor }, function(res) {
         if(res.success) {
-          self.step = $CONFIG.userInfo.User_Reg_Stat = 99;
+          self.step = $CONFIG.userInfo.User_Reg_Stat = $CONFIG.isAuthor ? 100 : 99;
           self.hide();
         }
         else {

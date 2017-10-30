@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 145);
+/******/ 	return __webpack_require__(__webpack_require__.s = 146);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,15 +264,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 145:
+/***/ 146:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(146);
+__webpack_require__(147);
 
-var _Find = __webpack_require__(147);
+var _Find = __webpack_require__(148);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -282,14 +282,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 146:
+/***/ 147:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 147:
+/***/ 148:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -309,7 +309,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(148);
+var _Banner = __webpack_require__(149);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -317,7 +317,7 @@ var _HotWork = __webpack_require__(63);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotPhotoAlbum = __webpack_require__(149);
+var _HotPhotoAlbum = __webpack_require__(150);
 
 var _HotPhotoAlbum2 = _interopRequireDefault(_HotPhotoAlbum);
 
@@ -436,7 +436,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 148:
+/***/ 149:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -547,7 +547,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 149:
+/***/ 150:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

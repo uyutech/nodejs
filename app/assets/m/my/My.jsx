@@ -6,6 +6,7 @@
 
 import net from '../../d/common/net';
 import util from '../../d/common/util';
+import Profile from './Profile.jsx';
 import Follow from './Follow.jsx';
 
 class My extends migi.Component {
@@ -22,10 +23,8 @@ class My extends migi.Component {
   }
   render() {
     return <div class="my">
-      <div class="c">
-        <Follow ref="follow" list={ this.props.follows }/>
-        {/*<Favor ref="favor" list={ this.props.favors }/>*/}
-      </div>
+      <Profile userInfo={ this.props.userInfo } updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }/>
+      <Follow ref="follow" list={ this.props.follows }/>
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>
     </div>;
   }

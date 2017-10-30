@@ -7,7 +7,20 @@
 import My from '../../assets/m/my/My.jsx';
 
 export default function(data) {
-  let my = migi.preRender(<My follows={ data.follows }/>);
+  let userInfo = data.userInfo;
+  let follows = data.follows;
+  let favors = data.favors;
+  let now = Date.now();
+  let lastUpdateNickNameTime = data.lastUpdateNickNameTime;
+  if(lastUpdateNickNameTime) {
+    lastUpdateNickNameTime = new Date(lastUpdateNickNameTime);
+  }
+  else {
+    lastUpdateNickNameTime = now;
+  }
+  let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
+
+  let my = migi.preRender(<My userInfo={ userInfo } follows={ follows } favors={ favors } updateNickNameTimeDiff={ updateNickNameTimeDiff }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -22,7 +35,10 @@ ${data.helper.getMTopNav()}
 ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
+  $CONFIG.userInfo = ${JSON.stringify(userInfo)};
   $CONFIG.follows = ${JSON.stringify(data.follows)};
+  $CONFIG.favors = ${JSON.stringify(favors)};
+  $CONFIG.updateNickNameTimeDiff = ${JSON.stringify(updateNickNameTimeDiff)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mmy.js')}"></script>

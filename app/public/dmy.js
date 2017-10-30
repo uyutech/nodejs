@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 178);
+/******/ 	return __webpack_require__(__webpack_require__.s = 179);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,32 +264,32 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 178:
+/***/ 179:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(179);
+__webpack_require__(180);
 
-var _My = __webpack_require__(180);
+var _My = __webpack_require__(181);
 
 var _My2 = _interopRequireDefault(_My);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInfo], ["follows", $CONFIG.follows], ["favors", $CONFIG.favors]]));
+var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInfo], ["follows", $CONFIG.follows], ["favors", $CONFIG.favors], ["updateNickNameTimeDiff", $CONFIG.updateNickNameTimeDiff]]));
 
 /***/ }),
 
-/***/ 179:
+/***/ 180:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 180:
+/***/ 181:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -305,17 +305,17 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Profile = __webpack_require__(181);
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _Profile = __webpack_require__(182);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(182);
+var _Follow = __webpack_require__(183);
 
 var _Follow2 = _interopRequireDefault(_Follow);
-
-var _Favor = __webpack_require__(183);
-
-var _Favor2 = _interopRequireDefault(_Favor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -324,6 +324,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import Favor from './Favor.jsx';
 
 var My = function (_migi$Component) {
   _inherits(My, _migi$Component);
@@ -351,13 +353,13 @@ var My = function (_migi$Component) {
           location.href = '/login';
         }
       }, function (res) {
-        alert(res.message || util.ERROR_MESSAGE);
+        alert(res.message || _util2.default.ERROR_MESSAGE);
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo]]), migi.createVd("div", [["class", "c"]], [migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]])] /*<Favor ref="favor" list={ this.props.favors }/>*/
+      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo], ["updateNickNameTimeDiff", this.props.updateNickNameTimeDiff]]), migi.createVd("div", [["class", "c"]], [migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]])] /*<Favor ref="favor" list={ this.props.favors }/>*/
       ), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
     }
   }]);
@@ -369,7 +371,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 181:
+/***/ 182:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -416,10 +418,7 @@ var Profile = function (_migi$Component) {
     var self = _this;
     self.head = self.props.userInfo.Head_Url;
     self.name = self.props.userInfo.NickName;
-    self.on(migi.Event.DOM, function () {
-      var name = self.ref.name;
-      var input = self.ref.input;
-    });
+    self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
     return _this;
   }
 
@@ -428,6 +427,10 @@ var Profile = function (_migi$Component) {
     value: function click(e) {
       e.preventDefault();
       var self = this;
+      if (self.updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
+        alert('昵称一天只能修改一次哦~');
+        return;
+      }
       $(self.ref.name.element).addClass('fn-hide');
       $(self.ref.edit.element).addClass('fn-hide');
       $(self.ref.input.element).removeClass('fn-hide').focus().val(self.name);
@@ -440,10 +443,17 @@ var Profile = function (_migi$Component) {
       $(self.ref.input.element).addClass('fn-hide');
       var $edit = $(self.ref.edit.element);
       var newName = $(self.ref.input.element).val().trim();
+      var length = newName.length;
+      if (length < 4 || length > 8) {
+        alert('昵称长度需要在4~8个字之间哦~');
+        $edit.removeClass('fn-hide');
+        return;
+      }
       if (newName !== self.name) {
         _net2.default.postJSON('/api/user/updateNickName', { nickName: newName }, function (res) {
           if (res.success) {
             self.name = newName;
+            self.updateNickNameTimeDiff = 0;
           } else {
             alert(res.message || _util2.default.ERROR_MESSAGE);
           }
@@ -452,6 +462,8 @@ var Profile = function (_migi$Component) {
           alert(res.message || _util2.default.ERROR_MESSAGE);
           $edit.removeClass('fn-hide');
         });
+      } else {
+        $edit.removeClass('fn-hide');
       }
     }
   }, {
@@ -496,9 +508,7 @@ var Profile = function (_migi$Component) {
       /*</div>*/
       ), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
         return this.name;
-      })]),,] /*<input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur }/>*/
-      /*<b class="edit" ref="edit" onClick={ this.click }/>*/
-      )]);
+      })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["onBlur", new migi.Cb(this, this.blur)], ["maxlength", "8"]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]])])]);
     }
   }, {
     key: 'head',
@@ -516,6 +526,14 @@ var Profile = function (_migi$Component) {
     get: function get() {
       return this.__getBind("name");
     }
+  }, {
+    key: 'updateNickNameTimeDiff',
+    set: function set(v) {
+      this.__setBind("updateNickNameTimeDiff", v);this.__data("updateNickNameTimeDiff");
+    },
+    get: function get() {
+      return this.__getBind("updateNickNameTimeDiff");
+    }
   }]);
 
   return Profile;
@@ -525,7 +543,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 182:
+/***/ 183:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -584,68 +602,6 @@ var Follow = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Follow, "Follow");exports.default = Follow;
-
-/***/ }),
-
-/***/ 183:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Favor = function (_migi$Component) {
-  _inherits(Favor, _migi$Component);
-
-  function Favor() {
-    var _ref;
-
-    _classCallCheck(this, Favor);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Favor.__proto__ || Object.getPrototypeOf(Favor)).call.apply(_ref, [this].concat(data)));
-
-    _this.list = _this.props.list;
-    return _this;
-  }
-
-  _createClass(Favor, [{
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "favor"]], [migi.createVd("h4", [], ["我的收藏"]), migi.createVd("ul", [["class", "list fn-clear"]], [new migi.Obj("list", this, function () {
-        return (this.list || []).map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", item.cover_Pic || '//zhuanquan.xin/img/blank.png']]), migi.createVd("div", [["class", "ath"]], [item.SingerName])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [item.Title])]);
-        });
-      })])]);
-    }
-  }, {
-    key: "list",
-    set: function set(v) {
-      this.__setBind("list", v);this.__data("list");
-    },
-    get: function get() {
-      return this.__getBind("list");
-    }
-  }]);
-
-  return Favor;
-}(migi.Component);
-
-migi.name(Favor, "Favor");exports.default = Favor;
 
 /***/ })
 

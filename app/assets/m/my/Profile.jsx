@@ -1,10 +1,11 @@
 /**
- * Created by army8735 on 2017/9/22.
+ * Created by army8735 on 2017/10/30.
  */
 
-import net from '../common/net';
-import util from '../common/util';
-// import Spark from 'spark-md5';
+'use strict';
+
+import net from '../../d/common/net';
+import util from '../../d/common/util';
 
 class Profile extends migi.Component {
   constructor(...data) {
@@ -27,11 +28,13 @@ class Profile extends migi.Component {
     $(self.ref.name.element).addClass('fn-hide');
     $(self.ref.edit.element).addClass('fn-hide');
     $(self.ref.input.element).removeClass('fn-hide').focus().val(self.name);
+    $(self.ref.ok.element).removeClass('fn-hide')
   }
-  blur() {
+  clickOk() {
     let self = this;
     $(self.ref.name.element).removeClass('fn-hide');
     $(self.ref.input.element).addClass('fn-hide');
+    $(self.ref.ok.element).addClass('fn-hide');
     let $edit = $(self.ref.edit.element);
     let newName = $(self.ref.input.element).val().trim();
     let length = newName.length;
@@ -94,16 +97,18 @@ class Profile extends migi.Component {
   }
   render() {
     return <div class="profile fn-clear">
+      <h4>我的资料</h4>
       <div class="pic">
         <img src={ this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
         {/*<div class="upload" ref="upload">*/}
-          {/*<input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>*/}
+        {/*<input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>*/}
         {/*</div>*/}
       </div>
       <div class="txt">
         <strong ref="name">{ this.name }</strong>
-        <input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur } maxlength="8"/>
+        <input ref="input" type="text" class="fn-hide" value="" maxlength="8"/>
         <b class="edit" ref="edit" onClick={ this.click }/>
+        <button class="fn-hide" ref="ok" onClick={ this.clickOk }>确定</button>
       </div>
     </div>;
   }
