@@ -1118,7 +1118,7 @@ var Audio = function (_migi$Component) {
         diff = Math.min(width, diff);
         var percent = diff / width;
         this.setBarPercent(percent);
-        this.currentTime = Math.floor(this.duration * percent);
+        this.audio.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
       }
     }
   }, {
@@ -1135,7 +1135,7 @@ var Audio = function (_migi$Component) {
         var x = e.pageX - left;
         var percent = x / $progress.width();
         var currentTime = Math.floor(this.duration * percent);
-        this.currentTime = currentTime;
+        this.audio.element.currentTime = this.currentTime = currentTime;
       }
     }
   }, {
@@ -1387,9 +1387,6 @@ var Audio = function (_migi$Component) {
     },
     set: function set(v) {
       this._currentTime = v;
-      if (this.audio && v !== this.audio.element.currentTime) {
-        this.audio.element.currentTime = v;
-      }
       ;this.__array("currentTime", v);this.__data("currentTime");
     }
   }, {
@@ -1658,7 +1655,7 @@ var Video = function (_migi$Component) {
         diff = Math.min(width, diff);
         var percent = diff / width;
         this.setBarPercent(percent);
-        this.currentTime = Math.floor(this.duration * percent);
+        this.video.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
       }
     }
   }, {
@@ -1675,7 +1672,7 @@ var Video = function (_migi$Component) {
         var x = e.pageX - left;
         var percent = x / $progress.width();
         var currentTime = Math.floor(this.duration * percent);
-        this.currentTime = currentTime;
+        this.video.element.currentTime = this.currentTime = currentTime;
       }
     }
   }, {
@@ -1886,9 +1883,6 @@ var Video = function (_migi$Component) {
     },
     set: function set(v) {
       this._currentTime = v;
-      if (this.video && v !== this.video.element.currentTime) {
-        this.video.element.currentTime = v;
-      }
       ;this.__array("currentTime", v);this.__data("currentTime");
     }
   }, {
@@ -3751,7 +3745,7 @@ var Player = function (_migi$Component) {
         diff = Math.min(width, diff);
         var percent = diff / width;
         this.setBarPercent(percent);
-        this.currentTime = Math.floor(this.duration * percent);
+        this.av.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
       }
     }
   }, {
@@ -3768,7 +3762,7 @@ var Player = function (_migi$Component) {
         var x = e.pageX - left;
         var percent = x / $progress.width();
         var currentTime = Math.floor(this.duration * percent);
-        this.currentTime = currentTime;
+        this.av.element.currentTime = this.currentTime = currentTime;
       }
     }
   }, {
@@ -4063,9 +4057,6 @@ var Player = function (_migi$Component) {
     },
     set: function set(v) {
       this._currentTime = v;
-      if (this.av && v !== this.av.element.currentTime) {
-        this.av.element.currentTime = v;
-      }
       ;this.__array("currentTime", v);this.__data("currentTime");
     }
   }, {

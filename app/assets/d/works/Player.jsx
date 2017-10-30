@@ -60,9 +60,6 @@ class Player extends migi.Component {
   @bind
   set currentTime(v) {
     this._currentTime = v;
-    if(this.av && v !== this.av.element.currentTime) {
-      this.av.element.currentTime = v;
-    }
   }
   get volume() {
     return this._volume || 0.5;
@@ -258,7 +255,7 @@ class Player extends migi.Component {
       diff = Math.min(width, diff);
       let percent = diff / width;
       this.setBarPercent(percent);
-      this.currentTime = Math.floor(this.duration * percent);
+      this.av.element.currentTime = this.currentTime = Math.floor(this.duration * percent);
     }
   }
   mouseup() {
@@ -271,7 +268,7 @@ class Player extends migi.Component {
       let x = e.pageX - left;
       let percent = x / $progress.width();
       let currentTime = Math.floor(this.duration * percent);
-      this.currentTime = currentTime;
+      this.av.element.currentTime = this.currentTime = currentTime;
     }
   }
   setBarPercent(percent) {
