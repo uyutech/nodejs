@@ -103,7 +103,7 @@ class Media extends migi.Component {
         </div>
       </div>;
     }
-    return <div class="mod mod-media fn-clear" style={ `background-image:url(${this.props.cover || '//zhuanquan.xin/img/blank.png'})` }>
+    return <div class="mod mod-media no-type fn-clear" style={ `background-image:url(${this.props.cover || '//zhuanquan.xin/img/blank.png'})` }>
       {
         this.props.videoData
           ? <Video ref="video" cover={ this.props.cover } datas={ this.props.videoData } show={ this.props.first === 'video' }/>

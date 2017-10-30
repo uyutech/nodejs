@@ -317,15 +317,11 @@ var _Home = __webpack_require__(115);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Work = __webpack_require__(117);
-
-var _Work2 = _interopRequireDefault(_Work);
-
-var _AuthorComment = __webpack_require__(120);
+var _AuthorComment = __webpack_require__(117);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
-var _SubCmt = __webpack_require__(18);
+var _SubCmt = __webpack_require__(17);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -336,6 +332,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+// import Work from './Work.jsx';
+
 
 var Author = function (_migi$Component) {
   _inherits(Author, _migi$Component);
@@ -352,7 +350,53 @@ var Author = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = Author.__proto__ || Object.getPrototypeOf(Author)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    self.on(migi.Event.DOM, function () {});
+    self.on(migi.Event.DOM, function () {
+      var authorComment = self.ref.authorComment;
+      var comment = self.ref.authorComment.ref.comment;
+      var subCmt = self.ref.subCmt;
+      subCmt.on('submit', function (content) {
+        subCmt.invalid = true;
+        var rootID = authorComment.rootID;
+        var parentID = authorComment.parentID;
+        _net2.default.postJSON('/api/author/addComment', {
+          parentID: parentID,
+          rootID: rootID,
+          authorID: authorComment.authorID,
+          content: content
+        }, function (res) {
+          if (res.success) {
+            var _data = res.data;
+            subCmt.value = '';
+            if (rootID === -1) {
+              comment.prependData(_data);
+              comment.message = '';
+            } else {
+              comment.prependChild(_data);
+            }
+            var $tag = $(self.ref.type.element).find('.comments');
+            if (!$tag.hasClass('cur')) {
+              $tag.click();
+            }
+            migi.eventBus.emit('COMMENT', 'work');
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+            subCmt.invalid = false;
+          }
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          subCmt.invalid = false;
+        });
+      });
+      comment.on('chooseSubComment', function (rid, cid, name) {
+        subCmt.to = name;
+      });
+      comment.on('closeSubComment', function () {
+        subCmt.to = '';
+      });
+    });
     return _this;
   }
 
@@ -479,7 +523,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(16);
+var _authorTemplate = __webpack_require__(19);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -941,461 +985,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _net = __webpack_require__(1);
-
-var _net2 = _interopRequireDefault(_net);
-
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _DoubleCheck = __webpack_require__(118);
-
-var _DoubleCheck2 = _interopRequireDefault(_DoubleCheck);
-
-var _PlayList = __webpack_require__(119);
-
-var _PlayList2 = _interopRequireDefault(_PlayList);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ajax = void 0;
-var SortType = '1';
-var parameter = '';
-var ajaxL2 = void 0;
-
-var Work = function (_migi$Component) {
-  _inherits(Work, _migi$Component);
-
-  function Work() {
-    var _ref;
-
-    _classCallCheck(this, Work);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Work.__proto__ || Object.getPrototypeOf(Work)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.authorID = self.props.authorID;
-    self.on(migi.Event.DOM, function () {
-      var doubleCheck = self.ref.doubleCheck;
-      doubleCheck.on('changeL1', function (param) {
-        if (param) {
-          if (ajaxL2) {
-            ajaxL2.abort();
-          }
-          doubleCheck.isLoadindL2 = true;
-          _net2.default.postJSON('/api/author/tagB', { authorID: self.authorID, tagA: param }, function (res) {
-            if (res.success) {
-              var _data = res.data;
-              doubleCheck.tagList2 = _data;
-              doubleCheck.autoWidth2();
-              doubleCheck.setCacheL2(param, _data);
-              doubleCheck.checkL2();
-              doubleCheck.change();
-            }
-            doubleCheck.isLoadindL2 = false;
-          }, function () {
-            doubleCheck.isLoadindL2 = false;
-          });
-        }
-      });
-      doubleCheck.on('change', function (lA, lB) {
-        var temp = lA.concat(lB);
-        temp = temp.length ? JSON.stringify(temp) : '';
-        if (temp !== parameter) {
-          parameter = temp;
-          self.loadPlayList();
-        }
-      });
-    });
-    return _this;
-  }
-
-  _createClass(Work, [{
-    key: 'show',
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-      this.ref.doubleCheck.autoWidth();
-      this.ref.doubleCheck.autoWidth2();
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-    }
-  }, {
-    key: 'load',
-    value: function load() {
-      var self = this;
-      _net2.default.postJSON('/api/author/GetAuthorWorks', { AuthorID: self.authorID }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          self.ref.doubleCheck.setData(data);
-        }
-      });
-      self.loadPlayList();
-    }
-  }, {
-    key: 'loadPlayList',
-    value: function loadPlayList() {
-      var self = this;
-      if (ajax) {
-        ajax.abort();
-      }
-      ajax = _net2.default.postJSON('/api/author/playList', { authorID: self.authorID, parameter: parameter }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          self.ref.playList.setData(data.data);
-        }
-      });
-    }
-  }, {
-    key: 'switchType',
-    value: function switchType(e, vd) {
-      var $ul = $(vd.element);
-      $ul.toggleClass('alt');
-      $ul.find('li').toggleClass('cur');
-      SortType = $ul.find('.cur').attr('rel');
-      this.loadPlayList();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "works fn-hide"]], [migi.createCp(_DoubleCheck2.default, [["ref", "doubleCheck"], ["tags", this.props.tags]]), migi.createVd("div", [["class", "bar fn-hide"]], [migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "all"]], ["播放全部"]), migi.createVd("li", [["class", "audio"]], []), migi.createVd("li", [["class", "video"]], [])]), migi.createVd("ul", [["class", "type fn-clear"], ["onClick", new migi.Cb(this, this.switchType)]], [migi.createVd("li", [["class", "cur"], ["rel", "1"]], ["最热"]), migi.createVd("li", [["rel", "0"]], ["最新"])])]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["dataList", this.props.playList.data]])]);
-    }
-  }, {
-    key: 'authorID',
-    set: function set(v) {
-      this.__setBind("authorID", v);this.__data("authorID");
-    },
-    get: function get() {
-      return this.__getBind("authorID");
-    }
-  }]);
-
-  return Work;
-}(migi.Component);
-
-migi.name(Work, "Work");exports.default = Work;
-
-/***/ }),
-
-/***/ 118:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _authorTemplate = __webpack_require__(16);
-
-var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var choosedL2 = {};
-var all = void 0;
-var cacheL2 = {};
-
-var DoubleCheck = function (_migi$Component) {
-  _inherits(DoubleCheck, _migi$Component);
-
-  function DoubleCheck() {
-    var _ref;
-
-    _classCallCheck(this, DoubleCheck);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = DoubleCheck.__proto__ || Object.getPrototypeOf(DoubleCheck)).call.apply(_ref, [this].concat(data)));
-
-    _this.tagList = _this.props.tags.FilterlevelA;
-    _this.tagList2 = _this.props.tags.FilterlevelB;
-    all = _this.tagList2;
-    _this.on(migi.Event.DOM, function () {
-      this.autoWidth();
-      this.autoWidth2();
-    });
-    return _this;
-  }
-
-  _createClass(DoubleCheck, [{
-    key: "setData",
-    value: function setData(v) {
-      this.tagList = v.FilterlevelA;
-      this.autoWidth();
-      this.tagList2 = v.FilterlevelB;
-      this.autoWidth2();
-      all = this.tagList2;
-    }
-  }, {
-    key: "setCacheL2",
-    value: function setCacheL2(k, v) {
-      cacheL2[k] = v;
-    }
-  }, {
-    key: "clickL1",
-    value: function clickL1(e, vd, tvd) {
-      e.preventDefault();
-      var $ul = $(vd.element);
-      var $li = $(tvd.element);
-      $li.toggleClass('on');
-      var $allLis = $ul.find('li');
-      var $lis = $ul.find('.on');
-      // 只有1个和都没选为全部
-      if ($allLis.length === 1 || !$lis[0]) {
-        this.tagList2 = all;
-        this.checkL2();
-        this.change();
-      } else {
-        var param = [];
-        $lis.each(function (index, li) {
-          var $li = $(li);
-          param.push({
-            Filterlevel: $li.attr('tagID')
-          });
-        });
-        param = JSON.stringify(param);
-        if (cacheL2[param]) {
-          this.tagList2 = cacheL2[param];
-          this.checkL2();
-          this.change();
-        } else {
-          this.emit('changeL1', param);
-        }
-      }
-    }
-  }, {
-    key: "clickL2",
-    value: function clickL2(e, vd, tvd) {
-      e.preventDefault();
-      if ($(vd.element).hasClass('loading')) {
-        return;
-      }
-      var $li = $(tvd.element);
-      $li.toggleClass('on');
-      var name = $li.text();
-      choosedL2[name] = $li.hasClass('on');
-      this.change();
-    }
-  }, {
-    key: "checkL2",
-    value: function checkL2() {
-      // 遍历l2标签，chossed中没有的删除
-      var hash = {};
-      $(this.ref.l2.element).find('li.on').each(function (i, li) {
-        var $li = $(li);
-        hash[$li.text()] = true;
-      });
-      Object.keys(choosedL2).forEach(function (key) {
-        if (!hash[key]) {
-          choosedL2[key] = false;
-        }
-      });
-    }
-  }, {
-    key: "change",
-    value: function change() {
-      var self = this;
-      var $lis = $(self.ref.l1.element).find('li.on');
-      var lA = [];
-      $lis.each(function (i, li) {
-        var index = $(li).attr('rel');
-        var item = self.tagList[index];
-        lA.push({
-          ID: item.ID,
-          TagType: 0,
-          Filterlevel: 'A',
-          ParameterAName: item.TagName
-        });
-      });
-      var lB = [];
-      this.tagList2.forEach(function (item) {
-        var key = item.TagName;
-        if (choosedL2[key]) {
-          lB.push({
-            ID: item.ID,
-            TagType: item.TagType,
-            Filterlevel: item.Filterlevel,
-            ParameterAName: item.TagName
-          });
-        }
-      });
-      this.emit('change', lA, lB);
-    }
-  }, {
-    key: "autoWidth",
-    value: function autoWidth() {
-      var $li = $(this.ref.l1.element);
-      var $c = $li.find('.c');
-      $c.css('width', '999rem');
-      var $ul = $c.find('ul');
-      $c.css('width', $ul.width() + 1);
-    }
-  }, {
-    key: "autoWidth2",
-    value: function autoWidth2() {
-      var $li = $(this.ref.l2.element);
-      var $c = $li.find('.c');
-      $c.css('width', '999rem');
-      var $ul = $c.find('ul');
-      $c.css('width', $ul.width() + 1);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-doublecheck"]], [migi.createVd("div", [["class", "l1"], ["ref", "l1"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL1)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [], [new migi.Obj("tagList", this, function () {
-        return this.tagList.map(function (item, i) {
-          var type = _authorTemplate2.default.code2Data[item.TagName];
-          return migi.createVd("li", [["rel", i], ["tagType", item.TagType], ["tagID", item.ID]], [migi.createVd("a", [["href", "#"]], [migi.createVd("span", [], [type ? type.name : item.TagName])])]);
-        });
-      })])])]), migi.createVd("div", [["class", new migi.Obj("isLoadindL2", this, function () {
-        return 'l2' + (this.isLoadindL2 ? ' loading' : '');
-      })], ["ref", "l2"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickL2)]]]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [], [new migi.Obj("tagList2", this, function () {
-        return this.tagList2.map(function (item, i) {
-          var key = 'id' + item.ID + ',type' + item.TagType;
-          return migi.createVd("li", [["rel", i], ["tagType", item.TagType], ["tagID", item.ID], ["class", choosedL2[key] ? 'on' : '']], [migi.createVd("a", [["href", "#"]], [migi.createVd("span", [], [item.TagName])])]);
-        });
-      })])])])]);
-    }
-  }, {
-    key: "tagList",
-    get: function get() {
-      return this._tagList || [];
-    },
-    set: function set(v) {
-      this._tagList = v;
-      ;this.__array("tagList", v);this.__data("tagList");
-    }
-  }, {
-    key: "tagList2",
-    get: function get() {
-      return this._tagList2 || [];
-    },
-    set: function set(v) {
-      this._tagList2 = v;
-      ;this.__array("tagList2", v);this.__data("tagList2");
-    }
-  }, {
-    key: "isLoadindL2",
-    set: function set(v) {
-      this.__setBind("isLoadindL2", v);this.__data("isLoadindL2");
-    },
-    get: function get() {
-      return this.__getBind("isLoadindL2");
-    }
-  }]);
-
-  return DoubleCheck;
-}(migi.Component);
-
-migi.name(DoubleCheck, "DoubleCheck");exports.default = DoubleCheck;
-
-/***/ }),
-
-/***/ 119:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var PlayList = function (_migi$Component) {
-  _inherits(PlayList, _migi$Component);
-
-  function PlayList() {
-    var _ref;
-
-    _classCallCheck(this, PlayList);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = PlayList.__proto__ || Object.getPrototypeOf(PlayList)).call.apply(_ref, [this].concat(data)));
-
-    _this.dataList = _this.props.dataList || [];
-    return _this;
-  }
-
-  _createClass(PlayList, [{
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-playlist"]], [migi.createVd("ul", [["class", "list"], ["ref", "list"]], [new migi.Obj("dataList", this, function () {
-        return this.dataList.map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", "/works/" + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.img100_100(item.cover_Pic) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("div", [["class", "txt"], ["worksId", item.WorksID || item.WorkID]], [migi.createVd("a", [["href", "/works/" + item.WorksID], ["class", "name"]], [item.Title]), migi.createVd("p", [["class", "intro"]], [item.sub_Title])])]);
-        });
-      })])]);
-    }
-  }, {
-    key: "dataList",
-    set: function set(v) {
-      this.__setBind("dataList", v);this.__data("dataList");
-    },
-    get: function get() {
-      if (this.__initBind("dataList")) this.__setBind("dataList", []);return this.__getBind("dataList");
-    }
-  }]);
-
-  return PlayList;
-}(migi.Component);
-
-migi.name(PlayList, "PlayList");exports.default = PlayList;
-
-/***/ }),
-
-/***/ 120:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
@@ -1404,7 +993,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Comment = __webpack_require__(17);
+var _Comment = __webpack_require__(16);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -1556,7 +1145,7 @@ var AuthorComment = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", 'comments' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(1508739460298)])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m\n\
+      return migi.createVd("div", [["class", 'comments' + (this.props.show ? '' : ' fn-hide')]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部评论", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], ["刚刚"])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m\n\
 \n\
 转圈系统运用了人工智能算法，所以会根据大家留言内容不同对积分数量进行相应地微调。所以请尽量不要发表重复或没有意义的留言哦( •̥́ ˍ •̀ )\n\
 也建议大家不要把一段内容在短时间内拆开分多条发布，悄悄告诉大家，这样获得的积分反而比合在一起的要少哦~\n\
@@ -1613,131 +1202,6 @@ migi.name(AuthorComment, "AuthorComment");exports.default = AuthorComment;
 /***/ }),
 
 /***/ 16:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-var code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer'
-  },
-  '902': {
-    name: '策划',
-    display: '策划',
-    css: 'producer'
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer'
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer'
-  },
-  '113': {
-    name: '伴唱',
-    display: '伴唱',
-    css: 'singer'
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician'
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician'
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer'
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer'
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental'
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video'
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter'
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter'
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter'
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer'
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer'
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting'
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer'
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer'
-  }
-};
-
-var label2Code = {};
-Object.keys(code2Data).forEach(function (k) {
-  var v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-exports.default = {
-  code2Data: code2Data,
-  label2Code: label2Code
-};
-
-/***/ }),
-
-/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2049,7 +1513,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 18:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2204,6 +1668,131 @@ var SubCmt = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
+
+/***/ }),
+
+/***/ 19:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+var code2Data = {
+  '901': {
+    name: '出品',
+    display: '出品',
+    css: 'producer'
+  },
+  '902': {
+    name: '策划',
+    display: '策划',
+    css: 'producer'
+  },
+  '111': {
+    name: '演唱',
+    display: '演唱',
+    css: 'singer'
+  },
+  '112': {
+    name: '和声',
+    display: '和声',
+    css: 'singer'
+  },
+  '113': {
+    name: '伴唱',
+    display: '伴唱',
+    css: 'singer'
+  },
+  '121': {
+    name: '作曲',
+    display: '作曲',
+    css: 'musician'
+  },
+  '122': {
+    name: '编曲',
+    display: '编曲',
+    css: 'musician'
+  },
+  '131': {
+    name: '混音',
+    display: '混音',
+    css: 'mixer'
+  },
+  '134': {
+    name: '修音',
+    display: '修音',
+    css: 'mixer'
+  },
+  '141': {
+    name: '演奏',
+    display: '', //直接显示乐器名。
+    css: 'instrumental'
+  },
+  '211': {
+    name: '视频',
+    display: '视频',
+    css: 'video'
+  },
+  '311': {
+    name: '立绘',
+    display: '立绘',
+    css: 'painter'
+  },
+  '312': {
+    name: 'CG',
+    display: 'CG',
+    css: 'painter'
+  },
+  '313': {
+    name: '场景',
+    display: '场景',
+    css: 'painter'
+  },
+  '331': {
+    name: '设计',
+    display: '设计',
+    css: 'designer'
+  },
+  '332': {
+    name: '海报',
+    display: '海报',
+    css: 'designer'
+  },
+  '351': {
+    name: '书法',
+    display: '书法',
+    css: 'handwriting'
+  },
+  '411': {
+    name: '作词',
+    display: '作词',
+    css: 'writer'
+  },
+  '421': {
+    name: '文案',
+    display: '文案',
+    css: 'writer'
+  }
+};
+
+var label2Code = {};
+Object.keys(code2Data).forEach(function (k) {
+  var v = code2Data[k];
+  label2Code[v.css] = label2Code[v.css] || [];
+  label2Code[v.css].push(k);
+});
+
+exports.default = {
+  code2Data: code2Data,
+  label2Code: label2Code
+};
 
 /***/ }),
 

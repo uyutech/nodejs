@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 59);
+/******/ 	return __webpack_require__(__webpack_require__.s = 56);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -572,7 +572,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 59:
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -596,7 +596,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.hotMusicAlbumList = ' + JSON.stringify(hotMusicAlbumList) + ';\n  $CONFIG.hotPhotoAlbumList = ' + JSON.stringify(hotPhotoAlbumList) + ';\n  // $CONFIG.tags = ' + JSON.stringify(tags) + ';\n  // $CONFIG.playList = ' + JSON.stringify(playList) + ';\n  // $CONFIG.playList2 = ' + JSON.stringify(playList2) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Find = __webpack_require__(60);
+var _Find = __webpack_require__(57);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -606,7 +606,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 60:
+/***/ 57:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -626,7 +626,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(61);
+var _Banner = __webpack_require__(58);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -634,7 +634,7 @@ var _HotWork = __webpack_require__(20);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotPhotoAlbum = __webpack_require__(62);
+var _HotPhotoAlbum = __webpack_require__(59);
 
 var _HotPhotoAlbum2 = _interopRequireDefault(_HotPhotoAlbum);
 
@@ -753,7 +753,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 61:
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -861,7 +861,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 62:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

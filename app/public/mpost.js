@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 131);
+/******/ 	return __webpack_require__(__webpack_require__.s = 128);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,15 +264,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 131:
+/***/ 128:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(132);
+__webpack_require__(129);
 
-var _Post = __webpack_require__(133);
+var _Post = __webpack_require__(130);
 
 var _Post2 = _interopRequireDefault(_Post);
 
@@ -282,14 +282,14 @@ var post = migi.preExist(migi.createCp(_Post2.default, [["postData", $CONFIG.pos
 
 /***/ }),
 
-/***/ 132:
+/***/ 129:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 133:
+/***/ 130:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -301,7 +301,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _PostComment = __webpack_require__(134);
+var _PostComment = __webpack_require__(131);
 
 var _PostComment2 = _interopRequireDefault(_PostComment);
 
@@ -342,7 +342,7 @@ migi.name(Post, "Post");exports.default = Post;
 
 /***/ }),
 
-/***/ 134:
+/***/ 131:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -362,11 +362,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(17);
+var _Comment = __webpack_require__(16);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _SubCmt = __webpack_require__(18);
+var _SubCmt = __webpack_require__(17);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -584,7 +584,7 @@ migi.name(PostComment, "PostComment");exports.default = PostComment;
 
 /***/ }),
 
-/***/ 17:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -896,7 +896,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 18:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -349,7 +349,7 @@ var _WorkComment = __webpack_require__(107);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
-var _SubCmt = __webpack_require__(18);
+var _SubCmt = __webpack_require__(17);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -818,7 +818,7 @@ var Media = function (_migi$Component) {
           return migi.createVd("dd", [["class", this.props.first === 'audio' && !i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
         }.bind(this)) : '']) : ''])]);
       }
-      return migi.createVd("div", [["class", "mod mod-media fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '']);
+      return migi.createVd("div", [["class", "mod mod-media no-type fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '']);
     }
   }]);
 
@@ -2025,7 +2025,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Comment = __webpack_require__(17);
+var _Comment = __webpack_require__(16);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -2159,7 +2159,7 @@ var WorkComment = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod mod-comment fn-hide"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(1508739460298)])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m\n\
+      return migi.createVd("div", [["class", "mod mod-comment fn-hide"]], [migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], ["刚刚"])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m\n\
 \n\
 转圈系统运用了人工智能算法，所以会根据大家留言内容不同对积分数量进行相应地微调。所以请尽量不要发表重复或没有意义的留言哦( •̥́ ˍ •̀ )\n\
 也建议大家不要把一段内容在短时间内拆开分多条发布，悄悄告诉大家，这样获得的积分反而比合在一起的要少哦~\n\
@@ -2762,131 +2762,6 @@ migi.name(MusicAlbum, "MusicAlbum");exports.default = MusicAlbum;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-var code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer'
-  },
-  '902': {
-    name: '策划',
-    display: '策划',
-    css: 'producer'
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer'
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer'
-  },
-  '113': {
-    name: '伴唱',
-    display: '伴唱',
-    css: 'singer'
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician'
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician'
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer'
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer'
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental'
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video'
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter'
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter'
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter'
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer'
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer'
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting'
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer'
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer'
-  }
-};
-
-var label2Code = {};
-Object.keys(code2Data).forEach(function (k) {
-  var v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-exports.default = {
-  code2Data: code2Data,
-  label2Code: label2Code
-};
-
-/***/ }),
-
-/***/ 17:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -3190,7 +3065,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 18:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3348,6 +3223,131 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
+/***/ 19:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+var code2Data = {
+  '901': {
+    name: '出品',
+    display: '出品',
+    css: 'producer'
+  },
+  '902': {
+    name: '策划',
+    display: '策划',
+    css: 'producer'
+  },
+  '111': {
+    name: '演唱',
+    display: '演唱',
+    css: 'singer'
+  },
+  '112': {
+    name: '和声',
+    display: '和声',
+    css: 'singer'
+  },
+  '113': {
+    name: '伴唱',
+    display: '伴唱',
+    css: 'singer'
+  },
+  '121': {
+    name: '作曲',
+    display: '作曲',
+    css: 'musician'
+  },
+  '122': {
+    name: '编曲',
+    display: '编曲',
+    css: 'musician'
+  },
+  '131': {
+    name: '混音',
+    display: '混音',
+    css: 'mixer'
+  },
+  '134': {
+    name: '修音',
+    display: '修音',
+    css: 'mixer'
+  },
+  '141': {
+    name: '演奏',
+    display: '', //直接显示乐器名。
+    css: 'instrumental'
+  },
+  '211': {
+    name: '视频',
+    display: '视频',
+    css: 'video'
+  },
+  '311': {
+    name: '立绘',
+    display: '立绘',
+    css: 'painter'
+  },
+  '312': {
+    name: 'CG',
+    display: 'CG',
+    css: 'painter'
+  },
+  '313': {
+    name: '场景',
+    display: '场景',
+    css: 'painter'
+  },
+  '331': {
+    name: '设计',
+    display: '设计',
+    css: 'designer'
+  },
+  '332': {
+    name: '海报',
+    display: '海报',
+    css: 'designer'
+  },
+  '351': {
+    name: '书法',
+    display: '书法',
+    css: 'handwriting'
+  },
+  '411': {
+    name: '作词',
+    display: '作词',
+    css: 'writer'
+  },
+  '421': {
+    name: '文案',
+    display: '文案',
+    css: 'writer'
+  }
+};
+
+var label2Code = {};
+Object.keys(code2Data).forEach(function (k) {
+  var v = code2Data[k];
+  label2Code[v.css] = label2Code[v.css] || [];
+  label2Code[v.css].push(k);
+});
+
+exports.default = {
+  code2Data: code2Data,
+  label2Code: label2Code
+};
+
+/***/ }),
+
 /***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3488,7 +3488,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(16);
+var _authorTemplate = __webpack_require__(19);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 

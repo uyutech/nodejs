@@ -47,5 +47,5 @@ module.exports = {
   weiboRedirect: 'http://dev.circling.cc2/oauth/login',
   rhymeAppKey: '2120765784',
   rhymeAppSecret: '1db3207ed08ac5224a680898bbe10540',
-  rhymeRedirect: 'http://dev.rhymesland.com/oauth/rhymeLogin',
+  rhymeRedirect: 'http://dev.rhymesland.net/oauth/rhymeLogin',
 };

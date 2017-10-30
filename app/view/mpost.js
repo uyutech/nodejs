@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 54);
+/******/ 	return __webpack_require__(__webpack_require__.s = 51);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -262,7 +262,7 @@ let net = {
 
 /***/ }),
 
-/***/ 3:
+/***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -574,7 +574,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -732,7 +732,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 54:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -753,7 +753,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: postData.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mpost.css') + '"/>\n</head>\n<body>\n<div id="page">' + post + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.id = ' + JSON.stringify(id) + ';\n  $CONFIG.postData = ' + JSON.stringify(postData) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mpost.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Post = __webpack_require__(55);
+var _Post = __webpack_require__(52);
 
 var _Post2 = _interopRequireDefault(_Post);
 
@@ -763,7 +763,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 55:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -775,7 +775,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _PostComment = __webpack_require__(56);
+var _PostComment = __webpack_require__(53);
 
 var _PostComment2 = _interopRequireDefault(_PostComment);
 
@@ -816,7 +816,7 @@ migi.name(Post, "Post");exports.default = Post;
 
 /***/ }),
 
-/***/ 56:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -836,11 +836,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(3);
+var _Comment = __webpack_require__(2);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
-var _SubCmt = __webpack_require__(4);
+var _SubCmt = __webpack_require__(3);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 

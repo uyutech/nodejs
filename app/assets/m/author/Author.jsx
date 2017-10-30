@@ -6,7 +6,7 @@ import net from '../../d/common/net';
 import util from '../../d/common/util';
 import Nav from './Nav.jsx';
 import Home from './Home.jsx';
-import Work from './Work.jsx';
+// import Work from './Work.jsx';
 import AuthorComment from './AuthorComment.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 
@@ -15,6 +15,54 @@ class Author extends migi.Component {
     super(...data);
     let self = this;
     self.on(migi.Event.DOM, function() {
+      let authorComment = self.ref.authorComment;
+      let comment = self.ref.authorComment.ref.comment;
+      let subCmt = self.ref.subCmt;
+      subCmt.on('submit', function(content) {
+        subCmt.invalid = true;
+        let rootID = authorComment.rootID;
+        let parentID = authorComment.parentID;
+        net.postJSON('/api/author/addComment', {
+          parentID: parentID,
+          rootID: rootID,
+          authorID: authorComment.authorID,
+          content,
+        }, function(res) {
+          if(res.success) {
+            let data = res.data;
+            subCmt.value = '';
+            if(rootID === -1) {
+              comment.prependData(data);
+              comment.message = '';
+            }
+            else {
+              comment.prependChild(data);
+            }
+            let $tag = $(self.ref.type.element).find('.comments');
+            if(!$tag.hasClass('cur')) {
+              $tag.click();
+            }
+            migi.eventBus.emit('COMMENT', 'work');
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
+          }
+        }, function(res) {
+          alert(res.message || util.ERROR_MESSAGE);
+          subCmt.invalid = false;
+        });
+      });
+      comment.on('chooseSubComment', function(rid, cid, name) {
+        subCmt.to = name;
+      });
+      comment.on('closeSubComment', function() {
+        subCmt.to = '';
+      });
     });
   }
   clickType(e, vd ,tvd) {

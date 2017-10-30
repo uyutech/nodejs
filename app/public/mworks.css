@@ -469,6 +469,9 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
+.mod.mod-media.no-type .fn {
+  padding-bottom: 0.4rem;
+}
 .mod.mod-media .c {
   position: relative;
   padding-top: 56.25%;

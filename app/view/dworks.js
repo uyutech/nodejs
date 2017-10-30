@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 63);
+/******/ 	return __webpack_require__(__webpack_require__.s = 60);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -260,127 +260,6 @@ let net = {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-let code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'producer',
-  },
-  '902': {
-    name: '策划',
-    display: '策划',
-    css: 'producer',
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'singer',
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'singer',
-  },
-  '113': {
-    name: '伴唱',
-    display: '伴唱',
-    css: 'singer',
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'musician',
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'musician',
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'mixer',
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'mixer',
-  },
-  '141': {
-    name: '演奏',
-    display: '', //直接显示乐器名。
-    css: 'instrumental',
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'video',
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'painter',
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'painter',
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'painter',
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'designer',
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'designer',
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'handwriting',
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'writer',
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'writer',
-  },
-};
-
-let label2Code = {};
-Object.keys(code2Data).forEach(function(k) {
-  let v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  code2Data,
-  label2Code,
-});
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -691,7 +570,7 @@ var Comment = function (_migi$Component) {
 migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -846,6 +725,127 @@ var SubCmt = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+let code2Data = {
+  '901': {
+    name: '出品',
+    display: '出品',
+    css: 'producer',
+  },
+  '902': {
+    name: '策划',
+    display: '策划',
+    css: 'producer',
+  },
+  '111': {
+    name: '演唱',
+    display: '演唱',
+    css: 'singer',
+  },
+  '112': {
+    name: '和声',
+    display: '和声',
+    css: 'singer',
+  },
+  '113': {
+    name: '伴唱',
+    display: '伴唱',
+    css: 'singer',
+  },
+  '121': {
+    name: '作曲',
+    display: '作曲',
+    css: 'musician',
+  },
+  '122': {
+    name: '编曲',
+    display: '编曲',
+    css: 'musician',
+  },
+  '131': {
+    name: '混音',
+    display: '混音',
+    css: 'mixer',
+  },
+  '134': {
+    name: '修音',
+    display: '修音',
+    css: 'mixer',
+  },
+  '141': {
+    name: '演奏',
+    display: '', //直接显示乐器名。
+    css: 'instrumental',
+  },
+  '211': {
+    name: '视频',
+    display: '视频',
+    css: 'video',
+  },
+  '311': {
+    name: '立绘',
+    display: '立绘',
+    css: 'painter',
+  },
+  '312': {
+    name: 'CG',
+    display: 'CG',
+    css: 'painter',
+  },
+  '313': {
+    name: '场景',
+    display: '场景',
+    css: 'painter',
+  },
+  '331': {
+    name: '设计',
+    display: '设计',
+    css: 'designer',
+  },
+  '332': {
+    name: '海报',
+    display: '海报',
+    css: 'designer',
+  },
+  '351': {
+    name: '书法',
+    display: '书法',
+    css: 'handwriting',
+  },
+  '411': {
+    name: '作词',
+    display: '作词',
+    css: 'writer',
+  },
+  '421': {
+    name: '文案',
+    display: '文案',
+    css: 'writer',
+  },
+};
+
+let label2Code = {};
+Object.keys(code2Data).forEach(function(k) {
+  let v = code2Data[k];
+  label2Code[v.css] = label2Code[v.css] || [];
+  label2Code[v.css].push(k);
+});
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  code2Data,
+  label2Code,
+});
+
 
 /***/ }),
 /* 5 */,
@@ -1171,7 +1171,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(2);
+var _authorTemplate = __webpack_require__(4);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -1688,10 +1688,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 /* 57 */,
 /* 58 */,
 /* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1713,7 +1710,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: worksDetail.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.labelList = ' + JSON.stringify(labelList) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dworks.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Works = __webpack_require__(64);
+var _Works = __webpack_require__(61);
 
 var _Works2 = _interopRequireDefault(_Works);
 
@@ -1722,7 +1719,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 64 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1734,11 +1731,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(65);
+var _Title = __webpack_require__(62);
 
 var _Title2 = _interopRequireDefault(_Title);
 
-var _Media = __webpack_require__(66);
+var _Media = __webpack_require__(63);
 
 var _Media2 = _interopRequireDefault(_Media);
 
@@ -1770,19 +1767,19 @@ var _InspComment = __webpack_require__(17);
 
 var _InspComment2 = _interopRequireDefault(_InspComment);
 
-var _WorkComment = __webpack_require__(70);
+var _WorkComment = __webpack_require__(67);
 
 var _WorkComment2 = _interopRequireDefault(_WorkComment);
 
-var _PhotoAlbum = __webpack_require__(71);
+var _PhotoAlbum = __webpack_require__(68);
 
 var _PhotoAlbum2 = _interopRequireDefault(_PhotoAlbum);
 
-var _AddLabelPanel = __webpack_require__(72);
+var _AddLabelPanel = __webpack_require__(69);
 
 var _AddLabelPanel2 = _interopRequireDefault(_AddLabelPanel);
 
-var _ImageView = __webpack_require__(73);
+var _ImageView = __webpack_require__(70);
 
 var _ImageView2 = _interopRequireDefault(_ImageView);
 
@@ -1798,11 +1795,11 @@ var _PlayList = __webpack_require__(19);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
-var _MusicAlbum = __webpack_require__(74);
+var _MusicAlbum = __webpack_require__(71);
 
 var _MusicAlbum2 = _interopRequireDefault(_MusicAlbum);
 
-var _Describe = __webpack_require__(77);
+var _Describe = __webpack_require__(74);
 
 var _Describe2 = _interopRequireDefault(_Describe);
 
@@ -2052,7 +2049,7 @@ var Works = function (_migi$Component) {
 migi.name(Works, "Works");exports.default = Works;
 
 /***/ }),
-/* 65 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2181,7 +2178,7 @@ var Title = function (_migi$Component) {
 migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
-/* 66 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2193,15 +2190,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Audio = __webpack_require__(67);
+var _Audio = __webpack_require__(64);
 
 var _Audio2 = _interopRequireDefault(_Audio);
 
-var _Video = __webpack_require__(68);
+var _Video = __webpack_require__(65);
 
 var _Video2 = _interopRequireDefault(_Video);
 
-var _Link = __webpack_require__(69);
+var _Link = __webpack_require__(66);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -2282,7 +2279,7 @@ var Media = function (_migi$Component) {
 migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
-/* 67 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2843,7 +2840,7 @@ var Audio = function (_migi$Component) {
 migi.name(Audio, "Audio");exports.default = Audio;
 
 /***/ }),
-/* 68 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3341,7 +3338,7 @@ var Video = function (_migi$Component) {
 migi.name(Video, "Video");exports.default = Video;
 
 /***/ }),
-/* 69 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3498,7 +3495,7 @@ var Link = function (_migi$Component) {
 migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
-/* 70 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3518,7 +3515,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(3);
+var _Comment = __webpack_require__(2);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -3526,7 +3523,7 @@ var _Page = __webpack_require__(7);
 
 var _Page2 = _interopRequireDefault(_Page);
 
-var _SubCmt = __webpack_require__(4);
+var _SubCmt = __webpack_require__(3);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -3735,7 +3732,7 @@ var WorkComment = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod mod-comment box"]], [migi.createVd("h4", [], ["评论"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / take)]]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(1508739460298)])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m\n\
+      return migi.createVd("div", [["class", "mod mod-comment box"]], [migi.createVd("h4", [], ["评论"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.commentData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.commentData.Size / take)]]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], ["刚刚"])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m\n\
 \n\
 转圈系统运用了人工智能算法，所以会根据大家留言内容不同对积分数量进行相应地微调。所以请尽量不要发表重复或没有意义的留言哦( •̥́ ˍ •̀ )\n\
 也建议大家不要把一段内容在短时间内拆开分多条发布，悄悄告诉大家，这样获得的积分反而比合在一起的要少哦~\n\
@@ -3798,7 +3795,7 @@ var WorkComment = function (_migi$Component) {
 migi.name(WorkComment, "WorkComment");exports.default = WorkComment;
 
 /***/ }),
-/* 71 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4121,7 +4118,7 @@ var PhotoAlbum = function (_migi$Component) {
 migi.name(PhotoAlbum, "PhotoAlbum");exports.default = PhotoAlbum;
 
 /***/ }),
-/* 72 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4290,7 +4287,7 @@ var AddLabelPanel = function (_migi$Component) {
 migi.name(AddLabelPanel, "AddLabelPanel");exports.default = AddLabelPanel;
 
 /***/ }),
-/* 73 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4429,7 +4426,7 @@ var ImageView = function (_migi$Component) {
 migi.name(ImageView, "ImageView");exports.default = ImageView;
 
 /***/ }),
-/* 74 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4441,11 +4438,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Cover = __webpack_require__(75);
+var _Cover = __webpack_require__(72);
 
 var _Cover2 = _interopRequireDefault(_Cover);
 
-var _Player = __webpack_require__(76);
+var _Player = __webpack_require__(73);
 
 var _Player2 = _interopRequireDefault(_Player);
 
@@ -4524,7 +4521,7 @@ var Media = function (_migi$Component) {
 migi.name(Media, "Media");exports.default = Media;
 
 /***/ }),
-/* 75 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4585,7 +4582,7 @@ var Cover = function (_migi$Component) {
 migi.name(Cover, "Cover");exports.default = Cover;
 
 /***/ }),
-/* 76 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5198,7 +5195,7 @@ var Player = function (_migi$Component) {
 migi.name(Player, "Player");exports.default = Player;
 
 /***/ }),
-/* 77 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

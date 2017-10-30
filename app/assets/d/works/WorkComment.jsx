@@ -220,7 +220,7 @@ class WorkComment extends migi.Component {
           <div class="txt">
             <div>
               <span class="name">圈儿</span>
-              <small class="time">{ util.formatDate(1508739460298) }</small>
+              <small class="time">刚刚</small>
             </div>
           </div>
         </div>

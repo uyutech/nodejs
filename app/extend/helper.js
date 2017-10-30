@@ -9,7 +9,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?10';
+    return '/public' + url + '?11';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {

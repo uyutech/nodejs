@@ -6,7 +6,7 @@ import net from '../common/net';
 import util from '../common/util';
 import Nav from './Nav.jsx';
 import Home from './Home.jsx';
-import Work from './Work.jsx';
+// import Work from './Work.jsx';
 import AuthorComment from './AuthorComment.jsx';
 import SubCmt from '../component/subcmt/SubCmt.jsx';
 
