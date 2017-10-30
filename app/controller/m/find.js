@@ -15,15 +15,13 @@ module.exports = app => {
       let tags = {};
       let playList = [];
       let res = yield {
-        hotWorkList: ctx.curl(ctx.helper.getRemoteUrl('api/find/Hot_works_List'), {
-          method: 'POST',
-          dataType: 'json',
-          gzip: true,
+        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
+          Skip: 0,
+          Take: 10,
         }),
-        hotAuthorList: ctx.curl(ctx.helper.getRemoteUrl('api/find/Hot_Author_List'), {
-          method: 'POST',
-          dataType: 'json',
-          gzip: true,
+        hotAuthorList: ctx.helper.postServiceJSON('api/find/Hot_Author_List', {
+          Skip: 0,
+          Take: 10,
         }),
         hotPhotoAlbumList: ctx.helper.postServiceJSON('api/find/Hot_PHOTO_List', {
           Skip: 0,
