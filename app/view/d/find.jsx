@@ -11,6 +11,7 @@ export default function(data) {
   let hotAuthorList = data.hotAuthorList;
   let hotMusicAlbumList = data.hotMusicAlbumList;
   let hotPhotoAlbumList = data.hotPhotoAlbumList;
+  let hotPostList = data.hotPostList;
   let tags = data.tags;
   let playList = data.playList;
   let playList2 = data.playList;
@@ -20,6 +21,7 @@ export default function(data) {
     hotAuthorList={ hotAuthorList }
     hotMusicAlbumList={ hotMusicAlbumList }
     hotPhotoAlbumList={ hotPhotoAlbumList }
+    hotPostList={ hotPostList }
     tags={ tags }
     playList={ playList }
     playList2={ playList2 }/>);
@@ -40,9 +42,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
   $CONFIG.hotMusicAlbumList = ${JSON.stringify(hotMusicAlbumList)};
   $CONFIG.hotPhotoAlbumList = ${JSON.stringify(hotPhotoAlbumList)};
-  // $CONFIG.tags = ${JSON.stringify(tags)};
-  // $CONFIG.playList = ${JSON.stringify(playList)};
-  // $CONFIG.playList2 = ${JSON.stringify(playList2)};
+  $CONFIG.hotPostList = ${JSON.stringify(hotPostList)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dfind.js')}"></script>

@@ -9,6 +9,7 @@ import HotWork from '../component/hotwork/HotWork.jsx';
 import HotPhotoAlbum from '../component/hotphotoalbum/HotPhotoAlbum.jsx';
 import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
 import HotMusicAlbum from '../component/hotmusicalbum/HotMusicAlbum.jsx';
+import HotPost from '../component/hotpost/HotPost.jsx';
 // import DoubleCheck from '../component/doublecheck/DoubleCheck.jsx';
 // import PlayList from '../component/playlist/PlayList.jsx';
 
@@ -84,6 +85,7 @@ class Find extends migi.Component {
     return <div class="find">
       <Banner/>
       <div class="hot">
+        <HotPost ref="hotPost" title="推荐圈子" dataList={ this.props.hotPostList }/>
         <HotWork ref="hotWork" title="推荐作品" dataList={ this.props.hotWorkList }/>
         <HotMusicAlbum ref="hotMusicAlbum" title="推荐专辑" dataList={ this.props.hotMusicAlbumList }/>
         <HotAuthor ref="hotAuthor" title="推荐作者" dataList={ this.props.hotAuthorList }/>

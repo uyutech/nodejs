@@ -11,6 +11,7 @@ module.exports = app => {
       let hotAuthorList = [];
       let hotMusicAlbumList = [];
       let hotPhotoAlbumList = [];
+      let hotPostList = [];
       let tags = {};
       let playList = [];
       let playList2 = [];
@@ -30,6 +31,10 @@ module.exports = app => {
         hotMusicAlbumList: ctx.helper.postServiceJSON('api/find/Hot_album_List', {
           Skip: 0,
           Take: 10,
+        }),
+        hotPostList: ctx.helper.postServiceJSON('api/find/GetPost', {
+          Skip: 0,
+          Take: 12,
         }),
         // tags: ctx.helper.postServiceJSON('api/find/GetTag'),
         // playList: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
@@ -57,6 +62,9 @@ module.exports = app => {
       if(res.hotPhotoAlbumList.data.success) {
         hotPhotoAlbumList = res.hotPhotoAlbumList.data.data;
       }
+      if(res.hotPostList.data.success) {
+        hotPostList = res.hotPostList.data.data.data;
+      }
       // if(res.tags.data.success) {
       //   tags = res.tags.data.data;
       // }
@@ -79,6 +87,7 @@ module.exports = app => {
         hotAuthorList,
         hotMusicAlbumList,
         hotPhotoAlbumList,
+        hotPostList,
         tags,
         playList,
         playList2,

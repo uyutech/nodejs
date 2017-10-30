@@ -60,12 +60,221 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 198);
+/******/ 	return __webpack_require__(__webpack_require__.s = 200);
 /******/ })
 /************************************************************************/
 /******/ ({
 
 /***/ 10:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+var _Event2 = __webpack_require__(2);
+
+var _Event3 = _interopRequireDefault(_Event2);
+
+var _util = __webpack_require__(3);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var uid = 0;
+
+var EventBus = function (_Event) {
+  _inherits(EventBus, _Event);
+
+  function EventBus() {
+    _classCallCheck(this, EventBus);
+
+    var _this = _possibleConstructorReturn(this, (EventBus.__proto__ || Object.getPrototypeOf(EventBus)).call(this));
+
+    _this.uid = 'e' + uid++; //为数据流历史记录hack
+    _this.__bridgeHash = {};
+    _this.on(_Event3.default.DATA, _this.__brcb);
+    return _this;
+  }
+
+  _createClass(EventBus, [{
+    key: '__brcb',
+    value: function __brcb(k, v, stream) {
+      if (this.__bridgeHash.hasOwnProperty(k)) {
+        var arr = this.__bridgeHash[k];
+        for (var i = 0, len = arr.length; i < len; i++) {
+          var item = arr[i];
+          var target = item.target;
+          var name = item.name;
+          var middleware = item.middleware;
+          if (!stream.has(target.uid)) {
+            stream.add(target.uid);
+            //必须大于桥接对象的sid才生效
+            var tItem = migi.CacheComponent.getSid(target);
+            if (stream.sid > tItem) {
+              //先设置桥接对象数据为桥接模式，修改数据后再恢复
+              target.__stream = stream;
+              target[name] = middleware ? middleware.call(target, v) : v;
+              target.__stream = null;
+            }
+          }
+        }
+      }
+    }
+  }, {
+    key: '__record',
+    value: function __record(target, src, name, middleware) {
+      var self = this;
+      var arr = this.__bridgeHash[src] = this.__bridgeHash[src] || [];
+      //防止重复桥接
+      arr.forEach(function (item) {
+        if (item.target == target && item.name == name) {
+          throw new Error('duplicate bridge: ' + self + '.' + src + ' -> ' + target + '.' + name);
+        }
+      });
+      //记录桥接单向数据流关系
+      arr.push({
+        target: target,
+        name: name,
+        middleware: middleware
+      });
+    }
+  }, {
+    key: '__unRecord',
+    value: function __unRecord(target, src, name) {
+      var self = this;
+      var arr = self.__bridgeHash[src] || [];
+      for (var i = 0, len = arr.length; i < len; i++) {
+        var item = arr[i];
+        if (item.target == target && item.name == name) {
+          arr.splice(i, 1);
+          return;
+        }
+      }
+    }
+  }, {
+    key: 'bridge',
+    value: function bridge(target, src, name, middleware) {
+      var self = this;
+      if (target == this) {
+        throw new Error('can not bridge self: ' + self);
+      }
+      if (!target || !(target instanceof migi.Component) && !(target instanceof migi.Model)) {
+        throw new Error('can only bridge to Component/Model: ' + self);
+      }
+      //重载
+      if (arguments.length == 2) {
+        if (_util2.default.isString(src)) {
+          self.__record(target, src, src);
+        } else {
+          Object.keys(src).forEach(function (k) {
+            var o = src[k];
+            if (_util2.default.isString(o)) {
+              self.__record(target, k, o);
+            } else if (o.name) {
+              self.__record(target, k, o.name, o.middleware);
+            }
+          });
+        }
+      } else if (arguments.length == 3) {
+        if (_util2.default.isString(name)) {
+          self.__record(target, src, name);
+        } else {
+          middleware = name;
+          self.__record(target, src, src, middleware);
+        }
+      } else if (arguments.length == 4) {
+        self.__record(target, src, name, middleware);
+      }
+    }
+  }, {
+    key: 'bridgeTo',
+    value: function bridgeTo(target) {
+      for (var _len = arguments.length, datas = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        datas[_key - 1] = arguments[_key];
+      }
+
+      target.bridge.apply(target, [this].concat(datas));
+    }
+  }, {
+    key: 'unBridge',
+    value: function unBridge(target, src, name) {
+      var self = this;
+      //重载
+      if (arguments.length == 2) {
+        if (_util2.default.isString(src)) {
+          self.__unRecord(target, src, src);
+        } else {
+          Object.keys(src).forEach(function (k) {
+            var o = src[k];
+            if (_util2.default.isString(o)) {
+              self.__unRecord(target, k, o);
+            } else if (_util2.default.isFunction(o)) {
+              self.__unRecord(target, k, k);
+            } else if (o.name) {
+              self.__unRecord(target, k, o.name);
+            }
+          });
+        }
+      } else {
+        self.__unRecord(target, src, name);
+      }
+    }
+  }, {
+    key: 'unBridgeTo',
+    value: function unBridgeTo(target) {
+      for (var _len2 = arguments.length, datas = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        datas[_key2 - 1] = arguments[_key2];
+      }
+
+      target.unBridge.apply(target, [this].concat(datas));
+    }
+  }]);
+
+  return EventBus;
+}(_Event3.default);
+
+exports.default = EventBus;
+
+/***/ }),
+
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -187,7 +396,7 @@ exports.default = Model;
 
 /***/ }),
 
-/***/ 11:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -214,7 +423,7 @@ exports.default = Cb;
 
 /***/ }),
 
-/***/ 12:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -267,7 +476,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -283,7 +492,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -350,7 +559,7 @@ function swap(arr, a, b) {
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -360,7 +569,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(14);
+var _sort = __webpack_require__(15);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -651,25 +860,356 @@ function nth(idx, n) {
 
 /***/ }),
 
-/***/ 198:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(34);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-__webpack_require__(35);
+var g;
 
-var _jquery = __webpack_require__(199);
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
 
-var _jquery2 = _interopRequireDefault(_jquery);
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
 
-var _util = __webpack_require__(201);
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+var Event = function () {
+  function Event() {
+    _classCallCheck(this, Event);
+
+    this.__hash = {};
+  }
+
+  _createClass(Event, [{
+    key: 'on',
+    value: function on(id, handle) {
+      var self = this;
+      if (Array.isArray(id)) {
+        for (var i = 0, len = id.length; i < len; i++) {
+          self.on(id[i], handle);
+        }
+      } else if (handle) {
+        if (!self.__hash.hasOwnProperty(id)) {
+          self.__hash[id] = [];
+        }
+        //遍历防止此handle被侦听过了
+        for (var i = 0, item = self.__hash[id], len = item.length; i < len; i++) {
+          if (item[i] === handle) {
+            return self;
+          }
+        }
+        self.__hash[id].push(handle);
+      }
+      return self;
+    }
+  }, {
+    key: 'once',
+    value: function once(id, handle) {
+      var self = this;
+      if (Array.isArray(id)) {
+        for (var i = 0, len = id.length; i < len; i++) {
+          self.once(id[i], handle);
+        }
+      } else if (handle) {
+        var _cb = function _cb() {
+          for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+            data[_key] = arguments[_key];
+          }
+
+          handle.apply(this, data);
+          self.off(id, _cb);
+        };
+
+        self.on(id, _cb);
+      }
+      return this;
+    }
+  }, {
+    key: 'off',
+    value: function off(id, handle) {
+      var self = this;
+      if (Array.isArray(id)) {
+        for (var i = 0, len = id.length; i < len; i++) {
+          self.off(id[i], handle);
+        }
+      } else if (self.__hash.hasOwnProperty(id)) {
+        if (handle) {
+          for (var i = 0, item = self.__hash[id], len = item.length; i < len; i++) {
+            if (item[i] === handle) {
+              item.splice(i, 1);
+              break;
+            }
+          }
+        }
+        //未定义为全部清除
+        else {
+            delete self.__hash[id];
+          }
+      }
+      return this;
+    }
+  }, {
+    key: 'emit',
+    value: function emit(id) {
+      var self = this;
+
+      for (var _len2 = arguments.length, data = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        data[_key2 - 1] = arguments[_key2];
+      }
+
+      if (Array.isArray(id)) {
+        for (var i = 0, len = id.length; i < len; i++) {
+          self.emit(id[i], data);
+        }
+      } else {
+        if (self.__hash.hasOwnProperty(id)) {
+          var list = self.__hash[id];
+          if (list.length) {
+            list = list.slice();
+            for (var i = 0, len = list.length; i < len; i++) {
+              list[i].apply(self, data);
+            }
+          }
+        }
+      }
+      return this;
+    }
+  }], [{
+    key: 'mix',
+    value: function mix() {
+      for (var _len3 = arguments.length, obj = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        obj[_key3] = arguments[_key3];
+      }
+
+      for (var i = obj.length - 1; i >= 0; i--) {
+        var o = obj[i];
+        var event = new Event();
+        o.__hash = {};
+        var fns = ['on', 'once', 'off', 'emit'];
+        for (var j = fns.length - 1; j >= 0; j--) {
+          var fn = fns[j];
+          o[fn] = event[fn];
+        }
+      }
+    }
+  }]);
+
+  return Event;
+}();
+
+Event.DOM = 'DOM';
+Event.DESTROY = 'DESTROY';
+Event.DATA = 'DATA';
+
+exports.default = Event;
+
+/***/ }),
+
+/***/ 20:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Element = __webpack_require__(4);
+
+var _Element2 = _interopRequireDefault(_Element);
+
+var _VirtualDom = __webpack_require__(7);
+
+var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
+
+var _Obj = __webpack_require__(8);
+
+var _Obj2 = _interopRequireDefault(_Obj);
+
+var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-__webpack_require__(203);
+var _browser = __webpack_require__(13);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _type = __webpack_require__(14);
+
+var _type2 = _interopRequireDefault(_type);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function join(index, children, history) {
+  var res = '';
+  for (var i = index.shift(), len = children.length; i < len; i++) {
+    var child = children[i];
+    if (index.length) {
+      if (child instanceof _Obj2.default) {
+        res += join(index, child.v, history);
+      } else {
+        res += join(index, child, history);
+      }
+      if (history.end) {
+        break;
+      }
+    } else if (child instanceof _Obj2.default) {
+      if (Array.isArray(child.v)) {
+        res += joinObj(child.v, history);
+        if (history.end) {
+          break;
+        }
+      } else if (child.v instanceof _Element2.default) {
+        history.end = true;
+        break;
+      } else {
+        res += child.toString();
+      }
+    } else if (child instanceof _Element2.default) {
+      history.end = true;
+      break;
+    }
+    //array逻辑和Obj里面相同
+    else if (Array.isArray(child)) {
+        res += joinObj(child, history);
+        if (history.end) {
+          break;
+        }
+      } else {
+        res += _util2.default.stringify(child);
+      }
+  }
+  return res;
+}
+//递归找到第一个不是text的为止，将之前的text拼接返回
+function joinObj(arr, history) {
+  var res = '';
+  for (var i = 0, len = arr.length; i < len; i++) {
+    var child = arr[i];
+    if (history.end) {
+      break;
+    }
+    if (Array.isArray(child)) {
+      res += joinObj(child, history);
+    } else if (child instanceof _Element2.default) {
+      history.end = true;
+      break;
+    } else {
+      res += _util2.default.stringify(child);
+    }
+  }
+  return res;
+}
+
+function update(item, children, elem) {
+  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
+  var res = join(item.index, children, {});
+  var cns = elem.childNodes;
+  var textNode = cns[item.start];
+  //神奇的地方，更新的对象是个DOM而不是TEXT，会发生在混杂情况下的t2d变化
+  //如t1{t}t2{t}变为t1{d}t2{d}，t2记录的range的start在3，而其目前是第2个{d}的DOM，插入在t2d逻辑中
+  if (textNode.nodeType == 1) {
+    return;
+  }
+  var now = textNode.textContent;
+  if (res != now) {
+    //textContent自动转义，保留空白
+    //有实体字符时也不能用textContent
+    if (/&([a-z]+|#\d+);/i.test(res)) {
+      var node = _browser2.default.NODE;
+      node.innerHTML = _util2.default.encodeHtml(res);
+      elem.replaceChild(node.firstChild, textNode);
+    } else {
+      textNode.textContent = res;
+    }
+  }
+}
+
+function value(item, children) {
+  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
+  return join(item.index, children, {});
+}
+
+function record(history, option) {
+  if (option.first || option.prev == _type2.default.DOM) {
+    option.record = history.slice();
+  }
+}
+
+exports.default = {
+  update: update,
+  value: value,
+  record: record
+};
+
+/***/ }),
+
+/***/ 200:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(32);
+
+__webpack_require__(33);
+
+var _jquery = __webpack_require__(201);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _util = __webpack_require__(203);
+
+var _util2 = _interopRequireDefault(_util);
+
+__webpack_require__(205);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -805,7 +1345,7 @@ window.util = _util2.default;
 
 /***/ }),
 
-/***/ 199:
+/***/ 201:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3084,7 +3624,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return 1 === arguments.length ? this.off(a, "**") : this.off(b, a || "**", c);
     } }), r.holdReady = function (a) {
     a ? r.readyWait++ : r.ready(!0);
-  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(200) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(202) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return r;
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));var Vb = a.jQuery,
@@ -3096,196 +3636,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-var Event = function () {
-  function Event() {
-    _classCallCheck(this, Event);
-
-    this.__hash = {};
-  }
-
-  _createClass(Event, [{
-    key: 'on',
-    value: function on(id, handle) {
-      var self = this;
-      if (Array.isArray(id)) {
-        for (var i = 0, len = id.length; i < len; i++) {
-          self.on(id[i], handle);
-        }
-      } else if (handle) {
-        if (!self.__hash.hasOwnProperty(id)) {
-          self.__hash[id] = [];
-        }
-        //遍历防止此handle被侦听过了
-        for (var i = 0, item = self.__hash[id], len = item.length; i < len; i++) {
-          if (item[i] === handle) {
-            return self;
-          }
-        }
-        self.__hash[id].push(handle);
-      }
-      return self;
-    }
-  }, {
-    key: 'once',
-    value: function once(id, handle) {
-      var self = this;
-      if (Array.isArray(id)) {
-        for (var i = 0, len = id.length; i < len; i++) {
-          self.once(id[i], handle);
-        }
-      } else if (handle) {
-        var _cb = function _cb() {
-          for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-            data[_key] = arguments[_key];
-          }
-
-          handle.apply(this, data);
-          self.off(id, _cb);
-        };
-
-        self.on(id, _cb);
-      }
-      return this;
-    }
-  }, {
-    key: 'off',
-    value: function off(id, handle) {
-      var self = this;
-      if (Array.isArray(id)) {
-        for (var i = 0, len = id.length; i < len; i++) {
-          self.off(id[i], handle);
-        }
-      } else if (self.__hash.hasOwnProperty(id)) {
-        if (handle) {
-          for (var i = 0, item = self.__hash[id], len = item.length; i < len; i++) {
-            if (item[i] === handle) {
-              item.splice(i, 1);
-              break;
-            }
-          }
-        }
-        //未定义为全部清除
-        else {
-            delete self.__hash[id];
-          }
-      }
-      return this;
-    }
-  }, {
-    key: 'emit',
-    value: function emit(id) {
-      var self = this;
-
-      for (var _len2 = arguments.length, data = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        data[_key2 - 1] = arguments[_key2];
-      }
-
-      if (Array.isArray(id)) {
-        for (var i = 0, len = id.length; i < len; i++) {
-          self.emit(id[i], data);
-        }
-      } else {
-        if (self.__hash.hasOwnProperty(id)) {
-          var list = self.__hash[id];
-          if (list.length) {
-            list = list.slice();
-            for (var i = 0, len = list.length; i < len; i++) {
-              list[i].apply(self, data);
-            }
-          }
-        }
-      }
-      return this;
-    }
-  }], [{
-    key: 'mix',
-    value: function mix() {
-      for (var _len3 = arguments.length, obj = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        obj[_key3] = arguments[_key3];
-      }
-
-      for (var i = obj.length - 1; i >= 0; i--) {
-        var o = obj[i];
-        var event = new Event();
-        o.__hash = {};
-        var fns = ['on', 'once', 'off', 'emit'];
-        for (var j = fns.length - 1; j >= 0; j--) {
-          var fn = fns[j];
-          o[fn] = event[fn];
-        }
-      }
-    }
-  }]);
-
-  return Event;
-}();
-
-Event.DOM = 'DOM';
-Event.DESTROY = 'DESTROY';
-Event.DATA = 'DATA';
-
-exports.default = Event;
-
-/***/ }),
-
-/***/ 20:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
-
-/***/ 200:
+/***/ 202:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -3295,7 +3646,7 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 
-/***/ 201:
+/***/ 203:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3305,7 +3656,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(202);
+var _sort = __webpack_require__(204);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3376,7 +3727,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 202:
+/***/ 204:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3443,7 +3794,7 @@ function swap(arr, a, b) {
 
 /***/ }),
 
-/***/ 203:
+/***/ 205:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -3451,148 +3802,6 @@ function swap(arr, a, b) {
 /***/ }),
 
 /***/ 21:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Element = __webpack_require__(4);
-
-var _Element2 = _interopRequireDefault(_Element);
-
-var _VirtualDom = __webpack_require__(7);
-
-var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
-
-var _Obj = __webpack_require__(8);
-
-var _Obj2 = _interopRequireDefault(_Obj);
-
-var _util = __webpack_require__(3);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _browser = __webpack_require__(12);
-
-var _browser2 = _interopRequireDefault(_browser);
-
-var _type = __webpack_require__(13);
-
-var _type2 = _interopRequireDefault(_type);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function join(index, children, history) {
-  var res = '';
-  for (var i = index.shift(), len = children.length; i < len; i++) {
-    var child = children[i];
-    if (index.length) {
-      if (child instanceof _Obj2.default) {
-        res += join(index, child.v, history);
-      } else {
-        res += join(index, child, history);
-      }
-      if (history.end) {
-        break;
-      }
-    } else if (child instanceof _Obj2.default) {
-      if (Array.isArray(child.v)) {
-        res += joinObj(child.v, history);
-        if (history.end) {
-          break;
-        }
-      } else if (child.v instanceof _Element2.default) {
-        history.end = true;
-        break;
-      } else {
-        res += child.toString();
-      }
-    } else if (child instanceof _Element2.default) {
-      history.end = true;
-      break;
-    }
-    //array逻辑和Obj里面相同
-    else if (Array.isArray(child)) {
-        res += joinObj(child, history);
-        if (history.end) {
-          break;
-        }
-      } else {
-        res += _util2.default.stringify(child);
-      }
-  }
-  return res;
-}
-//递归找到第一个不是text的为止，将之前的text拼接返回
-function joinObj(arr, history) {
-  var res = '';
-  for (var i = 0, len = arr.length; i < len; i++) {
-    var child = arr[i];
-    if (history.end) {
-      break;
-    }
-    if (Array.isArray(child)) {
-      res += joinObj(child, history);
-    } else if (child instanceof _Element2.default) {
-      history.end = true;
-      break;
-    } else {
-      res += _util2.default.stringify(child);
-    }
-  }
-  return res;
-}
-
-function update(item, children, elem) {
-  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
-  var res = join(item.index, children, {});
-  var cns = elem.childNodes;
-  var textNode = cns[item.start];
-  //神奇的地方，更新的对象是个DOM而不是TEXT，会发生在混杂情况下的t2d变化
-  //如t1{t}t2{t}变为t1{d}t2{d}，t2记录的range的start在3，而其目前是第2个{d}的DOM，插入在t2d逻辑中
-  if (textNode.nodeType == 1) {
-    return;
-  }
-  var now = textNode.textContent;
-  if (res != now) {
-    //textContent自动转义，保留空白
-    //有实体字符时也不能用textContent
-    if (/&([a-z]+|#\d+);/i.test(res)) {
-      var node = _browser2.default.NODE;
-      node.innerHTML = _util2.default.encodeHtml(res);
-      elem.replaceChild(node.firstChild, textNode);
-    } else {
-      textNode.textContent = res;
-    }
-  }
-}
-
-function value(item, children) {
-  //从item的index开始往后找，直到不是text为止，拼接所有text进行更新
-  return join(item.index, children, {});
-}
-
-function record(history, option) {
-  if (option.first || option.prev == _type2.default.DOM) {
-    option.record = history.slice();
-  }
-}
-
-exports.default = {
-  update: update,
-  value: value,
-  record: record
-};
-
-/***/ }),
-
-/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3622,7 +3831,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 23:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3651,7 +3860,7 @@ exports.default = pool;
 
 /***/ }),
 
-/***/ 24:
+/***/ 23:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3672,7 +3881,7 @@ exports.default = function (e) {
 
 /***/ }),
 
-/***/ 25:
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3686,7 +3895,7 @@ var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchUtil = __webpack_require__(15);
+var _matchUtil = __webpack_require__(16);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
@@ -3857,7 +4066,7 @@ exports.default = delegate;
 
 /***/ }),
 
-/***/ 26:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3923,7 +4132,7 @@ exports.default = Stream;
 
 /***/ }),
 
-/***/ 27:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4772,7 +4981,7 @@ exports.default = FastClick;
 
 /***/ }),
 
-/***/ 28:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4784,11 +4993,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Model2 = __webpack_require__(10);
+var _Model2 = __webpack_require__(11);
 
 var _Model3 = _interopRequireDefault(_Model2);
 
-var _CacheComponent = __webpack_require__(29);
+var _CacheComponent = __webpack_require__(28);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -4839,7 +5048,7 @@ exports.default = CacheModel;
 
 /***/ }),
 
-/***/ 29:
+/***/ 28:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4869,15 +5078,15 @@ var _Component2 = __webpack_require__(5);
 
 var _Component3 = _interopRequireDefault(_Component2);
 
-var _EventBus = __webpack_require__(9);
+var _EventBus = __webpack_require__(10);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Stream = __webpack_require__(26);
+var _Stream = __webpack_require__(25);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _CacheModel = __webpack_require__(28);
+var _CacheModel = __webpack_require__(27);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -5234,7 +5443,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 34:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5552,21 +5761,21 @@ defineProperties(Number, {
   MAX_SAFE_INTEGER: maxSafeInteger,
   MIN_SAFE_INTEGER: -maxSafeInteger
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
 
-/***/ 35:
+/***/ 33:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(36)['default'];
+module.exports = __webpack_require__(34)['default'];
 
 /***/ }),
 
-/***/ 36:
+/***/ 34:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5584,15 +5793,15 @@ var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _EventBus = __webpack_require__(9);
+var _EventBus = __webpack_require__(10);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(10);
+var _Model = __webpack_require__(11);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _CacheModel = __webpack_require__(28);
+var _CacheModel = __webpack_require__(27);
 
 var _CacheModel2 = _interopRequireDefault(_CacheModel);
 
@@ -5604,11 +5813,11 @@ var _VirtualDom = __webpack_require__(7);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _NonVisualComponent = __webpack_require__(43);
+var _NonVisualComponent = __webpack_require__(41);
 
 var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
 
-var _CacheComponent = __webpack_require__(29);
+var _CacheComponent = __webpack_require__(28);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
@@ -5616,11 +5825,11 @@ var _Obj = __webpack_require__(8);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(11);
+var _Cb = __webpack_require__(12);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _cachePool = __webpack_require__(23);
+var _cachePool = __webpack_require__(22);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
@@ -5628,11 +5837,11 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(12);
+var _browser = __webpack_require__(13);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _sort = __webpack_require__(14);
+var _sort = __webpack_require__(15);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -5640,7 +5849,7 @@ var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _Fastclick = __webpack_require__(27);
+var _Fastclick = __webpack_require__(26);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
@@ -5712,11 +5921,11 @@ if (typeof window != 'undefined') {
 }
 
 exports.default = migi;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
 
-/***/ 37:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5734,7 +5943,7 @@ var _Event = __webpack_require__(2);
 
 var _Event2 = _interopRequireDefault(_Event);
 
-var _sort = __webpack_require__(14);
+var _sort = __webpack_require__(15);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -5742,11 +5951,11 @@ var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(22);
+var _matchHash = __webpack_require__(21);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
-var _matchUtil = __webpack_require__(15);
+var _matchUtil = __webpack_require__(16);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
@@ -6178,7 +6387,7 @@ exports.default = match;
 
 /***/ }),
 
-/***/ 38:
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6200,7 +6409,7 @@ var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _Cb = __webpack_require__(11);
+var _Cb = __webpack_require__(12);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -6208,19 +6417,19 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(12);
+var _browser = __webpack_require__(13);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _range = __webpack_require__(21);
+var _range = __webpack_require__(20);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _cachePool = __webpack_require__(23);
+var _cachePool = __webpack_require__(22);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
-var _type = __webpack_require__(13);
+var _type = __webpack_require__(14);
 
 var _type2 = _interopRequireDefault(_type);
 
@@ -6228,15 +6437,15 @@ var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchHash = __webpack_require__(22);
+var _matchHash = __webpack_require__(21);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
-var _fixEvent = __webpack_require__(24);
+var _fixEvent = __webpack_require__(23);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _delegate = __webpack_require__(25);
+var _delegate = __webpack_require__(24);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
@@ -6964,7 +7173,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 39:
+/***/ 37:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7151,6 +7360,205 @@ exports.default = {
       element.setAttribute(k, v);
     }
   }
+};
+
+/***/ }),
+
+/***/ 38:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (vd, name, cb, listener) {
+  if (!hasInitGlobal) {
+    hasInitGlobal = true;
+    initGlobal();
+  }
+  listener.push(['touchstart', onTouchStart]);
+
+  var elem = vd.element;
+
+  elem.addEventListener('touchstart', onTouchStart);
+
+  function onTouchStart(e) {
+    //有可能组件内父子多个使用了手势，冒泡触发了多个
+    if (touch.first) {
+      touchList.push({
+        vd: vd,
+        name: name,
+        cb: cb
+      });
+      return;
+    }
+
+    firstTouch = e.touches[0];
+    if (e.touches && e.touches.length === 1 && touch.x2) {
+      // Clear out touch movement data if we have it sticking around
+      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
+      touch.x2 = undefined;
+      touch.y2 = undefined;
+    }
+
+    touch = {
+      vd: vd,
+      name: name,
+      cb: cb,
+      first: true,
+      x1: firstTouch.pageX,
+      y1: firstTouch.pageY
+    };
+    lastTouch = touch;
+
+    now = Date.now();
+    delta = now - lastTime;
+    lastTime = now;
+    if (delta > 0 && delta < 250) {
+      touch.isDoubleTap = true;
+    }
+  }
+};
+
+/**
+ * Thanks to zepto-touch.js
+ * https://github.com/madrobby/zepto/blob/master/src/touch.js
+ */
+
+var touchList = [];
+var touch = {};
+var lastTouch;
+var tapTimeout;
+var swipeTimeout;
+var longTapDelay = 750;
+var lastTime = 0;
+var now;
+var delta;
+var deltaX = 0;
+var deltaY = 0;
+var firstTouch;
+
+function swipeDirection(x1, x2, y1, y2) {
+  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
+}
+
+function cancelAll() {
+  if (tapTimeout) {
+    clearTimeout(tapTimeout);
+  }
+  if (swipeTimeout) {
+    clearTimeout(swipeTimeout);
+  }
+  tapTimeout = swipeTimeout = null;
+  touch = {};
+  touchList = [];
+}
+
+var hasInitGlobal;
+
+function initGlobal() {
+  document.addEventListener('touchmove', onTouchMove, true);
+  document.addEventListener('touchend', onTouchEnd, true);
+  document.addEventListener('touchcancel', cancelAll, true);
+
+  window.addEventListener('scroll', cancelAll);
+  window.addEventListener('blur', cancelAll);
+}
+
+function onTouchMove(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  firstTouch = e.touches[0];
+  touch.x2 = firstTouch.pageX;
+  touch.y2 = firstTouch.pageY;
+
+  deltaX += Math.abs(touch.x1 - touch.x2);
+  deltaY += Math.abs(touch.y1 - touch.y2);
+}
+
+function onTouchEnd(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  // swipe
+  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
+    swipeTimeout = setTimeout(function () {
+      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
+      if (touch.name == 'swipe' || touch.name == type) {
+        touch.cb(e);
+      }
+      touchList.forEach(function (touch) {
+        if (touch.name == 'swipe' || touch.name == type) {
+          touch.cb(e);
+        }
+      });
+      touch = {};
+      touchList = [];
+    }, 0);
+  }
+  // don't fire tap when delta position changed by more than 30 pixels,
+  // for instance when moving to a point and back to origin
+  else if (deltaX < 30 && deltaY < 30) {
+      tapTimeout = setTimeout(function () {
+        var isLongTap = Date.now() - lastTime > longTapDelay;
+        if (isLongTap) {
+          if (touch.name == 'longtap') {
+            touch.cb(e);
+          }
+          touchList.forEach(function (touch) {
+            if (touch.name == 'longtap') {
+              touch.cb(e);
+            }
+          });
+        }
+        // trigger double tap immediately
+        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
+            if (touch.name == 'doubletap') {
+              touch.cb(e);
+            }
+            touchList.forEach(function (touch) {
+              if (touch.name == 'doubletap') {
+                touch.cb(e);
+              }
+            });
+          }
+        touch = {};
+        touchList = [];
+      }, 0);
+    } else {
+      touch = {};
+      touchList = [];
+    }
+  deltaX = deltaY = 0;
+}
+
+;
+
+/***/ }),
+
+/***/ 39:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  domactivate: 'DOMActivate',
+  domfocusin: 'DOMFocusIn',
+  msgestureend: 'MSGestureEnd',
+  mspointerdown: 'MSPointerDown',
+  mspointermove: 'MSPointerMove',
+  mspointerup: 'MSPointerUp',
+  mspointercancel: 'MSPointerCancel'
 };
 
 /***/ }),
@@ -7442,205 +7850,6 @@ exports.default = Element;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-exports.default = function (vd, name, cb, listener) {
-  if (!hasInitGlobal) {
-    hasInitGlobal = true;
-    initGlobal();
-  }
-  listener.push(['touchstart', onTouchStart]);
-
-  var elem = vd.element;
-
-  elem.addEventListener('touchstart', onTouchStart);
-
-  function onTouchStart(e) {
-    //有可能组件内父子多个使用了手势，冒泡触发了多个
-    if (touch.first) {
-      touchList.push({
-        vd: vd,
-        name: name,
-        cb: cb
-      });
-      return;
-    }
-
-    firstTouch = e.touches[0];
-    if (e.touches && e.touches.length === 1 && touch.x2) {
-      // Clear out touch movement data if we have it sticking around
-      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
-      touch.x2 = undefined;
-      touch.y2 = undefined;
-    }
-
-    touch = {
-      vd: vd,
-      name: name,
-      cb: cb,
-      first: true,
-      x1: firstTouch.pageX,
-      y1: firstTouch.pageY
-    };
-    lastTouch = touch;
-
-    now = Date.now();
-    delta = now - lastTime;
-    lastTime = now;
-    if (delta > 0 && delta < 250) {
-      touch.isDoubleTap = true;
-    }
-  }
-};
-
-/**
- * Thanks to zepto-touch.js
- * https://github.com/madrobby/zepto/blob/master/src/touch.js
- */
-
-var touchList = [];
-var touch = {};
-var lastTouch;
-var tapTimeout;
-var swipeTimeout;
-var longTapDelay = 750;
-var lastTime = 0;
-var now;
-var delta;
-var deltaX = 0;
-var deltaY = 0;
-var firstTouch;
-
-function swipeDirection(x1, x2, y1, y2) {
-  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
-}
-
-function cancelAll() {
-  if (tapTimeout) {
-    clearTimeout(tapTimeout);
-  }
-  if (swipeTimeout) {
-    clearTimeout(swipeTimeout);
-  }
-  tapTimeout = swipeTimeout = null;
-  touch = {};
-  touchList = [];
-}
-
-var hasInitGlobal;
-
-function initGlobal() {
-  document.addEventListener('touchmove', onTouchMove, true);
-  document.addEventListener('touchend', onTouchEnd, true);
-  document.addEventListener('touchcancel', cancelAll, true);
-
-  window.addEventListener('scroll', cancelAll);
-  window.addEventListener('blur', cancelAll);
-}
-
-function onTouchMove(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  firstTouch = e.touches[0];
-  touch.x2 = firstTouch.pageX;
-  touch.y2 = firstTouch.pageY;
-
-  deltaX += Math.abs(touch.x1 - touch.x2);
-  deltaY += Math.abs(touch.y1 - touch.y2);
-}
-
-function onTouchEnd(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  // swipe
-  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
-    swipeTimeout = setTimeout(function () {
-      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
-      if (touch.name == 'swipe' || touch.name == type) {
-        touch.cb(e);
-      }
-      touchList.forEach(function (touch) {
-        if (touch.name == 'swipe' || touch.name == type) {
-          touch.cb(e);
-        }
-      });
-      touch = {};
-      touchList = [];
-    }, 0);
-  }
-  // don't fire tap when delta position changed by more than 30 pixels,
-  // for instance when moving to a point and back to origin
-  else if (deltaX < 30 && deltaY < 30) {
-      tapTimeout = setTimeout(function () {
-        var isLongTap = Date.now() - lastTime > longTapDelay;
-        if (isLongTap) {
-          if (touch.name == 'longtap') {
-            touch.cb(e);
-          }
-          touchList.forEach(function (touch) {
-            if (touch.name == 'longtap') {
-              touch.cb(e);
-            }
-          });
-        }
-        // trigger double tap immediately
-        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
-            if (touch.name == 'doubletap') {
-              touch.cb(e);
-            }
-            touchList.forEach(function (touch) {
-              if (touch.name == 'doubletap') {
-                touch.cb(e);
-              }
-            });
-          }
-        touch = {};
-        touchList = [];
-      }, 0);
-    } else {
-      touch = {};
-      touchList = [];
-    }
-  deltaX = deltaY = 0;
-}
-
-;
-
-/***/ }),
-
-/***/ 41:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  domactivate: 'DOMActivate',
-  domfocusin: 'DOMFocusIn',
-  msgestureend: 'MSGestureEnd',
-  mspointerdown: 'MSPointerDown',
-  mspointermove: 'MSPointerMove',
-  mspointerup: 'MSPointerUp',
-  mspointercancel: 'MSPointerCancel'
-};
-
-/***/ }),
-
-/***/ 42:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 var arrayProto = Array.prototype;
 var arrayMethods = Object.create(arrayProto);
 
@@ -7668,7 +7877,7 @@ exports.default = arrayMethods;
 
 /***/ }),
 
-/***/ 43:
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7817,23 +8026,23 @@ var _Obj = __webpack_require__(8);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _EventBus = __webpack_require__(9);
+var _EventBus = __webpack_require__(10);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(10);
+var _Model = __webpack_require__(11);
 
 var _Model2 = _interopRequireDefault(_Model);
 
-var _Stream = __webpack_require__(26);
+var _Stream = __webpack_require__(25);
 
 var _Stream2 = _interopRequireDefault(_Stream);
 
-var _Fastclick = __webpack_require__(27);
+var _Fastclick = __webpack_require__(26);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
-var _array = __webpack_require__(42);
+var _array = __webpack_require__(40);
 
 var _array2 = _interopRequireDefault(_array);
 
@@ -8394,31 +8603,31 @@ var _Obj = __webpack_require__(8);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(11);
+var _Cb = __webpack_require__(12);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
-var _range = __webpack_require__(21);
+var _range = __webpack_require__(20);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _match = __webpack_require__(37);
+var _match = __webpack_require__(35);
 
 var _match2 = _interopRequireDefault(_match);
 
-var _domDiff = __webpack_require__(38);
+var _domDiff = __webpack_require__(36);
 
 var _domDiff2 = _interopRequireDefault(_domDiff);
 
-var _type = __webpack_require__(13);
+var _type = __webpack_require__(14);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _fixEvent = __webpack_require__(24);
+var _fixEvent = __webpack_require__(23);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _attr = __webpack_require__(39);
+var _attr = __webpack_require__(37);
 
 var _attr2 = _interopRequireDefault(_attr);
 
@@ -8426,19 +8635,19 @@ var _hash = __webpack_require__(6);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _touch = __webpack_require__(40);
+var _touch = __webpack_require__(38);
 
 var _touch2 = _interopRequireDefault(_touch);
 
-var _delegate = __webpack_require__(25);
+var _delegate = __webpack_require__(24);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
-var _matchUtil = __webpack_require__(15);
+var _matchUtil = __webpack_require__(16);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
-var _eventCaseName = __webpack_require__(41);
+var _eventCaseName = __webpack_require__(39);
 
 var _eventCaseName2 = _interopRequireDefault(_eventCaseName);
 
@@ -9728,215 +9937,6 @@ var Obj = function () {
 }();
 
 exports.default = Obj;
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-  };
-}();
-
-var _Event2 = __webpack_require__(2);
-
-var _Event3 = _interopRequireDefault(_Event2);
-
-var _util = __webpack_require__(3);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
-
-var uid = 0;
-
-var EventBus = function (_Event) {
-  _inherits(EventBus, _Event);
-
-  function EventBus() {
-    _classCallCheck(this, EventBus);
-
-    var _this = _possibleConstructorReturn(this, (EventBus.__proto__ || Object.getPrototypeOf(EventBus)).call(this));
-
-    _this.uid = 'e' + uid++; //为数据流历史记录hack
-    _this.__bridgeHash = {};
-    _this.on(_Event3.default.DATA, _this.__brcb);
-    return _this;
-  }
-
-  _createClass(EventBus, [{
-    key: '__brcb',
-    value: function __brcb(k, v, stream) {
-      if (this.__bridgeHash.hasOwnProperty(k)) {
-        var arr = this.__bridgeHash[k];
-        for (var i = 0, len = arr.length; i < len; i++) {
-          var item = arr[i];
-          var target = item.target;
-          var name = item.name;
-          var middleware = item.middleware;
-          if (!stream.has(target.uid)) {
-            stream.add(target.uid);
-            //必须大于桥接对象的sid才生效
-            var tItem = migi.CacheComponent.getSid(target);
-            if (stream.sid > tItem) {
-              //先设置桥接对象数据为桥接模式，修改数据后再恢复
-              target.__stream = stream;
-              target[name] = middleware ? middleware.call(target, v) : v;
-              target.__stream = null;
-            }
-          }
-        }
-      }
-    }
-  }, {
-    key: '__record',
-    value: function __record(target, src, name, middleware) {
-      var self = this;
-      var arr = this.__bridgeHash[src] = this.__bridgeHash[src] || [];
-      //防止重复桥接
-      arr.forEach(function (item) {
-        if (item.target == target && item.name == name) {
-          throw new Error('duplicate bridge: ' + self + '.' + src + ' -> ' + target + '.' + name);
-        }
-      });
-      //记录桥接单向数据流关系
-      arr.push({
-        target: target,
-        name: name,
-        middleware: middleware
-      });
-    }
-  }, {
-    key: '__unRecord',
-    value: function __unRecord(target, src, name) {
-      var self = this;
-      var arr = self.__bridgeHash[src] || [];
-      for (var i = 0, len = arr.length; i < len; i++) {
-        var item = arr[i];
-        if (item.target == target && item.name == name) {
-          arr.splice(i, 1);
-          return;
-        }
-      }
-    }
-  }, {
-    key: 'bridge',
-    value: function bridge(target, src, name, middleware) {
-      var self = this;
-      if (target == this) {
-        throw new Error('can not bridge self: ' + self);
-      }
-      if (!target || !(target instanceof migi.Component) && !(target instanceof migi.Model)) {
-        throw new Error('can only bridge to Component/Model: ' + self);
-      }
-      //重载
-      if (arguments.length == 2) {
-        if (_util2.default.isString(src)) {
-          self.__record(target, src, src);
-        } else {
-          Object.keys(src).forEach(function (k) {
-            var o = src[k];
-            if (_util2.default.isString(o)) {
-              self.__record(target, k, o);
-            } else if (o.name) {
-              self.__record(target, k, o.name, o.middleware);
-            }
-          });
-        }
-      } else if (arguments.length == 3) {
-        if (_util2.default.isString(name)) {
-          self.__record(target, src, name);
-        } else {
-          middleware = name;
-          self.__record(target, src, src, middleware);
-        }
-      } else if (arguments.length == 4) {
-        self.__record(target, src, name, middleware);
-      }
-    }
-  }, {
-    key: 'bridgeTo',
-    value: function bridgeTo(target) {
-      for (var _len = arguments.length, datas = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        datas[_key - 1] = arguments[_key];
-      }
-
-      target.bridge.apply(target, [this].concat(datas));
-    }
-  }, {
-    key: 'unBridge',
-    value: function unBridge(target, src, name) {
-      var self = this;
-      //重载
-      if (arguments.length == 2) {
-        if (_util2.default.isString(src)) {
-          self.__unRecord(target, src, src);
-        } else {
-          Object.keys(src).forEach(function (k) {
-            var o = src[k];
-            if (_util2.default.isString(o)) {
-              self.__unRecord(target, k, o);
-            } else if (_util2.default.isFunction(o)) {
-              self.__unRecord(target, k, k);
-            } else if (o.name) {
-              self.__unRecord(target, k, o.name);
-            }
-          });
-        }
-      } else {
-        self.__unRecord(target, src, name);
-      }
-    }
-  }, {
-    key: 'unBridgeTo',
-    value: function unBridgeTo(target) {
-      for (var _len2 = arguments.length, datas = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        datas[_key2 - 1] = arguments[_key2];
-      }
-
-      target.unBridge.apply(target, [this].concat(datas));
-    }
-  }]);
-
-  return EventBus;
-}(_Event3.default);
-
-exports.default = EventBus;
 
 /***/ })
 

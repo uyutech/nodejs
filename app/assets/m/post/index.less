@@ -2,14 +2,9 @@
  * Created by army8735 on 2017/10/28.
  */
 
-@import '../common/var.less';
-@import '../../d/component/page/index.less';
+@import '../../d/common/var.less';
 @import '../../d/component/comment/index.less';
 @import '../component/subcmt/index.less';
-
-.cp-page{
-  text-align:right;
-}
 
 .post{
   padding:0.1rem;
@@ -18,19 +13,27 @@
     font-size:0.18rem;
     text-align:center;
   }
-  h3{
+  > .profile{
     margin-bottom:0.2rem;
     font-size:0.14rem;
-    color:@secondColor;
     line-height:0.3rem;
     font-weight:400;
-    img{
-      margin-right:0.1rem;
+    .pic{
+      float:left;
+      margin-right:0.2rem;
       width:0.64rem;
       height:0.64rem;
       border-radius:100%;
       box-shadow:@picShadow;
       vertical-align:middle;
+    }
+    .txt{
+      float:left;
+      small{
+        margin-left:0.1rem;
+        font-size:0.12rem;
+        color:@fourthTextColor;
+      }
     }
   }
   > .wrap{
@@ -45,6 +48,10 @@
       white-space:pre-wrap;
       word-break:break-all;
       word-wrap:break-word;
+      img{
+        display:block;
+        max-width:100%;
+      }
     }
     .arrow{
       position:absolute;
@@ -69,7 +76,7 @@
       }
     }
   }
-  > .comments{
+  > .box{
     margin-top:0.2rem;
     padding-bottom:0.1rem;
     box-shadow:0 2px 3px rgba(0, 0, 0, 0.1);
@@ -181,6 +188,11 @@
     }
     .cp-comment{
       margin:0.1rem 0.1rem 0 0.1rem;
+      .con div{
+        display:inline-block;
+        word-break:break-all;
+        word-wrap:break-word;
+      }
     }
   }
 }

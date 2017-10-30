@@ -7,16 +7,16 @@
 import Post from '../../assets/m/post/Post.jsx';
 
 export default function(data) {
-  let isLogin = data.isLogin;
+  let isLogin = !!data.ctx.session.uid;
   let id = data.id;
   let postData = data.postData;
-  let commentData = data.commentData;
+  let replyData = data.replyData;
 
   let post = migi.preRender(<Post
     isLogin={ isLogin }
     id={ id }
     postData={ postData }
-    commentData={ commentData }/>);
+    replyData={ replyData }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -33,7 +33,7 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.id = ${JSON.stringify(id)};
   $CONFIG.postData = ${JSON.stringify(postData)};
-  $CONFIG.commentData = ${JSON.stringify(commentData)};
+  $CONFIG.replyData = ${JSON.stringify(replyData)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mpost.js')}"></script>

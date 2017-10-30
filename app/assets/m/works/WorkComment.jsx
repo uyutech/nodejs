@@ -51,7 +51,8 @@ class WorkComment extends migi.Component {
       ajax.abort();
     }
     self.loading = true;
-    ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID , skip, take, sortType, myComment, currentCount }, function(res) {
+    comment.message = '正在加载...';
+    ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID, skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         // currentCount = data.Size;
@@ -60,7 +61,6 @@ class WorkComment extends migi.Component {
           comment.appendData(res.data.data);
         }
         else {
-          comment.appendData(res.data.data);
           comment.message = skip === 0 ? '暂无评论' : '已经到底了';
           self.loadEnd = true;
         }

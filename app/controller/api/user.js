@@ -36,7 +36,7 @@ module.exports = app => {
           lastUpdateNickNameTime = new Date(lastUpdateNickNameTime);
         }
         else {
-          lastUpdateNickNameTime = now;
+          lastUpdateNickNameTime = 0;
         }
         let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
         if(updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {

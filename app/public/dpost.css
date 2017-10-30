@@ -181,7 +181,7 @@
   word-wrap: break-word;
   white-space: pre-wrap;
 }
-.cp-comment .list > li > .c > pre .placeholder {
+.cp-comment .list > li > .c .placeholder {
   display: inline-block;
   width: 0.7rem;
   height: 0.1rem;
@@ -316,6 +316,9 @@
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+}
+.cp-comment .list > li > .list2 li.author .t > .profile .txt .name {
+  color: #C93;
 }
 .cp-comment .list > li > .list2 li .c {
   position: relative;
@@ -477,20 +480,28 @@ body {
   font-size: 0.24rem;
   text-align: center;
 }
-.post .main h3 {
+.post .main > .profile {
   margin-bottom: 0.2rem;
   font-size: 0.14rem;
-  color: #5D99C4;
   line-height: 0.3rem;
   font-weight: 400;
 }
-.post .main h3 img {
-  margin-right: 0.1rem;
+.post .main > .profile .pic {
+  float: left;
+  margin-right: 0.2rem;
   width: 0.64rem;
   height: 0.64rem;
   border-radius: 100%;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   vertical-align: middle;
+}
+.post .main > .profile .txt {
+  float: left;
+}
+.post .main > .profile .txt small {
+  margin-left: 0.1rem;
+  font-size: 0.12rem;
+  color: #919191;
 }
 .post .main > .wrap {
   position: relative;
@@ -505,6 +516,10 @@ body {
   white-space: pre-wrap;
   word-break: break-all;
   word-wrap: break-word;
+}
+.post .main > .wrap .con img {
+  display: block;
+  max-width: 100%;
 }
 .post .main > .wrap .arrow {
   position: absolute;
@@ -529,13 +544,13 @@ body {
           transform: scaleX(0.7) rotateZ(-45deg);
   content: ' ';
 }
-.post .main > .comments {
+.post .main > .box {
   margin-top: 0.2rem;
   padding-bottom: 0.1rem;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   border-radius: 0.1rem;
 }
-.post .main > .comments h4 {
+.post .main > .box h4 {
   padding: 0 0.2rem 0 0.4rem;
   height: 0.36rem;
   line-height: 0.36rem;
@@ -546,7 +561,7 @@ body {
   border-top-left-radius: 0.1rem;
   border-top-right-radius: 0.1rem;
 }
-.post .main > .comments > .fn {
+.post .main > .box > .fn {
   position: relative;
   padding-bottom: 0.05rem;
   height: 0.3rem;
@@ -557,7 +572,7 @@ body {
   border-top-right-radius: 0.1rem;
   border-bottom: 0.04rem solid #F0F0F0;
 }
-.post .main > .comments > .fn .type {
+.post .main > .box > .fn .type {
   position: absolute;
   top: 0;
   left: 0;
@@ -565,7 +580,7 @@ body {
   height: 0.3rem;
   border-radius: 0.18rem;
 }
-.post .main > .comments > .fn .type li {
+.post .main > .box > .fn .type li {
   position: relative;
   margin-right: 0.5rem;
   float: left;
@@ -573,14 +588,14 @@ body {
   line-height: 0.3rem;
   cursor: pointer;
 }
-.post .main > .comments > .fn .type li:last-child {
+.post .main > .box > .fn .type li:last-child {
   margin: 0;
 }
-.post .main > .comments > .fn .type li.cur {
+.post .main > .box > .fn .type li.cur {
   color: #808080;
   cursor: default;
 }
-.post .main > .comments > .fn .type li.cur:after {
+.post .main > .box > .fn .type li.cur:after {
   position: absolute;
   left: 20%;
   right: 20%;
@@ -591,14 +606,14 @@ body {
   border-radius: 0.02rem;
   content: ' ';
 }
-.post .main > .comments > .fn .type li small {
+.post .main > .box > .fn .type li small {
   position: absolute;
   left: 100%;
   padding-left: 0.05rem;
   color: #58A2CE;
   font-size: 0.12rem;
 }
-.post .main > .comments > .fn .type2 {
+.post .main > .box > .fn .type2 {
   position: absolute;
   top: 0.05rem;
   right: 0.1rem;
@@ -606,7 +621,7 @@ body {
   color: #FFF;
   background: #B1C0C9;
 }
-.post .main > .comments > .fn .type2:before {
+.post .main > .box > .fn .type2:before {
   position: absolute;
   left: 0;
   top: 0;
@@ -619,11 +634,11 @@ body {
   transition: transform 0.2s;
   transition: transform 0.2s, -webkit-transform 0.2s;
 }
-.post .main > .comments > .fn .type2.alt:before {
+.post .main > .box > .fn .type2.alt:before {
   -webkit-transform: translateX(100%);
           transform: translateX(100%);
 }
-.post .main > .comments > .fn .type2 li {
+.post .main > .box > .fn .type2 li {
   position: relative;
   float: left;
   padding: 0 0.1rem;
@@ -635,14 +650,19 @@ body {
   white-space: nowrap;
   overflow: hidden;
 }
-.post .main > .comments > .fn .type2 li.cur {
+.post .main > .box > .fn .type2 li.cur {
   color: #2D4D67;
   cursor: pointer;
 }
-.post .main > .comments .cp-page {
+.post .main > .box .cp-page {
   margin: 0.1rem 0.1rem 0 0.1rem;
   text-align: right;
 }
-.post .main > .comments .cp-comment {
+.post .main > .box .cp-comment {
   margin: 0.1rem 0.1rem 0 0.1rem;
+}
+.post .main > .box .cp-comment .con div {
+  display: inline-block;
+  word-break: break-all;
+  word-wrap: break-word;
 }

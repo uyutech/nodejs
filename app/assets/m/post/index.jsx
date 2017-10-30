@@ -11,5 +11,5 @@ import Post from './Post.jsx';
 let post = migi.preExist(<Post
   postData={ $CONFIG.postData }
   id={ $CONFIG.id }
-  commentData={ $CONFIG.commentData }
+  replyData={ $CONFIG.replyData }
   isLogin={ $CONFIG.isLogin }/>);

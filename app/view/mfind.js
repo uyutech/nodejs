@@ -261,8 +261,7 @@ let net = {
 /***/ }),
 /* 2 */,
 /* 3 */,
-/* 4 */,
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -321,6 +320,7 @@ exports.default = {
 };
 
 /***/ }),
+/* 5 */,
 /* 6 */,
 /* 7 */,
 /* 8 */,
@@ -340,7 +340,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(5);
+var _AuthorType = __webpack_require__(4);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -601,12 +601,13 @@ exports.default = function (data) {
   var hotAuthorList = data.hotAuthorList;
   var hotMusicAlbumList = data.hotMusicAlbumList;
   var hotPhotoAlbumList = data.hotPhotoAlbumList;
+  var hotPostList = data.hotPostList;
   var tags = data.tags;
   var playList = data.playList;
 
-  var find = migi.preRender(migi.createCp(_Find2.default, [["hotWorkList", hotWorkList], ["hotAuthorList", hotAuthorList], ["hotMusicAlbumList", hotMusicAlbumList], ["hotPhotoAlbumList", hotPhotoAlbumList], ["tags", tags], ["playList", playList]]));
+  var find = migi.preRender(migi.createCp(_Find2.default, [["hotWorkList", hotWorkList], ["hotAuthorList", hotAuthorList], ["hotMusicAlbumList", hotMusicAlbumList], ["hotPhotoAlbumList", hotPhotoAlbumList], ["hotPostList", hotPostList], ["tags", tags], ["playList", playList]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.hotMusicAlbumList = ' + JSON.stringify(hotMusicAlbumList) + ';\n  $CONFIG.hotPhotoAlbumList = ' + JSON.stringify(hotPhotoAlbumList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mfind.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.hotMusicAlbumList = ' + JSON.stringify(hotMusicAlbumList) + ';\n  $CONFIG.hotPhotoAlbumList = ' + JSON.stringify(hotPhotoAlbumList) + ';\n  $CONFIG.hotPostList = ' + JSON.stringify(hotPostList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mfind.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
 var _Find = __webpack_require__(24);
@@ -657,6 +658,10 @@ var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 var _HotMusicAlbum = __webpack_require__(11);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
+
+var _HotPost = __webpack_require__(27);
+
+var _HotPost2 = _interopRequireDefault(_HotPost);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -778,7 +783,7 @@ var Find = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "推荐作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotMusicAlbum"], ["title", "推荐专辑"], ["dataList", this.props.hotMusicAlbumList]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "推荐作者"], ["dataList", this.props.hotAuthorList]]), migi.createCp(_HotPhotoAlbum2.default, [["ref", "hotPhotoAlbum"], ["title", "推荐相册"], ["dataList", this.props.hotPhotoAlbumList]])]);
+      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["title", "推荐圈子"], ["dataList", this.props.hotPostList]]), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "推荐作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotMusicAlbum"], ["title", "推荐专辑"], ["dataList", this.props.hotMusicAlbumList]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "推荐作者"], ["dataList", this.props.hotAuthorList]]), migi.createCp(_HotPhotoAlbum2.default, [["ref", "hotPhotoAlbum"], ["title", "推荐相册"], ["dataList", this.props.hotPhotoAlbumList]])]);
     }
   }]);
 
@@ -992,6 +997,88 @@ var HotPhotoAlbum = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(HotPhotoAlbum, "HotPhotoAlbum");exports.default = HotPhotoAlbum;
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var HotPost = function (_migi$Component) {
+  _inherits(HotPost, _migi$Component);
+
+  function HotPost() {
+    var _ref;
+
+    _classCallCheck(this, HotPost);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = HotPost.__proto__ || Object.getPrototypeOf(HotPost)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    if (self.props.dataList) {
+      self.dataList = self.props.dataList;
+    }
+    self.on(migi.Event.DOM, function () {
+      self.autoWidth();
+    });
+    return _this;
+  }
+
+  _createClass(HotPost, [{
+    key: 'autoWidth',
+    value: function autoWidth() {
+      var $list = $(this.ref.list.element);
+      var $c = $list.find('.c');
+      $c.css('width', '9999rem');
+      var $ul = $c.find('ul');
+      $c.css('width', $ul.width() + 1);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-hotpost"]], [migi.createVd("h4", [], [this.props.title]), migi.createVd("div", [["class", "list"], ["ref", "list"]], [migi.createVd("div", [["class", "c"]], [new migi.Obj("dataList", this, function () {
+        return this.dataList && this.dataList.length ? migi.createVd("ul", [], [this.dataList.map(function (item) {
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/post/' + item.ID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img100_100(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", '/post/' + item.ID], ["class", "txt"]], [item.Taglist[0].TagName])]);
+        })]) : migi.createVd("div", [["class", "empty"]]);
+      })])])]);
+    }
+  }, {
+    key: 'dataList',
+    set: function set(v) {
+      this.__setBind("dataList", v);this.__data("dataList");
+    },
+    get: function get() {
+      if (this.__initBind("dataList")) this.__setBind("dataList", []);return this.__getBind("dataList");
+    }
+  }]);
+
+  return HotPost;
+}(migi.Component);
+
+migi.name(HotPost, "HotPost");exports.default = HotPost;
 
 /***/ })
 /******/ ])));

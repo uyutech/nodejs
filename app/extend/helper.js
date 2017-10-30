@@ -9,7 +9,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?17';
+    return '/public' + url + '?18';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -99,7 +99,7 @@ module.exports = {
     </div>`;
     }
     return `<div class="top-nav" id="topNav">
-      <a href="#" class="logo"></a>
+      <a href="/find" class="logo"></a>
       <span class="user">
         <span>登录/注册</span>
         <img src="//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png">

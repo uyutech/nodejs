@@ -16,7 +16,7 @@ export default function(data) {
     lastUpdateNickNameTime = new Date(lastUpdateNickNameTime);
   }
   else {
-    lastUpdateNickNameTime = now;
+    lastUpdateNickNameTime = 0;
   }
   let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
 

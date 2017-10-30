@@ -9,19 +9,14 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let id = ctx.params.id;
-      let list = [];
       let postData = {};
-      let commentData = {};
+      let replyData = {};
       let res = yield {
-        list: ctx.helper.postServiceJSON('api/tag/GetTagPost', {
-          uid,
-          TagID: 21,
-        }),
-        post: ctx.helper.postServiceJSON('api/tag/GetTagPostDetailes', {
+        postData: ctx.helper.postServiceJSON('api/tag/GetTagPostDetailes', {
           uid,
           PostID: id,
         }),
-        commentData: ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
+        replyData: ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
           uid,
           PostID: id,
           Skip: 0,
@@ -31,21 +26,16 @@ module.exports = app => {
           myComment: 0,
         }),
       };
-      if(res.list.data.success) {
-        list = res.list.data.data;
+      if(res.postData.data.success) {
+        postData = res.postData.data.data;
       }
-      if(res.post.data.success) {
-        postData = res.post.data.data;
-      }
-      if(res.commentData.data.success) {
-        commentData = res.commentData.data.data;
+      if(res.replyData.data.success) {
+        replyData = res.replyData.data.data;
       }
       yield ctx.render('mpost', {
-        isLogin: !!uid,
         id,
-        list,
         postData,
-        commentData,
+        replyData,
       });
     }
   }

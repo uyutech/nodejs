@@ -11,6 +11,7 @@ export default function(data) {
   let hotAuthorList = data.hotAuthorList;
   let hotMusicAlbumList = data.hotMusicAlbumList;
   let hotPhotoAlbumList = data.hotPhotoAlbumList;
+  let hotPostList = data.hotPostList;
   let tags = data.tags;
   let playList = data.playList;
 
@@ -19,6 +20,7 @@ export default function(data) {
     hotAuthorList={ hotAuthorList }
     hotMusicAlbumList={ hotMusicAlbumList }
     hotPhotoAlbumList={ hotPhotoAlbumList }
+    hotPostList={ hotPostList }
     tags={ tags }
     playList={ playList }/>);
 
@@ -39,6 +41,7 @@ ${data.helper.getMBotNav()}
   $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
   $CONFIG.hotMusicAlbumList = ${JSON.stringify(hotMusicAlbumList)};
   $CONFIG.hotPhotoAlbumList = ${JSON.stringify(hotPhotoAlbumList)};
+  $CONFIG.hotPostList = ${JSON.stringify(hotPostList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mfind.js')}"></script>

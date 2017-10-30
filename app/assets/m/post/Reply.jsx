@@ -1,9 +1,11 @@
 /**
- * Created by army8735 on 2017/8/26.
+ * Created by army8735 on 2017/10/30.
  */
 
-import net from '../../common/net';
-import util from '../../common/util';
+'use strict';
+
+import net from '../../d/common/net';
+import util from '../../d/common/util';
 
 const NOT_LOADED = 0;
 const IS_LOADING = 1;
@@ -14,7 +16,7 @@ let $last;
 let take = 10;
 let ajax;
 
-class Comment extends migi.Component {
+class Reply extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
@@ -54,7 +56,7 @@ class Comment extends migi.Component {
       $root.on('click', '.slide .sub, .slide span', function() {
         self.slide($(this).closest('li'));
       });
-      $root.on('click', '.list>li>.c>pre', function() {
+      $root.on('click', '.list>li>.c>.con', function() {
         self.slide($(this).closest('li'));
       });
       $root.on('click', '.more', function() {
@@ -97,7 +99,7 @@ class Comment extends migi.Component {
         let $btn = $(this);
         if(window.confirm('会删除子留言哦，确定要删除吗？')) {
           let cid = $btn.attr('cid');
-          net.postJSON(self.props.delUrl, {commentID: cid}, function(res) {
+          net.postJSON(self.props.delUrl, { commentID: cid }, function(res) {
             if(res.success) {
               $btn.closest('li').remove();
             }
@@ -249,7 +251,10 @@ class Comment extends migi.Component {
           </div>
         </div>
         <div class="c">
-          <pre>{ item.Send_Content }<span class="placeholder"/></pre>
+          <div class="con">
+            <div dangerouslySetInnerHTML={ item.Send_Content }/>
+            <span class="placeholder"/>
+          </div>
           <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_AuthorName }>
             <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
             <small class="sub">{ item.sub_Count }</small>
@@ -282,7 +287,10 @@ class Comment extends migi.Component {
         </div>
       </div>
       <div class="c">
-        <pre>{ item.Send_Content }<span class="placeholder"/></pre>
+        <div class="con">
+          <div dangerouslySetInnerHTML={ item.Send_Content }/>
+          <span class="placeholder"/>
+        </div>
         <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_UserName }>
           <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
           <small class="sub">{ item.sub_Count }</small>
@@ -314,7 +322,7 @@ class Comment extends migi.Component {
           </div>
         </div>
         <div class="c">
-          <pre cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_AuthorName }>{ item.Send_Content }</pre>
+          <div class="con" dangerouslySetInnerHTML={ item.Send_Content }/>
           <div class="slide2">
             <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
           </div>
@@ -338,7 +346,7 @@ class Comment extends migi.Component {
         </div>
       </div>
       <div class="c">
-        <pre cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>{ item.Send_Content }</pre>
+        <div class="con" dangerouslySetInnerHTML={ item.Send_Content }/>
         <div class="slide2">
           <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
         </div>
@@ -353,11 +361,11 @@ class Comment extends migi.Component {
     $last = null;
   }
   render() {
-    return <div class="cp-comment">
+    return <div class="cp-comment reply">
       <ul class="list" ref="list" dangerouslySetInnerHTML={ this.html }/>
       <p class={ 'message' + (this.message ? '' : ' fn-hide') }>{ this.message }</p>
     </div>;
   }
 }
 
-export default Comment;
+export default Reply;
