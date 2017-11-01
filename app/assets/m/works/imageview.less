@@ -12,37 +12,39 @@
     height:100%;
     background:rgba(0, 0, 0, 0.7);
     content:' ';
-    z-index:100;
+    z-index:1001;
   }
   .c{
     position:absolute;
     left:50%;
     top:0;
     padding:0.1rem 0;
-    min-width:8rem;
+    width:100%;
     min-height:4rem;
     transform:translateX(-50%);
-    z-index:101;
+    z-index:1001;
     img{
       position:relative;
       display:block;
       margin:0 auto;
-      max-width:9rem;
+      max-width:90%;
       transition:all 0.2s;
+      background-repeat:no-repeat;
+      background-position:center 0;
       background-size:100% auto;
     }
   }
   .prev{
     position:fixed;
     top:50%;
+    left:0.1rem;
     display:block;
     width:0.3rem;
     height:0.3rem;
     border-left:1px solid #FFF;
     border-top:1px solid #FFF;
-    transform:translateY(-50%) rotateZ(-45deg);
-    cursor:pointer;
-    z-index:101;
+    transform:rotateZ(-45deg);
+    z-index:1001;
     opacity:0.7;
     &:hover{
       opacity:1;
@@ -51,14 +53,14 @@
   .next{
     position:fixed;
     top:50%;
+    right:0.1rem;
     display:block;
     width:0.3rem;
     height:0.3rem;
     border-right:1px solid #FFF;
     border-top:1px solid #FFF;
-    transform:translate3d(9.7rem, -50%, 0) rotateZ(45deg);
-    cursor:pointer;
-    z-index:101;
+    transform:rotateZ(45deg);
+    z-index:1001;
     opacity:0.7;
     &:hover{
       opacity:1;
@@ -66,16 +68,17 @@
   }
   .close{
     position:fixed;
-    top:0.2rem;
+    top:0.1rem;
+    right:0.1rem;
     display:block;
-    width:0.42rem;
-    height:0.42rem;
-    background:url(close.png) no-repeat center;
+    width:0.21rem;
+    height:0.21rem;
+    background:url(../../d/works/close.png) no-repeat center;
     background-size:contain;
     cursor:pointer;
-    transform:translateX(9.7rem);
+    //transform:translateX(9.7rem);
     opacity:0.7;
-    z-index:101;
+    z-index:1001;
     &:hover{
       opacity:1;
     }
@@ -86,19 +89,13 @@
     display:block;
     width:0.24rem;
     height:0.24rem;
-    background:url(like-white.png) no-repeat;
+    background:url(../../d/works/like-white.png) no-repeat;
     background-size:contain;
     cursor:pointer;
     z-index:101;
     transform:translateX(9.8rem);
-    &:hover{
-      background-image:url(like-hover.png);
-    }
     &.has{
-      background-image:url(liked-white.png);
-      &:hover{
-        background-image:url(liked-hover.png);
-      }
+      background-image:url(../../d/works/liked-white.png);
     }
   }
   .favor{
@@ -107,19 +104,13 @@
     display:block;
     width:0.24rem;
     height:0.24rem;
-    background:url(favor-white.png) no-repeat;
+    background:url(../../d/works/favor-white.png) no-repeat;
     background-size:contain;
     cursor:pointer;
     z-index:101;
     transform:translateX(9.8rem);
-    &:hover{
-      background-image:url(favor-hover.png);
-    }
     &.has{
-      background-image:url(favored-white.png);
-      &:hover{
-        background-image:url(favored-hover.png);
-      }
+      background-image:url(../../d/works/favored-white.png);
     }
     &.loading{
       opacity:0.7;
@@ -134,7 +125,7 @@
     text-align:center;
     color:#FFF;
     text-shadow:0 0 2px rgba(0, 0, 0, 0.7);
-    z-index:101;
+    z-index:1001;
     font-size:0.14rem;
     font-weight:400;
     small{

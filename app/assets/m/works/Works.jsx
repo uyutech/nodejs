@@ -19,6 +19,7 @@ import WorksTypeEnum from '../../d/works/WorksTypeEnum';
 import LyricsParser from '../../d/works/LyricsParser.jsx';
 import MusicAlbum from './MusicAlbum.jsx';
 import PlayList from '../../d/works/PlayList.jsx';
+import ImageView from './ImageView.jsx';
 
 let first;
 
@@ -341,6 +342,7 @@ class Works extends migi.Component {
                 subText="发送"
                 tipText="-${n}"
                 placeholder="夸夸这个作品吧"/>
+        <ImageView ref="imageView"/>
       </div>;
     }
     return <div class={ 'works t' + self.worksType }>

@@ -1,11 +1,11 @@
 /**
- * Created by army8735 on 2017/10/19.
+ * Created by army8735 on 2017/11/1.
  */
 
 'use strict';
 
-import util from '../common/util';
-import net from '../common/net';
+import util from '../../d/common/util';
+import net from '../../d/common/net';
 
 let list = [];
 let index = 0;
@@ -41,6 +41,18 @@ class ImageView extends migi.Component {
       parent.downZIndex();
     }
   }
+  right() {
+    if(index) {
+      let self = this;
+      self.data = list[--index];
+    }
+  }
+  left() {
+    if(index < list.length - 1) {
+      let self = this;
+      self.data = list[++index];
+    }
+  }
   clickPrev() {
     if(index) {
       let self = this;
@@ -58,8 +70,8 @@ class ImageView extends migi.Component {
   }
   render() {
     return <div class="image-view fn-hide">
-      <div class="c" style={ 'top:' + this.top + 'px' }>
-        <img src={ util.autoSsl(this.data.FileUrl) || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.data.Width + 'pxbackground-image:url("' + util.autoSsl(util.img__60(this.data.FileUrl)) + '")' }/>
+      <div class="c" style={ 'top:' + this.top + 'px' } onSwipeLeft={ this.left } onSwipeRight={ this.right }>
+        <img src={ util.autoSsl(this.data.FileUrl) || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.data.Width + 'px;background-image:url("' + util.autoSsl(util.img__60(this.data.FileUrl)) + '")' }/>
       </div>
       <h3>{ this.data.ItemName }<small>{ this.data.Tips }</small></h3>
       <b class="prev" onClick={ this.clickPrev }/>

@@ -4390,12 +4390,10 @@ var ImageView = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "image-view fn-hide"]], [migi.createVd("div", [["class", "c"], ["style", new migi.Obj("top", this, function () {
         return 'top:' + this.top + 'px';
-      })]], [migi.createVd("b", [["class", "bg"], ["style", new migi.Obj("data", this, function () {
-        return 'height:' + this.data.Height + 'px;background-image:url("' + _util2.default.autoSsl(_util2.default.img__60(this.data.FileUrl)) + '");background-size:' + this.data.Width + 'px auto;';
-      })]]), migi.createVd("img", [["src", new migi.Obj("data", this, function () {
+      })]], [migi.createVd("img", [["src", new migi.Obj("data", this, function () {
         return _util2.default.autoSsl(this.data.FileUrl) || '//zhuanquan.xin/img/blank.png';
       })], ["style", new migi.Obj("data", this, function () {
-        return 'width:' + this.data.Width + 'px';
+        return 'width:' + this.data.Width + 'pxbackground-image:url("' + _util2.default.autoSsl(_util2.default.img__60(this.data.FileUrl)) + '")';
       })]])]), migi.createVd("h3", [], [new migi.Obj("data", this, function () {
         return this.data.ItemName;
       }), migi.createVd("small", [], [new migi.Obj("data", this, function () {
