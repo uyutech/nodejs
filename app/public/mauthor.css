@@ -1109,6 +1109,10 @@ body {
   border-radius: 0.1rem;
   color: #FFF;
 }
+.author > .nav > .profile .txt .rel .un-follow {
+  background-color: #919191;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUAgMAAADw5/WeAAAACVBMVEUAAAD5+fn7+/trAkXDAAAAAXRSTlMAQObYZgAAABNJREFUCNdjIA+ohoaGRkBJsgAAscwC+VHouGIAAAAASUVORK5CYII=);
+}
 .author > .nav > .profile .txt .intro {
   margin-top: 0.1rem;
 }

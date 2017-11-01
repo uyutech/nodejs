@@ -45,30 +45,30 @@ class Profile extends migi.Component {
     let self = this;
     self.loading = true;
     if(self.like) {
-      net.postJSON('/api/author/unFollow', { authorID: self.authorID }, function(res) {
-        if(res.success) {
-          self.like = false;
-          self.fansNumber = res.data.followCount;
-          alert('取关成功');
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
+      if(window.confirm('确定取关吗？')) {
+        net.postJSON('/api/author/unFollow', { authorID: self.authorID }, function(res) {
+          if(res.success) {
+            self.like = false;
+            self.fansNumber = res.data.followCount;
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+          }
+          self.loading = false;
+        }, function(res) {
           alert(res.message || util.ERROR_MESSAGE);
-        }
-        self.loading = false;
-      }, function(res) {
-        alert(res.message || util.ERROR_MESSAGE);
-        self.loading = false;
-      });
+          self.loading = false;
+        });
+      }
     }
     else {
       net.postJSON('/api/author/follow', { authorID: self.authorID } , function(res) {
         if(res.success) {
           self.like = true;
           self.fansNumber = res.data.followCount;
-          alert('关注成功');
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
