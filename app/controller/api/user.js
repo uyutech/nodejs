@@ -49,6 +49,7 @@ module.exports = app => {
           uid,
           NickName: body.nickName,
         });
+        ctx.session.uname = body.nickName;
         return ctx.body = res.data;
       }
       ctx.body = {
