@@ -14,11 +14,11 @@ if(parent !== window) {
       if(node && node !== document.body && node.nodeName === 'A') {
         let href = node.getAttribute('href') || '';
         if(href && href.charAt(0) !== '#') {
+          if(node.getAttribute('target') === '_blank') {
+            return false;
+          }
           // 外链
           if(/^https?:\/\//.test(href)) {
-            if(node.getAttribute('target') === '_blank') {
-              return false;
-            }
             parent.goto && parent.goto(href);
             return true;
           }

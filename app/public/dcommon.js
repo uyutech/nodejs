@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 134);
+/******/ 	return __webpack_require__(__webpack_require__.s = 135);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7471,7 +7471,8 @@ module.exports = function (module) {
 /* 131 */,
 /* 132 */,
 /* 133 */,
-/* 134 */
+/* 134 */,
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7486,17 +7487,17 @@ __webpack_require__(32);
 
 __webpack_require__(33);
 
-var _jquery = __webpack_require__(135);
+var _jquery = __webpack_require__(136);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _cookie = __webpack_require__(136);
+var _cookie = __webpack_require__(137);
 
 var _cookie2 = _interopRequireDefault(_cookie);
 
-__webpack_require__(137);
+__webpack_require__(138);
 
-__webpack_require__(140);
+__webpack_require__(141);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7511,7 +7512,7 @@ window.requestAnimationFrame = function () {
 window.$ = _jquery2.default;
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17347,7 +17348,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(62)(module)))
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17453,15 +17454,15 @@ exports.default = function ($) {
 };
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(138);
+__webpack_require__(139);
 
-var _MLogin = __webpack_require__(139);
+var _MLogin = __webpack_require__(140);
 
 var _MLogin2 = _interopRequireDefault(_MLogin);
 
@@ -17502,7 +17503,7 @@ migi.eventBus.on('COMMENT', function (type) {
 });
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17523,11 +17524,11 @@ if (parent !== window) {
       if (node && node !== document.body && node.nodeName === 'A') {
         var href = node.getAttribute('href') || '';
         if (href && href.charAt(0) !== '#') {
+          if (node.getAttribute('target') === '_blank') {
+            return false;
+          }
           // 外链
           if (/^https?:\/\//.test(href)) {
-            if (node.getAttribute('target') === '_blank') {
-              return false;
-            }
             parent.goto && parent.goto(href);
             return true;
           }
@@ -17556,7 +17557,7 @@ if (parent !== window) {
 }
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17639,7 +17640,7 @@ var NeedLogin = function (_migi$Component) {
 migi.name(NeedLogin, "NeedLogin");exports.default = NeedLogin;
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

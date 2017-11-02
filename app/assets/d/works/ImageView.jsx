@@ -27,6 +27,8 @@ class ImageView extends migi.Component {
   }
   @bind data = {}
   @bind top = 0
+  @bind fnLike
+  @bind fnFavor
   show() {
     $(this.element).removeClass('fn-hide');
     let parent = window.parent;
@@ -56,12 +58,107 @@ class ImageView extends migi.Component {
   clickClose() {
     this.hide();
   }
+  clickLike(e, vd) {
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
+    let self = this;
+    let $vd = $(vd.element);
+    if(!$vd.hasClass('loading')) {
+      $vd.addClass('loading');
+      let data = self.data;
+      net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
+        if(res.success) {
+          data.ISLike = res.data === 211;
+          self.fnLike = null;
+          migi.eventBus.emit('photoLike', data);
+        }
+        else if(res.code === 1000) {
+          migi.eventBus.emit('NEED_LOGIN');
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $vd.removeClass('loading');
+      }, function () {
+        alert(res.message || util.ERROR_MESSAGE);
+        $vd.removeClass('loading');
+      });
+    }
+  }
+  clickFavor(e, vd) {
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
+    let self = this;
+    let $vd = $(vd.element);
+    let data = self.data;
+    if($vd.hasClass('loading')) {
+      //
+    }
+    else if($vd.hasClass('has')) {
+      net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
+        if(res.success) {
+          data.ISFavor = false;
+          self.fnFavor = null;
+          migi.eventBus.emit('photoFavor', data);
+        }
+        else if(res.code === 1000) {
+          migi.eventBus.emit('NEED_LOGIN');
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $vd.removeClass('loading');
+      }, function () {
+        alert(res.message || util.ERROR_MESSAGE);
+        $vd.removeClass('loading');
+      });
+    }
+    else {
+      net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
+        if(res.success) {
+          data.ISFavor = true;
+          self.fnFavor = null;
+          migi.eventBus.emit('photoFavor', data);
+        }
+        else if(res.code === 1000) {
+          migi.eventBus.emit('NEED_LOGIN');
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $vd.removeClass('loading');
+      }, function () {
+        alert(res.message || util.ERROR_MESSAGE);
+        $vd.removeClass('loading');
+      });
+    }
+  }
+  clickDownload(e) {
+    if(!$CONFIG.isLogin) {
+      e.preventDefault();
+      migi.eventBus.emit('NEED_LOGIN');
+    }
+  }
   render() {
     return <div class="image-view fn-hide">
       <div class="c" style={ 'top:' + this.top + 'px' }>
-        <img src={ util.autoSsl(this.data.FileUrl) || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.data.Width + 'pxbackground-image:url("' + util.autoSsl(util.img__60(this.data.FileUrl)) + '")' }/>
+        <img src={ util.autoSsl(util.img__60(this.data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.data.Width + 'px;' }/>
+        <h3>{ this.data.ItemName }<small>{ this.data.Tips }</small></h3>
+        <ul class="btn">
+          <li class={ 'like' + (this.data.ISLike || this.fnLike ? ' has' : '') } onClick={ this.clickLike }/>
+          <li class={ 'favor' + (this.data.ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class="download">
+            <a href={ this.data.FileUrl }
+               target="_blank"
+               download={ this.data.ItemName + (this.data.FileUrl ? (/\.\w+$/.exec(this.data.FileUrl)[0] || '') : '') }
+               onClick={ this.clickDownload }/>
+          </li>
+        </ul>
       </div>
-      <h3>{ this.data.ItemName }<small>{ this.data.Tips }</small></h3>
       <b class="prev" onClick={ this.clickPrev }/>
       <b class="next" onClick={ this.clickNext }/>
       <b class="close" onClick={ this.clickClose }/>

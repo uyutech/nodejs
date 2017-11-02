@@ -10,7 +10,7 @@ module.exports = app => {
       yield ctx.render('404.html');
     }
     * qr(ctx) {
-      ctx.redirect('http://test.circling.cc');
+      ctx.redirect('http://circling.cc');
       // yield ctx.render('404.html');
     }
   }

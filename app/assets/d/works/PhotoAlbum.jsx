@@ -91,6 +91,25 @@ class PhotoAlbum extends migi.Component {
           migi.eventBus.emit('choosePic', list, index);
         }
       });
+
+      migi.eventBus.on('photoLike', function(data) {
+        let $li = $('#photo_' + data.ItemID);
+        if(data.ISLike) {
+          $li.find('.like').addClass('has');
+        }
+        else {
+          $li.find('.like').removeClass('has');
+        }
+      });
+      migi.eventBus.on('photoFavor', function(data) {
+        let $li = $('#photo_' + data.ItemID);
+        if(data.ISLike) {
+          $li.find('.favor').addClass('has');
+        }
+        else {
+          $li.find('.favor').removeClass('has');
+        }
+      });
     });
   }
   @bind loading
@@ -195,14 +214,14 @@ class PhotoAlbum extends migi.Component {
   genItem(data) {
     list.push(data);
     if(data.Width <= 144) {
-      return <li rel={ index++ }>
+      return <li rel={ index++ } id={ 'photo_' + data.ItemID }>
         <img src={ util.autoSsl(util.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } height={ data.Height }/>
         <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
         <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>
       </li>;
     }
     let height = data.Height * 144 / data.Width;
-    return <li rel={ index++ }>
+    return <li rel={ index++ } id={ 'photo_' + data.ItemID }>
       <img src={ util.autoSsl(util.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } height={ height }/>
       <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
       <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>

@@ -369,7 +369,7 @@ var _PlayList = __webpack_require__(61);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
-var _ImageView = __webpack_require__(502);
+var _ImageView = __webpack_require__(110);
 
 var _ImageView2 = _interopRequireDefault(_ImageView);
 
@@ -1739,11 +1739,11 @@ var PhotoAlbum = function (_migi$Component) {
   function PhotoAlbum() {
     var _ref;
 
-    _classCallCheck(this, PhotoAlbum);
-
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
+
+    _classCallCheck(this, PhotoAlbum);
 
     var _this = _possibleConstructorReturn(this, (_ref = PhotoAlbum.__proto__ || Object.getPrototypeOf(PhotoAlbum)).call.apply(_ref, [this].concat(data)));
 
@@ -1812,6 +1812,23 @@ var PhotoAlbum = function (_migi$Component) {
         if (e.target.nodeName === 'LI' || e.target.nodeName === 'IMG') {
           var _index = $li.attr('rel');
           migi.eventBus.emit('choosePic', list, _index);
+        }
+      });
+
+      migi.eventBus.on('photoLike', function (data) {
+        var $li = $('#photo_' + data.ItemID);
+        if (data.ISLike) {
+          $li.find('.like').addClass('has');
+        } else {
+          $li.find('.like').removeClass('has');
+        }
+      });
+      migi.eventBus.on('photoFavor', function (data) {
+        var $li = $('#photo_' + data.ItemID);
+        if (data.ISLike) {
+          $li.find('.favor').addClass('has');
+        } else {
+          $li.find('.favor').removeClass('has');
         }
       });
     });
@@ -1916,10 +1933,10 @@ var PhotoAlbum = function (_migi$Component) {
     value: function genItem(data) {
       list.push(data);
       if (data.Width <= 144) {
-        return migi.createVd("li", [["rel", index++]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+        return migi.createVd("li", [["rel", index++], ["id", 'photo_' + data.ItemID]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
       }
       var height = data.Height * 144 / data.Width;
-      return migi.createVd("li", [["rel", index++]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+      return migi.createVd("li", [["rel", index++], ["id", 'photo_' + data.ItemID]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
     }
   }, {
     key: 'loadImgSize',
@@ -2757,6 +2774,267 @@ migi.name(MusicAlbum, "MusicAlbum");exports.default = MusicAlbum;
 
 /***/ }),
 
+/***/ 110:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var list = [];
+var index = 0;
+
+var ImageView = function (_migi$Component) {
+  _inherits(ImageView, _migi$Component);
+
+  function ImageView() {
+    var _ref;
+
+    _classCallCheck(this, ImageView);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = ImageView.__proto__ || Object.getPrototypeOf(ImageView)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var $window = $(window);
+      migi.eventBus.on('choosePic', function (l, i) {
+        self.show();
+        self.top = $window.scrollTop();
+        list = l;
+        index = i;
+        self.data = list[index];
+      });
+    });
+    return _this;
+  }
+
+  _createClass(ImageView, [{
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+      var parent = window.parent;
+      if (parent !== window && parent.upZIndex) {
+        parent.upZIndex();
+      }
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+      var parent = window.parent;
+      if (parent !== window && parent.downZIndex) {
+        parent.downZIndex();
+      }
+    }
+  }, {
+    key: 'right',
+    value: function right() {
+      if (index) {
+        var self = this;
+        self.data = list[--index];
+      }
+    }
+  }, {
+    key: 'left',
+    value: function left() {
+      if (index < list.length - 1) {
+        var self = this;
+        self.data = list[++index];
+      }
+    }
+  }, {
+    key: 'clickPrev',
+    value: function clickPrev() {
+      if (index) {
+        var self = this;
+        self.data = list[--index];
+      }
+    }
+  }, {
+    key: 'clickNext',
+    value: function clickNext() {
+      if (index < list.length - 1) {
+        var self = this;
+        self.data = list[++index];
+      }
+    }
+  }, {
+    key: 'clickClose',
+    value: function clickClose() {
+      this.hide();
+    }
+  }, {
+    key: 'clickLike',
+    value: function clickLike(e, vd) {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
+      var self = this;
+      var $vd = $(vd.element);
+      if (!$vd.hasClass('loading')) {
+        $vd.addClass('loading');
+        var data = self.data;
+        _net2.default.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
+          if (res.success) {
+            data.ISLike = res.data === 211;
+            self.fnLike = null;
+            migi.eventBus.emit('photoLike', data);
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      }
+    }
+  }, {
+    key: 'clickFavor',
+    value: function clickFavor(e, vd) {
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
+      var self = this;
+      var $vd = $(vd.element);
+      var data = self.data;
+      if ($vd.hasClass('loading')) {
+        //
+      } else if ($vd.hasClass('has')) {
+        _net2.default.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
+          if (res.success) {
+            data.ISFavor = false;
+            self.fnFavor = null;
+            migi.eventBus.emit('photoFavor', data);
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      } else {
+        _net2.default.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
+          if (res.success) {
+            data.ISFavor = true;
+            self.fnFavor = null;
+            migi.eventBus.emit('photoFavor', data);
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $vd.removeClass('loading');
+        }, function () {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $vd.removeClass('loading');
+        });
+      }
+    }
+  }, {
+    key: 'clickDownload',
+    value: function clickDownload(e) {
+      if (!$CONFIG.isLogin) {
+        e.preventDefault();
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "image-view fn-hide"]], [migi.createVd("div", [["class", "c"], ["style", new migi.Obj("top", this, function () {
+        return 'top:' + this.top + 'px';
+      })], ["onSwipeLeft", new migi.Cb(this, this.left)], ["onSwipeRight", new migi.Cb(this, this.right)]], [migi.createVd("img", [["src", new migi.Obj("data", this, function () {
+        return _util2.default.autoSsl(_util2.default.img__60(this.data.FileUrl)) || '//zhuanquan.xin/img/blank.png';
+      })], ["style", new migi.Obj("data", this, function () {
+        return 'width:' + this.data.Width + 'px;';
+      })]]), migi.createVd("h3", [], [new migi.Obj("data", this, function () {
+        return this.data.ItemName;
+      }), migi.createVd("small", [], [new migi.Obj("data", this, function () {
+        return this.data.Tips;
+      })])]), migi.createVd("ul", [["class", "btn"]], [migi.createVd("li", [["class", new migi.Obj(["data", "fnLike"], this, function () {
+        return 'like' + (this.data.ISLike || this.fnLike ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickLike)]]), migi.createVd("li", [["class", new migi.Obj(["data", "fnFavor"], this, function () {
+        return 'favor' + (this.data.ISFavor || this.fnFavor ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("data", this, function () {
+        return this.data.FileUrl;
+      })], ["target", "_blank"], ["download", new migi.Obj("data", this, function () {
+        return this.data.ItemName + (this.data.FileUrl ? /\.\w+$/.exec(this.data.FileUrl)[0] || '' : '');
+      })], ["onClick", new migi.Cb(this, this.clickDownload)]])])])]), migi.createVd("b", [["class", "prev"], ["onClick", new migi.Cb(this, this.clickPrev)]]), migi.createVd("b", [["class", "next"], ["onClick", new migi.Cb(this, this.clickNext)]]), migi.createVd("b", [["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])]);
+    }
+  }, {
+    key: 'data',
+    set: function set(v) {
+      this.__setBind("data", v);this.__data("data");
+    },
+    get: function get() {
+      if (this.__initBind("data")) this.__setBind("data", {});return this.__getBind("data");
+    }
+  }, {
+    key: 'top',
+    set: function set(v) {
+      this.__setBind("top", v);this.__data("top");
+    },
+    get: function get() {
+      if (this.__initBind("top")) this.__setBind("top", 0);return this.__getBind("top");
+    }
+  }, {
+    key: 'fnLike',
+    set: function set(v) {
+      this.__setBind("fnLike", v);this.__data("fnLike");
+    },
+    get: function get() {
+      return this.__getBind("fnLike");
+    }
+  }, {
+    key: 'fnFavor',
+    set: function set(v) {
+      this.__setBind("fnFavor", v);this.__data("fnFavor");
+    },
+    get: function get() {
+      return this.__getBind("fnFavor");
+    }
+  }]);
+
+  return ImageView;
+}(migi.Component);
+
+migi.name(ImageView, "ImageView");exports.default = ImageView;
+
+/***/ }),
+
 /***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3420,160 +3698,6 @@ exports.default = {
   TYPE: TYPE,
   NAME: NAME
 };
-
-/***/ }),
-
-/***/ 502:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _net = __webpack_require__(1);
-
-var _net2 = _interopRequireDefault(_net);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var list = [];
-var index = 0;
-
-var ImageView = function (_migi$Component) {
-  _inherits(ImageView, _migi$Component);
-
-  function ImageView() {
-    var _ref;
-
-    _classCallCheck(this, ImageView);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = ImageView.__proto__ || Object.getPrototypeOf(ImageView)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.on(migi.Event.DOM, function () {
-      var $window = $(window);
-      migi.eventBus.on('choosePic', function (l, i) {
-        self.show();
-        self.top = $window.scrollTop();
-        list = l;
-        index = i;
-        self.data = list[index];
-      });
-    });
-    return _this;
-  }
-
-  _createClass(ImageView, [{
-    key: 'show',
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-      var parent = window.parent;
-      if (parent !== window && parent.upZIndex) {
-        parent.upZIndex();
-      }
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-      var parent = window.parent;
-      if (parent !== window && parent.downZIndex) {
-        parent.downZIndex();
-      }
-    }
-  }, {
-    key: 'right',
-    value: function right() {
-      if (index) {
-        var self = this;
-        self.data = list[--index];
-      }
-    }
-  }, {
-    key: 'left',
-    value: function left() {
-      if (index < list.length - 1) {
-        var self = this;
-        self.data = list[++index];
-      }
-    }
-  }, {
-    key: 'clickPrev',
-    value: function clickPrev() {
-      if (index) {
-        var self = this;
-        self.data = list[--index];
-      }
-    }
-  }, {
-    key: 'clickNext',
-    value: function clickNext() {
-      if (index < list.length - 1) {
-        var self = this;
-        self.data = list[++index];
-      }
-    }
-  }, {
-    key: 'clickClose',
-    value: function clickClose() {
-      this.hide();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "image-view fn-hide"]], [migi.createVd("div", [["class", "c"], ["style", new migi.Obj("top", this, function () {
-        return 'top:' + this.top + 'px';
-      })], ["onSwipeLeft", new migi.Cb(this, this.left)], ["onSwipeRight", new migi.Cb(this, this.right)]], [migi.createVd("img", [["src", new migi.Obj("data", this, function () {
-        return _util2.default.autoSsl(this.data.FileUrl) || '//zhuanquan.xin/img/blank.png';
-      })], ["style", new migi.Obj("data", this, function () {
-        return 'width:' + this.data.Width + 'px;background-image:url("' + _util2.default.autoSsl(_util2.default.img__60(this.data.FileUrl)) + '")';
-      })]])]), migi.createVd("h3", [], [new migi.Obj("data", this, function () {
-        return this.data.ItemName;
-      }), migi.createVd("small", [], [new migi.Obj("data", this, function () {
-        return this.data.Tips;
-      })])]), migi.createVd("b", [["class", "prev"], ["onClick", new migi.Cb(this, this.clickPrev)]]), migi.createVd("b", [["class", "next"], ["onClick", new migi.Cb(this, this.clickNext)]]), migi.createVd("b", [["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]])]);
-    }
-  }, {
-    key: 'data',
-    set: function set(v) {
-      this.__setBind("data", v);this.__data("data");
-    },
-    get: function get() {
-      if (this.__initBind("data")) this.__setBind("data", {});return this.__getBind("data");
-    }
-  }, {
-    key: 'top',
-    set: function set(v) {
-      this.__setBind("top", v);this.__data("top");
-    },
-    get: function get() {
-      if (this.__initBind("top")) this.__setBind("top", 0);return this.__getBind("top");
-    }
-  }]);
-
-  return ImageView;
-}(migi.Component);
-
-migi.name(ImageView, "ImageView");exports.default = ImageView;
 
 /***/ }),
 
