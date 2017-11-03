@@ -2,6 +2,10 @@
  * Created by army8735 on 2017/9/18.
  */
 
+'use strict';
+
+import util from '../../../d/common/util';
+
 class HotPhotoAlbum extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -34,7 +38,7 @@ class HotPhotoAlbum extends migi.Component {
                     return <li>
                       <b class="bg"/>
                       <a href={ `/works/${item.WorksID}` } class="pic">
-                        <img src={ item.cover_Pic || '//zhuanquan.xin/img/blank.png' }/>
+                        <img src={ util.autoSsl(util.img200_200_80(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
                       </a>
                       <a href="#" class="txt">{ item.Title }</a>
                     </li>;

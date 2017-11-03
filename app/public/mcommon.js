@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 83);
+/******/ 	return __webpack_require__(__webpack_require__.s = 85);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -93,6 +93,36 @@ var util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img288__80: function img288__80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-288__80' : url;
+  },
+  img288_288_80: function img288_288_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-288_288_80' : url;
+  },
+  img240_240_80: function img240_240_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-240_240_80' : url;
+  },
+  img200_200: function img200_200(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-200_200' : url;
+  },
+  img200_200_80: function img200_200_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-200_200_80' : url;
+  },
   img192_192: function img192_192(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -111,6 +141,24 @@ var util = {
     }
     return url ? url + '-144_144' : url;
   },
+  img144_144_80: function img144_144_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_144_80' : url;
+  },
+  img120_120: function img120_120(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120' : url;
+  },
+  img120_120_80: function img120_120_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120_80' : url;
+  },
   img100_100: function img100_100(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -122,6 +170,12 @@ var util = {
       return url;
     }
     return url ? url + '-90_90' : url;
+  },
+  img60_60: function img60_60(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-60_60' : url;
   },
   img__60: function img__60(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -7643,7 +7697,9 @@ migi.name(Share, "Share");exports.default = Share;
 /* 80 */,
 /* 81 */,
 /* 82 */,
-/* 83 */
+/* 83 */,
+/* 84 */,
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7714,8 +7770,6 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 84 */,
-/* 85 */,
 /* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 

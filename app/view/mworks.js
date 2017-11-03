@@ -89,6 +89,36 @@ let util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img288__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-288__80' : url;
+  },
+  img288_288_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-288_288_80' : url;
+  },
+  img240_240_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-240_240_80' : url;
+  },
+  img200_200: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-200_200' : url;
+  },
+  img200_200_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-200_200_80' : url;
+  },
   img192_192: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -100,12 +130,30 @@ let util = {
       return url;
     }
     return url ? url + '-144_' : url;
-    },
+  },
   img144_144: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
     return url ? url + '-144_144' : url;
+  },
+  img144_144_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-144_144_80' : url;
+  },
+  img120_120: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120' : url;
+  },
+  img120_120_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120_80' : url;
   },
   img100_100: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -118,6 +166,12 @@ let util = {
       return url;
     }
     return url ? url + '-90_90' : url;
+  },
+  img60_60: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-60_60' : url;
   },
   img__60: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -3157,10 +3211,10 @@ var PhotoAlbum = function (_migi$Component) {
     value: function genItem(data) {
       list.push(data);
       if (data.Width <= 144) {
-        return migi.createVd("li", [["rel", index++], ["id", 'photo_' + data.ItemID]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+        return migi.createVd("li", [["rel", index++], ["id", 'photo_' + data.ItemID]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img288__80(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", data.Height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
       }
       var height = data.Height * 144 / data.Width;
-      return migi.createVd("li", [["rel", index++], ["id", 'photo_' + data.ItemID]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img144_(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
+      return migi.createVd("li", [["rel", index++], ["id", 'photo_' + data.ItemID]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img288__80(data.FileUrl)) || '//zhuanquan.xin/img/blank.png'], ["height", height]]), migi.createVd("b", [["class", 'like' + (data.ISLike ? ' has' : '')], ["itemID", data.ItemID]]), migi.createVd("b", [["class", 'favor' + (data.ISFavor ? ' has' : '')], ["itemID", data.ItemID]])]);
     }
   }, {
     key: 'loadImgSize',

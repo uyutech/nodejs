@@ -22,7 +22,7 @@ class HotPost extends migi.Component {
               this.dataList.map(function(item) {
                 return <li>
                   <a href={ `/post/${item.ID}` } class="pic">
-                    <img src={ util.autoSsl(util.img144_144(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png' }/>
+                    <img src={ util.autoSsl(util.img288_288_80(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png' }/>
                   </a>
                   <a href={ `/post/${item.ID}` } class="txt">{ item.Taglist[0].TagName }</a>
                 </li>;

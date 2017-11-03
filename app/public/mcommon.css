@@ -121,10 +121,6 @@ a {
   color: #2D4D67;
   text-decoration: none;
 }
-a:hover {
-  color: #0AE;
-  text-decoration: underline;
-}
 .fn-clear:after {
   visibility: hidden;
   display: block;

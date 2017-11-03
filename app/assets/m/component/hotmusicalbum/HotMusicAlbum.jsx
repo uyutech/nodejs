@@ -39,7 +39,7 @@ class HotMusicAlbum extends migi.Component {
                     return <li>
                       <b class="bg"/>
                       <a href={ url } class="pic">
-                        <img src={ util.autoSsl(util.img100_100(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
+                        <img src={ util.autoSsl(util.img200_200_80(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
                       </a>
                       <a href={ url } class="txt">{ item.Title }</a>
                     </li>;

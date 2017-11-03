@@ -33,7 +33,7 @@ class HotAuthor extends migi.Component {
                     let types = item.WorksType || [];
                     return <li>
                       <a href={ `/author/${item.AuthorID}` } class="pic">
-                        <img src={ util.autoSsl(util.img90_90(item.Head_url)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
+                        <img src={ util.autoSsl(util.img120_120_80(item.Head_url)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
                         {
                           types.slice(0, 2).map(function(item) {
                             return <b class={ `cp-author_type${item}` }/>;

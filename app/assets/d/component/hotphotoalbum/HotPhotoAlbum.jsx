@@ -4,6 +4,8 @@
 
 'use strict';
 
+import util from '../../common/util';
+
 class HotPhotoAlbum extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -21,7 +23,7 @@ class HotPhotoAlbum extends migi.Component {
                 return <li>
                   <b class="bg"/>
                   <a href={ `/works/${item.WorksID}` } class="pic">
-                    <img src={ item.cover_Pic || '//zhuanquan.xin/img/blank.png' }/>
+                    <img src={ util.autoSsl(util.img288_288_80(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
                   </a>
                   <a href="#" class="txt">{ item.Title }</a>
                 </li>;
