@@ -7511,6 +7511,10 @@ window.requestAnimationFrame = function () {
 
 window.$ = _jquery2.default;
 
+if (!window.location.origin) {
+  window.location.origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+}
+
 /***/ }),
 /* 136 */
 /***/ (function(module, exports, __webpack_require__) {

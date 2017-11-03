@@ -771,8 +771,9 @@ body {
   background: #8BBDE1;
   color: #FFF;
 }
-.mod.mod-media .type dl.cur dd {
-  display: block;
+.mod.mod-media .type dl.cur dd.cur {
+  text-decoration: underline;
+  opacity: 1;
 }
 .mod.mod-media .type dl dt {
   float: left;
@@ -790,10 +791,6 @@ body {
   line-height: 0.24rem;
   color: #2D4D67;
   opacity: 0.5;
-}
-.mod.mod-media .type dl dd.cur {
-  text-decoration: underline;
-  opacity: 1;
 }
 /**
  * Created by army8735 on 2017/10/18.

@@ -125,6 +125,12 @@ let util = {
     }
     return url ? url + '-192_192' : url;
   },
+  img150_150_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-150_150_80' : url;
+  },
   img144_: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;

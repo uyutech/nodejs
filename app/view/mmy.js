@@ -126,6 +126,12 @@ let util = {
     }
     return url ? url + '-192_192' : url;
   },
+  img150_150_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-150_150_80' : url;
+  },
   img144_: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -572,7 +578,7 @@ var Profile = function (_migi$Component) {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("h4", [], ["我的资料"]), migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
-        return this.head || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png';
+        return _util2.default.autoSsl(_util2.default.img200_200_80(this.head)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png';
       })]]),,,] /*<div class="upload" ref="upload">*/
       /*<input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>*/
       /*</div>*/
@@ -625,6 +631,16 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -653,7 +669,7 @@ var Follow = function (_migi$Component) {
   }
 
   _createClass(Follow, [{
-    key: "autoWidth",
+    key: 'autoWidth',
     value: function autoWidth() {
       var $list = $(this.ref.list.element);
       var $c = $list.find('.c');
@@ -662,16 +678,16 @@ var Follow = function (_migi$Component) {
       $c.css('width', $ul.width() + 1);
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "cp-hotauthor follow"]], [migi.createVd("h4", [], ["我的关注"]), migi.createVd("div", [["class", "list"], ["ref", "list"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [], [new migi.Obj("list", this, function () {
         return (this.list || []).map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", item.Head_url || '//zhuanquan.xin/head/0d90e4f2e6f7ef48992df6b49f54cf40.png']])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [item.AuthorName]), migi.createVd("div", [["class", "info"]], [item.FansNumber, "粉丝"])]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img120_120_80(item.Head_url)) || '//zhuanquan.xin/head/0d90e4f2e6f7ef48992df6b49f54cf40.png']])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [item.AuthorName]), migi.createVd("div", [["class", "info"]], [item.FansNumber, "粉丝"])]);
         });
       })])])])]);
     }
   }, {
-    key: "list",
+    key: 'list',
     set: function set(v) {
       this.__setBind("list", v);this.__data("list");
     },

@@ -15,7 +15,16 @@ class MusicAlbum extends migi.Component {
     super(...data);
     let self = this;
     if(self.props.workList && self.props.workList.length) {
-      self.setItem(self.props.workList[0]);
+      if(self.props.workID) {
+        self.props.workList.forEach(function(item, i) {
+          if(self.props.workID === item.ItemID.toString()) {
+            self.setItem(self.props.workList[i]);
+          }
+        });
+      }
+      else {
+        self.setItem(self.props.workList[0]);
+      }
       self.on(migi.Event.DOM, function() {
         self.addOrAltMedia();
       });
@@ -23,13 +32,14 @@ class MusicAlbum extends migi.Component {
         self.av.element.currentTime = self.currentTime = 0;
         self.setItem(item);
         self.addOrAltMedia();
+        history.replaceState(null, null, '/works/' + self.props.worksID + '/' + self.workID);
       });
     }
   }
   @bind item
   @bind type
   @bind workID
-  @bind name
+  @bind sname
   @bind url
   @bind playNum
   @bind isPlaying
@@ -61,7 +71,7 @@ class MusicAlbum extends migi.Component {
     self.item = item;
     self.type = item.ItemType;
     self.workID = item.ItemID;
-    self.name = item.ItemName;
+    self.sname = item.ItemName;
     self.url = item.FileUrl;
     self.playNum = item.PlayHis;
     self.formatLyrics = item.formatLyrics || {};
@@ -337,7 +347,7 @@ class MusicAlbum extends migi.Component {
           <li class={ 'favor' + (this.favor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.url }
-               download={ this.name + this.url ? (/\.\w+$/.exec(this.url)[0] || '') : '' }
+               download={ this.sname + this.url ? (/\.\w+$/.exec(this.url)[0] || '') : '' }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

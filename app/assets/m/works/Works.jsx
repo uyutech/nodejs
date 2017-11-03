@@ -28,6 +28,7 @@ class Works extends migi.Component {
     super(...data);
     let self = this;
     self.worksID = self.props.worksID;
+    self.workID = self.props.workID;
     self.worksType = self.props.worksDetail.WorkType;
     self.setWorks(self.props.worksDetail.Works_Items);
     self.on(migi.Event.DOM, function() {
@@ -207,13 +208,31 @@ class Works extends migi.Component {
       }
     });
 
-    if(self.videoData) {
-      first = 'video';
-      self.workID = self.videoData[0].ItemID;
+    if(self.workID) {
+      if(self.videoData) {
+        self.videoData.forEach(function(item) {
+          if(item.ItemID.toString() === self.workID) {
+            first = 'video';
+          }
+        });
+      }
+      if(self.audioData) {
+        self.audioData.forEach(function(item) {
+          if(item.ItemID.toString() === self.workID) {
+            first = 'audio';
+          }
+        });
+      }
     }
-    else if(self.audioData) {
-      first = 'audio';
-      self.workID = self.audioData[0].ItemID;
+    else {
+      if(self.videoData) {
+        first = 'video';
+        self.workID = self.videoData[0].ItemID;
+      }
+      else if(self.audioData) {
+        first = 'audio';
+        self.workID = self.audioData[0].ItemID;
+      }
     }
   }
   clickSel(e, vd, tvd) {
@@ -275,6 +294,7 @@ class Works extends migi.Component {
       return <div class={'works t' + self.worksType}>
         <MusicAlbum ref="musicAlbum"
                     worksID={ this.worksID }
+                    workID={ this.workID }
                     cover={ this.props.worksDetail.cover_Pic }
                     workList={ this.workList }/>
         <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
@@ -282,7 +302,7 @@ class Works extends migi.Component {
           <li rel="intro">简介</li>
           <li rel="comment">留言</li>
         </ul>
-        <PlayList ref="playList" workList={ this.workList }/>
+        <PlayList ref="playList" worksID={ this.worksID } workID={ this.workID } workList={ this.workList }/>
         <div class="intro fn-hide" ref="intro">
           {
             this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
@@ -348,6 +368,7 @@ class Works extends migi.Component {
     return <div class={ 'works t' + self.worksType }>
       <Media ref="media"
              worksID={ this.worksID }
+             workID={ this.workID }
              cover={ this.props.worksDetail.cover_Pic }
              audioData={ this.audioData }
              videoData={ this.videoData }

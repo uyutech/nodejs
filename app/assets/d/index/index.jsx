@@ -13,6 +13,7 @@ let topNav = migi.preExist(<TopNav userInfo={ $CONFIG.userInfo } authorInfo={ $C
                                    isLogin={ $CONFIG.isLogin } isAuthor={ $CONFIG.isAuthor }/>);
 
 let cIframe;
+let url;
 
 let quanNiang = migi.render(
   <QuanNiang/>,
@@ -31,7 +32,8 @@ if($CONFIG.isLogin && $CONFIG.userInfo.User_Reg_Stat !== 99 && $CONFIG.userInfo.
   );
 }
 
-window.setHash = function(hash) {
+window.setHash = function(hash, noRedirect) {
+  iframeGoto(hash, noRedirect);
   location.hash = hash;
 };
 window.goto = function(url) {
@@ -64,15 +66,23 @@ window.comment = function(type) {
   list.push(now);
 };
 
-function iframeGoto(hash) {
+function iframeGoto(hash, noRedirect) {
   hash = hash || '';
   hash = hash.replace(/^#/, '');
+  // 兼容
   if(hash.indexOf('/musicalbum/') === 0) {
     location.hash = '#/works/' + hash.slice(12);
     return;
   }
   if(!hash || hash === '/') {
     hash = '/find';
+  }
+  if(url === hash) {
+    return;
+  }
+  url = hash;
+  if(noRedirect) {
+    return;
   }
   if(cIframe) {
     cIframe.clean();

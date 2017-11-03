@@ -28,6 +28,7 @@ class Works extends migi.Component {
     super(...data);
     let self = this;
     self.worksID = self.props.worksID;
+    self.workID = self.props.workID;
     self.worksType = self.props.worksDetail.WorkType;
     self.setWorks(self.props.worksDetail.Works_Items);
     self.on(migi.Event.DOM, function() {
@@ -59,6 +60,7 @@ class Works extends migi.Component {
     });
   }
   @bind worksID
+  @bind workID
   @bind worksType
   setWorks(works) {
     let self = this;
@@ -171,13 +173,31 @@ class Works extends migi.Component {
       }
     });
 
-    if(self.videoData) {
-      first = 'video';
-      self.workID = self.videoData[0].ItemID;
+    if(self.workID) {
+      if(self.videoData) {
+        self.videoData.forEach(function(item) {
+          if(item.ItemID.toString() === self.workID) {
+            first = 'video';
+          }
+        });
+      }
+      if(self.audioData) {
+        self.audioData.forEach(function(item) {
+          if(item.ItemID.toString() === self.workID) {
+            first = 'audio';
+          }
+        });
+      }
     }
-    else if(self.audioData) {
-      first = 'audio';
-      self.workID = self.audioData[0].ItemID;
+    else {
+      if(self.videoData) {
+        first = 'video';
+        self.workID = self.videoData[0].ItemID;
+      }
+      else if(self.audioData) {
+        first = 'audio';
+        self.workID = self.audioData[0].ItemID;
+      }
     }
   }
   clickType(e, vd, tvd) {
@@ -213,6 +233,7 @@ class Works extends migi.Component {
           </ul>
           <MusicAlbum ref="musicAlbum"
                       worksID={ this.worksID }
+                      workID={ this.workID }
                       cover={ this.props.worksDetail.cover_Pic }
                       workList={ this.workList }/>
           <div class="box">
@@ -227,7 +248,7 @@ class Works extends migi.Component {
             <li class="cur">曲目</li>
           </ul>
           <div class="box box-fn-top-left">
-            <PlayList ref="playList" workList={ this.workList }/>
+            <PlayList ref="playList" workList={ this.workList } worksID={ this.worksID } workID={ this.workID }/>
           </div>
           <WorkComment ref="workComment"
                        isLogin={ this.props.isLogin }
@@ -296,6 +317,7 @@ class Works extends migi.Component {
         </ul>
         <Media ref="media"
                worksID={ this.worksID }
+               workID={ this.workID }
                cover={ this.props.worksDetail.cover_Pic }
                audioData={ this.audioData }
                videoData={ this.videoData }

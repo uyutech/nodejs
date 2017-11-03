@@ -9,6 +9,7 @@ import Works from '../../assets/d/works/Works.jsx';
 export default function(data) {
   let isLogin = !!data.ctx.session.uid;
   let worksID = data.worksID;
+  let workID = data.workID;
   let worksDetail = data.worksDetail;
   let commentData = data.commentData;
   let labelList = data.labelList;
@@ -16,6 +17,7 @@ export default function(data) {
   let works = migi.preRender(<Works
     isLogin={ isLogin }
     worksID={ worksID }
+    workID={ workID }
     worksDetail={ worksDetail }
     labelList={ labelList }
     commentData={ commentData }/>);
@@ -33,6 +35,7 @@ ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.worksID = ${JSON.stringify(worksID)};
+  $CONFIG.workID = ${JSON.stringify(workID)};
   $CONFIG.worksDetail = ${JSON.stringify(worksDetail)};
   $CONFIG.labelList = ${JSON.stringify(labelList)};
   $CONFIG.commentData = ${JSON.stringify(commentData)};

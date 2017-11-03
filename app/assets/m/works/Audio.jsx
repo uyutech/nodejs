@@ -15,6 +15,13 @@ class Audio extends migi.Component {
     let self = this;
     if(self.props.datas) {
       self.setData(self.props.datas);
+      if(self.props.workID) {
+        self.props.datas.forEach(function(item, i) {
+          if(item.ItemID.toString() === self.props.workID) {
+            self.index = i;
+          }
+        });
+      }
       if(self.props.show) {
         self.on(migi.Event.DOM, function() {
           self.addMedia();
@@ -58,7 +65,7 @@ class Audio extends migi.Component {
     return this;
   }
   addMedia() {
-    let audio = <audio src={ this.datas[0].FileUrl }
+    let audio = <audio src={ this.datas[this.index].FileUrl }
                        onTimeupdate={ this.onTimeupdate.bind(this) }
                        onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
                        onPlaying={ this.onPlaying.bind(this) }

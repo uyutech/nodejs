@@ -14,6 +14,13 @@ class Video extends migi.Component {
     let self = this;
     if(self.props.datas) {
       self.setData(self.props.datas);
+      if(self.props.workID) {
+        self.props.datas.forEach(function(item, i) {
+          if(item.ItemID.toString() === self.props.workID) {
+            self.index = i;
+          }
+        });
+      }
       if(self.props.show) {
         self.on(migi.Event.DOM, function() {
           self.addMedia();

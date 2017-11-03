@@ -48,10 +48,17 @@
         text-align:right;
         background-position:0.2rem 0.12rem;
         background-repeat:no-repeat;
+        &:first-child{
+          margin-left:1px;
+          &.cur{
+            margin-left:0;
+          }
+        }
         &.audio{
           background-image:url(audio-dis.png);
           background-size:0.24rem auto;
           &.cur{
+            margin-left:0;
             background-image:url(audio.png);
             &:hover{
               background-image:url(audio.png);

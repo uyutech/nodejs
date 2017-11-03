@@ -130,6 +130,12 @@ var util = {
     }
     return url ? url + '-192_192' : url;
   },
+  img150_150_80: function img150_150_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-150_150_80' : url;
+  },
   img144_: function img144_(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;

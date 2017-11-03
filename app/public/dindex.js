@@ -130,6 +130,12 @@ var util = {
     }
     return url ? url + '-192_192' : url;
   },
+  img150_150_80: function img150_150_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-150_150_80' : url;
+  },
   img144_: function img144_(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -359,6 +365,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var topNav = migi.preExist(migi.createCp(_TopNav2.default, [["userInfo", $CONFIG.userInfo], ["authorInfo", $CONFIG.authorInfo], ["isLogin", $CONFIG.isLogin], ["isAuthor", $CONFIG.isAuthor]]));
 
 var cIframe = void 0;
+var url = void 0;
 
 var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, []), document.body);
 
@@ -368,7 +375,8 @@ if ($CONFIG.isLogin && $CONFIG.userInfo.User_Reg_Stat !== 99 && $CONFIG.userInfo
   migi.render(migi.createCp(_Welcome2.default, [["userInfo", $CONFIG.userInfo], ["authorInfo", $CONFIG.authorInfo]]), document.body);
 }
 
-window.setHash = function (hash) {
+window.setHash = function (hash, noRedirect) {
+  iframeGoto(hash, noRedirect);
   location.hash = hash;
 };
 window.goto = function (url) {
@@ -401,15 +409,23 @@ window.comment = function (type) {
   list.push(now);
 };
 
-function iframeGoto(hash) {
+function iframeGoto(hash, noRedirect) {
   hash = hash || '';
   hash = hash.replace(/^#/, '');
+  // 兼容
   if (hash.indexOf('/musicalbum/') === 0) {
     location.hash = '#/works/' + hash.slice(12);
     return;
   }
   if (!hash || hash === '/') {
     hash = '/find';
+  }
+  if (url === hash) {
+    return;
+  }
+  url = hash;
+  if (noRedirect) {
+    return;
   }
   if (cIframe) {
     cIframe.clean();

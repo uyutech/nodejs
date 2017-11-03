@@ -287,7 +287,10 @@
           color:#FFF;
         }
         dd{
-          display:block;
+          &.cur{
+            text-decoration:underline;
+            opacity:1;
+          }
         }
       }
       dt{
@@ -302,15 +305,10 @@
       }
       dd{
         float:left;
-        //display:none;
         margin-right:0.05rem;
         line-height:0.24rem;
         color:@mainTextColor;
         opacity:0.5;
-        &.cur{
-          text-decoration:underline;
-          opacity:1;
-        }
       }
     }
   }

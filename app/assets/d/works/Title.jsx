@@ -32,7 +32,7 @@ class Title extends migi.Component {
       {
         hasCover
           ? <div class="pic">
-              <img src={ util.autoSsl(util.img100_100(this.props.detail.cover_Pic)) }/>
+              <img src={ util.autoSsl(util.img200_200_80((this.props.detail.cover_Pic))) }/>
             </div>
           : ''
       }

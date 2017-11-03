@@ -2733,11 +2733,18 @@ body {
   background-position: 0.2rem 0.12rem;
   background-repeat: no-repeat;
 }
+.works > .main > .type li:first-child {
+  margin-left: 1px;
+}
+.works > .main > .type li:first-child.cur {
+  margin-left: 0;
+}
 .works > .main > .type li.audio {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAASFBMVEUAAACxwcqywcuywcq6ydHe3t6xwMmywMqywcqywcqyw8y6z9axwcqywcqywcmywcmxwcqxwsqyw8uzwMmzw8u1w8m2yNGxwMlwn9dwAAAAF3RSTlMA5ojBEAXz57lpOQzZ1LWikH1cUUAmHOYBWfcAAADySURBVEjH7ZLJroMwDAADCVkIlL3z/3/6xAGpZNXroVKlzi22R3YSix/vodZJDloPclqVqLNJXpBbpbyXgHX74f2xO3sqfaG8m8E49TKdMzB32eEtevH3mF80VmXqR0yif28Yk0ZnGZ+pxHPEpqaaMWd9yjDMic7oPvt2mjgnWUSWBRn9F8bnBW/YogZOFHBhCwWqJET5FSuKWNbbecKVBccUXGEvC3twiYGjLBwMt7PGlwWPvp1BVIBvELq2adpg8a9oUmgB2lC4ogmhAWhC4YomBDiJZz/5BuHxqAhnRTqVj35cqHxcTGU1YirL9+Nf/AFSDhllEia9hAAAAABJRU5ErkJggg==);
   background-size: 0.24rem auto;
 }
 .works > .main > .type li.audio.cur {
+  margin-left: 0;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAS1BMVEUAAABPj7BPj7BOj7FamLpOjrFPjrBPj7FOj7FPkLJSkbJVk7pVqtVPjrBPj7FPj7FQj7FQj7FQkLJPkbBQj7NRlLVSkrZVqv9OjrBTLEWaAAAAGHRSTlMA5oj3DOfXv7lpORAGxbWikH1cUUAmHANh+ErmAAAA9klEQVRIx+2S2W6DMBAADb5JCEcgzP9/aSUk1NpZNmofKkXKvO0xsr1r8+FvXOYhBmtDHOaLec098oN4NzpdDzblZXVuXXKy0HdK+zaCz+474bKHcTu9fMJOrsy5yZIuJ/0BL5zfeYJobInwkAqPQJJuNeL3fsHwjMLJ2O50dpbnWs9kTpnon/aFd+eC89QbjGSjkInVSLFOE5ylHO1MMiqJuYgHsi5khuoJiy4s1SMCqy6shCK2OF1w2CIG8wJ4B+HaNk17LduOrCi0AG0tHFlBaACaWjiygsBOLbDzDsLtpgt7h1xSsv8u6IsT0L+GgP75PvyKL4jlGl2rM8N/AAAAAElFTkSuQmCC);
 }
 .works > .main > .type li.audio.cur:hover {

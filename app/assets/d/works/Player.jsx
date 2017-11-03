@@ -17,7 +17,16 @@ class Player extends migi.Component {
     super(...data);
     let self = this;
     if(self.props.workList && self.props.workList.length) {
-      self.setItem(self.props.workList[0]);
+      if(self.props.workID) {
+        self.props.workList.forEach(function(item, i) {
+          if(self.props.workID === item.ItemID.toString()) {
+            self.setItem(self.props.workList[i]);
+          }
+        });
+      }
+      else {
+        self.setItem(self.props.workList[0]);
+      }
       self.on(migi.Event.DOM, function() {
         let uid = window.$CONFIG ? $CONFIG.uid : '';
         let key = uid + 'volume';

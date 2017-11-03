@@ -9,6 +9,7 @@ import Works from './Works.jsx';
 let works = migi.preExist(<Works
   isLogin={ $CONFIG.isLogin }
   worksID={ $CONFIG.worksID }
+  workID={ $CONFIG.workID }
   worksDetail={ $CONFIG.worksDetail }
   labelList={ $CONFIG.labelList }
   commentData={ $CONFIG.commentData }/>);

@@ -125,6 +125,12 @@ let util = {
     }
     return url ? url + '-192_192' : url;
   },
+  img150_150_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-150_150_80' : url;
+  },
   img144_: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -1606,7 +1612,7 @@ var Profile = function (_migi$Component) {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "profile"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("headUrl", this, function () {
-        return _util2.default.autoSsl(_util2.default.img100_100(this.headUrl)) || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png';
+        return _util2.default.autoSsl(_util2.default.img200_200_80(this.headUrl)) || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png';
       })]]), new migi.Obj("settled", this, function () {
         return this.settled ? migi.createVd("b", [["class", "settled"], ["title", "已入驻"]]) : '';
       })]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [["class", "n"]], [migi.createVd("h3", [], [new migi.Obj("authorName", this, function () {

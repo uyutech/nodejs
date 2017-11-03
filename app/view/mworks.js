@@ -125,6 +125,12 @@ let util = {
     }
     return url ? url + '-192_192' : url;
   },
+  img150_150_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-150_150_80' : url;
+  },
   img144_: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -1469,6 +1475,13 @@ var PlayList = function (_migi$Component) {
 
     var self = _this;
     self.list = self.props.workList;
+    if (self.props.workID) {
+      self.list.forEach(function (item, i) {
+        if (self.props.workID === item.ItemID.toString()) {
+          self.index = i;
+        }
+      });
+    }
     self.on(migi.Event.DOM, function () {
       var $l1 = $(self.element).find('.l1');
       var $l2 = $(self.element).find('.l2');
@@ -1520,6 +1533,9 @@ var PlayList = function (_migi$Component) {
         $li.addClass('cur');
         var i = tvd.props.rel;
         migi.eventBus.emit('chooseMusic', this.list[i]);
+        if (parent && parent !== window && parent.setHash) {
+          parent.setHash('/works/' + this.props.worksID + '/' + this.list[i].ItemID, true);
+        }
       }
     }
   }, {
@@ -1538,10 +1554,10 @@ var PlayList = function (_migi$Component) {
             type = 'video';
           }
           if (item.WorksID && item.WorksCoverPic) {
-            return migi.createVd("li", [["class", type + ' rel' + (i ? '' : ' cur')], ["rel", i]], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img64_64_80(item.WorksCoverPic))]])]), migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
+            return migi.createVd("li", [["class", type + ' rel' + ((this.index === undefined ? i : this.index !== i) ? '' : ' cur')], ["rel", i]], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img64_64_80(item.WorksCoverPic))]])]), migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
           }
-          return migi.createVd("li", [["class", type + (i ? '' : ' cur')], ["rel", i]], [migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
-        });
+          return migi.createVd("li", [["class", type + ((this.index === undefined ? i : this.index !== i) ? '' : ' cur')], ["rel", i]], [migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
+        }.bind(this));
       })])]);
     }
   }, {
@@ -1551,6 +1567,14 @@ var PlayList = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("list");
+    }
+  }, {
+    key: 'index',
+    set: function set(v) {
+      this.__setBind("index", v);this.__data("index");
+    },
+    get: function get() {
+      return this.__getBind("index");
     }
   }]);
 
@@ -1581,13 +1605,14 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (data) {
   var isLogin = !!data.ctx.session.uid;
   var worksID = data.worksID;
+  var workID = data.workID;
   var worksDetail = data.worksDetail;
   var commentData = data.commentData;
   var labelList = data.labelList;
 
-  var works = migi.preRender(migi.createCp(_Works2.default, [["isLogin", isLogin], ["worksID", worksID], ["worksDetail", worksDetail], ["labelList", labelList], ["commentData", commentData]]));
+  var works = migi.preRender(migi.createCp(_Works2.default, [["isLogin", isLogin], ["worksID", worksID], ["workID", workID], ["worksDetail", worksDetail], ["labelList", labelList], ["commentData", commentData]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: worksDetail.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.labelList = ' + JSON.stringify(labelList) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mworks.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: worksDetail.Title }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mworks.css') + '"/>\n</head>\n<body>\n<div id="page">' + works + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.worksID = ' + JSON.stringify(worksID) + ';\n  $CONFIG.workID = ' + JSON.stringify(workID) + ';\n  $CONFIG.worksDetail = ' + JSON.stringify(worksDetail) + ';\n  $CONFIG.labelList = ' + JSON.stringify(labelList) + ';\n  $CONFIG.commentData = ' + JSON.stringify(commentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mworks.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
 var _Works = __webpack_require__(29);
@@ -1709,6 +1734,7 @@ var Works = function (_migi$Component) {
 
     var self = _this;
     self.worksID = self.props.worksID;
+    self.workID = self.props.workID;
     self.worksType = self.props.worksDetail.WorkType;
     self.setWorks(self.props.worksDetail.Works_Items);
     self.on(migi.Event.DOM, function () {
@@ -1876,12 +1902,29 @@ var Works = function (_migi$Component) {
         }
       });
 
-      if (self.videoData) {
-        first = 'video';
-        self.workID = self.videoData[0].ItemID;
-      } else if (self.audioData) {
-        first = 'audio';
-        self.workID = self.audioData[0].ItemID;
+      if (self.workID) {
+        if (self.videoData) {
+          self.videoData.forEach(function (item) {
+            if (item.ItemID.toString() === self.workID) {
+              first = 'video';
+            }
+          });
+        }
+        if (self.audioData) {
+          self.audioData.forEach(function (item) {
+            if (item.ItemID.toString() === self.workID) {
+              first = 'audio';
+            }
+          });
+        }
+      } else {
+        if (self.videoData) {
+          first = 'video';
+          self.workID = self.videoData[0].ItemID;
+        } else if (self.audioData) {
+          first = 'audio';
+          self.workID = self.audioData[0].ItemID;
+        }
       }
     }
   }, {
@@ -1941,7 +1984,13 @@ var Works = function (_migi$Component) {
           return 'works t' + self.worksType;
         })]], [migi.createCp(_MusicAlbum2.default, [["ref", "musicAlbum"], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
-        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "playList"]], ["曲目"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["workList", this.workList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+        })], ["workID", new migi.Obj("workID", this, function () {
+          return this.workID;
+        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "playList"]], ["曲目"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["worksID", new migi.Obj("worksID", this, function () {
+          return this.worksID;
+        })], ["workID", new migi.Obj("workID", this, function () {
+          return this.workID;
+        })], ["workList", this.workList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
@@ -1962,6 +2011,8 @@ var Works = function (_migi$Component) {
         return 'works t' + self.worksType;
       })]], [migi.createCp(_Media2.default, [["ref", "media"], ["worksID", new migi.Obj("worksID", this, function () {
         return this.worksID;
+      })], ["workID", new migi.Obj("workID", this, function () {
+        return this.workID;
       })], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createVd("div", [["class", "intro"], ["ref", "intro"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
         return this.worksID;
       })], ["workID", new migi.Obj("workID", this, function () {
@@ -2075,7 +2126,21 @@ var Media = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-
+    if (self.props.workID) {
+      if (self.props.first === 'video') {
+        self.props.videoData.forEach(function (item, i) {
+          if (self.props.workID === item.ItemID.toString()) {
+            self.vIndex = i;
+          }
+        });
+      } else if (self.props.first === 'audio') {
+        self.props.audioData.forEach(function (item, i) {
+          if (self.props.workID === item.ItemID.toString()) {
+            self.aIndex = i;
+          }
+        });
+      }
+    }
     self.on(migi.Event.DOM, function () {});
     return _this;
   }
@@ -2085,36 +2150,43 @@ var Media = function (_migi$Component) {
     value: function clickType(e, vd, tvd) {
       var self = this;
       var $dd = $(tvd.element);
-      if (!$dd.hasClass('cur')) {
-        var $parent = $dd.parent();
+      var $parent = $dd.parent();
+      if (tvd.name === 'dt' && !$parent.hasClass('cur') || tvd.name === 'dd' && (!$dd.hasClass('cur') || !$parent.hasClass('cur'))) {
         var type = $parent.attr('rel');
-        var index = tvd.props.rel;
+        var index = $dd.attr('rel');
         var audio = self.ref.audio;
         var video = self.ref.video;
         if ($parent.hasClass('cur')) {
-          $parent.find('.cur').removeClass('cur');
+          if (tvd.name === 'dd') {
+            $parent.find('.cur').removeClass('cur');
+            $dd.addClass('cur');
+          }
           if (type === 'audio') {
-            audio.switchTo(index);
+            audio.switchTo(this.aIndex = index);
+            history.replaceState(null, null, '/works/' + this.props.worksID + '/' + this.props.audioData[this.aIndex].ItemID);
           } else if (type === 'video') {
-            video.switchTo(index);
+            video.switchTo(this.vIndex = index);
+            history.replaceState(null, null, '/works/' + this.props.worksID + '/' + this.props.videoData[this.vIndex].ItemID);
           }
         } else {
           var $type = $(vd.element);
-          $type.find('.cur').removeClass('cur');
+          $type.find('dl.cur').removeClass('cur');
           $parent.addClass('cur');
+          if (tvd.name === 'dd') {
+            $parent.find('.cur').removeClass('cur');
+            $dd.addClass('cur');
+          }
           if (type === 'audio') {
             video && video.pause().hide();
             audio.show();
-            audio.switchTo(index);
+            audio.switchTo(this.aIndex = index);
+            history.replaceState(null, null, '/works/' + this.props.worksID + '/' + this.props.audioData[this.aIndex].ItemID);
           } else if (type === 'video') {
             audio && audio.pause().hide();
             video.show();
-            video.switchTo(index);
+            video.switchTo(this.vIndex = index);
+            history.replaceState(null, null, '/works/' + this.props.worksID + '/' + this.props.videoData[this.vIndex].ItemID);
           }
-        }
-        $dd.addClass('cur');
-        if (tvd.name.toLowerCase() === 'dt') {
-          $dd.next().addClass('cur');
         }
       }
     }
@@ -2122,16 +2194,43 @@ var Media = function (_migi$Component) {
     key: 'render',
     value: function render() {
       var showLabel = this.props.videoData && this.props.audioData;
-      var videoLabelNum = this.props.videoData ? this.props.videoData.length : 0;
-      var audioLabelNum = this.props.audioData ? this.props.audioData.length : 0;
+      var worksID = this.props.worksID;
+      var workID = this.props.workID;
+      var first = this.props.first;
       if (showLabel) {
-        return migi.createVd("div", [["class", "mod mod-media fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', migi.createVd("div", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "dt": { "_v": true } }, new migi.Cb(this, this.clickType)], [{ "dd": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.props.videoData ? migi.createVd("dl", [["class", 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '')], ["rel", "video"]], [migi.createVd("dt", [["rel", 0]], ["视频"]), this.props.videoData.length && this.props.videoData.length > 1 ? this.props.videoData.map(function (item, i) {
-          return migi.createVd("dd", [["class", this.props.first === 'video' && !i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
-        }.bind(this)) : '']) : '', this.props.audioData ? migi.createVd("dl", [["class", 'audio fn-clear' + (this.props.first === 'audio' ? ' cur' : '')], ["rel", "audio"]], [migi.createVd("dt", [["rel", 0]], ["音频"]), this.props.audioData.length && this.props.audioData.length > 1 ? this.props.audioData.map(function (item, i) {
-          return migi.createVd("dd", [["class", this.props.first === 'audio' && !i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
+        return migi.createVd("div", [["class", "mod mod-media fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', migi.createVd("div", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "dt": { "_v": true } }, new migi.Cb(this, this.clickType)], [{ "dd": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.props.videoData ? migi.createVd("dl", [["class", 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '')], ["rel", "video"]], [migi.createVd("dt", [["rel", new migi.Obj("vIndex", this, function () {
+          return this.vIndex;
+        })]], ["视频"]), this.props.videoData.length && this.props.videoData.length > 1 ? this.props.videoData.map(function (item, i) {
+          if (workID !== undefined && first === 'video') {
+            return migi.createVd("dd", [["class", workID === item.ItemID.toString() ? 'cur' : ''], ["rel", i]], [item.ItemName]);
+          }
+          return migi.createVd("dd", [["class", this.vIndex === i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
+        }.bind(this)) : '']) : '', this.props.audioData ? migi.createVd("dl", [["class", 'audio fn-clear' + (this.props.first === 'audio' ? ' cur' : '')], ["rel", "audio"]], [migi.createVd("dt", [["rel", new migi.Obj("aIndex", this, function () {
+          return this.aIndex;
+        })]], ["音频"]), this.props.audioData.length && this.props.audioData.length > 1 ? this.props.audioData.map(function (item, i) {
+          if (workID !== undefined && first === 'audio') {
+            return migi.createVd("dd", [["class", workID === item.ItemID.toString() ? 'cur' : ''], ["rel", i]], [item.ItemName]);
+          }
+          return migi.createVd("dd", [["class", this.aIndex === i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
         }.bind(this)) : '']) : ''])]);
       }
-      return migi.createVd("div", [["class", "mod mod-media no-type fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '']);
+      return migi.createVd("div", [["class", "mod mod-media no-type fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '']);
+    }
+  }, {
+    key: 'vIndex',
+    set: function set(v) {
+      this.__setBind("vIndex", v);this.__data("vIndex");
+    },
+    get: function get() {
+      if (this.__initBind("vIndex")) this.__setBind("vIndex", 0);return this.__getBind("vIndex");
+    }
+  }, {
+    key: 'aIndex',
+    set: function set(v) {
+      this.__setBind("aIndex", v);this.__data("aIndex");
+    },
+    get: function get() {
+      if (this.__initBind("aIndex")) this.__setBind("aIndex", 0);return this.__getBind("aIndex");
     }
   }]);
 
@@ -2193,6 +2292,13 @@ var Audio = function (_migi$Component) {
     var self = _this;
     if (self.props.datas) {
       self.setData(self.props.datas);
+      if (self.props.workID) {
+        self.props.datas.forEach(function (item, i) {
+          if (item.ItemID.toString() === self.props.workID) {
+            self.index = i;
+          }
+        });
+      }
       if (self.props.show) {
         self.on(migi.Event.DOM, function () {
           self.addMedia();
@@ -2224,7 +2330,7 @@ var Audio = function (_migi$Component) {
   }, {
     key: 'addMedia',
     value: function addMedia() {
-      var audio = migi.createVd("audio", [["src", this.datas[0].FileUrl], ["onTimeupdate", this.onTimeupdate.bind(this)], ["onLoadedmetadata", this.onLoadedmetadata.bind(this)], ["onPlaying", this.onPlaying.bind(this)], ["onPause", this.onPause.bind(this)], ["onProgress", this.onProgress.bind(this)], ["preload", "meta"]], ["\n\
+      var audio = migi.createVd("audio", [["src", this.datas[this.index].FileUrl], ["onTimeupdate", this.onTimeupdate.bind(this)], ["onLoadedmetadata", this.onLoadedmetadata.bind(this)], ["onPlaying", this.onPlaying.bind(this)], ["onPause", this.onPause.bind(this)], ["onProgress", this.onProgress.bind(this)], ["preload", "meta"]], ["\n\
       your browser does not support the audio tag\n\
     "]);
       this.audio = audio;
@@ -2647,6 +2753,13 @@ var Video = function (_migi$Component) {
     var self = _this;
     if (self.props.datas) {
       self.setData(self.props.datas);
+      if (self.props.workID) {
+        self.props.datas.forEach(function (item, i) {
+          if (item.ItemID.toString() === self.props.workID) {
+            self.index = i;
+          }
+        });
+      }
       if (self.props.show) {
         self.on(migi.Event.DOM, function () {
           self.addMedia();
@@ -3603,7 +3716,15 @@ var MusicAlbum = function (_migi$Component) {
 
     var self = _this;
     if (self.props.workList && self.props.workList.length) {
-      self.setItem(self.props.workList[0]);
+      if (self.props.workID) {
+        self.props.workList.forEach(function (item, i) {
+          if (self.props.workID === item.ItemID.toString()) {
+            self.setItem(self.props.workList[i]);
+          }
+        });
+      } else {
+        self.setItem(self.props.workList[0]);
+      }
       self.on(migi.Event.DOM, function () {
         self.addOrAltMedia();
       });
@@ -3611,6 +3732,7 @@ var MusicAlbum = function (_migi$Component) {
         self.av.element.currentTime = self.currentTime = 0;
         self.setItem(item);
         self.addOrAltMedia();
+        history.replaceState(null, null, '/works/' + self.props.worksID + '/' + self.workID);
       });
     }
     return _this;
@@ -3633,7 +3755,7 @@ var MusicAlbum = function (_migi$Component) {
       self.item = item;
       self.type = item.ItemType;
       self.workID = item.ItemID;
-      self.name = item.ItemName;
+      self.sname = item.ItemName;
       self.url = item.FileUrl;
       self.playNum = item.PlayHis;
       self.formatLyrics = item.formatLyrics || {};
@@ -3920,8 +4042,8 @@ var MusicAlbum = function (_migi$Component) {
         return 'favor' + (this.favor ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("url", this, function () {
         return this.url;
-      })], ["download", new migi.Obj(["name", "url"], this, function () {
-        return this.name + this.url ? /\.\w+$/.exec(this.url)[0] || '' : '';
+      })], ["download", new migi.Obj(["sname", "url"], this, function () {
+        return this.sname + this.url ? /\.\w+$/.exec(this.url)[0] || '' : '';
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
@@ -3949,12 +4071,12 @@ var MusicAlbum = function (_migi$Component) {
       return this.__getBind("workID");
     }
   }, {
-    key: 'name',
+    key: 'sname',
     set: function set(v) {
-      this.__setBind("name", v);this.__data("name");
+      this.__setBind("sname", v);this.__data("sname");
     },
     get: function get() {
-      return this.__getBind("name");
+      return this.__getBind("sname");
     }
   }, {
     key: 'url',

@@ -34,13 +34,13 @@ class Media extends migi.Component {
       // link.hide();
       video && video.pause().hide();
       audio.show();
-      self.emit('switchTo', audio.datas[audio.index]);
+      self.emit('switchTo', audio.datas[audio.index || 0]);
     }
     else if(type === 'video') {
       // link.hide();
       audio && audio.pause().hide();
       video.show();
-      self.emit('switchTo', video.datas[video.index]);
+      self.emit('switchTo', video.datas[video.index || 0]);
     }
     else if(type === 'link') {
       audio && audio.pause().hide();
@@ -52,12 +52,14 @@ class Media extends migi.Component {
     return <div class="mod mod-media box box-fn-top-left" style={ `background-image:url(${this.props.cover})` }>
       {
         this.props.audioData
-          ? <Audio ref="audio" cover={ this.props.cover } datas={ this.props.audioData } show={ this.props.first === 'audio' }/>
+          ? <Audio ref="audio" cover={ this.props.cover } datas={ this.props.audioData }
+                   show={ this.props.first === 'audio' } worksID={ this.props.worksID } workID={ this.props.workID }/>
           : ''
       }
       {
         this.props.videoData
-          ? <Video ref="video" cover={ this.props.cover } datas={ this.props.videoData } show={ this.props.first === 'video' }/>
+          ? <Video ref="video" cover={ this.props.cover } datas={ this.props.videoData }
+                   show={ this.props.first === 'video' } worksID={ this.props.worksID } workID={ this.props.workID }/>
           : ''
       }
       {/*<Link ref="link" worksID={ this.props.worksID } audioData={ this.props.audioData } videoData={ this.props.videoData }/>*/}

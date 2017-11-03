@@ -48,7 +48,7 @@ class Media extends migi.Component {
   render() {
     return <div class="mod mod-musicalbum box box-fn-top-left" style={ 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")'}>
       <Cover ref="cover"/>
-      <Player ref="player" workList={ this.props.workList }/>
+      <Player ref="player" workList={ this.props.workList } worksID={ this.props.worksID } workID={ this.props.workID }/>
     </div>;
   }
 }
