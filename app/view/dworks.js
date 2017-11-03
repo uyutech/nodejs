@@ -167,11 +167,23 @@ let util = {
     }
     return url ? url + '-90_90' : url;
   },
+  img64_64_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-64_64_80' : url;
+  },
   img60_60: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
     return url ? url + '-60_60' : url;
+  },
+  img60_60_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-60_60_80' : url;
   },
   img__60: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -1590,6 +1602,16 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1660,7 +1682,10 @@ var PlayList = function (_migi$Component) {
     }
   }, {
     key: 'clickItem',
-    value: function clickItem(e, vd, tvd) {
+    value: function clickItem(e, vd, tvd, avd) {
+      if (avd.name === 'img') {
+        return;
+      }
       var $li = $(tvd.element);
       if (!$li.hasClass('cur')) {
         var $ol = $(vd.element);
@@ -1684,6 +1709,9 @@ var PlayList = function (_migi$Component) {
             type = 'audio';
           } else if (item.ItemType === 2110) {
             type = 'video';
+          }
+          if (item.WorksID && item.WorksCoverPic) {
+            return migi.createVd("li", [["class", type + ' rel' + (i ? '' : ' cur')], ["rel", i]], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img64_64_80(item.WorksCoverPic))]])]), migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
           }
           return migi.createVd("li", [["class", type + (i ? '' : ' cur')], ["rel", i]], [migi.createVd("span", [["class", "name"]], [item.ItemName]), migi.createVd("span", [["class", "icon"]], [migi.createVd("b", [["class", "l1"]]), migi.createVd("b", [["class", "l2"]]), migi.createVd("b", [["class", "l3"]])])]);
         });

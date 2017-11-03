@@ -16,6 +16,7 @@ module.exports = app => {
   app.get('/d', 'd.index.index');
   app.get('/d/find', 'd.find.index');
   app.get('/d/works/:worksID', 'd.works.index');
+  app.get('/d/works/:worksID/:workID', 'd.works.index');
   app.get('/d/musicalbum/:collectionID', 'd.collection.index');
   app.get('/d/author/:authorID', 'd.author.index');
   // app.get('/d/search/:kw', 'd.search.index');
@@ -28,6 +29,7 @@ module.exports = app => {
   app.get('/m', 'm.index.index');
   app.get('/m/find', 'm.find.index');
   app.get('/m/works/:worksID', 'm.works.index');
+  app.get('/m/works/:worksID/:workID', 'm.works.index');
   app.get('/m/author/:authorID', 'm.author.index');
   // app.get('/m/search/:kw', 'm.search.index');
   app.get('/m/my', app.middlewares.needLogin(), 'm.my.index');

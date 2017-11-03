@@ -172,11 +172,23 @@ var util = {
     }
     return url ? url + '-90_90' : url;
   },
+  img64_64_80: function img64_64_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-64_64_80' : url;
+  },
   img60_60: function img60_60(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
     return url ? url + '-60_60' : url;
+  },
+  img60_60_80: function img60_60_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-60_60_80' : url;
   },
   img__60: function img__60(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {

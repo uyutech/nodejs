@@ -4,6 +4,9 @@
 
 'use strict';
 
+import net from '../common/net';
+import util from '../common/util';
+
 function setTranform($elem, n) {
   $elem.css('-moz-transform', `scaleY(${n})`);
   $elem.css('-webkit-transform', `scaleY(${n})`);
@@ -52,7 +55,10 @@ class PlayList extends migi.Component {
       this.ref.list.element.className = 'list ' + (tvd.props.rel || '');
     }
   }
-  clickItem(e, vd, tvd) {
+  clickItem(e, vd, tvd, avd) {
+    if(avd.name === 'img') {
+      return;
+    }
     let $li = $(tvd.element);
     if(!$li.hasClass('cur')) {
       let $ol = $(vd.element);
@@ -78,6 +84,13 @@ class PlayList extends migi.Component {
             }
             else if(item.ItemType === 2110) {
               type = 'video';
+            }
+            if(item.WorksID && item.WorksCoverPic) {
+              return <li class={ type + ' rel' + (i ? '' : ' cur') } rel={ i }>
+                <a href={ '/works/' + item.WorksID } class="pic"><img src={ util.autoSsl(util.img64_64_80(item.WorksCoverPic)) }/></a>
+                <span class="name">{ item.ItemName }</span>
+                <span class="icon"><b class="l1"/><b class="l2"/><b class="l3"/></span>
+              </li>;
             }
             return <li class={ type + (i ? '' : ' cur') } rel={ i }>
               <span class="name">{ item.ItemName }</span>

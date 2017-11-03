@@ -9,6 +9,7 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let worksID = ctx.params.worksID;
+      let workID = ctx.params.workID;
       let worksDetail = {};
       let commentData = {};
       let res = yield {
@@ -40,6 +41,7 @@ module.exports = app => {
       }
       yield ctx.render('dworks', {
         worksID,
+        workID,
         worksDetail,
         commentData,
         labelList,

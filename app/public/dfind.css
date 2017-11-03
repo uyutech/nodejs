@@ -507,10 +507,6 @@
   border-radius: 0.1rem;
   overflow: hidden;
 }
-.find > .hot > .cp-hotwork h4 {
-  border-top-left-radius: 0.1rem;
-  border-top-right-radius: 0.1rem;
-}
 .find > .hot > .cp-hotauthor .list li .info {
   display: none;
 }
