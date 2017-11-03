@@ -7,10 +7,13 @@
 import TopNav from '../../assets/d/component/topnav/TopNav.jsx';
 
 export default function(data) {
+  let isLogin = !!data.ctx.session.uid;
+  let isAuthor = !!data.ctx.session.authorID;
   let userInfo = data.userInfo;
   let authorInfo = data.authorInfo;
 
-  let topNav = migi.preRender(<TopNav userInfo={ userInfo } authorInfo={ authorInfo }/>);
+  let topNav = migi.preRender(<TopNav userInfo={ userInfo } authorInfo={ authorInfo }
+                                      isLogin={ isLogin } isAuthor={ isAuthor }/>);
 
   return `<!DOCTYPE html>
 <html>

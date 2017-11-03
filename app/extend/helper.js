@@ -9,7 +9,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?21';
+    return '/public' + url + '?22';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -90,10 +90,21 @@ module.exports = {
   getMTopNav: function() {
     let session = this.ctx.session || {};
     if(session.uid) {
+      if(session.authorID) {
+        let isPublic = session.isPublic;
+        return `<div class="top-nav" id="topNav">
+          <a href="/find" class="logo"></a>
+          <span class="public">[${ isPublic ? '切换到用户身份' : '切换到作者身份' }]</span>
+          <a href="/my" class="user">
+            <span class="${'name' + (isPublic ? ' public' : '')}">${isPublic ? session.authorName : session.uname}</span>
+            <img src=${session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>
+          </a>
+        </div>`;
+      }
       return `<div class="top-nav" id="topNav">
       <a href="/find" class="logo"></a>
       <a href="/my" class="user">
-        <span>${session.uname}</span>
+        <span class="name">${session.uname}</span>
         <img src=${session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>
       </a>
     </div>`;
@@ -101,7 +112,7 @@ module.exports = {
     return `<div class="top-nav" id="topNav">
       <a href="/find" class="logo"></a>
       <span class="user">
-        <span>登录/注册</span>
+        <span class="name">登录/注册</span>
         <img src="//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png">
       </a>
     </div>`;

@@ -98,7 +98,7 @@
   color: #999;
 }
 .cp-comment .list > li.author > .t > .profile .txt .name {
-  color: #C93;
+  color: #EC0;
 }
 .cp-comment .list > li > .t {
   position: relative;
@@ -318,7 +318,7 @@
   cursor: pointer;
 }
 .cp-comment .list > li > .list2 li.author .t > .profile .txt .name {
-  color: #C93;
+  color: #EC0;
 }
 .cp-comment .list > li > .list2 li .c {
   position: relative;

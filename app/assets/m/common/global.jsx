@@ -2,6 +2,8 @@
  * Created by army8735 on 2017/9/18.
  */
 
+import net from '../../d/common/net';
+import util from '../../d/common/util';
 import MLogin from '../component/mlogin/MLogin.jsx';
 import Share from '../../d/component/share/Share.jsx';
 
@@ -29,7 +31,41 @@ migi.eventBus.on('SHARE', function(url) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-  $('#topNav span.user').on('click', function() {
-    migi.eventBus.emit('NEED_LOGIN');
+  let $name = $('#topNav .name');
+  $name.on('click', function() {
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+    }
+  });
+  let loading;
+  let $public = $('#topNav .public').eq(0);
+  $public.on('click', function() {
+    if(loading) {
+      return;
+    }
+    loading = true;
+    let isPublic = $CONFIG.isPublic;
+    net.postJSON('/api/user/altSettle', { public: !isPublic }, function(res) {
+      if(res.success) {
+        $CONFIG.isPublic = !isPublic;
+        if(!isPublic) {
+          $name.addClass('public');
+          $name.text($CONFIG.authorName);
+          $public.text('[切换到用户身份]');
+        }
+        else {
+          $name.removeClass('public');
+          $name.text($CONFIG.uname);
+          $public.text('[切换到作者身份]');
+        }
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      loading = false;
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      loading = false;
+    });
   });
 });

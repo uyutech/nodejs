@@ -12,7 +12,6 @@ class Welcome extends migi.Component {
     super(...data);
     let self = this;
     self.step = self.props.userInfo.User_Reg_Stat;
-    self.authorID = self.props.userInfo.AuthorID;
     self.on(migi.Event.DOM, function() {
       if(self.step === 10) {
         self.load();
@@ -35,7 +34,7 @@ class Welcome extends migi.Component {
   @bind dis
   clickEnterPublic(e) {
     let self = this;
-    net.postJSON('/api/user/settle', { settle: true, public: true, authorID: this.authorID }, function(res) {
+    net.postJSON('/api/user/settle', { settle: true, public: true }, function(res) {
       if(res.success) {
         self.step = $CONFIG.userInfo.User_Reg_Stat = 10;
         self.load();
@@ -49,7 +48,7 @@ class Welcome extends migi.Component {
   }
   clickEnterShadow(e) {
     let self = this;
-    net.postJSON('/api/user/settle', { settle: true, public: false, authorID: this.authorID }, function(res) {
+    net.postJSON('/api/user/settle', { settle: true, public: false }, function(res) {
       if(res.success) {
         self.step = $CONFIG.userInfo.User_Reg_Stat = 1;
       }
@@ -195,12 +194,12 @@ class Welcome extends migi.Component {
           </div>
           <div class="step step1">
             <div class="con">
-              <p>给马甲想个名字吧！<br/>现在的名字是<strong>{ $CONFIG.userInfo.NickName }</strong></p>
+              <p>给马甲想个名字吧！<br/>当前的名字是<strong>{ $CONFIG.userInfo.NickName }</strong></p>
               <b class="arrow"/>
             </div>
             <input ref="name" class="name" type="text" placeholder="请输入昵称" maxLength="8"/>
-            <button onClick={ this.clickNickName }>就这个啦！</button>
-            <button onClick={ this.clickNickName2 }>不改了</button>
+            <button onClick={ this.clickNickName }>改好提交</button>
+            <button onClick={ this.clickNickName2 }>不改了就用{ $CONFIG.userInfo.NickName }</button>
           </div>
           <div class="step step10">
             <div class="con">

@@ -290,7 +290,7 @@ var _Welcome2 = _interopRequireDefault(_Welcome);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var topNav = migi.preExist(migi.createCp(_TopNav2.default, [["userInfo", $CONFIG.userInfo]]));
+var topNav = migi.preExist(migi.createCp(_TopNav2.default, [["userInfo", $CONFIG.userInfo], ["authorInfo", $CONFIG.authorInfo], ["isLogin", $CONFIG.isLogin], ["isAuthor", $CONFIG.isAuthor]]));
 
 var cIframe = void 0;
 
@@ -383,6 +383,16 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -401,7 +411,10 @@ var TopNav = function (_migi$Component) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = TopNav.__proto__ || Object.getPrototypeOf(TopNav)).call.apply(_ref, [this].concat(data)));
+
+    _this.isPublic = !!_this.props.userInfo.ISOpen;
+    return _this;
   }
 
   _createClass(TopNav, [{
@@ -422,11 +435,32 @@ var TopNav = function (_migi$Component) {
     key: 'click',
     value: function click(e) {
       if (!window.$CONFIG.isLogin) {
-        e.preventDefault();
         migi.eventBus.emit('NEED_LOGIN');
       } else {
         location.hash = '/my';
       }
+    }
+  }, {
+    key: 'clickPublic',
+    value: function clickPublic() {
+      var self = this;
+      if (self.loading) {
+        return;
+      }
+      self.loading = true;
+      var isPublic = self.isPublic;
+      _net2.default.postJSON('/api/user/altSettle', { public: !isPublic }, function (res) {
+        if (res.success) {
+          self.isPublic = !isPublic;
+          $CONFIG.isPublic = !isPublic;
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+        self.loading = false;
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+        self.loading = false;
+      });
     }
   }, {
     key: 'render',
@@ -435,7 +469,29 @@ var TopNav = function (_migi$Component) {
       return migi.createVd("div", [["class", "cp-topnav"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("a", [["class", "logo"], ["href", "#/"]], ["转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！"]),,,, /*<form class="search" onSubmit={ this.submit }>*/
       /*<input type="text" ref="input" maxlength="16" placeholder="弱弱的初级搜索功能QAQ"/>*/
       /*</form>*/
-      migi.createVd("div", [["class", "user"], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("span", [], [userInfo.NickName || '登陆/注册']), migi.createVd("img", [["src", userInfo.Head_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']])])])]);
+      migi.createVd("div", [["class", "user fn-clear"]], [this.props.isLogin && this.props.isAuthor ? migi.createVd("span", [["class", "public"], ["onClick", new migi.Cb(this, this.clickPublic)]], ["[", new migi.Obj("isPublic", this, function () {
+        return this.isPublic ? '切换到用户身份' : '切换到作者身份';
+      }), "]"]) : '', migi.createVd("span", [["class", new migi.Obj("isPublic", this, function () {
+        return 'name' + (this.isPublic ? ' public' : '');
+      })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("isPublic", this, function () {
+        return (this.isPublic ? userInfo.AuthorName : userInfo.NickName) || '登陆/注册';
+      })]), migi.createVd("img", [["onClick", new migi.Cb(this, this.click)], ["src", userInfo.Head_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']])])])]);
+    }
+  }, {
+    key: 'isPublic',
+    set: function set(v) {
+      this.__setBind("isPublic", v);this.__data("isPublic");
+    },
+    get: function get() {
+      return this.__getBind("isPublic");
+    }
+  }, {
+    key: 'loading',
+    set: function set(v) {
+      this.__setBind("loading", v);this.__data("loading");
+    },
+    get: function get() {
+      return this.__getBind("loading");
     }
   }]);
 
@@ -617,7 +673,6 @@ var Welcome = function (_migi$Component) {
 
     var self = _this;
     self.step = self.props.userInfo.User_Reg_Stat;
-    self.authorID = self.props.userInfo.AuthorID;
     self.on(migi.Event.DOM, function () {
       if (self.step === 10) {
         self.load();
@@ -640,7 +695,7 @@ var Welcome = function (_migi$Component) {
     key: 'clickEnterPublic',
     value: function clickEnterPublic(e) {
       var self = this;
-      _net2.default.postJSON('/api/user/settle', { settle: true, public: true, authorID: this.authorID }, function (res) {
+      _net2.default.postJSON('/api/user/settle', { settle: true, public: true }, function (res) {
         if (res.success) {
           self.step = $CONFIG.userInfo.User_Reg_Stat = 10;
           self.load();
@@ -655,7 +710,7 @@ var Welcome = function (_migi$Component) {
     key: 'clickEnterShadow',
     value: function clickEnterShadow(e) {
       var self = this;
-      _net2.default.postJSON('/api/user/settle', { settle: true, public: false, authorID: this.authorID }, function (res) {
+      _net2.default.postJSON('/api/user/settle', { settle: true, public: false }, function (res) {
         if (res.success) {
           self.step = $CONFIG.userInfo.User_Reg_Stat = 1;
         } else {
@@ -794,7 +849,7 @@ var Welcome = function (_migi$Component) {
         authorTip += '\u4E0D\u77E5\u60A8\u662F\u5426\u613F\u610F\u5728\u8F6C\u5708\u5165\u9A7B\uFF1F<br/>\n\u5165\u9A7B\u4E4B\u540E\u5C06\u5F00\u542F\u60A8\u7684\u4E2A\u4EBA\u4F5C\u8005\u9875\u9762\uFF0C\u4E4B\u540E\u60A8\u5C06\u53EF\u4EE5\u4E0A\u4F20\u3001\u7F16\u8F91\u3001\u60A8\u7684\u4F5C\u54C1\uFF0C\u672A\u6765\u8FD8\u4F1A\u6709\u4E00\u7CFB\u5217\u7C89\u4E1D\u4E92\u52A8\u53CA\u7EA6\u7A3F\u63A5\u7A3F\u529F\u80FD\uFF01';
         return migi.createVd("div", [["class", "welcome"]], [migi.createVd("div", [["class", new migi.Obj("step", this, function () {
           return 'c step' + this.step;
-        })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step0"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [["dangerouslySetInnerHTML", authorTip]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterPublic)]], ["我要公开入驻"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterShadow)]], ["我要入驻，但是我想披个马甲"]), migi.createVd("br", []), migi.createVd("small", [], ["（您依然可以进行作者相关的操作，但将以普通用户的身份进行评论等互动，别人不会知道你就是", userInfo.AuthorName, "）"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNotEnter)]], ["我放弃入驻"])]), migi.createVd("div", [["class", "step step1"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [], ["给马甲想个名字吧！", migi.createVd("br", []), "现在的名字是", migi.createVd("strong", [], [$CONFIG.userInfo.NickName])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("input", [["ref", "name"], ["class", "name"], ["type", "text"], ["placeholder", "请输入昵称"], ["maxLength", "8"]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName)]], ["就这个啦！"]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName2)]], ["不改了"])]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎来到转圈！我是圈娘~\n\
+        })]], [migi.createVd("h3", [], [migi.createVd("img", [["src", "//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"]]), "圈儿"]), migi.createVd("div", [["class", "step step0"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [["dangerouslySetInnerHTML", authorTip]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterPublic)]], ["我要公开入驻"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickEnterShadow)]], ["我要入驻，但是我想披个马甲"]), migi.createVd("br", []), migi.createVd("small", [], ["（您依然可以进行作者相关的操作，但将以普通用户的身份进行评论等互动，别人不会知道你就是", userInfo.AuthorName, "）"]), migi.createVd("br", []), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNotEnter)]], ["我放弃入驻"])]), migi.createVd("div", [["class", "step step1"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("p", [], ["给马甲想个名字吧！", migi.createVd("br", []), "当前的名字是", migi.createVd("strong", [], [$CONFIG.userInfo.NickName])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("input", [["ref", "name"], ["class", "name"], ["type", "text"], ["placeholder", "请输入昵称"], ["maxLength", "8"]]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName)]], ["改好提交"]), migi.createVd("button", [["onClick", new migi.Cb(this, this.clickNickName2)]], ["不改了就用", $CONFIG.userInfo.NickName])]), migi.createVd("div", [["class", "step step10"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("pre", [], ["欢迎来到转圈！我是圈娘~\n\
 “转圈”是一款仍在开发中的平台，感谢您参与我们的内测活动，我们联合各位大大为您准备了各种福利，活动详情在活动详情页中查看哦！也欢迎随时在转圈右下角和圈儿互动！\n\
 \n\
 下面的内容中不知可有您喜欢的呢？\n\

@@ -55,6 +55,7 @@ module.exports = app => {
             if(userInfo.ISAuthor) {
               ctx.session.authorID = userInfo.AuthorID;
               ctx.session.authorName = userInfo.AuthorName;
+              ctx.session.isPublic = userInfo.ISOpen;
             }
           }
         }

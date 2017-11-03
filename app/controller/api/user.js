@@ -165,8 +165,8 @@ module.exports = app => {
       else if(body.settle === 'true') {
         let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
           uid,
-          AuthorID: body.authorID,
-          SettledType: 0,
+          AuthorID: ctx.session.authorID,
+          SettledType: body.public === 'true' ? 0 : 1,
         });
         if(res.data.success) {
           let res2 = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
@@ -226,11 +226,21 @@ module.exports = app => {
     }
     * settleShadow(ctx) {
       let uid = ctx.session.uid;
-      let res = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+      let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
         uid,
-        User_Reg_Stat: 10,
+        AuthorID: ctx.session.authorID,
+        SettledType: 1,
       });
-      return ctx.body = res.data;
+      if(res.data.success) {
+        let res2 = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+          uid,
+          User_Reg_Stat: 10,
+        });
+        return ctx.body = res2.data;
+      }
+      ctx.body = {
+        success: false,
+      };
     }
     * guideSuggest(ctx) {
       let uid = ctx.session.uid;
@@ -277,6 +287,19 @@ module.exports = app => {
         User_Reg_Stat: body.isAuthor ? 100 : 99,
       });
       return ctx.body = res.data;
+    }
+    * altSettle(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
+        uid,
+        AuthorID: ctx.session.authorID,
+        SettledType: body.public === 'true' ? 0 : 1,
+      });
+      if(ctx.session.authorID) {
+        ctx.session.isPublic = body.public === 'true';
+      }
+      ctx.body = res.data;
     }
   }
   return Controller;
