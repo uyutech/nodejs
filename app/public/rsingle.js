@@ -435,7 +435,7 @@ var TopNav = function (_migi$Component) {
       }
       setInterval(play, 40);
       migi.eventBus.on('changeTitle', function (t) {
-        self.name = t;
+        self.sname = t;
       });
     });
     return _this;
@@ -503,17 +503,17 @@ var TopNav = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "top-nav fn-hide"]], [migi.createVd("div", [["class", "ti"]], [migi.createVd("b", [["class", "bg"], ["ref", "bg"]]), migi.createVd("b", [["class", "fg"], ["ref", "fg"]]), migi.createVd("span", [["onClick", new migi.Cb(this, this.clickLogo)]], [new migi.Obj("name", this, function () {
-        return this.name || '首页';
+      return migi.createVd("div", [["class", "top-nav fn-hide"]], [migi.createVd("div", [["class", "ti"]], [migi.createVd("b", [["class", "bg"], ["ref", "bg"]]), migi.createVd("b", [["class", "fg"], ["ref", "fg"]]), migi.createVd("span", [["onClick", new migi.Cb(this, this.clickLogo)]], [new migi.Obj("sname", this, function () {
+        return this.sname || '首页';
       })])]), migi.createVd("b", [["ref", "back"], ["class", "back fn-hide"], ["onClick", new migi.Cb(this, this.clickBack)]]), migi.createVd("b", [["ref", "music"], ["class", "music"], ["onClick", new migi.Cb(this, this.clickMusic)]])]);
     }
   }, {
-    key: 'name',
+    key: 'sname',
     set: function set(v) {
-      this.__setBind("name", v);this.__data("name");
+      this.__setBind("sname", v);this.__data("sname");
     },
     get: function get() {
-      return this.__getBind("name");
+      return this.__getBind("sname");
     }
   }]);
 
@@ -1221,7 +1221,7 @@ var Character = function (_migi$Component) {
     key: 'user',
     value: function user(name) {
       var self = this;
-      self.name = name;
+      self.sname = name;
       var hash = HASH[name];
       showAnimate = true;
       index = 0;
@@ -1232,7 +1232,7 @@ var Character = function (_migi$Component) {
         var bg = self.ref.img.element;
         var img = new Image();
         img.onload = function () {
-          if (self.name !== name) {
+          if (self.sname !== name) {
             return;
           }
           function anm() {
@@ -1295,11 +1295,11 @@ var Character = function (_migi$Component) {
     value: function clickFollow(e, vd) {
       e.preventDefault();
       var self = this;
-      if (HASH[self.name].state === 1) {
-        util.postJSON('/api/author/unFollow', { authorID: HASH[self.name].authorId }, function (res) {
+      if (HASH[self.sname].state === 1) {
+        util.postJSON('/api/author/unFollow', { authorID: HASH[self.sname].authorId }, function (res) {
           if (res.success) {
-            HASH[self.name].state = 0;
-            self.name = self.name;
+            HASH[self.sname].state = 0;
+            self.sname = self.sname;
             alert('取关成功');
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
@@ -1310,10 +1310,10 @@ var Character = function (_migi$Component) {
           alert(res.message || util.ERROR_MESSAGE);
         });
       } else {
-        util.postJSON('/api/author/follow', { authorID: HASH[self.name].authorId }, function (res) {
+        util.postJSON('/api/author/follow', { authorID: HASH[self.sname].authorId }, function (res) {
           if (res.success) {
-            HASH[self.name].state = 1;
-            self.name = self.name;
+            HASH[self.sname].state = 1;
+            self.sname = self.sname;
             alert('关注成功');
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
@@ -1345,8 +1345,8 @@ var Character = function (_migi$Component) {
       this.ref.comment.showComment();
       skip = 0;
       currentCount = 0;
-      HASH[this.name].skip = 0;
-      HASH[this.name].end = false;
+      HASH[this.sname].skip = 0;
+      HASH[this.sname].end = false;
       this.rootId = null;
       this.replayId = null;
       this.replayName = null;
@@ -1360,7 +1360,7 @@ var Character = function (_migi$Component) {
         ajax.abort();
       }
       self.loading = true;
-      ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.name].authorId, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
+      ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.sname].authorId, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
           // currentCount = data.Size;
@@ -1390,12 +1390,12 @@ var Character = function (_migi$Component) {
     key: 'checkMore',
     value: function checkMore() {
       var self = this;
-      if (self.showComment && !loadingMore && !HASH[self.name].end && $wrap.scrollTop() + $wrap.height() + 30 > $cp.height()) {
+      if (self.showComment && !loadingMore && !HASH[self.sname].end && $wrap.scrollTop() + $wrap.height() + 30 > $cp.height()) {
         loadingMore = true;
         if (ajax) {
           ajax.abort();
         }
-        ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.name].authorId, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
+        ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.sname].authorId, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
           if (res.success) {
             var data = res.data;
             // currentCount = data.Size;
@@ -1404,11 +1404,11 @@ var Character = function (_migi$Component) {
               self.ref.comment.addMore(data.data);
               if (data.data.length < take) {
                 self.ref.comment.message = '';
-                HASH[self.name].end = true;
+                HASH[self.sname].end = true;
               }
             } else {
               self.ref.comment.message = '';
-              HASH[self.name].end = true;
+              HASH[self.sname].end = true;
             }
           } else {
             self.ref.comment.message = res.message || util.ERROR_MESSAGE;
@@ -1461,7 +1461,7 @@ var Character = function (_migi$Component) {
           parentID: parentID,
           rootID: rootID,
           content: content,
-          authorID: HASH[self.name].authorId
+          authorID: HASH[self.sname].authorId
         }, function (res) {
           if (res.success) {
             $input.val('');
@@ -1491,8 +1491,8 @@ var Character = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      HASH[this.name].skip = 0;
-      HASH[this.name].end = false;
+      HASH[this.sname].skip = 0;
+      HASH[this.sname].end = false;
       currentCount = 0;
       sortType = rel;
       skip = 0;
@@ -1507,8 +1507,8 @@ var Character = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      HASH[this.name].skip = 0;
-      HASH[this.name].end = false;
+      HASH[this.sname].skip = 0;
+      HASH[this.sname].end = false;
       currentCount = 0;
       myComment = rel;
       skip = 0;
@@ -1525,12 +1525,12 @@ var Character = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", new migi.Obj("name", this, function () {
-        return 'main character ' + this.name;
-      })]], [migi.createVd("div", [["class", "con"]], [migi.createVd("div", [["class", "img"], ["ref", "img"]]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [], [migi.createVd("a", [["href", "#"], ["onClick", new migi.Cb(this, this.clickFollow)]], [migi.createVd("span", [], [new migi.Obj("name", this, function () {
-        return HASH[this.name] && HASH[this.name].state === 1 ? '取关' : '关注';
-      })])])]), migi.createVd("li", [], [migi.createVd("a", [["href", "#"], ["class", "comment"], ["onClick", new migi.Cb(this, this.clickComment)]], [migi.createVd("span", [], [new migi.Obj("name", this, function () {
-        return this.name === 'jiemeng' ? '留言' : '表白';
+      return migi.createVd("div", [["class", new migi.Obj("sname", this, function () {
+        return 'main character ' + this.sname;
+      })]], [migi.createVd("div", [["class", "con"]], [migi.createVd("div", [["class", "img"], ["ref", "img"]]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [], [migi.createVd("a", [["href", "#"], ["onClick", new migi.Cb(this, this.clickFollow)]], [migi.createVd("span", [], [new migi.Obj("sname", this, function () {
+        return HASH[this.sname] && HASH[this.sname].state === 1 ? '取关' : '关注';
+      })])])]), migi.createVd("li", [], [migi.createVd("a", [["href", "#"], ["class", "comment"], ["onClick", new migi.Cb(this, this.clickComment)]], [migi.createVd("span", [], [new migi.Obj("sname", this, function () {
+        return this.sname === 'jiemeng' ? '留言' : '表白';
       })])])]), migi.createVd("li", [], [migi.createVd("a", [["href", "#"], ["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]], [migi.createVd("span", [], ["分享"])])])]), migi.createVd("div", [["class", "left"], ["ref", "left"]]), migi.createVd("div", [["class", "right"], ["ref", "right"]])]), migi.createVd("div", [["class", new migi.Obj("showComment", this, function () {
         return 'comments' + (this.showComment ? '' : ' fn-hide');
       })], ["ref", "comments"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("div", [["class", "wrap"], ["ref", "wrap"]], [migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/author/likeComment"], ["subUrl", "/api/author/subCommentList"], ["delUrl", "/api/author/delComment"]])]), migi.createVd("a", [["href", "#"], ["class", "close"], ["onClick", new migi.Cb(this, this.clickClose)]]), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], [migi.createVd("span", [], ["全部"])]), migi.createVd("li", [["rel", "1"]], [migi.createVd("span", [], ["我的"])])]), migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], [migi.createVd("span", [], ["最新"])]), migi.createVd("li", [["rel", "1"]], [migi.createVd("span", [], ["最热"])])]), migi.createVd("div", [["class", "form"]], [migi.createVd("div", [["class", new migi.Obj("replayId", this, function () {
@@ -1542,12 +1542,12 @@ var Character = function (_migi$Component) {
       })]], ["确定"])])])])]);
     }
   }, {
-    key: 'name',
+    key: 'sname',
     set: function set(v) {
-      this.__setBind("name", v);this.__data("name");
+      this.__setBind("sname", v);this.__data("sname");
     },
     get: function get() {
-      return this.__getBind("name");
+      return this.__getBind("sname");
     }
   }, {
     key: 'showComment',

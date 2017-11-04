@@ -111,7 +111,8 @@ class Audio extends migi.Component {
       this.addMedia();
     }
     if(parent && parent !== window && parent.setHash) {
-      parent.setHash('/works/' + this.props.worksID + '/' + this.datas[this.index || 0].ItemID, true);
+      this.index = this.index || 0;
+      parent.setHash('/works/' + this.props.worksID + '/' + this.datas[this.index].ItemID, true);
     }
     $(this.ref.fn.element).removeClass('fn-hidden');
     return this;
@@ -348,9 +349,7 @@ class Audio extends migi.Component {
   }
   clickShare() {
     let url = location.origin + '/works/' + this.props.worksID;
-    if(this.index !== undefined) {
-      url += '/' + this.datas[this.index].ItemID;
-    }
+    url += '/' + this.datas[this.index || 0].ItemID;
     migi.eventBus.emit('SHARE', url);
   }
   render() {

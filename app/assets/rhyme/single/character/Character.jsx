@@ -85,7 +85,7 @@ class Character extends migi.Component{
       });
     });
   }
-  @bind name
+  @bind sname
   @bind showComment
   @bind rootId = null
   @bind replayId = null
@@ -94,7 +94,7 @@ class Character extends migi.Component{
   @bind loading
   user(name) {
     let self = this;
-    self.name = name;
+    self.sname = name;
     let hash = HASH[name];
     showAnimate = true;
     index = 0;
@@ -106,7 +106,7 @@ class Character extends migi.Component{
       let bg = self.ref.img.element;
       let img = new Image();
       img.onload = function() {
-        if(self.name !== name) {
+        if(self.sname !== name) {
           return;
         }
         function anm() {
@@ -163,11 +163,11 @@ class Character extends migi.Component{
   clickFollow(e, vd) {
     e.preventDefault();
     let self = this;
-    if(HASH[self.name].state === 1) {
-      util.postJSON('/api/author/unFollow', { authorID: HASH[self.name].authorId }, function(res) {
+    if(HASH[self.sname].state === 1) {
+      util.postJSON('/api/author/unFollow', { authorID: HASH[self.sname].authorId }, function(res) {
         if(res.success) {
-          HASH[self.name].state = 0;
-          self.name = self.name;
+          HASH[self.sname].state = 0;
+          self.sname = self.sname;
           alert('取关成功');
         }
         else if(res.code === 1000) {
@@ -181,10 +181,10 @@ class Character extends migi.Component{
       });
     }
     else {
-      util.postJSON('/api/author/follow', { authorID: HASH[self.name].authorId }, function(res) {
+      util.postJSON('/api/author/follow', { authorID: HASH[self.sname].authorId }, function(res) {
         if(res.success) {
-          HASH[self.name].state = 1;
-          self.name = self.name;
+          HASH[self.sname].state = 1;
+          self.sname = self.sname;
           alert('关注成功');
         }
         else if(res.code === 1000) {
@@ -214,8 +214,8 @@ class Character extends migi.Component{
     this.ref.comment.showComment();
     skip = 0;
     currentCount = 0;
-    HASH[this.name].skip = 0;
-    HASH[this.name].end = false;
+    HASH[this.sname].skip = 0;
+    HASH[this.sname].end = false;
     this.rootId = null;
     this.replayId = null;
     this.replayName = null;
@@ -227,7 +227,7 @@ class Character extends migi.Component{
       ajax.abort();
     }
     self.loading = true;
-    ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.name].authorId , skip, take, sortType, myComment, currentCount }, function(res) {
+    ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.sname].authorId , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         // currentCount = data.Size;
@@ -257,12 +257,12 @@ class Character extends migi.Component{
   }
   checkMore() {
     let self = this;
-    if(self.showComment && !loadingMore && !HASH[self.name].end && $wrap.scrollTop() + $wrap.height() + 30 > $cp.height()) {
+    if(self.showComment && !loadingMore && !HASH[self.sname].end && $wrap.scrollTop() + $wrap.height() + 30 > $cp.height()) {
       loadingMore = true;
       if(ajax) {
         ajax.abort();
       }
-      ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.name].authorId, skip, take, sortType, myComment, currentCount }, function(res) {
+      ajax = util.postJSON('/api/author/commentList', { authorID: HASH[self.sname].authorId, skip, take, sortType, myComment, currentCount }, function(res) {
         if(res.success) {
           let data = res.data;
           // currentCount = data.Size;
@@ -271,12 +271,12 @@ class Character extends migi.Component{
             self.ref.comment.addMore(data.data);
             if(data.data.length < take) {
               self.ref.comment.message = '';
-              HASH[self.name].end = true;
+              HASH[self.sname].end = true;
             }
           }
           else {
             self.ref.comment.message = '';
-            HASH[self.name].end = true;
+            HASH[self.sname].end = true;
           }
         }
         else {
@@ -322,7 +322,7 @@ class Character extends migi.Component{
         parentID,
         rootID,
         content,
-        authorID: HASH[self.name].authorId,
+        authorID: HASH[self.sname].authorId,
       }, function(res) {
         if(res.success) {
           $input.val('');
@@ -353,8 +353,8 @@ class Character extends migi.Component{
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    HASH[this.name].skip = 0;
-    HASH[this.name].end = false;
+    HASH[this.sname].skip = 0;
+    HASH[this.sname].end = false;
     currentCount = 0;
     sortType = rel;
     skip = 0;
@@ -367,8 +367,8 @@ class Character extends migi.Component{
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    HASH[this.name].skip = 0;
-    HASH[this.name].end = false;
+    HASH[this.sname].skip = 0;
+    HASH[this.sname].end = false;
     currentCount = 0;
     myComment = rel;
     skip = 0;
@@ -381,12 +381,12 @@ class Character extends migi.Component{
     migi.eventBus.emit('share', location.href);
   }
   render() {
-    return <div class={ 'main character ' + this.name }>
+    return <div class={ 'main character ' + this.sname }>
       <div class="con">
         <div class="img" ref="img"/>
         <ul class="btn fn-clear">
-          <li><a href="#" onClick={ this.clickFollow }><span>{ HASH[this.name] && HASH[this.name].state === 1 ? '取关' : '关注' }</span></a></li>
-          <li><a href="#" class="comment" onClick={ this.clickComment }><span>{ this.name === 'jiemeng' ? '留言' : '表白' }</span></a></li>
+          <li><a href="#" onClick={ this.clickFollow }><span>{ HASH[this.sname] && HASH[this.sname].state === 1 ? '取关' : '关注' }</span></a></li>
+          <li><a href="#" class="comment" onClick={ this.clickComment }><span>{ this.sname === 'jiemeng' ? '留言' : '表白' }</span></a></li>
           <li><a href="#" class="share" onClick={ this.clickShare }><span>分享</span></a></li>
         </ul>
         <div class="left" ref="left"/>

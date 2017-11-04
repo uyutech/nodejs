@@ -464,7 +464,7 @@ var TopNav = function (_migi$Component) {
       /*<input type="text" ref="input" maxlength="16" placeholder="弱弱的初级搜索功能QAQ"/>*/
       /*</form>*/
       migi.createVd("div", [["class", "user fn-clear"]], [this.props.isLogin && this.props.isAuthor ? migi.createVd("span", [["class", "public"], ["onClick", new migi.Cb(this, this.clickPublic)]], ["[", new migi.Obj("isPublic", this, function () {
-        return this.isPublic ? '切换到用户身份' : '切换到作者身份';
+        return this.isPublic ? '切换到马甲' : '切换到作者身份';
       }), "]"]) : '', migi.createVd("span", [["class", new migi.Obj("isPublic", this, function () {
         return 'name' + (this.isPublic ? ' public' : '');
       })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("isPublic", this, function () {

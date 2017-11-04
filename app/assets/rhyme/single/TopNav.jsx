@@ -21,7 +21,7 @@ class TopNav extends migi.Component {
       }
       setInterval(play, 40);
       migi.eventBus.on('changeTitle', function(t) {
-        self.name = t;
+        self.sname = t;
       });
     });
   }
@@ -36,7 +36,7 @@ class TopNav extends migi.Component {
     // $(this.ref.bg.element).css('height', width);
     // $(this.ref.fg.element).css('height', width * 0.8);
   }
-  @bind name
+  @bind sname
   clickLogo() {
     this.emit('clickLogo');
   }
@@ -70,7 +70,7 @@ class TopNav extends migi.Component {
       <div class="ti">
         <b class="bg" ref="bg"/>
         <b class="fg" ref="fg"/>
-        <span onClick={ this.clickLogo }>{ this.name || '首页' }</span>
+        <span onClick={ this.clickLogo }>{ this.sname || '首页' }</span>
       </div>
       <b ref="back" class="back fn-hide" onClick={ this.clickBack }/>
       <b ref="music" class="music" onClick={ this.clickMusic }/>

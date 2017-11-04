@@ -32,7 +32,7 @@ class MusicAlbum extends migi.Component {
         self.av.element.currentTime = self.currentTime = 0;
         self.setItem(item);
         self.addOrAltMedia();
-        history.replaceState(null, null, '/works/' + self.props.worksID + '/' + self.workID);
+        history.replaceState(null, '', '/works/' + self.props.worksID + '/' + self.workID);
       });
     }
   }

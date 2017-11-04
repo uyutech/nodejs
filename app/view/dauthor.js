@@ -410,7 +410,7 @@ var SubCmt = function (_migi$Component) {
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
         return this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个作品吧';
       })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
-        return this.maxlength || 120;
+        return this.maxlength || 256;
       })], ["value", new migi.Obj("value", this, function () {
         return this.value;
       })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj("invalid", this, function () {

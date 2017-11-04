@@ -51,12 +51,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if(!isPublic) {
           $name.addClass('public');
           $name.text($CONFIG.authorName);
-          $public.text('[切换到用户身份]');
+          $public.text('[切换到马甲]');
         }
         else {
           $name.removeClass('public');
           $name.text($CONFIG.uname);
-          $public.text('[切换到作者身份]');
+          $public.text('[切换到作者]');
         }
       }
       else {

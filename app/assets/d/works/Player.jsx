@@ -49,7 +49,7 @@ class Player extends migi.Component {
   @bind item
   @bind type
   @bind workID
-  @bind name
+  @bind sname
   @bind url
   @bind playNum
   @bind isPlaying
@@ -95,7 +95,7 @@ class Player extends migi.Component {
     self.item = item;
     self.type = item.ItemType;
     self.workID = item.ItemID;
-    self.name = item.ItemName;
+    self.sname = item.ItemName;
     self.url = item.FileUrl;
     self.playNum = item.PlayHis;
     self.formatLyrics = item.formatLyrics || {};
@@ -374,7 +374,7 @@ class Player extends migi.Component {
   }
   render() {
     return <div class={ 'player fn-hide' } style={ 'background-image:url("' + (this.cover || '//zhuanquan.xin/img/blank.png') + '")' }>
-      <h3>{ this.name }</h3>
+      <h3>{ this.sname }</h3>
       <div class="num fn-hide">
         <small class="play">{ this.playNum || 0 }</small>
       </div>
@@ -421,7 +421,7 @@ class Player extends migi.Component {
           <li class={ 'favor' + (this.favor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.url }
-               download={ this.name + this.url ? (/\.\w+$/.exec(this.url)[0] || '') : '' }
+               download={ this.sname + this.url ? (/\.\w+$/.exec(this.url)[0] || '') : '' }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

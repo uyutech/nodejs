@@ -47,7 +47,7 @@ class SubCmt extends migi.Component {
       <form class={ 'fn-clear' + (this.to || this.originTo ? ' to' : '') } ref="form" onSubmit={ this.submit }>
         <label>TO: { this.to || this.originTo }</label>
         <input type="text" class="text" ref="input" placeholder={ this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个作品吧' }
-               onInput={ this.input } onFocus={ this.focus } maxlength={ this.maxlength || 120 }
+               onInput={ this.input } onFocus={ this.focus } maxlength={ this.maxlength || 256 }
                value={ this.value }/>
         <input type="submit"
                class={ 'submit' + (this.invalid ? ' dis' : '') }

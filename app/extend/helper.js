@@ -94,7 +94,7 @@ module.exports = {
         let isPublic = session.isPublic;
         return `<div class="top-nav" id="topNav">
           <a href="/find" class="logo"></a>
-          <span class="public">[${ isPublic ? '切换到用户身份' : '切换到作者身份' }]</span>
+          <span class="public">[${ isPublic ? '切换到马甲' : '切换到作者身份' }]</span>
           <a href="/my" class="user">
             <span class="${'name' + (isPublic ? ' public' : '')}">${isPublic ? session.authorName : session.uname}</span>
             <img src=${session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>

@@ -500,7 +500,7 @@ var Profile = function (_migi$Component) {
 
     var self = _this;
     self.head = self.props.userInfo.Head_Url;
-    self.name = self.props.userInfo.NickName;
+    self.sname = self.props.userInfo.NickName;
     self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
     return _this;
   }
@@ -514,15 +514,15 @@ var Profile = function (_migi$Component) {
         alert('昵称一天只能修改一次哦~');
         return;
       }
-      $(self.ref.name.element).addClass('fn-hide');
+      $(self.ref.sname.element).addClass('fn-hide');
       $(self.ref.edit.element).addClass('fn-hide');
-      $(self.ref.input.element).removeClass('fn-hide').focus().val(self.name);
+      $(self.ref.input.element).removeClass('fn-hide').focus().val(self.sname);
     }
   }, {
     key: 'blur',
     value: function blur() {
       var self = this;
-      $(self.ref.name.element).removeClass('fn-hide');
+      $(self.ref.sname.element).removeClass('fn-hide');
       $(self.ref.input.element).addClass('fn-hide');
       var $edit = $(self.ref.edit.element);
       var newName = $(self.ref.input.element).val().trim();
@@ -532,10 +532,10 @@ var Profile = function (_migi$Component) {
         $edit.removeClass('fn-hide');
         return;
       }
-      if (newName !== self.name) {
+      if (newName !== self.sname) {
         _net2.default.postJSON('/api/user/updateNickName', { nickName: newName }, function (res) {
           if (res.success) {
-            self.name = newName;
+            self.sname = newName;
             self.updateNickNameTimeDiff = 0;
           } else {
             alert(res.message || _util2.default.ERROR_MESSAGE);
@@ -589,8 +589,8 @@ var Profile = function (_migi$Component) {
       })]]),,,] /*<div class="upload" ref="upload">*/
       /*<input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>*/
       /*</div>*/
-      ), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "name"]], [new migi.Obj("name", this, function () {
-        return this.name;
+      ), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "sname"]], [new migi.Obj("sname", this, function () {
+        return this.sname;
       })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["onBlur", new migi.Cb(this, this.blur)], ["maxlength", "8"]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]])])]);
     }
   }, {
@@ -602,12 +602,12 @@ var Profile = function (_migi$Component) {
       return this.__getBind("head");
     }
   }, {
-    key: 'name',
+    key: 'sname',
     set: function set(v) {
-      this.__setBind("name", v);this.__data("name");
+      this.__setBind("sname", v);this.__data("sname");
     },
     get: function get() {
-      return this.__getBind("name");
+      return this.__getBind("sname");
     }
   }, {
     key: 'updateNickNameTimeDiff',

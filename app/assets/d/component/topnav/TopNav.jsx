@@ -62,7 +62,7 @@ class TopNav extends migi.Component {
         <div class="user fn-clear">
           {
             this.props.isLogin && this.props.isAuthor
-              ? <span class="public" onClick={ this.clickPublic }>[{ this.isPublic ? '切换到用户身份' : '切换到作者身份' }]</span>
+              ? <span class="public" onClick={ this.clickPublic }>[{ this.isPublic ? '切换到马甲' : '切换到作者身份' }]</span>
               : ''
           }
           <span class={ 'name' + (this.isPublic ? ' public' : '') } onClick={ this.click }>{ (this.isPublic ? userInfo.AuthorName : userInfo.NickName) || '登陆/注册' }</span>

@@ -12,11 +12,11 @@ class Profile extends migi.Component {
     super(...data);
     let self = this;
     self.head = self.props.userInfo.Head_Url;
-    self.name = self.props.userInfo.NickName;
+    self.sname = self.props.userInfo.NickName;
     self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
   }
   @bind head
-  @bind name
+  @bind sname
   @bind updateNickNameTimeDiff
   click(e) {
     e.preventDefault();
@@ -25,14 +25,14 @@ class Profile extends migi.Component {
       alert('昵称一天只能修改一次哦~');
       return;
     }
-    $(self.ref.name.element).addClass('fn-hide');
+    $(self.ref.sname.element).addClass('fn-hide');
     $(self.ref.edit.element).addClass('fn-hide');
-    $(self.ref.input.element).removeClass('fn-hide').focus().val(self.name);
+    $(self.ref.input.element).removeClass('fn-hide').focus().val(self.sname);
     $(self.ref.ok.element).removeClass('fn-hide')
   }
   clickOk() {
     let self = this;
-    $(self.ref.name.element).removeClass('fn-hide');
+    $(self.ref.sname.element).removeClass('fn-hide');
     $(self.ref.input.element).addClass('fn-hide');
     $(self.ref.ok.element).addClass('fn-hide');
     let $edit = $(self.ref.edit.element);
@@ -43,10 +43,10 @@ class Profile extends migi.Component {
       $edit.removeClass('fn-hide');
       return;
     }
-    if(newName !== self.name) {
+    if(newName !== self.sname) {
       net.postJSON('/api/user/updateNickName', { nickName: newName }, function(res) {
         if(res.success) {
-          self.name = newName;
+          self.sname = newName;
           self.updateNickNameTimeDiff = 0;
         }
         else {
@@ -105,7 +105,7 @@ class Profile extends migi.Component {
         {/*</div>*/}
       </div>
       <div class="txt">
-        <strong ref="name">{ this.name }</strong>
+        <strong ref="sname">{ this.sname }</strong>
         <input ref="input" type="text" class="fn-hide" value="" maxlength="8"/>
         <b class="edit" ref="edit" onClick={ this.click }/>
         <button class="fn-hide" ref="ok" onClick={ this.clickOk }>确定</button>

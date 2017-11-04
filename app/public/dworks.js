@@ -1084,7 +1084,8 @@ var Audio = function (_migi$Component) {
         this.addMedia();
       }
       if (parent && parent !== window && parent.setHash) {
-        parent.setHash('/works/' + this.props.worksID + '/' + this.datas[this.index || 0].ItemID, true);
+        this.index = this.index || 0;
+        parent.setHash('/works/' + this.props.worksID + '/' + this.datas[this.index].ItemID, true);
       }
       $(this.ref.fn.element).removeClass('fn-hidden');
       return this;
@@ -1361,9 +1362,7 @@ var Audio = function (_migi$Component) {
     key: 'clickShare',
     value: function clickShare() {
       var url = location.origin + '/works/' + this.props.worksID;
-      if (this.index !== undefined) {
-        url += '/' + this.datas[this.index].ItemID;
-      }
+      url += '/' + this.datas[this.index || 0].ItemID;
       migi.eventBus.emit('SHARE', url);
     }
   }, {
@@ -1642,7 +1641,8 @@ var Video = function (_migi$Component) {
         this.addMedia();
       }
       if (parent && parent !== window && parent.setHash) {
-        parent.setHash('/works/' + this.props.worksID + '/' + this.datas[this.index || 0].ItemID, true);
+        this.index = this.index || 0;
+        parent.setHash('/works/' + this.props.worksID + '/' + this.datas[this.index].ItemID, true);
       }
       $(this.ref.fn.element).removeClass('fn-hidden');
       return this;
@@ -1912,9 +1912,7 @@ var Video = function (_migi$Component) {
     key: 'clickShare',
     value: function clickShare() {
       var url = location.origin + '/works/' + this.props.worksID;
-      if (this.index !== undefined) {
-        url += '/' + this.datas[this.index].ItemID;
-      }
+      url += '/' + this.datas[this.index || 0].ItemID;
       migi.eventBus.emit('SHARE', url);
     }
   }, {
@@ -3525,7 +3523,7 @@ var Player = function (_migi$Component) {
       self.item = item;
       self.type = item.ItemType;
       self.workID = item.ItemID;
-      self.name = item.ItemName;
+      self.sname = item.ItemName;
       self.url = item.FileUrl;
       self.playNum = item.PlayHis;
       self.formatLyrics = item.formatLyrics || {};
@@ -3828,8 +3826,8 @@ var Player = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", 'player fn-hide'], ["style", new migi.Obj("cover", this, function () {
         return 'background-image:url("' + (this.cover || '//zhuanquan.xin/img/blank.png') + '")';
-      })]], [migi.createVd("h3", [], [new migi.Obj("name", this, function () {
-        return this.name;
+      })]], [migi.createVd("h3", [], [new migi.Obj("sname", this, function () {
+        return this.sname;
       })]), migi.createVd("div", [["class", "num fn-hide"]], [migi.createVd("small", [["class", "play"]], [new migi.Obj("playNum", this, function () {
         return this.playNum || 0;
       })])]), migi.createVd("div", [["class", new migi.Obj(["isPlaying", "type"], this, function () {
@@ -3872,8 +3870,8 @@ var Player = function (_migi$Component) {
         return 'favor' + (this.favor ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickFavor)]]), migi.createVd("li", [["class", "download"]], [migi.createVd("a", [["href", new migi.Obj("url", this, function () {
         return this.url;
-      })], ["download", new migi.Obj(["name", "url"], this, function () {
-        return this.name + this.url ? /\.\w+$/.exec(this.url)[0] || '' : '';
+      })], ["download", new migi.Obj(["sname", "url"], this, function () {
+        return this.sname + this.url ? /\.\w+$/.exec(this.url)[0] || '' : '';
       })], ["onClick", new migi.Cb(this, this.clickDownload)]])]), migi.createVd("li", [["class", "share"], ["onClick", new migi.Cb(this, this.clickShare)]])])])]);
     }
   }, {
@@ -3901,12 +3899,12 @@ var Player = function (_migi$Component) {
       return this.__getBind("workID");
     }
   }, {
-    key: 'name',
+    key: 'sname',
     set: function set(v) {
-      this.__setBind("name", v);this.__data("name");
+      this.__setBind("sname", v);this.__data("sname");
     },
     get: function get() {
-      return this.__getBind("name");
+      return this.__getBind("sname");
     }
   }, {
     key: 'url',
@@ -4166,7 +4164,7 @@ var SubCmt = function (_migi$Component) {
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
         return this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个作品吧';
       })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
-        return this.maxlength || 120;
+        return this.maxlength || 256;
       })], ["value", new migi.Obj("value", this, function () {
         return this.value;
       })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj("invalid", this, function () {
