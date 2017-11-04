@@ -521,6 +521,9 @@ body {
   margin-left: 0.2rem;
   line-height: 0.32rem;
 }
+.mod.mod-title .txt h1.empty {
+  color: #B1C0C9;
+}
 .mod.mod-title .txt h2 {
   margin-left: 0.2rem;
   line-height: 0.32rem;

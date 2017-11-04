@@ -39,7 +39,7 @@ class Title extends migi.Component {
       }
       <div class="txt">
         <h3>{ WorksTypeEnum.NAME[this.type] }</h3>
-        <h1>{ this.title }</h1>
+        <h1 class={ this.title ? '' : 'empty' }>{ this.title || '待揭秘' }</h1>
         <h2 class={ this.subTitle ? '' : 'fn-hide' }>{ this.subTitle }</h2>
         {/*<small class="pop">{ this.popular }</small>*/}
         <ul class={ 'tags fn-clear' }>
