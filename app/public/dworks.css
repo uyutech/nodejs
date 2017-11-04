@@ -676,7 +676,6 @@ body {
 .mod.mod-author ul li {
   display: inline-block;
   margin: 0 0.05rem 0.02rem 0;
-  height: 0.24rem;
   line-height: 0.24rem;
   box-sizing: border-box;
   vertical-align: top;
@@ -685,6 +684,7 @@ body {
   display: inline-block;
   white-space: nowrap;
   vertical-align: top;
+  line-height: 1;
 }
 .mod.mod-author ul li span.item small {
   display: inline-block;
@@ -704,6 +704,7 @@ body {
   display: inline-block;
   white-space: nowrap;
   vertical-align: top;
+  line-height: 1;
 }
 .mod.mod-author ul li a.item img {
   display: inline-block;
@@ -719,6 +720,7 @@ body {
   max-width: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 0.24rem;
 }
 .mod.mod-author ul li a.item:hover img {
   box-shadow: 0 0 3px rgba(45, 77, 103, 0.6);

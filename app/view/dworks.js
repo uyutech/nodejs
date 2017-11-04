@@ -203,6 +203,12 @@ let util = {
     }
     return url ? url + '-__60' : url;
   },
+  img48_48_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-48_48_80' : url;
+  },
   formatTime: function(time) {
     if(!time) {
       return '00:00';
@@ -529,6 +535,11 @@ let code2Data = {
     display: '伴唱',
     css: 'singer',
   },
+  '115': {
+    name: '合唱',
+    display: '合唱',
+    css: 'singer',
+  },
   '121': {
     name: '作曲',
     display: '作曲',
@@ -544,6 +555,16 @@ let code2Data = {
     display: '混音',
     css: 'mixer',
   },
+  '132': {
+    name: '母带',
+    display: '母带',
+    css: 'mixer',
+  },
+  '133': {
+    name: '录音',
+    display: '录音',
+    css: 'mixer',
+  },
   '134': {
     name: '修音',
     display: '修音',
@@ -551,12 +572,27 @@ let code2Data = {
   },
   '141': {
     name: '演奏',
-    display: '', //直接显示乐器名。
+    display: '演奏', //优先显示乐器名。
     css: 'instrumental',
+  },
+  '151': {
+    name: '配音',
+    display: '配音',
+    css: 'singer',
   },
   '211': {
     name: '视频',
     display: '视频',
+    css: 'video',
+  },
+  '212': {
+    name: '压制',
+    display: '压制',
+    css: 'video',
+  },
+  '213': {
+    name: '拍摄',
+    display: '拍摄',
     css: 'video',
   },
   '311': {
@@ -574,20 +610,58 @@ let code2Data = {
     display: '场景',
     css: 'painter',
   },
+  '314': {
+    name: '线稿',
+    display: '线稿',
+    css: 'painter',
+  },
+  '315': {
+    name: '上色',
+    display: '上色',
+    css: 'painter',
+  },
+  '316': {
+    name: '手绘',
+    display: '手绘',
+    css: 'painter',
+  },
+  '317': {
+    name: '插画',
+    display: '插画',
+    css: 'painter',
+  },
   '331': {
     name: '设计',
     display: '设计',
     css: 'designer',
   },
+
   '332': {
     name: '海报',
     display: '海报',
     css: 'designer',
   },
+  '333': {
+    name: 'Logo设计',
+    display: 'Logo设计',
+    css: 'designer',
+  },
+  '341': {
+    name: '漫画',
+    display: '漫画',
+    css: 'painter',
+  },
+
   '351': {
     name: '书法',
     display: '书法',
     css: 'handwriting',
+  },
+
+  '391': {
+    name: '沙画',
+    display: '沙画',
+    css: 'painter',
   },
   '411': {
     name: '作词',
@@ -597,6 +671,16 @@ let code2Data = {
   '421': {
     name: '文案',
     display: '文案',
+    css: 'writer',
+  },
+  '422': {
+    name: '剧本',
+    display: '剧本',
+    css: 'writer',
+  },
+  '423': {
+    name: '小说',
+    display: '小说',
     css: 'writer',
   },
 };
@@ -1221,16 +1305,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   authorType: [
     [901, 902],
-    [111, 113, 112],
+    [423,422],
+    [111, 115, 113, 112, 114, 151],
     [151],
     [121, 122],
     [411, 421],
-    [131, 132, 134],
+    [331],
+    [131, 132, 134,133],
     [141],
-    [211],
-    [312, 311, 313],
+    [211,213,212,391],
+    [317,316,312, 311, 313,314,315],
     [351],
-    [331, 332]
+    [331, 332,333]
   ],
 });
 
@@ -1303,9 +1389,9 @@ var Author = function (_migi$Component) {
             }
             var type = _authorTemplate2.default.code2Data[item.WorksAuthorType];
             var label = item.Tips || (type ? type.display : '其它');
-            temp.push(migi.createVd("span", [["class", "item"]], [migi.createVd("small", [], [label]), migi.createVd("a", [["class", "item"], ["href", '/author/' + item.ID], ["title", item.AuthName]], [migi.createVd("img", [["src", _util2.default.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("span", [], [item.AuthName])])]));
+            temp.push(migi.createVd("span", [["class", "item"]], [migi.createVd("small", [], [label]), migi.createVd("a", [["class", "item"], ["href", '/author/' + item.ID], ["title", item.AuthName]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img48_48_80(item.HeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("span", [], [item.AuthName])])]));
           } else {
-            temp.push(migi.createVd("a", [["class", "item"], ["href", '/author/' + item.ID]], [migi.createVd("img", [["src", _util2.default.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("span", [], [item.AuthName])]));
+            temp.push(migi.createVd("a", [["class", "item"], ["href", '/author/' + item.ID]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img48_48_80(item.HeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("span", [], [item.AuthName])]));
           }
           last = item.WorksAuthorType;
           lastTips = item.Tips;
@@ -2036,6 +2122,12 @@ var Works = function (_migi$Component) {
     value: function setWorks(works) {
       var self = this;
       var workList = [];
+      var authorList = [];
+      var authorHash = {};
+      var unknowList = [];
+      var authorType = _itemTemplate2.default.authorType;
+      var authorTypeHash = {};
+      var authorTypeList = [];
       if (self.worksType === _WorksTypeEnum2.default.TYPE.musicAlbum) {
         works.forEach(function (item) {
           if (item.ItemType === 1111 || item.ItemType === 1113) {
@@ -2055,11 +2147,43 @@ var Works = function (_migi$Component) {
           }
         });
         self.workList = workList;
+
+        (self.props.worksDetail.Works_Author || []).forEach(function (item) {
+          authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
+          if (!authorHash[item.WorksAuthorType][item.ID]) {
+            authorHash[item.WorksAuthorType][item.ID] = true;
+            authorList.push(item);
+          }
+        });
+        authorHash = {};
+        authorType.forEach(function (list, index) {
+          list.forEach(function (item) {
+            authorTypeHash[item] = index;
+          });
+        });
+        authorList.forEach(function (item) {
+          var i = authorTypeHash[item.WorksAuthorType];
+          if (i === undefined) {
+            unknowList.push(item);
+          } else {
+            authorTypeList[i] = authorTypeList[i] || [];
+            authorTypeList[i].push(item);
+          }
+        });
+        authorList = [];
+        authorTypeList.forEach(function (item, index) {
+          var seq = _itemTemplate2.default.authorType[index];
+          migi.sort(item, function (a, b) {
+            return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
+          });
+        });
+        if (unknowList.length) {
+          authorTypeList.push(unknowList);
+        }
+        self.authorList = authorTypeList;
         return;
       }
       var workHash = {};
-      var authorList = [];
-      var authorHash = {};
       works.forEach(function (item) {
         // 将每个小作品根据小类型映射到大类型上，再归类
         var type = _itemTemplate2.default.workType(item.ItemType);
@@ -2089,10 +2213,6 @@ var Works = function (_migi$Component) {
       });
 
       authorHash = {};
-      var authorType = _itemTemplate2.default.authorType;
-      var authorTypeHash = {};
-      var authorTypeList = [];
-      var unknowList = [];
       authorType.forEach(function (list, index) {
         list.forEach(function (item) {
           authorTypeHash[item] = index;
@@ -2163,6 +2283,9 @@ var Works = function (_migi$Component) {
       }
     }
   }, {
+    key: 'setAuthorList',
+    value: function setAuthorList(authors) {}
+  }, {
     key: 'clickType',
     value: function clickType(e, vd, tvd) {
       var self = this;
@@ -2191,7 +2314,7 @@ var Works = function (_migi$Component) {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
-        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("div", [["class", "box"]], [migi.createCp(_Describe2.default, [["data", this.props.worksDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", [this.props.worksDetail.Works_Author]]]), migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["曲目"])]), migi.createVd("div", [["class", "box box-fn-top-left"]], [migi.createCp(_PlayList2.default, [["ref", "playList"], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList], ["worksID", new migi.Obj("worksID", this, function () {
+        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("div", [["class", "box"]], [migi.createCp(_Describe2.default, [["data", this.props.worksDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])])]), migi.createVd("div", [["class", "side"]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"]], [migi.createVd("li", [["class", "cur"]], ["曲目"])]), migi.createVd("div", [["class", "box box-fn-top-left"]], [migi.createCp(_PlayList2.default, [["ref", "playList"], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;

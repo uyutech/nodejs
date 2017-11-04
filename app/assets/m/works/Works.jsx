@@ -21,6 +21,7 @@ import MusicAlbum from './MusicAlbum.jsx';
 import PlayList from '../../d/works/PlayList.jsx';
 import ImageView from './ImageView.jsx';
 import worksState from '../../d/works/worksState';
+import Describe from '../../d/works/Describe.jsx';
 
 let first;
 
@@ -101,6 +102,12 @@ class Works extends migi.Component {
   setWorks(works) {
     let self = this;
     let workList = [];
+    let authorList = [];
+    let authorHash = {};
+    let authorTypeHash = {};
+    let authorTypeList = [];
+    let unknowList = [];
+    let authorType = itemTemplate.authorType;
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       works.forEach(function(item) {
         if(item.ItemType === 1111 || item.ItemType === 1113) {
@@ -122,11 +129,44 @@ class Works extends migi.Component {
         }
       });
       self.workList = workList;
+
+      (self.props.worksDetail.Works_Author || []).forEach(function(item) {
+        authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
+        if(!authorHash[item.WorksAuthorType][item.ID]) {
+          authorHash[item.WorksAuthorType][item.ID] = true;
+          authorList.push(item);
+        }
+      });
+      authorHash = {};
+      authorType.forEach(function(list, index) {
+        list.forEach(function(item) {
+          authorTypeHash[item] = index;
+        });
+      });
+      authorList.forEach(function(item) {
+        let i = authorTypeHash[item.WorksAuthorType];
+        if(i === undefined) {
+          unknowList.push(item);
+        }
+        else {
+          authorTypeList[i] = authorTypeList[i] || [];
+          authorTypeList[i].push(item);
+        }
+      });
+      authorList = [];
+      authorTypeList.forEach(function(item, index) {
+        let seq = itemTemplate.authorType[index];
+        migi.sort(item, function(a, b) {
+          return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
+        });
+      });
+      if(unknowList.length) {
+        authorTypeList.push(unknowList);
+      }
+      self.authorList = authorTypeList;
       return;
     }
     let workHash = {};
-    let authorList = [];
-    let authorHash = {};
     works.forEach(function(item) {
       // 将每个小作品根据小类型映射到大类型上，再归类
       let type = itemTemplate.workType(item.ItemType);
@@ -156,10 +196,6 @@ class Works extends migi.Component {
     });
 
     authorHash = {};
-    let authorType = itemTemplate.authorType;
-    let authorTypeHash = {};
-    let authorTypeList = [];
-    let unknowList = [];
     authorType.forEach(function(list, index) {
       list.forEach(function(item) {
         authorTypeHash[item] = index;
@@ -307,6 +343,8 @@ class Works extends migi.Component {
                   worksID={ this.worksID } workID={ this.workID } workList={ this.workList }/>
         <div class="intro fn-hide" ref="intro">
           <span class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</span>
+          <Describe data={ this.props.worksDetail.Describe }/>
+          <Author authorList={ this.authorList }/>
           {
             this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
               ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>

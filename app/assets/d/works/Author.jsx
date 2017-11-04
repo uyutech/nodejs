@@ -37,7 +37,7 @@ class Author extends migi.Component {
           temp.push(<span class="item">
             <small>{ label }</small>
             <a class="item" href={ `/author/${item.ID}` } title={ item.AuthName }>
-              <img src={ util.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+              <img src={ util.autoSsl(util.img48_48_80(item.HeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
               <span>{ item.AuthName }</span>
             </a>
           </span>);
@@ -45,7 +45,7 @@ class Author extends migi.Component {
         else {
           temp.push(
             <a class="item" href={ `/author/${item.ID}` }>
-              <img src={ util.autoSsl(item.HeadUrl) || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+              <img src={ util.autoSsl(util.img48_48_80(item.HeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
               <span>{ item.AuthName }</span>
             </a>
           );

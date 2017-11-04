@@ -203,6 +203,12 @@ let util = {
     }
     return url ? url + '-__60' : url;
   },
+  img48_48_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-48_48_80' : url;
+  },
   formatTime: function(time) {
     if(!time) {
       return '00:00';

@@ -819,7 +819,6 @@ body {
 .mod.mod-author ul li {
   display: inline-block;
   margin: 0 0.05rem 0.02rem 0;
-  height: 0.24rem;
   line-height: 0.24rem;
   box-sizing: border-box;
   vertical-align: top;
@@ -828,6 +827,7 @@ body {
   display: inline-block;
   white-space: nowrap;
   vertical-align: top;
+  line-height: 1;
 }
 .mod.mod-author ul li span.item small {
   display: inline-block;
@@ -847,6 +847,7 @@ body {
   display: inline-block;
   white-space: nowrap;
   vertical-align: top;
+  line-height: 1;
 }
 .mod.mod-author ul li a.item img {
   display: inline-block;
@@ -862,6 +863,7 @@ body {
   max-width: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 0.24rem;
 }
 .mod.mod-author ul li a.item:hover img {
   box-shadow: 0 0 3px rgba(45, 77, 103, 0.6);
@@ -2030,6 +2032,25 @@ body {
     max-width: 3.94rem;
   }
 }
+/**
+ * Created by army8735 on 2017/10/19.
+ */
+.mod.mod-describe {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+.mod.mod-describe h4 {
+  padding-left: 0.4rem;
+  height: 0.36rem;
+  line-height: 0.36rem;
+  background: #8BBDE1 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAZlBMVEUAAAAuTWgtTmc5U3ItTWdEZXkzUXAvTmgvT2gwUWsuTWctTmctTmctTWkuT2guTWcwTmguTmguTmgtTWguTWguTmctTWguTmguT2gvT2guT2ozVW8uT2guTmguTmcuT2cvTmgtTWfi3EMNAAAAIXRSTlMA4M4N9AcZQVwmyNr5gWdjO+nCv7atpYxuUU0ehVibVDFXkJ30AAABTUlEQVQ4y51U13KDQAzMVXxHM9WAS7L//5PBOHByAM0YPQgNs6e60tdBsVlbxVrHVZvZfZTpPIj4zmzjTgLQTR45pVyUNxoQpw3YVQKyN8R///xz/Y87F+E9jVGc33/dE9RqHUbVSO5v/hJcthO/ICE+r0XArZFFyFOi3m9aDbnkDKH2gUrgr0ozWWshfl5d6yD5uUp009ejp5FSqbVMaS49/MQDaDKPSGASEZEZaTwZkqEhOKAcrB1KgCAbZKNukdMKby/rRjuRox11Rd6mKGezREriVKOO4Uh9w2wOpBcO8ag1QgwNu3AdOmQE/QnwFTpzfOi5mB94vpi5PUbDse1ZGv5AyjZ8GeEZieNGGEjxgDcMKQLNlIBXDM0CcV2M+JshblgFKwFpmVVYlsvkAhGzXGRdjWPW9ZMDwJ+UA0eKPXvHDyl/mvljf0x+AUs4IlAUb6lPAAAAAElFTkSuQmCC) no-repeat 0.1rem center;
+  background-size: 0.2rem auto;
+  font-size: 0.14rem;
+  font-weight: 400;
+}
+.mod.mod-describe pre {
+  padding: 0.1rem;
+  white-space: pre-wrap;
+}
 .works > .sel {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2065,13 +2086,6 @@ body {
 }
 .works.t5 .sel {
   margin-top: -0.3rem;
-}
-.works.t5 .intro:before {
-  display: block;
-  margin-bottom: 0.1rem;
-  height: 0.35rem;
-  background: #8BBDE1;
-  content: ' ';
 }
 .works.t11 .sel {
   margin-top: 0.1rem;

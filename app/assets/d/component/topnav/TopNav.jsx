@@ -66,7 +66,7 @@ class TopNav extends migi.Component {
               : ''
           }
           <span class={ 'name' + (this.isPublic ? ' public' : '') } onClick={ this.click }>{ (this.isPublic ? userInfo.AuthorName : userInfo.NickName) || '登陆/注册' }</span>
-          <img onClick={ this.click } src={ userInfo.Head_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+          <img onClick={ this.click } src={ userInfo.Head_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
         </div>
       </div>
     </div>;

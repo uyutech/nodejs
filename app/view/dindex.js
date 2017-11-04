@@ -204,6 +204,12 @@ let util = {
     }
     return url ? url + '-__60' : url;
   },
+  img48_48_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-48_48_80' : url;
+  },
   formatTime: function(time) {
     if(!time) {
       return '00:00';
@@ -475,7 +481,7 @@ var TopNav = function (_migi$Component) {
         return 'name' + (this.isPublic ? ' public' : '');
       })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("isPublic", this, function () {
         return (this.isPublic ? userInfo.AuthorName : userInfo.NickName) || '登陆/注册';
-      })]), migi.createVd("img", [["onClick", new migi.Cb(this, this.click)], ["src", userInfo.Head_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']])])])]);
+      })]), migi.createVd("img", [["onClick", new migi.Cb(this, this.click)], ["src", userInfo.Head_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png']])])])]);
     }
   }, {
     key: 'isPublic',
