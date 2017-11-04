@@ -78,16 +78,36 @@ module.exports = app => {
       let img = file[2];
       let suffix = file[1];
 
-      // 超过100k
       let equalIndex =  img.indexOf('=');
       if(equalIndex > 0) {
         let temp = img.slice(0, equalIndex);
         let strLen = temp.length;
         let fileLen = Math.ceil(strLen - (strLen / 8) * 2);
-        if(fileLen > 1024 * 100) {
+        if(fileLen > 1024 * 300) {
           return ctx.body = {
             success: false,
-            message: '图片体积太大啦，不能超过100k！',
+            message: '图片体积太大啦，不能超过500k！',
+          };
+        }
+      }
+
+      let lastUpdateHeadTime = yield ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+        uid,
+      });
+      if(lastUpdateHeadTime.data && lastUpdateHeadTime.data.success) {
+        let now = Date.now();
+        lastUpdateHeadTime = lastUpdateHeadTime.data.data;
+        if(lastUpdateHeadTime) {
+          lastUpdateHeadTime = new Date(lastUpdateHeadTime);
+        }
+        else {
+          lastUpdateHeadTime = 0;
+        }
+        let updateHeadTimeDiff = now - lastUpdateHeadTime;console.log(111,updateHeadTimeDiff)
+        if(updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+          return ctx.body = {
+            success: false,
+            message: '头像一天只能修改一次哦~',
           };
         }
       }

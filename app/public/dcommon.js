@@ -356,7 +356,10 @@ function stringify(s) {
 }
 
 function encodeHtml(s, prop) {
-  return prop ? s.replace(/"/g, '&quot;') : s.replace(/</g, '&lt;');
+  if (prop) {
+    return s.replace(/"/g, '&quot;');
+  }
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 }
 
 var util = {
@@ -2878,21 +2881,19 @@ var Model = function (_Event) {
     _this.__bridgeHash = {}; //桥接记录
     _this.__bindHash = {}; //缩略语法中是否设置过默认值
     _this.__ob = []; //被array们的__ob__引用
-
-    // this.on(Event.DATA, this.__onData);
     return _this;
   }
 
   _createClass(Model, [{
     key: '__onData',
-    value: function __onData(k, caller) {
+    value: function __onData(k) {
+      console.log(k);
       k = 'model.' + k;
       this.__ref.forEach(function (cp) {
         //set触发数据变更时，若已DOM则打开开关
         if (cp.dom) {
           cp.__canData = true;
         }
-        // cp.emit(Event.DATA, k, caller);
         cp.__onData(k);
       });
     }
@@ -3483,7 +3484,7 @@ function join(index, children, history) {
         history.end = true;
         break;
       } else {
-        res += child.toString();
+        res += child.toSourceString();
       }
     } else if (child instanceof _Element2.default) {
       history.end = true;
@@ -3534,14 +3535,7 @@ function update(item, children, elem) {
   var now = textNode.textContent;
   if (res != now) {
     //textContent自动转义，保留空白
-    //有实体字符时也不能用textContent
-    if (/&([a-z]+|#\d+);/i.test(res)) {
-      var node = _browser2.default.NODE;
-      node.innerHTML = _util2.default.encodeHtml(res);
-      elem.replaceChild(node.firstChild, textNode);
-    } else {
-      textNode.textContent = res;
-    }
+    textNode.textContent = res;
   }
 }
 

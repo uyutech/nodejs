@@ -713,8 +713,8 @@ body {
 }
 .cp-hotauthor .list .c .empty {
   margin-left: 0.12rem;
-  width: 0.45rem;
-  height: 0.45rem;
+  width: 0.6rem;
+  height: 0.6rem;
   background-color: #E1E3E4;
   border-radius: 100%;
 }
@@ -1232,7 +1232,7 @@ body {
 .author > .home > .cp-hotwork {
   margin-top: 0.1rem;
 }
-.author > .home > .cp-hotcollection {
+.author > .home > .cp-hotmusicalbum {
   margin-top: 0.1rem;
 }
 .author > .home > .cp-hotauthor {

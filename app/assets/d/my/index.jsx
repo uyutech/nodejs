@@ -6,4 +6,6 @@ import './index.less';
 
 import My from './My.jsx';
 
-let my = migi.preExist(<My userInfo={ $CONFIG.userInfo } follows={ $CONFIG.follows } favors={ $CONFIG.favors } updateNickNameTimeDiff={ $CONFIG.updateNickNameTimeDiff }/>);
+let my = migi.preExist(<My userInfo={ $CONFIG.userInfo } follows={ $CONFIG.follows } favors={ $CONFIG.favors }
+                           updateNickNameTimeDiff={ $CONFIG.updateNickNameTimeDiff }
+                           updateHeadTimeDiff={ $CONFIG.updateHeadTimeDiff }/>);

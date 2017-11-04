@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 73);
+/******/ 	return __webpack_require__(__webpack_require__.s = 83);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -106,6 +106,12 @@ var util = {
     return url ? url + '-288_288_80' : url;
   },
   img240_240_80: function img240_240_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-240_240_80' : url;
+  },
+  img220_220_80: function img220_220_80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
@@ -623,7 +629,10 @@ function stringify(s) {
 }
 
 function encodeHtml(s, prop) {
-  return prop ? s.replace(/"/g, '&quot;') : s.replace(/</g, '&lt;');
+  if (prop) {
+    return s.replace(/"/g, '&quot;');
+  }
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 }
 
 var util = {
@@ -3145,21 +3154,19 @@ var Model = function (_Event) {
     _this.__bridgeHash = {}; //桥接记录
     _this.__bindHash = {}; //缩略语法中是否设置过默认值
     _this.__ob = []; //被array们的__ob__引用
-
-    // this.on(Event.DATA, this.__onData);
     return _this;
   }
 
   _createClass(Model, [{
     key: '__onData',
-    value: function __onData(k, caller) {
+    value: function __onData(k) {
+      console.log(k);
       k = 'model.' + k;
       this.__ref.forEach(function (cp) {
         //set触发数据变更时，若已DOM则打开开关
         if (cp.dom) {
           cp.__canData = true;
         }
-        // cp.emit(Event.DATA, k, caller);
         cp.__onData(k);
       });
     }
@@ -3750,7 +3757,7 @@ function join(index, children, history) {
         history.end = true;
         break;
       } else {
-        res += child.toString();
+        res += child.toSourceString();
       }
     } else if (child instanceof _Element2.default) {
       history.end = true;
@@ -3801,14 +3808,7 @@ function update(item, children, elem) {
   var now = textNode.textContent;
   if (res != now) {
     //textContent自动转义，保留空白
-    //有实体字符时也不能用textContent
-    if (/&([a-z]+|#\d+);/i.test(res)) {
-      var node = _browser2.default.NODE;
-      node.innerHTML = _util2.default.encodeHtml(res);
-      elem.replaceChild(node.firstChild, textNode);
-    } else {
-      textNode.textContent = res;
-    }
+    textNode.textContent = res;
   }
 }
 
@@ -7705,7 +7705,17 @@ migi.name(Share, "Share");exports.default = Share;
 /* 70 */,
 /* 71 */,
 /* 72 */,
-/* 73 */
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7776,16 +7786,6 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
 /* 84 */,
 /* 85 */,
 /* 86 */

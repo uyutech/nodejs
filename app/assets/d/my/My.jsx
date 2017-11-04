@@ -27,7 +27,9 @@ class My extends migi.Component {
   }
   render() {
     return <div class="my">
-      <Profile userInfo={ this.props.userInfo } updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }/>
+      <Profile userInfo={ this.props.userInfo }
+               updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }
+               updateHeadTimeDiff={ this.props.updateHeadTimeDiff }/>
       <div class="c">
         <Follow ref="follow" list={ this.props.follows }/>
         {/*<Favor ref="favor" list={ this.props.favors }/>*/}

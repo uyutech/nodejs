@@ -68,6 +68,9 @@ class PlayList extends migi.Component {
       return;
     }
     let $li = $(tvd.element);
+    if($li.hasClass('private')) {
+      return;
+    }
     if(!$li.hasClass('cur')) {
       let $ol = $(vd.element);
       $ol.find('.cur').removeClass('cur');
@@ -96,15 +99,24 @@ class PlayList extends migi.Component {
             else if(item.ItemType === 2110) {
               type = 'video';
             }
-            if(item.WorksID && item.WorksCoverPic) {
-              return <li class={ type + ' rel' + ((this.index === undefined ? i : this.index !== i) ? '' : ' cur') } rel={ i }>
-                <a href={ '/works/' + item.WorksID } class="pic"><img src={ util.autoSsl(util.img64_64_80(item.WorksCoverPic)) }/></a>
-                <span class="name">{ item.ItemName }</span>
-                <span class="icon"><b class="l1"/><b class="l2"/><b class="l3"/></span>
+            if(item.WorksState === 3) {
+              return <li class="private">
+                <span class="name">待揭秘</span>
               </li>;
             }
-            return <li class={ type + ((this.index === undefined ? i : this.index !== i) ? '' : ' cur') } rel={ i }>
-              <span class="name">{ item.ItemName }</span>
+            if(item.WorksState === 2) {
+              return <li class={ type + ' rel' + ((this.index === undefined ? i : this.index !== i) ? '' : ' cur') } rel={ i }>
+                <a href={ '/works/' + item.WorksID } class="pic">
+                  <img src={ util.autoSsl(util.img64_64_80(item.WorksCoverPic || this.props.cover)) || '//zhuanquan.xin/img/blank.png' }/>
+                </a>
+                <a href={ '/works/' + item.WorksID } class={ 'name' + (item.ItemName ? '' : ' empty') }>{ item.ItemName || '待揭秘' }</a>
+              </li>;
+            }
+            return <li class={ type + ' rel' + ((this.index === undefined ? i : this.index !== i) ? '' : ' cur') + (item.FileUrl ? '' : ' empty') } rel={ i }>
+              <a href={ '/works/' + item.WorksID } class="pic">
+                <img src={ util.autoSsl(util.img64_64_80(item.WorksCoverPic || this.props.cover)) || '//zhuanquan.xin/img/blank.png' }/>
+              </a>
+              <span class={ 'name' + (item.ItemName ? '' : ' empty') }>{ item.ItemName || '待揭秘' }</span>
               <span class="icon"><b class="l1"/><b class="l2"/><b class="l3"/></span>
             </li>;
           }.bind(this))

@@ -45,7 +45,7 @@ module.exports = app => {
     }
     * commentList(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
         uid,
         AuthorID: body.authorID,
@@ -59,7 +59,12 @@ module.exports = app => {
     }
     * addComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
+      if(!body.content || body.content.length > 256) {
+        return ctx.body = {
+          success: false,
+        };
+      }
       let res = yield ctx.helper.postServiceJSON('api/author/AddComment', {
         uid,
         ParentID: body.parentID,
@@ -71,7 +76,7 @@ module.exports = app => {
     }
     * likeComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/author/AddWorkCommentLike', {
         uid,
         CommentID: body.commentID,
@@ -80,7 +85,7 @@ module.exports = app => {
     }
     * delComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/author/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
@@ -89,7 +94,7 @@ module.exports = app => {
     }
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/author/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
@@ -101,7 +106,7 @@ module.exports = app => {
     // 异世谣特殊接口，其中AuthorID字段为评论属于总作者的ID
     * singleComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/author/GetCommentByID', {
         uid,
         CommentID: body.commentID,
@@ -109,7 +114,7 @@ module.exports = app => {
       ctx.body = res.data;
     }
     * searchWorks(ctx) {
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/author/SearchWorks', {
         AuthorID: body.authorID,
         Parameter: body.parameter,

@@ -5,6 +5,11 @@
 import util from '../common/util';
 import WorksTypeEnum from './WorksTypeEnum';
 
+const STATE = {
+  1: '已完成',
+  2: '未完成'
+};
+
 class Title extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -51,6 +56,9 @@ class Title extends migi.Component {
             // this.type === 1 ? <li class="add" onClick={ this.clickAdd }/> : ''
           }
         </ul>
+      </div>
+      <div class="plus">
+        <span class="state">{ STATE[this.props.detail.WorkState] }</span>
       </div>
     </div>;
   }

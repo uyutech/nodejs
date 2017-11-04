@@ -6,6 +6,7 @@
   position:relative;
   margin-bottom:0.2rem;
   padding-left:1.2rem;
+  padding-right:1.2rem;
   min-height:0.5rem;
   height:1rem;
   background:url(title-bg.png) no-repeat right 0;
@@ -83,6 +84,21 @@
           cursor:pointer;
         }
       }
+    }
+  }
+  .plus{
+    position:absolute;
+    top:0;
+    right:0;
+    max-width:1rem;
+    .state{
+      display:inline-block;
+      margin-top:0.04rem;
+      line-height:0.24rem;
+      padding:0 0.1rem;
+      background:@mainColor;
+      border-radius:0.24rem;
+      color:@thirdTextColor;
     }
   }
 }

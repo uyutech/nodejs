@@ -101,7 +101,7 @@ class Player extends migi.Component {
     self.formatLyrics = item.formatLyrics || {};
     self.like = item.ISLike;
     self.favor = item.ISFavor;
-    self.cover = item.ItemCoverPic;
+    self.cover = item.WorksCoverPic;
   }
   addOrAltMedia() {
     let self = this;
@@ -189,10 +189,12 @@ class Player extends migi.Component {
   onPause(e) {
   }
   play() {
-    this.av && this.av.element.play();
-    this.isPlaying = true;
-    this.hasStart = true;
-    migi.eventBus.emit('play');
+    if(this.url) {
+      this.av && this.av.element.play();
+      this.isPlaying = true;
+      this.hasStart = true;
+      migi.eventBus.emit('play');
+    }
     return this;
   }
   pause() {
@@ -421,7 +423,7 @@ class Player extends migi.Component {
           <li class={ 'favor' + (this.favor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.url }
-               download={ this.sname + this.url ? (/\.\w+$/.exec(this.url)[0] || '') : '' }
+               download={ (this.sname || '') + (this.url ? (/\.\w+$/.exec(this.url)[0] || '') : '') }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

@@ -155,9 +155,11 @@ class Audio extends migi.Component {
   onPause(e) {
   }
   play() {
-    this.audio.element.play();
-    this.isPlaying = true;
-    this.hasStart = true;
+    if(this.datas[this.index || 0].FileUrl) {
+      this.audio.element.play();
+      this.isPlaying = true;
+      this.hasStart = true;
+    }
     return this;
   }
   pause() {
@@ -408,7 +410,7 @@ class Audio extends migi.Component {
           <li class={ 'favor' + (this.datas[this.index || 0].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.datas[this.index || 0].FileUrl }
-               download={ this.datas[this.index || 0].ItemName + this.datas[this.index || 0].FileUrl ? (/\.\w+$/.exec(this.datas[this.index || 0].FileUrl)[0] || '') : '' }
+               download={ (this.datas[this.index || 0].ItemName || '') + (this.datas[this.index || 0].FileUrl ? (/\.\w+$/.exec(this.datas[this.index || 0].FileUrl)[0] || '') : '') }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

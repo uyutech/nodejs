@@ -78,6 +78,20 @@
     margin:0;
     padding:0;
   }
+  > .intro{
+    position:relative;
+    .state{
+      position:absolute;
+      top:-0.3rem;
+      right:0.05rem;
+      display:block;
+      line-height:0.24rem;
+      padding:0 0.1rem;
+      background:@mainColor;
+      border-radius:0.24rem;
+      color:@thirdTextColor;
+    }
+  }
 }
 
 img.temp{
@@ -86,4 +100,9 @@ img.temp{
   left:1000%;
   top:-9999rem;
   visibility:hidden;
+}
+
+h1.private{
+  text-align:center;
+  line-height:3;
 }

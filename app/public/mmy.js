@@ -112,6 +112,12 @@ var util = {
     }
     return url ? url + '-240_240_80' : url;
   },
+  img220_220_80: function img220_220_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-240_240_80' : url;
+  },
   img200_200: function img200_200(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -350,7 +356,7 @@ var _My2 = _interopRequireDefault(_My);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInfo], ["follows", $CONFIG.follows], ["favors", $CONFIG.favors], ["updateNickNameTimeDiff", $CONFIG.updateNickNameTimeDiff]]));
+var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInfo], ["follows", $CONFIG.follows], ["favors", $CONFIG.favors], ["updateNickNameTimeDiff", $CONFIG.updateNickNameTimeDiff], ["updateHeadTimeDiff", $CONFIG.updateHeadTimeDiff]]));
 
 /***/ }),
 
@@ -425,7 +431,7 @@ var My = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo], ["updateNickNameTimeDiff", this.props.updateNickNameTimeDiff]]), migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]]), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
+      return migi.createVd("div", [["class", "my"]], [migi.createCp(_Profile2.default, [["userInfo", this.props.userInfo], ["updateNickNameTimeDiff", this.props.updateNickNameTimeDiff], ["updateHeadTimeDiff", this.props.updateHeadTimeDiff]]), migi.createCp(_Follow2.default, [["ref", "follow"], ["list", this.props.follows]]), migi.createVd("a", [["href", "#"], ["class", "loginout"], ["onClick", new migi.Cb(this, this.clickOut)]], ["退出登录"])]);
     }
   }]);
 
@@ -482,6 +488,7 @@ var Profile = function (_migi$Component) {
     self.head = self.props.userInfo.Head_Url;
     self.sname = self.props.userInfo.NickName;
     self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
+    self.updateHeadTimeDiff = self.props.updateHeadTimeDiff || 0;
     return _this;
   }
 
@@ -532,20 +539,34 @@ var Profile = function (_migi$Component) {
       }
     }
   }, {
+    key: 'clickHead',
+    value: function clickHead(e) {
+      var self = this;
+      if (self.updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+        e.preventDefault();
+        alert('头像一天只能修改一次哦~');
+      }
+    }
+  }, {
     key: 'change',
     value: function change(e) {
+      var self = this;
+      if (self.updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+        e.preventDefault();
+        alert('头像一天只能修改一次哦~');
+        return;
+      }
       if (window.FileReader) {
-        var self = this;
         var file = e.target.files[0];
         var size = file.size;
-        if (size && size !== 0 && size <= 1024 * 100) {
+        if (size && size !== 0 && size <= 1024 * 500) {
           var $upload = $(self.ref.upload.element);
           $upload.addClass('fn-hide');
           var fileReader = new FileReader();
           fileReader.onload = function () {
             _net2.default.postJSON('/api/user/uploadHead', { img: fileReader.result }, function (res) {
               if (res.success) {
-                self.head = _util2.default.autoSsl(_util2.default.img144_144(res.url));
+                self.head = res.url;
               } else {
                 alert(res.message || _util2.default.ERROR_MESSAGE);
               }
@@ -557,7 +578,7 @@ var Profile = function (_migi$Component) {
           };
           fileReader.readAsDataURL(file);
         } else {
-          alert('图片体积太大啦，不能超过100k！');
+          alert('图片体积太大啦，不能超过500k！');
         }
       } else {
         alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器。');
@@ -566,12 +587,9 @@ var Profile = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("h4", [], ["我的资料"]), migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
+      return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("h4", [], ["我的资料"]), migi.createVd("div", [["class", "pic"], ["onClick", new migi.Cb(this, this.clickPic)]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
         return _util2.default.autoSsl(_util2.default.img200_200_80(this.head)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png';
-      })]]),,,] /*<div class="upload" ref="upload">*/
-      /*<input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>*/
-      /*</div>*/
-      ), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "sname"]], [new migi.Obj("sname", this, function () {
+      })]]), migi.createVd("div", [["class", "upload"], ["ref", "upload"]], [migi.createVd("input", [["ref", "file"], ["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["onClick", new migi.Cb(this, this.clickHead)], ["accept", "image/gif, image/jpeg, image/png"]])])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "sname"]], [new migi.Obj("sname", this, function () {
         return this.sname;
       })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["maxlength", "8"]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]]), migi.createVd("button", [["class", "fn-hide"], ["ref", "ok"], ["onClick", new migi.Cb(this, this.clickOk)]], ["确定"])])]);
     }
@@ -598,6 +616,14 @@ var Profile = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("updateNickNameTimeDiff");
+    }
+  }, {
+    key: 'updateHeadTimeDiff',
+    set: function set(v) {
+      this.__setBind("updateHeadTimeDiff", v);this.__data("updateHeadTimeDiff");
+    },
+    get: function get() {
+      return this.__getBind("updateHeadTimeDiff");
     }
   }]);
 

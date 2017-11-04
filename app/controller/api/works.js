@@ -34,8 +34,11 @@ module.exports = app => {
     * addComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      // let test = yield ctx.service.green.textScan(body.content);ctx.body = test;return;
-      // console.log(test);
+      if(!body.content || body.content.length > 256) {
+        return ctx.body = {
+          success: false,
+        };
+      }
       let res = yield ctx.helper.postServiceJSON('api/works/AddComment', {
         uid,
         ParentID: body.parentID,
@@ -49,7 +52,7 @@ module.exports = app => {
     }
     * likeComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/works/AddWorkCommentLike', {
         uid,
         CommentID: body.commentID,
@@ -58,7 +61,7 @@ module.exports = app => {
     }
     * delComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/works/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
@@ -67,7 +70,7 @@ module.exports = app => {
     }
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/works/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,

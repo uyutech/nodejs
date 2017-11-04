@@ -15,6 +15,7 @@ export default function(data) {
   let playList = data.playList;
   let playList2 = data.playList2;
   let commentData = data.commentData;
+  let hotCommentData = data.hotCommentData;
 
   let author = migi.preRender(<Author
     uid={ uid }
@@ -24,7 +25,8 @@ export default function(data) {
     tags={ tags }
     playList={ playList }
     playList2={ playList2 }
-    commentData={ commentData }/>);
+    commentData={ commentData }
+    hotCommentData={ hotCommentData }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -45,6 +47,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.playList = ${JSON.stringify(playList)};
   $CONFIG.playList2 = ${JSON.stringify(playList2)};
   $CONFIG.commentData = ${JSON.stringify(commentData)};
+  $CONFIG.hotCommentData = ${JSON.stringify(hotCommentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dauthor.js')}"></script>

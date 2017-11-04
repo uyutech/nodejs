@@ -112,6 +112,12 @@ var util = {
     }
     return url ? url + '-240_240_80' : url;
   },
+  img220_220_80: function img220_220_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-240_240_80' : url;
+  },
   img200_200: function img200_200(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;

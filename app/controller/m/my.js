@@ -12,6 +12,7 @@ module.exports = app => {
       let follows = [];
       let favors = [];
       let lastUpdateNickNameTime;
+      let lastUpdateHeadTime;
       let res = yield {
         userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
           uid,
@@ -23,6 +24,9 @@ module.exports = app => {
           uid,
         }),
         lastUpdateNickNameTime: ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
+          uid,
+        }),
+        lastUpdateHeadTime: ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
           uid,
         }),
       };
@@ -38,11 +42,15 @@ module.exports = app => {
       if(res.lastUpdateNickNameTime.data.success) {
         lastUpdateNickNameTime = res.lastUpdateNickNameTime.data.data;
       }
+      if(res.lastUpdateHeadTime.data.success) {
+        lastUpdateHeadTime = res.lastUpdateHeadTime.data.data;
+      }
       yield ctx.render('mmy', {
         userInfo,
         follows,
         favors,
         lastUpdateNickNameTime,
+        lastUpdateHeadTime,
       });
     }
   }

@@ -248,7 +248,8 @@ class Works extends migi.Component {
             <li class="cur">曲目</li>
           </ul>
           <div class="box box-fn-top-left">
-            <PlayList ref="playList" workList={ this.workList } worksID={ this.worksID } workID={ this.workID }/>
+            <PlayList ref="playList" cover={ this.props.worksDetail.cover_Pic }
+                      workList={ this.workList } worksID={ this.worksID } workID={ this.workID }/>
           </div>
           <WorkComment ref="workComment"
                        isLogin={ this.props.isLogin }

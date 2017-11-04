@@ -14,6 +14,27 @@ export default function(data) {
   let commentData = data.commentData;
   let labelList = data.labelList;
 
+  // 完成公开1，未完成公开2，未完成保密3
+  if(worksDetail.WorkState === 3) {
+    return `<!DOCTYPE html>
+<html>
+<head>
+  ${data.helper.getDHead()}
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dworks.css')}"/>
+</head>
+<body>
+<div id="page"><h1 class="private">此作品尚未完成公开</h1></div>
+${data.helper.getDBotNav()}
+<script>
+  ${data.helper.$CONFIG}
+</script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
+${data.helper.getStat()}
+</body>
+</html>`;
+  }
+
   let works = migi.preRender(<Works
     isLogin={ isLogin }
     worksID={ worksID }

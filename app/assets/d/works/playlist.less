@@ -53,7 +53,7 @@
       line-height:0.46rem;
       cursor:pointer;
       transition:transform 0.2s;
-      list-style:decimal inside;
+      //list-style:decimal inside;
       color:#919191;
       overflow:hidden;
       &:after{
@@ -69,6 +69,29 @@
         &:after{
           display:none;
           content:'';
+        }
+      }
+      &.private{
+        padding-left:0.5rem;
+        opacity:0.7;
+        cursor:default;
+        &:hover{
+          transform:none;
+        }
+        .name{
+          color:@fourthTextColor;
+        }
+      }
+      &.empty{
+        cursor:default;
+        &:hover{
+          transform:none;
+        }
+        .icon{
+          display:none;
+        }
+        .name{
+          color:@secondTextColor;
         }
       }
       &.rel{
@@ -98,6 +121,12 @@
         font-size:0.14rem;
         white-space:nowrap;
         color:@mainTextColor;
+        &.empty{
+          font-size:0.12rem;
+        }
+      }
+      a.name{
+        color:@mainLinkColor;
       }
       .icon{
         position:absolute;

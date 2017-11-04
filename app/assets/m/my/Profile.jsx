@@ -14,10 +14,12 @@ class Profile extends migi.Component {
     self.head = self.props.userInfo.Head_Url;
     self.sname = self.props.userInfo.NickName;
     self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
+    self.updateHeadTimeDiff = self.props.updateHeadTimeDiff || 0;
   }
   @bind head
   @bind sname
   @bind updateNickNameTimeDiff
+  @bind updateHeadTimeDiff
   click(e) {
     e.preventDefault();
     let self = this;
@@ -62,19 +64,31 @@ class Profile extends migi.Component {
       $edit.removeClass('fn-hide');
     }
   }
+  clickHead(e) {
+    let self = this;
+    if(self.updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+      e.preventDefault();
+      alert('头像一天只能修改一次哦~');
+    }
+  }
   change(e) {
+    let self = this;
+    if(self.updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+      e.preventDefault();
+      alert('头像一天只能修改一次哦~');
+      return;
+    }
     if(window.FileReader) {
-      let self = this;
       let file = e.target.files[0];
       let size = file.size;
-      if(size && size !== 0 && size <= 1024 * 100) {
+      if(size && size !== 0 && size <= 1024 * 500) {
         let $upload = $(self.ref.upload.element);
         $upload.addClass('fn-hide');
         let fileReader = new FileReader();
         fileReader.onload = function() {
           net.postJSON('/api/user/uploadHead', { img: fileReader.result }, function(res) {
             if(res.success) {
-              self.head = util.autoSsl(util.img144_144(res.url));
+              self.head = res.url;
             }
             else {
               alert(res.message || util.ERROR_MESSAGE);
@@ -88,7 +102,7 @@ class Profile extends migi.Component {
         fileReader.readAsDataURL(file);
       }
       else {
-        alert('图片体积太大啦，不能超过100k！');
+        alert('图片体积太大啦，不能超过500k！');
       }
     }
     else {
@@ -98,11 +112,11 @@ class Profile extends migi.Component {
   render() {
     return <div class="profile fn-clear">
       <h4>我的资料</h4>
-      <div class="pic">
+      <div class="pic" onClick={ this.clickPic }>
         <img src={ util.autoSsl(util.img200_200_80(this.head)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
-        {/*<div class="upload" ref="upload">*/}
-        {/*<input type="file" onChange={ this.change } accept="image/gif, image/jpeg, image/png"/>*/}
-        {/*</div>*/}
+        <div class="upload" ref="upload">
+          <input ref="file" type="file" onChange={ this.change } onClick={ this.clickHead } accept="image/gif, image/jpeg, image/png"/>
+        </div>
       </div>
       <div class="txt">
         <strong ref="sname">{ this.sname }</strong>

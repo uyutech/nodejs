@@ -23,7 +23,9 @@ class My extends migi.Component {
   }
   render() {
     return <div class="my">
-      <Profile userInfo={ this.props.userInfo } updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }/>
+      <Profile userInfo={ this.props.userInfo }
+               updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }
+               updateHeadTimeDiff={ this.props.updateHeadTimeDiff }/>
       <Follow ref="follow" list={ this.props.follows }/>
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>
     </div>;

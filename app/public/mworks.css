@@ -1736,7 +1736,6 @@ body {
   transition: -webkit-transform 0.2s;
   transition: transform 0.2s;
   transition: transform 0.2s, -webkit-transform 0.2s;
-  list-style: decimal inside;
   color: #919191;
   overflow: hidden;
 }
@@ -1753,6 +1752,31 @@ body {
 .mod.mod-playlist .list li.cur:after {
   display: none;
   content: '';
+}
+.mod.mod-playlist .list li.private {
+  padding-left: 0.5rem;
+  opacity: 0.7;
+  cursor: default;
+}
+.mod.mod-playlist .list li.private:hover {
+  -webkit-transform: none;
+          transform: none;
+}
+.mod.mod-playlist .list li.private .name {
+  color: #919191;
+}
+.mod.mod-playlist .list li.empty {
+  cursor: default;
+}
+.mod.mod-playlist .list li.empty:hover {
+  -webkit-transform: none;
+          transform: none;
+}
+.mod.mod-playlist .list li.empty .icon {
+  display: none;
+}
+.mod.mod-playlist .list li.empty .name {
+  color: #B1C0C9;
 }
 .mod.mod-playlist .list li.rel {
   padding-left: 0.5rem;
@@ -1780,6 +1804,12 @@ body {
   margin-left: 0.05rem;
   font-size: 0.14rem;
   white-space: nowrap;
+  color: #2D4D67;
+}
+.mod.mod-playlist .list li .name.empty {
+  font-size: 0.12rem;
+}
+.mod.mod-playlist .list li a.name {
   color: #2D4D67;
 }
 .mod.mod-playlist .list li .icon {
@@ -2050,10 +2080,28 @@ body {
   margin: 0;
   padding: 0;
 }
+.works > .intro {
+  position: relative;
+}
+.works > .intro .state {
+  position: absolute;
+  top: -0.3rem;
+  right: 0.05rem;
+  display: block;
+  line-height: 0.24rem;
+  padding: 0 0.1rem;
+  background: #8BBDE1;
+  border-radius: 0.24rem;
+  color: #FFF;
+}
 img.temp {
   display: block;
   position: absolute;
   left: 1000%;
   top: -9999rem;
   visibility: hidden;
+}
+h1.private {
+  text-align: center;
+  line-height: 3;
 }

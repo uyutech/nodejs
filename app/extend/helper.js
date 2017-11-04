@@ -9,7 +9,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?25';
+    return '/public' + url + '?26';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -89,6 +89,10 @@ module.exports = {
   },
   getMTopNav: function() {
     let session = this.ctx.session || {};
+    let head = session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png';
+    if(head && /\/\/zhuanquan\./i.test(head)) {
+      head += '-64_64_80';
+    }
     if(session.uid) {
       if(session.authorID) {
         let isPublic = session.isPublic;
@@ -97,7 +101,7 @@ module.exports = {
           <span class="public">[${ isPublic ? '切换到马甲' : '切换到作者身份' }]</span>
           <a href="/my" class="user">
             <span class="${'name' + (isPublic ? ' public' : '')}">${isPublic ? session.authorName : session.uname}</span>
-            <img src=${session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>
+            <img src=${head}>
           </a>
         </div>`;
       }
@@ -105,7 +109,7 @@ module.exports = {
       <a href="/find" class="logo"></a>
       <a href="/my" class="user">
         <span class="name">${session.uname}</span>
-        <img src=${session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'}>
+        <img src=${head}>
       </a>
     </div>`;
     }

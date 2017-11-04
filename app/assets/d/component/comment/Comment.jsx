@@ -236,7 +236,11 @@ class Comment extends migi.Component {
             <img class="pic" src={ item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
             <div class="txt">
               <div>
-                <span class="name">{ item.Send_AuthorName }</span>
+                {
+                  item.IsAuthor === true
+                    ? <span class="name">{ item.Send_AuthorName }</span>
+                    : <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
+                }
                 <small class="time">{ util.formatDate(item.Send_Time) }</small>
               </div>
               <p>{ item.sign }</p>
@@ -303,7 +307,14 @@ class Comment extends migi.Component {
           <div class="profile fn-clear" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_AuthorName }>
             <img class="pic" src={ item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
             <div class="txt">
-              <div><span class="name2 fn-hide">{ item.Send_ToUserName }</span><b class="arrow fn-hide"/><small class="time">{ util.formatDate(item.Send_Time) }</small><span class="name">{ item.Send_AuthorName }</span></div>
+              <div>
+                <small class="time">{ util.formatDate(item.Send_Time) }</small>
+                {
+                  item.IsAuthor === true
+                    ? <span class="name">{ item.Send_AuthorName }</span>
+                    : <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
+                }
+              </div>
               <p>{ item.sign }</p>
             </div>
           </div>
