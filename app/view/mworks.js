@@ -2163,10 +2163,10 @@ var Media = function (_migi$Component) {
           }
           if (type === 'audio') {
             audio.switchTo(this.aIndex = index);
-            history.replaceState(null, null, '/works/' + this.props.worksID + '/' + this.props.audioData[this.aIndex].ItemID);
+            history.replaceState(null, '', '/works/' + this.props.worksID + '/' + this.props.audioData[this.aIndex].ItemID);
           } else if (type === 'video') {
             video.switchTo(this.vIndex = index);
-            history.replaceState(null, null, '/works/' + this.props.worksID + '/' + this.props.videoData[this.vIndex].ItemID);
+            history.replaceState(null, '', '/works/' + this.props.worksID + '/' + this.props.videoData[this.vIndex].ItemID);
           }
         } else {
           var $type = $(vd.element);
@@ -2180,12 +2180,12 @@ var Media = function (_migi$Component) {
             video && video.pause().hide();
             audio.show();
             audio.switchTo(this.aIndex = index);
-            history.replaceState(null, null, '/works/' + this.props.worksID + '/' + this.props.audioData[this.aIndex].ItemID);
+            history.replaceState(null, '', '/works/' + this.props.worksID + '/' + this.props.audioData[this.aIndex].ItemID);
           } else if (type === 'video') {
             audio && audio.pause().hide();
             video.show();
             video.switchTo(this.vIndex = index);
-            history.replaceState(null, null, '/works/' + this.props.worksID + '/' + this.props.videoData[this.vIndex].ItemID);
+            history.replaceState(null, '', '/works/' + this.props.worksID + '/' + this.props.videoData[this.vIndex].ItemID);
           }
         }
       }
