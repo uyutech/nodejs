@@ -760,6 +760,14 @@ body {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAS1BMVEUAAABPj7BPj7BPkLNPj7BSkrZPj7L///9Oj7FQj7JPjrBPj7NPj7FPj7FUlrpPjrBPkLNOj7FPj7FSj7NPj7FQj7FPjrBQkLJOjrDxm4eDAAAAGHRSTlMA/ONX8htmAb1Jyk/IphG1QN6cMrSAeFPbgq8vAAAA30lEQVRIx92TWQ7DIAxEEwKG7FuXuf9JC0VVYymCWGo/kvk088CYobi2aqVaEaCAspIBQqItpUT1R8I++1njoz7rnxow5fx3QAQ8mDnfUg2vcpmGo5cO/ev1+JDaYFoFD9d71yKJxuxtkyR82gODJN587r8DLHUa0LQH1MqvdGS3NePwVjnsACquObPZ3yEPwH3PIAQlWooilobRpC5tRl/u2OxNekomNMBHmQRi/SyAApQI8BmtBUDUGYFtNLh4NFj4bozIhI9wSMQ+UF7Osi+a97OeLTU65dYN2eIyegFGOizXCfFfSgAAAABJRU5ErkJggg==) no-repeat center;
   background-size: contain;
 }
+.mod.mod-media .audio.empty .start,
+.mod.mod-media .video.empty .start {
+  display: none;
+}
+.mod.mod-media .audio.empty .fn,
+.mod.mod-media .video.empty .fn {
+  visibility: hidden;
+}
 .mod.mod-media .type {
   padding: 0.1rem 0.1rem 0.4rem;
   background: rgba(255, 255, 255, 0.7);
@@ -1169,7 +1177,7 @@ body {
 }
 .mod.mod-comment > .warn > .t .txt {
   float: left;
-  line-height: 1;
+  line-height: 0.3rem;
 }
 .mod.mod-comment > .warn > .t .txt .name {
   display: inline-block;

@@ -107,13 +107,15 @@ class Profile extends migi.Component {
       alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器。');
     }
   }
-  clickPic() {
-    $(this.ref.file.element).click();
+  clickPic(e, vd, tvd) {
+    if(tvd.name === 'img') {
+      $(this.ref.file.element).click();
+    }
   }
   render() {
     return <div class="profile fn-clear">
       <div class="pic" onClick={ this.clickPic }>
-        <img src={ util.autoSsl(util.img220_220_80(this.head)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
+        <img src={ util.autoSsl(util.img220_220_80(this.head)) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
         <div class="upload" ref="upload">
           <input ref="file" type="file" onChange={ this.change } onClick={ this.clickHead } accept="image/gif, image/jpeg, image/png"/>
         </div>

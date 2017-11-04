@@ -178,7 +178,7 @@ class Welcome extends migi.Component {
 入驻之后将开启您的个人作者页面，之后您将可以上传、编辑、您的作品，未来还会有一系列粉丝互动及约稿接稿功能！`;
       return <div class="welcome">
         <div class={ 'c step' + this.step }>
-          <h3><img src="//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"/>圈儿</h3>
+          <h3><img src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>圈儿</h3>
           <div class="step step0">
             <div class="con">
               <p dangerouslySetInnerHTML={ authorTip }/>
@@ -239,7 +239,7 @@ class Welcome extends migi.Component {
     }
     return <div class="welcome">
       <div class={ 'c step' + this.step }>
-        <h3><img src="//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"/>圈儿</h3>
+        <h3><img src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>圈儿</h3>
         <div class="step step10">
           <div class="con">
               <pre>欢迎来到转圈！我是圈娘~

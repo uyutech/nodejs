@@ -25,7 +25,14 @@ class Post extends migi.Component {
       let subCmt = self.ref.subCmt;
       let reply = self.ref.reply;
       let page = self.ref.page;
+      let page2 = self.ref.page2;
       page.on('page', function(i) {
+        page2.index = i;
+        skip = (i - 1) * take;
+        self.loadPage();
+      });
+      page2.on('page', function(i) {
+        page.index = i;
         skip = (i - 1) * take;
         self.loadPage();
       });
@@ -81,8 +88,8 @@ class Post extends migi.Component {
     let self = this;
     let reply = self.ref.reply;
     let page = self.ref.page;
+    let page2 = self.ref.page2;
     reply.message = '读取中...';
-    page.total = 1;
     if(ajax) {
       ajax.abort();
     }
@@ -95,7 +102,7 @@ class Post extends migi.Component {
         if(data.data.length) {
           reply.message = '';
           reply.appendData(res.data.data);
-          page.total = Math.ceil(currentCount / take);
+          page.total = page2.total = Math.ceil(currentCount / take);
         }
         else {
           reply.appendData(res.data.data);
@@ -224,6 +231,7 @@ class Post extends migi.Component {
                  subUrl="/api/post/subCommentList"
                  delUrl="/api/post/delComment"
                  data={ this.props.replyData.data }/>
+          <Page ref="page2" total={ Math.ceil(this.props.replyData.Size / take) }/>
         </div>
         <SubCmt ref="subCmt"
                 subText="回复帖子"

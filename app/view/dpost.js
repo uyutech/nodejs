@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 100);
+/******/ 	return __webpack_require__(__webpack_require__.s = 101);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -340,7 +340,7 @@ let net = {
 
 /***/ }),
 
-/***/ 100:
+/***/ 101:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -363,7 +363,7 @@ exports.default = function (data) {
   }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dpost.css') + '"/>\n</head>\n<body>\n<div id="page">' + post + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.id = ' + JSON.stringify(id) + ';\n  $CONFIG.postData = ' + JSON.stringify(postData) + ';\n  $CONFIG.replyData = ' + JSON.stringify(replyData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dpost.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Post = __webpack_require__(101);
+var _Post = __webpack_require__(102);
 
 var _Post2 = _interopRequireDefault(_Post);
 
@@ -373,7 +373,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 101:
+/***/ 102:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -393,7 +393,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Reply = __webpack_require__(102);
+var _Reply = __webpack_require__(103);
 
 var _Reply2 = _interopRequireDefault(_Reply);
 
@@ -401,7 +401,7 @@ var _SubCmt = __webpack_require__(2);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
-var _Page = __webpack_require__(7);
+var _Page = __webpack_require__(8);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -439,7 +439,14 @@ var Post = function (_migi$Component) {
       var subCmt = self.ref.subCmt;
       var reply = self.ref.reply;
       var page = self.ref.page;
+      var page2 = self.ref.page2;
       page.on('page', function (i) {
+        page2.index = i;
+        skip = (i - 1) * take;
+        self.loadPage();
+      });
+      page2.on('page', function (i) {
+        page.index = i;
         skip = (i - 1) * take;
         self.loadPage();
       });
@@ -493,8 +500,8 @@ var Post = function (_migi$Component) {
       var self = this;
       var reply = self.ref.reply;
       var page = self.ref.page;
+      var page2 = self.ref.page2;
       reply.message = '读取中...';
-      page.total = 1;
       if (ajax) {
         ajax.abort();
       }
@@ -507,7 +514,7 @@ var Post = function (_migi$Component) {
           if (data.data.length) {
             reply.message = '';
             reply.appendData(res.data.data);
-            page.total = Math.ceil(currentCount / take);
+            page.total = page2.total = Math.ceil(currentCount / take);
           } else {
             reply.appendData(res.data.data);
             reply.message = '暂无评论';
@@ -599,7 +606,7 @@ var Post = function (_migi$Component) {
     key: 'render',
     value: function render() {
       var postData = this.props.postData;
-      return migi.createVd("div", [["class", "post fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createVd("h2", [], [postData.Title]), migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", postData.IsAuthor ? postData.SendAuthorHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' : postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [postData.SendUserNickName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(postData.Createtime)])])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "con"], ["dangerouslySetInnerHTML", postData.Content]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "box"]], [migi.createVd("h4", [], ["回复"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.replyData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.replyData.Size / take)]]), migi.createCp(_Reply2.default, [["ref", "reply"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.replyData.data]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "回复帖子"], ["placeholder", "夸夸这个帖子吧"]])])]);
+      return migi.createVd("div", [["class", "post fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createVd("h2", [], [postData.Title]), migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", postData.IsAuthor ? postData.SendAuthorHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' : postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [postData.SendUserNickName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(postData.Createtime)])])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "con"], ["dangerouslySetInnerHTML", postData.Content]]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "box"]], [migi.createVd("h4", [], ["回复"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.replyData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.replyData.Size / take)]]), migi.createCp(_Reply2.default, [["ref", "reply"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.replyData.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.replyData.Size / take)]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "回复帖子"], ["placeholder", "夸夸这个帖子吧"]])])]);
     }
   }, {
     key: 'rootID',
@@ -634,7 +641,7 @@ migi.name(Post, "Post");exports.default = Post;
 
 /***/ }),
 
-/***/ 102:
+/***/ 103:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1107,7 +1114,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

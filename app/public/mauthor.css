@@ -1506,7 +1506,7 @@ body {
 }
 .author > .comments > .warn > .t .txt {
   float: left;
-  line-height: 1;
+  line-height: 0.3rem;
 }
 .author > .comments > .warn > .t .txt .name {
   display: inline-block;

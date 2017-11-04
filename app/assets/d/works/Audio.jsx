@@ -355,7 +355,7 @@ class Audio extends migi.Component {
     migi.eventBus.emit('SHARE', url);
   }
   render() {
-    return <div class={ 'audio' + (this.props.show ? '' : ' fn-hide') }>
+    return <div class={ 'audio' + (this.props.show ? '' : ' fn-hide') + (this.datas[this.index || 0].FileUrl ? '' : ' empty') }>
       <ul class={ 'type fn-clear' + ((this.index, this.datas || []).length === 1 ? ' single' : '') } onClick={ this.clickType }>
         {
           (this.index, this.datas || []).map(function(item, index) {

@@ -22,7 +22,14 @@ class AuthorComment extends migi.Component {
     self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function() {
       let page = self.ref.page;
+      let page2 = self.ref.page2;
       page.on('page', function(i) {
+        page2.index = i;
+        skip = (i - 1) * take;
+        self.loadPage();
+      });
+      page2.on('page', function(i) {
+        page.index = i;
         skip = (i - 1) * take;
         self.loadPage();
       });
@@ -53,8 +60,8 @@ class AuthorComment extends migi.Component {
     let self = this;
     let comment = self.ref.comment;
     let page = self.ref.page;
+    let page2 = self.ref.page2;
     comment.message = '读取中...';
-    page.total = 1;
     if(ajax) {
       ajax.abort();
     }
@@ -67,7 +74,7 @@ class AuthorComment extends migi.Component {
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
-          page.total = Math.ceil(currentCount / take);
+          page.total = page2.total = Math.ceil(currentCount / take);
         }
         else {
           comment.appendData(res.data.data);
@@ -173,7 +180,7 @@ class AuthorComment extends migi.Component {
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <div class="warn">
         <div class="t fn-clear">
-          <img class="pic" src="//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"/>
+          <img class="pic" src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>
           <div class="txt">
             <div>
               <span class="name">圈儿</span>
@@ -196,6 +203,7 @@ class AuthorComment extends migi.Component {
                subUrl="/api/author/subCommentList"
                delUrl="/api/author/delComment"
                data={ this.props.commentData.data }/>
+      <Page ref="page2" total={ Math.ceil(this.props.commentData.Size / take) }/>
     </div>;
   }
 }

@@ -1477,8 +1477,7 @@ body {
   color: #2D4D67;
 }
 .author > .comments .cp-page {
-  margin-top: 0.1rem;
-  padding: 0 0.1rem;
+  padding: 0.1rem;
   text-align: right;
 }
 .author > .comments .cp-comment {
@@ -1503,7 +1502,7 @@ body {
 }
 .author > .comments .warn > .t .txt {
   float: left;
-  line-height: 1;
+  line-height: 0.3rem;
 }
 .author > .comments .warn > .t .txt .name {
   display: inline-block;

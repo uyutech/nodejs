@@ -23,7 +23,7 @@ class HotWork extends migi.Component {
   }
   render() {
     return <div class="cp-hotwork">
-      <h4>{ this.props.title }<small>未来会根据你的口味进行精准智能的推送！>3&lt;</small></h4>
+      <h4>{ this.props.title }<small>{ '未来会根据你的口味进行精准智能的推送！>3<' }</small></h4>
       {
         this.dataList && this.dataList.length
           ? <ul class="list fn-clear">

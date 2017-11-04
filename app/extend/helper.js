@@ -9,7 +9,7 @@ module.exports = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?26';
+    return '/public' + url + '?28';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -89,7 +89,7 @@ module.exports = {
   },
   getMTopNav: function() {
     let session = this.ctx.session || {};
-    let head = session.head || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png';
+    let head = session.head || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png';
     if(head && /\/\/zhuanquan\./i.test(head)) {
       head += '-64_64_80';
     }

@@ -1013,7 +1013,7 @@ body {
 }
 .mod.mod-comment .warn > .t .txt {
   float: left;
-  line-height: 1;
+  line-height: 0.3rem;
 }
 .mod.mod-comment .warn > .t .txt .name {
   display: inline-block;
@@ -1807,6 +1807,14 @@ body {
 .mod.mod-media .audio .c.playing video,
 .mod.mod-media .video .c.playing video {
   opacity: 1;
+}
+.mod.mod-media .audio.empty .start,
+.mod.mod-media .video.empty .start {
+  display: none;
+}
+.mod.mod-media .audio.empty .fn,
+.mod.mod-media .video.empty .fn {
+  visibility: hidden;
 }
 .mod.mod-media .video h3 {
   background: rgba(255, 255, 255, 0.7);

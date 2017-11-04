@@ -4,11 +4,7 @@
 
 import util from '../common/util';
 import WorksTypeEnum from './WorksTypeEnum';
-
-const STATE = {
-  1: '已完成',
-  2: '未完成'
-};
+import worksState from './worksState';
 
 class Title extends migi.Component {
   constructor(...data) {
@@ -58,7 +54,7 @@ class Title extends migi.Component {
         </ul>
       </div>
       <div class="plus">
-        <span class="state">{ STATE[this.props.detail.WorkState] }</span>
+        <span class="state">{ worksState.getStateStr(this.props.worksType, this.props.detail.WorkState) }</span>
       </div>
     </div>;
   }

@@ -143,7 +143,7 @@ class AuthorComment extends migi.Component {
       </div>
       <div class="warn">
         <div class="t fn-clear">
-          <img class="pic" src="//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"/>
+          <img class="pic" src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>
           <div class="txt">
             <div>
               <span class="name">圈儿</span>

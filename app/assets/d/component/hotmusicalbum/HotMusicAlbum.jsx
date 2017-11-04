@@ -23,7 +23,7 @@ class HotMusicAlbum extends migi.Component {
   }
   render() {
     return <div class="cp-hotmusicalbum">
-      <h4>{ this.props.title }<small>我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3&lt;</small></h4>
+      <h4>{ this.props.title }<small>{ '我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3< '}</small></h4>
       {
         this.dataList && this.dataList.length
           ? <ul class="list fn-clear">

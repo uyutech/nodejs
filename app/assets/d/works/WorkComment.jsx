@@ -27,8 +27,16 @@ class WorkComment extends migi.Component {
     self.on(migi.Event.DOM, function() {
       let subCmt = self.ref.subCmt;
       let page = self.ref.page;
+      let page2 = self.ref.page2;
       let comment = self.ref.comment;
       page.on('page', function(i) {
+        page2.index = i;
+        skip = (i - 1) * take;
+        self.loadPage();
+        subCmt.to = '';
+      });
+      page2.on('page', function(i) {
+        page.index = i;
         skip = (i - 1) * take;
         self.loadPage();
         subCmt.to = '';
@@ -92,8 +100,8 @@ class WorkComment extends migi.Component {
     let self = this;
     let comment = self.ref.comment;
     let page = self.ref.page;
+    let page2 = self.ref.page2;
     comment.message = '读取中...';
-    page.total = 1;
     if(ajax) {
       ajax.abort();
     }
@@ -106,7 +114,7 @@ class WorkComment extends migi.Component {
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
-          page.total = Math.ceil(currentCount / take);
+          page.total = page2.total = Math.ceil(currentCount / take);
         }
         else {
           comment.appendData(res.data.data);
@@ -216,7 +224,7 @@ class WorkComment extends migi.Component {
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <div class="warn">
         <div class="t fn-clear">
-          <img class="pic" src="//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png"/>
+          <img class="pic" src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>
           <div class="txt">
             <div>
               <span class="name">圈儿</span>
@@ -239,6 +247,7 @@ class WorkComment extends migi.Component {
                subUrl="/api/works/subCommentList"
                delUrl="/api/works/delComment"
                data={ this.props.commentData.data }/>
+      <Page ref="page2" total={ Math.ceil(this.props.commentData.Size / take) }/>
       <SubCmt ref="subCmt"
               originTo={ this.props.originTo }
               placeholder="夸夸这个作品吧"/>

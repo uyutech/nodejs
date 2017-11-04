@@ -267,7 +267,7 @@ class Video extends migi.Component {
     migi.eventBus.emit('SHARE', location.href);
   }
   render() {
-    return <div class={ 'video' + (this.props.show ? '' : ' fn-hide') }>
+    return <div class={ 'video' + (this.props.show ? '' : ' fn-hide') + (this.datas[this.index || 0].FileUrl ? '' : ' empty') }>
       <div class={ 'c' + ( this.isPlaying ? ' playing' : '') } ref="c">
         <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
       </div>

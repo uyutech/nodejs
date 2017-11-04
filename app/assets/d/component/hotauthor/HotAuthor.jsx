@@ -18,7 +18,7 @@ class HotAuthor extends migi.Component {
   }
   render() {
     return <div class="cp-hotauthor">
-      <h4>{ this.props.title }<small>我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3&lt;</small></h4>
+      <h4>{ this.props.title }<small>{ '我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3<' }</small></h4>
       {
         this.dataList && this.dataList.length
           ? <ul class="list fn-clear">
@@ -27,7 +27,7 @@ class HotAuthor extends migi.Component {
                   let types = item.WorksType || [];
                   return <li authorID={ item.AuthorID }>
                     <a href={ `/author/${item.AuthorID}` } class="pic">
-                      <img src={ util.autoSsl(util.img144_144_80(item.Head_url)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
+                      <img src={ util.autoSsl(util.img144_144_80(item.Head_url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
                       {
                         types.slice(0, 2).map(function(item) {
                           return <b class={ `cp-author_type${item}` }/>;

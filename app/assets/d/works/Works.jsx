@@ -219,7 +219,7 @@ class Works extends migi.Component {
     let self = this;
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       return <div class={ 'works fn-clear t' + self.worksType }>
-        <Title ref="title"
+        <Title ref="title" worksType={ self.worksType }
                detail={ this.props.worksDetail }/>
         {
           this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
@@ -262,7 +262,7 @@ class Works extends migi.Component {
     }
     if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
       return <div class={ 'works fn-clear t' + self.worksType }>
-        <Title ref="title"
+        <Title ref="title" worksType={ self.worksType }
                detail={ this.props.worksDetail }/>
         <div class="main">
           <PhotoAlbum worksID={ this.worksID } labelList={ this.props.labelList }/>
@@ -276,13 +276,8 @@ class Works extends migi.Component {
                 : ''
             }
             {
-              this.textData
+              this.textData && this.textData.value && this.textData.value.length
                 ? <Text datas={ this.textData }/>
-                : ''
-            }
-            {
-              this.lyricData
-                ? <Lyric datas={ this.lyricData }/>
                 : ''
             }
             <InspComment ref="inspComment"
@@ -300,7 +295,7 @@ class Works extends migi.Component {
       </div>;
     }
     return <div class={ 'works fn-clear t' + self.worksType }>
-      <Title ref="title"
+      <Title ref="title" worksType={ self.worksType }
              detail={ this.props.worksDetail }/>
       <div class="main">
         <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
@@ -342,12 +337,12 @@ class Works extends migi.Component {
               : ''
           }
           {
-            this.textData
+            this.textData && this.textData.value && this.textData.value.length
               ? <Text datas={ this.textData }/>
               : ''
           }
           {
-            this.lyricData
+            this.lyricData && this.lyricData.value && this.lyricData.value.length
               ? <Lyric datas={ this.lyricData }/>
               : ''
           }

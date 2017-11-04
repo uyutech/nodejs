@@ -113,7 +113,7 @@ class Profile extends migi.Component {
     return <div class="profile fn-clear">
       <h4>我的资料</h4>
       <div class="pic" onClick={ this.clickPic }>
-        <img src={ util.autoSsl(util.img200_200_80(this.head)) || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png' }/>
+        <img src={ util.autoSsl(util.img200_200_80(this.head)) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
         <div class="upload" ref="upload">
           <input ref="file" type="file" onChange={ this.change } onClick={ this.clickHead } accept="image/gif, image/jpeg, image/png"/>
         </div>

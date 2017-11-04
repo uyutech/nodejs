@@ -20,11 +20,7 @@ import LyricsParser from '../../d/works/LyricsParser.jsx';
 import MusicAlbum from './MusicAlbum.jsx';
 import PlayList from '../../d/works/PlayList.jsx';
 import ImageView from './ImageView.jsx';
-
-const STATE = {
-  1: '已完成',
-  2: '未完成'
-};
+import worksState from '../../d/works/worksState';
 
 let first;
 
@@ -310,7 +306,7 @@ class Works extends migi.Component {
         <PlayList ref="playList"cover={ this.props.worksDetail.cover_Pic }
                   worksID={ this.worksID } workID={ this.workID } workList={ this.workList }/>
         <div class="intro fn-hide" ref="intro">
-          <span class="state">{ STATE[this.props.worksDetail.WorkState] }</span>
+          <span class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</span>
           {
             this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
               ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
@@ -339,7 +335,7 @@ class Works extends migi.Component {
         </ul>
         <PhotoAlbum ref="photoAlbum" worksID={ this.worksID } labelList={ this.props.labelList }/>
         <div class="intro fn-hide" ref="intro">
-          <span class="state">{ STATE[this.props.worksDetail.WorkState] }</span>
+          <span class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</span>
           <Author authorList={ [this.props.worksDetail.Works_Author] }/>
           {
             this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
@@ -347,13 +343,8 @@ class Works extends migi.Component {
               : ''
           }
           {
-            this.textData
+            this.textData && this.textData.value && this.textData.value.length
               ? <Text datas={ this.textData }/>
-              : ''
-          }
-          {
-            this.lyricData
-              ? <Lyric datas={ this.lyricData }/>
               : ''
           }
           <InspComment ref="inspComment"
@@ -386,7 +377,7 @@ class Works extends migi.Component {
         <li rel="comment">留言</li>
       </ul>
       <div class="intro" ref="intro">
-        <span class="state">{ STATE[this.props.worksDetail.WorkState] }</span>
+        <span class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</span>
         <Author authorList={ this.authorList }/>
         {
           this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
@@ -394,12 +385,12 @@ class Works extends migi.Component {
             : ''
         }
         {
-          this.textData
+          this.textData && this.textData.value && this.textData.value.length
             ? <Text datas={ this.textData }/>
             : ''
         }
         {
-          this.lyricData
+          this.lyricData && this.lyricData.value && this.lyricData.value.length
             ? <Lyric datas={ this.lyricData }/>
             : ''
         }
