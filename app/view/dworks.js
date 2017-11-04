@@ -1306,7 +1306,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   authorType: [
     [901, 902],
     [423,422],
-    [111, 115, 113, 112, 114, 151],
+    [111],
+    [115, 113, 112, 114, 151],
     [151],
     [121, 122],
     [411, 421],
