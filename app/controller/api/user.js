@@ -45,6 +45,12 @@ module.exports = app => {
             message: '昵称一天只能修改一次哦~',
           };
         }
+        if(body.nickName.indexOf('转圈') === 0) {
+          return ctx.body = {
+            success: false,
+            message: '昵称不能以"转圈"开头哦！',
+          };
+        }
         let res = yield ctx.helper.postServiceJSON('api/users/UpdateNickName', {
           uid,
           NickName: body.nickName,
@@ -103,7 +109,7 @@ module.exports = app => {
         else {
           lastUpdateHeadTime = 0;
         }
-        let updateHeadTimeDiff = now - lastUpdateHeadTime;console.log(111,updateHeadTimeDiff)
+        let updateHeadTimeDiff = now - lastUpdateHeadTime;
         if(updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
           return ctx.body = {
             success: false,
@@ -208,6 +214,12 @@ module.exports = app => {
         return ctx.body = {
           success: false,
           message: '昵称长度需要在4~8个字之间哦！',
+        };
+      }
+      if(body.nickName.indexOf('转圈') === 0) {
+        return ctx.body = {
+          success: false,
+          message: '昵称不能以"转圈"开头哦！',
         };
       }
       let scan = yield ctx.service.green.textScan(body.nickName);

@@ -4018,7 +4018,7 @@ var Player = function (_migi$Component) {
       }
       var self = this;
       var $vd = $(vd.element);
-      var data = self.datas[self.index];
+      var data = self.item;
       if ($vd.hasClass('loading')) {
         //
       } else if ($vd.hasClass('has')) {

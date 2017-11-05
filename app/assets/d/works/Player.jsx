@@ -326,7 +326,7 @@ class Player extends migi.Component {
     }
     let self = this;
     let $vd = $(vd.element);
-    let data = self.datas[self.index];
+    let data = self.item;
     if($vd.hasClass('loading')) {
       //
     }
