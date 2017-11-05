@@ -206,7 +206,7 @@ class Post extends migi.Component {
           </div>
         </div>
         <div class="wrap">
-          <div class="con" dangerouslySetInnerHTML={ postData.Content }/>
+          <pre class="con">{ postData.Content }</pre>
           <b class="arrow"/>
         </div>
         <div class="box">

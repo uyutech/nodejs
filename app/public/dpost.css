@@ -516,10 +516,7 @@ body {
   white-space: pre-wrap;
   word-break: break-all;
   word-wrap: break-word;
-}
-.post .main > .wrap .con img {
-  display: block;
-  max-width: 100%;
+  font-size: 0.14rem;
 }
 .post .main > .wrap .arrow {
   position: absolute;
