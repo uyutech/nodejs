@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 61);
+/******/ 	return __webpack_require__(__webpack_require__.s = 65);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -173,6 +173,12 @@ let util = {
       return url;
     }
     return url ? url + '-100_100' : url;
+  },
+  img96_96_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
   },
   img90_90: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -656,7 +662,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 61:
+/***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -681,7 +687,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + JSON.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + JSON.stringify(hotAuthorList) + ';\n  $CONFIG.hotMusicAlbumList = ' + JSON.stringify(hotMusicAlbumList) + ';\n  $CONFIG.hotPhotoAlbumList = ' + JSON.stringify(hotPhotoAlbumList) + ';\n  $CONFIG.hotPostList = ' + JSON.stringify(hotPostList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Find = __webpack_require__(62);
+var _Find = __webpack_require__(66);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -691,7 +697,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 62:
+/***/ 66:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -711,7 +717,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(63);
+var _Banner = __webpack_require__(67);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -719,7 +725,7 @@ var _HotWork = __webpack_require__(22);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotPhotoAlbum = __webpack_require__(64);
+var _HotPhotoAlbum = __webpack_require__(68);
 
 var _HotPhotoAlbum2 = _interopRequireDefault(_HotPhotoAlbum);
 
@@ -731,7 +737,7 @@ var _HotMusicAlbum = __webpack_require__(24);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 
-var _HotPost = __webpack_require__(65);
+var _HotPost = __webpack_require__(69);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
@@ -842,7 +848,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 63:
+/***/ 67:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -953,7 +959,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 64:
+/***/ 68:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1021,7 +1027,7 @@ migi.name(HotPhotoAlbum, "HotPhotoAlbum");exports.default = HotPhotoAlbum;
 
 /***/ }),
 
-/***/ 65:
+/***/ 69:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1068,7 +1074,7 @@ var HotPost = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "cp-hotpost"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ['未来会根据你的口味进行精准智能的推送！>3<'])]), new migi.Obj("dataList", this, function () {
         return this.dataList && this.dataList.length ? migi.createVd("ul", [["class", "list fn-clear"]], [this.dataList.map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '/post/' + item.ID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img288_288_80(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", '/post/' + item.ID], ["class", "txt"]], [item.Taglist[0].TagName])]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/circle/' + item.Taglist[0].TagID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img288_288_80(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", '/circle/' + item.Taglist[0].TagID], ["class", "txt"]], [item.Taglist[0].TagName])]);
         })]) : migi.createVd("div", [["class", "empty"]]);
       })]);
     }

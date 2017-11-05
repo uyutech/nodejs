@@ -97,7 +97,7 @@ class Post extends migi.Component {
     ajax = net.postJSON('/api/post/commentList', { postID: self.props.id , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        // currentCount = data.Size;
+        currentCount = data.Size;
         skip += take;
         if(data.data.length) {
           reply.message = '';

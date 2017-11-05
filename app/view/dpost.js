@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 101);
+/******/ 	return __webpack_require__(__webpack_require__.s = 105);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -173,6 +173,12 @@ let util = {
       return url;
     }
     return url ? url + '-100_100' : url;
+  },
+  img96_96_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
   },
   img90_90: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -346,7 +352,7 @@ let net = {
 
 /***/ }),
 
-/***/ 101:
+/***/ 105:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -369,7 +375,7 @@ exports.default = function (data) {
   }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dpost.css') + '"/>\n</head>\n<body>\n<div id="page">' + post + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.id = ' + JSON.stringify(id) + ';\n  $CONFIG.postData = ' + JSON.stringify(postData) + ';\n  $CONFIG.replyData = ' + JSON.stringify(replyData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dpost.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Post = __webpack_require__(102);
+var _Post = __webpack_require__(106);
 
 var _Post2 = _interopRequireDefault(_Post);
 
@@ -379,7 +385,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 102:
+/***/ 106:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -399,7 +405,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Reply = __webpack_require__(103);
+var _Reply = __webpack_require__(107);
 
 var _Reply2 = _interopRequireDefault(_Reply);
 
@@ -515,7 +521,7 @@ var Post = function (_migi$Component) {
       ajax = _net2.default.postJSON('/api/post/commentList', { postID: self.props.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          // currentCount = data.Size;
+          currentCount = data.Size;
           skip += take;
           if (data.data.length) {
             reply.message = '';
@@ -647,7 +653,7 @@ migi.name(Post, "Post");exports.default = Post;
 
 /***/ }),
 
-/***/ 103:
+/***/ 107:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -113,7 +113,7 @@ input {
   line-height: normal;
 }
 a {
-  color: #2D4D67;
+  color: #234;
   text-decoration: none;
 }
 a:hover {
@@ -304,7 +304,7 @@ a:hover {
   position: absolute;
   top: 0.18rem;
   right: 0;
-  color: #2D4D67;
+  color: #234;
 }
 .cp-botnav .c .link li {
   float: left;

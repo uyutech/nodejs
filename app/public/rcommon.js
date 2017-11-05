@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 203);
+/******/ 	return __webpack_require__(__webpack_require__.s = 212);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1061,11 +1061,11 @@ var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _VirtualDom = __webpack_require__(7);
+var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _Obj = __webpack_require__(8);
+var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -1182,7 +1182,37 @@ exports.default = {
 
 /***/ }),
 
-/***/ 203:
+/***/ 21:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var hash = {};
+
+exports.default = {
+  add: function add(uid, cb) {
+    hash[uid] = cb;
+  },
+  del: function del(uid) {
+    var cb = hash[uid];
+    if (cb) {
+      window.removeEventListener('mouseup', cb, true);
+      window.removeEventListener('touchend', cb, true);
+      window.removeEventListener('touchcancel', cb, true);
+      window.removeEventListener('blur', cb);
+      window.removeEventListener('dragend', cb);
+      delete hash[uid];
+    }
+  }
+};
+
+/***/ }),
+
+/***/ 212:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1192,15 +1222,15 @@ __webpack_require__(33);
 
 __webpack_require__(34);
 
-var _jquery = __webpack_require__(204);
+var _jquery = __webpack_require__(213);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _util = __webpack_require__(206);
+var _util = __webpack_require__(215);
 
 var _util2 = _interopRequireDefault(_util);
 
-__webpack_require__(208);
+__webpack_require__(217);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1336,7 +1366,7 @@ window.util = _util2.default;
 
 /***/ }),
 
-/***/ 204:
+/***/ 213:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3615,7 +3645,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return 1 === arguments.length ? this.off(a, "**") : this.off(b, a || "**", c);
     } }), r.holdReady = function (a) {
     a ? r.readyWait++ : r.ready(!0);
-  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(205) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(214) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return r;
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));var Vb = a.jQuery,
@@ -3623,11 +3653,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return a.$ === r && (a.$ = Wb), b && a.jQuery === r && (a.jQuery = Vb), r;
   }, b || (a.jQuery = a.$ = r), r;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63)(module)))
 
 /***/ }),
 
-/***/ 205:
+/***/ 214:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -3637,7 +3667,7 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 
-/***/ 206:
+/***/ 215:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3647,7 +3677,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(207);
+var _sort = __webpack_require__(216);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3718,7 +3748,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 207:
+/***/ 216:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3785,40 +3815,10 @@ function swap(arr, a, b) {
 
 /***/ }),
 
-/***/ 208:
+/***/ 217:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 21:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var hash = {};
-
-exports.default = {
-  add: function add(uid, cb) {
-    hash[uid] = cb;
-  },
-  del: function del(uid) {
-    var cb = hash[uid];
-    if (cb) {
-      window.removeEventListener('mouseup', cb, true);
-      window.removeEventListener('touchend', cb, true);
-      window.removeEventListener('touchcancel', cb, true);
-      window.removeEventListener('blur', cb);
-      window.removeEventListener('dragend', cb);
-      delete hash[uid];
-    }
-  }
-};
 
 /***/ }),
 
@@ -5803,7 +5803,7 @@ var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _VirtualDom = __webpack_require__(7);
+var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -5815,7 +5815,7 @@ var _CacheComponent = __webpack_require__(28);
 
 var _CacheComponent2 = _interopRequireDefault(_CacheComponent);
 
-var _Obj = __webpack_require__(8);
+var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -5929,7 +5929,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _VirtualDom = __webpack_require__(7);
+var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -8008,7 +8008,7 @@ var _Element2 = __webpack_require__(4);
 
 var _Element3 = _interopRequireDefault(_Element2);
 
-var _VirtualDom = __webpack_require__(7);
+var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
@@ -8016,7 +8016,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Obj = __webpack_require__(8);
+var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -8508,7 +8508,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 64:
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8539,7 +8539,7 @@ module.exports = function (module) {
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8593,7 +8593,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Obj = __webpack_require__(8);
+var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
@@ -9840,7 +9840,7 @@ exports.default = VirtualDom;
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

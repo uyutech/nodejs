@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 145);
+/******/ 	return __webpack_require__(__webpack_require__.s = 149);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -177,6 +177,12 @@ var util = {
       return url;
     }
     return url ? url + '-100_100' : url;
+  },
+  img96_96_80: function img96_96_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
   },
   img90_90: function img90_90(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -348,27 +354,27 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 145:
+/***/ 149:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(146);
+__webpack_require__(150);
 
-var _TopNav = __webpack_require__(147);
+var _TopNav = __webpack_require__(151);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(148);
+var _CIframe = __webpack_require__(152);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(149);
+var _QuanNiang = __webpack_require__(153);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
-var _Welcome = __webpack_require__(150);
+var _Welcome = __webpack_require__(154);
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
@@ -458,14 +464,14 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 146:
+/***/ 150:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 147:
+/***/ 151:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -596,7 +602,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 148:
+/***/ 152:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -643,7 +649,7 @@ migi.name(CIframe, "CIframe");exports.default = CIframe;
 
 /***/ }),
 
-/***/ 149:
+/***/ 153:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -723,7 +729,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 150:
+/***/ 154:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

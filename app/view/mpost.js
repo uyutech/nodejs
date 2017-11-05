@@ -174,6 +174,12 @@ let util = {
     }
     return url ? url + '-100_100' : url;
   },
+  img96_96_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
+  },
   img90_90: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;

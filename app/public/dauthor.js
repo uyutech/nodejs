@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 172);
+/******/ 	return __webpack_require__(__webpack_require__.s = 176);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -177,6 +177,12 @@ var util = {
       return url;
     }
     return url ? url + '-100_100' : url;
+  },
+  img96_96_80: function img96_96_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
   },
   img90_90: function img90_90(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -506,15 +512,15 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 172:
+/***/ 176:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(173);
+__webpack_require__(177);
 
-var _Author = __webpack_require__(174);
+var _Author = __webpack_require__(178);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -524,14 +530,14 @@ var author = migi.preExist(migi.createCp(_Author2.default, [["uid", $CONFIG.uid]
 
 /***/ }),
 
-/***/ 173:
+/***/ 177:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 174:
+/***/ 178:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -551,15 +557,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Nav = __webpack_require__(175);
+var _Nav = __webpack_require__(179);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(178);
+var _Home = __webpack_require__(182);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _AuthorComment = __webpack_require__(180);
+var _AuthorComment = __webpack_require__(184);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
@@ -694,7 +700,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 175:
+/***/ 179:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -706,11 +712,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(176);
+var _Profile = __webpack_require__(180);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(177);
+var _Link = __webpack_require__(181);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -748,476 +754,6 @@ var Nav = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Nav, "Nav");exports.default = Nav;
-
-/***/ }),
-
-/***/ 176:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _net = __webpack_require__(1);
-
-var _net2 = _interopRequireDefault(_net);
-
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _authorTemplate = __webpack_require__(18);
-
-var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Profile = function (_migi$Component) {
-  _inherits(Profile, _migi$Component);
-
-  function Profile() {
-    var _ref;
-
-    _classCallCheck(this, Profile);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Profile.__proto__ || Object.getPrototypeOf(Profile)).call.apply(_ref, [this].concat(data)));
-
-    _this.authorID = _this.props.authorID;
-    _this.authorName = _this.props.authorDetail.AuthorName;
-    _this.sign = _this.props.authorDetail.Sign;
-    _this.headUrl = _this.props.authorDetail.Head_url;
-    _this.fansNumber = _this.props.authorDetail.FansNumber;
-    _this.like = _this.props.authorDetail.IsLike;
-    _this.settled = _this.props.authorDetail.ISSettled;
-    _this.type = _this.props.authorDetail.Authortype;
-    return _this;
-  }
-
-  _createClass(Profile, [{
-    key: 'click',
-    value: function click(e) {
-      e.preventDefault();
-      if (!$CONFIG.isLogin) {
-        migi.eventBus.emit('NEED_LOGIN');
-        return;
-      }
-      var self = this;
-      self.loading = true;
-      if (self.like) {
-        if (window.confirm('确定取关吗？')) {
-          _net2.default.postJSON('/api/author/unFollow', { authorID: self.authorID }, function (res) {
-            if (res.success) {
-              self.like = false;
-              self.fansNumber = res.data.followCount;
-            } else if (res.code === 1000) {
-              migi.eventBus.emit('NEED_LOGIN');
-            } else {
-              alert(res.message || _util2.default.ERROR_MESSAGE);
-            }
-            self.loading = false;
-          }, function (res) {
-            alert(res.message || _util2.default.ERROR_MESSAGE);
-            self.loading = false;
-          });
-        }
-      } else {
-        _net2.default.postJSON('/api/author/follow', { authorID: self.authorID }, function (res) {
-          if (res.success) {
-            self.like = true;
-            self.fansNumber = res.data.followCount;
-          } else if (res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-          } else {
-            alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-          self.loading = false;
-        }, function (res) {
-          alert(res.message || _util2.default.ERROR_MESSAGE);
-          self.loading = false;
-        });
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("headUrl", this, function () {
-        return _util2.default.autoSsl(_util2.default.img288_288_80(this.headUrl)) || '//zhuanquan.xin/img/c370ff3fa46f4273d0f73147459a43d8.png';
-      })]]), new migi.Obj("settled", this, function () {
-        return this.settled ? migi.createVd("b", [["class", "settled"], ["title", "已入驻"]]) : '';
-      })]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [["class", "n"]], [migi.createVd("h3", [], [new migi.Obj("authorName", this, function () {
-        return this.authorName || '&nbsp;';
-      })]), new migi.Obj("authorType", this, function () {
-        return this.authorType.map(function (item) {
-          return migi.createVd("span", [["class", 'cp-author-type-' + item]]);
-        });
-      })]), migi.createVd("div", [["class", "rel"]], [migi.createVd("label", [], ["粉丝"]), migi.createVd("span", [], [new migi.Obj("fansNumber", this, function () {
-        return this.fansNumber || '0';
-      })]), migi.createVd("a", [["href", "#"], ["class", new migi.Obj(["like", "loading"], this, function () {
-        return (this.like ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '');
-      })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("like", this, function () {
-        return this.like ? '取关' : '关注';
-      })])]), migi.createVd("p", [["class", "intro"]], [new migi.Obj("sign", this, function () {
-        return this.sign;
-      })])])]);
-    }
-  }, {
-    key: 'authorID',
-    set: function set(v) {
-      this.__setBind("authorID", v);this.__data("authorID");
-    },
-    get: function get() {
-      return this.__getBind("authorID");
-    }
-  }, {
-    key: 'authorName',
-    set: function set(v) {
-      this.__setBind("authorName", v);this.__data("authorName");
-    },
-    get: function get() {
-      return this.__getBind("authorName");
-    }
-  }, {
-    key: 'sign',
-    set: function set(v) {
-      this.__setBind("sign", v);this.__data("sign");
-    },
-    get: function get() {
-      return this.__getBind("sign");
-    }
-  }, {
-    key: 'authorType',
-    set: function set(v) {
-      this.__setBind("authorType", v);this.__data("authorType");
-    },
-    get: function get() {
-      if (this.__initBind("authorType")) this.__setBind("authorType", []);return this.__getBind("authorType");
-    }
-  }, {
-    key: 'headUrl',
-    set: function set(v) {
-      this.__setBind("headUrl", v);this.__data("headUrl");
-    },
-    get: function get() {
-      return this.__getBind("headUrl");
-    }
-  }, {
-    key: 'fansNumber',
-    set: function set(v) {
-      this.__setBind("fansNumber", v);this.__data("fansNumber");
-    },
-    get: function get() {
-      return this.__getBind("fansNumber");
-    }
-  }, {
-    key: 'like',
-    set: function set(v) {
-      this.__setBind("like", v);this.__data("like");
-    },
-    get: function get() {
-      return this.__getBind("like");
-    }
-  }, {
-    key: 'loading',
-    set: function set(v) {
-      this.__setBind("loading", v);this.__data("loading");
-    },
-    get: function get() {
-      return this.__getBind("loading");
-    }
-  }, {
-    key: 'settled',
-    set: function set(v) {
-      this.__setBind("settled", v);this.__data("settled");
-    },
-    get: function get() {
-      return this.__getBind("settled");
-    }
-  }, {
-    key: 'type',
-    set: function set(v) {
-      v = v || [];
-      var hash = {};
-      v.forEach(function (item) {
-        var css = _authorTemplate2.default.code2Data[item.AuthorTypeID].css;
-        hash[css] = true;
-      });
-      this.authorType = Object.keys(hash);
-    }
-  }]);
-
-  return Profile;
-}(migi.Component);
-
-migi.name(Profile, "Profile");exports.default = Profile;
-
-/***/ }),
-
-/***/ 177:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Link = function (_migi$Component) {
-  _inherits(Link, _migi$Component);
-
-  function Link() {
-    var _ref;
-
-    _classCallCheck(this, Link);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Link.__proto__ || Object.getPrototypeOf(Link)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self._5SingUrl = self.props.authorDetail._5SingUrl;
-    self._BilibiliUrl = self.props.authorDetail._BilibiliUrl;
-    self._BaiduUrl = self.props.authorDetail._BaiduUrl;
-    self._WangyiUrl = self.props.authorDetail._WangyiUrl;
-    self._WeiboUrl = self.props.authorDetail._WeiboUrl;
-    return _this;
-  }
-
-  _createClass(Link, [{
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "link"]], [migi.createVd("ul", [], [new migi.Obj("_5SingUrl", this, function () {
-        return this._5SingUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._5SingUrl], ["class", "sing5"]], ["5sing"])]) : '';
-      }), new migi.Obj("_BilibiliUrl", this, function () {
-        return this._BilibiliUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._BilibiliUrl], ["class", "bilibili"]], ["b站"])]) : '';
-      }), new migi.Obj("_BaiduUrl", this, function () {
-        return this._BaiduUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._BaiduUrl], ["class", "baidu"]], ["百度"])]) : '';
-      }), new migi.Obj("_WangyiUrl", this, function () {
-        return this._WangyiUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._WangyiUrl], ["class", "wangyi"]], ["网易"])]) : '';
-      }), new migi.Obj("_WeiboUrl", this, function () {
-        return this._WeiboUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._WeiboUrl], ["class", "weibo"]], ["微博"])]) : '';
-      })]), migi.createVd("p", [], ["外站主页"])]);
-    }
-  }, {
-    key: "_5SingUrl",
-    set: function set(v) {
-      this.__setBind("_5SingUrl", v);this.__data("_5SingUrl");
-    },
-    get: function get() {
-      return this.__getBind("_5SingUrl");
-    }
-  }, {
-    key: "_BilibiliUrl",
-    set: function set(v) {
-      this.__setBind("_BilibiliUrl", v);this.__data("_BilibiliUrl");
-    },
-    get: function get() {
-      return this.__getBind("_BilibiliUrl");
-    }
-  }, {
-    key: "_BaiduUrl",
-    set: function set(v) {
-      this.__setBind("_BaiduUrl", v);this.__data("_BaiduUrl");
-    },
-    get: function get() {
-      return this.__getBind("_BaiduUrl");
-    }
-  }, {
-    key: "_WangyiUrl",
-    set: function set(v) {
-      this.__setBind("_WangyiUrl", v);this.__data("_WangyiUrl");
-    },
-    get: function get() {
-      return this.__getBind("_WangyiUrl");
-    }
-  }, {
-    key: "_WeiboUrl",
-    set: function set(v) {
-      this.__setBind("_WeiboUrl", v);this.__data("_WeiboUrl");
-    },
-    get: function get() {
-      return this.__getBind("_WeiboUrl");
-    }
-  }]);
-
-  return Link;
-}(migi.Component);
-
-migi.name(Link, "Link");exports.default = Link;
-
-/***/ }),
-
-/***/ 178:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _HotWork = __webpack_require__(65);
-
-var _HotWork2 = _interopRequireDefault(_HotWork);
-
-var _HotMusicAlbum = __webpack_require__(67);
-
-var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
-
-var _HotAuthor = __webpack_require__(66);
-
-var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
-
-var _Dynamic = __webpack_require__(179);
-
-var _Dynamic2 = _interopRequireDefault(_Dynamic);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Home = function (_migi$Component) {
-  _inherits(Home, _migi$Component);
-
-  function Home() {
-    var _ref;
-
-    _classCallCheck(this, Home);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = Home.__proto__ || Object.getPrototypeOf(Home)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(Home, [{
-    key: 'show',
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "home"]], [migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "主打作品"], ["dataList", this.props.homeDetail.Hot_Works_Items]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotCollection"], ["title", "专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "合作关系"], ["dataList", this.props.homeDetail.AuthorToAuthor]]), migi.createCp(_Dynamic2.default, [["title", "全网动态"]])]);
-    }
-  }]);
-
-  return Home;
-}(migi.Component);
-
-migi.name(Home, "Home");exports.default = Home;
-
-/***/ }),
-
-/***/ 179:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Dynamics = function (_migi$Component) {
-  _inherits(Dynamics, _migi$Component);
-
-  function Dynamics() {
-    var _ref;
-
-    _classCallCheck(this, Dynamics);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = Dynamics.__proto__ || Object.getPrototypeOf(Dynamics)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(Dynamics, [{
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-dynamic"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ["等这个功能上线，就再也不用担心特关是死的啦！>3&lt;"])]), migi.createVd("ul", [["class", new migi.Obj("list", this, function () {
-        return this.list.length ? '' : 'fn-hide';
-      })], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.click)]]]], [new migi.Obj("list", this, function () {
-        return this.list.map(function (item) {
-          return migi.createVd("li", [["href", item.DynamicUrl]], [migi.createVd("div", [["class", "con"]], [migi.createVd("div", [["class", "user"]], [migi.createVd("div", [["class", "head fn-clear"]], [migi.createVd("img", [["src", item.AuthorHeadUrl]])]), migi.createVd("div", [["class", "name"]], [migi.createVd("p", [], [item.AuthorName]), migi.createVd("small", [], [item.SendTime])])]), migi.createVd("p", [["class", "info"]], [migi.createVd("b", [["class", "weibo"]]), item.DynamicContent])]), migi.createVd("div", [["class", "preview"]], [migi.createVd("img", [["src", item.DynamicPic]])])]);
-          var info = void 0;
-          var preview = void 0;
-          if (item.type == 'song') {
-            info = migi.createVd("p", [["class", "info"]], [migi.createVd("b", [["class", "zq"]]), item.action, migi.createVd("a", [["href", "#"]], [item.song])]);
-            preview = migi.createVd("div", [["class", "preview"]], [migi.createVd("img", [["src", item.pic]])]);
-          } else if (item.type == 'weibo') {
-            info = migi.createVd("p", [["class", "info"]], [migi.createVd("b", [["class", "wb"]]), item.action, migi.createVd("a", [["href", "#"]], [item.txt])]);
-          }
-          return migi.createVd("li", [], [migi.createVd("div", [["class", "con"]], [migi.createVd("div", [["class", "user"]], [migi.createVd("div", [["class", "head n" + item.imgs.length + " fn-clear"]], [item.imgs.map(function (item2) {
-            return migi.createVd("img", [["src", item2]]);
-          })]), migi.createVd("div", [["class", "name"]], [migi.createVd("p", [], [item.names.join('、')]), migi.createVd("small", [], [item.time])])]), info]), preview]);
-        });
-      })]), migi.createVd("div", [["class", new migi.Obj("list", this, function () {
-        return 'no' + (this.list.length ? ' fn-hide' : '');
-      })]], [])]);
-    }
-  }, {
-    key: "list",
-    set: function set(v) {
-      this.__setBind("list", v);this.__data("list");
-    },
-    get: function get() {
-      if (this.__initBind("list")) this.__setBind("list", []);return this.__getBind("list");
-    }
-  }]);
-
-  return Dynamics;
-}(migi.Component);
-
-migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
 
@@ -1425,6 +961,476 @@ exports.default = {
 /***/ }),
 
 /***/ 180:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _authorTemplate = __webpack_require__(18);
+
+var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Profile = function (_migi$Component) {
+  _inherits(Profile, _migi$Component);
+
+  function Profile() {
+    var _ref;
+
+    _classCallCheck(this, Profile);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Profile.__proto__ || Object.getPrototypeOf(Profile)).call.apply(_ref, [this].concat(data)));
+
+    _this.authorID = _this.props.authorID;
+    _this.authorName = _this.props.authorDetail.AuthorName;
+    _this.sign = _this.props.authorDetail.Sign;
+    _this.headUrl = _this.props.authorDetail.Head_url;
+    _this.fansNumber = _this.props.authorDetail.FansNumber;
+    _this.like = _this.props.authorDetail.IsLike;
+    _this.settled = _this.props.authorDetail.ISSettled;
+    _this.type = _this.props.authorDetail.Authortype;
+    return _this;
+  }
+
+  _createClass(Profile, [{
+    key: 'click',
+    value: function click(e) {
+      e.preventDefault();
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+        return;
+      }
+      var self = this;
+      self.loading = true;
+      if (self.like) {
+        if (window.confirm('确定取关吗？')) {
+          _net2.default.postJSON('/api/author/unFollow', { authorID: self.authorID }, function (res) {
+            if (res.success) {
+              self.like = false;
+              self.fansNumber = res.data.followCount;
+            } else if (res.code === 1000) {
+              migi.eventBus.emit('NEED_LOGIN');
+            } else {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+            }
+            self.loading = false;
+          }, function (res) {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+            self.loading = false;
+          });
+        }
+      } else {
+        _net2.default.postJSON('/api/author/follow', { authorID: self.authorID }, function (res) {
+          if (res.success) {
+            self.like = true;
+            self.fansNumber = res.data.followCount;
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          self.loading = false;
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          self.loading = false;
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"]], [migi.createVd("img", [["src", new migi.Obj("headUrl", this, function () {
+        return _util2.default.autoSsl(_util2.default.img288_288_80(this.headUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'));
+      })]]), new migi.Obj("settled", this, function () {
+        return this.settled ? migi.createVd("b", [["class", "settled"], ["title", "已入驻"]]) : '';
+      })]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [["class", "n"]], [migi.createVd("h3", [], [new migi.Obj("authorName", this, function () {
+        return this.authorName;
+      })]), new migi.Obj("authorType", this, function () {
+        return this.authorType.map(function (item) {
+          return migi.createVd("span", [["class", 'cp-author-type-' + item]]);
+        });
+      })]), migi.createVd("div", [["class", "rel"]], [migi.createVd("label", [], ["粉丝"]), migi.createVd("span", [], [new migi.Obj("fansNumber", this, function () {
+        return this.fansNumber || '0';
+      })]), migi.createVd("a", [["href", "#"], ["class", new migi.Obj(["like", "loading"], this, function () {
+        return (this.like ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '');
+      })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("like", this, function () {
+        return this.like ? '取关' : '关注';
+      })])]), migi.createVd("p", [["class", "intro"]], [new migi.Obj("sign", this, function () {
+        return this.sign;
+      })])])]);
+    }
+  }, {
+    key: 'authorID',
+    set: function set(v) {
+      this.__setBind("authorID", v);this.__data("authorID");
+    },
+    get: function get() {
+      return this.__getBind("authorID");
+    }
+  }, {
+    key: 'authorName',
+    set: function set(v) {
+      this.__setBind("authorName", v);this.__data("authorName");
+    },
+    get: function get() {
+      return this.__getBind("authorName");
+    }
+  }, {
+    key: 'sign',
+    set: function set(v) {
+      this.__setBind("sign", v);this.__data("sign");
+    },
+    get: function get() {
+      return this.__getBind("sign");
+    }
+  }, {
+    key: 'authorType',
+    set: function set(v) {
+      this.__setBind("authorType", v);this.__data("authorType");
+    },
+    get: function get() {
+      if (this.__initBind("authorType")) this.__setBind("authorType", []);return this.__getBind("authorType");
+    }
+  }, {
+    key: 'headUrl',
+    set: function set(v) {
+      this.__setBind("headUrl", v);this.__data("headUrl");
+    },
+    get: function get() {
+      return this.__getBind("headUrl");
+    }
+  }, {
+    key: 'fansNumber',
+    set: function set(v) {
+      this.__setBind("fansNumber", v);this.__data("fansNumber");
+    },
+    get: function get() {
+      return this.__getBind("fansNumber");
+    }
+  }, {
+    key: 'like',
+    set: function set(v) {
+      this.__setBind("like", v);this.__data("like");
+    },
+    get: function get() {
+      return this.__getBind("like");
+    }
+  }, {
+    key: 'loading',
+    set: function set(v) {
+      this.__setBind("loading", v);this.__data("loading");
+    },
+    get: function get() {
+      return this.__getBind("loading");
+    }
+  }, {
+    key: 'settled',
+    set: function set(v) {
+      this.__setBind("settled", v);this.__data("settled");
+    },
+    get: function get() {
+      return this.__getBind("settled");
+    }
+  }, {
+    key: 'type',
+    set: function set(v) {
+      v = v || [];
+      var hash = {};
+      v.forEach(function (item) {
+        var css = _authorTemplate2.default.code2Data[item.AuthorTypeID].css;
+        hash[css] = true;
+      });
+      this.authorType = Object.keys(hash);
+    }
+  }]);
+
+  return Profile;
+}(migi.Component);
+
+migi.name(Profile, "Profile");exports.default = Profile;
+
+/***/ }),
+
+/***/ 181:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Link = function (_migi$Component) {
+  _inherits(Link, _migi$Component);
+
+  function Link() {
+    var _ref;
+
+    _classCallCheck(this, Link);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Link.__proto__ || Object.getPrototypeOf(Link)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self._5SingUrl = self.props.authorDetail._5SingUrl;
+    self._BilibiliUrl = self.props.authorDetail._BilibiliUrl;
+    self._BaiduUrl = self.props.authorDetail._BaiduUrl;
+    self._WangyiUrl = self.props.authorDetail._WangyiUrl;
+    self._WeiboUrl = self.props.authorDetail._WeiboUrl;
+    return _this;
+  }
+
+  _createClass(Link, [{
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "link"]], [migi.createVd("ul", [], [new migi.Obj("_5SingUrl", this, function () {
+        return this._5SingUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._5SingUrl], ["class", "sing5"]], ["5sing"])]) : '';
+      }), new migi.Obj("_BilibiliUrl", this, function () {
+        return this._BilibiliUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._BilibiliUrl], ["class", "bilibili"]], ["b站"])]) : '';
+      }), new migi.Obj("_BaiduUrl", this, function () {
+        return this._BaiduUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._BaiduUrl], ["class", "baidu"]], ["百度"])]) : '';
+      }), new migi.Obj("_WangyiUrl", this, function () {
+        return this._WangyiUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._WangyiUrl], ["class", "wangyi"]], ["网易"])]) : '';
+      }), new migi.Obj("_WeiboUrl", this, function () {
+        return this._WeiboUrl ? migi.createVd("li", [], [migi.createVd("a", [["target", "_blank"], ["href", this._WeiboUrl], ["class", "weibo"]], ["微博"])]) : '';
+      })]), migi.createVd("p", [], ["外站主页"])]);
+    }
+  }, {
+    key: "_5SingUrl",
+    set: function set(v) {
+      this.__setBind("_5SingUrl", v);this.__data("_5SingUrl");
+    },
+    get: function get() {
+      return this.__getBind("_5SingUrl");
+    }
+  }, {
+    key: "_BilibiliUrl",
+    set: function set(v) {
+      this.__setBind("_BilibiliUrl", v);this.__data("_BilibiliUrl");
+    },
+    get: function get() {
+      return this.__getBind("_BilibiliUrl");
+    }
+  }, {
+    key: "_BaiduUrl",
+    set: function set(v) {
+      this.__setBind("_BaiduUrl", v);this.__data("_BaiduUrl");
+    },
+    get: function get() {
+      return this.__getBind("_BaiduUrl");
+    }
+  }, {
+    key: "_WangyiUrl",
+    set: function set(v) {
+      this.__setBind("_WangyiUrl", v);this.__data("_WangyiUrl");
+    },
+    get: function get() {
+      return this.__getBind("_WangyiUrl");
+    }
+  }, {
+    key: "_WeiboUrl",
+    set: function set(v) {
+      this.__setBind("_WeiboUrl", v);this.__data("_WeiboUrl");
+    },
+    get: function get() {
+      return this.__getBind("_WeiboUrl");
+    }
+  }]);
+
+  return Link;
+}(migi.Component);
+
+migi.name(Link, "Link");exports.default = Link;
+
+/***/ }),
+
+/***/ 182:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _HotWork = __webpack_require__(64);
+
+var _HotWork2 = _interopRequireDefault(_HotWork);
+
+var _HotMusicAlbum = __webpack_require__(66);
+
+var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
+
+var _HotAuthor = __webpack_require__(65);
+
+var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
+
+var _Dynamic = __webpack_require__(183);
+
+var _Dynamic2 = _interopRequireDefault(_Dynamic);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Home = function (_migi$Component) {
+  _inherits(Home, _migi$Component);
+
+  function Home() {
+    var _ref;
+
+    _classCallCheck(this, Home);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = Home.__proto__ || Object.getPrototypeOf(Home)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(Home, [{
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "home"]], [migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "主打作品"], ["dataList", this.props.homeDetail.Hot_Works_Items]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotCollection"], ["title", "专辑"]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "合作关系"], ["dataList", this.props.homeDetail.AuthorToAuthor]]), migi.createCp(_Dynamic2.default, [["title", "全网动态"]])]);
+    }
+  }]);
+
+  return Home;
+}(migi.Component);
+
+migi.name(Home, "Home");exports.default = Home;
+
+/***/ }),
+
+/***/ 183:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Dynamics = function (_migi$Component) {
+  _inherits(Dynamics, _migi$Component);
+
+  function Dynamics() {
+    var _ref;
+
+    _classCallCheck(this, Dynamics);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = Dynamics.__proto__ || Object.getPrototypeOf(Dynamics)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(Dynamics, [{
+    key: "render",
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-dynamic"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ["等这个功能上线，就再也不用担心特关是死的啦！>3&lt;"])]), migi.createVd("ul", [["class", new migi.Obj("list", this, function () {
+        return this.list.length ? '' : 'fn-hide';
+      })], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.click)]]]], [new migi.Obj("list", this, function () {
+        return this.list.map(function (item) {
+          return migi.createVd("li", [["href", item.DynamicUrl]], [migi.createVd("div", [["class", "con"]], [migi.createVd("div", [["class", "user"]], [migi.createVd("div", [["class", "head fn-clear"]], [migi.createVd("img", [["src", item.AuthorHeadUrl]])]), migi.createVd("div", [["class", "name"]], [migi.createVd("p", [], [item.AuthorName]), migi.createVd("small", [], [item.SendTime])])]), migi.createVd("p", [["class", "info"]], [migi.createVd("b", [["class", "weibo"]]), item.DynamicContent])]), migi.createVd("div", [["class", "preview"]], [migi.createVd("img", [["src", item.DynamicPic]])])]);
+          var info = void 0;
+          var preview = void 0;
+          if (item.type == 'song') {
+            info = migi.createVd("p", [["class", "info"]], [migi.createVd("b", [["class", "zq"]]), item.action, migi.createVd("a", [["href", "#"]], [item.song])]);
+            preview = migi.createVd("div", [["class", "preview"]], [migi.createVd("img", [["src", item.pic]])]);
+          } else if (item.type == 'weibo') {
+            info = migi.createVd("p", [["class", "info"]], [migi.createVd("b", [["class", "wb"]]), item.action, migi.createVd("a", [["href", "#"]], [item.txt])]);
+          }
+          return migi.createVd("li", [], [migi.createVd("div", [["class", "con"]], [migi.createVd("div", [["class", "user"]], [migi.createVd("div", [["class", "head n" + item.imgs.length + " fn-clear"]], [item.imgs.map(function (item2) {
+            return migi.createVd("img", [["src", item2]]);
+          })]), migi.createVd("div", [["class", "name"]], [migi.createVd("p", [], [item.names.join('、')]), migi.createVd("small", [], [item.time])])]), info]), preview]);
+        });
+      })]), migi.createVd("div", [["class", new migi.Obj("list", this, function () {
+        return 'no' + (this.list.length ? ' fn-hide' : '');
+      })]], [])]);
+    }
+  }, {
+    key: "list",
+    set: function set(v) {
+      this.__setBind("list", v);this.__data("list");
+    },
+    get: function get() {
+      if (this.__initBind("list")) this.__setBind("list", []);return this.__getBind("list");
+    }
+  }]);
+
+  return Dynamics;
+}(migi.Component);
+
+migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
+
+/***/ }),
+
+/***/ 184:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2011,17 +2017,17 @@ var Comment = function (_migi$Component) {
     key: 'genComment',
     value: function genComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.IsAuthor === true ? migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]) : migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.IsAuthor === true ? migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]) : migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
       }
-      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
     }
   }, {
     key: 'genChildComment',
     value: function genChildComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)]), item.IsAuthor === true ? migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]) : migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)]), item.IsAuthor === true ? migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]) : migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name2 fn-hide"]], [item.Send_ToUserName]), migi.createVd("b", [["class", "arrow fn-hide"]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name2 fn-hide"]], [item.Send_ToUserName]), migi.createVd("b", [["class", "arrow fn-hide"]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'hideLast',
@@ -2232,7 +2238,7 @@ migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
 
-/***/ 65:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2320,7 +2326,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 66:
+/***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2401,7 +2407,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 67:
+/***/ 66:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

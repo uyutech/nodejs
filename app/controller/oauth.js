@@ -42,6 +42,7 @@ module.exports = app => {
         });
         let data = res.data;
         if(data && data.success) {
+          ctx.rotateCsrfSecret();
           let uid = data.data;
           ctx.session.uid = uid;
           let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
@@ -80,6 +81,7 @@ module.exports = app => {
           });
           create = create.data;
           if(create && create.success) {
+            ctx.rotateCsrfSecret();
             let uid = create.data;
             ctx.session.uid = uid;
             let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {

@@ -21,7 +21,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getMHead({ title:postData.Title })}
+  ${data.helper.getMHead({ title: postData.Title })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mpost.css')}"/>
 </head>

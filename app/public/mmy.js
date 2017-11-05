@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 126);
+/******/ 	return __webpack_require__(__webpack_require__.s = 125);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -177,6 +177,12 @@ var util = {
       return url;
     }
     return url ? url + '-100_100' : url;
+  },
+  img96_96_80: function img96_96_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
   },
   img90_90: function img90_90(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -348,15 +354,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 126:
+/***/ 125:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(127);
+__webpack_require__(126);
 
-var _My = __webpack_require__(128);
+var _My = __webpack_require__(127);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -366,14 +372,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 127:
+/***/ 126:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 128:
+/***/ 127:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -393,11 +399,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Profile = __webpack_require__(129);
+var _Profile = __webpack_require__(128);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(130);
+var _Follow = __webpack_require__(129);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
@@ -449,7 +455,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 129:
+/***/ 128:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -641,7 +647,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 130:
+/***/ 129:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

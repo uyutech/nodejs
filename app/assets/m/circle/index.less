@@ -1,0 +1,174 @@
+/**
+ * Created by army8735 on 2017/11/5.
+ */
+
+@import '../../d/common/var';
+
+.circle{
+  .title{
+    position:relative;
+    padding:0.3rem 0.2rem;
+    background:url(//zhuanquan.xin/img/9a50c2a08935b9c9c0a9cbed22ce402a.jpg) no-repeat center;
+    background-size:cover;
+    border-bottom:0.08rem solid #8BBDE1;
+    .profile{
+      display:flex;
+      align-items:center;
+      .pic{
+        position:relative;
+        width:1rem;
+        height:1rem;
+        margin-right:0.2rem;
+        img{
+          display:block;
+          width:100%;
+          height:100%;
+          box-sizing:border-box;
+          border:1px solid #FFF;
+          border-radius:100%;
+        }
+      }
+      .txt{
+        flex:1;
+        h1{
+          font-size:0.2rem;
+          font-weight:400;
+        }
+        .rel{
+          position:relative;
+          margin-top:0.1rem;
+          .join{
+            position:absolute;
+            top:0;
+            right:0;
+            display:block;
+            padding:0 0.2rem;
+            line-height:0.32rem;
+            background:@secondColor;
+            color:@thirdTextColor;
+            border-radius:0.1rem;
+            cursor:pointer;
+            &:hover{
+              text-decoration:underline;
+            }
+            &.joined{
+              background:@fourthTextColor;
+            }
+          }
+          .count{
+            display:inline-block;
+            padding-left:0.25rem;
+            background:url(../../d/circle/people.png) no-repeat 0.05rem center;
+            background-size:0.12rem auto;
+            line-height:0.32rem;
+          }
+        }
+      }
+    }
+    .intro{
+      margin-top:0.2rem;
+      padding-top:0.1rem;
+      font-size:0.12rem;
+      color:@fourthTextColor;
+      border-top:1px solid #C2D8E4;
+    }
+  }
+  .post-list{
+    margin-top:0.2rem;
+    padding:0 0.1rem;
+    ol{
+      li{
+        > .profile{
+          padding-left:0.12rem;
+          .pic{
+            float:left;
+            margin-right:0.2rem;
+            width:0.48rem;
+            height:0.48rem;
+            border-radius:100%;
+            box-shadow:@picShadow;
+          }
+          .txt{
+            float:left;
+            line-height:0.48rem;
+            .name{
+              margin-right:0.1rem;
+              font-size:0.16rem;
+              vertical-align:middle;
+            }
+            .time{
+              font-size:0.12rem;
+              color:@fourthTextColor;
+              vertical-align:middle;
+            }
+          }
+        }
+        &.author{
+          > .profile .txt .name{
+            color:#EC0;
+          }
+        }
+        > .c{
+          position:relative;
+          display:inline-block;
+          min-width:2rem;
+          max-width:100%;
+          margin:0.15rem 0;
+          padding:0.1rem;
+          background:#FFF;
+          border:1px solid #EDF3F7;
+          border-radius:0.1rem;
+          .t{
+            display:block;
+            margin-bottom:0.1rem;
+            font-size:0.14rem;
+            word-break:break-all;
+            word-wrap:break-word;
+            white-space:pre-wrap;
+          }
+          .arrow{
+            position:absolute;
+            left:0.3rem;
+            top:-1px;
+            display:block;
+            width:0.1rem;
+            height:0.1rem;
+            border-top:1px solid #FFF;
+            &:after{
+              position:absolute;
+              left:0;
+              top:-0.06rem;
+              display:block;
+              width:0.1rem;
+              height:0.1rem;
+              border:1px solid #EDF3F7;
+              border-left:none;
+              border-bottom:none;
+              transform:rotateZ(-45deg);
+              content:' ';
+            }
+          }
+          pre{
+            position:relative;
+            font-size:0.13rem;
+            word-break:break-all;
+            word-wrap:break-word;
+            white-space:pre-wrap;
+            line-height:1.8;
+            .placeholder{
+              display:inline-block;
+              width:0.7rem;
+              height:0.1rem;
+            }
+            a{
+              position:absolute;
+              bottom:0;
+              right:0;
+              color:@secondLinkColor;
+            }
+          }
+        }
+      }
+    }
+  }
+}

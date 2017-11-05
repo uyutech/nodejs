@@ -347,7 +347,7 @@ class MusicAlbum extends migi.Component {
           <li class={ 'favor' + (this.favor ? ' has' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.url }
-               download={ this.sname + this.url ? (/\.\w+$/.exec(this.url)[0] || '') : '' }
+               download={ this.sname + (this.url ? (/\.\w+$/.exec(this.url)[0] || '') : '') }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

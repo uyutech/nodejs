@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 151);
+/******/ 	return __webpack_require__(__webpack_require__.s = 155);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -177,6 +177,12 @@ var util = {
       return url;
     }
     return url ? url + '-100_100' : url;
+  },
+  img96_96_80: function img96_96_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
   },
   img90_90: function img90_90(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -348,15 +354,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 151:
+/***/ 155:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(152);
+__webpack_require__(156);
 
-var _Find = __webpack_require__(153);
+var _Find = __webpack_require__(157);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -366,14 +372,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 152:
+/***/ 156:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 153:
+/***/ 157:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -393,27 +399,27 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(154);
+var _Banner = __webpack_require__(158);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(65);
+var _HotWork = __webpack_require__(64);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotPhotoAlbum = __webpack_require__(155);
+var _HotPhotoAlbum = __webpack_require__(159);
 
 var _HotPhotoAlbum2 = _interopRequireDefault(_HotPhotoAlbum);
 
-var _HotAuthor = __webpack_require__(66);
+var _HotAuthor = __webpack_require__(65);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _HotMusicAlbum = __webpack_require__(67);
+var _HotMusicAlbum = __webpack_require__(66);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 
-var _HotPost = __webpack_require__(156);
+var _HotPost = __webpack_require__(160);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
@@ -524,7 +530,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 154:
+/***/ 158:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -635,7 +641,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 155:
+/***/ 159:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -703,7 +709,7 @@ migi.name(HotPhotoAlbum, "HotPhotoAlbum");exports.default = HotPhotoAlbum;
 
 /***/ }),
 
-/***/ 156:
+/***/ 160:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -750,7 +756,7 @@ var HotPost = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "cp-hotpost"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ['未来会根据你的口味进行精准智能的推送！>3<'])]), new migi.Obj("dataList", this, function () {
         return this.dataList && this.dataList.length ? migi.createVd("ul", [["class", "list fn-clear"]], [this.dataList.map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '/post/' + item.ID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img288_288_80(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", '/post/' + item.ID], ["class", "txt"]], [item.Taglist[0].TagName])]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/circle/' + item.Taglist[0].TagID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img288_288_80(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", '/circle/' + item.Taglist[0].TagID], ["class", "txt"]], [item.Taglist[0].TagName])]);
         })]) : migi.createVd("div", [["class", "empty"]]);
       })]);
     }
@@ -831,7 +837,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 65:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -919,7 +925,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 66:
+/***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1000,7 +1006,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 67:
+/***/ 66:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

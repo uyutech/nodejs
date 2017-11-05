@@ -233,7 +233,7 @@ class Comment extends migi.Component {
       return <li class="author" id={ 'comment_' + item.Send_ID }>
         <div class="t">
           <div class="profile fn-clear">
-            <img class="pic" src={ item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+            <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
             <div class="txt">
               <div>
                 {
@@ -270,7 +270,7 @@ class Comment extends migi.Component {
     return <li id={ 'comment_' + item.Send_ID }>
       <div class="t">
         <div class="profile fn-clear">
-          <img class="pic" src={ item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+          <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
             <div>
               <span class="name">{ item.Send_UserName }</span>
@@ -305,7 +305,7 @@ class Comment extends migi.Component {
       return <li class="author">
         <div class="t fn-clear">
           <div class="profile fn-clear" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_AuthorName }>
-            <img class="pic" src={ item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+            <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
             <div class="txt">
               <div>
                 <small class="time">{ util.formatDate(item.Send_Time) }</small>
@@ -336,9 +336,14 @@ class Comment extends migi.Component {
     return <li>
       <div class="t fn-clear">
         <div class="profile fn-clear" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>
-          <img class="pic" src={ item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+          <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
-            <div><span class="name2 fn-hide">{ item.Send_ToUserName }</span><b class="arrow fn-hide"/><small class="time">{ util.formatDate(item.Send_Time) }</small><span class="name">{ item.Send_UserName }</span></div>
+            <div>
+              <span class="name2 fn-hide">{ item.Send_ToUserName }</span>
+              <b class="arrow fn-hide"/>
+              <small class="time">{ util.formatDate(item.Send_Time) }</small>
+              <span class="name">{ item.Send_UserName }</span>
+            </div>
             <p>{ item.sign }</p>
           </div>
         </div>

@@ -1,0 +1,193 @@
+/**
+ * Created by army8735 on 2017/11/5.
+ */
+/**
+ * Created by army8735 on 2017/9/1.
+ */
+.circle .title {
+  position: relative;
+  padding: 0.5rem 0.3rem;
+  background-position: center;
+  background-size: cover;
+  border-radius: 0.1rem;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+.circle .title .bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: url(//zhuanquan.xin/img/76873d30f1d764ff290963ca8b4f3fb5.jpg) no-repeat center 0;
+  background-size: cover;
+}
+.circle .title .bg:after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  content: ' ';
+}
+.circle .title > * {
+  position: relative;
+}
+.circle .title .pic {
+  float: left;
+  position: relative;
+  width: 1.44rem;
+  height: 1.44rem;
+  margin-right: 0.1rem;
+}
+.circle .title .pic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #FFF;
+  border-radius: 100%;
+}
+.circle .title .txt {
+  float: left;
+  width: 4rem;
+}
+.circle .title .txt h1 {
+  font-size: 0.24rem;
+  font-weight: 400;
+}
+.circle .title .txt .rel {
+  position: relative;
+  margin-top: 0.1rem;
+}
+.circle .title .txt .rel .join {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  padding: 0 0.2rem;
+  line-height: 0.32rem;
+  background: #5D99C4;
+  color: #FFF;
+  border-radius: 0.1rem;
+  cursor: pointer;
+}
+.circle .title .txt .rel .join:hover {
+  text-decoration: underline;
+}
+.circle .title .txt .rel .join.joined {
+  background: #919191;
+}
+.circle .title .txt .rel .count {
+  display: inline-block;
+  padding-left: 0.25rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAcBAMAAACJyGLdAAAALVBMVEUAAABOj7FPj7BPjrFTjrJQk7RVqtVPj7BPjrFPjrBOj7FOj7FPj7BOkLFOjrDuK4IRAAAADnRSTlMAkvPVKxsGbPLZvbabTnE2pcgAAACPSURBVBjTYwABRyNlEQYoSHwHBGIQNts6EOdVApjD+A4MBMAcPwjnCZgjB+E8BHPsIJzHYI4ehPMInYNQhm4Awmh0SxHOQXMohhdYqydpbg+Ass+BlL2B8G5ATOsFsdnfQUEBkHMPxnkL1NEH47wIYOB5BwcHGOIQnKcMdQjOc4Z9CM5rhnkIzkuIp6EeBwBZRL6oHobQRQAAAABJRU5ErkJggg==) no-repeat 0.05rem center;
+  background-size: 0.12rem auto;
+  line-height: 0.32rem;
+}
+.circle .title .txt .intro {
+  margin-top: 0.1rem;
+  padding-top: 0.1rem;
+  font-size: 0.12rem;
+  color: #919191;
+  border-top: 1px solid #8BBDE1;
+}
+.circle .main {
+  float: left;
+  width: 6.48rem;
+}
+.circle .main .post-list {
+  margin-top: 0.2rem;
+}
+.circle .main .post-list ol li {
+  margin-bottom: 0.1rem;
+}
+.circle .main .post-list ol li > .profile {
+  padding-left: 0.12rem;
+}
+.circle .main .post-list ol li > .profile .pic {
+  float: left;
+  margin-right: 0.2rem;
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 100%;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+.circle .main .post-list ol li > .profile .txt {
+  float: left;
+  line-height: 0.48rem;
+}
+.circle .main .post-list ol li > .profile .txt .name {
+  margin-right: 0.1rem;
+  font-size: 0.18rem;
+  vertical-align: middle;
+}
+.circle .main .post-list ol li > .profile .txt .time {
+  font-size: 0.14rem;
+  color: #919191;
+  vertical-align: middle;
+}
+.circle .main .post-list ol li.author > .profile .txt .name {
+  color: #EC0;
+}
+.circle .main .post-list ol li > .c {
+  position: relative;
+  display: inline-block;
+  min-width: 2rem;
+  max-width: 100%;
+  margin: 0.15rem 0;
+  padding: 0.1rem 0.2rem;
+  background: #FFF;
+  border: 1px solid #EDF3F7;
+  border-radius: 0.1rem;
+}
+.circle .main .post-list ol li > .c .t {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 0.16rem;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.circle .main .post-list ol li > .c .arrow {
+  position: absolute;
+  left: 0.3rem;
+  top: -1px;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  border-top: 1px solid #FFF;
+}
+.circle .main .post-list ol li > .c .arrow:after {
+  position: absolute;
+  left: 0;
+  top: -0.06rem;
+  display: block;
+  width: 0.1rem;
+  height: 0.1rem;
+  border: 1px solid #EDF3F7;
+  border-left: none;
+  border-bottom: none;
+  -webkit-transform: rotateZ(-45deg);
+          transform: rotateZ(-45deg);
+  content: ' ';
+}
+.circle .main .post-list ol li > .c pre {
+  position: relative;
+  font-size: 0.14rem;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  line-height: 1.8;
+}
+.circle .main .post-list ol li > .c pre .placeholder {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.1rem;
+}
+.circle .main .post-list ol li > .c pre a {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: #4E8EB0;
+}

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 199);
+/******/ 	return __webpack_require__(__webpack_require__.s = 203);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -177,6 +177,12 @@ var util = {
       return url;
     }
     return url ? url + '-100_100' : url;
+  },
+  img96_96_80: function img96_96_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-90_90' : url;
   },
   img90_90: function img90_90(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -506,15 +512,15 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 199:
+/***/ 203:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(200);
+__webpack_require__(204);
 
-var _Post = __webpack_require__(201);
+var _Post = __webpack_require__(205);
 
 var _Post2 = _interopRequireDefault(_Post);
 
@@ -524,14 +530,14 @@ var post = migi.preExist(migi.createCp(_Post2.default, [["postData", $CONFIG.pos
 
 /***/ }),
 
-/***/ 200:
+/***/ 204:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 201:
+/***/ 205:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -551,7 +557,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Reply = __webpack_require__(202);
+var _Reply = __webpack_require__(206);
 
 var _Reply2 = _interopRequireDefault(_Reply);
 
@@ -667,7 +673,7 @@ var Post = function (_migi$Component) {
       ajax = _net2.default.postJSON('/api/post/commentList', { postID: self.props.id, skip: skip, take: take, sortType: sortType, myComment: myComment, currentCount: currentCount }, function (res) {
         if (res.success) {
           var data = res.data;
-          // currentCount = data.Size;
+          currentCount = data.Size;
           skip += take;
           if (data.data.length) {
             reply.message = '';
@@ -799,7 +805,7 @@ migi.name(Post, "Post");exports.default = Post;
 
 /***/ }),
 
-/***/ 202:
+/***/ 206:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

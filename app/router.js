@@ -24,6 +24,7 @@ module.exports = app => {
   app.get('/d/login', 'd.login.index');
   // app.get('/d/upload', 'd.upload.index');
   // app.get('/d/guide.index', 'd.guide.index');
+  app.get('/d/circle/:circleID', 'd.circle.index');
   app.get('/d/post/:id', 'd.post.index');
 
   app.get('/m', 'm.index.index');
@@ -34,6 +35,7 @@ module.exports = app => {
   // app.get('/m/search/:kw', 'm.search.index');
   app.get('/m/my', app.middlewares.needLogin(), 'm.my.index');
   app.get('/m/login', 'm.login.index');
+  app.get('/m/circle/:circleID', 'm.circle.index');
   app.get('/m/post/:id', 'm.post.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
@@ -77,6 +79,8 @@ module.exports = app => {
   app.post('/api/author/delComment', app.middlewares.needLoginJson(), 'api.author.delComment');
   app.post('/api/author/singleComment', 'api.author.singleComment');
   app.post('/api/author/searchWorks', 'api.author.searchWorks');
+
+  app.post('/api/circle/join', 'api.circle.join');
 
   app.post('/api/post/commentList', 'api.post.commentList');
   app.post('/api/post/addComment', app.middlewares.needLoginJson(), 'api.post.addComment');

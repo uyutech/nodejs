@@ -47,7 +47,7 @@ ${data.helper.getStat()}
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getMHead({ title:worksDetail.Title })}
+  ${data.helper.getMHead({ title: worksDetail.Title })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mworks.css')}"/>
 </head>
