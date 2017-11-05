@@ -27,23 +27,23 @@ class QuanNiang extends migi.Component {
   show() {
     let $txt = $(this.ref.txt.element);
     $txt.removeClass('fn-hide');
-    timeout = setTimeout(function() {
-      $txt.addClass('fn-hide');
-    }, 3000);
+    // timeout = setTimeout(function() {
+    //   $txt.addClass('fn-hide');
+    // }, 3000);
   }
   enter() {
-    if(timeout) {
-      clearTimeout(timeout);
-    }
+    // if(timeout) {
+    //   clearTimeout(timeout);
+    // }
   }
   leave() {
-    if(timeout) {
-      clearTimeout(timeout);
-    }
-    let $txt = $(this.ref.txt.element);
-    timeout = setTimeout(function() {
-      $txt.addClass('fn-hide');
-    }, 3000);
+    // if(timeout) {
+    //   clearTimeout(timeout);
+    // }
+    // let $txt = $(this.ref.txt.element);
+    // timeout = setTimeout(function() {
+    //   $txt.addClass('fn-hide');
+    // }, 3000);
   }
   render() {
     return <div class="quaniang">

@@ -710,27 +710,27 @@ var QuanNiang = function (_migi$Component) {
     value: function show() {
       var $txt = $(this.ref.txt.element);
       $txt.removeClass('fn-hide');
-      timeout = setTimeout(function () {
-        $txt.addClass('fn-hide');
-      }, 3000);
+      // timeout = setTimeout(function() {
+      //   $txt.addClass('fn-hide');
+      // }, 3000);
     }
   }, {
     key: 'enter',
     value: function enter() {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
+      // if(timeout) {
+      //   clearTimeout(timeout);
+      // }
     }
   }, {
     key: 'leave',
     value: function leave() {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-      var $txt = $(this.ref.txt.element);
-      timeout = setTimeout(function () {
-        $txt.addClass('fn-hide');
-      }, 3000);
+      // if(timeout) {
+      //   clearTimeout(timeout);
+      // }
+      // let $txt = $(this.ref.txt.element);
+      // timeout = setTimeout(function() {
+      //   $txt.addClass('fn-hide');
+      // }, 3000);
     }
   }, {
     key: 'render',
