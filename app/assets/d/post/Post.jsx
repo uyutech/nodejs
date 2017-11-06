@@ -21,6 +21,8 @@ class Post extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    self.isLike = self.props.postData.ISLike;
+    self.likeCount = self.props.postData.LikeCount;
     self.on(migi.Event.DOM, function() {
       let subCmt = self.ref.subCmt;
       let reply = self.ref.reply;
@@ -84,6 +86,8 @@ class Post extends migi.Component {
   @bind rootID = -1
   @bind parentID = -1
   @bind loading
+  @bind likeCount
+  @bind isLike
   load() {
     let self = this;
     let reply = self.ref.reply;
@@ -188,6 +192,21 @@ class Post extends migi.Component {
       this.load();
     }
   }
+  clickLike() {
+    let self = this;
+    net.postJSON('/api/post/like', { postID: self.props.postData.ID }, function(res) {
+      if(res.success) {
+        let data = res.data;
+        self.isLike = data.ISLike;
+        self.likeCount = data.LikeCount;
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+    }, function() {
+      alert(res.message || util.ERROR_MESSAGE);
+    });
+  }
   render() {
     let postData = this.props.postData;
     return <div class="post fn-clear">
@@ -208,9 +227,7 @@ class Post extends migi.Component {
         <div class="wrap">
           <pre class="con">{ postData.Content }</pre>
           <ul class="btn fn-clear">
-            <li class={ 'like' + (postData.ISLike ? ' has' : '') } rel={ postData.ID }>{ postData.ZanCount }</li>
-            <li class={ 'favor' + (postData.ISCollection ? ' has' : '')} rel={ postData.ID }>{ postData.FavorCount }</li>
-            <li class="share" rel={ postData.ID }/>
+            <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }>{ this.likeCount }</li>
           </ul>
           <b class="arrow"/>
         </div>

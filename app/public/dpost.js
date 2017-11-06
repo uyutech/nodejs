@@ -599,6 +599,8 @@ var Post = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = Post.__proto__ || Object.getPrototypeOf(Post)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
+    self.isLike = self.props.postData.ISLike;
+    self.likeCount = self.props.postData.LikeCount;
     self.on(migi.Event.DOM, function () {
       var subCmt = self.ref.subCmt;
       var reply = self.ref.reply;
@@ -767,10 +769,30 @@ var Post = function (_migi$Component) {
       }
     }
   }, {
+    key: 'clickLike',
+    value: function clickLike() {
+      var self = this;
+      _net2.default.postJSON('/api/post/like', { postID: self.props.postData.ID }, function (res) {
+        if (res.success) {
+          var data = res.data;
+          self.isLike = data.ISLike;
+          self.likeCount = data.LikeCount;
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+      }, function () {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var postData = this.props.postData;
-      return migi.createVd("div", [["class", "post fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createVd("h2", [], [postData.Title]), migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", postData.IsAuthor ? postData.SendAuthorHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' : postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [postData.SendUserNickName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(postData.Createtime)])])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("pre", [["class", "con"]], [postData.Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (postData.ISLike ? ' has' : '')], ["rel", postData.ID]], [postData.ZanCount]), migi.createVd("li", [["class", 'favor' + (postData.ISCollection ? ' has' : '')], ["rel", postData.ID]], [postData.FavorCount]), migi.createVd("li", [["class", "share"], ["rel", postData.ID]])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "box"]], [migi.createVd("h4", [], ["回复"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.replyData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.replyData.Size / take)]]), migi.createCp(_Reply2.default, [["ref", "reply"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.replyData.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.replyData.Size / take)]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "回复帖子"], ["placeholder", "夸夸这个帖子吧"]])])]);
+      return migi.createVd("div", [["class", "post fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createVd("h2", [], [postData.Title]), migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", postData.IsAuthor ? postData.SendAuthorHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' : postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [postData.SendUserNickName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(postData.Createtime)])])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("pre", [["class", "con"]], [postData.Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", new migi.Obj("isLike", this, function () {
+        return 'like' + (this.isLike ? ' has' : '');
+      })], ["onClick", new migi.Cb(this, this.clickLike)]], [new migi.Obj("likeCount", this, function () {
+        return this.likeCount;
+      })])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "box"]], [migi.createVd("h4", [], ["回复"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.replyData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.replyData.Size / take)]]), migi.createCp(_Reply2.default, [["ref", "reply"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.replyData.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.replyData.Size / take)]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "回复帖子"], ["placeholder", "夸夸这个帖子吧"]])])]);
     }
   }, {
     key: 'rootID',
@@ -795,6 +817,22 @@ var Post = function (_migi$Component) {
     },
     get: function get() {
       return this.__getBind("loading");
+    }
+  }, {
+    key: 'likeCount',
+    set: function set(v) {
+      this.__setBind("likeCount", v);this.__data("likeCount");
+    },
+    get: function get() {
+      return this.__getBind("likeCount");
+    }
+  }, {
+    key: 'isLike',
+    set: function set(v) {
+      this.__setBind("isLike", v);this.__data("isLike");
+    },
+    get: function get() {
+      return this.__getBind("isLike");
     }
   }]);
 
