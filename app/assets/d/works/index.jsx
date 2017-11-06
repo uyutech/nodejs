@@ -5,9 +5,11 @@
 import './index.less';
 
 import Works from './Works.jsx';
+import './admin.jsx';
 
 let works = migi.preExist(<Works
   isLogin={ $CONFIG.isLogin }
+  authorID={ $CONFIG.authorID }
   worksID={ $CONFIG.worksID }
   workID={ $CONFIG.workID }
   worksDetail={ $CONFIG.worksDetail }

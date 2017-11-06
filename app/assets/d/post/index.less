@@ -79,6 +79,59 @@
           content:' ';
         }
       }
+      .btn{
+        margin-top:0.1rem;
+        height:0.24rem;
+        overflow:hidden;
+        text-align:right;
+        li{
+          display:inline-block;
+          margin-right:0.1rem;
+          height:0.24rem;
+          line-height:0.24rem;
+          cursor:pointer;
+          vertical-align:middle;
+          &:last-child{
+            margin-right:0;
+          }
+          &.like{
+            padding-left:0.25rem;
+            background:url(../works/like.png) no-repeat 0 center;
+            background-size:contain;
+            &:hover{
+              background-image:url(../works/like-hover.png);
+            }
+            &.has{
+              background-image:url(../works/liked.png);
+              &:hover{
+                background-image:url(../works/liked-hover.png);
+              }
+            }
+          }
+          &.favor{
+            padding-left:0.25rem;
+            background:url(../works/favor.png) no-repeat 0 center;
+            background-size:contain;
+            &:hover{
+              background-image:url(../works/favor-hover.png);
+            }
+            &.has{
+              background-image:url(../works/favored.png);
+              &:hover{
+                background-image:url(../works/favored-hover.png);
+              }
+            }
+          }
+          &.share{
+            width:0.24rem;
+            background:url(../works/share.png) no-repeat center;
+            background-size:contain;
+            &:hover{
+              background-image:url(../works/share-hover.png);
+            }
+          }
+        }
+      }
     }
     > .box{
       margin-top:0.2rem;

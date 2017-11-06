@@ -620,7 +620,7 @@ var Profile = function (_migi$Component) {
           alert('图片体积太大啦，不能超过500k！');
         }
       } else {
-        alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器。');
+        alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器或者极速模式。');
       }
     }
   }, {

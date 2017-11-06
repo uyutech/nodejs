@@ -8,6 +8,7 @@ import Works from '../../assets/d/works/Works.jsx';
 
 export default function(data) {
   let isLogin = !!data.ctx.session.uid;
+  let authorID = data.ctx.session.authorID;
   let worksID = data.worksID;
   let workID = data.workID;
   let worksDetail = data.worksDetail;
@@ -37,6 +38,7 @@ ${data.helper.getStat()}
 
   let works = migi.preRender(<Works
     isLogin={ isLogin }
+    authorID={ authorID }
     worksID={ worksID }
     workID={ workID }
     worksDetail={ worksDetail }

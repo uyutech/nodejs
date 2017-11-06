@@ -104,7 +104,7 @@ class Profile extends migi.Component {
       }
     }
     else {
-      alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器。');
+      alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器或者极速模式。');
     }
   }
   clickPic(e, vd, tvd) {

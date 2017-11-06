@@ -172,6 +172,11 @@ class Post extends migi.Component {
       </div>
       <div class="wrap">
         <pre class="con">{ postData.Content }</pre>
+        <ul class="btn fn-clear">
+          <li class={ 'like' + (postData.ISLike ? ' has' : '') } rel={ postData.ID }>{ postData.ZanCount }</li>
+          <li class={ 'favor' + (postData.ISCollection ? ' has' : '')} rel={ postData.ID }>{ postData.FavorCount }</li>
+          <li class="share" rel={ postData.ID }/>
+        </ul>
         <b class="arrow"/>
       </div>
       <div class="box">

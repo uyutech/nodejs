@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 188);
+/******/ 	return __webpack_require__(__webpack_require__.s = 189);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -354,15 +354,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 188:
+/***/ 189:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(189);
+__webpack_require__(190);
 
-var _My = __webpack_require__(190);
+var _My = __webpack_require__(191);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -372,14 +372,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 189:
+/***/ 190:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 190:
+/***/ 191:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -399,11 +399,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Profile = __webpack_require__(191);
+var _Profile = __webpack_require__(192);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(192);
+var _Follow = __webpack_require__(193);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
@@ -462,7 +462,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 191:
+/***/ 192:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -602,7 +602,7 @@ var Profile = function (_migi$Component) {
           alert('图片体积太大啦，不能超过500k！');
         }
       } else {
-        alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器。');
+        alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器或者极速模式。');
       }
     }
   }, {
@@ -662,7 +662,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 192:
+/***/ 193:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

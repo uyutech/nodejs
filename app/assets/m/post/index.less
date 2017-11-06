@@ -72,6 +72,44 @@
         content:' ';
       }
     }
+    .btn{
+      margin-top:0.1rem;
+      height:0.24rem;
+      overflow:hidden;
+      text-align:right;
+      li{
+        display:inline-block;
+        margin-right:0.1rem;
+        height:0.24rem;
+        line-height:0.24rem;
+        cursor:pointer;
+        vertical-align:middle;
+        &:last-child{
+          margin-right:0;
+        }
+        &.like{
+          padding-left:0.25rem;
+          background:url(../../d/works/like.png) no-repeat 0 center;
+          background-size:contain;
+          &.has{
+            background-image:url(../../d/works/liked.png);
+          }
+        }
+        &.favor{
+          padding-left:0.25rem;
+          background:url(../../d/works/favor.png) no-repeat 0 center;
+          background-size:contain;
+          &.has{
+            background-image:url(../../d/works/favored.png);
+          }
+        }
+        &.share{
+          width:0.24rem;
+          background:url(../../d/works/share.png) no-repeat center;
+          background-size:contain;
+        }
+      }
+    }
   }
   > .box{
     margin-top:0.2rem;

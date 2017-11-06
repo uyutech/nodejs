@@ -17,10 +17,73 @@ class PostList extends migi.Component {
         html += self.genItem(item);
       });
       self.html = html;
+      self.on(migi.Event.DOM, function() {
+        let $list = $(this.ref.list.element);
+        $list.on('click', '.like', function() {
+          let $li = $(this);
+          if($li.hasClass('loading')) {
+            return;
+          }
+          $li.addClass('loading');
+          let postID = $li.attr('rel');
+          net.postJSON('/api/post/like', { postID }, function(res) {
+            if(res.success) {
+              res.data === 210 ? $li.addClass('has') : $li.removeClass('has');
+            }
+            else {
+              alert(res.message || util.ERROR_MESSAGE);
+            }
+            $li.removeClass('loading');
+          }, function() {
+            alert(res.message || util.ERROR_MESSAGE);
+            $li.removeClass('loading');
+          });
+        });
+        $list.on('click', '.favor', function() {
+          let $li = $(this);
+          if($li.hasClass('loading')) {
+            return;
+          }
+          $li.addClass('loading');
+          let postID = $li.attr('rel');
+          if($li.hasClass('has')) {
+            net.postJSON('/api/post/unFavor', { postID }, function(res) {
+              if(res.success) {
+                $li.removeClass('has');
+              }
+              else {
+                alert(res.message || util.ERROR_MESSAGE);
+              }
+              $li.removeClass('loading');
+            }, function() {
+              alert(res.message || util.ERROR_MESSAGE);
+              $li.removeClass('loading');
+            });
+          }
+          else {
+            net.postJSON('/api/post/favor', { postID }, function(res) {
+              if(res.success) {
+                $li.addClass('has');
+              }
+              else {
+                alert(res.message || util.ERROR_MESSAGE);
+              }
+              $li.removeClass('loading');
+            }, function() {
+              alert(res.message || util.ERROR_MESSAGE);
+              $li.removeClass('loading');
+            });
+          }
+        });
+        $list.on('click', '.share', function() {
+          migi.eventBus.emit('SHARE', location.origin + '/post/' + $(this).attr('rel'));
+        });
+      });
     }
   }
   genItem(item) {
     let len = item.Content.length;
+    let maxLen = 64;
     if(item.IsAuthor) {
       return <li class="author">
         <div class="profile fn-clear">
@@ -30,15 +93,22 @@ class PostList extends migi.Component {
             <small class="time">{ util.formatDate(item.Createtime) }</small>
           </div>
         </div>
-        <div class="c">
-          <div class="con">
-            {
-              item.Title
-                ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
-                : ''
-            }
-            <pre class={ len > 128 ? 'more' : '' }>{ len > 128 ? item.Content.slice(0, 128) + '...' : item.Content }<span class="placeholder"/><a href={ '/post/' + item.ID } class="more">查看全部</a></pre>
-          </div>
+        <div class="wrap">
+          {
+            item.Title
+              ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
+              : ''
+          }
+          <pre class="con">
+            { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
+            <b class="placeholder"/>
+            <a href={ '/post/' + item.ID } class="more">查看全部</a>
+          </pre>
+          <ul class="btn fn-clear">
+            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.ZanCount }</li>
+            <li class={ 'favor' + (item.ISCollection ? ' has' : '')} rel={ item.ID }>{ item.FavorCount }</li>
+            <li class="share" rel={ item.ID }/>
+          </ul>
           <b class="arrow"/>
         </div>
       </li>;
@@ -51,14 +121,24 @@ class PostList extends migi.Component {
           <small class="time">{ util.formatDate(item.Createtime) }</small>
         </div>
       </div>
-      <div class="c">
-        <div class="con">
-          {
-            item.Title
-              ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
-              : ''
-          }
-          <pre class={ len > 128 ? 'more' : '' }>{ len > 128 ? item.Content.slice(0, 128) + '...' : item.Content }<span class="placeholder"/><a href={ '/post/' + item.ID } class="more">查看全部</a></pre>
+      <div class="wrap">
+        {
+          item.Title
+            ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
+            : ''
+        }
+        <pre class="con">
+          { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
+          <b class="placeholder"/>
+          <a href={ '/post/' + item.ID } class="more">查看全部</a>
+        </pre>
+        <div class="fn">
+          <a href={ '/post/' + item.ID } class="more">查看全部</a>
+          <ul class="btn fn-clear">
+            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.ZanCount }</li>
+            <li class={ 'favor' + (item.ISCollection ? ' has' : '')} rel={ item.ID }>{ item.FavorCount }</li>
+            <li class="share" rel={ item.ID }/>
+          </ul>
         </div>
         <b class="arrow"/>
       </div>

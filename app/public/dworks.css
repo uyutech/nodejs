@@ -533,6 +533,20 @@ body {
   content: '\2014';
   color: #437998;
 }
+.mod.mod-title .txt .edit {
+  display: inline-block;
+  margin-left: 0.2rem;
+  width: 0.2rem;
+  height: 0.2rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAOVBMVEUAAABtkrZPjrBTjrJOj7FPjrFOj7BPj7NPj7BPj7JOj7FPj7BOj7JOj7FOj7FPkbRSlLNiibFOjrBxHPmDAAAAEnRSTlMAB+ortrT7SuSCpuzazYY6Mg3KTV+QAAAAq0lEQVQ4y83P2wqDMBCE4Zi4OXioOu//sE2hMEhwN0gL/tcfO6z7YVvoYoMArx43Yo6UmvMhRVjrR67OhRmbcW9BTC54iLkbkZPHOFjO79X2uOD2iNzjgsdydDnuCsDk2jmcYesIjV1CwxEajtB2hAJAFNdAxXG6cSoUOhUmOh0WFDoNTpgKnfL1ippUZ8G8TiU1hPDcg6BIJwRuQMFFcg9q/RWafaHYTj7uDaz+Fh3uQPLUAAAAAElFTkSuQmCC) no-repeat center;
+  background-size: contain;
+  text-indent: 999rem;
+  overflow: hidden;
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-transform: translateY(-2px);
+          transform: translateY(-2px);
+}
 .mod.mod-title .txt .pop {
   position: absolute;
   top: 0.05rem;
@@ -2761,6 +2775,34 @@ body {
 .mod.mod-describe pre {
   padding: 0.1rem;
   white-space: pre-wrap;
+}
+/**
+ * Created by army8735 on 2017/11/6.
+ */
+.cp-edit:before {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: rgba(0, 0, 0, 0.5);
+  content: ' ';
+}
+.cp-edit .c {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  padding: 0.2rem;
+  width: 6rem;
+  background: #FFF;
+  border-radius: 0.1rem;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.cp-edit .c label {
+  display: block;
+  color: #919191;
 }
 .works {
   padding: 0 0 0.2rem;

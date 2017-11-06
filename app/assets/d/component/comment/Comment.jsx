@@ -241,7 +241,7 @@ class Comment extends migi.Component {
                     ? <span class="name">{ item.Send_AuthorName }</span>
                     : <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
                 }
-                <small class="time">{ util.formatDate(item.Send_Time) }</small>
+                <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
               </div>
               <p>{ item.sign }</p>
             </div>
@@ -274,7 +274,7 @@ class Comment extends migi.Component {
           <div class="txt">
             <div>
               <span class="name">{ item.Send_UserName }</span>
-              <small class="time">{ util.formatDate(item.Send_Time) }</small>
+              <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
             </div>
             <p>{ item.sign }</p>
           </div>
@@ -308,7 +308,7 @@ class Comment extends migi.Component {
             <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
             <div class="txt">
               <div>
-                <small class="time">{ util.formatDate(item.Send_Time) }</small>
+                <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
                 {
                   item.IsAuthor === true
                     ? <span class="name">{ item.Send_AuthorName }</span>
@@ -341,7 +341,7 @@ class Comment extends migi.Component {
             <div>
               <span class="name2 fn-hide">{ item.Send_ToUserName }</span>
               <b class="arrow fn-hide"/>
-              <small class="time">{ util.formatDate(item.Send_Time) }</small>
+              <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
               <span class="name">{ item.Send_UserName }</span>
             </div>
             <p>{ item.sign }</p>

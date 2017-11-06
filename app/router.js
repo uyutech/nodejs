@@ -80,13 +80,16 @@ module.exports = app => {
   app.post('/api/author/singleComment', 'api.author.singleComment');
   app.post('/api/author/searchWorks', 'api.author.searchWorks');
 
-  app.post('/api/circle/join', 'api.circle.join');
+  app.post('/api/circle/join', app.middlewares.needLoginJson(), 'api.circle.join');
 
   app.post('/api/post/commentList', 'api.post.commentList');
   app.post('/api/post/addComment', app.middlewares.needLoginJson(), 'api.post.addComment');
   app.post('/api/post/likeComment', app.middlewares.needLoginJson(), 'api.post.likeComment');
   app.post('/api/post/subCommentList', 'api.post.subCommentList');
   app.post('/api/post/delComment', app.middlewares.needLoginJson(), 'api.post.delComment');
+  app.post('/api/post/like', app.middlewares.needLoginJson(), 'api.post.like');
+  app.post('/api/post/favor', app.middlewares.needLoginJson(), 'api.post.favor');
+  app.post('/api/post/unFavor', app.middlewares.needLoginJson(), 'api.post.unFavor');
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
