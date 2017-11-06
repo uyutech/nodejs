@@ -1885,7 +1885,7 @@ var Profile = function (_migi$Component) {
       })]), migi.createVd("a", [["href", "#"], ["class", new migi.Obj(["like", "loading"], this, function () {
         return (this.like ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '');
       })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("like", this, function () {
-        return this.like ? '取关' : '关注';
+        return this.like ? '已关注' : '关注';
       })])]), migi.createVd("p", [["class", "intro"]], [new migi.Obj("sign", this, function () {
         return this.sign;
       })])])]);

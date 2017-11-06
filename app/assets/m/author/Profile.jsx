@@ -103,7 +103,7 @@ class Profile extends migi.Component {
         <div class="rel">
           <label>粉丝</label>
           <span>{ this.fansNumber || '0' }</span>
-          <a href="#" class={ (this.like ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '') } onClick={ this.click }>{ this.like ? '取关' : '关注' }</a>
+          <a href="#" class={ (this.like ? 'un-follow' : 'follow') + (this.loading ? ' loading' : '') } onClick={ this.click }>{ this.like ? '已关注' : '关注' }</a>
         </div>
         <p class="intro">{ this.sign }</p>
       </div>

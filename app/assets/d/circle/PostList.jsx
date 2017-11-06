@@ -46,6 +46,10 @@ class PostList extends migi.Component {
             $li.removeClass('loading');
           });
         });
+        $list.on('click', '.comment', function() {
+          let postID = $(this).attr('rel');
+          location.href = '/post/' + postID;
+        });
       });
     }
   }
@@ -73,7 +77,7 @@ class PostList extends migi.Component {
           </pre>
           <ul class="btn fn-clear">
             <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
-            <li class="comment">{ item.CommentCount }</li>
+            <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
           </ul>
           <b class="arrow"/>
         </div>

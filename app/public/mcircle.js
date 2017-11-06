@@ -517,7 +517,7 @@ var Title = function (_migi$Component) {
       })]), migi.createVd("a", [["href", "#"], ["class", new migi.Obj("joined", this, function () {
         return 'join' + (this.joined ? ' joined' : '');
       })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("joined", this, function () {
-        return this.joined ? '离开圈子' : '加入圈子';
+        return this.joined ? '已经加入' : '加入圈子';
       })])])])]), migi.createVd("p", [["class", 'intro' + (this.props.circleDetail.Describe ? '' : ' fn-hide')]], [this.props.circleDetail.Describe])]);
     }
   }, {
