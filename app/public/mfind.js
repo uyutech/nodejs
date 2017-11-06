@@ -630,7 +630,7 @@ var HotPost = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "cp-hotpost"]], [migi.createVd("h4", [], [this.props.title]), migi.createVd("div", [["class", "list"], ["ref", "list"]], [migi.createVd("div", [["class", "c"]], [new migi.Obj("dataList", this, function () {
         return this.dataList && this.dataList.length ? migi.createVd("ul", [], [this.dataList.map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '/circle/' + item.Taglist[0].TagID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img200_200_80(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", '/circle/' + item.Taglist[0].TagID], ["class", "txt"]], [item.Taglist[0].TagName])]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/circle/' + item.TagID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img288_288_80(item.TagCover)) || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("a", [["href", '/circle/' + item.TagID], ["class", "txt"]], [item.TagName])]);
         })]) : migi.createVd("div", [["class", "empty"]]);
       })])])]);
     }

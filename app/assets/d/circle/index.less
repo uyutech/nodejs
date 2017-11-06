@@ -102,6 +102,7 @@
       ol{
         > li{
           margin-bottom:0.1rem;
+          //background:#EEE;
           > .profile{
             padding-left:0.12rem;
             .pic{
@@ -134,9 +135,9 @@
           }
           > .wrap{
             position:relative;
-            display:inline-block;
-            min-width:2rem;
-            max-width:100%;
+            //display:inline-block;
+            //min-width:100%;
+            //max-width:100%;
             margin:0.15rem 0;
             padding:0.1rem 0.2rem;
             background:#FFF;
@@ -181,67 +182,50 @@
               white-space:pre-wrap;
               line-height:1.8;
               overflow:hidden;
-              cursor:pointer;
               .more{
+                margin-left:0.05rem;
                 font-size:0.14rem;
                 color:@secondLinkColor;
-                line-height:0.24rem;
+                line-height:1.8;
+                white-space:nowrap;
                 &:hover{
                   color:@mainHoverColor;
                 }
               }
             }
-            .fn{
-              position:relative;
-              height:0.24rem;
-              .btn{
-                position:absolute;
-                top:0;
-                right:0;
-                li{
-                  float:left;
-                  margin-right:0.1rem;
-                  height:0.24rem;
-                  line-height:0.24rem;
-                  cursor:pointer;
-                  &:last-child{
-                    margin-right:0;
+            .btn{
+              margin-top:0.05rem;
+              text-align:right;
+              li{
+                display:inline-block;
+                margin-right:0.1rem;
+                height:0.24rem;
+                line-height:0.24rem;
+                cursor:pointer;
+                vertical-align:middle;
+                &:last-child{
+                  margin-right:0;
+                }
+                &.like{
+                  padding-left:0.3rem;
+                  background:url(../works/like.png) no-repeat 0 center;
+                  background-size:contain;
+                  &:hover{
+                    background-image:url(../works/like-hover.png);
                   }
-                  &.like{
-                    padding-left:0.25rem;
-                    background:url(../works/like.png) no-repeat 0 center;
-                    background-size:contain;
+                  &.has{
+                    background-image:url(../works/liked.png);
                     &:hover{
-                      background-image:url(../works/like-hover.png);
-                    }
-                    &.has{
-                      background-image:url(../works/liked.png);
-                      &:hover{
-                        background-image:url(../works/liked-hover.png);
-                      }
+                      background-image:url(../works/liked-hover.png);
                     }
                   }
-                  &.favor{
-                    padding-left:0.25rem;
-                    background:url(../works/favor.png) no-repeat 0 center;
-                    background-size:contain;
-                    &:hover{
-                      background-image:url(../works/favor-hover.png);
-                    }
-                    &.has{
-                      background-image:url(../works/favored.png);
-                      &:hover{
-                        background-image:url(../works/favored-hover.png);
-                      }
-                    }
-                  }
-                  &.share{
-                    width:0.24rem;
-                    background:url(../works/share.png) no-repeat center;
-                    background-size:contain;
-                    &:hover{
-                      background-image:url(../works/share-hover.png);
-                    }
+                }
+                &.comment{
+                  padding-left:0.3rem;
+                  background:url(comment.png) no-repeat 0 center;
+                  background-size:contain;
+                  &:hover{
+                    background-image:url(comment-hover.png);
                   }
                 }
               }

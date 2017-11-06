@@ -55,7 +55,7 @@ class Title extends migi.Component {
           </div>
         </div>
       </div>
-      <p class="intro">{ this.props.circleDetail.Describe }</p>
+      <p class={ 'intro' + (this.props.circleDetail.Describe ? '' : ' fn-hide') }>{ this.props.circleDetail.Describe }</p>
     </div>;
   }
 }

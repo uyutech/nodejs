@@ -36,10 +36,10 @@ class HotPost extends migi.Component {
                 {
                   this.dataList.map(function(item) {
                     return <li>
-                      <a href={ `/circle/${item.Taglist[0].TagID}` } class="pic">
-                        <img src={ util.autoSsl(util.img200_200_80(item.Taglist[0].TagCover)) || '//zhuanquan.xin/img/blank.png' }/>
+                      <a href={ `/circle/${item.TagID}` } class="pic">
+                        <img src={ util.autoSsl(util.img288_288_80(item.TagCover)) || '//zhuanquan.xin/img/blank.png' }/>
                       </a>
-                      <a href={ `/circle/${item.Taglist[0].TagID}` } class="txt">{ item.Taglist[0].TagName }</a>
+                      <a href={ `/circle/${item.TagID}` } class="txt">{ item.TagName }</a>
                     </li>;
                   })
                 }

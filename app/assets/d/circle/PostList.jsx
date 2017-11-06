@@ -28,7 +28,14 @@ class PostList extends migi.Component {
           let postID = $li.attr('rel');
           net.postJSON('/api/post/like', { postID }, function(res) {
             if(res.success) {
-              res.data === 210 ? $li.addClass('has') : $li.removeClass('has');
+              let data = res.data;
+              if(data.ISLike) {
+                $li.addClass('has');
+              }
+              else {
+                $li.removeClass('has');
+              }
+              $li.text(data.LikeCount);
             }
             else {
               alert(res.message || util.ERROR_MESSAGE);
@@ -38,45 +45,6 @@ class PostList extends migi.Component {
             alert(res.message || util.ERROR_MESSAGE);
             $li.removeClass('loading');
           });
-        });
-        $list.on('click', '.favor', function() {
-          let $li = $(this);
-          if($li.hasClass('loading')) {
-            return;
-          }
-          $li.addClass('loading');
-          let postID = $li.attr('rel');
-          if($li.hasClass('has')) {
-            net.postJSON('/api/post/unFavor', { postID }, function(res) {
-              if(res.success) {
-                $li.removeClass('has');
-              }
-              else {
-                alert(res.message || util.ERROR_MESSAGE);
-              }
-              $li.removeClass('loading');
-            }, function() {
-              alert(res.message || util.ERROR_MESSAGE);
-              $li.removeClass('loading');
-            });
-          }
-          else {
-            net.postJSON('/api/post/favor', { postID }, function(res) {
-              if(res.success) {
-                $li.addClass('has');
-              }
-              else {
-                alert(res.message || util.ERROR_MESSAGE);
-              }
-              $li.removeClass('loading');
-            }, function() {
-              alert(res.message || util.ERROR_MESSAGE);
-              $li.removeClass('loading');
-            });
-          }
-        });
-        $list.on('click', '.share', function() {
-          migi.eventBus.emit('SHARE', location.origin + '/post/' + $(this).attr('rel'));
         });
       });
     }
@@ -101,13 +69,11 @@ class PostList extends migi.Component {
           }
           <pre class="con">
             { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
-            <b class="placeholder"/>
             <a href={ '/post/' + item.ID } class="more">查看全部</a>
           </pre>
           <ul class="btn fn-clear">
-            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.ZanCount }</li>
-            <li class={ 'favor' + (item.ISCollection ? ' has' : '')} rel={ item.ID }>{ item.FavorCount }</li>
-            <li class="share" rel={ item.ID }/>
+            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
+            <li class="comment">{ item.CommentCount }</li>
           </ul>
           <b class="arrow"/>
         </div>
@@ -129,17 +95,12 @@ class PostList extends migi.Component {
         }
         <pre class="con">
           { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
-          <b class="placeholder"/>
-          <a href={ '/post/' + item.ID } class="more">查看全部</a>
+          <a href={ '/post/' + item.ID } class="more">点击展开></a>
         </pre>
-        <div class="fn">
-          <a href={ '/post/' + item.ID } class="more">查看全部</a>
-          <ul class="btn fn-clear">
-            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.ZanCount }</li>
-            <li class={ 'favor' + (item.ISCollection ? ' has' : '')} rel={ item.ID }>{ item.FavorCount }</li>
-            <li class="share" rel={ item.ID }/>
-          </ul>
-        </div>
+        <ul class="btn fn-clear">
+          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
+          <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+        </ul>
         <b class="arrow"/>
       </div>
     </li>;

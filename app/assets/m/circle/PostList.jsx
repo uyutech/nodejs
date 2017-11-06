@@ -17,11 +17,41 @@ class PostList extends migi.Component {
         html += self.genItem(item);
       });
       self.html = html;
+      self.on(migi.Event.DOM, function() {
+        let $list = $(this.ref.list.element);
+        $list.on('click', '.like', function() {
+          let $li = $(this);
+          if($li.hasClass('loading')) {
+            return;
+          }
+          $li.addClass('loading');
+          let postID = $li.attr('rel');
+          net.postJSON('/api/post/like', { postID }, function(res) {
+            if(res.success) {
+              let data = res.data;
+              if(data.ISLike) {
+                $li.addClass('has');
+              }
+              else {
+                $li.removeClass('has');
+              }
+              $li.text(data.LikeCount);
+            }
+            else {
+              alert(res.message || util.ERROR_MESSAGE);
+            }
+            $li.removeClass('loading');
+          }, function() {
+            alert(res.message || util.ERROR_MESSAGE);
+            $li.removeClass('loading');
+          });
+        });
+      });
     }
   }
   genItem(item) {
     let len = item.Content.length;
-    let maxLen = 64;
+    let maxLen = 32;
     if(item.IsAuthor) {
       return <li class="author">
         <div class="profile fn-clear">
@@ -37,15 +67,14 @@ class PostList extends migi.Component {
               ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
               : ''
           }
-          <pre class="con">{ len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }</pre>
-          <div class="fn">
+          <pre class="con">
+            { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
             <a href={ '/post/' + item.ID } class="more">查看全部</a>
-            <ul class="btn fn-clear">
-              <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.ZanCount }</li>
-              <li class={ 'favor' + (item.ISCollection ? ' has' : '')} rel={ item.ID }>{ item.FavorCount }</li>
-              <li class="share" rel={ item.ID }/>
-            </ul>
-          </div>
+          </pre>
+          <ul class="btn fn-clear">
+            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
+            <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+          </ul>
           <b class="arrow"/>
         </div>
       </li>;
@@ -64,15 +93,14 @@ class PostList extends migi.Component {
             ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
             : ''
         }
-        <pre class="con">{ len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }</pre>
-        <div class="fn">
+        <pre class="con">
+          { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
           <a href={ '/post/' + item.ID } class="more">查看全部</a>
-          <ul class="btn fn-clear">
-            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.ZanCount }</li>
-            <li class={ 'favor' + (item.ISCollection ? ' has' : '')} rel={ item.ID }>{ item.FavorCount }</li>
-            <li class="share" rel={ item.ID }/>
-          </ul>
-        </div>
+        </pre>
+        <ul class="btn fn-clear">
+          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
+          <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+        </ul>
         <b class="arrow"/>
       </div>
     </li>;
