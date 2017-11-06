@@ -24,7 +24,11 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       let content = body.content || '';
-      content = content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n/g, '<br/>');
+      if(!content || content.length > 256) {
+        return ctx.body = {
+          success: false,
+        };
+      }
       let res = yield ctx.helper.postServiceJSON('api/tag/AddComment', {
         uid,
         ParentID: body.parentID,

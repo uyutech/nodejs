@@ -60,7 +60,8 @@ module.exports = app => {
     * addComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      if(!body.content || body.content.length > 256) {
+      let content = body.content || '';
+      if(!content || content.length > 256) {
         return ctx.body = {
           success: false,
         };
@@ -69,7 +70,7 @@ module.exports = app => {
         uid,
         ParentID: body.parentID,
         RootID: body.rootID,
-        Content: body.content,
+        Content: content,
         AuthorCommentID: body.authorID,
       });
       ctx.body = res.data;
