@@ -6,6 +6,7 @@
 
 import Title from './Title.jsx';
 import PostList from './PostList.jsx';
+import SubPost from './SubPost.jsx';
 
 class Circle extends migi.Component {
   constructor(...data) {
@@ -17,6 +18,7 @@ class Circle extends migi.Component {
       <div class="main">
         <PostList datas={ this.props.postList }/>
       </div>
+      <SubPost ref="subPost" originTo="haha"/>
     </div>;
   }
 }

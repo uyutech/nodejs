@@ -5,7 +5,7 @@
 import './index.less';
 
 import Works from './Works.jsx';
-import './admin.jsx';
+// import './admin.jsx';
 
 let works = migi.preExist(<Works
   isLogin={ $CONFIG.isLogin }
