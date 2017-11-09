@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 204);
+/******/ 	return __webpack_require__(__webpack_require__.s = 203);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -512,15 +512,15 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 204:
+/***/ 203:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(205);
+__webpack_require__(204);
 
-var _Post = __webpack_require__(206);
+var _Post = __webpack_require__(205);
 
 var _Post2 = _interopRequireDefault(_Post);
 
@@ -530,14 +530,14 @@ var post = migi.preExist(migi.createCp(_Post2.default, [["postData", $CONFIG.pos
 
 /***/ }),
 
-/***/ 205:
+/***/ 204:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 206:
+/***/ 205:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -557,7 +557,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Reply = __webpack_require__(207);
+var _Reply = __webpack_require__(206);
 
 var _Reply2 = _interopRequireDefault(_Reply);
 
@@ -843,7 +843,7 @@ migi.name(Post, "Post");exports.default = Post;
 
 /***/ }),
 
-/***/ 207:
+/***/ 206:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

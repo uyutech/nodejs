@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 177);
+/******/ 	return __webpack_require__(__webpack_require__.s = 176);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -512,15 +512,15 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 177:
+/***/ 176:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(178);
+__webpack_require__(177);
 
-var _Author = __webpack_require__(179);
+var _Author = __webpack_require__(178);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -530,14 +530,14 @@ var author = migi.preExist(migi.createCp(_Author2.default, [["uid", $CONFIG.uid]
 
 /***/ }),
 
-/***/ 178:
+/***/ 177:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 179:
+/***/ 178:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -557,15 +557,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Nav = __webpack_require__(180);
+var _Nav = __webpack_require__(179);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(183);
+var _Home = __webpack_require__(182);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _AuthorComment = __webpack_require__(185);
+var _AuthorComment = __webpack_require__(184);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
@@ -697,6 +697,63 @@ var Author = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Author, "Author");exports.default = Author;
+
+/***/ }),
+
+/***/ 179:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Profile = __webpack_require__(180);
+
+var _Profile2 = _interopRequireDefault(_Profile);
+
+var _Link = __webpack_require__(181);
+
+var _Link2 = _interopRequireDefault(_Link);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Nav = function (_migi$Component) {
+  _inherits(Nav, _migi$Component);
+
+  function Nav() {
+    var _ref;
+
+    _classCallCheck(this, Nav);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(this, (_ref = Nav.__proto__ || Object.getPrototypeOf(Nav)).call.apply(_ref, [this].concat(data)));
+  }
+
+  _createClass(Nav, [{
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "nav fn-clear"]], [migi.createVd("div", [["class", "bg"]]), migi.createCp(_Profile2.default, [["ref", "profile"], ["authorID", this.props.authorID], ["authorDetail", this.props.authorDetail], ["uid", this.props.uid]]), migi.createCp(_Link2.default, [["ref", "link"], ["authorDetail", this.props.authorDetail]])]);
+    }
+  }]);
+
+  return Nav;
+}(migi.Component);
+
+migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
 
@@ -915,63 +972,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(181);
-
-var _Profile2 = _interopRequireDefault(_Profile);
-
-var _Link = __webpack_require__(182);
-
-var _Link2 = _interopRequireDefault(_Link);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Nav = function (_migi$Component) {
-  _inherits(Nav, _migi$Component);
-
-  function Nav() {
-    var _ref;
-
-    _classCallCheck(this, Nav);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = Nav.__proto__ || Object.getPrototypeOf(Nav)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(Nav, [{
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "nav fn-clear"]], [migi.createVd("div", [["class", "bg"]]), migi.createCp(_Profile2.default, [["ref", "profile"], ["authorID", this.props.authorID], ["authorDetail", this.props.authorDetail], ["uid", this.props.uid]]), migi.createCp(_Link2.default, [["ref", "link"], ["authorDetail", this.props.authorDetail]])]);
-    }
-  }]);
-
-  return Nav;
-}(migi.Component);
-
-migi.name(Nav, "Nav");exports.default = Nav;
-
-/***/ }),
-
-/***/ 181:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
@@ -1176,7 +1176,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 182:
+/***/ 181:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1281,7 +1281,7 @@ migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
 
-/***/ 183:
+/***/ 182:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1305,7 +1305,7 @@ var _HotAuthor = __webpack_require__(65);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(184);
+var _Dynamic = __webpack_require__(183);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -1356,7 +1356,7 @@ migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
 
-/***/ 184:
+/***/ 183:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1430,7 +1430,7 @@ migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
 
-/***/ 185:
+/***/ 184:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

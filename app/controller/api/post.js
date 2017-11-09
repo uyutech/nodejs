@@ -23,8 +23,8 @@ module.exports = app => {
     * addComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let content = body.content || '';
-      if(!content || content.length > 256) {
+      let content = (body.content || '').trim();
+      if(content.length < 3 || content.length > 256) {
         return ctx.body = {
           success: false,
         };

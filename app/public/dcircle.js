@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 208);
+/******/ 	return __webpack_require__(__webpack_require__.s = 207);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -354,15 +354,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 208:
+/***/ 207:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(209);
+__webpack_require__(208);
 
-var _Circle = __webpack_require__(210);
+var _Circle = __webpack_require__(209);
 
 var _Circle2 = _interopRequireDefault(_Circle);
 
@@ -372,14 +372,14 @@ var circle = migi.preExist(migi.createCp(_Circle2.default, [["circleDetail", $CO
 
 /***/ }),
 
-/***/ 209:
+/***/ 208:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 210:
+/***/ 209:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -391,13 +391,17 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(211);
+var _Title = __webpack_require__(210);
 
 var _Title2 = _interopRequireDefault(_Title);
 
-var _PostList = __webpack_require__(212);
+var _PostList = __webpack_require__(211);
 
 var _PostList2 = _interopRequireDefault(_PostList);
+
+var _SubPost = __webpack_require__(212);
+
+var _SubPost2 = _interopRequireDefault(_SubPost);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -425,7 +429,7 @@ var Circle = function (_migi$Component) {
   _createClass(Circle, [{
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createVd("div", [["class", "main"]], [migi.createCp(_PostList2.default, [["datas", this.props.postList]])])]);
+      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createVd("div", [["class", "main"]], [migi.createCp(_PostList2.default, [["datas", this.props.postList]])]), migi.createCp(_SubPost2.default, [["circleID", this.props.circleDetail.TagID], ["ref", "subPost"], ["originTo", this.props.circleDetail.TagName]])]);
     }
   }]);
 
@@ -436,7 +440,7 @@ migi.name(Circle, "Circle");exports.default = Circle;
 
 /***/ }),
 
-/***/ 211:
+/***/ 210:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -553,7 +557,7 @@ migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
 
-/***/ 212:
+/***/ 211:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -659,6 +663,414 @@ var PostList = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(PostList, "PostList");exports.default = PostList;
+
+/***/ }),
+
+/***/ 212:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var STATE = {
+  LOADING: 0,
+  LOADED: 1,
+  ERROR: 2
+};
+var TEXT = {
+  0: '上传中...',
+  1: '',
+  2: '加载失败'
+};
+
+var SubPost = function (_migi$Component) {
+  _inherits(SubPost, _migi$Component);
+
+  function SubPost() {
+    var _ref;
+
+    _classCallCheck(this, SubPost);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = SubPost.__proto__ || Object.getPrototypeOf(SubPost)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.value = self.props.value || '';
+    self.invalid = self.value.trim().length < 3;
+    self.maxlength = self.props.maxlength;
+    self.subText = self.props.subText;
+    self.tipText = self.props.tipText;
+    self.placeholder = self.props.placeholder;
+    self.originTo = self.props.originTo;
+    self.on(migi.Event.DOM, function () {
+      if ($CONFIG.isLogin) {
+        var key = $CONFIG.uid + '_circle_img';
+        var cache = localStorage[key];
+        if (cache) {
+          cache = JSON.parse(cache);
+          var temp = [];
+          cache.forEach(function (item) {
+            temp.push({
+              state: STATE.LOADED,
+              url: item
+            });
+          });
+          self.list = temp;
+          self.imgNum = temp.length;
+        }
+        var key2 = $CONFIG.uid + '_circle_content';
+        var cache2 = localStorage[key2];
+        if (cache2) {
+          self.value = cache2.trim();
+          self.input(null, self.ref.input);
+        }
+      }
+    });
+    return _this;
+  }
+
+  _createClass(SubPost, [{
+    key: 'input',
+    value: function input(e, vd) {
+      var self = this;
+      var $vd = $(vd.element);
+      self.num = $vd.val().length;
+      if (!$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+      } else {
+        self.num = $vd.val().trim().length;
+        var content = $vd.val().trim();
+        self.invalid = content.length < 3 || content.length > 256;
+        self.warnLength = content.length > 256;
+        var key2 = $CONFIG.uid + '_circle_content';
+        localStorage[key2] = content;
+      }
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      this.expand = true;return;
+      if (!window.$CONFIG.isLogin) {
+        migi.eventBus.emit('NEED_LOGIN');
+      } else {
+        this.expand = true;
+      }
+    }
+  }, {
+    key: 'submit',
+    value: function submit(e) {
+      e.preventDefault();
+      var self = this;
+      if (!self.sending && !self.invalid && !self.disableUpload) {
+        var imgs = self.list.map(function (item) {
+          return item.url;
+        });
+        self.sending = true;
+        _net2.default.postJSON('/api/circle/add', { content: self.value, imgs: imgs, circleID: self.props.circleID }, function (res) {
+          if (res.success) {
+            self.value = '';
+            self.list = [];
+            var key = $CONFIG.uid + '_circle_img';
+            localStorage[key] = '';
+            var key2 = $CONFIG.uid + '_circle_content';
+            localStorage[key2] = '';
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          self.sending = false;
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          self.sending = false;
+        });
+      }
+    }
+  }, {
+    key: 'blur',
+    value: function blur() {
+      // this.expand = false;
+    }
+  }, {
+    key: 'change',
+    value: function change(e) {
+      var self = this;
+      if (window.FileReader) {
+        var files = e.target.files;
+        var res = [];
+        for (var i = 0, len = files.length; i < len; i++) {
+          var file = files[i];
+          var size = file.size;
+          if (size && size !== 0 && size <= 1024 * 1024 * 3) {
+            res.push(file);
+          }
+        }
+        if (files.length !== res.length) {
+          alert('图片最大不能超过3M哦，超过的将自动过滤。');
+        }
+        if (!res.length) {
+          return;
+        }
+        self.disableUpload = true;
+        var num = res.length;
+        var count = 0;
+        res.forEach(function (file, i) {
+          var fileReader = new FileReader();
+          fileReader.onload = function () {
+            self.list.push({
+              state: STATE.LOADING,
+              url: fileReader.result
+            });
+            _net2.default.postJSON('/api/user/uploadPic', { img: fileReader.result }, function (res) {
+              if (res.success) {
+                self.list[i + self.imgNum].state = STATE.LOADED;
+                self.list[i + self.imgNum].url = res.data;
+                self.list = self.list;
+                self.addCache(res.data);
+                count++;
+                if (count === num) {
+                  self.disableUpload = false;
+                }
+              } else {
+                alert(res.message || _util2.default.ERROR_MESSAGE);
+              }
+            }, function (res) {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+              count++;
+              if (count === num) {
+                self.disableUpload = false;
+              }
+            });
+          };
+          fileReader.readAsDataURL(file);
+        });
+      } else {
+        alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器或者极速模式。');
+      }
+    }
+  }, {
+    key: 'addCache',
+    value: function addCache(url) {
+      var key = $CONFIG.uid + '_circle';
+      var cache = localStorage[key];
+      if (cache) {
+        cache = JSON.parse(cache);
+      } else {
+        cache = [];
+      }
+      cache.push(url);
+      localStorage[key] = JSON.stringify(cache);
+    }
+  }, {
+    key: 'delCache',
+    value: function delCache(url) {
+      var key = $CONFIG.uid + '_circle';
+      var cache = localStorage[key];
+      if (cache) {
+        cache = JSON.parse(cache);
+        var i = cache.indexOf(url);
+        if (i > -1) {
+          cache.splice(i, 1);
+          localStorage[key] = JSON.stringify(cache);
+        }
+      }
+    }
+  }, {
+    key: 'clearCache',
+    value: function clearCache() {
+      var key = $CONFIG.uid + '_circle';
+      localStorage[key] = '';
+    }
+  }, {
+    key: 'clickImg',
+    value: function clickImg(e, vd, tvd) {
+      this.delCache(tvd.props.rel);
+      this.list.splice(tvd.props.idx, 1);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", new migi.Obj("expand", this, function () {
+        return 'mod-sub' + (this.expand ? ' expand' : ' expand');
+      })]], [migi.createVd("div", [["class", "c"]], [migi.createVd("form", [["class", new migi.Obj(["to", "originTo"], this, function () {
+        return 'fn-clear' + (this.to || this.originTo ? ' to' : '');
+      })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("div", [["class", "wrap"]], [migi.createVd("label", [], ["TO: ", new migi.Obj(["to", "originTo"], this, function () {
+        return this.to || this.originTo;
+      })]), migi.createVd("textarea", [["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
+        return this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个圈子吧';
+      })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["onBlur", new migi.Cb(this, this.blur)]], [new migi.Obj("value", this, function () {
+        return this.value;
+      })]), migi.createVd("span", [["class", new migi.Obj("warnLength", this, function () {
+        return 'limit' + (this.warnLength ? ' warn' : '');
+      })]], [migi.createVd("strong", [], [new migi.Obj("num", this, function () {
+        return this.num;
+      })]), " / ", new migi.Obj("maxlength", this, function () {
+        return this.maxlength || 256;
+      })]), migi.createVd("div", [["class", new migi.Obj("disableUpload", this, function () {
+        return 'upload' + (this.disableUpload ? ' dis' : '');
+      })]], ["\n\
+              添加图片\n\
+              ", migi.createVd("input", [["type", "file"], ["class", "file"], ["onChange", new migi.Cb(this, this.change)], ["disabled", new migi.Obj("disableUpload", this, function () {
+        return !!this.disableUpload;
+      })], ["multiple", "multiple"], ["accept", "image/gif, image/jpeg, image/png"]])]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj(["sending", "invalid", "disableUpload"], this, function () {
+        return 'submit' + (this.sending || this.invalid || this.disableUpload ? ' dis' : '');
+      })], ["value", new migi.Obj(["value", "tipText", "subText"], this, function () {
+        return this.value.trim().length ? this.value.trim().length < 3 ? this.tipText ? this.tipText.replace('${n}', 3 - this.value.trim().length) : '还少' + (3 - this.value.trim().length) + '个字哦' : this.subText || '发送' : this.subText || '发送';
+      })]]), migi.createVd("input", [["type", 'hidden'], ["id", 'afs_scene'], ["name", 'afs_scene']]), migi.createVd("input", [["type", 'hidden'], ["id", 'afs_token'], ["name", 'afs_token']])]), migi.createVd("ul", [["class", "list fn-clear"], ["onClick", new migi.Cb(this, this.clickImg)]], [new migi.Obj("list", this, function () {
+        return (this.list || []).map(function (item, i) {
+          return migi.createVd("li", [["class", 's' + item.state], ["idx", i], ["rel", item.url], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img60_60_80(item.url)) + ')']], [migi.createVd("span", [], [TEXT[item.state]])]);
+        });
+      })])])])]);
+    }
+  }, {
+    key: 'maxlength',
+    set: function set(v) {
+      this.__setBind("maxlength", v);this.__data("maxlength");
+    },
+    get: function get() {
+      return this.__getBind("maxlength");
+    }
+  }, {
+    key: 'placeholder',
+    set: function set(v) {
+      this.__setBind("placeholder", v);this.__data("placeholder");
+    },
+    get: function get() {
+      return this.__getBind("placeholder");
+    }
+  }, {
+    key: 'subText',
+    set: function set(v) {
+      this.__setBind("subText", v);this.__data("subText");
+    },
+    get: function get() {
+      return this.__getBind("subText");
+    }
+  }, {
+    key: 'tipText',
+    set: function set(v) {
+      this.__setBind("tipText", v);this.__data("tipText");
+    },
+    get: function get() {
+      return this.__getBind("tipText");
+    }
+  }, {
+    key: 'value',
+    set: function set(v) {
+      this.__setBind("value", v);this.__data("value");
+    },
+    get: function get() {
+      if (this.__initBind("value")) this.__setBind("value", '');return this.__getBind("value");
+    }
+  }, {
+    key: 'to',
+    set: function set(v) {
+      this.__setBind("to", v);this.__data("to");
+    },
+    get: function get() {
+      return this.__getBind("to");
+    }
+  }, {
+    key: 'originTo',
+    set: function set(v) {
+      this.__setBind("originTo", v);this.__data("originTo");
+    },
+    get: function get() {
+      return this.__getBind("originTo");
+    }
+  }, {
+    key: 'invalid',
+    set: function set(v) {
+      this.__setBind("invalid", v);this.__data("invalid");
+    },
+    get: function get() {
+      if (this.__initBind("invalid")) this.__setBind("invalid", true);return this.__getBind("invalid");
+    }
+  }, {
+    key: 'expand',
+    set: function set(v) {
+      this.__setBind("expand", v);this.__data("expand");
+    },
+    get: function get() {
+      return this.__getBind("expand");
+    }
+  }, {
+    key: 'num',
+    set: function set(v) {
+      this.__setBind("num", v);this.__data("num");
+    },
+    get: function get() {
+      if (this.__initBind("num")) this.__setBind("num", 0);return this.__getBind("num");
+    }
+  }, {
+    key: 'disableUpload',
+    set: function set(v) {
+      this.__setBind("disableUpload", v);this.__data("disableUpload");
+    },
+    get: function get() {
+      return this.__getBind("disableUpload");
+    }
+  }, {
+    key: 'list',
+    set: function set(v) {
+      this.__setBind("list", v);this.__data("list");
+    },
+    get: function get() {
+      if (this.__initBind("list")) this.__setBind("list", []);return this.__getBind("list");
+    }
+  }, {
+    key: 'imgNum',
+    set: function set(v) {
+      this.__setBind("imgNum", v);this.__data("imgNum");
+    },
+    get: function get() {
+      if (this.__initBind("imgNum")) this.__setBind("imgNum", 0);return this.__getBind("imgNum");
+    }
+  }, {
+    key: 'warnLength',
+    set: function set(v) {
+      this.__setBind("warnLength", v);this.__data("warnLength");
+    },
+    get: function get() {
+      return this.__getBind("warnLength");
+    }
+  }, {
+    key: 'sending',
+    set: function set(v) {
+      this.__setBind("sending", v);this.__data("sending");
+    },
+    get: function get() {
+      return this.__getBind("sending");
+    }
+  }]);
+
+  return SubPost;
+}(migi.Component);
+
+migi.name(SubPost, "SubPost");exports.default = SubPost;
 
 /***/ })
 

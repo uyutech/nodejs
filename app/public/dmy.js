@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 189);
+/******/ 	return __webpack_require__(__webpack_require__.s = 188);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -354,15 +354,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 189:
+/***/ 188:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(190);
+__webpack_require__(189);
 
-var _My = __webpack_require__(191);
+var _My = __webpack_require__(190);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -372,14 +372,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 190:
+/***/ 189:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 191:
+/***/ 190:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -399,11 +399,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Profile = __webpack_require__(192);
+var _Profile = __webpack_require__(191);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(193);
+var _Follow = __webpack_require__(192);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
@@ -462,7 +462,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 192:
+/***/ 191:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -662,7 +662,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 193:
+/***/ 192:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -18,7 +18,7 @@ class Circle extends migi.Component {
       <div class="main">
         <PostList datas={ this.props.postList }/>
       </div>
-      <SubPost ref="subPost" originTo="haha"/>
+      <SubPost circleID={ this.props.circleDetail.TagID } ref="subPost" originTo={ this.props.circleDetail.TagName }/>
     </div>;
   }
 }

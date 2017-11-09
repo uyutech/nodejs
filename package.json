@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "ali-oss": "~4.10.1",
+    "aliyun-sdk": "~1.10.19",
     "egg": "~1.10.0",
     "egg-redis": "~1.0.2",
     "egg-scripts": "~2.1.0",

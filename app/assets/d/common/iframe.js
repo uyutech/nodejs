@@ -7,7 +7,7 @@ let parent = window.parent;
 if(parent !== window) {
   let hostname = parent.location.hostname;
   if(hostname.indexOf('circling.cc') === -1) {
-    location.href = '//404.html';
+    // location.href = '/404.html';
   }
   else {
     function findA(node) {

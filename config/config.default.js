@@ -77,5 +77,10 @@ module.exports = appInfo => {
     errorPageUrl: '/404.html',
   };
 
+  config.bodyParser = {
+    jsonLimit: '3mb',
+    formLimit: '3mb',
+  };
+
   return config;
 };

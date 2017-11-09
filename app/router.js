@@ -51,8 +51,8 @@ module.exports = app => {
   app.post('/api/user/guideSave', app.middlewares.needLoginJson(), 'api.user.guideSave');
   app.post('/api/user/altSettle', app.middlewares.needLoginJson(), 'api.user.altSettle');
   app.post('/api/user/updateNickName', app.middlewares.needLoginJson(), 'api.user.updateNickName');
-  // app.post('/api/user/checkExistHead', app.middlewares.needLoginJson(), 'api.user.checkExistHead');
   app.post('/api/user/uploadHead', app.middlewares.needLoginJson(), 'api.user.uploadHead');
+  app.post('/api/user/uploadPic', app.middlewares.needLoginJson(), 'api.user.uploadPic');
   // app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
   // app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
 
@@ -81,6 +81,7 @@ module.exports = app => {
   app.post('/api/author/searchWorks', 'api.author.searchWorks');
 
   app.post('/api/circle/join', app.middlewares.needLoginJson(), 'api.circle.join');
+  app.post('/api/circle/add', app.middlewares.needLoginJson(), 'api.circle.add');
 
   app.post('/api/post/commentList', 'api.post.commentList');
   app.post('/api/post/addComment', app.middlewares.needLoginJson(), 'api.post.addComment');

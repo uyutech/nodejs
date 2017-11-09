@@ -410,18 +410,22 @@ body {
   bottom: 0;
   width: 100%;
   height: 0.4rem;
-  background: linear-gradient(90deg, #BBE1F4 0%, #FFF6F8, 40%, #FFF6F8 60%, #BBE1F4 100%);
+  background: #BBE1F4;
   z-index: 99;
 }
 .cp-subcmt form {
   position: relative;
-  margin: 0.05rem auto 0;
+  margin: 0 auto;
+  padding-top: 0.05rem;
   width: 10rem;
+  height: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(90deg, #BBE1F4 0%, #FFF6F8 30%, #FFF6F8 70%, #BBE1F4 100%);
 }
 .cp-subcmt form label {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 0.05rem;
   display: none;
   padding: 0 0.1rem;
   width: 0.9rem;
@@ -2775,34 +2779,6 @@ body {
 .mod.mod-describe pre {
   padding: 0.1rem;
   white-space: pre-wrap;
-}
-/**
- * Created by army8735 on 2017/11/6.
- */
-.cp-edit:before {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  background: rgba(0, 0, 0, 0.5);
-  content: ' ';
-}
-.cp-edit .c {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  padding: 0.2rem;
-  width: 6rem;
-  background: #FFF;
-  border-radius: 0.1rem;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-}
-.cp-edit .c label {
-  display: block;
-  color: #919191;
 }
 .works {
   padding: 0 0 0.2rem;

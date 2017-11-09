@@ -366,9 +366,9 @@ var _Works = __webpack_require__(163);
 
 var _Works2 = _interopRequireDefault(_Works);
 
-__webpack_require__(176);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import './admin.jsx';
 
 var works = migi.preExist(migi.createCp(_Works2.default, [["isLogin", $CONFIG.isLogin], ["authorID", $CONFIG.authorID], ["worksID", $CONFIG.worksID], ["workID", $CONFIG.workID], ["worksDetail", $CONFIG.worksDetail], ["labelList", $CONFIG.labelList], ["commentData", $CONFIG.commentData]]));
 
@@ -4270,96 +4270,6 @@ var Player = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Player, "Player");exports.default = Player;
-
-/***/ }),
-
-/***/ 176:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var EditTitle = function (_migi$Component) {
-  _inherits(EditTitle, _migi$Component);
-
-  function EditTitle() {
-    var _ref;
-
-    _classCallCheck(this, EditTitle);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(this, (_ref = EditTitle.__proto__ || Object.getPrototypeOf(EditTitle)).call.apply(_ref, [this].concat(data)));
-  }
-
-  _createClass(EditTitle, [{
-    key: "show",
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-      parent.upZIndex && parent.upZIndex();
-    }
-  }, {
-    key: "hide",
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-    }
-  }, {
-    key: "clickSub",
-    value: function clickSub() {
-      this.hide();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-edit edit-title"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("h3", [], ["编辑标题"]), migi.createVd("label", [], ["主标题"]), migi.createVd("input", [["class", "text"], ["type", "text"], ["value", new migi.Obj("title", this, function () {
-        return this.title;
-      })]]), migi.createVd("label", [], ["副标题"]), migi.createVd("input", [["type", "text"], ["value", new migi.Obj("subTitle", this, function () {
-        return this.subTitle;
-      })]]), migi.createVd("button", [["class", "sub"], ["onClick", new migi.Cb(this, this.clickSub)]], ["提交"])])]);
-    }
-  }, {
-    key: "title",
-    set: function set(v) {
-      this.__setBind("title", v);this.__data("title");
-    },
-    get: function get() {
-      return this.__getBind("title");
-    }
-  }, {
-    key: "subTitle",
-    set: function set(v) {
-      this.__setBind("subTitle", v);this.__data("subTitle");
-    },
-    get: function get() {
-      return this.__getBind("subTitle");
-    }
-  }]);
-
-  return EditTitle;
-}(migi.Component);
-
-migi.name(EditTitle, "EditTitle");var editTitle = void 0;
-
-migi.eventBus.on('edit', function (type) {
-  switch (type) {
-    case 'title':
-      if (!editTitle) {
-        editTitle = migi.render(migi.createCp(EditTitle, []), document.body);
-      }
-      editTitle.show();
-      break;
-  }
-});
 
 /***/ }),
 
