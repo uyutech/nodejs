@@ -102,12 +102,7 @@ class Works extends migi.Component {
   setWorks(works) {
     let self = this;
     let workList = [];
-    let authorList = [];
-    let authorHash = {};
-    let authorTypeHash = {};
-    let authorTypeList = [];
-    let unknowList = [];
-    let authorType = itemTemplate.authorType;
+    let authorList = self.props.worksDetail.Works_Author || [];
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       works.forEach(function(item) {
         if(item.ItemType === 1111 || item.ItemType === 1113) {
@@ -130,40 +125,11 @@ class Works extends migi.Component {
       });
       self.workList = workList;
 
-      (self.props.worksDetail.Works_Author || []).forEach(function(item) {
-        authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
-        if(!authorHash[item.WorksAuthorType][item.ID]) {
-          authorHash[item.WorksAuthorType][item.ID] = true;
-          authorList.push(item);
-        }
-      });
-      authorHash = {};
-      authorType.forEach(function(list, index) {
-        list.forEach(function(item) {
-          authorTypeHash[item] = index;
-        });
-      });
-      authorList.forEach(function(item) {
-        let i = authorTypeHash[item.WorksAuthorType];
-        if(i === undefined) {
-          unknowList.push(item);
-        }
-        else {
-          authorTypeList[i] = authorTypeList[i] || [];
-          authorTypeList[i].push(item);
-        }
-      });
-      authorList = [];
-      authorTypeList.forEach(function(item, index) {
-        let seq = itemTemplate.authorType[index];
-        migi.sort(item, function(a, b) {
-          return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
-        });
-      });
-      if(unknowList.length) {
-        authorTypeList.push(unknowList);
-      }
-      self.authorList = authorTypeList;
+      self.setAuthors(authorList);
+      return;
+    }
+    else if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
+      self.setAuthors(self.props.worksDetail.Works_Author || []);
       return;
     }
     let workHash = {};
@@ -178,13 +144,7 @@ class Works extends migi.Component {
           value: [],
         };
         workHash[bigType].value.push(item);
-        item.Works_Item_Author.forEach(function (item) {
-          authorHash[item.WorksAuthorType] = authorHash[item.WorksAuthorType] || {};
-          if(!authorHash[item.WorksAuthorType][item.ID]) {
-            authorHash[item.WorksAuthorType][item.ID] = true;
-            authorList.push(item);
-          }
-        });
+        authorList = authorList.concat(item.Works_Item_Author);
       }
     });
     Object.keys(workHash).forEach(function(k) {
@@ -194,38 +154,6 @@ class Works extends migi.Component {
         value: workHash[k].value,
       });
     });
-
-    authorHash = {};
-    authorType.forEach(function(list, index) {
-      list.forEach(function(item) {
-        authorTypeHash[item] = index;
-      });
-    });
-    authorList.forEach(function(item) {
-      let i = authorTypeHash[item.WorksAuthorType];
-      if(i === undefined) {
-        unknowList.push(item);
-      }
-      else {
-        authorTypeList[i] = authorTypeList[i] || [];
-        authorTypeList[i].push(item);
-      }
-    });
-    authorList = [];
-    authorTypeList.forEach(function(item, index) {
-      let seq = itemTemplate.authorType[index];
-      migi.sort(item, function(a, b) {
-        return seq.indexOf(a.WorksAuthorType) > seq.indexOf(b.WorksAuthorType);
-      });
-    });
-    if(unknowList.length) {
-      authorTypeList.push(unknowList);
-    }
-    self.authorList = [];
-    if(self.props.worksDetail.Works_Author && self.props.worksDetail.Works_Author.length) {
-      self.authorList.push(self.props.worksDetail.Works_Author);
-    }
-    self.authorList = self.authorList.concat(authorTypeList);
 
     workList.forEach(function(item) {
       if(item.bigType === 'audio') {
@@ -271,6 +199,52 @@ class Works extends migi.Component {
         self.workID = self.audioData[0].ItemID;
       }
     }
+
+    self.setAuthors(authorList);
+  }
+  setAuthors(authors) {
+    let self = this;
+    let hash = {};
+    let typeHash = {};
+    (authors || []).forEach(function(item) {
+      hash[item.ID] = item;
+      typeHash[item.WorksAuthorType] = typeHash[item.WorksAuthorType] || {
+        hash: {},
+        list: [],
+      };
+      let type = typeHash[item.WorksAuthorType];
+      if(!type.hash.hasOwnProperty(item.ID)) {
+        type.hash[item.ID] = true;
+        type.list.push(item);
+      }
+    });
+    self.isManager = hash.hasOwnProperty(self.props.authorID);
+    // 按类型将作者整理排序
+    let authorList = [];
+    itemTemplate.authorType.forEach(function(typeList) {
+      let list = [];
+      typeList.forEach(function(type) {
+        if(typeHash.hasOwnProperty(type)) {
+          list = list.concat(typeHash[type].list);
+          delete typeHash[type];
+        }
+      });
+      if(list.length) {
+        authorList.push(list);
+      }
+    });
+    let unKnowList = [];
+    let unKnowHash = {};
+    Object.keys(typeHash).forEach(function(type) {
+      typeHash[type].list.forEach(function(item) {
+        if(!unKnowHash.hasOwnProperty(item.ID)) {
+          unKnowHash[item.ID] = true;
+          unKnowList.push(item);
+        }
+      });
+    });
+    authorList = authorList.concat([unKnowList]);
+    self.authorList = authorList;
   }
   clickSel(e, vd, tvd) {
     let self = this;
@@ -374,7 +348,7 @@ class Works extends migi.Component {
         <PhotoAlbum ref="photoAlbum" worksID={ this.worksID } labelList={ this.props.labelList }/>
         <div class="intro fn-hide" ref="intro">
           <span class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</span>
-          <Author authorList={ [this.props.worksDetail.Works_Author] }/>
+          <Author authorList={ this.authorList }/>
           {
             this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
               ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>

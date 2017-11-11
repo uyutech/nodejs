@@ -1,7 +1,6 @@
 /**
  * Created by army on 2017/3/19.
  */
-
 @import '../../d/common/var';
 
 *,
@@ -109,33 +108,38 @@ textarea,
 pre{
   font-size:0.12rem;
   line-height:1.5;
-  font-family:
-    // System Font            // https://www.webkit.org/blog/3709/using-the-system-font-in-web-content/
-    -apple-system,            // OSX ^10.11 & iOS ^9  San Francisco & 苹方
+  font-family:// System Font            // https://www.webkit.org/blog/3709/using-the-system-font-in-web-content/
+    -apple-system, // OSX ^10.11 & iOS ^9  San Francisco & 苹方
 
       // English First
-    "Helvetica Neue",         // OSX
-    "Arial",                  // Win "Helvetica"
+    "Helvetica Neue", // OSX
+    "Arial", // Win "Helvetica"
       //" Segoe UI",            // Win ^8
 
       // Chinese Fallback
-    "PingFang SC",            // OSX ^10.11 & iOS ^9  苹方（华康信凭黑）
-    "Hiragino Sans GB",       // OSX ^10.6            冬青黑体
-    "STHeiti",                // OSX <10.6  & iOS <9  华文黑体
-    "Microsoft YaHei",        // Win                  微软雅黑
-    "Microsoft JhengHei",     // Win                  微软正黑
-    "Source Han Sans SC",     // SourceHan - begin    思源黑体
+    "PingFang SC", // OSX ^10.11 & iOS ^9  苹方（华康信凭黑）
+    "Hiragino Sans GB", // OSX ^10.6            冬青黑体
+    "STHeiti", // OSX <10.6  & iOS <9  华文黑体
+    "Microsoft YaHei", // Win                  微软雅黑
+    "Microsoft JhengHei", // Win                  微软正黑
+    "Source Han Sans SC", // SourceHan - begin    思源黑体
     "Noto Sans CJK SC",
     "Source Han Sans CN",
     "Noto Sans SC",
     "Source Han Sans TC",
-    "Noto Sans CJK TC",       // SourceHan - end
-    "WenQuanYi Micro Hei",    // Linux                文泉驿微米黑
-    SimSun,                   // Win old              中易宋体
-    sans-serif;               // System Fallback
+    "Noto Sans CJK TC", // SourceHan - end
+    "WenQuanYi Micro Hei", // Linux                文泉驿微米黑
+    SimSun, // Win old              中易宋体
+    sans-serif; // System Fallback
 }
-body,button,input,select,textarea{
+
+body, button, input, select, textarea{
   color:@mainTextColor;
+}
+
+input[type=button], input[type=submit], input[type=file], button{
+  cursor:pointer;
+  -webkit-appearance:none;
 }
 
 input{
@@ -192,55 +196,4 @@ a{
 #page{
   margin:0.44rem 0 0;
   flex:1;
-}
-
-body.g-hm{
-  min-height:14rem;
-}
-.quaniang{
-  &:before{
-    position:fixed;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.5);
-    content:' ';
-  }
-  .c{
-    position:absolute;
-    left:50%;
-    top:0.5rem;
-    width:90%;
-    box-sizing:border-box;
-    padding:0.2rem;
-    background:#FFF;
-    transform:translateX(-50%);
-    pre{
-      word-break:break-all;
-      word-wrap:break-word;
-      white-space:pre-wrap;
-    }
-    h5{
-      color:#555;
-      font-weight:400;
-      font-size:0.14rem;
-      opacity:0.8;
-    }
-    p{
-      font-size:0.12rem;
-      opacity:0.8;
-    }
-    .close{
-      display:block;
-      width:0.3rem;
-      margin:0.1rem auto 0;
-      border-radius:0.05rem;
-      color:#FFF;
-      line-height:0.24rem;
-      padding:0 0.1rem;
-      text-align:center;
-      background:@bgLinearGradient;
-    }
-  }
 }

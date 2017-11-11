@@ -36,6 +36,7 @@ module.exports = app => {
   app.get('/m/my', app.middlewares.needLogin(), 'm.my.index');
   app.get('/m/login', 'm.login.index');
   app.get('/m/circle/:circleID', 'm.circle.index');
+  app.get('/m/circle/post', app.middlewares.needLogin(), 'm.circle.post');
   app.get('/m/post/:id', 'm.post.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
@@ -82,6 +83,7 @@ module.exports = app => {
 
   app.post('/api/circle/join', app.middlewares.needLoginJson(), 'api.circle.join');
   app.post('/api/circle/add', app.middlewares.needLoginJson(), 'api.circle.add');
+  app.post('/api/circle/list', 'api.circle.list');
 
   app.post('/api/post/commentList', 'api.post.commentList');
   app.post('/api/post/addComment', app.middlewares.needLoginJson(), 'api.post.addComment');

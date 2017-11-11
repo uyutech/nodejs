@@ -11,6 +11,18 @@ class Media extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    if(self.props.workList && self.props.workList.length) {
+      if(self.props.workID) {
+        self.props.workList.forEach(function(item, i) {
+          if(self.props.workID === item.ItemID.toString()) {
+            self.work = item;
+          }
+        });
+      }
+      else {
+        self.work = self.props.workList[0];
+      }
+    }
     self.on(migi.Event.DOM, function() {
       let cover = self.ref.cover;
       let player = self.ref.player;
@@ -46,9 +58,11 @@ class Media extends migi.Component {
     player.play();
   }
   render() {
-    return <div class="mod mod-musicalbum box box-fn-top-left" style={ 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")'}>
-      <Cover ref="cover"/>
-      <Player ref="player" workList={ this.props.workList } worksID={ this.props.worksID } workID={ this.props.workID }/>
+    return <div class="mod mod-musicalbum box box-fn-top-left"
+                style={ 'background-image:url("' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + '")'}>
+      <Cover ref="cover" work={ this.work }/>
+      <Player ref="player" work={ this.work } workList={ this.props.workList }
+              worksID={ this.props.worksID } workID={ this.props.workID }/>
     </div>;
   }
 }

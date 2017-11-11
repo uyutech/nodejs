@@ -4,6 +4,7 @@
 
 @import '../common/var';
 @import './sub';
+@import '../component/page/index';
 
 .circle{
   .title{
@@ -92,14 +93,18 @@
         font-size:0.12rem;
         color:@fourthTextColor;
         border-top:1px solid @mainColor;
+        white-space:pre-wrap;
+        word-wrap:break-word;
+        word-break:break-all;
       }
     }
   }
   .main{
     float:left;
+    padding-top:0.2rem;
     width:6.48rem;
     .post-list{
-      margin-top:0.2rem;
+      //margin-top:0.2rem;
       ol{
         > li{
           margin-bottom:0.1rem;
@@ -183,6 +188,7 @@
               white-space:pre-wrap;
               line-height:1.8;
               overflow:hidden;
+              text-overflow:ellipsis;
               .more{
                 margin-left:0.05rem;
                 font-size:0.14rem;
@@ -192,6 +198,19 @@
                 &:hover{
                   color:@mainHoverColor;
                 }
+              }
+            }
+            .imgs{
+              li{
+                float:left;
+                margin:0.1rem 0.1rem 0 0;
+                width:0.6rem;
+                height:0.6rem;
+                background:@secondTextColor;
+                background-size:cover;
+                background-repeat:no-repeat;
+                background-position:center;
+                border-radius:0.1rem;
               }
             }
             .btn{
@@ -234,6 +253,9 @@
           }
         }
       }
+    }
+    .cp-page{
+      text-align:right;
     }
   }
 }

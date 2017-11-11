@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 188);
+/******/ 	return __webpack_require__(__webpack_require__.s = 191);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -93,6 +93,12 @@ var util = {
       return url;
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
+  img600_600_80: function img600_600_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-600_600_80' : url;
   },
   img288__80: function img288__80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -159,6 +165,12 @@ var util = {
       return url;
     }
     return url ? url + '-144_144_80' : url;
+  },
+  img128_128_80: function img128_128_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120_80' : url;
   },
   img120_120: function img120_120(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -354,15 +366,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 188:
+/***/ 191:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(189);
+__webpack_require__(192);
 
-var _My = __webpack_require__(190);
+var _My = __webpack_require__(193);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -372,14 +384,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 189:
+/***/ 192:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 190:
+/***/ 193:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -399,11 +411,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Profile = __webpack_require__(191);
+var _Profile = __webpack_require__(194);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(192);
+var _Follow = __webpack_require__(195);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
@@ -462,7 +474,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 191:
+/***/ 194:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -662,7 +674,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 192:
+/***/ 195:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

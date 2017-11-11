@@ -1,0 +1,193 @@
+/**
+ * Created by army8735 on 2017/11/11.
+ */
+
+@import '../../d/common/var';
+
+#page{
+  display:flex;
+  flex-direction:column;
+}
+.mod-sub{
+  position:relative;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:0.1rem;
+  min-height:100%;
+  > .ti{
+    position:relative;
+    display:flex;
+    align-items:center;
+    .close{
+      display:block;
+      width:0.4rem;
+      height:0.4rem;
+      background:url(close.png) no-repeat center;
+      background-size:0.2rem auto;
+    }
+    img{
+      display:block;
+      width:0.4rem;
+      height:0.4rem;
+      border-radius:100%;
+      box-shadow:@headShadow;
+    }
+    .limit{
+      margin:0 0.1rem;
+      flex:1;
+      text-align:right;
+      strong{
+        font-weight:400;
+      }
+      &.warn strong{
+        color:#F00;
+      }
+    }
+    .submit{
+      display:block;
+      width:1rem;
+      height:0.4rem;
+      background:@secondLinkColor;
+      border-radius:0.3rem;
+      color:#FFF;
+      font-size:0.16rem;
+      border:none;
+      &.dis{
+        background:#CCC;
+      }
+    }
+  }
+  > .ti2{
+    display:flex;
+    margin-top:0.15rem;
+    align-items:center;
+    justify-content:space-between;
+    label{
+      display:block;
+      padding:0 0.1rem;
+      line-height:0.22rem;
+      border:1px solid @mainColor;
+      color:@mainColor;
+      border-radius:0.22rem;
+      &.cur{
+        background:@mainColor;
+        color:#FFF;
+      }
+    }
+    .upload{
+      position:relative;
+      padding-left:0.25rem;
+      width:1rem;
+      height:0.4rem;
+      box-sizing:border-box;
+      line-height:0.4rem;
+      background:#9ECDDB url(../../d/circle/image.png) no-repeat 0.15rem center;
+      background-size:0.3rem auto;
+      color:#FFF;
+      border-radius:0.3rem;
+      text-align:center;
+      font-size:0.14rem;
+      .file{
+        position:absolute;
+        left:0;
+        top:0;
+        display:block;
+        width:100%;
+        height:100%;
+        opacity:0;
+      }
+    }
+  }
+  > .c{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    margin-top:0.1rem;
+    padding:0.1rem;
+    min-height:0.84rem;
+    background:#f7f9fb;
+    border-radius:0.1rem;
+    border:1px solid @secondTextColor;
+    .text{
+      display:block;
+      flex:1;
+      width:100%;
+      height:100%;
+      font-size:0.14rem;
+      resize:none;
+      background:none;
+      border:none;
+      &::-webkit-input-placeholder{
+        color:#B7C8D0;
+      }
+      &.dis{
+        opacity:0.7;
+      }
+    }
+  }
+  > .list{
+    display:flex;
+    flex-wrap:wrap;
+    li{
+      position:relative;
+      display:block;
+      margin-top:0.1rem;
+      margin-right:0.2rem;
+      width:0.6rem;
+      height:0.6rem;
+      border-radius:0.1rem;
+      background:@secondTextColor;
+      background-size:cover;
+      background-repeat:no-repeat;
+      background-position:center;
+      line-height:0.6rem;
+      text-align:center;
+      &:before,&:after{
+        border-radius:0.1rem;
+      }
+      &.s0{
+        &:before{
+          position:absolute;
+          left:0;
+          top:0;
+          display:block;
+          width:100%;
+          height:100%;
+          background:rgba(255, 255, 255, 0.7);
+          content:' ';
+        }
+      }
+      &.s1,&.s2{
+        cursor:pointer;
+        &:after{
+          position:absolute;
+          top:-0.06rem;
+          right:-0.06rem;
+          display:block;
+          width:0.2rem;
+          height:0.2rem;
+          background:url(../../d/circle/close.png) no-repeat center;
+          background-size:contain;
+          border-radius:100%;
+          content:' ';
+        }
+      }
+      &.s2{
+        &:before{
+          position:absolute;
+          left:0;
+          top:0;
+          display:block;
+          width:100%;
+          height:100%;
+          background:rgba(255, 255, 255, 0.7);
+          content:' ';
+        }
+      }
+      span{
+        position:relative;
+      }
+    }
+  }
+}

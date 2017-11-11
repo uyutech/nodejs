@@ -3,6 +3,7 @@
  */
 
 @import '../../d/common/var';
+@import '../component/subcmt/index.less';
 
 .circle{
   .title{
@@ -71,6 +72,9 @@
       font-size:0.12rem;
       color:@fourthTextColor;
       border-top:1px solid #C2D8E4;
+      white-space:pre-wrap;
+      word-wrap:break-word;
+      word-break:break-all;
     }
   }
   .post-list{
@@ -147,7 +151,7 @@
           }
           .con{
             position:relative;
-            font-size:0.13rem;
+            font-size:0.14rem;
             word-break:break-all;
             word-wrap:break-word;
             white-space:pre-wrap;
@@ -159,11 +163,25 @@
               height:0.1rem;
             }
             .more{
+              display:inline-block;
               margin-left:0.05rem;
               font-size:0.13rem;
               color:@secondLinkColor;
               line-height:1.8;
               white-space:nowrap;
+            }
+          }
+          .imgs{
+            li{
+              float:left;
+              margin:0.1rem 0.1rem 0 0;
+              width:0.6rem;
+              height:0.6rem;
+              background:@secondTextColor;
+              background-size:cover;
+              background-repeat:no-repeat;
+              background-position:center;
+              border-radius:0.1rem;
             }
           }
           .btn{
@@ -188,7 +206,7 @@
               }
               &.comment{
                 padding-left:0.3rem;
-                background:url(../../d/works/comment.png) no-repeat 0 center;
+                background:url(../../d/circle/comment.png) no-repeat 0 center;
                 background-size:contain;
               }
             }
@@ -196,5 +214,9 @@
         }
       }
     }
+  }
+  .message{
+    text-align:center;
+    color:@fourthTextColor;
   }
 }

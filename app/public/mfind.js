@@ -94,6 +94,12 @@ var util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img600_600_80: function img600_600_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-600_600_80' : url;
+  },
   img288__80: function img288__80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -159,6 +165,12 @@ var util = {
       return url;
     }
     return url ? url + '-144_144_80' : url;
+  },
+  img128_128_80: function img128_128_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120_80' : url;
   },
   img120_120: function img120_120(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -711,7 +723,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 50:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -798,7 +810,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 51:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -881,7 +893,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 52:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1014,7 +1026,7 @@ var _Banner = __webpack_require__(100);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(50);
+var _HotWork = __webpack_require__(51);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
@@ -1022,11 +1034,11 @@ var _HotPhotoAlbum = __webpack_require__(101);
 
 var _HotPhotoAlbum2 = _interopRequireDefault(_HotPhotoAlbum);
 
-var _HotAuthor = __webpack_require__(51);
+var _HotAuthor = __webpack_require__(52);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _HotMusicAlbum = __webpack_require__(52);
+var _HotMusicAlbum = __webpack_require__(53);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 

@@ -36,6 +36,22 @@ module.exports = app => {
         postList,
       });
     }
+    * post(ctx) {
+      let uid = ctx.session.uid;
+      let circleID = ctx.query.circleID;
+      let res = yield ctx.helper.postServiceJSON('api/tag/GetTagDetails', {
+        uid,
+        TagID: circleID,
+      });
+      if(res.data.success) {
+        let circleDetail = res.data.data;
+        yield ctx.render('mcpost', {
+          uid,
+          circleID,
+          circleDetail,
+        });
+      }
+    }
   }
   return Controller;
 };

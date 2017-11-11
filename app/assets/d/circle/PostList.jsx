@@ -48,21 +48,29 @@ class PostList extends migi.Component {
         });
         $list.on('click', '.comment', function() {
           let postID = $(this).attr('rel');
-          location.href = '/post/' + postID;
+          if(parent && parent.setHash) {
+            parent.setHash('/post/' + postID);
+          }
+          else {
+            location.href = '/post/' + postID;
+          }
+        });
+        $list.on('click', '.con,.imgs', function() {
+          $(this).closest('li').find('.comment').click();
         });
       });
     }
   }
   genItem(item) {
     let len = item.Content.length;
-    let maxLen = 64;
+    let maxLen = 256;
     if(item.IsAuthor) {
       return <li class="author">
         <div class="profile fn-clear">
           <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
-            <a href={ '/author/' + item.IsAuthor } class="name">{ item.SendUserNickName }</a>
-            <small class="time">{ util.formatDate(item.Createtime) }</small>
+            <a href={ '/author/' + item.AuthorID } class="name">{ item.SendUserNickName }</a>
+            <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
           </div>
         </div>
         <div class="wrap">
@@ -73,8 +81,19 @@ class PostList extends migi.Component {
           }
           <pre class="con">
             { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
-            <a href={ '/post/' + item.ID } class="more">查看全部</a>
+            <a href={ '/post/' + item.ID } class="more fn-hide">查看全部</a>
           </pre>
+          {
+            item.Image_Post
+              ? <ul class="imgs fn-clear">
+                {
+                  item.Image_Post.map(function(item) {
+                    return <li style={ 'background-image:url(' + util.autoSsl(util.img120_120_80(item.FileUrl)) + ')' }/>;
+                  })
+                }
+              </ul>
+              : ''
+          }
           <ul class="btn fn-clear">
             <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
             <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
@@ -88,7 +107,7 @@ class PostList extends migi.Component {
         <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
         <div class="txt">
           <span class="name">{ item.SendUserNickName }</span>
-          <small class="time">{ util.formatDate(item.Createtime) }</small>
+          <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
         </div>
       </div>
       <div class="wrap">
@@ -99,8 +118,19 @@ class PostList extends migi.Component {
         }
         <pre class="con">
           { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
-          <a href={ '/post/' + item.ID } class="more">点击展开></a>
+          <a href={ '/post/' + item.ID } class="more fn-hide">查看全部</a>
         </pre>
+        {
+          item.Image_Post
+            ? <ul class="imgs fn-clear">
+              {
+                item.Image_Post.map(function(item) {
+                  return <li style={ 'background-image:url(' + util.autoSsl(util.img120_120_80(item.FileUrl)) + ')' }/>;
+                })
+              }
+            </ul>
+            : ''
+        }
         <ul class="btn fn-clear">
           <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
           <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
@@ -108,6 +138,19 @@ class PostList extends migi.Component {
         <b class="arrow"/>
       </div>
     </li>;
+  }
+  setData(data) {
+    let self = this;
+    let html = '';
+    data.forEach(function(item) {
+      html += self.genItem(item);
+    });
+    $(self.ref.list.element).html(html);
+  }
+  addData(data) {
+    let self = this;
+    let html = self.genItem(data);
+    $(self.ref.list.element).prepend(html.toString());
   }
   render() {
     return <div class="post-list">

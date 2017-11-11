@@ -53,6 +53,7 @@ class MusicAlbum extends migi.Component {
   @bind like
   @bind favor
   @bind cover
+  @bind showFn = true
   get currentTime() {
     return this._currentTime || 0;
   }
@@ -327,9 +328,9 @@ class MusicAlbum extends migi.Component {
             <pre style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>{ this.formatLyrics.txt }</pre>
           </div>
         </div>
-        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
+        <b class={ 'start' + ((this.isPlaying || !this.url) ? ' fn-hide' : '') } onClick={ this.clickStart }/>
       </div>
-      <div class="fn" ref="fn">
+      <div class={ 'fn' + ((this.showFn && this.url) ? '' : ' hidden') } ref="fn">
         <div class="control">
           <small class="time">{ util.formatTime(this.currentTime * 1000) } / { util.formatTime(this.duration * 1000) }</small>
           <b class="full" onClick={ this.clickScreen }/>

@@ -89,6 +89,12 @@ let util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img600_600_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-600_600_80' : url;
+  },
   img288__80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -154,6 +160,12 @@ let util = {
       return url;
     }
     return url ? url + '-144_144_80' : url;
+  },
+  img128_128_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120_80' : url;
   },
   img120_120: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -388,6 +400,7 @@ var SubCmt = function (_migi$Component) {
     _this.tipText = _this.props.tipText;
     _this.placeholder = _this.props.placeholder;
     _this.originTo = _this.props.originTo;
+    _this.readOnly = _this.props.readOnly;
     return _this;
   }
 
@@ -405,7 +418,14 @@ var SubCmt = function (_migi$Component) {
     value: function focus() {
       if (!window.$CONFIG.isLogin) {
         migi.eventBus.emit('NEED_LOGIN');
+      } else {
+        this.emit('focus');
       }
+    }
+  }, {
+    key: 'click',
+    value: function click() {
+      this.emit('click');
     }
   }, {
     key: 'submit',
@@ -420,7 +440,7 @@ var SubCmt = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "cp-subcmt"]], [migi.createVd("form", [["class", new migi.Obj(["to", "originTo"], this, function () {
         return 'fn-clear' + (this.to || this.originTo ? ' to' : '');
-      })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("label", [], ["TO: ", new migi.Obj(["to", "originTo"], this, function () {
+      })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("label", [], ["TO: ", new migi.Obj(["to", "originTo"], this, function () {
         return this.to || this.originTo;
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
         return this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个作品吧';
@@ -428,6 +448,8 @@ var SubCmt = function (_migi$Component) {
         return this.maxlength || 256;
       })], ["value", new migi.Obj("value", this, function () {
         return this.value;
+      })], ["readonly", new migi.Obj("readOnly", this, function () {
+        return this.readOnly;
       })]]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj("invalid", this, function () {
         return 'submit' + (this.invalid ? ' dis' : '');
       })], ["value", new migi.Obj(["value", "tipText", "subText"], this, function () {
@@ -498,6 +520,14 @@ var SubCmt = function (_migi$Component) {
     get: function get() {
       if (this.__initBind("invalid")) this.__setBind("invalid", true);return this.__getBind("invalid");
     }
+  }, {
+    key: 'readOnly',
+    set: function set(v) {
+      this.__setBind("readOnly", v);this.__data("readOnly");
+    },
+    get: function get() {
+      return this.__getBind("readOnly");
+    }
   }]);
 
   return SubCmt;
@@ -539,6 +569,11 @@ let code2Data = {
   '113': {
     name: '伴唱',
     display: '伴唱',
+    css: 'singer',
+  },
+  '114': {
+    name: '戏腔',
+    display: '戏腔',
     css: 'singer',
   },
   '115': {
@@ -641,7 +676,6 @@ let code2Data = {
     display: '设计',
     css: 'designer',
   },
-
   '332': {
     name: '海报',
     display: '海报',
@@ -657,13 +691,11 @@ let code2Data = {
     display: '漫画',
     css: 'painter',
   },
-
   '351': {
     name: '书法',
     display: '书法',
     css: 'handwriting',
   },
-
   '391': {
     name: '沙画',
     display: '沙画',

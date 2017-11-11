@@ -53,7 +53,7 @@ class Title extends migi.Component {
           <span class="count">{ this.count || 0 }</span>
           <a href="#" class={ 'join' + (this.joined ? ' joined' : '') } onClick={ this.click }>{ this.joined ? '已经加入' : '加入圈子' }</a>
         </div>
-        <p class="intro">{ this.props.circleDetail.Describe }</p>
+        <pre class="intro">{ this.props.circleDetail.Describe }</pre>
       </div>
     </div>;
   }

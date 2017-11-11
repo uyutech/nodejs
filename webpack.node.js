@@ -8,6 +8,7 @@ module.exports = {
     mlogin: './app/view/m/login.jsx',
     mpost: './app/view/m/post.jsx',
     mcircle: './app/view/m/circle.jsx',
+    mcpost: './app/view/m/mcpost.jsx',
     dindex: './app/view/d/index.jsx',
     dfind: './app/view/d/find.jsx',
     dworks: './app/view/d/works.jsx',

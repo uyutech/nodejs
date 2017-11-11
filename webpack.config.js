@@ -13,6 +13,7 @@ module.exports = {
     mlogin: './app/assets/m/login/index.jsx',
     mpost: './app/assets/m/post/index.jsx',
     mcircle: './app/assets/m/circle/index.jsx',
+    mcpost: './app/assets/m/circle/mcpost.jsx',
     dcommon: './app/assets/d/common/index.js',
     dindex: './app/assets/d/index/index.jsx',
     dfind: './app/assets/d/find/index.jsx',

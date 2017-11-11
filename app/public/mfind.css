@@ -84,7 +84,7 @@
 }
 .cp-hotwork .list .c ul li .txt {
   display: block;
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -171,7 +171,7 @@
 }
 .cp-hotphotoalbum .list .c ul li .txt {
   display: block;
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -258,7 +258,7 @@
 }
 .cp-hotmusicalbum .list .c ul li .txt {
   display: block;
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -354,7 +354,7 @@
 .cp-hotauthor .list .c ul li .txt {
   display: block;
   margin-top: 0.04rem;
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   color: #2A2A2A;
   text-align: center;
   white-space: nowrap;
@@ -362,7 +362,7 @@
   overflow: hidden;
 }
 .cp-hotauthor .list .c ul li .info {
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   color: #B1C0C9;
   text-align: center;
   white-space: nowrap;
@@ -449,7 +449,7 @@
 }
 .cp-hotpost .list .c ul li .txt {
   display: block;
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

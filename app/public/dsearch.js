@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 185);
+/******/ 	return __webpack_require__(__webpack_require__.s = 188);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -102,6 +102,11 @@ var code2Data = {
   '113': {
     name: '伴唱',
     display: '伴唱',
+    css: 'singer'
+  },
+  '114': {
+    name: '戏腔',
+    display: '戏腔',
     css: 'singer'
   },
   '115': {
@@ -204,7 +209,6 @@ var code2Data = {
     display: '设计',
     css: 'designer'
   },
-
   '332': {
     name: '海报',
     display: '海报',
@@ -220,13 +224,11 @@ var code2Data = {
     display: '漫画',
     css: 'painter'
   },
-
   '351': {
     name: '书法',
     display: '书法',
     css: 'handwriting'
   },
-
   '391': {
     name: '沙画',
     display: '沙画',
@@ -268,15 +270,15 @@ exports.default = {
 
 /***/ }),
 
-/***/ 185:
+/***/ 188:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(186);
+__webpack_require__(189);
 
-var _Search = __webpack_require__(187);
+var _Search = __webpack_require__(190);
 
 var _Search2 = _interopRequireDefault(_Search);
 
@@ -286,14 +288,14 @@ var search = migi.preExist(migi.createCp(_Search2.default, [["kw", $CONFIG.kw], 
 
 /***/ }),
 
-/***/ 186:
+/***/ 189:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 187:
+/***/ 190:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

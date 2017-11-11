@@ -207,7 +207,7 @@ class Works extends migi.Component {
         }
       });
     });
-    authorList = authorList.concat(unKnowList);
+    authorList = authorList.concat([unKnowList]);
     self.authorList = authorList;
   }
   clickType(e, vd, tvd) {
@@ -238,7 +238,7 @@ class Works extends migi.Component {
         }
         <div class="main">
           <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
-            <li class="cover cur" rel="intro">封面</li>
+            <li class="cover cur" rel="cover">封面</li>
             <li class="player" rel="player">播放</li>
           </ul>
           <MusicAlbum ref="musicAlbum"

@@ -114,6 +114,13 @@ select,
 textarea {
   color: #2D4D67;
 }
+input[type=button],
+input[type=submit],
+input[type=file],
+button {
+  cursor: pointer;
+  -webkit-appearance: none;
+}
 input {
   line-height: normal;
 }
@@ -245,9 +252,12 @@ a {
   font-size: 0.12rem;
 }
 .top-nav .user .name {
+  display: inline-block;
   margin-right: 0.05rem;
+  height: 0.32rem;
   color: #FFF;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+  line-height: 0.32rem;
 }
 .top-nav .user .name.public {
   color: #FD0;
@@ -339,53 +349,4 @@ a {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
-}
-body.g-hm {
-  min-height: 14rem;
-}
-.quaniang:before {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  content: ' ';
-}
-.quaniang .c {
-  position: absolute;
-  left: 50%;
-  top: 0.5rem;
-  width: 90%;
-  box-sizing: border-box;
-  padding: 0.2rem;
-  background: #FFF;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.quaniang .c pre {
-  word-break: break-all;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-.quaniang .c h5 {
-  color: #555;
-  font-weight: 400;
-  font-size: 0.14rem;
-  opacity: 0.8;
-}
-.quaniang .c p {
-  font-size: 0.12rem;
-  opacity: 0.8;
-}
-.quaniang .c .close {
-  display: block;
-  width: 0.3rem;
-  margin: 0.1rem auto 0;
-  border-radius: 0.05rem;
-  color: #FFF;
-  line-height: 0.24rem;
-  padding: 0 0.1rem;
-  text-align: center;
-  background: linear-gradient(#A4D2DF, #7EB4CA);
 }

@@ -4,7 +4,7 @@
 
 'use strict';
 
-const ALY = require("aliyun-sdk");
+// const ALY = require("aliyun-sdk");
 
 module.exports = app => {
   class Controller extends app.Controller {
@@ -34,7 +34,7 @@ module.exports = app => {
       let circleID = body.circleID;
       let content = (body.content || '').trim();
       let imgs = body.imgs;
-      if(content.length < 3 || content.length > 256) {
+      if(content.length < 3 || content.length > 512) {
         return {
           success: false,
         };
@@ -57,8 +57,22 @@ module.exports = app => {
               Width: 0,
               Height: 0,
             }
-          }))
+          }).slice(0, 10))
           : '',
+      });
+      ctx.body = res.data;
+    }
+    * list(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let circleID = body.circleID;
+      let skip = body.skip;
+      let take = body.take;
+      let res = yield ctx.helper.postServiceJSON('api/tag/GetTagPost', {
+        uid,
+        TagID: circleID,
+        Skip: skip,
+        Take: take,
       });
       ctx.body = res.data;
     }

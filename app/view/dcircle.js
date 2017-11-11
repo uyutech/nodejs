@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 108);
+/******/ 	return __webpack_require__(__webpack_require__.s = 110);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -89,6 +89,12 @@ let util = {
       return url;
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
+  img600_600_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-600_600_80' : url;
   },
   img288__80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -155,6 +161,12 @@ let util = {
       return url;
     }
     return url ? url + '-144_144_80' : url;
+  },
+  img128_128_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120_80' : url;
   },
   img120_120: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -352,7 +364,7 @@ let net = {
 
 /***/ }),
 
-/***/ 108:
+/***/ 110:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -375,7 +387,7 @@ exports.default = function (data) {
   }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcircle.css') + '"/>\n</head>\n<body>\n<div id="page">' + circle + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.circleID = ' + JSON.stringify(circleID) + ';\n  $CONFIG.circleDetail = ' + JSON.stringify(circleDetail) + ';\n  $CONFIG.postList = ' + JSON.stringify(postList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dcircle.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Circle = __webpack_require__(109);
+var _Circle = __webpack_require__(111);
 
 var _Circle2 = _interopRequireDefault(_Circle);
 
@@ -385,7 +397,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 109:
+/***/ 111:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -397,17 +409,29 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(110);
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _Title = __webpack_require__(112);
 
 var _Title2 = _interopRequireDefault(_Title);
 
-var _PostList = __webpack_require__(111);
+var _PostList = __webpack_require__(113);
 
 var _PostList2 = _interopRequireDefault(_PostList);
 
-var _SubPost = __webpack_require__(112);
+var _SubPost = __webpack_require__(114);
 
 var _SubPost2 = _interopRequireDefault(_SubPost);
+
+var _Page = __webpack_require__(6);
+
+var _Page2 = _interopRequireDefault(_Page);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -417,25 +441,70 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var skip = 0;
+var take = 20;
+var loading = void 0;
+
 var Circle = function (_migi$Component) {
   _inherits(Circle, _migi$Component);
 
   function Circle() {
     var _ref;
 
-    _classCallCheck(this, Circle);
-
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = Circle.__proto__ || Object.getPrototypeOf(Circle)).call.apply(_ref, [this].concat(data)));
+    _classCallCheck(this, Circle);
+
+    var _this = _possibleConstructorReturn(this, (_ref = Circle.__proto__ || Object.getPrototypeOf(Circle)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var page = self.ref.page;
+      var page2 = self.ref.page2;
+      page.on('page', function (i) {
+        page2.index = i;
+        skip = (i - 1) * take;
+        self.loadPage();
+      });
+      page2.on('page', function (i) {
+        page.index = i;
+        skip = (i - 1) * take;
+        self.loadPage();
+      });
+      self.ref.subPost.on('add_post', function (data) {
+        self.ref.postList.addData(data);
+      });
+    });
+    return _this;
   }
 
   _createClass(Circle, [{
+    key: 'loadPage',
+    value: function loadPage() {
+      if (loading) {
+        return;
+      }
+      loading = true;
+      var self = this;
+      _net2.default.postJSON('/api/circle/list', { circleID: $CONFIG.circleID, skip: skip, take: take }, function (res) {
+        if (res.success) {
+          var data = res.data;
+          self.ref.postList.setData(data.data);
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+        loading = false;
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+        loading = false;
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createVd("div", [["class", "main"]], [migi.createCp(_PostList2.default, [["datas", this.props.postList]])]), migi.createCp(_SubPost2.default, [["circleID", this.props.circleDetail.TagID], ["ref", "subPost"], ["originTo", this.props.circleDetail.TagName]])]);
+      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.postList.Size / take)]]), migi.createCp(_PostList2.default, [["ref", "postList"], ["datas", this.props.postList]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.postList.Size / take)]])]), migi.createCp(_SubPost2.default, [["ref", "subPost"], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧'], ["circleID", this.props.circleDetail.TagID], ["originTo", this.props.circleDetail.TagName + '圈']])]);
     }
   }]);
 
@@ -446,7 +515,7 @@ migi.name(Circle, "Circle");exports.default = Circle;
 
 /***/ }),
 
-/***/ 110:
+/***/ 112:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -528,7 +597,7 @@ var Title = function (_migi$Component) {
         return 'join' + (this.joined ? ' joined' : '');
       })], ["onClick", new migi.Cb(this, this.click)]], [new migi.Obj("joined", this, function () {
         return this.joined ? '已经加入' : '加入圈子';
-      })])]), migi.createVd("p", [["class", "intro"]], [this.props.circleDetail.Describe])])]);
+      })])]), migi.createVd("pre", [["class", "intro"]], [this.props.circleDetail.Describe])])]);
     }
   }, {
     key: 'joined',
@@ -563,7 +632,7 @@ migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
 
-/***/ 111:
+/***/ 113:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -641,7 +710,14 @@ var PostList = function (_migi$Component) {
         });
         $list.on('click', '.comment', function () {
           var postID = $(this).attr('rel');
-          location.href = '/post/' + postID;
+          if (parent && parent.setHash) {
+            parent.setHash('/post/' + postID);
+          } else {
+            location.href = '/post/' + postID;
+          }
+        });
+        $list.on('click', '.con,.imgs', function () {
+          $(this).closest('li').find('.comment').click();
         });
       });
     }
@@ -652,11 +728,32 @@ var PostList = function (_migi$Component) {
     key: 'genItem',
     value: function genItem(item) {
       var len = item.Content.length;
-      var maxLen = 64;
+      var maxLen = 256;
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.SendUserNickName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Createtime)])])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + item.ID], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + item.ID], ["class", "more"]], ["查看全部"])]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + item.ID]], [_util2.default.formatDate(item.Createtime)])])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + item.ID], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + item.ID], ["class", "more fn-hide"]], ["查看全部"])]), item.Image_Post ? migi.createVd("ul", [["class", "imgs fn-clear"]], [item.Image_Post.map(function (item) {
+          return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img120_120_80(item.FileUrl)) + ')']]);
+        })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.SendUserNickName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Createtime)])])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + item.ID], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + item.ID], ["class", "more"]], ["点击展开>"])]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + item.ID]], [_util2.default.formatDate(item.Createtime)])])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + item.ID], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + item.ID], ["class", "more fn-hide"]], ["查看全部"])]), item.Image_Post ? migi.createVd("ul", [["class", "imgs fn-clear"]], [item.Image_Post.map(function (item) {
+        return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img120_120_80(item.FileUrl)) + ')']]);
+      })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+    }
+  }, {
+    key: 'setData',
+    value: function setData(data) {
+      var self = this;
+      var html = '';
+      data.forEach(function (item) {
+        html += self.genItem(item);
+      });
+      $(self.ref.list.element).html(html);
+    }
+  }, {
+    key: 'addData',
+    value: function addData(data) {
+      var self = this;
+      var html = self.genItem(data);
+      $(self.ref.list.element).prepend(html.toString());
     }
   }, {
     key: 'render',
@@ -672,7 +769,7 @@ migi.name(PostList, "PostList");exports.default = PostList;
 
 /***/ }),
 
-/***/ 112:
+/***/ 114:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -710,6 +807,8 @@ var TEXT = {
   1: '',
   2: '加载失败'
 };
+var MAX_IMG_NUM = 10;
+var MAX_TEXT_LENGTH = 512;
 
 var SubPost = function (_migi$Component) {
   _inherits(SubPost, _migi$Component);
@@ -735,7 +834,7 @@ var SubPost = function (_migi$Component) {
     self.originTo = self.props.originTo;
     self.on(migi.Event.DOM, function () {
       if ($CONFIG.isLogin) {
-        var key = $CONFIG.uid + '_circle_img';
+        var key = self.getImgKey();
         var cache = localStorage[key];
         if (cache) {
           cache = JSON.parse(cache);
@@ -749,13 +848,24 @@ var SubPost = function (_migi$Component) {
           self.list = temp;
           self.imgNum = temp.length;
         }
-        var key2 = $CONFIG.uid + '_circle_content';
+        var key2 = self.getContentKey();
         var cache2 = localStorage[key2];
         if (cache2) {
           self.value = cache2.trim();
           self.input(null, self.ref.input);
+          var length = self.value.trim().length;
+          self.invalid = length < 3 || length > MAX_TEXT_LENGTH;
         }
       }
+      var $body = $(document.body);
+      $body.on('click', function (e) {
+        if (self.expand) {
+          var $target = $(e.target);
+          if (!$target.closest('.mod-sub')[0] && (!$target.hasClass('s1') || $target.hasClass('s2'))) {
+            self.expand = false;
+          }
+        }
+      });
     });
     return _this;
   }
@@ -771,16 +881,15 @@ var SubPost = function (_migi$Component) {
       } else {
         self.num = $vd.val().trim().length;
         var content = $vd.val().trim();
-        self.invalid = content.length < 3 || content.length > 256;
-        self.warnLength = content.length > 256;
-        var key2 = $CONFIG.uid + '_circle_content';
+        self.invalid = content.length < 3 || content.length > MAX_TEXT_LENGTH;
+        self.warnLength = content.length > MAX_TEXT_LENGTH;
+        var key2 = self.getContentKey();
         localStorage[key2] = content;
       }
     }
   }, {
     key: 'focus',
     value: function focus() {
-      this.expand = true;return;
       if (!window.$CONFIG.isLogin) {
         migi.eventBus.emit('NEED_LOGIN');
       } else {
@@ -793,18 +902,22 @@ var SubPost = function (_migi$Component) {
       e.preventDefault();
       var self = this;
       if (!self.sending && !self.invalid && !self.disableUpload) {
-        var imgs = self.list.map(function (item) {
-          return item.url;
+        var imgs = [];
+        self.list.forEach(function (item) {
+          if (item.state === STATE.LOADED) {
+            imgs.push(item.url);
+          }
         });
         self.sending = true;
         _net2.default.postJSON('/api/circle/add', { content: self.value, imgs: imgs, circleID: self.props.circleID }, function (res) {
           if (res.success) {
             self.value = '';
             self.list = [];
-            var key = $CONFIG.uid + '_circle_img';
+            var key = self.getImgKey();
             localStorage[key] = '';
-            var key2 = $CONFIG.uid + '_circle_content';
+            var key2 = self.getContentKey();
             localStorage[key2] = '';
+            self.emit('add_post', res.data);
           } else {
             alert(res.message || _util2.default.ERROR_MESSAGE);
           }
@@ -827,15 +940,29 @@ var SubPost = function (_migi$Component) {
       if (window.FileReader) {
         var files = e.target.files;
         var res = [];
+        var sizeLimit = void 0;
+        var spliceLimit = void 0;
         for (var i = 0, len = files.length; i < len; i++) {
           var file = files[i];
           var size = file.size;
           if (size && size !== 0 && size <= 1024 * 1024 * 3) {
             res.push(file);
+          } else {
+            sizeLimit = true;
           }
         }
+        if (res.length + self.imgNum > MAX_IMG_NUM) {
+          res.splice(MAX_IMG_NUM - self.imgNum);
+          spliceLimit = true;
+        }
         if (files.length !== res.length) {
-          alert('图片最大不能超过3M哦，超过的将自动过滤。');
+          if (sizeLimit && spliceLimit) {
+            alert('图片最大不能超过3M哦，超过的将自动过滤。图片最多不能超过' + MAX_IMG_NUM + '张哦，超过的将自动忽略。');
+          } else if (spliceLimit) {
+            alert('图片最多不能超过' + MAX_IMG_NUM + '张哦，超过的将自动忽略。');
+          } else if (sizeLimit) {
+            alert('图片最大不能超过3M哦，超过的将自动过滤。');
+          }
         }
         if (!res.length) {
           return;
@@ -843,6 +970,7 @@ var SubPost = function (_migi$Component) {
         self.disableUpload = true;
         var num = res.length;
         var count = 0;
+        var hasUpload = void 0;
         res.forEach(function (file, i) {
           var fileReader = new FileReader();
           fileReader.onload = function () {
@@ -852,22 +980,52 @@ var SubPost = function (_migi$Component) {
             });
             _net2.default.postJSON('/api/user/uploadPic', { img: fileReader.result }, function (res) {
               if (res.success) {
-                self.list[i + self.imgNum].state = STATE.LOADED;
-                self.list[i + self.imgNum].url = res.data;
-                self.list = self.list;
-                self.addCache(res.data);
-                count++;
-                if (count === num) {
-                  self.disableUpload = false;
+                var url = res.data;
+                var has = void 0;
+                self.list.forEach(function (item) {
+                  if (item.url === url) {
+                    hasUpload = has = true;
+                  }
+                });
+                if (!has) {
+                  self.list[i + self.imgNum].state = STATE.LOADED;
+                  self.list[i + self.imgNum].url = url;
+                  self.addCache(url);
+                } else {
+                  self.list[i + self.imgNum] = null;
                 }
               } else {
-                alert(res.message || _util2.default.ERROR_MESSAGE);
+                self.list[i + self.imgNum].state = STATE.ERROR;
               }
-            }, function (res) {
-              alert(res.message || _util2.default.ERROR_MESSAGE);
+              self.list = self.list;
               count++;
               if (count === num) {
                 self.disableUpload = false;
+                for (var j = self.list.length - 1; j >= 0; j--) {
+                  if (self.list[j] === null) {
+                    self.list.splice(j, 1);
+                  }
+                }
+                self.imgNum = self.list.length;
+                if (hasUpload) {
+                  alert('有图片已经重复上传过啦，已自动忽略。');
+                }
+              }
+            }, function (res) {
+              self.list[i + self.imgNum].state = STATE.ERROR;
+              self.list = self.list;
+              count++;
+              if (count === num) {
+                self.disableUpload = false;
+                for (var j = self.list.length - 1; j >= 0; j--) {
+                  if (self.list[j] === null) {
+                    self.list.splice(j, 1);
+                  }
+                }
+                self.imgNum = self.list.length;
+                if (hasUpload) {
+                  alert('有图片已经重复上传过啦，已自动忽略。');
+                }
               }
             });
           };
@@ -878,9 +1036,20 @@ var SubPost = function (_migi$Component) {
       }
     }
   }, {
+    key: 'getImgKey',
+    value: function getImgKey() {
+      return $CONFIG.uid + '_circle_img';
+    }
+  }, {
+    key: 'getContentKey',
+    value: function getContentKey() {
+      return $CONFIG.uid + '_circle_content';
+    }
+  }, {
     key: 'addCache',
     value: function addCache(url) {
-      var key = $CONFIG.uid + '_circle';
+      var self = this;
+      var key = self.getImgKey();
       var cache = localStorage[key];
       if (cache) {
         cache = JSON.parse(cache);
@@ -893,7 +1062,8 @@ var SubPost = function (_migi$Component) {
   }, {
     key: 'delCache',
     value: function delCache(url) {
-      var key = $CONFIG.uid + '_circle';
+      var self = this;
+      var key = self.getImgKey();
       var cache = localStorage[key];
       if (cache) {
         cache = JSON.parse(cache);
@@ -907,25 +1077,34 @@ var SubPost = function (_migi$Component) {
   }, {
     key: 'clearCache',
     value: function clearCache() {
-      var key = $CONFIG.uid + '_circle';
+      var self = this;
+      var key = self.getImgKey();
       localStorage[key] = '';
     }
   }, {
     key: 'clickImg',
     value: function clickImg(e, vd, tvd) {
-      this.delCache(tvd.props.rel);
-      this.list.splice(tvd.props.idx, 1);
+      var i = tvd.props.idx;
+      if (this.list[i].state === STATE.LOADED || this.list[i].state === STATE.ERROR) {
+        this.delCache(tvd.props.rel);
+        this.list.splice(i, 1);
+        this.imgNum = this.list.length;
+      }
     }
   }, {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", new migi.Obj("expand", this, function () {
-        return 'mod-sub' + (this.expand ? ' expand' : ' expand');
+        return 'mod-sub' + (this.expand ? ' expand' : '');
       })]], [migi.createVd("div", [["class", "c"]], [migi.createVd("form", [["class", new migi.Obj(["to", "originTo"], this, function () {
         return 'fn-clear' + (this.to || this.originTo ? ' to' : '');
-      })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("div", [["class", "wrap"]], [migi.createVd("label", [], ["TO: ", new migi.Obj(["to", "originTo"], this, function () {
+      })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)]], [migi.createVd("div", [["class", "wrap"]], [migi.createVd("label", [], [new migi.Obj(["to", "originTo"], this, function () {
         return this.to || this.originTo;
-      })]), migi.createVd("textarea", [["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
+      })]), migi.createVd("textarea", [["class", new migi.Obj("sending", this, function () {
+        return 'text' + (this.sending ? ' dis' : '');
+      })], ["ref", "input"], ["disabled", new migi.Obj("sending", this, function () {
+        return !!this.sending;
+      })], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
         return this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个圈子吧';
       })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["onBlur", new migi.Cb(this, this.blur)]], [new migi.Obj("value", this, function () {
         return this.value;
@@ -933,31 +1112,21 @@ var SubPost = function (_migi$Component) {
         return 'limit' + (this.warnLength ? ' warn' : '');
       })]], [migi.createVd("strong", [], [new migi.Obj("num", this, function () {
         return this.num;
-      })]), " / ", new migi.Obj("maxlength", this, function () {
-        return this.maxlength || 256;
-      })]), migi.createVd("div", [["class", new migi.Obj("disableUpload", this, function () {
+      })]), " / ", MAX_TEXT_LENGTH]), migi.createVd("div", [["class", new migi.Obj("disableUpload", this, function () {
         return 'upload' + (this.disableUpload ? ' dis' : '');
       })]], ["\n\
               添加图片\n\
-              ", migi.createVd("input", [["type", "file"], ["class", "file"], ["onChange", new migi.Cb(this, this.change)], ["disabled", new migi.Obj("disableUpload", this, function () {
+              ", migi.createVd("input", [["type", "file"], ["ref", "file"], ["class", "file"], ["onChange", new migi.Cb(this, this.change)], ["disabled", new migi.Obj("disableUpload", this, function () {
         return !!this.disableUpload;
       })], ["multiple", "multiple"], ["accept", "image/gif, image/jpeg, image/png"]])]), migi.createVd("input", [["type", "submit"], ["class", new migi.Obj(["sending", "invalid", "disableUpload"], this, function () {
         return 'submit' + (this.sending || this.invalid || this.disableUpload ? ' dis' : '');
       })], ["value", new migi.Obj(["value", "tipText", "subText"], this, function () {
         return this.value.trim().length ? this.value.trim().length < 3 ? this.tipText ? this.tipText.replace('${n}', 3 - this.value.trim().length) : '还少' + (3 - this.value.trim().length) + '个字哦' : this.subText || '发送' : this.subText || '发送';
-      })]]), migi.createVd("input", [["type", 'hidden'], ["id", 'afs_scene'], ["name", 'afs_scene']]), migi.createVd("input", [["type", 'hidden'], ["id", 'afs_token'], ["name", 'afs_token']])]), migi.createVd("ul", [["class", "list fn-clear"], ["onClick", new migi.Cb(this, this.clickImg)]], [new migi.Obj("list", this, function () {
+      })]])]), migi.createVd("ul", [["class", "list fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickImg)]]]], [new migi.Obj("list", this, function () {
         return (this.list || []).map(function (item, i) {
-          return migi.createVd("li", [["class", 's' + item.state], ["idx", i], ["rel", item.url], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img60_60_80(item.url)) + ')']], [migi.createVd("span", [], [TEXT[item.state]])]);
+          return migi.createVd("li", [["class", 's' + item.state], ["idx", i], ["rel", item.url], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img120_120_80(item.url)) + ')']], [migi.createVd("span", [], [TEXT[item.state]])]);
         });
       })])])])]);
-    }
-  }, {
-    key: 'maxlength',
-    set: function set(v) {
-      this.__setBind("maxlength", v);this.__data("maxlength");
-    },
-    get: function get() {
-      return this.__getBind("maxlength");
     }
   }, {
     key: 'placeholder',
@@ -1077,6 +1246,181 @@ var SubPost = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(SubPost, "SubPost");exports.default = SubPost;
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Page = function (_migi$Component) {
+  _inherits(Page, _migi$Component);
+
+  function Page() {
+    var _ref;
+
+    _classCallCheck(this, Page);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Page.__proto__ || Object.getPrototypeOf(Page)).call.apply(_ref, [this].concat(data)));
+
+    _this._index = _this.props.index;
+    _this._total = _this.props.total;
+    _this.update();
+    return _this;
+  }
+
+  _createClass(Page, [{
+    key: "update",
+    value: function update() {
+      var list = [];
+      list.push(migi.createVd("li", [], [this.index == 1 ? migi.createVd("span", [], ["1"]) : migi.createVd("a", [["href", "#"]], ["1"])]));
+      if (this.total > 1) {
+        if (this.index > 4) {
+          list.push(migi.createVd("li", [], ["..."]));
+        }
+        for (var i = Math.max(2, this.index - 2); i < this.index; i++) {
+          list.push(migi.createVd("li", [], [this.index == i ? migi.createVd("span", [], [i]) : migi.createVd("a", [["href", "#"]], [i])]));
+        }
+        if (this.index > 1) {
+          list.push(migi.createVd("li", [], [migi.createVd("span", [], [this.index])]));
+        }
+        for (var i = this.index + 1; i < Math.min(this.total, this.index + 3); i++) {
+          list.push(migi.createVd("li", [], [this.index == i ? migi.createVd("span", [], [i]) : migi.createVd("a", [["href", "#"]], [i])]));
+        }
+        if (this.index < this.total - 3) {
+          list.push(migi.createVd("li", [], ["..."]));
+        }
+        if (this.index < this.total) {
+          list.push(migi.createVd("li", [], [migi.createVd("a", [["href", "#"]], [this.total])]));
+        }
+      }
+      this.list = list;
+    }
+  }, {
+    key: "submit",
+    value: function submit(e) {
+      e.preventDefault();
+      var index = parseInt(this.num) || 1;
+      if (index < 1) {
+        index = 1;
+      } else if (index > this.total) {
+        index = this.total;
+      }
+      this.num = index;
+      if (index && index != this.index) {
+        this.index = index;
+        this.emit('page', this.index);
+      }
+    }
+  }, {
+    key: "click",
+    value: function click(e) {
+      e.preventDefault();
+      var index = e.target.innerHTML;
+      if (index && index != this.index) {
+        this.index = parseInt(index);
+        this.emit('page', this.index);
+      }
+    }
+  }, {
+    key: "prev",
+    value: function prev(e) {
+      e.preventDefault();
+      if (this.index > 1) {
+        this.index--;
+        this.emit('page', this.index);
+      }
+    }
+  }, {
+    key: "next",
+    value: function next(e) {
+      e.preventDefault();
+      if (this.index < this.total) {
+        this.index++;
+        this.emit('page', this.index);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return migi.createVd("form", [["class", "cp-page"], ["onSubmit", new migi.Cb(this, this.submit)], ["onSwipeLeft", new migi.Cb(this, this.prev)], ["onSwipeRight", new migi.Cb(this, this.next)]], [migi.createVd("a", [["href", "#"], ["class", new migi.Obj("index", this, function () {
+        return this.index == 1 ? 'prev dis' : 'prev';
+      })], ["onClick", new migi.Cb(this, this.prev)]], [migi.createVd("b", [], []), "上一页"]), migi.createVd("ol", [["onClick", [[{ "a": { "_v": true } }, new migi.Cb(this, this.click)]]]], [new migi.Obj("list", this, function () {
+        return this.list;
+      })]), migi.createVd("a", [["href", "#"], ["class", new migi.Obj(["index", "total"], this, function () {
+        return this.index == this.total ? 'next dis' : 'next';
+      })], ["onClick", new migi.Cb(this, this.next)]], ["下一页", migi.createVd("b", [], [])]), migi.createVd("span", [], [new migi.Obj("index", this, function () {
+        return this.index;
+      }), "/", new migi.Obj("total", this, function () {
+        return this.total;
+      }), " 页"]), migi.createVd("input", [["type", "number"], ["class", "num"], ["name", "page"], ["value", new migi.Obj("num", this, function () {
+        return this.num;
+      })], ["min", "1"], ["max", new migi.Obj("total", this, function () {
+        return this.total;
+      })]]), migi.createVd("input", [["type", "submit"], ["class", "sub"], ["value", "跳转"]])]);
+    }
+  }, {
+    key: "index",
+    get: function get() {
+      return this._index || 1;
+    },
+    set: function set(v) {
+      this._index = v;
+      this.update();
+      ;this.__array("index", v);this.__data("index");
+    }
+  }, {
+    key: "total",
+    get: function get() {
+      return this._total || 1;
+    },
+    set: function set(v) {
+      this._total = v;
+      this.index = 1;
+      ;this.__array("total", v);this.__data("total");
+    }
+  }, {
+    key: "list",
+    get: function get() {
+      return this._list || [];
+    },
+    set: function set(v) {
+      this._list = v;
+      ;this.__array("list", v);this.__data("list");
+    }
+  }, {
+    key: "num",
+    get: function get() {
+      return this._num;
+    },
+    set: function set(v) {
+      this._num = v;
+      ;this.__array("num", v);this.__data("num");
+    }
+  }]);
+
+  return Page;
+}(migi.Component);
+
+migi.name(Page, "Page");exports.default = Page;
 
 /***/ })
 

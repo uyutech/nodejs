@@ -362,6 +362,7 @@ body {
   padding: 0 0.2rem;
   width: 8.4rem;
   height: 0.28rem;
+  line-height: 0.28rem;
   background: #F1F6F9;
   border-radius: 0.3rem;
   border: 1px solid #B1C0C9;
@@ -381,7 +382,7 @@ body {
   cursor: pointer;
 }
 .cp-subcmt form .submit.dis {
-  background: #ccc;
+  background: #CCC;
   cursor: default;
 }
 .cp-subcmt form.to label {
@@ -401,7 +402,6 @@ body {
 }
 .post > .profile {
   margin-bottom: 0.2rem;
-  font-size: 0.14rem;
   line-height: 0.3rem;
   font-weight: 400;
 }
@@ -416,11 +416,15 @@ body {
 }
 .post > .profile .txt {
   float: left;
+  font-size: 0.18rem;
 }
 .post > .profile .txt small {
   margin-left: 0.1rem;
-  font-size: 0.12rem;
+  font-size: 0.14rem;
   color: #919191;
+}
+.post > .profile.author .name {
+  color: #EC0;
 }
 .post > .wrap {
   position: relative;
@@ -432,10 +436,13 @@ body {
   line-height: 1.8;
 }
 .post > .wrap .con {
+  display: block;
   white-space: pre-wrap;
   word-break: break-all;
   word-wrap: break-word;
   font-size: 0.14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .post > .wrap .arrow {
   position: absolute;
@@ -460,6 +467,11 @@ body {
           transform: scaleX(0.7) rotateZ(-45deg);
   content: ' ';
 }
+.post > .wrap .imgs img {
+  display: block;
+  margin: 0.1rem 0;
+  max-width: 100%;
+}
 .post > .wrap .btn {
   margin-top: 0.1rem;
   height: 0.24rem;
@@ -478,7 +490,7 @@ body {
   margin-right: 0;
 }
 .post > .wrap .btn li.like {
-  padding-left: 0.25rem;
+  padding-left: 0.3rem;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAYFBMVEUAAABPj7BRkrdPj7BOj7FOjrFPj7FPj7FPj7FeoddOj7FOj7FPj7FPj7JOkLFQj7JPkbROjrFOj7FOj7FTkLVSkrVVm8FOj7FPkLRQkLJQk7ZPjrFOj7FQkbNQj79OjrA+G1nSAAAAH3RSTlMA5Rz0vfnWyF0Ep5SBcWVJOu3FtiEZC6xHNCS+S0MQ/NcySwAAAOhJREFUSMftVFcOgzAUC7Nlr1Kg693/ljWQKkWkyL9F+MdC2IrfSNQOca4DCcK4ZPWpaHRXSn8J5IM6ogKJQcoaahWVIThomUgCoGDXAWeKQANhAs7AJ8bQQxiCb2CPKduF0FHA2C6ms4M+IRLGoLPHuvpKEeh0d87gO2NwIBzACTc505xxcj05aR/8kiW8U26TmyRPWcFfbEqB7E6hlI8/D3yXYnEsa50HVoHc6Shv7fhOJRNmti5Ao3eLMJiV8UiDURyGw/AXBtt68xfIXFHwBnLLIxBv6H3r0dVvfWsvLtap1g/ZjvAGooBFiMj5dcEAAAAASUVORK5CYII=) no-repeat 0 center;
   background-size: contain;
 }

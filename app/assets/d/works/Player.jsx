@@ -16,23 +16,14 @@ class Player extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.workList && self.props.workList.length) {
-      if(self.props.workID) {
-        self.props.workList.forEach(function(item, i) {
-          if(self.props.workID === item.ItemID.toString()) {
-            self.setItem(self.props.workList[i]);
-          }
-        });
-      }
-      else {
-        self.setItem(self.props.workList[0]);
-      }
+    if(self.props.work) {
+      self.setItem(self.props.work);
       self.on(migi.Event.DOM, function() {
         let uid = window.$CONFIG ? $CONFIG.uid : '';
         let key = uid + 'volume';
         self.volume = localStorage[key];
         self.addOrAltMedia();
-        $(self.ref.fn.element).removeClass('fn-hidden');
+        self.showFn = true;
 
         $(document).on('mousemove', this.mousemove.bind(this));
         $(document).on('mouseup', this.mouseup.bind(this));
@@ -63,6 +54,7 @@ class Player extends migi.Component {
   @bind like
   @bind favor
   @bind cover
+  @bind showFn
   get currentTime() {
     return this._currentTime || 0;
   }
@@ -395,9 +387,9 @@ class Player extends migi.Component {
             <pre style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>{ this.formatLyrics.txt }</pre>
           </div>
         </div>
-        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
+        <b class={ 'start' + ((this.isPlaying || !this.url) ? ' fn-hide' : '') } onClick={ this.clickStart }/>
       </div>
-      <div class="fn fn-hidden" ref="fn">
+      <div class={ 'fn' + ((this.showFn && this.url) ? '' : ' fn-hidden') } ref="fn">
         <div class="control">
           <b class={ 'lyrics' + (this.showLyricsMode ? '' : ' roll') } onClick={ this.altLyrics }/>
           <div class="volume" ref="volume" onClick={ this.clickVolume }>

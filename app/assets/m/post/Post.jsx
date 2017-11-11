@@ -177,11 +177,8 @@ class Post extends migi.Component {
     let postData = this.props.postData;
     return <div class="post">
       <h2>{ postData.Title }</h2>
-      <div class="profile fn-clear">
-        <img class="pic" src={
-          postData.IsAuthor
-            ? postData.SendAuthorHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'
-            : postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png' }/>
+      <div class={ 'profile fn-clear' + (postData.IsAuthor ? ' author' : '') }>
+        <img class="pic" src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
         <div class="txt">
           <div>
             <span class="name">{ postData.SendUserNickName }</span>
@@ -191,6 +188,18 @@ class Post extends migi.Component {
       </div>
       <div class="wrap">
         <pre class="con">{ postData.Content }</pre>
+        {
+          postData.Image_Post
+            ?
+            <div class="imgs">
+              {
+                postData.Image_Post.map(function(item) {
+                  return <img src={ util.autoSsl(util.img600_600_80(item.FileUrl)) }/>
+                })
+              }
+            </div>
+            : ''
+        }
         <ul class="btn fn-clear">
           <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }>{ this.likeCount }</li>
         </ul>
@@ -221,7 +230,8 @@ class Post extends migi.Component {
       <SubCmt ref="subCmt"
               tipText="-${n}"
               subText="回复"
-              placeholder="夸夸这个帖子吧"/>
+              originTo={ postData.SendUserNickName }
+              placeholder="交流一下吧~"/>
     </div>;
   }
 }

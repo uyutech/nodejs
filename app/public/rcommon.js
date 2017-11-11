@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 213);
+/******/ 	return __webpack_require__(__webpack_require__.s = 216);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 10:
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -274,7 +274,7 @@ exports.default = EventBus;
 
 /***/ }),
 
-/***/ 11:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -394,7 +394,7 @@ exports.default = Model;
 
 /***/ }),
 
-/***/ 12:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -421,7 +421,7 @@ exports.default = Cb;
 
 /***/ }),
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -474,7 +474,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -490,7 +490,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -557,7 +557,7 @@ function swap(arr, a, b) {
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -567,7 +567,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(15);
+var _sort = __webpack_require__(16);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -1073,11 +1073,11 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(13);
+var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _type = __webpack_require__(14);
+var _type = __webpack_require__(15);
 
 var _type2 = _interopRequireDefault(_type);
 
@@ -1212,25 +1212,25 @@ exports.default = {
 
 /***/ }),
 
-/***/ 213:
+/***/ 216:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(33);
+__webpack_require__(35);
 
-__webpack_require__(34);
+__webpack_require__(36);
 
-var _jquery = __webpack_require__(214);
+var _jquery = __webpack_require__(217);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _util = __webpack_require__(216);
+var _util = __webpack_require__(219);
 
 var _util2 = _interopRequireDefault(_util);
 
-__webpack_require__(218);
+__webpack_require__(221);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1366,7 +1366,7 @@ window.util = _util2.default;
 
 /***/ }),
 
-/***/ 214:
+/***/ 217:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3645,7 +3645,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       return 1 === arguments.length ? this.off(a, "**") : this.off(b, a || "**", c);
     } }), r.holdReady = function (a) {
     a ? r.readyWait++ : r.ready(!0);
-  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(215) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+  }, r.isArray = Array.isArray, r.parseJSON = JSON.parse, r.nodeName = B, "function" == "function" && __webpack_require__(218) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return r;
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));var Vb = a.jQuery,
@@ -3653,11 +3653,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return a.$ === r && (a.$ = Wb), b && a.jQuery === r && (a.jQuery = Vb), r;
   }, b || (a.jQuery = a.$ = r), r;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)(module)))
 
 /***/ }),
 
-/***/ 215:
+/***/ 218:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -3667,7 +3667,7 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 
-/***/ 216:
+/***/ 219:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3677,7 +3677,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(217);
+var _sort = __webpack_require__(220);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3748,7 +3748,36 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 217:
+/***/ 22:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var MAX = 4096;
+var cache = new Array(MAX);
+
+var pool = {
+  index: 0,
+  add: function add(item) {
+    if (!item.__hasDes && this.index < MAX) {
+      cache[this.index++] = item;
+      item.__hasDes = true;
+    }
+  },
+  get: function get() {
+    return cache[--this.index];
+  }
+};
+
+exports.default = pool;
+
+/***/ }),
+
+/***/ 220:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3815,39 +3844,10 @@ function swap(arr, a, b) {
 
 /***/ }),
 
-/***/ 218:
+/***/ 221:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 22:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var MAX = 4096;
-var cache = new Array(MAX);
-
-var pool = {
-  index: 0,
-  add: function add(item) {
-    if (!item.__hasDes && this.index < MAX) {
-      cache[this.index++] = item;
-      item.__hasDes = true;
-    }
-  },
-  get: function get() {
-    return cache[--this.index];
-  }
-};
-
-exports.default = pool;
 
 /***/ }),
 
@@ -3882,11 +3882,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchUtil = __webpack_require__(16);
+var _matchUtil = __webpack_require__(17);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
@@ -4984,7 +4984,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Model2 = __webpack_require__(11);
+var _Model2 = __webpack_require__(12);
 
 var _Model3 = _interopRequireDefault(_Model2);
 
@@ -5069,7 +5069,7 @@ var _Component2 = __webpack_require__(5);
 
 var _Component3 = _interopRequireDefault(_Component2);
 
-var _EventBus = __webpack_require__(10);
+var _EventBus = __webpack_require__(11);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
@@ -5437,7 +5437,7 @@ exports.default = util;
 
 /***/ }),
 
-/***/ 33:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5759,17 +5759,17 @@ defineProperties(Number, {
 
 /***/ }),
 
-/***/ 34:
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(35)['default'];
+module.exports = __webpack_require__(37)['default'];
 
 /***/ }),
 
-/***/ 35:
+/***/ 37:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5787,11 +5787,11 @@ var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _EventBus = __webpack_require__(10);
+var _EventBus = __webpack_require__(11);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(11);
+var _Model = __webpack_require__(12);
 
 var _Model2 = _interopRequireDefault(_Model);
 
@@ -5807,7 +5807,7 @@ var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _NonVisualComponent = __webpack_require__(42);
+var _NonVisualComponent = __webpack_require__(44);
 
 var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
 
@@ -5819,7 +5819,7 @@ var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(12);
+var _Cb = __webpack_require__(13);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -5831,15 +5831,15 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(13);
+var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _sort = __webpack_require__(15);
+var _sort = __webpack_require__(16);
 
 var _sort2 = _interopRequireDefault(_sort);
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
@@ -5919,7 +5919,7 @@ exports.default = migi;
 
 /***/ }),
 
-/***/ 36:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5937,11 +5937,11 @@ var _Event = __webpack_require__(2);
 
 var _Event2 = _interopRequireDefault(_Event);
 
-var _sort = __webpack_require__(15);
+var _sort = __webpack_require__(16);
 
 var _sort2 = _interopRequireDefault(_sort);
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
@@ -5949,7 +5949,7 @@ var _matchHash = __webpack_require__(21);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
-var _matchUtil = __webpack_require__(16);
+var _matchUtil = __webpack_require__(17);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
@@ -6381,7 +6381,7 @@ exports.default = match;
 
 /***/ }),
 
-/***/ 37:
+/***/ 39:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6403,7 +6403,7 @@ var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _Cb = __webpack_require__(12);
+var _Cb = __webpack_require__(13);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -6411,7 +6411,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(13);
+var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
@@ -6423,11 +6423,11 @@ var _cachePool = __webpack_require__(22);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
-var _type = __webpack_require__(14);
+var _type = __webpack_require__(15);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
@@ -7167,375 +7167,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ 38:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _util = __webpack_require__(3);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var NUM = 0;
-var STR = 1;
-var BOOL = 2;
-
-var RENDER_EXIST = 1;
-var RENDER_DOM = 2;
-
-var SPECIALS = {
-  button: {
-    disabled: RENDER_EXIST
-  },
-  input: {
-    autofocus: RENDER_EXIST,
-    checked: RENDER_EXIST,
-    defaultChecked: RENDER_DOM,
-    defaultchecked: RENDER_DOM,
-    defaultValue: RENDER_DOM,
-    defaultvalue: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    multiple: RENDER_EXIST,
-    readOnly: RENDER_EXIST,
-    readonly: RENDER_EXIST,
-    required: RENDER_EXIST
-  },
-  link: {
-    disabled: RENDER_EXIST
-  },
-  option: {
-    defaultSelected: RENDER_DOM,
-    defaultselected: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    selected: RENDER_EXIST,
-    text: RENDER_DOM
-  },
-  select: {
-    autofocus: RENDER_EXIST,
-    disabled: RENDER_EXIST,
-    multiple: RENDER_EXIST,
-    selectedIndex: RENDER_DOM,
-    selectedindex: RENDER_DOM
-  },
-  textarea: {
-    autofocus: RENDER_EXIST,
-    defaultValue: RENDER_DOM,
-    defaultvalue: RENDER_DOM,
-    disabled: RENDER_EXIST,
-    readOnly: RENDER_EXIST,
-    readonly: RENDER_EXIST
-  }
-};
-
-var SETS = {
-  button: {
-    disabled: BOOL
-  },
-  input: {
-    autofocus: BOOL,
-    checked: BOOL,
-    defaultChecked: BOOL,
-    defaultchecked: BOOL,
-    defaultValue: STR,
-    defaultvalue: STR,
-    disabled: BOOL,
-    readOnly: BOOL,
-    readonly: BOOL,
-    required: BOOL,
-    value: STR
-  },
-  link: {
-    checked: BOOL
-  },
-  option: {
-    defaultSelected: BOOL,
-    defaultselected: BOOL,
-    disabled: BOOL,
-    selected: BOOL,
-    text: STR
-  },
-  select: {
-    autofocus: BOOL,
-    disabled: BOOL,
-    required: BOOL,
-    selectedIndex: NUM,
-    selectedindex: NUM,
-    value: STR
-  },
-  textarea: {
-    autofocus: BOOL,
-    defaultValue: STR,
-    defaultvalue: STR,
-    disabled: BOOL,
-    readOnly: BOOL,
-    readonly: BOOL,
-    required: BOOL,
-    value: STR
-  }
-};
-
-var lowerCase = {
-  defaultchecked: 'defaultChecked',
-  defaultselected: 'defaultSelected',
-  defaultvalue: 'defautlValue',
-  readonly: 'readOnly',
-  selectindex: 'selectIndex'
-};
-
-exports.default = {
-  RENDER_EXIST: RENDER_EXIST,
-  RENDER_DOM: RENDER_DOM,
-  special: function special(name, prop) {
-    if (SPECIALS.hasOwnProperty(name)) {
-      var o = SPECIALS[name];
-      if (o.hasOwnProperty(prop)) {
-        return o[prop];
-      }
-    }
-  },
-  update: function update(name, element, k, v, jaw) {
-    //特殊对待的prop，用js赋值
-    if (SETS.hasOwnProperty(name)) {
-      var o = SETS[name];
-      if (o.hasOwnProperty(k)) {
-        o = o[k];
-        k = lowerCase[k] || k;
-        switch (o) {
-          case NUM:
-            v = parseInt(v);
-            element[k] = v || 0;
-            break;
-          case STR:
-            v = _util2.default.stringify(v);
-            element[k] = v;
-            break;
-          case BOOL:
-            v = !!v;
-            element[k] = v;
-            break;
-        }
-        return;
-      }
-    }
-    //普通的setAttribute
-    switch (k) {
-      case 'className':
-        k = 'class';
-        break;
-      case 'htmlFor':
-        k = 'for';
-        break;
-    }
-    //jaw导入style时改写migi-前缀
-    if (jaw) {
-      switch (k) {
-        case 'id':
-        case 'class':
-          k = 'migi-' + k;
-          break;
-      }
-    }
-    if (v === null || v === void 0) {
-      element.removeAttribute(k);
-    } else if (k == 'id') {
-      element[k] = v;
-    } else if (k == 'class') {
-      element.className = v;
-    } else {
-      element.setAttribute(k, v);
-    }
-  }
-};
-
-/***/ }),
-
-/***/ 39:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (vd, name, cb, listener) {
-  if (!hasInitGlobal) {
-    hasInitGlobal = true;
-    initGlobal();
-  }
-  listener.push(['touchstart', onTouchStart]);
-
-  var elem = vd.element;
-
-  elem.addEventListener('touchstart', onTouchStart);
-
-  function onTouchStart(e) {
-    //有可能组件内父子多个使用了手势，冒泡触发了多个
-    if (touch.first) {
-      touchList.push({
-        vd: vd,
-        name: name,
-        cb: cb
-      });
-      return;
-    }
-
-    firstTouch = e.touches[0];
-    if (e.touches && e.touches.length === 1 && touch.x2) {
-      // Clear out touch movement data if we have it sticking around
-      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
-      touch.x2 = undefined;
-      touch.y2 = undefined;
-    }
-
-    touch = {
-      vd: vd,
-      name: name,
-      cb: cb,
-      first: true,
-      x1: firstTouch.pageX,
-      y1: firstTouch.pageY
-    };
-    lastTouch = touch;
-
-    now = Date.now();
-    delta = now - lastTime;
-    lastTime = now;
-    if (delta > 0 && delta < 250) {
-      touch.isDoubleTap = true;
-    }
-  }
-};
-
-/**
- * Thanks to zepto-touch.js
- * https://github.com/madrobby/zepto/blob/master/src/touch.js
- */
-
-var touchList = [];
-var touch = {};
-var lastTouch;
-var tapTimeout;
-var swipeTimeout;
-var longTapDelay = 750;
-var lastTime = 0;
-var now;
-var delta;
-var deltaX = 0;
-var deltaY = 0;
-var firstTouch;
-
-function swipeDirection(x1, x2, y1, y2) {
-  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
-}
-
-function cancelAll() {
-  if (tapTimeout) {
-    clearTimeout(tapTimeout);
-  }
-  if (swipeTimeout) {
-    clearTimeout(swipeTimeout);
-  }
-  tapTimeout = swipeTimeout = null;
-  touch = {};
-  touchList = [];
-}
-
-var hasInitGlobal;
-
-function initGlobal() {
-  document.addEventListener('touchmove', onTouchMove, true);
-  document.addEventListener('touchend', onTouchEnd, true);
-  document.addEventListener('touchcancel', cancelAll, true);
-
-  window.addEventListener('scroll', cancelAll);
-  window.addEventListener('blur', cancelAll);
-}
-
-function onTouchMove(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  firstTouch = e.touches[0];
-  touch.x2 = firstTouch.pageX;
-  touch.y2 = firstTouch.pageY;
-
-  deltaX += Math.abs(touch.x1 - touch.x2);
-  deltaY += Math.abs(touch.y1 - touch.y2);
-}
-
-function onTouchEnd(e) {
-  if (!touch.vd) {
-    return;
-  }
-
-  // swipe
-  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
-    swipeTimeout = setTimeout(function () {
-      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
-      if (touch.name == 'swipe' || touch.name == type) {
-        touch.cb(e);
-      }
-      touchList.forEach(function (touch) {
-        if (touch.name == 'swipe' || touch.name == type) {
-          touch.cb(e);
-        }
-      });
-      touch = {};
-      touchList = [];
-    }, 0);
-  }
-  // don't fire tap when delta position changed by more than 30 pixels,
-  // for instance when moving to a point and back to origin
-  else if (deltaX < 30 && deltaY < 30) {
-      tapTimeout = setTimeout(function () {
-        var isLongTap = Date.now() - lastTime > longTapDelay;
-        if (isLongTap) {
-          if (touch.name == 'longtap') {
-            touch.cb(e);
-          }
-          touchList.forEach(function (touch) {
-            if (touch.name == 'longtap') {
-              touch.cb(e);
-            }
-          });
-        }
-        // trigger double tap immediately
-        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
-            if (touch.name == 'doubletap') {
-              touch.cb(e);
-            }
-            touchList.forEach(function (touch) {
-              if (touch.name == 'doubletap') {
-                touch.cb(e);
-              }
-            });
-          }
-        touch = {};
-        touchList = [];
-      }, 0);
-    } else {
-      touch = {};
-      touchList = [];
-    }
-  deltaX = deltaY = 0;
-}
-
-;
-
-/***/ }),
-
 /***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7823,6 +7454,375 @@ exports.default = Element;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _util = __webpack_require__(3);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var NUM = 0;
+var STR = 1;
+var BOOL = 2;
+
+var RENDER_EXIST = 1;
+var RENDER_DOM = 2;
+
+var SPECIALS = {
+  button: {
+    disabled: RENDER_EXIST
+  },
+  input: {
+    autofocus: RENDER_EXIST,
+    checked: RENDER_EXIST,
+    defaultChecked: RENDER_DOM,
+    defaultchecked: RENDER_DOM,
+    defaultValue: RENDER_DOM,
+    defaultvalue: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    multiple: RENDER_EXIST,
+    readOnly: RENDER_EXIST,
+    readonly: RENDER_EXIST,
+    required: RENDER_EXIST
+  },
+  link: {
+    disabled: RENDER_EXIST
+  },
+  option: {
+    defaultSelected: RENDER_DOM,
+    defaultselected: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    selected: RENDER_EXIST,
+    text: RENDER_DOM
+  },
+  select: {
+    autofocus: RENDER_EXIST,
+    disabled: RENDER_EXIST,
+    multiple: RENDER_EXIST,
+    selectedIndex: RENDER_DOM,
+    selectedindex: RENDER_DOM
+  },
+  textarea: {
+    autofocus: RENDER_EXIST,
+    defaultValue: RENDER_DOM,
+    defaultvalue: RENDER_DOM,
+    disabled: RENDER_EXIST,
+    readOnly: RENDER_EXIST,
+    readonly: RENDER_EXIST
+  }
+};
+
+var SETS = {
+  button: {
+    disabled: BOOL
+  },
+  input: {
+    autofocus: BOOL,
+    checked: BOOL,
+    defaultChecked: BOOL,
+    defaultchecked: BOOL,
+    defaultValue: STR,
+    defaultvalue: STR,
+    disabled: BOOL,
+    readOnly: BOOL,
+    readonly: BOOL,
+    required: BOOL,
+    value: STR
+  },
+  link: {
+    checked: BOOL
+  },
+  option: {
+    defaultSelected: BOOL,
+    defaultselected: BOOL,
+    disabled: BOOL,
+    selected: BOOL,
+    text: STR
+  },
+  select: {
+    autofocus: BOOL,
+    disabled: BOOL,
+    required: BOOL,
+    selectedIndex: NUM,
+    selectedindex: NUM,
+    value: STR
+  },
+  textarea: {
+    autofocus: BOOL,
+    defaultValue: STR,
+    defaultvalue: STR,
+    disabled: BOOL,
+    readOnly: BOOL,
+    readonly: BOOL,
+    required: BOOL,
+    value: STR
+  }
+};
+
+var lowerCase = {
+  defaultchecked: 'defaultChecked',
+  defaultselected: 'defaultSelected',
+  defaultvalue: 'defautlValue',
+  readonly: 'readOnly',
+  selectindex: 'selectIndex'
+};
+
+exports.default = {
+  RENDER_EXIST: RENDER_EXIST,
+  RENDER_DOM: RENDER_DOM,
+  special: function special(name, prop) {
+    if (SPECIALS.hasOwnProperty(name)) {
+      var o = SPECIALS[name];
+      if (o.hasOwnProperty(prop)) {
+        return o[prop];
+      }
+    }
+  },
+  update: function update(name, element, k, v, jaw) {
+    //特殊对待的prop，用js赋值
+    if (SETS.hasOwnProperty(name)) {
+      var o = SETS[name];
+      if (o.hasOwnProperty(k)) {
+        o = o[k];
+        k = lowerCase[k] || k;
+        switch (o) {
+          case NUM:
+            v = parseInt(v);
+            element[k] = v || 0;
+            break;
+          case STR:
+            v = _util2.default.stringify(v);
+            element[k] = v;
+            break;
+          case BOOL:
+            v = !!v;
+            element[k] = v;
+            break;
+        }
+        return;
+      }
+    }
+    //普通的setAttribute
+    switch (k) {
+      case 'className':
+        k = 'class';
+        break;
+      case 'htmlFor':
+        k = 'for';
+        break;
+    }
+    //jaw导入style时改写migi-前缀
+    if (jaw) {
+      switch (k) {
+        case 'id':
+        case 'class':
+          k = 'migi-' + k;
+          break;
+      }
+    }
+    if (v === null || v === void 0) {
+      element.removeAttribute(k);
+    } else if (k == 'id') {
+      element[k] = v;
+    } else if (k == 'class') {
+      element.className = v;
+    } else {
+      element.setAttribute(k, v);
+    }
+  }
+};
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (vd, name, cb, listener) {
+  if (!hasInitGlobal) {
+    hasInitGlobal = true;
+    initGlobal();
+  }
+  listener.push(['touchstart', onTouchStart]);
+
+  var elem = vd.element;
+
+  elem.addEventListener('touchstart', onTouchStart);
+
+  function onTouchStart(e) {
+    //有可能组件内父子多个使用了手势，冒泡触发了多个
+    if (touch.first) {
+      touchList.push({
+        vd: vd,
+        name: name,
+        cb: cb
+      });
+      return;
+    }
+
+    firstTouch = e.touches[0];
+    if (e.touches && e.touches.length === 1 && touch.x2) {
+      // Clear out touch movement data if we have it sticking around
+      // This can occur if touchcancel doesn't fire due to preventDefault, etc.
+      touch.x2 = undefined;
+      touch.y2 = undefined;
+    }
+
+    touch = {
+      vd: vd,
+      name: name,
+      cb: cb,
+      first: true,
+      x1: firstTouch.pageX,
+      y1: firstTouch.pageY
+    };
+    lastTouch = touch;
+
+    now = Date.now();
+    delta = now - lastTime;
+    lastTime = now;
+    if (delta > 0 && delta < 250) {
+      touch.isDoubleTap = true;
+    }
+  }
+};
+
+/**
+ * Thanks to zepto-touch.js
+ * https://github.com/madrobby/zepto/blob/master/src/touch.js
+ */
+
+var touchList = [];
+var touch = {};
+var lastTouch;
+var tapTimeout;
+var swipeTimeout;
+var longTapDelay = 750;
+var lastTime = 0;
+var now;
+var delta;
+var deltaX = 0;
+var deltaY = 0;
+var firstTouch;
+
+function swipeDirection(x1, x2, y1, y2) {
+  return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? x1 - x2 > 0 ? 'left' : 'right' : y1 - y2 > 0 ? 'up' : 'down';
+}
+
+function cancelAll() {
+  if (tapTimeout) {
+    clearTimeout(tapTimeout);
+  }
+  if (swipeTimeout) {
+    clearTimeout(swipeTimeout);
+  }
+  tapTimeout = swipeTimeout = null;
+  touch = {};
+  touchList = [];
+}
+
+var hasInitGlobal;
+
+function initGlobal() {
+  document.addEventListener('touchmove', onTouchMove, true);
+  document.addEventListener('touchend', onTouchEnd, true);
+  document.addEventListener('touchcancel', cancelAll, true);
+
+  window.addEventListener('scroll', cancelAll);
+  window.addEventListener('blur', cancelAll);
+}
+
+function onTouchMove(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  firstTouch = e.touches[0];
+  touch.x2 = firstTouch.pageX;
+  touch.y2 = firstTouch.pageY;
+
+  deltaX += Math.abs(touch.x1 - touch.x2);
+  deltaY += Math.abs(touch.y1 - touch.y2);
+}
+
+function onTouchEnd(e) {
+  if (!touch.vd) {
+    return;
+  }
+
+  // swipe
+  if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
+    swipeTimeout = setTimeout(function () {
+      var type = 'swipe' + swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2);
+      if (touch.name == 'swipe' || touch.name == type) {
+        touch.cb(e);
+      }
+      touchList.forEach(function (touch) {
+        if (touch.name == 'swipe' || touch.name == type) {
+          touch.cb(e);
+        }
+      });
+      touch = {};
+      touchList = [];
+    }, 0);
+  }
+  // don't fire tap when delta position changed by more than 30 pixels,
+  // for instance when moving to a point and back to origin
+  else if (deltaX < 30 && deltaY < 30) {
+      tapTimeout = setTimeout(function () {
+        var isLongTap = Date.now() - lastTime > longTapDelay;
+        if (isLongTap) {
+          if (touch.name == 'longtap') {
+            touch.cb(e);
+          }
+          touchList.forEach(function (touch) {
+            if (touch.name == 'longtap') {
+              touch.cb(e);
+            }
+          });
+        }
+        // trigger double tap immediately
+        else if (touch.isDoubleTap && touch.vd == lastTouch.vd) {
+            if (touch.name == 'doubletap') {
+              touch.cb(e);
+            }
+            touchList.forEach(function (touch) {
+              if (touch.name == 'doubletap') {
+                touch.cb(e);
+              }
+            });
+          }
+        touch = {};
+        touchList = [];
+      }, 0);
+    } else {
+      touch = {};
+      touchList = [];
+    }
+  deltaX = deltaY = 0;
+}
+
+;
+
+/***/ }),
+
+/***/ 42:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.default = {
   domactivate: 'DOMActivate',
   domfocusin: 'DOMFocusIn',
@@ -7835,7 +7835,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 41:
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7871,7 +7871,7 @@ exports.default = arrayMethods;
 
 /***/ }),
 
-/***/ 42:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8020,11 +8020,11 @@ var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _EventBus = __webpack_require__(10);
+var _EventBus = __webpack_require__(11);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(11);
+var _Model = __webpack_require__(12);
 
 var _Model2 = _interopRequireDefault(_Model);
 
@@ -8036,7 +8036,7 @@ var _Fastclick = __webpack_require__(26);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
-var _array = __webpack_require__(41);
+var _array = __webpack_require__(43);
 
 var _array2 = _interopRequireDefault(_array);
 
@@ -8485,30 +8485,7 @@ exports.default = Component;
 
 /***/ }),
 
-/***/ 6:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var hash = {};
-
-exports.default = {
-  get: function get(k) {
-    return hash[k];
-  },
-  set: function set(elem) {
-    hash[elem.uid] = elem;
-    return elem;
-  }
-};
-
-/***/ }),
-
-/***/ 63:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8535,6 +8512,29 @@ module.exports = function (module) {
 		module.webpackPolyfill = 1;
 	}
 	return module;
+};
+
+/***/ }),
+
+/***/ 7:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var hash = {};
+
+exports.default = {
+  get: function get(k) {
+    return hash[k];
+  },
+  set: function set(elem) {
+    hash[elem.uid] = elem;
+    return elem;
+  }
 };
 
 /***/ }),
@@ -8597,7 +8597,7 @@ var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(12);
+var _Cb = __webpack_require__(13);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -8605,15 +8605,15 @@ var _range = __webpack_require__(20);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _match = __webpack_require__(36);
+var _match = __webpack_require__(38);
 
 var _match2 = _interopRequireDefault(_match);
 
-var _domDiff = __webpack_require__(37);
+var _domDiff = __webpack_require__(39);
 
 var _domDiff2 = _interopRequireDefault(_domDiff);
 
-var _type = __webpack_require__(14);
+var _type = __webpack_require__(15);
 
 var _type2 = _interopRequireDefault(_type);
 
@@ -8621,15 +8621,15 @@ var _fixEvent = __webpack_require__(23);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _attr = __webpack_require__(38);
+var _attr = __webpack_require__(40);
 
 var _attr2 = _interopRequireDefault(_attr);
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _touch = __webpack_require__(39);
+var _touch = __webpack_require__(41);
 
 var _touch2 = _interopRequireDefault(_touch);
 
@@ -8637,11 +8637,11 @@ var _delegate = __webpack_require__(24);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
-var _matchUtil = __webpack_require__(16);
+var _matchUtil = __webpack_require__(17);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
-var _eventCaseName = __webpack_require__(40);
+var _eventCaseName = __webpack_require__(42);
 
 var _eventCaseName2 = _interopRequireDefault(_eventCaseName);
 

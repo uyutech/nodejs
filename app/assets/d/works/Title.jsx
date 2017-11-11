@@ -44,7 +44,7 @@ class Title extends migi.Component {
         <h3>{ WorksTypeEnum.NAME[this.type] }</h3>
         <h1 class={ this.title ? '' : 'empty' }>{ this.title || '待揭秘' }</h1>
         <h2 class={ this.subTitle ? '' : 'fn-hide' }>{ this.subTitle }</h2>
-        <b class="edit" ref="edit" onClick={ this.clickEdit }/>
+        {/*<b class="edit" ref="edit" onClick={ this.clickEdit }/>*/}
         {/*<small class="pop">{ this.popular }</small>*/}
         <ul class={ 'tags fn-clear' }>
           {

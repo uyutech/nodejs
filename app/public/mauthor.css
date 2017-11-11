@@ -445,6 +445,7 @@ body {
   padding: 0 0.2rem;
   width: 8.4rem;
   height: 0.28rem;
+  line-height: 0.28rem;
   background: #F1F6F9;
   border-radius: 0.3rem;
   border: 1px solid #B1C0C9;
@@ -464,7 +465,7 @@ body {
   cursor: pointer;
 }
 .cp-subcmt form .submit.dis {
-  background: #ccc;
+  background: #CCC;
   cursor: default;
 }
 .cp-subcmt form.to label {
@@ -585,7 +586,7 @@ body {
 }
 .cp-hotwork .list .c ul li .txt {
   display: block;
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -672,7 +673,7 @@ body {
 }
 .cp-hotmusicalbum .list .c ul li .txt {
   display: block;
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -768,7 +769,7 @@ body {
 .cp-hotauthor .list .c ul li .txt {
   display: block;
   margin-top: 0.04rem;
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   color: #2A2A2A;
   text-align: center;
   white-space: nowrap;
@@ -776,7 +777,7 @@ body {
   overflow: hidden;
 }
 .cp-hotauthor .list .c ul li .info {
-  font-size: 0.1rem;
+  font-size: 0.12rem;
   color: #B1C0C9;
   text-align: center;
   white-space: nowrap;

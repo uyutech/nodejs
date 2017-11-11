@@ -7,7 +7,15 @@
 class Cover extends migi.Component {
   constructor(...data) {
     super(...data);
+    let self = this;
+    self.url = self.props.work.FileUrl;
+    self.on(migi.Event.DOM, function() {
+      migi.eventBus.on('chooseMusic', function(item) {
+        self.url = item.FileUrl;
+      });
+    });
   }
+  @bind url
   show() {
     $(this.element).removeClass('fn-hide');
   }
@@ -19,7 +27,7 @@ class Cover extends migi.Component {
   }
   render() {
     return <div class="cover">
-      <b class="start" onClick={ this.clickStart }/>
+      <b class={ 'start' + (this.url ? '' : ' fn-hide') } onClick={ this.clickStart }/>
     </div>;
   }
 }

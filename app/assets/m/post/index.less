@@ -15,7 +15,6 @@
   }
   > .profile{
     margin-bottom:0.2rem;
-    font-size:0.14rem;
     line-height:0.3rem;
     font-weight:400;
     .pic{
@@ -29,10 +28,16 @@
     }
     .txt{
       float:left;
+      font-size:0.18rem;
       small{
         margin-left:0.1rem;
-        font-size:0.12rem;
+        font-size:0.14rem;
         color:@fourthTextColor;
+      }
+    }
+    &.author{
+      .name{
+        color:#EC0;
       }
     }
   }
@@ -45,10 +50,13 @@
     font-size:0.14rem;
     line-height:1.8;
     .con{
+      display:block;
       white-space:pre-wrap;
       word-break:break-all;
       word-wrap:break-word;
       font-size:0.14rem;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
     .arrow{
       position:absolute;
@@ -72,6 +80,13 @@
         content:' ';
       }
     }
+    .imgs{
+      img{
+        display:block;
+        margin:0.1rem 0;
+        max-width:100%;
+      }
+    }
     .btn{
       margin-top:0.1rem;
       height:0.24rem;
@@ -88,7 +103,7 @@
           margin-right:0;
         }
         &.like{
-          padding-left:0.25rem;
+          padding-left:0.3rem;
           background:url(../../d/works/like.png) no-repeat 0 center;
           background-size:contain;
           &.has{

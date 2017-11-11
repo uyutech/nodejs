@@ -28,6 +28,11 @@ let code2Data = {
     display: '伴唱',
     css: 'singer',
   },
+  '114': {
+    name: '戏腔',
+    display: '戏腔',
+    css: 'singer',
+  },
   '115': {
     name: '合唱',
     display: '合唱',
@@ -128,7 +133,6 @@ let code2Data = {
     display: '设计',
     css: 'designer',
   },
-
   '332': {
     name: '海报',
     display: '海报',
@@ -144,13 +148,11 @@ let code2Data = {
     display: '漫画',
     css: 'painter',
   },
-
   '351': {
     name: '书法',
     display: '书法',
     css: 'handwriting',
   },
-
   '391': {
     name: '沙画',
     display: '沙画',

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 77);
+/******/ 	return __webpack_require__(__webpack_require__.s = 85);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,6 +92,12 @@ var util = {
       return url;
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
+  img600_600_80: function img600_600_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-600_600_80' : url;
   },
   img288__80: function img288__80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -158,6 +164,12 @@ var util = {
       return url;
     }
     return url ? url + '-144_144_80' : url;
+  },
+  img128_128_80: function img128_128_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-120_120_80' : url;
   },
   img120_120: function img120_120(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -1010,11 +1022,11 @@ var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _EventBus = __webpack_require__(10);
+var _EventBus = __webpack_require__(11);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(11);
+var _Model = __webpack_require__(12);
 
 var _Model2 = _interopRequireDefault(_Model);
 
@@ -1026,7 +1038,7 @@ var _Fastclick = __webpack_require__(26);
 
 var _Fastclick2 = _interopRequireDefault(_Fastclick);
 
-var _array = __webpack_require__(41);
+var _array = __webpack_require__(43);
 
 var _array2 = _interopRequireDefault(_array);
 
@@ -1474,7 +1486,8 @@ var Component = function (_Element) {
 exports.default = Component;
 
 /***/ }),
-/* 6 */
+/* 6 */,
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1496,7 +1509,6 @@ exports.default = {
 };
 
 /***/ }),
-/* 7 */,
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1555,7 +1567,7 @@ var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(12);
+var _Cb = __webpack_require__(13);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -1563,15 +1575,15 @@ var _range = __webpack_require__(20);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _match = __webpack_require__(36);
+var _match = __webpack_require__(38);
 
 var _match2 = _interopRequireDefault(_match);
 
-var _domDiff = __webpack_require__(37);
+var _domDiff = __webpack_require__(39);
 
 var _domDiff2 = _interopRequireDefault(_domDiff);
 
-var _type = __webpack_require__(14);
+var _type = __webpack_require__(15);
 
 var _type2 = _interopRequireDefault(_type);
 
@@ -1579,15 +1591,15 @@ var _fixEvent = __webpack_require__(23);
 
 var _fixEvent2 = _interopRequireDefault(_fixEvent);
 
-var _attr = __webpack_require__(38);
+var _attr = __webpack_require__(40);
 
 var _attr2 = _interopRequireDefault(_attr);
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _touch = __webpack_require__(39);
+var _touch = __webpack_require__(41);
 
 var _touch2 = _interopRequireDefault(_touch);
 
@@ -1595,11 +1607,11 @@ var _delegate = __webpack_require__(24);
 
 var _delegate2 = _interopRequireDefault(_delegate);
 
-var _matchUtil = __webpack_require__(16);
+var _matchUtil = __webpack_require__(17);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
-var _eventCaseName = __webpack_require__(40);
+var _eventCaseName = __webpack_require__(42);
 
 var _eventCaseName2 = _interopRequireDefault(_eventCaseName);
 
@@ -2890,7 +2902,8 @@ var Obj = function () {
 exports.default = Obj;
 
 /***/ }),
-/* 10 */
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3098,7 +3111,7 @@ var EventBus = function (_Event) {
 exports.default = EventBus;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3217,7 +3230,7 @@ var Model = function (_Event) {
 exports.default = Model;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3243,7 +3256,7 @@ var Cb = function Cb(context, cb) {
 exports.default = Cb;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3295,7 +3308,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3310,7 +3323,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3376,7 +3389,7 @@ function swap(arr, a, b) {
 ;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3386,7 +3399,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _sort = __webpack_require__(15);
+var _sort = __webpack_require__(16);
 
 var _sort2 = _interopRequireDefault(_sort);
 
@@ -3676,7 +3689,6 @@ function nth(idx, n) {
 }
 
 /***/ }),
-/* 17 */,
 /* 18 */,
 /* 19 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -3734,11 +3746,11 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(13);
+var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _type = __webpack_require__(14);
+var _type = __webpack_require__(15);
 
 var _type2 = _interopRequireDefault(_type);
 
@@ -3929,11 +3941,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
-var _matchUtil = __webpack_require__(16);
+var _matchUtil = __webpack_require__(17);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
@@ -5028,7 +5040,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Model2 = __webpack_require__(11);
+var _Model2 = __webpack_require__(12);
 
 var _Model3 = _interopRequireDefault(_Model2);
 
@@ -5112,7 +5124,7 @@ var _Component2 = __webpack_require__(5);
 
 var _Component3 = _interopRequireDefault(_Component2);
 
-var _EventBus = __webpack_require__(10);
+var _EventBus = __webpack_require__(11);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
@@ -5315,7 +5327,9 @@ exports.default = CacheComponent;
 /* 30 */,
 /* 31 */,
 /* 32 */,
-/* 33 */
+/* 33 */,
+/* 34 */,
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5636,16 +5650,16 @@ defineProperties(Number, {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(35)['default'];
+module.exports = __webpack_require__(37)['default'];
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5663,11 +5677,11 @@ var _Element = __webpack_require__(4);
 
 var _Element2 = _interopRequireDefault(_Element);
 
-var _EventBus = __webpack_require__(10);
+var _EventBus = __webpack_require__(11);
 
 var _EventBus2 = _interopRequireDefault(_EventBus);
 
-var _Model = __webpack_require__(11);
+var _Model = __webpack_require__(12);
 
 var _Model2 = _interopRequireDefault(_Model);
 
@@ -5683,7 +5697,7 @@ var _VirtualDom = __webpack_require__(8);
 
 var _VirtualDom2 = _interopRequireDefault(_VirtualDom);
 
-var _NonVisualComponent = __webpack_require__(42);
+var _NonVisualComponent = __webpack_require__(44);
 
 var _NonVisualComponent2 = _interopRequireDefault(_NonVisualComponent);
 
@@ -5695,7 +5709,7 @@ var _Obj = __webpack_require__(9);
 
 var _Obj2 = _interopRequireDefault(_Obj);
 
-var _Cb = __webpack_require__(12);
+var _Cb = __webpack_require__(13);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -5707,15 +5721,15 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(13);
+var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _sort = __webpack_require__(15);
+var _sort = __webpack_require__(16);
 
 var _sort2 = _interopRequireDefault(_sort);
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
@@ -5794,7 +5808,7 @@ exports.default = migi;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5812,11 +5826,11 @@ var _Event = __webpack_require__(2);
 
 var _Event2 = _interopRequireDefault(_Event);
 
-var _sort = __webpack_require__(15);
+var _sort = __webpack_require__(16);
 
 var _sort2 = _interopRequireDefault(_sort);
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
@@ -5824,7 +5838,7 @@ var _matchHash = __webpack_require__(21);
 
 var _matchHash2 = _interopRequireDefault(_matchHash);
 
-var _matchUtil = __webpack_require__(16);
+var _matchUtil = __webpack_require__(17);
 
 var _matchUtil2 = _interopRequireDefault(_matchUtil);
 
@@ -6255,7 +6269,7 @@ function getCur(k) {
 exports.default = match;
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6277,7 +6291,7 @@ var _Component = __webpack_require__(5);
 
 var _Component2 = _interopRequireDefault(_Component);
 
-var _Cb = __webpack_require__(12);
+var _Cb = __webpack_require__(13);
 
 var _Cb2 = _interopRequireDefault(_Cb);
 
@@ -6285,7 +6299,7 @@ var _util = __webpack_require__(3);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _browser = __webpack_require__(13);
+var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
@@ -6297,11 +6311,11 @@ var _cachePool = __webpack_require__(22);
 
 var _cachePool2 = _interopRequireDefault(_cachePool);
 
-var _type = __webpack_require__(14);
+var _type = __webpack_require__(15);
 
 var _type2 = _interopRequireDefault(_type);
 
-var _hash = __webpack_require__(6);
+var _hash = __webpack_require__(7);
 
 var _hash2 = _interopRequireDefault(_hash);
 
@@ -7040,7 +7054,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7230,7 +7244,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7407,7 +7421,7 @@ function onTouchEnd(e) {
 ;
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7427,7 +7441,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7462,7 +7476,7 @@ var arrayMethods = Object.create(arrayProto);
 exports.default = arrayMethods;
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7552,8 +7566,6 @@ var NonVisualComponent = function (_Component) {
 exports.default = NonVisualComponent;
 
 /***/ }),
-/* 43 */,
-/* 44 */,
 /* 45 */,
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -7566,7 +7578,8 @@ var core = __webpack_require__(90);
 module.exports = core;
 
 /***/ }),
-/* 47 */
+/* 47 */,
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7604,7 +7617,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7615,7 +7628,7 @@ var event = __webpack_require__(91);
 module.exports = event;
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7694,7 +7707,6 @@ var Share = function (_migi$Component) {
 migi.name(Share, "Share");exports.default = Share;
 
 /***/ }),
-/* 50 */,
 /* 51 */,
 /* 52 */,
 /* 53 */,
@@ -7721,15 +7733,23 @@ migi.name(Share, "Share");exports.default = Share;
 /* 74 */,
 /* 75 */,
 /* 76 */,
-/* 77 */
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(33);
+__webpack_require__(35);
 
-__webpack_require__(34);
+__webpack_require__(36);
 
 var _animaYoctoAjax = __webpack_require__(88);
 
@@ -7792,14 +7812,6 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
 /* 86 */,
 /* 87 */,
 /* 88 */
@@ -7820,9 +7832,9 @@ module.exports = ajax;
 
 
 var $ = __webpack_require__(46),
-    util = __webpack_require__(47);
+    util = __webpack_require__(48);
 
-__webpack_require__(48);
+__webpack_require__(49);
 
 __webpack_require__(92);
 
@@ -8914,9 +8926,9 @@ module.exports = $;
 
 
 var $ = __webpack_require__(46),
-    util = __webpack_require__(47);
+    util = __webpack_require__(48);
 
-__webpack_require__(48);
+__webpack_require__(49);
 
 var jsonpID = Date.now(),
     document = window.document,
@@ -8985,9 +8997,9 @@ module.exports = $;
 
 
 var $ = __webpack_require__(46),
-    util = __webpack_require__(47);
+    util = __webpack_require__(48);
 
-__webpack_require__(48);
+__webpack_require__(49);
 
 var key,
     name,
@@ -9245,7 +9257,7 @@ var _MLogin = __webpack_require__(95);
 
 var _MLogin2 = _interopRequireDefault(_MLogin);
 
-var _Share = __webpack_require__(49);
+var _Share = __webpack_require__(50);
 
 var _Share2 = _interopRequireDefault(_Share);
 
@@ -9271,6 +9283,12 @@ migi.eventBus.on('SHARE', function (url) {
 document.addEventListener('DOMContentLoaded', function () {
   var $name = $('#topNav .name');
   $name.on('click', function () {
+    if (!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+    }
+  });
+  var $head = $('#topNav img');
+  $head.on('click', function () {
     if (!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
     }
@@ -9304,18 +9322,6 @@ document.addEventListener('DOMContentLoaded', function () {
       loading = false;
     });
   });
-  var helloMessage = localStorage['helloMessage'];
-  if (!helloMessage) {
-    var clickClose = function clickClose(e) {
-      e.preventDefault();
-      quaniang.clean();
-      $(document.body).removeClass('g-hm');
-      localStorage['helloMessage'] = 1;
-    };
-
-    var quaniang = migi.render(migi.createVd("div", [["class", "quaniang"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("h5", [], ["圈儿："]), migi.createVd("pre", [], ['感谢大家对积分活动的支持！近期我们感受到了大家满满的热情！~\n' + '\n' + '其实原本这个活动是要到App正式上线之后才开放哒！但看到大家等待得很焦急，所以提前开放了这次活动，也是希望小伙伴们能一起见证圈儿的成长。\n' + '\n' + '转圈平台鼓励的是有意义的分享和交流，并不鼓励大家每天花费过多的时间进行灌水哦！\n' + '虽然我们的平台积分显示功能还没做好，但圈儿在这里针对这次的活动规则特地做以下补充和提示：\n' + '（1）全站每8小时内的留言超过10条后就只能积累极少积分了——也就是说不鼓励大家全天盯着转圈不停的发言哦！比较合理的做法是，早、中、晚随便转一圈，和小伙伴们交流就好啦。\n' + '（2）同一时段同一页面连续留言时，积分会不断递减——也就是说不鼓励大家在同一页面不停留言，而是鼓励大家四处逛逛，多发现新的内容哦！\n' + '（3）同一时段在多个页面出现同质留言（例如“早安”、“打卡”）也会递减——也就是说不鼓励大家在不同的地方刷同样的话，而是把问候留给自己最心爱的人哦！\n' + '（4）由于现在功能还在持续增加中，大家能做的只有评论留言。不过很快我们会上线在圈子中发状态和讨论的功能，大家可以分享自己的生活点滴，或是发布摄影、绘画、练字作品等等，也可以分享站内音乐、给喜爱的作品写长评等等。届时这类有意义的作品将获得更多的积分。\n' + '（5）本次活动的积分会换算成站内货币，未来的福利都是通过用虚拟货币购买的形式获得的。所以本次活动没有直接获得福利的小伙伴依然可以积累虚拟币，在未来可以兑换福利。\n' + '（6）我们目前提供的任何一种福利都不会绝版，并且会不断增加新的类别，只要大家未来不断交流探索，都可以获得这些福利的。所以没时间的学生党也不用担心，希望大家安心学习，不要为了一时的活动花费过多的时间。\n' + '（7）给他人留言互动与直接留言获得的积分一样（目前还没有做好消息提醒的功能，我们会尽快添加），此外和他人互动可以积累用户间的亲密值，未来会有圈友和圈密的功能上线。圈友多多的话，未来获得的积分也会得到加成哦！\n' + '（8）很快会有各种类型作品的上传功能，欢迎有才华的小伙伴们一起分享你们的作品！优秀作品会额外获得圈儿赠送的虚拟币！\n' + '\n' + '所以综合来看，这次活动、以及未来转圈最效率的方法是，每天空闲的休息的时候，在喜欢的一两位作者或圈子和大家打个招呼、或是催催坑，浏览浏览各处，发现新的讨论、作品和优秀作者，看看其他小伙伴的作品，并进行交流，或者与大家分享的自己的作品和每天的生活！\n' + '\n' + '希望大家合理利用时间！~不断交流，共同进步~每天都成为比昨天更优秀的人~']), migi.createVd("p", [], ["欢迎点击右侧给我们留言！", migi.createVd("a", [["href", "http://weibo.com/u/6259241863"], ["target", "_blank"]], ["@转圈circling"])]), migi.createVd("a", [["class", "close"], ["href", "#"], ["onClick", clickClose]], ["好的"])])]), document.body);
-    $(document.body).addClass('g-hm');
-  }
 });
 
 /***/ }),

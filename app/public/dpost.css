@@ -486,7 +486,6 @@ body {
 }
 .post .main > .profile {
   margin-bottom: 0.2rem;
-  font-size: 0.14rem;
   line-height: 0.3rem;
   font-weight: 400;
 }
@@ -501,11 +500,15 @@ body {
 }
 .post .main > .profile .txt {
   float: left;
+  font-size: 0.18rem;
 }
 .post .main > .profile .txt small {
   margin-left: 0.1rem;
-  font-size: 0.12rem;
+  font-size: 0.14rem;
   color: #919191;
+}
+.post .main > .profile.author .name {
+  color: #EC0;
 }
 .post .main > .wrap {
   position: relative;
@@ -517,10 +520,13 @@ body {
   line-height: 1.8;
 }
 .post .main > .wrap .con {
+  display: block;
   white-space: pre-wrap;
   word-break: break-all;
   word-wrap: break-word;
   font-size: 0.14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .post .main > .wrap .arrow {
   position: absolute;
@@ -544,6 +550,11 @@ body {
   -webkit-transform: scaleX(0.7) rotateZ(-45deg);
           transform: scaleX(0.7) rotateZ(-45deg);
   content: ' ';
+}
+.post .main > .wrap .imgs img {
+  display: block;
+  margin: 0.1rem 0;
+  max-width: 100%;
 }
 .post .main > .wrap .btn {
   margin-top: 0.1rem;
