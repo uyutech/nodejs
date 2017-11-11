@@ -1376,7 +1376,7 @@ body {
   background: #B1C0C9;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center 0.35rem;
+  background-position: center;
 }
 .mod.mod-media .type {
   padding: 0 0.1rem 0.05rem 0.1rem;

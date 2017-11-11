@@ -93,6 +93,18 @@ var util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img1296_1296_80: function img1296_1296_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1296_1296_80' : url;
+  },
+  img750_750_80: function img750_750_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-750_750_80' : url;
+  },
   img600_600_80: function img600_600_80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -2508,7 +2520,7 @@ var Media = function (_migi$Component) {
       var workID = this.props.workID;
       var first = this.props.first;
       if (showLabel) {
-        return migi.createVd("div", [["class", "mod mod-media fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', migi.createVd("div", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "dt": { "_v": true } }, new migi.Cb(this, this.clickType)], [{ "dd": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.props.videoData ? migi.createVd("dl", [["class", 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '')], ["rel", "video"]], [migi.createVd("dt", [["rel", new migi.Obj("vIndex", this, function () {
+        return migi.createVd("div", [["class", "mod mod-media fn-clear"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img750_750_80(this.props.cover || '//zhuanquan.xin/img/blank.png')) + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '', migi.createVd("div", [["class", "type fn-clear"], ["ref", "type"], ["onClick", [[{ "dt": { "_v": true } }, new migi.Cb(this, this.clickType)], [{ "dd": { "_v": true } }, new migi.Cb(this, this.clickType)]]]], [this.props.videoData ? migi.createVd("dl", [["class", 'video fn-clear' + (this.props.first === 'video' ? ' cur' : '')], ["rel", "video"]], [migi.createVd("dt", [["rel", new migi.Obj("vIndex", this, function () {
           return this.vIndex;
         })]], ["视频"]), this.props.videoData.length && this.props.videoData.length > 1 ? this.props.videoData.map(function (item, i) {
           if (workID !== undefined && first === 'video') {
@@ -2524,7 +2536,7 @@ var Media = function (_migi$Component) {
           return migi.createVd("dd", [["class", this.aIndex === i ? 'cur' : ''], ["rel", i]], [item.ItemName]);
         }.bind(this)) : '']) : ''])]);
       }
-      return migi.createVd("div", [["class", "mod mod-media no-type fn-clear"], ["style", 'background-image:url(' + (this.props.cover || '//zhuanquan.xin/img/blank.png') + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '']);
+      return migi.createVd("div", [["class", "mod mod-media no-type fn-clear"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img750_750_80(this.props.cover || '//zhuanquan.xin/img/blank.png')) + ')']], [this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video']]) : '', this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["worksID", worksID], ["workID", workID], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio']]) : '']);
     }
   }, {
     key: 'vIndex',

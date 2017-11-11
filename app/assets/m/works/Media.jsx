@@ -84,7 +84,7 @@ class Media extends migi.Component {
     let workID = this.props.workID;
     let first = this.props.first;
     if(showLabel) {
-      return <div class="mod mod-media fn-clear" style={ `background-image:url(${this.props.cover || '//zhuanquan.xin/img/blank.png'})` }>
+      return <div class="mod mod-media fn-clear" style={ `background-image:url(${util.autoSsl(util.img750_750_80(this.props.cover || '//zhuanquan.xin/img/blank.png'))})` }>
         {
           this.props.videoData
             ? <Video ref="video" worksID={ worksID } workID={ workID }
@@ -135,7 +135,7 @@ class Media extends migi.Component {
         </div>
       </div>;
     }
-    return <div class="mod mod-media no-type fn-clear" style={ `background-image:url(${this.props.cover || '//zhuanquan.xin/img/blank.png'})` }>
+    return <div class="mod mod-media no-type fn-clear" style={ `background-image:url(${util.autoSsl(util.img750_750_80(this.props.cover || '//zhuanquan.xin/img/blank.png'))})` }>
       {
         this.props.videoData
           ? <Video ref="video" worksID={ worksID } workID={ workID }

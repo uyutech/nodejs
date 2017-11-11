@@ -93,6 +93,7 @@ module.exports = app => {
   app.post('/api/post/like', app.middlewares.needLoginJson(), 'api.post.like');
   app.post('/api/post/favor', app.middlewares.needLoginJson(), 'api.post.favor');
   app.post('/api/post/unFavor', app.middlewares.needLoginJson(), 'api.post.unFavor');
+  app.post('/api/post/del', app.middlewares.needLoginJson(), 'api.post.del');
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');

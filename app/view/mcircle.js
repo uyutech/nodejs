@@ -90,6 +90,18 @@ let util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img1296_1296_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1296_1296_80' : url;
+  },
+  img750_750_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-750_750_80' : url;
+  },
   img600_600_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -843,6 +855,21 @@ var PostList = function (_migi$Component) {
         $list.on('click', '.comment', function () {
           location.href = $(this).closest('.wrap').find('.more').attr('href');
         });
+        $list.on('click', '.del', function () {
+          if (window.confirm('确认删除吗？')) {
+            var postID = $(this).attr('rel');
+            var $li = $(this).closest('.wrap').closest('li');
+            _net2.default.postJSON('/api/post/del', { postID: postID }, function (res) {
+              if (res.success) {
+                $li.remove();
+              } else {
+                alert(res.message || _util2.default.ERROR_MESSAGE);
+              }
+            }, function (res) {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+            });
+          }
+        });
 
         var $window = $(window);
         $window.on('scroll', function () {
@@ -861,11 +888,11 @@ var PostList = function (_migi$Component) {
       if (item.IsAuthor) {
         return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + item.ID]], [_util2.default.formatDate(item.Createtime)])])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + item.ID], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + item.ID], ["class", 'more' + (len > maxLen ? '' : ' fn-hide')]], ["查看全部"])]), item.Image_Post ? migi.createVd("ul", [["class", "imgs fn-clear"]], [item.Image_Post.map(function (item) {
           return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img120_120_80(item.FileUrl)) + ')']]);
-        })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+        })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", item.ID]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
       }
       return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + item.ID]], [_util2.default.formatDate(item.Createtime)])])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + item.ID], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + item.ID], ["class", 'more' + (len > maxLen ? '' : ' fn-hide')]], ["查看全部"])]), item.Image_Post ? migi.createVd("ul", [["class", "imgs fn-clear"]], [item.Image_Post.map(function (item) {
         return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img120_120_80(item.FileUrl)) + ')']]);
-      })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", item.ID]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'checkMore',

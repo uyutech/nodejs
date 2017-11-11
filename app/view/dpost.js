@@ -90,6 +90,18 @@ let util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img1296_1296_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1296_1296_80' : url;
+  },
+  img750_750_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-750_750_80' : url;
+  },
   img600_600_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -516,6 +528,24 @@ var Post = function (_migi$Component) {
           subCmt.isCommentSending = false;
         });
       });
+
+      $(self.element).on('click', '.del', function () {
+        if (window.confirm('确认删除吗？')) {
+          var postID = $(this).attr('rel');
+          _net2.default.postJSON('/api/post/del', { postID: postID }, function (res) {
+            if (res.success) {
+              if (parent && parent.setHash) {
+                // parent.setHash('/circle/' + $CONFIG.circleID);
+                location.reload(true);
+              }
+            } else {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+            }
+          }, function (res) {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          });
+        }
+      });
     });
     return _this;
   }
@@ -654,7 +684,7 @@ var Post = function (_migi$Component) {
         return 'like' + (this.isLike ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickLike)]], [new migi.Obj("likeCount", this, function () {
         return this.likeCount;
-      })])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "box"]], [migi.createVd("h4", [], ["回复"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.replyData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.replyData.Size / take)]]), migi.createCp(_Reply2.default, [["ref", "reply"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.replyData.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.replyData.Size / take)]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "回复"], ["originTo", postData.SendUserNickName], ["placeholder", "交流一下吧~"]])])]);
+      })]), postData.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", postData.ID]]) : '']), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "box"]], [migi.createVd("h4", [], ["回复"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.replyData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.replyData.Size / take)]]), migi.createCp(_Reply2.default, [["ref", "reply"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.replyData.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.replyData.Size / take)]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "回复"], ["originTo", postData.SendUserNickName], ["placeholder", "交流一下吧~"]])])]);
     }
   }, {
     key: 'rootID',

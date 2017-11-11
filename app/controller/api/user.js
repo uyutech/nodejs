@@ -352,10 +352,10 @@ module.exports = app => {
         let temp = img.slice(0, equalIndex);
         let strLen = temp.length;
         let fileLen = Math.ceil(strLen - (strLen / 8) * 2);
-        if(fileLen > 1024 * 1024 * 3) {
+        if(fileLen > 1024 * 1024 * 15) {
           return ctx.body = {
             success: false,
-            message: '图片体积太大啦，不能超过3M！',
+            message: '图片体积太大啦，不能超过15M！',
           };
         }
       }

@@ -115,10 +115,17 @@ class SubPost extends migi.Component {
           imgs.push(item.url);
         }
       });
+      if(self.list.length > imgs.length) {
+        if(!window.confirm('尚有未上传成功的图片，继续提交吗？')) {
+          return;
+        }
+      }
       self.sending = true;
       net.postJSON('/api/circle/add', { content: self.value, imgs, circleID: self.props.circleID }, function(res) {
         if(res.success) {
           self.value = '';
+          self.invalid = true;
+          self.num = 0;
           self.list = [];
           let key = self.getImgKey();
           localStorage[key] = '';

@@ -94,6 +94,18 @@ var util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img1296_1296_80: function img1296_1296_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1296_1296_80' : url;
+  },
+  img750_750_80: function img750_750_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-750_750_80' : url;
+  },
   img600_600_80: function img600_600_80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -509,10 +521,17 @@ var SubPost = function (_migi$Component) {
             imgs.push(item.url);
           }
         });
+        if (self.list.length > imgs.length) {
+          if (!window.confirm('尚有未上传成功的图片，继续提交吗？')) {
+            return;
+          }
+        }
         self.sending = true;
         _net2.default.postJSON('/api/circle/add', { content: self.value, imgs: imgs, circleID: self.props.circleID }, function (res) {
           if (res.success) {
             self.value = '';
+            self.invalid = true;
+            self.num = 0;
             self.list = [];
             var key = self.getImgKey();
             localStorage[key] = '';

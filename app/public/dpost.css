@@ -587,6 +587,11 @@ body {
 .post .main > .wrap .btn li.like.has:hover {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAUVBMVEUAAACeztyeztyhztyeztuk0eTA8P+fz92fztyfztufztyfztyfz92h0N6hzt6m0+Cfzdyfztyfztyeztyez9yfz9yh0Nygzt6ez9yi0eiezdtDII5yAAAAGnRSTlMA5KVJ7RwEWfj03cZnLiIUzLCYjIR1UT46C9+xNS0AAACVSURBVEjH7dTJCsMwDEVRS3GdsfP8/v9DS2JtAm55KnRR8F0Jw8F4YYXaNyXtAPSnxIIWuckLBvaKZzTRBrKLgQMLtrB2JNjDuv/qhgm5GMjUwJEFg4Gr980PEtyQ6xIJzgbG8LFGAGnmaUQp0c0ayHI6Tz3KxbXAkk3l1AvEC1BBBX8DxAv0zRcV7ovaErCpvARqfC9VMFAaAWJq1AAAAABJRU5ErkJggg==);
 }
+.post .main > .wrap .btn li.del {
+  padding-left: 0.3rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAABMCAMAAAAGACSBAAAASFBMVEUAAABMja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja+4INFpAAAAF3RSTlMAtUri6fcH0j8VjB8xJcCR2p6rZH9tWO0rVecAAAEdSURBVFjD7ZHLloMgEERbm7dINK/6/z8dFpnEoBA0i5kFd1Xl8XK6gdZcGBtMPVUwSGwiVIV8wZk20DAV8hkX2sDBVcgCA21goEtW+SclYVcfe0aCy62ToD2lruxU5hUCEgIBdIwR03cy4zCB+sO29vSnHBid+6fM2A3/ugeeC2jyt7JyQjgVQ6Fm5RMipxgKNSsLGAMRQ6FmZeCVc7XJTW5yk5vc5CY3+V/LEtZCxlCoWbkDM7oYCjUrDxrQQwyFupIl1CN5/wjlqhbbMAbaxQBebHPfJ98XV3GLeRcdbs9sJcwe10DaV7uCbb1rGddFVQHTWOuOE4J6O0xDurFKdRI6GVPNADh0HwgMYFaU4meBCsTsMyOZ/gPmbbUf8iZmhYs2T04AAAAASUVORK5CYII=) no-repeat 0 center;
+  background-size: auto 0.2rem;
+}
 .post .main > .box {
   margin-top: 0.2rem;
   padding-bottom: 0.1rem;

@@ -94,6 +94,15 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * del(ctx) {
+      let uid = ctx.session.uid;
+      const body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/tag/DelPost', {
+        uid,
+        PostID: body.postID,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

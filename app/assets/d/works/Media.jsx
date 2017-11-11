@@ -2,6 +2,7 @@
  * Created by army8735 on 2017/9/21.
  */
 
+import util from '../common/util';
 import Audio from './Audio.jsx';
 import Video from './Video.jsx';
 import Link from './Link.jsx';
@@ -49,7 +50,7 @@ class Media extends migi.Component {
     }
   }
   render() {
-    return <div class="mod mod-media box box-fn-top-left" style={ `background-image:url(${this.props.cover})` }>
+    return <div class="mod mod-media box box-fn-top-left" style={ `background-image:url(${util.autoSsl(util.img1296_1296_80(this.props.cover || '//zhuanquan.xin/img/blank.png'))})` }>
       {
         this.props.audioData
           ? <Audio ref="audio" cover={ this.props.cover } datas={ this.props.audioData }

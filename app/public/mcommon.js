@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 74);
+/******/ 	return __webpack_require__(__webpack_require__.s = 85);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,6 +92,18 @@ var util = {
       return url;
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+  },
+  img1296_1296_80: function img1296_1296_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1296_1296_80' : url;
+  },
+  img750_750_80: function img750_750_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-750_750_80' : url;
   },
   img600_600_80: function img600_600_80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -7730,7 +7742,18 @@ migi.name(Share, "Share");exports.default = Share;
 /* 71 */,
 /* 72 */,
 /* 73 */,
-/* 74 */
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7801,17 +7824,6 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
 /* 86 */,
 /* 87 */,
 /* 88 */

@@ -81,6 +81,25 @@ class Post extends migi.Component {
           subCmt.isCommentSending = false;
         });
       });
+
+      $(self.element).on('click', '.del', function() {
+        if(window.confirm('确认删除吗？')) {
+          let postID = $(this).attr('rel');
+          net.postJSON('/api/post/del', { postID }, function(res) {
+            if(res.success) {
+              if(parent && parent.setHash) {
+                // parent.setHash('/circle/' + $CONFIG.circleID);
+                location.reload(true);
+              }
+            }
+            else {
+              alert(res.message || util.ERROR_MESSAGE);
+            }
+          }, function(res) {
+            alert(res.message || util.ERROR_MESSAGE);
+          });
+        }
+      });
     });
   }
   @bind rootID = -1
@@ -237,6 +256,9 @@ class Post extends migi.Component {
           }
           <ul class="btn fn-clear">
             <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }>{ this.likeCount }</li>
+            {
+              postData.IsOwn ? <li class="del" rel={ postData.ID }/> : ''
+            }
           </ul>
           <b class="arrow"/>
         </div>

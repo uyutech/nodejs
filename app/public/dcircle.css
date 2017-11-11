@@ -564,6 +564,11 @@ body {
 .circle .main .post-list ol > li > .wrap .btn li.comment:hover {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAARVBMVEUAAACezduezduezduezduezduezduezduezduezduezduezduezduezduezduezduezduezduezduezduezduezduezduoGJPoAAAAFnRSTlMA5vOmlRwMBuNIGO1i2ce/sYImLZI+W2nxBwAAAQxJREFUSMftlNsSgyAMRJeLoVSoVVv+/1NrGJjWCh3z3vPgRJBkFyH4A+ftFHUq6DhZ79DnanU6oO21l33WqYmeXTP9LXW5NYqsl8RcrF8IBVq8LcPrIX+eUAEHgsorvmq4rOdOaED3rGrvY+axBzo8eHbeCdKcH124hv4UZVk/oQuxD/vhgAsE/CBwibcLz9uAn/Am+p0iCwxGKTMAx6h+Upny8mFMG+OAVsQiJlTi9rbApIxBK1q2Z0SFPRNUyii0ImLX4gVySXLT8m2V/zj50ZAfPvnxll8g+RWVNwF5m5E3MnmrlDdjebuvmHd2gzNQTIVIOMWqi6IVJwkpE3CaMG75AwTQ8+nwp/ICTjou89w0D9AAAAAASUVORK5CYII=);
 }
+.circle .main .post-list ol > li > .wrap .btn li.del {
+  padding-left: 0.3rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAABMCAMAAAAGACSBAAAASFBMVEUAAABMja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja9Mja+4INFpAAAAF3RSTlMAtUri6fcH0j8VjB8xJcCR2p6rZH9tWO0rVecAAAEdSURBVFjD7ZHLloMgEERbm7dINK/6/z8dFpnEoBA0i5kFd1Xl8XK6gdZcGBtMPVUwSGwiVIV8wZk20DAV8hkX2sDBVcgCA21goEtW+SclYVcfe0aCy62ToD2lruxU5hUCEgIBdIwR03cy4zCB+sO29vSnHBid+6fM2A3/ugeeC2jyt7JyQjgVQ6Fm5RMipxgKNSsLGAMRQ6FmZeCVc7XJTW5yk5vc5CY3+V/LEtZCxlCoWbkDM7oYCjUrDxrQQwyFupIl1CN5/wjlqhbbMAbaxQBebHPfJ98XV3GLeRcdbs9sJcwe10DaV7uCbb1rGddFVQHTWOuOE4J6O0xDurFKdRI6GVPNADh0HwgMYFaU4meBCsTsMyOZ/gPmbbUf8iZmhYs2T04AAAAASUVORK5CYII=) no-repeat 0 center;
+  background-size: auto 0.2rem;
+}
 .circle .main .cp-page {
   text-align: right;
 }

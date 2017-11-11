@@ -58,6 +58,22 @@ class PostList extends migi.Component {
         $list.on('click', '.con,.imgs', function() {
           $(this).closest('li').find('.comment').click();
         });
+        $list.on('click', '.del', function() {
+          if(window.confirm('确认删除吗？')) {
+            let postID = $(this).attr('rel');
+            let $li = $(this).closest('.wrap').closest('li');
+            net.postJSON('/api/post/del', { postID }, function(res) {
+              if(res.success) {
+                $li.remove();
+              }
+              else {
+                alert(res.message || util.ERROR_MESSAGE);
+              }
+            }, function(res) {
+              alert(res.message || util.ERROR_MESSAGE);
+            });
+          }
+        });
       });
     }
   }
@@ -97,6 +113,9 @@ class PostList extends migi.Component {
           <ul class="btn fn-clear">
             <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
             <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+            {
+              item.IsOwn ? <li class="del" rel={ item.ID }/> : ''
+            }
           </ul>
           <b class="arrow"/>
         </div>
@@ -134,6 +153,9 @@ class PostList extends migi.Component {
         <ul class="btn fn-clear">
           <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
           <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+          {
+            item.IsOwn ? <li class="del" rel={ item.ID }/> : ''
+          }
         </ul>
         <b class="arrow"/>
       </div>

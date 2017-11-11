@@ -94,6 +94,18 @@ var util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img1296_1296_80: function img1296_1296_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1296_1296_80' : url;
+  },
+  img750_750_80: function img750_750_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-750_750_80' : url;
+  },
   img600_600_80: function img600_600_80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;

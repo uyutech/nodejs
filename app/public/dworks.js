@@ -94,6 +94,18 @@ var util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img1296_1296_80: function img1296_1296_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1296_1296_80' : url;
+  },
+  img750_750_80: function img750_750_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-750_750_80' : url;
+  },
   img600_600_80: function img600_600_80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -1119,6 +1131,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
 var _Audio = __webpack_require__(169);
 
 var _Audio2 = _interopRequireDefault(_Audio);
@@ -1197,7 +1213,7 @@ var Media = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "mod mod-media box box-fn-top-left"], ["style", 'background-image:url(' + this.props.cover + ')']], [this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio'], ["worksID", this.props.worksID], ["workID", this.props.workID]]) : '', this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video'], ["worksID", this.props.worksID], ["workID", this.props.workID]]) : ''] /*<Link ref="link" worksID={ this.props.worksID } audioData={ this.props.audioData } videoData={ this.props.videoData }/>*/
+      return migi.createVd("div", [["class", "mod mod-media box box-fn-top-left"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img1296_1296_80(this.props.cover || '//zhuanquan.xin/img/blank.png')) + ')']], [this.props.audioData ? migi.createCp(_Audio2.default, [["ref", "audio"], ["cover", this.props.cover], ["datas", this.props.audioData], ["show", this.props.first === 'audio'], ["worksID", this.props.worksID], ["workID", this.props.workID]]) : '', this.props.videoData ? migi.createCp(_Video2.default, [["ref", "video"], ["cover", this.props.cover], ["datas", this.props.videoData], ["show", this.props.first === 'video'], ["worksID", this.props.worksID], ["workID", this.props.workID]]) : ''] /*<Link ref="link" worksID={ this.props.worksID } audioData={ this.props.audioData } videoData={ this.props.videoData }/>*/
       );
     }
   }]);
