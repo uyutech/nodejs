@@ -939,7 +939,7 @@ var SubPost = function (_migi$Component) {
         for (var i = 0, len = files.length; i < len; i++) {
           var file = files[i];
           var size = file.size;
-          if (size && size !== 0 && size <= 1024 * 1024 * 3) {
+          if (size && size !== 0 && size <= 1024 * 1024 * 15) {
             res.push(file);
           } else {
             sizeLimit = true;

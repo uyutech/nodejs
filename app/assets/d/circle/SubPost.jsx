@@ -149,7 +149,7 @@ class SubPost extends migi.Component {
       for(let i = 0, len = files.length; i < len; i++) {
         let file = files[i];
         let size = file.size;
-        if(size && size !== 0 && size <= 1024 * 1024 * 3) {
+        if(size && size !== 0 && size <= 1024 * 1024 * 15) {
           res.push(file);
         }
         else {
