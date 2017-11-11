@@ -638,7 +638,9 @@ var Circle = function (_migi$Component) {
   _createClass(Circle, [{
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createCp(_PostList2.default, [["ref", "postList"], ["datas", this.props.postList]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["tipText", "-${n}"], ["subText", "发送"], ["readOnly", true], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧']])]);
+      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], ["刚刚"])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["#画个圈# 功能暂时开放啦~不过目前个别手机机型会有无法加载图片的问题，程序员小哥哥们正在尽快解决。\n\
+在此之前，大家可以尝试用电脑，或更换手机浏览器发布图片。\n\
+这个问题解决之后，我们会公布新的福利活动！敬请期待哦~~"]), migi.createVd("b", [["class", "arrow"]])])]), migi.createCp(_PostList2.default, [["ref", "postList"], ["datas", this.props.postList]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["tipText", "-${n}"], ["subText", "发送"], ["readOnly", true], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧']])]);
     }
   }]);
 
