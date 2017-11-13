@@ -27,7 +27,7 @@ module.exports = app => {
   app.get('/d/circle/:circleID', 'd.circle.index');
   app.get('/d/post/:id', 'd.post.index');
 
-  app.get('/m', 'm.index.index');
+  app.get('/m', 'm.find.index');
   app.get('/m/find', 'm.find.index');
   app.get('/m/works/:worksID', 'm.works.index');
   app.get('/m/works/:worksID/:workID', 'm.works.index');
@@ -41,9 +41,7 @@ module.exports = app => {
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 
-  app.post('/api/find/hotWorkList', 'api.find.hotWorkList');
-  app.post('/api/find/tagB', 'api.find.tagB');
-  app.post('/api/find/playList', 'api.find.playList');
+  app.post('/api/find/hotPostList', 'api.find.hotPostList');
 
   app.post('/api/user/settle', app.middlewares.needLoginJson(), 'api.user.settle');
   app.post('/api/user/settleShadowName', app.middlewares.needLoginJson(), 'api.user.settleShadowName');

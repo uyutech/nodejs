@@ -7,48 +7,50 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
+      let uid = ctx.session.uid;
       let hotWorkList = [];
       let hotAuthorList = [];
       let hotMusicAlbumList = [];
       let hotPhotoAlbumList = [];
+      let hotCircleList = [];
       let hotPostList = [];
-      let tags = {};
-      let playList = [];
-      let playList2 = [];
+      let hotPlayList = [];
       let res = yield {
-        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
+        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List1', {
+          uid,
           Skip: 0,
           Take: 10,
         }),
         hotAuthorList: ctx.helper.postServiceJSON('api/find/Hot_Author_List', {
+          uid,
           Skip: 0,
           Take: 10,
         }),
         hotPhotoAlbumList: ctx.helper.postServiceJSON('api/find/Hot_PHOTO_List', {
+          uid,
           Skip: 0,
           Take: 10,
         }),
         hotMusicAlbumList: ctx.helper.postServiceJSON('api/find/Hot_album_List', {
+          uid,
           Skip: 0,
           Take: 10,
         }),
-        hotPostList: ctx.helper.postServiceJSON('api/find/GetPost', {
+        hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
+          uid,
           Skip: 0,
-          Take: 12,
+          Take: 6,
         }),
-        // tags: ctx.helper.postServiceJSON('api/find/GetTag'),
-        // playList: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
-        //   Parameter: '',
-        //   Skip: 0,
-        //   Take: 10,
-        //   SortType: 1,
-        // }),
-        // playList2: ctx.helper.postServiceJSON('api/find/GetFindWorkList', {
-        //   Parameter: '',
-        //   Skip: 0,
-        //   Take: 10,
-        //   SortType: 0,
-        // }),
+        hotPostList: ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+          uid,
+          Skip: 0,
+          Take: 10,
+        }),
+        hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
       };
       if(res.hotWorkList.data.success) {
         hotWorkList = res.hotWorkList.data.data;
@@ -62,35 +64,24 @@ module.exports = app => {
       if(res.hotPhotoAlbumList.data.success) {
         hotPhotoAlbumList = res.hotPhotoAlbumList.data.data;
       }
+      if(res.hotCircleList.data.success) {
+        hotCircleList = res.hotCircleList.data.data.data;
+      }
       if(res.hotPostList.data.success) {
         hotPostList = res.hotPostList.data.data.data;
       }
-      // if(res.tags.data.success) {
-      //   tags = res.tags.data.data;
-      // }
-      // if(res.playList.data.success) {
-      //   playList = res.playList.data.data;
-      // }
-      // if(res.playList2.data.success) {
-      //   playList2 = res.playList2.data.data;
-      // }
-      // tags.FilterlevelA = [{
-      //   ID: 0,
-      //   TagName: '音乐',
-      //   TagType: 0,
-      //   TagCount: 3957,
-      //   Filterlevel: "A",
-      // }];
+      if(res.hotPlayList.data.success) {
+        hotPlayList = res.hotPlayList.data.data;
+      }
 
       yield ctx.render('dfind', {
         hotWorkList,
         hotAuthorList,
         hotMusicAlbumList,
         hotPhotoAlbumList,
+        hotCircleList,
         hotPostList,
-        tags,
-        playList,
-        playList2,
+        hotPlayList,
       });
     }
   }

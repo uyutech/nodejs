@@ -95,10 +95,31 @@
   margin-top: 0.04rem;
   font-size: 0.12rem;
   color: #2A2A2A;
+  overflow: hidden;
+}
+.cp-hotauthor .list .c ul li .txt .name {
+  display: block;
   text-align: center;
   white-space: nowrap;
-  text-overflow: ellipsis;
   overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cp-hotauthor .list .c ul li .txt .fans {
+  display: inline-block;
+  margin-right: 0.1rem;
+  padding-left: 0.2rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUAAABOj7FPj7BPjrFTjrJQk7RVqtVPjrFPjrBOj7FOj7FPj7BPj7BOkLFPkLBOjrBbySdDAAAAD3RSTlMAkvPVKxsG8tm9tptrTm4ZX2w+AAAAl0lEQVQoz2MgFjgaKYsg8xP/A4EYgs82HyTwMwEuwPgfDATgAv4QgS9wAXmIwEe4gD1E4DNcQB8i8AlTAFMLpqGY1mI6DNPpCM/h8z7rqSaNNQFI/P0gLb8RItchttTC+Hz/oeABVOA+TOAv1IR6mMB3iCnc/+FgA1ggHiHwFSxwHiHwByywHiHwCyzQjxD4gQhAeCASBgCLb8ub7AnN2wAAAABJRU5ErkJggg==) no-repeat 0 center;
+  background-size: 0.16rem auto;
+  color: #919191;
+  font-size: 0.1rem;
+}
+.cp-hotauthor .list .c ul li .txt .comment {
+  display: inline-block;
+  padding-left: 0.2rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUAAABSkrZPjrBOj7FYlbVOj7FPjrBPj7FPj7BQj7FQj7JVl7Ngn79Oj7FOkLFOjrAcmjw0AAAAD3RSTlMAHPK2EufZy695YBsIqlX0I0HVAAAAm0lEQVQoz2MgDni16f///yljCYx/EsgFgU9zIHzu+v9Q8H0DWGDrfziIBvF5gArgSg4ABTj/I4EJQAEnZAEVoMB6ZIFfQIF+ZIEfQIH8/4bC/2H4G1BA/78A438Y/oQhgKEFw1AMazEchuF0DM+hex8jgNCDECOQEeD+//9/USLC9f//EBQBvv//H6DG1X2oDoQeqA6EHpgOwgAAV9Lxdfs5vjgAAAAASUVORK5CYII=) no-repeat 0 center;
+  background-size: 0.16rem auto;
+  color: #919191;
+  font-size: 0.1rem;
 }
 .cp-hotauthor .list .c ul li .info {
   font-size: 0.12rem;

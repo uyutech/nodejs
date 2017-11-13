@@ -70,10 +70,35 @@
         display:block;
         margin-top:0.04rem;
         font-size:0.12rem;
-        text-align:center;
-        white-space:nowrap;
         text-overflow:ellipsis;
         overflow:hidden;
+        .name{
+          display:block;
+          text-align:center;
+          white-space:nowrap;
+          overflow:hidden;
+          text-overflow:ellipsis;
+        }
+        .fans{
+          display:inline-block;
+          margin-right:0.1rem;
+          padding-left:0.2rem;
+          background:url(fans.png) no-repeat 0 center;
+          background-size:0.16rem auto;
+          color:@fourthTextColor;
+        }
+        .comment{
+          display:inline-block;
+          padding-left:0.2rem;
+          background:url(comment.png) no-repeat 0 center;
+          background-size:0.16rem auto;
+          color:@fourthTextColor;
+        }
+        &:hover{
+          .fans,.comment{
+            color:@mainHoverColor;
+          }
+        }
       }
       .info{
         font-size:0.12rem;

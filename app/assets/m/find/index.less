@@ -7,9 +7,8 @@
 @import '../component/hotphotoalbum/index';
 @import '../component/hotmusicalbum/index';
 @import '../component/hotauthor/index';
+@import '../component/hotcircle/index';
 @import '../component/hotpost/index';
-//@import '../component/doublecheck/index';
-//@import '../component/playlist/index';
 
 .find{
   > .banner{
@@ -69,11 +68,31 @@
   }
   > .cp-hotpost{
     margin-top:0.1rem;
+    padding:0;
   }
   > .cp-hotauthor{
     margin-top:0.1rem;
     .list .c ul li .info{
       display:none;
+    }
+  }
+  .post{
+    margin-top:0.1rem;
+    h4{
+      position:relative;
+      margin-left:0.1rem;
+      padding-left:0.05rem;
+      font-size:0.12rem;
+      &:before{
+        position:absolute;
+        left:0;
+        top:0.02rem;
+        bottom:0.02rem;
+        width:0.02rem;
+        background:@secondColor;
+        content:' ';
+        border-radius:0.05rem;
+      }
     }
   }
 }

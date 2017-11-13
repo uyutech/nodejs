@@ -4,12 +4,12 @@
 
 'use strict';
 
-module.exports = {
+let helper = {
   getAssetUrl(url) {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?45';
+    return '/public' + url + '?48';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -100,7 +100,7 @@ module.exports = {
           <a href="/find" class="logo"></a>
           <span class="public">[${ isPublic ? '切换到马甲' : '切换到作者身份' }]</span>
           <a href="/my" class="user">
-            <span class="${'name' + (isPublic ? ' public' : '')}">${isPublic ? session.authorName : session.uname}</span>
+            <span class="${'name' + (isPublic ? ' public' : '')}">${helper.encode(isPublic ? session.authorName : session.uname)}</span>
             <img src=${head}>
           </a>
         </div>`;
@@ -108,7 +108,7 @@ module.exports = {
       return `<div class="top-nav" id="topNav">
       <a href="/find" class="logo"></a>
       <a href="/my" class="user">
-        <span class="name">${session.uname}</span>
+        <span class="name">${helper.encode(session.uname)}</span>
         <img src=${head}>
       </a>
     </div>`;
@@ -136,6 +136,21 @@ module.exports = {
       '})();\n' +
       '</script></div>';
   },
+  stringify: function(data) {
+    if(data === undefined) {
+      return 'undefined';
+    }
+    if(data === null) {
+      return 'null';
+    }
+    return helper.encode(JSON.stringify(data));
+  },
+  encode: function(str) {
+    if(!str) {
+      return '';
+    }
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  },
   weiboAppKey: '2345825162',
   weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
   weiboRedirect: 'https://circling.cc/oauth/login',
@@ -144,3 +159,5 @@ module.exports = {
   rhymeAppSecret: '1152af67bb15530c50d91728f86c43df',
   rhymeRedirect: 'http://rhymesland.com/oauth/rhymeLogin',
 };
+
+module.exports = helper;

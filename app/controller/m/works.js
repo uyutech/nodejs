@@ -9,6 +9,9 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let worksID = ctx.params.worksID;
+      if(!worksID) {
+        return;
+      }
       let workID = ctx.params.workID;
       let worksDetail = {};
       let commentData = {};

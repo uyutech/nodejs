@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 50);
+/******/ 	return __webpack_require__(__webpack_require__.s = 52);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -96,6 +96,12 @@ let util = {
     }
     return url ? url + '-1296_1296_80' : url;
   },
+  img980_980_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-980_980_80' : url;
+  },
   img750_750_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -107,6 +113,12 @@ let util = {
       return url;
     }
     return url ? url + '-600_600_80' : url;
+  },
+  img480_480_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-480_480_80' : url;
   },
   img288__80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -239,6 +251,9 @@ let util = {
       return url;
     }
     return url ? url + '-48_48_80' : url;
+  },
+  decode: function(str) {
+    return str.replace(/&lt;/g, '<').replace(/&amp;/g, '&');
   },
   formatTime: function(time) {
     if(!time) {
@@ -376,7 +391,7 @@ let net = {
 
 /***/ }),
 
-/***/ 50:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -408,10 +423,10 @@ exports.default = function (data) {
 
   var my = migi.preRender(migi.createCp(_My2.default, [["userInfo", userInfo], ["follows", follows], ["favors", favors], ["updateNickNameTimeDiff", updateNickNameTimeDiff], ["updateHeadTimeDiff", updateHeadTimeDiff]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: '我的' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mmy.css') + '"/>\n</head>\n<body>\n<div id="page">' + my + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + JSON.stringify(userInfo) + ';\n  $CONFIG.follows = ' + JSON.stringify(data.follows) + ';\n  $CONFIG.favors = ' + JSON.stringify(favors) + ';\n  $CONFIG.updateNickNameTimeDiff = ' + JSON.stringify(updateNickNameTimeDiff) + ';\n  $CONFIG.updateHeadTimeDiff = ' + JSON.stringify(updateHeadTimeDiff) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mmy.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: '我的' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mmy.css') + '"/>\n</head>\n<body>\n<div id="page">' + my + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + data.helper.stringify(userInfo) + ';\n  $CONFIG.follows = ' + data.helper.stringify(data.follows) + ';\n  $CONFIG.favors = ' + data.helper.stringify(favors) + ';\n  $CONFIG.updateNickNameTimeDiff = ' + data.helper.stringify(updateNickNameTimeDiff) + ';\n  $CONFIG.updateHeadTimeDiff = ' + data.helper.stringify(updateHeadTimeDiff) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mmy.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _My = __webpack_require__(51);
+var _My = __webpack_require__(53);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -421,7 +436,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 51:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -441,11 +456,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Profile = __webpack_require__(52);
+var _Profile = __webpack_require__(54);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(53);
+var _Follow = __webpack_require__(55);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
@@ -497,7 +512,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 52:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -689,7 +704,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 53:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

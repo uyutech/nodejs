@@ -9,6 +9,9 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let authorID = ctx.params.authorID;
+      if(!authorID) {
+        return;
+      }
       let authorDetail = {};
       let homeDetail = {};
       let tags = {};

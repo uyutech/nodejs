@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 63);
+/******/ 	return __webpack_require__(__webpack_require__.s = 64);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -96,6 +96,12 @@ let util = {
     }
     return url ? url + '-1296_1296_80' : url;
   },
+  img980_980_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-980_980_80' : url;
+  },
   img750_750_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -107,6 +113,12 @@ let util = {
       return url;
     }
     return url ? url + '-600_600_80' : url;
+  },
+  img480_480_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-480_480_80' : url;
   },
   img288__80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -239,6 +251,9 @@ let util = {
       return url;
     }
     return url ? url + '-48_48_80' : url;
+  },
+  decode: function(str) {
+    return str.replace(/&lt;/g, '<').replace(/&amp;/g, '&');
   },
   formatTime: function(time) {
     if(!time) {
@@ -376,7 +391,7 @@ let net = {
 
 /***/ }),
 
-/***/ 63:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -394,10 +409,10 @@ exports.default = function (data) {
 
   var subPost = migi.preRender(migi.createCp(_SubPost2.default, [["circleID", circleID], ["circleDetail", circleDetail], ["placeholder", '在' + circleDetail.TagName + '圈画个圈吧'], ["isPublic", isPublic], ["head", head]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: '发新帖子' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcpost.css') + '"/>\n</head>\n<body>\n<div id="page">' + subPost + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.circleID = ' + JSON.stringify(circleID) + ';\n  $CONFIG.circleDetail = ' + JSON.stringify(circleDetail) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mcpost.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: '发新帖子' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcpost.css') + '"/>\n</head>\n<body>\n<div id="page">' + subPost + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.circleID = ' + data.helper.stringify(circleID) + ';\n  $CONFIG.circleDetail = ' + data.helper.stringify(circleDetail) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mcpost.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _SubPost = __webpack_require__(64);
+var _SubPost = __webpack_require__(65);
 
 var _SubPost2 = _interopRequireDefault(_SubPost);
 
@@ -407,7 +422,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 64:
+/***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

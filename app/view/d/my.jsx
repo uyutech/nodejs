@@ -43,11 +43,11 @@ export default function(data) {
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.userInfo = ${JSON.stringify(userInfo)};
-  $CONFIG.follows = ${JSON.stringify(follows)};
-  $CONFIG.favors = ${JSON.stringify(favors)};
-  $CONFIG.updateNickNameTimeDiff = ${JSON.stringify(updateNickNameTimeDiff)};
-  $CONFIG.updateHeadTimeDiff = ${JSON.stringify(updateHeadTimeDiff)};
+  $CONFIG.userInfo = ${data.helper.stringify(userInfo)};
+  $CONFIG.follows = ${data.helper.stringify(follows)};
+  $CONFIG.favors = ${data.helper.stringify(favors)};
+  $CONFIG.updateNickNameTimeDiff = ${data.helper.stringify(updateNickNameTimeDiff)};
+  $CONFIG.updateHeadTimeDiff = ${data.helper.stringify(updateHeadTimeDiff)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dmy.js')}"></script>

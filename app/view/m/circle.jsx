@@ -27,9 +27,9 @@ ${data.helper.getMTopNav()}
 ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.circleID = ${JSON.stringify(circleID)};
-  $CONFIG.circleDetail = ${JSON.stringify(circleDetail)};
-  $CONFIG.postList = ${JSON.stringify(postList)};
+  $CONFIG.circleID = ${data.helper.stringify(circleID)};
+  $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
+  $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mcircle.js')}"></script>

@@ -5,31 +5,194 @@
 'use strict';
 
 import util from '../../common/util';
+import net from '../../common/net';
 
 class HotPost extends migi.Component {
   constructor(...data) {
     super(...data);
-    this.dataList = this.props.dataList || [];
+    let self = this;
+    if(self.props.datas && self.props.datas.data && self.props.datas.data.length) {
+      let html = '';
+      self.props.datas.data.forEach(function(item) {
+        html += self.genItem(item);
+      });
+      self.html = html;
+      self.on(migi.Event.DOM, function() {
+        let $list = $(this.ref.list.element);
+        $list.on('click', '.like', function() {
+          if(!$CONFIG.isLogin) {
+            migi.eventBus.emit('NEED_LOGIN');
+            return;
+          }
+          let $li = $(this);
+          if($li.hasClass('loading')) {
+            return;
+          }
+          $li.addClass('loading');
+          let postID = $li.attr('rel');
+          net.postJSON('/api/post/like', { postID }, function(res) {
+            if(res.success) {
+              let data = res.data;
+              if(data.ISLike) {
+                $li.addClass('has');
+              }
+              else {
+                $li.removeClass('has');
+              }
+              $li.text(data.LikeCount);
+            }
+            else {
+              alert(res.message || util.ERROR_MESSAGE);
+            }
+            $li.removeClass('loading');
+          }, function() {
+            alert(res.message || util.ERROR_MESSAGE);
+            $li.removeClass('loading');
+          });
+        });
+        $list.on('click', '.comment', function() {
+          let postID = $(this).attr('rel');
+          if(parent && parent.setHash) {
+            parent.setHash('/post/' + postID);
+          }
+          else {
+            location.href = '/post/' + postID;
+          }
+        });
+        $list.on('click', '.con,.imgs', function() {
+          $(this).closest('li').find('.comment').click();
+        });
+        $list.on('click', '.del', function() {
+          if(window.confirm('确认删除吗？')) {
+            let postID = $(this).attr('rel');
+            let $li = $(this).closest('.wrap').closest('li');
+            net.postJSON('/api/post/del', { postID }, function(res) {
+              if(res.success) {
+                $li.remove();
+              }
+              else {
+                alert(res.message || util.ERROR_MESSAGE);
+              }
+            }, function(res) {
+              alert(res.message || util.ERROR_MESSAGE);
+            });
+          }
+        });
+      });
+    }
   }
-  @bind dataList = []
-  render() {
-    return <div class="cp-hotpost">
-      <h4>{ this.props.title }<small>{ '未来会根据你的口味进行精准智能的推送！>3<' }</small></h4>
-      {
-        this.dataList && this.dataList.length
-          ? <ul class="list fn-clear">
+  genItem(item) {
+    let len = item.Content.length;
+    let maxLen = 256;
+    let imgLen = item.Image_Post.length;
+    if(item.IsAuthor) {
+      return <li class="author">
+        <div class="profile fn-clear">
+          <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+          <div class="txt">
+            <a href={ '/author/' + item.AuthorID } class="name">{ item.SendUserNickName }</a>
+            <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
+          </div>
+        </div>
+        <div class="wrap">
+          {
+            item.Title
+              ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
+              : ''
+          }
+          <pre class="con">
+            { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
+            <a href={ '/post/' + item.ID } class="more fn-hide">查看全部</a>
+          </pre>
+          {
+            item.Image_Post && imgLen
+              ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
+                {
+                  item.Image_Post.length > 4
+                   ? item.Image_Post.slice(0, 3).map(function(item) {
+                       return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
+                    }).concat([<li class="all"><a href={ '/post/' + item.ID }>查看全部</a></li>])
+                   : item.Image_Post.map(function(item) {
+                       return <li style={ 'background-image:url(' + util.autoSsl(imgLen === 1 ? util.img980_980_80(item.FileUrl) : util.img480_480_80(item.FileUrl)) + ')' }/>;
+                     })
+                }
+              </ul>
+              : ''
+          }
+          <ul class="btn fn-clear">
+            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
+            <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
             {
-              this.dataList.map(function(item) {
-                return <li>
-                  <a href={ `/circle/${item.TagID}` } class="pic">
-                    <img src={ util.autoSsl(util.img288_288_80(item.TagCover)) || '//zhuanquan.xin/img/blank.png' }/>
-                  </a>
-                  <a href={ `/circle/${item.TagID}` } class="txt">{ item.TagName }</a>
-                </li>;
-              })
+              item.IsOwn ? <li class="del" rel={ item.ID }/> : ''
             }
           </ul>
-          : <div class="empty"/>
+          <b class="arrow"/>
+        </div>
+      </li>;
+    }
+    return <li>
+      <div class="profile fn-clear">
+        <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+        <div class="txt">
+          <span class="name">{ item.SendUserNickName }</span>
+          <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
+        </div>
+      </div>
+      <div class="wrap">
+        {
+          item.Title
+            ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
+            : ''
+        }
+        <pre class="con">
+          { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
+          <a href={ '/post/' + item.ID } class="more fn-hide">查看全部</a>
+        </pre>
+        {
+          item.Image_Post && imgLen
+            ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
+              {
+                item.Image_Post.length > 4
+                  ? item.Image_Post.slice(0, 3).map(function(item) {
+                    return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
+                  }).concat([<li class="all"><a href={ '/post/' + item.ID }>查看全部</a></li>])
+                  : item.Image_Post.map(function(item) {
+                    return <li style={ 'background-image:url(' + util.autoSsl(imgLen === 1 ? util.img980_980_80(item.FileUrl) : util.img480_480_80(item.FileUrl)) + ')' }/>;
+                  })
+              }
+            </ul>
+            : ''
+        }
+        <ul class="btn fn-clear">
+          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
+          <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+          {
+            item.IsOwn ? <li class="del" rel={ item.ID }/> : ''
+          }
+        </ul>
+        <b class="arrow"/>
+      </div>
+    </li>;
+  }
+  setData(data) {
+    let self = this;
+    let html = '';
+    data.forEach(function(item) {
+      html += self.genItem(item);
+    });
+    $(self.ref.list.element).html(html);
+  }
+  addData(data) {
+    let self = this;
+    let html = self.genItem(data);
+    $(self.ref.list.element).prepend(html.toString());
+  }
+  render() {
+    return <div class="cp-hotpost">
+      {
+        this.props.datas.data && this.props.datas.data.length
+          ? <ol class="list" ref="list" dangerouslySetInnerHTML={ this.html }/>
+          : <div class="empty">暂无内容</div>
       }
     </div>;
   }

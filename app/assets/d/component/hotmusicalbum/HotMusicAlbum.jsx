@@ -33,8 +33,12 @@ class HotMusicAlbum extends migi.Component {
                   <b class="bg"/>
                   <a href={ `/works/${item.WorksID}` } class="pic">
                     <img src={ util.autoSsl(util.img288_288_80(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
+                    <span class="num">{ item.Popular || 0 }</span>
                   </a>
-                  <a href={ `/works/${item.WorksID}` } class="txt">{ item.Title }</a>
+                  <a href={ `/works/${item.WorksID}` } class="txt">
+                    <span>{ item.Title }</span>
+                    <span class="author">{ (item.SingerName || []).join(' ') }</span>
+                  </a>
                 </li>;
               })
             }

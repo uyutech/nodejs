@@ -4,6 +4,7 @@
 
 import './index.less';
 
+import util from '../common/util';
 import Find from './Find.jsx';
 
 let find = migi.preExist(<Find
@@ -11,4 +12,6 @@ let find = migi.preExist(<Find
   hotAuthorList={ $CONFIG.hotAuthorList }
   hotMusicAlbumList={ $CONFIG.hotMusicAlbumList }
   hotPhotoAlbumList={ $CONFIG.hotPhotoAlbumList }
-  hotPostList={ $CONFIG.hotPostList }/>);
+  hotPostList={ $CONFIG.hotPostList }
+  hotCircleList={ $CONFIG.hotCircleList }
+  hotPlayList={ $CONFIG.hotPlayList }/>);

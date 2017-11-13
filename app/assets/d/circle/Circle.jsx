@@ -8,9 +8,9 @@ import net from '../common/net';
 import util from '../common/util';
 
 import Title from './Title.jsx';
-import PostList from './PostList.jsx';
 import SubPost from './SubPost.jsx';
 import Page from '../component/page/Page.jsx';
+import HotPost from '../component/hotpost/HotPost.jsx';
 
 let skip = 0;
 let take = 20;
@@ -34,7 +34,7 @@ class Circle extends migi.Component {
         self.loadPage();
       });
       self.ref.subPost.on('add_post', function(data) {
-        self.ref.postList.addData(data);
+        self.ref.hotPost.addData(data);
       });
     });
   }
@@ -47,7 +47,7 @@ class Circle extends migi.Component {
     net.postJSON('/api/circle/list', { circleID: $CONFIG.circleID, skip, take }, function(res) {
       if(res.success) {
         let data = res.data;
-        self.ref.postList.setData(data.data);
+        self.ref.hotPost.setData(data.data);
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);
@@ -63,7 +63,7 @@ class Circle extends migi.Component {
       <Title circleDetail={ this.props.circleDetail }/>
       <div class="main">
         <Page ref="page" total={ Math.ceil(this.props.postList.Size / take) }/>
-        <PostList ref="postList" datas={ this.props.postList }/>
+        <HotPost ref="hotPost" datas={ this.props.postList }/>
         <Page ref="page2" total={ Math.ceil(this.props.postList.Size / take) }/>
       </div>
       <SubPost ref="subPost" placeholder={ '在' + this.props.circleDetail.TagName +'圈画个圈吧' }

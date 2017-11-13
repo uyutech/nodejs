@@ -28,9 +28,9 @@ export default function(data) {
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.circleID = ${JSON.stringify(circleID)};
-  $CONFIG.circleDetail = ${JSON.stringify(circleDetail)};
-  $CONFIG.postList = ${JSON.stringify(postList)};
+  $CONFIG.circleID = ${data.helper.stringify(circleID)};
+  $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
+  $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dcircle.js')}"></script>

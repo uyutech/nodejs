@@ -26,8 +26,8 @@ export default function(data) {
 ${topNav}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.userInfo = ${JSON.stringify(userInfo)};
-  $CONFIG.authorInfo = ${JSON.stringify(authorInfo)};
+  $CONFIG.userInfo = ${data.helper.stringify(userInfo)};
+  $CONFIG.authorInfo = ${data.helper.stringify(authorInfo)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dindex.js')}"></script>

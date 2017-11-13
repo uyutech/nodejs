@@ -7,15 +7,16 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
+      let uid = ctx.session.uid;
       let hotWorkList = [];
       let hotAuthorList = [];
       let hotMusicAlbumList = [];
       let hotPhotoAlbumList = [];
+      let hotCircleList = [];
       let hotPostList = [];
-      let tags = {};
-      let playList = [];
+      let hotPlayList = [];
       let res = yield {
-        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
+        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List1', {
           Skip: 0,
           Take: 10,
         }),
@@ -31,26 +32,21 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
-        hotPostList: ctx.helper.postServiceJSON('api/find/GetPost', {
+        hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
+          uid,
           Skip: 0,
-          Take: 12,
+          Take: 6,
         }),
-        // tags: ctx.curl(ctx.helper.getRemoteUrl('api/find/GetTag'), {
-        //   method: 'POST',
-        //   dataType: 'json',
-        //   gzip: true,
-        // }),
-        // playList: ctx.curl(ctx.helper.getRemoteUrl('api/find/GetFindWorkList'), {
-        //   method: 'POST',
-        //   data: {
-        //     Parameter: '',
-        //     Skip: 0,
-        //     Take: 10,
-        //     SortType: 1,
-        //   },
-        //   dataType: 'json',
-        //   gzip: true,
-        // }),
+        hotPostList: ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+          uid,
+          Skip: 0,
+          Take: 10,
+        }),
+        hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+          uid,
+          Skip: 0,
+          Take: 5,
+        }),
       };
       if(res.hotWorkList.data.success) {
         hotWorkList = res.hotWorkList.data.data;
@@ -64,31 +60,24 @@ module.exports = app => {
       if(res.hotPhotoAlbumList.data.success) {
         hotPhotoAlbumList = res.hotPhotoAlbumList.data.data;
       }
+      if(res.hotCircleList.data.success) {
+        hotCircleList = res.hotCircleList.data.data.data;
+      }
       if(res.hotPostList.data.success) {
         hotPostList = res.hotPostList.data.data.data;
       }
-      // if(res.tags.data.success) {
-      //   tags = res.tags.data.data;
-      // }
-      // if(res.playList.data.success) {
-      //   playList = res.playList.data.data;
-      // }
-      // tags.FilterlevelA = [{
-      //   ID: 0,
-      //   TagName: '音乐',
-      //   TagType: 0,
-      //   TagCount: 3957,
-      //   Filterlevel: "A",
-      // }];
+      if(res.hotPlayList.data.success) {
+        hotPlayList = res.hotPlayList.data.data;
+      }
 
       yield ctx.render('mfind', {
         hotWorkList,
         hotAuthorList,
         hotMusicAlbumList,
         hotPhotoAlbumList,
+        hotCircleList,
         hotPostList,
-        tags,
-        playList,
+        hotPlayList,
       });
     }
   }

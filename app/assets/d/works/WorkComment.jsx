@@ -222,26 +222,6 @@ class WorkComment extends migi.Component {
         </ul>
       </div>
       <Page ref="page" total={ Math.ceil(this.props.commentData.Size / take) }/>
-      <div class="warn">
-        <div class="t fn-clear">
-          <img class="pic" src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>
-          <div class="txt">
-            <div>
-              <span class="name">圈儿</span>
-              <small class="time">刚刚</small>
-            </div>
-          </div>
-        </div>
-        <div class="c">
-          <pre>自从积分活动开启，我们感受到了大家满满的热情，感谢支持！m(_ _)m
-
-转圈系统运用了人工智能算法，所以会根据大家留言内容不同对积分数量进行相应地微调。所以请尽量不要发表重复或没有意义的留言哦( •̥́ ˍ •̀ )
-也建议大家不要把一段内容在短时间内拆开分多条发布，悄悄告诉大家，这样获得的积分反而比合在一起的要少哦~
-
-希望大家转圈开心，都能得想要的福利∗ > ɞ &lt;∗很快会有越来越多的新功能解锁哦！</pre>
-          <b class="arrow"/>
-        </div>
-      </div>
       <Comment ref="comment"
                zanUrl="/api/works/likeComment"
                subUrl="/api/works/subCommentList"

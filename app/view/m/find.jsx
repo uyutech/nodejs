@@ -11,37 +11,39 @@ export default function(data) {
   let hotAuthorList = data.hotAuthorList;
   let hotMusicAlbumList = data.hotMusicAlbumList;
   let hotPhotoAlbumList = data.hotPhotoAlbumList;
+  let hotCircleList = data.hotCircleList;
   let hotPostList = data.hotPostList;
-  let tags = data.tags;
-  let playList = data.playList;
+  let hotPlayList = data.hotPlayList;
 
   let find = migi.preRender(<Find
     hotWorkList={ hotWorkList }
     hotAuthorList={ hotAuthorList }
     hotMusicAlbumList={ hotMusicAlbumList }
     hotPhotoAlbumList={ hotPhotoAlbumList }
+    hotCircleList={ hotCircleList }
     hotPostList={ hotPostList }
-    tags={ tags }
-    playList={ playList }/>);
+    hotPlayList={ hotPlayList }/>);
 
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getMHead({title: '发现'})}
+  ${data.helper.getMHead({ title: '发现' })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mfind.css')}"/>
 </head>
 <body>
-<div id="page">${ find }</div>
+<div id="page">${find}</div>
 ${data.helper.getMTopNav()}
 ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.hotWorkList = ${JSON.stringify(hotWorkList)};
-  $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
-  $CONFIG.hotMusicAlbumList = ${JSON.stringify(hotMusicAlbumList)};
-  $CONFIG.hotPhotoAlbumList = ${JSON.stringify(hotPhotoAlbumList)};
-  $CONFIG.hotPostList = ${JSON.stringify(hotPostList)};
+  $CONFIG.hotWorkList = ${data.helper.stringify(hotWorkList)};
+  $CONFIG.hotAuthorList = ${data.helper.stringify(hotAuthorList)};
+  $CONFIG.hotMusicAlbumList = ${data.helper.stringify(hotMusicAlbumList)};
+  $CONFIG.hotPhotoAlbumList = ${data.helper.stringify(hotPhotoAlbumList)};
+  $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
+  $CONFIG.hotPostList = ${data.helper.stringify(hotPostList)};
+  $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mfind.js')}"></script>

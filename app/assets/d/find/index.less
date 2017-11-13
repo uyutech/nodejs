@@ -5,10 +5,11 @@
 @import '../component/hotwork/index.less';
 @import '../component/hotmusicalbum/index.less';
 @import '../component/hotauthor/index.less';
-@import '../component/hotphotoalbum/index.less';
+//@import '../component/hotphotoalbum/index.less';
 @import '../component/hotpost/index.less';
-//@import '../component/doublecheck/index.less';
-//@import '../component/playlist/index.less';
+@import '../component/hotcircle/index.less';
+@import '../component/hotplaylist/index.less';
+@import '../component/page/index';
 
 .find{
   > .banner{
@@ -69,18 +70,48 @@
       }
     }
   }
-  > .cp-doublecheck{
-    .l2{
+  > .hot2{
+    .post{
+      float:left;
+      width:6.48rem;
       box-shadow:@boxShadow;
-      border-top-right-radius:0.1rem;
+      border-radius:0.1rem;
+      overflow:hidden;
+      &:before{
+        display:block;
+        margin-bottom:0.1rem;
+        padding:0 0.2rem;
+        height:0.35rem;
+        background:@mainColor;
+        font-size:0.14rem;
+        line-height:0.35rem;
+        content:'转圈';
+      }
+      > .cp-hotpost{
+        .list{
+          padding:0 0.1rem;
+        }
+      }
+      > .cp-page{
+        padding:0.1rem;
+        text-align:right;
+      }
     }
-  }
-  > .cp-playlist{
-    position:relative;
-    padding:0.2rem;
-    background:#FFF;
-    box-shadow:@boxShadow;
-    border-bottom-left-radius:0.1rem;
-    border-bottom-right-radius:0.1rem;
+    > .cp-hotplaylist{
+      float:right;
+      width:3.3rem;
+      box-shadow:@boxShadow;
+      border-radius:0.1rem;
+      overflow:hidden;
+      &:before{
+        display:block;
+        padding:0 0.2rem;
+        height:0.35rem;
+        background:@mainColor;
+        font-size:0.14rem;
+        line-height:0.35rem;
+        content:'发现';
+      }
+    }
   }
 }

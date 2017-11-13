@@ -9,6 +9,9 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let id = ctx.params.id;
+      if(!id) {
+        return;
+      }
       let postData = {};
       let replyData = {};
       let res = yield {

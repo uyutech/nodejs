@@ -9,6 +9,9 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let circleID = ctx.params.circleID;
+      if(!circleID) {
+        return;
+      }
       let circleDetail = {};
       let postList = {};
       let res = yield {

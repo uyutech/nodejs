@@ -24,17 +24,15 @@ class HotAuthor extends migi.Component {
           ? <ul class="list fn-clear">
               {
                 this.dataList.map(function(item) {
-                  let types = item.WorksType || [];
                   return <li authorID={ item.AuthorID }>
                     <a href={ `/author/${item.AuthorID}` } class="pic">
                       <img src={ util.autoSsl(util.img144_144_80(item.Head_url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
-                      {
-                        types.slice(0, 2).map(function(item) {
-                          return <b class={ `cp-author_type${item}` }/>;
-                        })
-                      }
                     </a>
-                    <a href={ `/author/${item.AuthorID}` } class="txt">{ item.AuthorName }</a>
+                    <a href={ `/author/${item.AuthorID}` } class="txt">
+                      <span class="name">{ item.AuthorName }</span>
+                      <span class="fans">{ item.FansNumber || 0 }</span>
+                      <span class="comment">{ item.Popular || 0 }</span>
+                    </a>
                     <div class="info">合作{ item.CooperationTimes }次</div>
                   </li>;
                 })

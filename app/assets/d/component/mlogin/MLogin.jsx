@@ -9,9 +9,11 @@ class NeedLogin extends migi.Component {
   @bind message
   show() {
     $(this.element).removeClass('fn-hide');
+    parent.upZIndex && parent.upZIndex();
   }
   hide() {
     $(this.element).addClass('fn-hide');
+    parent.downZIndex && parent.downZIndex();
   }
   clickClose(e) {
     e.preventDefault();
@@ -19,7 +21,8 @@ class NeedLogin extends migi.Component {
   }
   clickWeibo(e) {
     e.preventDefault();
-    let parent = window.parent;
+    e.stopPropagation();
+    parent.downZIndex && parent.downZIndex();
     if(parent !== window && parent.goto) {
       parent.goto('/oauth/weibo?goto=' + encodeURIComponent(location.href));
     }

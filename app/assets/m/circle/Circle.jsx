@@ -5,8 +5,8 @@
 'use strict';
 
 import Title from './Title.jsx';
-import PostList from './PostList.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
+import HotPost from '../component/hotpost/HotPost.jsx';
 
 class Circle extends migi.Component {
   constructor(...data) {
@@ -39,7 +39,7 @@ class Circle extends migi.Component {
           <b class="arrow"/>
         </div>
       </div>
-      <PostList ref="postList" datas={ this.props.postList }/>
+      <HotPost ref="hotPost" datas={ this.props.postList }/>
       <SubCmt ref="subCmt"
               tipText="-${n}"
               subText="发送"

@@ -40,14 +40,14 @@ export default function(data) {
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.authorID = ${JSON.stringify(authorID)};
-  $CONFIG.authorDetail = ${JSON.stringify(authorDetail)};
-  $CONFIG.homeDetail = ${JSON.stringify(homeDetail)};
-  $CONFIG.tags = ${JSON.stringify(tags)};
-  $CONFIG.playList = ${JSON.stringify(playList)};
-  $CONFIG.playList2 = ${JSON.stringify(playList2)};
-  $CONFIG.commentData = ${JSON.stringify(commentData)};
-  $CONFIG.hotCommentData = ${JSON.stringify(hotCommentData)};
+  $CONFIG.authorID = ${data.helper.stringify(authorID)};
+  $CONFIG.authorDetail = ${data.helper.stringify(authorDetail)};
+  $CONFIG.homeDetail = ${data.helper.stringify(homeDetail)};
+  $CONFIG.tags = ${data.helper.stringify(tags)};
+  $CONFIG.playList = ${data.helper.stringify(playList)};
+  $CONFIG.playList2 = ${data.helper.stringify(playList2)};
+  $CONFIG.commentData = ${data.helper.stringify(commentData)};
+  $CONFIG.hotCommentData = ${data.helper.stringify(hotCommentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dauthor.js')}"></script>

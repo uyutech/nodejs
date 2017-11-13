@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 137);
+/******/ 	return __webpack_require__(__webpack_require__.s = 141);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -100,6 +100,12 @@ var util = {
     }
     return url ? url + '-1296_1296_80' : url;
   },
+  img980_980_80: function img980_980_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-980_980_80' : url;
+  },
   img750_750_80: function img750_750_80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -111,6 +117,12 @@ var util = {
       return url;
     }
     return url ? url + '-600_600_80' : url;
+  },
+  img480_480_80: function img480_480_80(url) {
+    if (!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-480_480_80' : url;
   },
   img288__80: function img288__80(url) {
     if (!/\/\/zhuanquan\./i.test(url)) {
@@ -243,6 +255,9 @@ var util = {
       return url;
     }
     return url ? url + '-48_48_80' : url;
+  },
+  decode: function decode(str) {
+    return str.replace(/&lt;/g, '<').replace(/&amp;/g, '&');
   },
   formatTime: function formatTime(time) {
     if (!time) {
@@ -554,15 +569,15 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 137:
+/***/ 141:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(138);
+__webpack_require__(142);
 
-var _Circle = __webpack_require__(139);
+var _Circle = __webpack_require__(143);
 
 var _Circle2 = _interopRequireDefault(_Circle);
 
@@ -572,14 +587,14 @@ var circle = migi.preExist(migi.createCp(_Circle2.default, [["circleDetail", $CO
 
 /***/ }),
 
-/***/ 138:
+/***/ 142:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 139:
+/***/ 143:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -591,17 +606,17 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(140);
+var _Title = __webpack_require__(144);
 
 var _Title2 = _interopRequireDefault(_Title);
-
-var _PostList = __webpack_require__(141);
-
-var _PostList2 = _interopRequireDefault(_PostList);
 
 var _SubCmt = __webpack_require__(10);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
+
+var _HotPost = __webpack_require__(54);
+
+var _HotPost2 = _interopRequireDefault(_HotPost);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -640,7 +655,7 @@ var Circle = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createVd("div", [["class", "warn"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", "//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], ["圈儿"]), migi.createVd("small", [["class", "time"]], ["刚刚"])])])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], ["#画个圈# 功能暂时开放啦~不过目前个别手机机型会有无法加载图片的问题，程序员小哥哥们正在尽快解决。\n\
 在此之前，大家可以尝试用电脑，或更换手机浏览器发布图片。\n\
-这个问题解决之后，我们会公布新的福利活动！敬请期待哦~~"]), migi.createVd("b", [["class", "arrow"]])])]), migi.createCp(_PostList2.default, [["ref", "postList"], ["datas", this.props.postList]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["tipText", "-${n}"], ["subText", "发送"], ["readOnly", true], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧']])]);
+这个问题解决之后，我们会公布新的福利活动！敬请期待哦~~"]), migi.createVd("b", [["class", "arrow"]])])]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["datas", this.props.postList]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["tipText", "-${n}"], ["subText", "发送"], ["readOnly", true], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧']])]);
     }
   }]);
 
@@ -651,7 +666,7 @@ migi.name(Circle, "Circle");exports.default = Circle;
 
 /***/ }),
 
-/***/ 140:
+/***/ 144:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -768,7 +783,7 @@ migi.name(Title, "Title");exports.default = Title;
 
 /***/ }),
 
-/***/ 141:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -796,8 +811,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var skip = 20;
 var take = 20;
+var skip = take;
 
 var PostList = function (_migi$Component) {
   _inherits(PostList, _migi$Component);
@@ -814,7 +829,24 @@ var PostList = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = PostList.__proto__ || Object.getPrototypeOf(PostList)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    if (self.props.datas.Size) {
+    if (self.props.take) {
+      take = self.props.take;
+      if (self.props.skip) {
+        skip = self.props.skip;
+      } else {
+        skip = take;
+      }
+    } else if (self.props.skip) {
+      skip = self.props.skip;
+    }
+    if (self.props.datas && self.props.datas.data) {
+      if (self.props.take) {
+        if (self.props.skip) {
+          skip = self.props.skip;
+        } else {
+          skip = self.props.datas.data.length;
+        }
+      }
       var html = '';
       self.props.datas.data.forEach(function (item) {
         html += self.genItem(item);
@@ -910,10 +942,10 @@ var PostList = function (_migi$Component) {
       var self = this;
       self.loading = true;
       self.message = '正在加载...';
-      _net2.default.postJSON('/api/circle/list', { circleID: $CONFIG.circleID, skip: skip, take: take }, function (res) {
+      _net2.default.postJSON(self.props.url || '/api/circle/list', { circleID: $CONFIG.circleID, skip: skip, take: take }, function (res) {
         if (res.success) {
           var data = res.data;
-          skip += data.Size;
+          skip += take;
           self.setData(data.data);
           if (!data.data.length || data.data.length < take) {
             self.loadEnd = true;
@@ -941,7 +973,7 @@ var PostList = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "post-list"]], [this.props.datas.Size ? migi.createVd("ol", [["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"]), migi.createVd("div", [["class", "message"]], [new migi.Obj("message", this, function () {
+      return migi.createVd("div", [["class", "cp-hotpost"]], [this.props.datas.Size ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"]), migi.createVd("div", [["class", "message"]], [new migi.Obj("message", this, function () {
         return this.message;
       })])]);
     }

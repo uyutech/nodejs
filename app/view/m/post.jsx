@@ -31,9 +31,9 @@ ${data.helper.getMTopNav()}
 ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.id = ${JSON.stringify(id)};
-  $CONFIG.postData = ${JSON.stringify(postData)};
-  $CONFIG.replyData = ${JSON.stringify(replyData)};
+  $CONFIG.id = ${data.helper.stringify(id)};
+  $CONFIG.postData = ${data.helper.stringify(postData)};
+  $CONFIG.replyData = ${data.helper.stringify(replyData)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mpost.js')}"></script>

@@ -57,11 +57,11 @@ ${data.helper.getMTopNav()}
 ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.worksID = ${JSON.stringify(worksID)};
-  $CONFIG.workID = ${JSON.stringify(workID)};
-  $CONFIG.worksDetail = ${JSON.stringify(worksDetail)};
-  $CONFIG.labelList = ${JSON.stringify(labelList)};
-  $CONFIG.commentData = ${JSON.stringify(commentData)};
+  $CONFIG.worksID = ${data.helper.stringify(worksID)};
+  $CONFIG.workID = ${data.helper.stringify(workID)};
+  $CONFIG.worksDetail = ${data.helper.stringify(worksDetail)};
+  $CONFIG.labelList = ${data.helper.stringify(labelList)};
+  $CONFIG.commentData = ${data.helper.stringify(commentData)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mworks.js')}"></script>

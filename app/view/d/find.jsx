@@ -11,25 +11,23 @@ export default function(data) {
   let hotAuthorList = data.hotAuthorList;
   let hotMusicAlbumList = data.hotMusicAlbumList;
   let hotPhotoAlbumList = data.hotPhotoAlbumList;
+  let hotCircleList = data.hotCircleList;
   let hotPostList = data.hotPostList;
-  let tags = data.tags;
-  let playList = data.playList;
-  let playList2 = data.playList;
+  let hotPlayList = data.hotPlayList;
 
   let find = migi.preRender(<Find
     hotWorkList={ hotWorkList }
     hotAuthorList={ hotAuthorList }
     hotMusicAlbumList={ hotMusicAlbumList }
     hotPhotoAlbumList={ hotPhotoAlbumList }
+    hotCircleList={ hotCircleList }
     hotPostList={ hotPostList }
-    tags={ tags }
-    playList={ playList }
-    playList2={ playList2 }/>);
+    hotPlayList={ hotPlayList }/>);
 
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead({title:'发现'})}
+  ${data.helper.getDHead({ title: '发现' })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dfind.css')}"/>
 </head>
@@ -38,11 +36,13 @@ export default function(data) {
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.hotWorkList = ${JSON.stringify(hotWorkList)};
-  $CONFIG.hotAuthorList = ${JSON.stringify(hotAuthorList)};
-  $CONFIG.hotMusicAlbumList = ${JSON.stringify(hotMusicAlbumList)};
-  $CONFIG.hotPhotoAlbumList = ${JSON.stringify(hotPhotoAlbumList)};
-  $CONFIG.hotPostList = ${JSON.stringify(hotPostList)};
+  $CONFIG.hotWorkList = ${data.helper.stringify(hotWorkList)};
+  $CONFIG.hotAuthorList = ${data.helper.stringify(hotAuthorList)};
+  $CONFIG.hotMusicAlbumList = ${data.helper.stringify(hotMusicAlbumList)};
+  $CONFIG.hotPhotoAlbumList = ${data.helper.stringify(hotPhotoAlbumList)};
+  $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
+  $CONFIG.hotPostList = ${data.helper.stringify(hotPostList)};
+  $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dfind.js')}"></script>

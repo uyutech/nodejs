@@ -4,7 +4,7 @@
 
 'use strict';
 
-module.exports = {
+let helper = {
   getAssetUrl(url) {
     if(url.indexOf('//') > -1) {
       return url;
@@ -49,3 +49,5 @@ module.exports = {
   rhymeAppSecret: '1db3207ed08ac5224a680898bbe10540',
   rhymeRedirect: 'http://dev.rhymesland.net/oauth/rhymeLogin',
 };
+
+module.exports = helper;
