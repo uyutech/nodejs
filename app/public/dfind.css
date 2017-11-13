@@ -365,6 +365,7 @@
 .cp-hotauthor .list li .txt:hover .fans,
 .cp-hotauthor .list li .txt:hover .comment {
   color: #0AE;
+  text-decoration: underline;
 }
 .cp-hotauthor .list li .info {
   font-size: 0.12rem;
@@ -391,6 +392,7 @@
   margin-bottom: 0.1rem;
 }
 .cp-hotpost .list > li > .profile {
+  position: relative;
   padding-left: 0.12rem;
 }
 .cp-hotpost .list > li > .profile .pic {
@@ -414,6 +416,19 @@
   font-size: 0.14rem;
   color: #919191;
   vertical-align: middle;
+}
+.cp-hotpost .list > li > .profile .circle {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.cp-hotpost .list > li > .profile .circle li {
+  display: inline-block;
+  padding: 0 0.1rem;
+  line-height: 0.24rem;
+  background: #8BBDE1;
+  border-radius: 0.24rem;
+  color: #FFF;
 }
 .cp-hotpost .list > li.author > .profile .txt .name {
   color: #EC0;
@@ -493,8 +508,22 @@
   background-position: center;
   border-radius: 0.1rem;
   cursor: url(http://zhuanquan.xin/b.cur), auto;
+  overflow: hidden;
+}
+.cp-hotpost .list > li > .wrap .imgs li.all {
+  position: relative;
+}
+.cp-hotpost .list > li > .wrap .imgs li.all:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  content: ' ';
 }
 .cp-hotpost .list > li > .wrap .imgs li.all a {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
@@ -616,7 +645,6 @@
   padding: 0 0.1rem;
   text-overflow: ellipsis;
   overflow: hidden;
-  text-align: center;
 }
 .cp-hotcircle .list li .txt .name {
   display: block;

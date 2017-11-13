@@ -24,7 +24,7 @@ let net = {
         data: data,
         dataType: 'json',
         crossDomain: true,
-        timeout: 6000,
+        timeout: 30000,
         type: type || 'get',
         headers: {
           'x-csrf-token': csrfToken,

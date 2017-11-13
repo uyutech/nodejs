@@ -211,7 +211,7 @@ class Post extends migi.Component {
               {
                 postData.Image_Post.map(function(item) {
                   return <a href={ item.FileUrl } target="_blank">
-                    <img src={ util.autoSsl(util.img600_600_80(item.FileUrl)) }/>
+                    <img src={ util.autoSsl(util.img720__80(item.FileUrl)) }/>
                   </a>;
                 })
               }

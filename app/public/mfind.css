@@ -524,8 +524,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #000;
-  text-align: center;
 }
 .cp-hotpost .list .c ul li .txt .name {
   display: block;

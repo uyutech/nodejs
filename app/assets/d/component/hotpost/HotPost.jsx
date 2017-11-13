@@ -83,6 +83,7 @@ class HotPost extends migi.Component {
   }
   genItem(item) {
     let len = item.Content.length;
+    let id = item.ID;
     let maxLen = 256;
     let imgLen = item.Image_Post.length;
     if(item.IsAuthor) {
@@ -91,39 +92,51 @@ class HotPost extends migi.Component {
           <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
             <a href={ '/author/' + item.AuthorID } class="name">{ item.SendUserNickName }</a>
-            <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
+            <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>
           </div>
+          <ul class="circle">
+            {
+              (item.Taglist || []).map(function(item) {
+                return <li>{ item.TagName }圈</li>;
+              })
+            }
+          </ul>
         </div>
         <div class="wrap">
           {
             item.Title
-              ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
+              ? <a href={ '/post/' + id } class="t">{ item.Title }</a>
               : ''
           }
           <pre class="con">
             { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
-            <a href={ '/post/' + item.ID } class="more fn-hide">查看全部</a>
+            <a href={ '/post/' + id } class="more fn-hide">查看全部</a>
           </pre>
           {
             item.Image_Post && imgLen
               ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
                 {
                   item.Image_Post.length > 4
-                   ? item.Image_Post.slice(0, 3).map(function(item) {
-                       return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
-                    }).concat([<li class="all"><a href={ '/post/' + item.ID }>查看全部</a></li>])
-                   : item.Image_Post.map(function(item) {
-                       return <li style={ 'background-image:url(' + util.autoSsl(imgLen === 1 ? util.img980_980_80(item.FileUrl) : util.img480_480_80(item.FileUrl)) + ')' }/>;
-                     })
+                    ? item.Image_Post.slice(0, 4).map(function(item, i) {
+                      if(i === 3) {
+                        return <li class="all" style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }>
+                          <a href={ '/post/' + id }>查看全部</a>
+                        </li>;
+                      }
+                      return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
+                    })
+                    : item.Image_Post.map(function(item) {
+                      return <li style={ 'background-image:url(' + util.autoSsl(imgLen === 1 ? util.img980_980_80(item.FileUrl) : util.img480_480_80(item.FileUrl)) + ')' }/>;
+                    })
                 }
               </ul>
               : ''
           }
           <ul class="btn fn-clear">
-            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
-            <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }>{ item.LikeCount }</li>
+            <li class="comment" rel={ id }>{ item.CommentCount }</li>
             {
-              item.IsOwn ? <li class="del" rel={ item.ID }/> : ''
+              item.IsOwn ? <li class="del" rel={ id }/> : ''
             }
           </ul>
           <b class="arrow"/>
@@ -135,27 +148,39 @@ class HotPost extends migi.Component {
         <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
         <div class="txt">
           <span class="name">{ item.SendUserNickName }</span>
-          <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
+          <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>
         </div>
+        <ul class="circle">
+          {
+            (item.Taglist || []).map(function(item) {
+              return <li>{ item.TagName }圈</li>;
+            })
+          }
+        </ul>
       </div>
       <div class="wrap">
         {
           item.Title
-            ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
+            ? <a href={ '/post/' + id } class="t">{ item.Title }</a>
             : ''
         }
         <pre class="con">
           { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
-          <a href={ '/post/' + item.ID } class="more fn-hide">查看全部</a>
+          <a href={ '/post/' + id } class="more fn-hide">查看全部</a>
         </pre>
         {
           item.Image_Post && imgLen
             ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
               {
                 item.Image_Post.length > 4
-                  ? item.Image_Post.slice(0, 3).map(function(item) {
+                  ? item.Image_Post.slice(0, 4).map(function(item, i) {
+                    if(i === 3) {
+                      return <li class="all" style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }>
+                        <a href={ '/post/' + id }>查看全部</a>
+                      </li>;
+                    }
                     return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
-                  }).concat([<li class="all"><a href={ '/post/' + item.ID }>查看全部</a></li>])
+                  })
                   : item.Image_Post.map(function(item) {
                     return <li style={ 'background-image:url(' + util.autoSsl(imgLen === 1 ? util.img980_980_80(item.FileUrl) : util.img480_480_80(item.FileUrl)) + ')' }/>;
                   })
@@ -164,10 +189,10 @@ class HotPost extends migi.Component {
             : ''
         }
         <ul class="btn fn-clear">
-          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
-          <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }>{ item.LikeCount }</li>
+          <li class="comment" rel={ id }>{ item.CommentCount }</li>
           {
-            item.IsOwn ? <li class="del" rel={ item.ID }/> : ''
+            item.IsOwn ? <li class="del" rel={ id }/> : ''
           }
         </ul>
         <b class="arrow"/>

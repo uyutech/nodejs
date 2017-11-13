@@ -186,7 +186,8 @@
 .mod-sub > .list li:after {
   border-radius: 0.1rem;
 }
-.mod-sub > .list li.s0:before {
+.mod-sub > .list li.s0:before,
+.mod-sub > .list li.s1:before {
   position: absolute;
   left: 0;
   top: 0;
@@ -196,12 +197,12 @@
   background: rgba(255, 255, 255, 0.7);
   content: ' ';
 }
-.mod-sub > .list li.s1,
-.mod-sub > .list li.s2 {
+.mod-sub > .list li.s2,
+.mod-sub > .list li.s3 {
   cursor: pointer;
 }
-.mod-sub > .list li.s1:after,
-.mod-sub > .list li.s2:after {
+.mod-sub > .list li.s2:after,
+.mod-sub > .list li.s3:after {
   position: absolute;
   top: -0.06rem;
   right: -0.06rem;
@@ -213,7 +214,7 @@
   border-radius: 100%;
   content: ' ';
 }
-.mod-sub > .list li.s2:before {
+.mod-sub > .list li.s3:before {
   position: absolute;
   left: 0;
   top: 0;

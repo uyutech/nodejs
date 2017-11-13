@@ -396,6 +396,7 @@
 .cp-hotauthor .list li .txt:hover .fans,
 .cp-hotauthor .list li .txt:hover .comment {
   color: #0AE;
+  text-decoration: underline;
 }
 .cp-hotauthor .list li .info {
   font-size: 0.12rem;

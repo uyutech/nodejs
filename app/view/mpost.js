@@ -96,6 +96,12 @@ let util = {
     }
     return url ? url + '-1296_1296_80' : url;
   },
+  img1200__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1200__80' : url;
+  },
   img980_980_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -108,11 +114,23 @@ let util = {
     }
     return url ? url + '-750_750_80' : url;
   },
+  img720__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-720__80' : url;
+  },
   img600_600_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
     return url ? url + '-600_600_80' : url;
+  },
+  img600__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-600__80' : url;
   },
   img480_480_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -343,7 +361,7 @@ let net = {
         data: data,
         dataType: 'json',
         crossDomain: true,
-        timeout: 6000,
+        timeout: 30000,
         type: type || 'get',
         headers: {
           'x-csrf-token': csrfToken,
@@ -829,7 +847,7 @@ var Post = function (_migi$Component) {
     value: function render() {
       var postData = this.props.postData;
       return migi.createVd("div", [["class", "post"]], [migi.createVd("h2", [], [postData.Title]), migi.createVd("div", [["class", 'profile fn-clear' + (postData.IsAuthor ? ' author' : '')]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img128_128_80(postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [postData.SendUserNickName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(postData.Createtime)])])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("pre", [["class", "con"]], [postData.Content]), postData.Image_Post ? migi.createVd("div", [["class", "imgs"]], [postData.Image_Post.map(function (item) {
-        return migi.createVd("a", [["href", item.FileUrl], ["target", "_blank"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img600_600_80(item.FileUrl))]])]);
+        return migi.createVd("a", [["href", item.FileUrl], ["target", "_blank"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img720__80(item.FileUrl))]])]);
       })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", new migi.Obj("isLike", this, function () {
         return 'like' + (this.isLike ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickLike)]], [new migi.Obj("likeCount", this, function () {

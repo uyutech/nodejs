@@ -96,6 +96,12 @@ let util = {
     }
     return url ? url + '-1296_1296_80' : url;
   },
+  img1200__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1200__80' : url;
+  },
   img980_980_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -108,11 +114,23 @@ let util = {
     }
     return url ? url + '-750_750_80' : url;
   },
+  img720__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-720__80' : url;
+  },
   img600_600_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
     return url ? url + '-600_600_80' : url;
+  },
+  img600__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-600__80' : url;
   },
   img480_480_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -343,7 +361,7 @@ let net = {
         data: data,
         dataType: 'json',
         crossDomain: true,
-        timeout: 6000,
+        timeout: 30000,
         type: type || 'get',
         headers: {
           'x-csrf-token': csrfToken,
@@ -452,13 +470,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var STATE = {
   LOADING: 0,
-  LOADED: 1,
-  ERROR: 2
+  SENDING: 1,
+  LOADED: 2,
+  ERROR: 3
 };
 var TEXT = {
-  0: '上传中...',
-  1: '',
-  2: '加载失败'
+  0: '读取中...',
+  1: '上传中...',
+  2: '',
+  3: '加载失败'
 };
 var MAX_IMG_NUM = 10;
 var MAX_TEXT_LENGTH = 512;
@@ -606,12 +626,14 @@ var SubPost = function (_migi$Component) {
         var count = 0;
         var hasUpload = void 0;
         res.forEach(function (file, i) {
+          self.list.push({
+            state: STATE.LOADING,
+            url: ''
+          });
           var fileReader = new FileReader();
           fileReader.onload = function () {
-            self.list.push({
-              state: STATE.LOADING,
-              url: fileReader.result
-            });
+            self.list[i + self.imgNum].state = STATE.SENDING;
+            self.list[i + self.imgNum].url = fileReader.result;
             _net2.default.postJSON('/api/user/uploadPic', { img: fileReader.result }, function (res) {
               if (res.success) {
                 var url = res.data;

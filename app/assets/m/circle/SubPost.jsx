@@ -9,13 +9,15 @@ import util from '../../d/common/util';
 
 const STATE = {
   LOADING: 0,
-  LOADED: 1,
-  ERROR: 2,
+  SENDING: 1,
+  LOADED: 2,
+  ERROR: 3,
 };
 const TEXT = {
-  0: '上传中...',
-  1: '',
-  2: '加载失败',
+  0: '读取中...',
+  1: '上传中...',
+  2: '',
+  3: '加载失败',
 };
 const MAX_IMG_NUM = 10;
 const MAX_TEXT_LENGTH = 512;
@@ -157,12 +159,14 @@ class SubPost extends migi.Component {
       let count = 0;
       let hasUpload;
       res.forEach(function(file, i) {
+        self.list.push({
+          state: STATE.LOADING,
+          url: '',
+        });
         let fileReader = new FileReader();
         fileReader.onload = function() {
-          self.list.push({
-            state: STATE.LOADING,
-            url: fileReader.result,
-          });
+          self.list[i + self.imgNum].state = STATE.SENDING;
+          self.list[i + self.imgNum].url = fileReader.result;
           net.postJSON('/api/user/uploadPic', { img: fileReader.result }, function(res) {
             if(res.success) {
               let url = res.data;

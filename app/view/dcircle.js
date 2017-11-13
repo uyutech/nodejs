@@ -96,6 +96,12 @@ let util = {
     }
     return url ? url + '-1296_1296_80' : url;
   },
+  img1200__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1200__80' : url;
+  },
   img980_980_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -108,11 +114,23 @@ let util = {
     }
     return url ? url + '-750_750_80' : url;
   },
+  img720__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-720__80' : url;
+  },
   img600_600_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
     return url ? url + '-600_600_80' : url;
+  },
+  img600__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-600__80' : url;
   },
   img480_480_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -343,7 +361,7 @@ let net = {
         data: data,
         dataType: 'json',
         crossDomain: true,
-        timeout: 6000,
+        timeout: 30000,
         type: type || 'get',
         headers: {
           'x-csrf-token': csrfToken,
@@ -689,13 +707,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var STATE = {
   LOADING: 0,
-  LOADED: 1,
-  ERROR: 2
+  SENDING: 1,
+  LOADED: 2,
+  ERROR: 3
 };
 var TEXT = {
-  0: '上传中...',
-  1: '',
-  2: '加载失败'
+  0: '读取中...',
+  1: '上传中...',
+  2: '',
+  3: '加载失败'
 };
 var MAX_IMG_NUM = 10;
 var MAX_TEXT_LENGTH = 512;
@@ -869,12 +889,14 @@ var SubPost = function (_migi$Component) {
         var count = 0;
         var hasUpload = void 0;
         res.forEach(function (file, i) {
+          self.list.push({
+            state: STATE.LOADING,
+            url: ''
+          });
           var fileReader = new FileReader();
           fileReader.onload = function () {
-            self.list.push({
-              state: STATE.LOADING,
-              url: fileReader.result
-            });
+            self.list[i + self.imgNum].state = STATE.SENDING;
+            self.list[i + self.imgNum].url = fileReader.result;
             _net2.default.postJSON('/api/user/uploadPic', { img: fileReader.result }, function (res) {
               if (res.success) {
                 var url = res.data;
@@ -1261,20 +1283,31 @@ var HotPost = function (_migi$Component) {
     key: 'genItem',
     value: function genItem(item) {
       var len = item.Content.length;
+      var id = item.ID;
       var maxLen = 256;
       var imgLen = item.Image_Post.length;
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + item.ID]], [_util2.default.formatDate(item.Createtime)])])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + item.ID], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + item.ID], ["class", "more fn-hide"]], ["查看全部"])]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 3).map(function (item) {
+        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + id]], [_util2.default.formatDate(item.Createtime)])]), migi.createVd("ul", [["class", "circle"]], [(item.Taglist || []).map(function (item) {
+          return migi.createVd("li", [], [item.TagName, "圈"]);
+        })])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + id], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + id], ["class", "more fn-hide"]], ["查看全部"])]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 4).map(function (item, i) {
+          if (i === 3) {
+            return migi.createVd("li", [["class", "all"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']], [migi.createVd("a", [["href", '/post/' + id]], ["查看全部"])]);
+          }
           return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']]);
-        }).concat([migi.createVd("li", [["class", "all"]], [migi.createVd("a", [["href", '/post/' + item.ID]], ["查看全部"])])]) : item.Image_Post.map(function (item) {
+        }) : item.Image_Post.map(function (item) {
           return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(imgLen === 1 ? _util2.default.img980_980_80(item.FileUrl) : _util2.default.img480_480_80(item.FileUrl)) + ')']]);
-        })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", item.ID]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
+        })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", id]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", id]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", id]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + item.ID]], [_util2.default.formatDate(item.Createtime)])])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + item.ID], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + item.ID], ["class", "more fn-hide"]], ["查看全部"])]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 3).map(function (item) {
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + id]], [_util2.default.formatDate(item.Createtime)])]), migi.createVd("ul", [["class", "circle"]], [(item.Taglist || []).map(function (item) {
+        return migi.createVd("li", [], [item.TagName, "圈"]);
+      })])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + id], ["class", "t"]], [item.Title]) : '', migi.createVd("pre", [["class", "con"]], [len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content, migi.createVd("a", [["href", '/post/' + id], ["class", "more fn-hide"]], ["查看全部"])]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 4).map(function (item, i) {
+        if (i === 3) {
+          return migi.createVd("li", [["class", "all"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']], [migi.createVd("a", [["href", '/post/' + id]], ["查看全部"])]);
+        }
         return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']]);
-      }).concat([migi.createVd("li", [["class", "all"]], [migi.createVd("a", [["href", '/post/' + item.ID]], ["查看全部"])])]) : item.Image_Post.map(function (item) {
+      }) : item.Image_Post.map(function (item) {
         return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(imgLen === 1 ? _util2.default.img980_980_80(item.FileUrl) : _util2.default.img480_480_80(item.FileUrl)) + ')']]);
-      })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", item.ID]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", item.ID]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", item.ID]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
+      })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", id]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", id]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", id]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'setData',
