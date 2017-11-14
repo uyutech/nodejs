@@ -90,6 +90,7 @@ body {
   padding: 0 0.1rem;
 }
 .cp-hotpost .list li > .profile {
+  position: relative;
   padding-left: 0.12rem;
 }
 .cp-hotpost .list li > .profile .pic {
@@ -113,6 +114,19 @@ body {
   font-size: 0.12rem;
   color: #919191;
   vertical-align: middle;
+}
+.cp-hotpost .list li > .profile .circle {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.cp-hotpost .list li > .profile .circle li {
+  display: inline-block;
+  padding: 0 0.1rem;
+  line-height: 0.24rem;
+  background: #8BBDE1;
+  border-radius: 0.24rem;
+  color: #FFF;
 }
 .cp-hotpost .list li.author > .profile .txt .name {
   color: #EC0;

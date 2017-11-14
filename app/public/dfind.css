@@ -483,6 +483,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.cp-hotpost .list > li > .wrap .con a {
+  margin: 0 0.02rem;
+  color: #0AE;
+}
 .cp-hotpost .list > li > .wrap .con .more {
   margin-left: 0.05rem;
   font-size: 0.14rem;
