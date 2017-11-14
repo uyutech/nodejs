@@ -434,6 +434,11 @@ body {
   margin: 0 0.02rem;
   color: #0AE;
 }
+.cp-hotpost .list > li > .wrap .con strong {
+  margin: 0 0.02rem;
+  font-weight: 400;
+  color: #0AE;
+}
 .cp-hotpost .list > li > .wrap .con .more {
   margin-left: 0.05rem;
   font-size: 0.14rem;

@@ -19,6 +19,10 @@ class HotPost extends migi.Component {
       self.html = html;
       self.on(migi.Event.DOM, function() {
         let $list = $(this.ref.list.element);
+        $list.on('click', '.con a', function(e) {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+        });
         $list.on('click', '.like', function() {
           if(!$CONFIG.isLogin) {
             migi.eventBus.emit('NEED_LOGIN');
@@ -88,7 +92,7 @@ class HotPost extends migi.Component {
     let imgLen = item.Image_Post.length;
     let html = len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content;
     html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/#(\S.*?)#/g, `<a href="/post/${id}">$1</a>`)
+      .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
       .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
     if(item.IsAuthor) {
       return <li class="author">
@@ -113,7 +117,6 @@ class HotPost extends migi.Component {
               : ''
           }
           <p class="con" dangerouslySetInnerHTML={ html }/>
-          {/*<a href={ '/post/' + id } class="more fn-hide">查看全部</a>*/}
           {
             item.Image_Post && imgLen
               ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>

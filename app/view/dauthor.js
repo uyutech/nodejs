@@ -343,7 +343,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 let net = {
-  ajax: function(url, data, success, error, type) {
+  ajax: function(url, data, success, error, type, timeout) {
     let csrfToken = $.cookie('csrfToken');
     Object.keys(data).forEach(function(k) {
       if(data[k] === undefined || data[k] === null) {
@@ -362,7 +362,7 @@ let net = {
         data: data,
         dataType: 'json',
         crossDomain: true,
-        timeout: 30000,
+        timeout: timeout || 30000,
         type: type || 'get',
         headers: {
           'x-csrf-token': csrfToken,
@@ -384,24 +384,41 @@ let net = {
     }
     return load();
   },
-  getJSON: function(url, data, success, error) {
+  getJSON: function(url, data, success, error, timeout) {
     if(typeof data === 'function') {
+      timeout = error;
       error = success;
       success = data;
       data = {};
     }
-    error = error || function() {};
-    return net.ajax(url, data, success, error);
+    if(typeof success !== 'function') {
+      success = function() {};
+      timeout = error;
+      error = success;
+    }
+    if(typeof error !== 'function') {
+      timeout = error;
+      error = function() {};
+    }
+    return net.ajax(url, data, success, error, 'GET', timeout);
   },
-  postJSON: function(url, data, success, error) {
+  postJSON: function(url, data, success, error, timeout) {
     if(typeof data === 'function') {
+      timeout = error;
       error = success;
       success = data;
       data = {};
     }
-    success = success || function() {};
-    error = error || function() {};
-    return net.ajax(url, data, success, error, 'post');
+    if(typeof success !== 'function') {
+      success = function() {};
+      timeout = error;
+      error = success;
+    }
+    if(typeof error !== 'function') {
+      timeout = error;
+      error = function() {};
+    }
+    return net.ajax(url, data, success, error, 'POST', timeout);
   },
 };
 

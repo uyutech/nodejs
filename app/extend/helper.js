@@ -9,7 +9,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?50';
+    return '/public' + url + '?51';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -97,7 +97,7 @@ let helper = {
       if(session.authorID) {
         let isPublic = session.isPublic;
         return `<div class="top-nav" id="topNav">
-          <a href="/find" class="logo"></a>
+          <a href="/" class="logo"></a>
           <span class="public">[${ isPublic ? '切换到马甲' : '切换到作者身份' }]</span>
           <a href="/my" class="user">
             <span class="${'name' + (isPublic ? ' public' : '')}">${helper.encode(isPublic ? session.authorName : session.uname)}</span>
@@ -114,7 +114,7 @@ let helper = {
     </div>`;
     }
     return `<div class="top-nav" id="topNav">
-      <a href="/find" class="logo"></a>
+      <a href="/" class="logo"></a>
       <span class="user">
         <span class="name">登录/注册</span>
         <img src="//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png">

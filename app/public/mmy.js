@@ -347,7 +347,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var net = {
-  ajax: function ajax(url, data, _success, _error, type) {
+  ajax: function ajax(url, data, _success, _error, type, timeout) {
     var csrfToken = $.cookie('csrfToken');
     Object.keys(data).forEach(function (k) {
       if (data[k] === undefined || data[k] === null) {
@@ -365,7 +365,7 @@ var net = {
         data: data,
         dataType: 'json',
         crossDomain: true,
-        timeout: 30000,
+        timeout: timeout || 30000,
         type: type || 'get',
         headers: {
           'x-csrf-token': csrfToken
@@ -387,24 +387,41 @@ var net = {
     }
     return load();
   },
-  getJSON: function getJSON(url, data, success, error) {
+  getJSON: function getJSON(url, data, success, error, timeout) {
     if (typeof data === 'function') {
+      timeout = error;
       error = success;
       success = data;
       data = {};
     }
-    error = error || function () {};
-    return net.ajax(url, data, success, error);
+    if (typeof success !== 'function') {
+      success = function success() {};
+      timeout = error;
+      error = success;
+    }
+    if (typeof error !== 'function') {
+      timeout = error;
+      error = function error() {};
+    }
+    return net.ajax(url, data, success, error, 'GET', timeout);
   },
-  postJSON: function postJSON(url, data, success, error) {
+  postJSON: function postJSON(url, data, success, error, timeout) {
     if (typeof data === 'function') {
+      timeout = error;
       error = success;
       success = data;
       data = {};
     }
-    success = success || function () {};
-    error = error || function () {};
-    return net.ajax(url, data, success, error, 'post');
+    if (typeof success !== 'function') {
+      success = function success() {};
+      timeout = error;
+      error = success;
+    }
+    if (typeof error !== 'function') {
+      timeout = error;
+      error = function error() {};
+    }
+    return net.ajax(url, data, success, error, 'POST', timeout);
   }
 };
 
@@ -768,7 +785,7 @@ var Follow = function (_migi$Component) {
     value: function render() {
       return migi.createVd("div", [["class", "cp-hotauthor follow"]], [migi.createVd("h4", [], ["我的关注"]), migi.createVd("div", [["class", "list"], ["ref", "list"]], [migi.createVd("div", [["class", "c"]], [migi.createVd("ul", [], [new migi.Obj("list", this, function () {
         return (this.list || []).map(function (item) {
-          return migi.createVd("li", [], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img120_120_80(item.Head_url)) || '//zhuanquan.xin/head/0d90e4f2e6f7ef48992df6b49f54cf40.png']])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [item.AuthorName]), migi.createVd("div", [["class", "info"]], [item.FansNumber, "粉丝"])]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img120_120_80(item.Head_url)) || '//zhuanquan.xin/head/0d90e4f2e6f7ef48992df6b49f54cf40.png']])]), migi.createVd("a", [["href", "#"], ["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.AuthorName])]), migi.createVd("div", [["class", "info"]], [item.FansNumber, "粉丝"])]);
         });
       })])])])]);
     }

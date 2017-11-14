@@ -42,6 +42,10 @@ class PostList extends migi.Component {
       self.html = html;
       self.on(migi.Event.DOM, function() {
         let $list = $(this.ref.list.element);
+        $list.on('click', '.con a', function(e) {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+        });
         $list.on('click', '.like', function() {
           let $li = $(this);
           if($li.hasClass('loading')) {
@@ -104,7 +108,13 @@ class PostList extends migi.Component {
   @bind message
   genItem(item) {
     let len = item.Content.length;
+    let id = item.ID;
     let maxLen = 144;
+    let imgLen = item.Image_Post.length;
+    let html = len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content;
+    html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
+      .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
     if(item.IsAuthor) {
       return <li class="author">
         <div class="profile fn-clear">
@@ -127,10 +137,10 @@ class PostList extends migi.Component {
               ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
               : ''
           }
-          <pre class="con">
+          <p class="con" dangerouslySetInnerHTML={ html }>
             { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
             <a href={ '/post/' + item.ID } class={ 'more' + (len > maxLen ? '' : ' fn-hide') }>查看全部</a>
-          </pre>
+          </p>
           {
             item.Image_Post
               ? <ul class="imgs fn-clear">

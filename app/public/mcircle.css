@@ -178,11 +178,16 @@ body {
   white-space: pre-wrap;
   line-height: 1.8;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
-.cp-hotpost .list li > .wrap .con .placeholder {
-  display: inline-block;
-  width: 0.7rem;
-  height: 0.1rem;
+.cp-hotpost .list li > .wrap .con a {
+  margin: 0 0.02rem;
+  color: #0AE;
+}
+.cp-hotpost .list li > .wrap .con strong {
+  margin: 0 0.02rem;
+  font-weight: 400;
+  color: #0AE;
 }
 .cp-hotpost .list li > .wrap .con .more {
   display: inline-block;

@@ -343,7 +343,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 let net = {
-  ajax: function(url, data, success, error, type) {
+  ajax: function(url, data, success, error, type, timeout) {
     let csrfToken = $.cookie('csrfToken');
     Object.keys(data).forEach(function(k) {
       if(data[k] === undefined || data[k] === null) {
@@ -362,7 +362,7 @@ let net = {
         data: data,
         dataType: 'json',
         crossDomain: true,
-        timeout: 30000,
+        timeout: timeout || 30000,
         type: type || 'get',
         headers: {
           'x-csrf-token': csrfToken,
@@ -384,24 +384,41 @@ let net = {
     }
     return load();
   },
-  getJSON: function(url, data, success, error) {
+  getJSON: function(url, data, success, error, timeout) {
     if(typeof data === 'function') {
+      timeout = error;
       error = success;
       success = data;
       data = {};
     }
-    error = error || function() {};
-    return net.ajax(url, data, success, error);
+    if(typeof success !== 'function') {
+      success = function() {};
+      timeout = error;
+      error = success;
+    }
+    if(typeof error !== 'function') {
+      timeout = error;
+      error = function() {};
+    }
+    return net.ajax(url, data, success, error, 'GET', timeout);
   },
-  postJSON: function(url, data, success, error) {
+  postJSON: function(url, data, success, error, timeout) {
     if(typeof data === 'function') {
+      timeout = error;
       error = success;
       success = data;
       data = {};
     }
-    success = success || function() {};
-    error = error || function() {};
-    return net.ajax(url, data, success, error, 'post');
+    if(typeof success !== 'function') {
+      success = function() {};
+      timeout = error;
+      error = success;
+    }
+    if(typeof error !== 'function') {
+      timeout = error;
+      error = function() {};
+    }
+    return net.ajax(url, data, success, error, 'POST', timeout);
   },
 };
 
@@ -708,6 +725,10 @@ var HotPost = function (_migi$Component) {
       self.html = html;
       self.on(migi.Event.DOM, function () {
         var $list = $(this.ref.list.element);
+        $list.on('click', '.con a', function (e) {
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+        });
         $list.on('click', '.like', function () {
           if (!$CONFIG.isLogin) {
             migi.eventBus.emit('NEED_LOGIN');
@@ -776,13 +797,11 @@ var HotPost = function (_migi$Component) {
       var maxLen = 256;
       var imgLen = item.Image_Post.length;
       var html = len > maxLen ? item.Content.slice(0, maxLen) + '...' : item.Content;
-      html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/#(\S.*?)#/g, '<a href="/post/' + id + '">$1</a>').replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
+      html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/#(\S.*?)#/g, '<strong>#$1#</strong>').replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
       if (item.IsAuthor) {
         return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + id]], [_util2.default.formatDate(item.Createtime)])]), migi.createVd("ul", [["class", "circle"]], [(item.Taglist || []).map(function (item) {
           return migi.createVd("li", [], [item.TagName, "圈"]);
-        })])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + id], ["class", "t"]], [item.Title]) : '', migi.createVd("p", [["class", "con"], ["dangerouslySetInnerHTML", html]]),, /*<a href={ '/post/' + id } class="more fn-hide">查看全部</a>*/
-
-        item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 4).map(function (item, i) {
+        })])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + id], ["class", "t"]], [item.Title]) : '', migi.createVd("p", [["class", "con"], ["dangerouslySetInnerHTML", html]]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 4).map(function (item, i) {
           if (i === 3) {
             return migi.createVd("li", [["class", "all"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']], [migi.createVd("a", [["href", '/post/' + id]], ["查看全部"])]);
           }

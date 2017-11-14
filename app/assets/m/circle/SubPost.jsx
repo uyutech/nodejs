@@ -167,6 +167,7 @@ class SubPost extends migi.Component {
         fileReader.onload = function() {
           self.list[i + self.imgNum].state = STATE.SENDING;
           self.list[i + self.imgNum].url = fileReader.result;
+          self.list = self.list;
           net.postJSON('/api/user/uploadPic', { img: fileReader.result }, function(res) {
             if(res.success) {
               let url = res.data;
@@ -218,7 +219,7 @@ class SubPost extends migi.Component {
                 alert('有图片已经重复上传过啦，已自动忽略。');
               }
             }
-          });
+          }, 1000 * 60 * 10);
         };
         fileReader.readAsDataURL(file);
       });

@@ -12,7 +12,7 @@ export default function(data) {
   let userInfo = data.userInfo;
   let authorInfo = data.authorInfo;
 
-  let topNav = migi.preRender(<TopNav userInfo={ userInfo } authorInfo={ authorInfo }
+  let topNav = migi.preRender(<TopNav userInfo={ userInfo }
                                       isLogin={ isLogin } isAuthor={ isAuthor }/>);
 
   return `<!DOCTYPE html>

@@ -35,7 +35,10 @@ class Follow extends migi.Component {
                   <a href={ '/author/' + item.AuthorID } class="pic">
                     <img src={ util.autoSsl(util.img120_120_80(item.Head_url)) || '//zhuanquan.xin/head/0d90e4f2e6f7ef48992df6b49f54cf40.png' }/>
                   </a>
-                  <a href="#" class="txt">{ item.AuthorName }</a>
+                  <a href="#" class="txt">
+                    <span class="name">{ item.AuthorName }
+                    </span>
+                  </a>
                   <div class="info">{ item.FansNumber }粉丝</div>
                 </li>;
               })
