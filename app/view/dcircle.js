@@ -603,7 +603,7 @@ var Title = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = Title.__proto__ || Object.getPrototypeOf(Title)).call.apply(_ref, [this].concat(data)));
 
     _this.joined = !!_this.props.circleDetail.ISLike;
-    _this.count = _this.props.circleDetail.UserCount;
+    _this.count = _this.props.circleDetail.FansNumber;
     return _this;
   }
 

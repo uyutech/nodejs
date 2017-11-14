@@ -11,7 +11,7 @@ class Title extends migi.Component {
   constructor(...data) {
     super(...data);
     this.joined = !!this.props.circleDetail.ISLike;
-    this.count = this.props.circleDetail.UserCount;
+    this.count = this.props.circleDetail.FansNumber;
   }
   @bind joined
   @bind count
