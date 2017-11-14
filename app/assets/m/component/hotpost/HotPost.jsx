@@ -113,6 +113,13 @@ class PostList extends migi.Component {
             <a href={ '/author/' + item.AuthorID } class="name">{ item.SendUserNickName }</a>
             <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
           </div>
+          <ul class="circle">
+            {
+              (item.Taglist || []).map(function(item) {
+                return <li>{ item.TagName }圈</li>;
+              })
+            }
+          </ul>
         </div>
         <div class="wrap">
           {
@@ -153,6 +160,13 @@ class PostList extends migi.Component {
           <span class="name">{ item.SendUserNickName }</span>
           <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
         </div>
+        <ul class="circle">
+          {
+            (item.Taglist || []).map(function(item) {
+              return <li>{ item.TagName }圈</li>;
+            })
+          }
+        </ul>
       </div>
       <div class="wrap">
         {

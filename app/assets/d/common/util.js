@@ -201,6 +201,7 @@ let util = {
   decode: function(str) {
     return str.replace(/&lt;/g, '<').replace(/&amp;/g, '&');
   },
+  formatPost: function(str) {},
   formatTime: function(time) {
     if(!time) {
       return '00:00';

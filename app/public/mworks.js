@@ -277,6 +277,7 @@ var util = {
   decode: function decode(str) {
     return str.replace(/&lt;/g, '<').replace(/&amp;/g, '&');
   },
+  formatPost: function formatPost(str) {},
   formatTime: function formatTime(time) {
     if (!time) {
       return '00:00';
