@@ -74,10 +74,10 @@ class PostList extends migi.Component {
           });
         });
         $list.on('click', '.con,.imgs', function() {
-          location.href = $(this).closest('li').find('.more').attr('href');
+          location.href = $(this).closest('li').find('.time').attr('href');
         });
         $list.on('click', '.comment', function() {
-          location.href = $(this).closest('.wrap').find('.more').attr('href');
+          location.href = $(this).closest('.wrap').closest('li').find('.more').attr('href');
         });
         $list.on('click', '.del', function() {
           if(window.confirm('确认删除吗？')) {
@@ -121,7 +121,7 @@ class PostList extends migi.Component {
           <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
             <a href={ '/author/' + item.AuthorID } class="name">{ item.SendUserNickName }</a>
-            <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
+            <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>
           </div>
           <ul class="circle">
             {
@@ -134,13 +134,10 @@ class PostList extends migi.Component {
         <div class="wrap">
           {
             item.Title
-              ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
+              ? <a href={ '/post/' + id } class="t">{ item.Title }</a>
               : ''
           }
-          <p class="con" dangerouslySetInnerHTML={ html }>
-            { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
-            <a href={ '/post/' + item.ID } class={ 'more' + (len > maxLen ? '' : ' fn-hide') }>查看全部</a>
-          </p>
+          <p class="con" dangerouslySetInnerHTML={ html }/>
           {
             item.Image_Post
               ? <ul class="imgs fn-clear">
@@ -153,10 +150,10 @@ class PostList extends migi.Component {
               : ''
           }
           <ul class="btn fn-clear">
-            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
-            <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }>{ item.LikeCount }</li>
+            <li class="comment" rel={ id }>{ item.CommentCount }</li>
             {
-              item.IsOwn ? <li class="del" rel={ item.ID }/> : ''
+              item.IsOwn ? <li class="del" rel={ id }/> : ''
             }
           </ul>
           <b class="arrow"/>
@@ -168,7 +165,7 @@ class PostList extends migi.Component {
         <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
         <div class="txt">
           <span class="name">{ item.SendUserNickName }</span>
-          <a class="time" href={ '/post/' + item.ID }>{ util.formatDate(item.Createtime) }</a>
+          <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>
         </div>
         <ul class="circle">
           {
@@ -181,13 +178,10 @@ class PostList extends migi.Component {
       <div class="wrap">
         {
           item.Title
-            ? <a href={ '/post/' + item.ID } class="t">{ item.Title }</a>
+            ? <a href={ '/post/' + id } class="t">{ item.Title }</a>
             : ''
         }
-        <pre class="con">
-          { len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content }
-          <a href={ '/post/' + item.ID } class={ 'more' + (len > maxLen ? '' : ' fn-hide') }>查看全部</a>
-        </pre>
+        <p class="con" dangerouslySetInnerHTML={ html }/>
         {
           item.Image_Post
             ? <ul class="imgs fn-clear">
@@ -200,10 +194,10 @@ class PostList extends migi.Component {
             : ''
         }
         <ul class="btn fn-clear">
-          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ item.ID }>{ item.LikeCount }</li>
-          <li class="comment" rel={ item.ID }>{ item.CommentCount }</li>
+          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }>{ item.LikeCount }</li>
+          <li class="comment" rel={ id }>{ item.CommentCount }</li>
           {
-            item.IsOwn ? <li class="del" rel={ item.ID }/> : ''
+            item.IsOwn ? <li class="del" rel={ id }/> : ''
           }
         </ul>
         <b class="arrow"/>

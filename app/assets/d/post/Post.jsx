@@ -228,6 +228,9 @@ class Post extends migi.Component {
   }
   render() {
     let postData = this.props.postData;
+    let html = (postData.Content || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
+      .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
     return <div class="post fn-clear">
       <div class="main">
         <h2>{ postData.Title }</h2>
@@ -241,7 +244,7 @@ class Post extends migi.Component {
           </div>
         </div>
         <div class="wrap">
-          <div class="con">{ postData.Content }</div>
+          <p class="con" dangerouslySetInnerHTML={ html }/>
           {
             postData.Image_Post
               ?

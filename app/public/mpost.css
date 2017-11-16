@@ -445,6 +445,15 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.post > .wrap .con a {
+  margin: 0 0.02rem;
+  color: #0AE;
+}
+.post > .wrap .con strong {
+  margin: 0 0.02rem;
+  font-weight: 400;
+  color: #0AE;
+}
 .post > .wrap .arrow {
   position: absolute;
   left: 0.3rem;

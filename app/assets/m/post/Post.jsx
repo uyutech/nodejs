@@ -191,6 +191,9 @@ class Post extends migi.Component {
   }
   render() {
     let postData = this.props.postData;
+    let html = (postData.Content || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
+      .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
     return <div class="post">
       <h2>{ postData.Title }</h2>
       <div class={ 'profile fn-clear' + (postData.IsAuthor ? ' author' : '') }>
@@ -203,7 +206,7 @@ class Post extends migi.Component {
         </div>
       </div>
       <div class="wrap">
-        <pre class="con">{ postData.Content }</pre>
+        <p class="con" dangerouslySetInnerHTML={ html }/>
         {
           postData.Image_Post
             ?

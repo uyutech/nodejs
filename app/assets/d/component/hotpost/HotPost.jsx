@@ -169,10 +169,7 @@ class HotPost extends migi.Component {
             ? <a href={ '/post/' + id } class="t">{ item.Title }</a>
             : ''
         }
-        <pre class="con">
-          { html }
-          <a href={ '/post/' + id } class="more fn-hide">查看全部</a>
-        </pre>
+        <p class="con" dangerouslySetInnerHTML={ html }/>
         {
           item.Image_Post && imgLen
             ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
