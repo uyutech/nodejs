@@ -478,7 +478,7 @@ var _Banner = __webpack_require__(104);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(51);
+var _HotWork = __webpack_require__(52);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
@@ -486,11 +486,11 @@ var _HotPhotoAlbum = __webpack_require__(105);
 
 var _HotPhotoAlbum2 = _interopRequireDefault(_HotPhotoAlbum);
 
-var _HotAuthor = __webpack_require__(52);
+var _HotAuthor = __webpack_require__(53);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _HotMusicAlbum = __webpack_require__(53);
+var _HotMusicAlbum = __webpack_require__(54);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 
@@ -498,7 +498,7 @@ var _HotCircle = __webpack_require__(106);
 
 var _HotCircle2 = _interopRequireDefault(_HotCircle);
 
-var _HotPost = __webpack_require__(54);
+var _HotPost = __webpack_require__(55);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
@@ -543,7 +543,7 @@ var Find = function (_migi$Component) {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createCp(_HotCircle2.default, [["ref", "HotCircle"], ["title", "推荐圈子"], ["dataList", this.props.hotCircleList]]), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "热门作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotMusicAlbum"], ["title", "热门专辑"], ["dataList", this.props.hotMusicAlbumList]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "入驻作者"], ["dataList", this.props.hotAuthorList]]),, /*<HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList}/>*/
-      migi.createVd("div", [["class", "post"]], [migi.createVd("h4", [], ["转圈"]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["take", 20], ["url", '/api/find/hotPostList'], ["data", this.props.hotPostList]])])]);
+      migi.createVd("div", [["class", "post"]], [migi.createVd("h4", [], ["转圈"]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["skip", 10], ["url", '/api/find/hotPostList'], ["data", this.props.hotPostList]])])]);
     }
   }]);
 
@@ -851,7 +851,7 @@ migi.name(HotPost, "HotPost");exports.default = HotPost;
 
 /***/ }),
 
-/***/ 30:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -911,7 +911,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 51:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -927,7 +927,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(30);
+var _AuthorType = __webpack_require__(31);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -998,7 +998,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 52:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1079,7 +1079,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 53:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1163,7 +1163,7 @@ migi.name(HotMusicAlbum, "HotMusicAlbum");exports.default = HotMusicAlbum;
 
 /***/ }),
 
-/***/ 54:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1334,7 +1334,10 @@ var PostList = function (_migi$Component) {
       var self = this;
       self.loading = true;
       self.message = '正在加载...';
-      _net2.default.postJSON(self.props.url || '/api/circle/list', { circleID: $CONFIG.circleID, skip: skip, take: take }, function (res) {
+      var params = self.props.params || {};
+      params.skip = skip;
+      params.take = take;
+      _net2.default.postJSON(self.props.url || '/api/circle/list', params, function (res) {
         if (res.success) {
           var data = res.data;
           skip += take;

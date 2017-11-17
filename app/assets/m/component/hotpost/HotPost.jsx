@@ -218,7 +218,10 @@ class PostList extends migi.Component {
     let self = this;
     self.loading = true;
     self.message = '正在加载...';
-    net.postJSON(self.props.url || '/api/circle/list', { circleID: $CONFIG.circleID, skip, take }, function(res) {
+    let params = self.props.params || {};
+    params.skip = skip;
+    params.take = take;
+    net.postJSON(self.props.url || '/api/circle/list', params, function(res) {
       if(res.success) {
         let data = res.data;
         skip += take;

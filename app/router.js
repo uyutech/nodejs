@@ -52,6 +52,7 @@ module.exports = app => {
   app.post('/api/user/updateNickName', app.middlewares.needLoginJson(), 'api.user.updateNickName');
   app.post('/api/user/uploadHead', app.middlewares.needLoginJson(), 'api.user.uploadHead');
   app.post('/api/user/uploadPic', app.middlewares.needLoginJson(), 'api.user.uploadPic');
+  app.post('/api/user/myPost', app.middlewares.needLoginJson(), 'api.user.myPost');
   // app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
   // app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
 

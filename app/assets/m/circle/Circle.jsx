@@ -22,7 +22,7 @@ class Circle extends migi.Component {
   render() {
     return <div class="circle fn-clear">
       <Title circleDetail={ this.props.circleDetail }/>
-      <HotPost ref="hotPost" datas={ this.props.postList }/>
+      <HotPost ref="hotPost" data={ this.props.postList.data } params={ { circleID: this.props.circleDetail.TagID } }/>
       <SubCmt ref="subCmt"
               tipText="-${n}"
               subText="发送"

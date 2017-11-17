@@ -25,7 +25,6 @@ class Find extends migi.Component {
     self.on(migi.Event.DOM, function() {
       let page = self.ref.page;
       let page2 = self.ref.page2;
-      let hotPost = self.ref.hotPost;
       page.on('page', function(i) {
         page2.index = i;
         self.load(i);

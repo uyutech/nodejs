@@ -599,7 +599,8 @@ var SubCmt = function (_migi$Component) {
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -800,7 +801,6 @@ Object.keys(code2Data).forEach(function(k) {
 
 
 /***/ }),
-/* 4 */,
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1176,7 +1176,8 @@ migi.name(Comment, "Comment");exports.default = Comment;
 /***/ }),
 /* 7 */,
 /* 8 */,
-/* 9 */
+/* 9 */,
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1262,7 +1263,7 @@ var HotWork = function (_migi$Component) {
 migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1342,7 +1343,7 @@ var HotAuthor = function (_migi$Component) {
 migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1425,7 +1426,6 @@ var HotMusicAlbum = function (_migi$Component) {
 migi.name(HotMusicAlbum, "HotMusicAlbum");exports.default = HotMusicAlbum;
 
 /***/ }),
-/* 12 */,
 /* 13 */,
 /* 14 */,
 /* 15 */,
@@ -1721,7 +1721,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(3);
+var _authorTemplate = __webpack_require__(4);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -2032,15 +2032,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _HotWork = __webpack_require__(9);
+var _HotWork = __webpack_require__(10);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotMusicAlbum = __webpack_require__(11);
+var _HotMusicAlbum = __webpack_require__(12);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 
-var _HotAuthor = __webpack_require__(10);
+var _HotAuthor = __webpack_require__(11);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 

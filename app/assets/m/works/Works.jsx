@@ -249,7 +249,7 @@ class Works extends migi.Component {
   clickSel(e, vd, tvd) {
     let self = this;
     let $li = $(tvd.element);
-    if(!$li.hasClass('cur')) {
+    if(!$li.hasClass('cur') && !$li.hasClass('state')) {
       $(vd.element).find('.cur').removeClass('cur');
       $li.addClass('cur');
       let rel = tvd.props.rel;
@@ -312,11 +312,11 @@ class Works extends migi.Component {
           <li class="cur" rel="playList">曲目</li>
           <li rel="intro">简介</li>
           <li rel="comment">留言</li>
+          <li class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</li>
         </ul>
         <PlayList ref="playList"cover={ this.props.worksDetail.cover_Pic }
                   worksID={ this.worksID } workID={ this.workID } workList={ this.workList }/>
         <div class="intro fn-hide" ref="intro">
-          <span class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</span>
           <Describe data={ this.props.worksDetail.Describe }/>
           <Author authorList={ this.authorList }/>
           {
@@ -344,10 +344,10 @@ class Works extends migi.Component {
           <li class="cur" rel="photoAlbum">相册</li>
           <li rel="intro">简介</li>
           <li rel="comment">留言</li>
+          <li class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</li>
         </ul>
         <PhotoAlbum ref="photoAlbum" worksID={ this.worksID } labelList={ this.props.labelList }/>
         <div class="intro fn-hide" ref="intro">
-          <span class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</span>
           <Author authorList={ this.authorList }/>
           {
             this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
@@ -387,9 +387,9 @@ class Works extends migi.Component {
       <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
         <li class="cur" rel="intro">简介</li>
         <li rel="comment">留言</li>
+        <li class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</li>
       </ul>
       <div class="intro" ref="intro">
-        <span class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</span>
         <Author authorList={ this.authorList }/>
         {
           this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length

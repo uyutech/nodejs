@@ -8,10 +8,29 @@ import net from '../../d/common/net';
 import util from '../../d/common/util';
 import Profile from './Profile.jsx';
 import Follow from './Follow.jsx';
+import HotPost from '../../d/component/hotpost/HotPost.jsx';
+import Page from '../../d/component/page/Page.jsx';
+
+let loading;
+let take = 10;
+let skip = take;
 
 class My extends migi.Component {
   constructor(...data) {
     super(...data);
+    let self = this;
+    self.on(migi.Event.DOM, function() {
+      let page = self.ref.page;
+      let page2 = self.ref.page2;
+      page.on('page', function(i) {
+        page2.index = i;
+        self.load(i);
+      });
+      page2.on('page', function(i) {
+        page.index = i;
+        self.load(i);
+      });
+    });
   }
   clickOut(e) {
     e.preventDefault();
@@ -19,6 +38,26 @@ class My extends migi.Component {
       location.href = '/login';
     }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
+    });
+  }
+  load(i) {
+    let self = this;
+    if(loading) {
+      return;
+    }
+    loading = true;
+    skip = (i - 1) * take;
+    net.postJSON('/api/user/myPost', { skip, take }, function(res) {
+      if(res.success) {
+        self.ref.hotPost.setData(res.data.data);
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      loading = false;
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      loading = false;
     });
   }
   render() {
@@ -43,6 +82,10 @@ class My extends migi.Component {
         </div>
       </div>
       <Follow ref="follow" list={ this.props.follows }/>
+      <h4>我画的圈</h4>
+      <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>
+      <HotPost ref="hotPost" data={ this.props.myPost.data }/>
+      <Page ref="page2" total={ Math.ceil(this.props.myPost.Size / take) }/>
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>
     </div>;
   }

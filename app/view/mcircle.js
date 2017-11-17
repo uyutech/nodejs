@@ -427,7 +427,7 @@ let net = {
 
 /***/ }),
 
-/***/ 12:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -598,7 +598,10 @@ var PostList = function (_migi$Component) {
       var self = this;
       self.loading = true;
       self.message = '正在加载...';
-      _net2.default.postJSON(self.props.url || '/api/circle/list', { circleID: $CONFIG.circleID, skip: skip, take: take }, function (res) {
+      var params = self.props.params || {};
+      params.skip = skip;
+      params.take = take;
+      _net2.default.postJSON(self.props.url || '/api/circle/list', params, function (res) {
         if (res.success) {
           var data = res.data;
           skip += take;
@@ -893,7 +896,7 @@ var _SubCmt = __webpack_require__(2);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
-var _HotPost = __webpack_require__(12);
+var _HotPost = __webpack_require__(13);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
@@ -932,7 +935,7 @@ var Circle = function (_migi$Component) {
   _createClass(Circle, [{
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["datas", this.props.postList]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["tipText", "-${n}"], ["subText", "发送"], ["readOnly", true], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧']])]);
+      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["data", this.props.postList.data], ["params", { circleID: this.props.circleDetail.TagID }]]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["tipText", "-${n}"], ["subText", "发送"], ["readOnly", true], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧']])]);
     }
   }]);
 

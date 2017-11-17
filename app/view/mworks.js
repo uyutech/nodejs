@@ -599,7 +599,8 @@ var SubCmt = function (_migi$Component) {
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -800,7 +801,6 @@ Object.keys(code2Data).forEach(function(k) {
 
 
 /***/ }),
-/* 4 */,
 /* 5 */,
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1185,7 +1185,8 @@ exports.default = {
 /* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1252,7 +1253,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1268,7 +1269,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(3);
+var _authorTemplate = __webpack_require__(4);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -1365,7 +1366,7 @@ var Author = function (_migi$Component) {
 migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1420,7 +1421,7 @@ var Timeline = function (_migi$Component) {
 migi.name(Timeline, "Timeline");exports.default = Timeline;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1468,7 +1469,7 @@ var Text = function (_migi$Component) {
 migi.name(Text, "Text");exports.default = Text;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1516,7 +1517,7 @@ var Lyric = function (_migi$Component) {
 migi.name(Lyric, "Lyric");exports.default = Lyric;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1570,7 +1571,7 @@ var InspComment = function (_migi$Component) {
 migi.name(InspComment, "InspComment");exports.default = InspComment;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1618,7 +1619,7 @@ var Poster = function (_migi$Component) {
 migi.name(Poster, "Poster");exports.default = Poster;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1785,7 +1786,7 @@ var PlayList = function (_migi$Component) {
 migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1824,7 +1825,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1870,7 +1871,6 @@ var Describe = function (_migi$Component) {
 migi.name(Describe, "Describe");exports.default = Describe;
 
 /***/ }),
-/* 23 */,
 /* 24 */,
 /* 25 */,
 /* 26 */,
@@ -1940,7 +1940,7 @@ var _Media = __webpack_require__(34);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _itemTemplate = __webpack_require__(13);
+var _itemTemplate = __webpack_require__(14);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
@@ -1948,27 +1948,27 @@ var _PhotoAlbum = __webpack_require__(37);
 
 var _PhotoAlbum2 = _interopRequireDefault(_PhotoAlbum);
 
-var _Author = __webpack_require__(14);
+var _Author = __webpack_require__(15);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Timeline = __webpack_require__(15);
+var _Timeline = __webpack_require__(16);
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 
-var _Text = __webpack_require__(16);
+var _Text = __webpack_require__(17);
 
 var _Text2 = _interopRequireDefault(_Text);
 
-var _Lyric = __webpack_require__(17);
+var _Lyric = __webpack_require__(18);
 
 var _Lyric2 = _interopRequireDefault(_Lyric);
 
-var _InspComment = __webpack_require__(18);
+var _InspComment = __webpack_require__(19);
 
 var _InspComment2 = _interopRequireDefault(_InspComment);
 
-var _Poster = __webpack_require__(19);
+var _Poster = __webpack_require__(20);
 
 var _Poster2 = _interopRequireDefault(_Poster);
 
@@ -1992,7 +1992,7 @@ var _MusicAlbum = __webpack_require__(39);
 
 var _MusicAlbum2 = _interopRequireDefault(_MusicAlbum);
 
-var _PlayList = __webpack_require__(20);
+var _PlayList = __webpack_require__(21);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -2000,11 +2000,11 @@ var _ImageView = __webpack_require__(40);
 
 var _ImageView2 = _interopRequireDefault(_ImageView);
 
-var _worksState = __webpack_require__(21);
+var _worksState = __webpack_require__(22);
 
 var _worksState2 = _interopRequireDefault(_worksState);
 
-var _Describe = __webpack_require__(22);
+var _Describe = __webpack_require__(23);
 
 var _Describe2 = _interopRequireDefault(_Describe);
 
@@ -2243,7 +2243,7 @@ var Works = function (_migi$Component) {
     value: function clickSel(e, vd, tvd) {
       var self = this;
       var $li = $(tvd.element);
-      if (!$li.hasClass('cur')) {
+      if (!$li.hasClass('cur') && !$li.hasClass('state')) {
         $(vd.element).find('.cur').removeClass('cur');
         $li.addClass('cur');
         var rel = tvd.props.rel;
@@ -2297,13 +2297,13 @@ var Works = function (_migi$Component) {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
-        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "playList"]], ["曲目"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["cover", this.props.worksDetail.cover_Pic], ["worksID", new migi.Obj("worksID", this, function () {
+        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "playList"]], ["曲目"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"]), migi.createVd("li", [["class", "state"]], [new migi.Obj("worksType", this, function () {
+          return _worksState2.default.getStateStr(self.worksType, this.props.worksDetail.WorkState);
+        })])]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["cover", this.props.worksDetail.cover_Pic], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
-        })], ["workList", this.workList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createVd("span", [["class", "state"]], [new migi.Obj("worksType", this, function () {
-          return _worksState2.default.getStateStr(self.worksType, this.props.worksDetail.WorkState);
-        })]), migi.createCp(_Describe2.default, [["data", this.props.worksDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+        })], ["workList", this.workList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createCp(_Describe2.default, [["data", this.props.worksDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
@@ -2312,11 +2312,11 @@ var Works = function (_migi$Component) {
       if (self.worksType === _WorksTypeEnum2.default.TYPE.photoAlbum) {
         return migi.createVd("div", [["class", new migi.Obj("worksType", this, function () {
           return 'works t' + self.worksType;
-        })]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "photoAlbum"]], ["相册"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_PhotoAlbum2.default, [["ref", "photoAlbum"], ["worksID", new migi.Obj("worksID", this, function () {
-          return this.worksID;
-        })], ["labelList", this.props.labelList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createVd("span", [["class", "state"]], [new migi.Obj("worksType", this, function () {
+        })]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "photoAlbum"]], ["相册"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"]), migi.createVd("li", [["class", "state"]], [new migi.Obj("worksType", this, function () {
           return _worksState2.default.getStateStr(self.worksType, this.props.worksDetail.WorkState);
-        })]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData && this.textData.value && this.textData.value.length ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+        })])]), migi.createCp(_PhotoAlbum2.default, [["ref", "photoAlbum"], ["worksID", new migi.Obj("worksID", this, function () {
+          return this.worksID;
+        })], ["labelList", this.props.labelList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData && this.textData.value && this.textData.value.length ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
@@ -2328,9 +2328,9 @@ var Works = function (_migi$Component) {
         return this.worksID;
       })], ["workID", new migi.Obj("workID", this, function () {
         return this.workID;
-      })], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createVd("div", [["class", "intro"], ["ref", "intro"]], [migi.createVd("span", [["class", "state"]], [new migi.Obj("worksType", this, function () {
+      })], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"]), migi.createVd("li", [["class", "state"]], [new migi.Obj("worksType", this, function () {
         return _worksState2.default.getStateStr(self.worksType, this.props.worksDetail.WorkState);
-      })]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData && this.textData.value && this.textData.value.length ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData && this.lyricData.value && this.lyricData.value.length ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+      })])]), migi.createVd("div", [["class", "intro"], ["ref", "intro"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData && this.textData.value && this.textData.value.length ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData && this.lyricData.value && this.lyricData.value.length ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
         return this.worksID;
       })], ["workID", new migi.Obj("workID", this, function () {
         return this.workID;

@@ -11,6 +11,7 @@ module.exports = app => {
       let userInfo = {};
       let follows = [];
       let favors = [];
+      let myPost = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
       let res = yield {
@@ -22,6 +23,12 @@ module.exports = app => {
         }),
         favors: ctx.helper.postServiceJSON('api/users/GetLikeWorksList', {
           uid,
+        }),
+        myPost: ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+          uid,
+          Skip: 0,
+          Take: 10,
+          MyPost: 1,
         }),
         lastUpdateNickNameTime: ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
           uid,
@@ -39,6 +46,9 @@ module.exports = app => {
       if(res.favors.data.success) {
         favors = res.favors.data.data;
       }
+      if(res.myPost.data.success) {
+        myPost = res.myPost.data.data;
+      }
       if(res.lastUpdateNickNameTime.data.success) {
         lastUpdateNickNameTime = res.lastUpdateNickNameTime.data.data;
       }
@@ -49,6 +59,7 @@ module.exports = app => {
         userInfo,
         follows,
         favors,
+        myPost,
         lastUpdateNickNameTime,
         lastUpdateHeadTime,
       });

@@ -588,6 +588,7 @@
 }
 .cp-hotpost .empty,
 .cp-hotpost .message {
+  padding: 0.1rem 0;
   text-align: center;
   color: #919191;
 }

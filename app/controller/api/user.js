@@ -391,6 +391,17 @@ module.exports = app => {
         success: false,
       };
     }
+    * myPost(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+        MyPost: 1,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

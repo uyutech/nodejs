@@ -980,6 +980,9 @@ body {
   text-align: right;
   font-size: 0.12rem;
 }
+.side .mod.mod-comment .cp-page ol {
+  margin: 0;
+}
 .side .mod.mod-comment .cp-page .prev {
   position: relative;
   width: 0.2rem;

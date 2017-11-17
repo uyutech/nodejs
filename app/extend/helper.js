@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?55';
+    return '/public' + url + '?57';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {

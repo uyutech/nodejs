@@ -488,7 +488,7 @@ var _SubCmt = __webpack_require__(2);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
-var _Page = __webpack_require__(4);
+var _Page = __webpack_require__(3);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -1278,7 +1278,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

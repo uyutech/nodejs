@@ -7274,7 +7274,8 @@ exports.default = NonVisualComponent;
 /* 47 */,
 /* 48 */,
 /* 49 */,
-/* 50 */
+/* 50 */,
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7353,7 +7354,6 @@ var Share = function (_migi$Component) {
 migi.name(Share, "Share");exports.default = Share;
 
 /***/ }),
-/* 51 */,
 /* 52 */,
 /* 53 */,
 /* 54 */,
@@ -7367,7 +7367,8 @@ migi.name(Share, "Share");exports.default = Share;
 /* 62 */,
 /* 63 */,
 /* 64 */,
-/* 65 */
+/* 65 */,
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7397,7 +7398,6 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 66 */,
 /* 67 */,
 /* 68 */,
 /* 69 */,
@@ -17356,7 +17356,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	return jQuery;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66)(module)))
 
 /***/ }),
 /* 150 */
@@ -17477,7 +17477,7 @@ var _MLogin = __webpack_require__(153);
 
 var _MLogin2 = _interopRequireDefault(_MLogin);
 
-var _Share = __webpack_require__(50);
+var _Share = __webpack_require__(51);
 
 var _Share2 = _interopRequireDefault(_Share);
 

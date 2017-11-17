@@ -654,7 +654,7 @@ var _Media = __webpack_require__(110);
 
 var _Media2 = _interopRequireDefault(_Media);
 
-var _itemTemplate = __webpack_require__(55);
+var _itemTemplate = __webpack_require__(56);
 
 var _itemTemplate2 = _interopRequireDefault(_itemTemplate);
 
@@ -662,27 +662,27 @@ var _PhotoAlbum = __webpack_require__(113);
 
 var _PhotoAlbum2 = _interopRequireDefault(_PhotoAlbum);
 
-var _Author = __webpack_require__(56);
+var _Author = __webpack_require__(57);
 
 var _Author2 = _interopRequireDefault(_Author);
 
-var _Timeline = __webpack_require__(57);
+var _Timeline = __webpack_require__(58);
 
 var _Timeline2 = _interopRequireDefault(_Timeline);
 
-var _Text = __webpack_require__(58);
+var _Text = __webpack_require__(59);
 
 var _Text2 = _interopRequireDefault(_Text);
 
-var _Lyric = __webpack_require__(59);
+var _Lyric = __webpack_require__(60);
 
 var _Lyric2 = _interopRequireDefault(_Lyric);
 
-var _InspComment = __webpack_require__(60);
+var _InspComment = __webpack_require__(61);
 
 var _InspComment2 = _interopRequireDefault(_InspComment);
 
-var _Poster = __webpack_require__(61);
+var _Poster = __webpack_require__(62);
 
 var _Poster2 = _interopRequireDefault(_Poster);
 
@@ -706,7 +706,7 @@ var _MusicAlbum = __webpack_require__(115);
 
 var _MusicAlbum2 = _interopRequireDefault(_MusicAlbum);
 
-var _PlayList = __webpack_require__(62);
+var _PlayList = __webpack_require__(63);
 
 var _PlayList2 = _interopRequireDefault(_PlayList);
 
@@ -714,11 +714,11 @@ var _ImageView = __webpack_require__(116);
 
 var _ImageView2 = _interopRequireDefault(_ImageView);
 
-var _worksState = __webpack_require__(63);
+var _worksState = __webpack_require__(64);
 
 var _worksState2 = _interopRequireDefault(_worksState);
 
-var _Describe = __webpack_require__(64);
+var _Describe = __webpack_require__(65);
 
 var _Describe2 = _interopRequireDefault(_Describe);
 
@@ -957,7 +957,7 @@ var Works = function (_migi$Component) {
     value: function clickSel(e, vd, tvd) {
       var self = this;
       var $li = $(tvd.element);
-      if (!$li.hasClass('cur')) {
+      if (!$li.hasClass('cur') && !$li.hasClass('state')) {
         $(vd.element).find('.cur').removeClass('cur');
         $li.addClass('cur');
         var rel = tvd.props.rel;
@@ -1011,13 +1011,13 @@ var Works = function (_migi$Component) {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
-        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "playList"]], ["曲目"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["cover", this.props.worksDetail.cover_Pic], ["worksID", new migi.Obj("worksID", this, function () {
+        })], ["cover", this.props.worksDetail.cover_Pic], ["workList", this.workList]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "playList"]], ["曲目"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"]), migi.createVd("li", [["class", "state"]], [new migi.Obj("worksType", this, function () {
+          return _worksState2.default.getStateStr(self.worksType, this.props.worksDetail.WorkState);
+        })])]), migi.createCp(_PlayList2.default, [["ref", "playList"], ["cover", this.props.worksDetail.cover_Pic], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
-        })], ["workList", this.workList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createVd("span", [["class", "state"]], [new migi.Obj("worksType", this, function () {
-          return _worksState2.default.getStateStr(self.worksType, this.props.worksDetail.WorkState);
-        })]), migi.createCp(_Describe2.default, [["data", this.props.worksDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+        })], ["workList", this.workList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createCp(_Describe2.default, [["data", this.props.worksDetail.Describe]]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
@@ -1026,11 +1026,11 @@ var Works = function (_migi$Component) {
       if (self.worksType === _WorksTypeEnum2.default.TYPE.photoAlbum) {
         return migi.createVd("div", [["class", new migi.Obj("worksType", this, function () {
           return 'works t' + self.worksType;
-        })]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "photoAlbum"]], ["相册"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createCp(_PhotoAlbum2.default, [["ref", "photoAlbum"], ["worksID", new migi.Obj("worksID", this, function () {
-          return this.worksID;
-        })], ["labelList", this.props.labelList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createVd("span", [["class", "state"]], [new migi.Obj("worksType", this, function () {
+        })]], [migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "photoAlbum"]], ["相册"]), migi.createVd("li", [["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"]), migi.createVd("li", [["class", "state"]], [new migi.Obj("worksType", this, function () {
           return _worksState2.default.getStateStr(self.worksType, this.props.worksDetail.WorkState);
-        })]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData && this.textData.value && this.textData.value.length ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+        })])]), migi.createCp(_PhotoAlbum2.default, [["ref", "photoAlbum"], ["worksID", new migi.Obj("worksID", this, function () {
+          return this.worksID;
+        })], ["labelList", this.props.labelList]]), migi.createVd("div", [["class", "intro fn-hide"], ["ref", "intro"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData && this.textData.value && this.textData.value.length ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]])]), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
           return this.worksID;
         })], ["workID", new migi.Obj("workID", this, function () {
           return this.workID;
@@ -1042,9 +1042,9 @@ var Works = function (_migi$Component) {
         return this.worksID;
       })], ["workID", new migi.Obj("workID", this, function () {
         return this.workID;
-      })], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"])]), migi.createVd("div", [["class", "intro"], ["ref", "intro"]], [migi.createVd("span", [["class", "state"]], [new migi.Obj("worksType", this, function () {
+      })], ["cover", this.props.worksDetail.cover_Pic], ["audioData", this.audioData], ["videoData", this.videoData], ["first", first]]), migi.createVd("ul", [["class", "sel fn-clear"], ["ref", "sel"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.clickSel)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "intro"]], ["简介"]), migi.createVd("li", [["rel", "comment"]], ["留言"]), migi.createVd("li", [["class", "state"]], [new migi.Obj("worksType", this, function () {
         return _worksState2.default.getStateStr(self.worksType, this.props.worksDetail.WorkState);
-      })]), migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData && this.textData.value && this.textData.value.length ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData && this.lyricData.value && this.lyricData.value.length ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
+      })])]), migi.createVd("div", [["class", "intro"], ["ref", "intro"]], [migi.createCp(_Author2.default, [["authorList", this.authorList]]), this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length ? migi.createCp(_Timeline2.default, [["datas", this.props.worksDetail.WorkTimeLine]]) : '', this.textData && this.textData.value && this.textData.value.length ? migi.createCp(_Text2.default, [["datas", this.textData]]) : '', this.lyricData && this.lyricData.value && this.lyricData.value.length ? migi.createCp(_Lyric2.default, [["datas", this.lyricData]]) : '', migi.createCp(_InspComment2.default, [["ref", "inspComment"], ["commentData", this.props.worksDetail.WorksAuthorComment]]), this.posterData ? migi.createCp(_Poster2.default, [["datas", this.posterData]]) : '']), migi.createCp(_WorkComment2.default, [["ref", "workComment"], ["isLogin", this.props.isLogin], ["worksID", new migi.Obj("worksID", this, function () {
         return this.worksID;
       })], ["workID", new migi.Obj("workID", this, function () {
         return this.workID;
@@ -2504,7 +2504,7 @@ var _net = __webpack_require__(1);
 
 var _net2 = _interopRequireDefault(_net);
 
-var _Comment = __webpack_require__(31);
+var _Comment = __webpack_require__(32);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -3507,7 +3507,7 @@ migi.name(ImageView, "ImageView");exports.default = ImageView;
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3712,7 +3712,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 31:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4095,7 +4095,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 55:
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4151,7 +4151,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 56:
+/***/ 57:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4167,7 +4167,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(18);
+var _authorTemplate = __webpack_require__(19);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -4265,7 +4265,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 57:
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4321,7 +4321,7 @@ migi.name(Timeline, "Timeline");exports.default = Timeline;
 
 /***/ }),
 
-/***/ 58:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4370,7 +4370,7 @@ migi.name(Text, "Text");exports.default = Text;
 
 /***/ }),
 
-/***/ 59:
+/***/ 60:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4419,7 +4419,7 @@ migi.name(Lyric, "Lyric");exports.default = Lyric;
 
 /***/ }),
 
-/***/ 60:
+/***/ 61:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4474,7 +4474,7 @@ migi.name(InspComment, "InspComment");exports.default = InspComment;
 
 /***/ }),
 
-/***/ 61:
+/***/ 62:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4523,7 +4523,7 @@ migi.name(Poster, "Poster");exports.default = Poster;
 
 /***/ }),
 
-/***/ 62:
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4691,7 +4691,7 @@ migi.name(PlayList, "PlayList");exports.default = PlayList;
 
 /***/ }),
 
-/***/ 63:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4736,7 +4736,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 64:
+/***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

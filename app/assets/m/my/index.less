@@ -4,27 +4,28 @@
 
 @import '../../d/common/var';
 @import '../component/hotauthor/index';
+@import '../component/hotpost/index';
+@import '../../d/component/page/index';
 
 .my{
+  h4{
+    position:relative;
+    margin:0.1rem;
+    padding-left:0.05rem;
+    font-size:0.12rem;
+    &:before{
+      position:absolute;
+      left:0;
+      top:0.02rem;
+      bottom:0.02rem;
+      width:0.02rem;
+      background:@secondColor;
+      content:' ';
+      border-radius:0.05rem;
+    }
+  }
   > .profile{
     margin-top:0.1rem;
-    h4{
-      position:relative;
-      margin-bottom:0.1rem;
-      margin-left:0.1rem;
-      padding-left:0.05rem;
-      font-size:0.12rem;
-      &:before{
-        position:absolute;
-        left:0;
-        top:0.02rem;
-        bottom:0.02rem;
-        width:0.02rem;
-        background:@secondColor;
-        content:' ';
-        border-radius:0.05rem;
-      }
-    }
     .pic{
       position:relative;
       float:left;
@@ -157,6 +158,41 @@
   }
   .cp-hotauthor{
     margin-top:0.1rem;
+  }
+  .cp-page{
+    padding:0 0.1rem;
+    text-align:right;
+    ol{
+      margin:0;
+    }
+    .prev{
+      position:relative;
+      width:0.2rem;
+      height:0.2rem;
+      text-indent:999rem;
+      overflow:hidden;
+      white-space:nowrap;
+      b{
+        margin:0;
+        position:absolute;
+        left:0.07rem;
+        top:0.06rem;
+      }
+    }
+    .next{
+      position:relative;
+      width:0.2rem;
+      height:0.2rem;
+      text-indent:999rem;
+      overflow:hidden;
+      white-space:nowrap;
+      b{
+        margin:0;
+        position:absolute;
+        left:0.07rem;
+        top:0.06rem;
+      }
+    }
   }
   > .loginout{
     display:block;
