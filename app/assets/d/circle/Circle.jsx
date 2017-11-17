@@ -63,7 +63,7 @@ class Circle extends migi.Component {
       <Title circleDetail={ this.props.circleDetail }/>
       <div class="main">
         <Page ref="page" total={ Math.ceil(this.props.postList.Size / take) }/>
-        <HotPost ref="hotPost" datas={ this.props.postList }/>
+        <HotPost ref="hotPost" data={ this.props.postList.data }/>
         <Page ref="page2" total={ Math.ceil(this.props.postList.Size / take) }/>
       </div>
       <SubPost ref="subPost" placeholder={ '在' + this.props.circleDetail.TagName +'圈画个圈吧' }

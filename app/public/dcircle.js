@@ -736,7 +736,7 @@ var Circle = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.postList.Size / take)]]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["datas", this.props.postList]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.postList.Size / take)]])]), migi.createCp(_SubPost2.default, [["ref", "subPost"], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧'], ["circleID", this.props.circleDetail.TagID], ["originTo", this.props.circleDetail.TagName + '圈']])]);
+      return migi.createVd("div", [["class", "circle fn-clear"]], [migi.createCp(_Title2.default, [["circleDetail", this.props.circleDetail]]), migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.postList.Size / take)]]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["data", this.props.postList.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.postList.Size / take)]])]), migi.createCp(_SubPost2.default, [["ref", "subPost"], ["placeholder", '在' + this.props.circleDetail.TagName + '圈画个圈吧'], ["circleID", this.props.circleDetail.TagID], ["originTo", this.props.circleDetail.TagName + '圈']])]);
     }
   }]);
 
