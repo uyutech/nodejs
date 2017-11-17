@@ -4,6 +4,8 @@
 
 'use strict';
 
+const R8232 = new RegExp(String.fromCharCode(8232), 'g');
+
 let helper = {
   getAssetUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -149,7 +151,7 @@ let helper = {
     if(!str) {
       return '';
     }
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(R8232, '&#8232;');
   },
   weiboAppKey: '2345825162',
   weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
