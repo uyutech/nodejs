@@ -240,6 +240,7 @@ body {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAKlBMVEUAAABSkrZPj7BOj7FPj7BQj7JPj7BPjrBPjrFOkLFPkbBPj7BPj7BOjrA5djQxAAAADXRSTlMAHOO220nzpYpVUca/ySeNJwAAAIpJREFUOMtjoCeQvgsGGzEkzkIk7iCLBd1FA6pQCV10iUs4JXAbRT4IwmWQLqrVCIBqN3EShsIwjCYhwAjDaBIIPCox8BK5yBLXkCR8kSWuIEnUIkftdSSJuciJ4SaSBAty6nFAkuBClliAnHh7EeI3UFI1B0KiATW9L4GJe6HnhOluIOGUSgY6AgAJ9EN29KBZkwAAAABJRU5ErkJggg==) no-repeat 0 center;
   background-size: contain;
 }
+.cp-hotpost .empty,
 .cp-hotpost .message {
   text-align: center;
   color: #919191;

@@ -68,7 +68,7 @@ module.exports = app => {
         hotCircleList = res.hotCircleList.data.data.data;
       }
       if(res.hotPostList.data.success) {
-        hotPostList = res.hotPostList.data.data.data;
+        hotPostList = res.hotPostList.data.data;
       }
       if(res.hotPlayList.data.success) {
         hotPlayList = res.hotPlayList.data.data;

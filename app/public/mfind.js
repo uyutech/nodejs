@@ -543,7 +543,7 @@ var Find = function (_migi$Component) {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createCp(_HotCircle2.default, [["ref", "HotCircle"], ["title", "推荐圈子"], ["dataList", this.props.hotCircleList]]), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "热门作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotMusicAlbum"], ["title", "热门专辑"], ["dataList", this.props.hotMusicAlbumList]]), migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "入驻作者"], ["dataList", this.props.hotAuthorList]]),, /*<HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList}/>*/
-      migi.createVd("div", [["class", "post"]], [migi.createVd("h4", [], ["转圈"]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["take", 20], ["url", '/api/find/hotPostList'], ["datas", { Size: this.props.hotPostList.length, data: this.props.hotPostList }]])])]);
+      migi.createVd("div", [["class", "post"]], [migi.createVd("h4", [], ["转圈"]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["take", 20], ["url", '/api/find/hotPostList'], ["data", this.props.hotPostList]])])]);
     }
   }]);
 
@@ -1219,16 +1219,16 @@ var PostList = function (_migi$Component) {
     } else if (self.props.skip) {
       skip = self.props.skip;
     }
-    if (self.props.datas && self.props.datas.data) {
+    if (self.props.data) {
       if (self.props.take) {
         if (self.props.skip) {
           skip = self.props.skip;
         } else {
-          skip = self.props.datas.data.length;
+          skip = self.props.data.length;
         }
       }
       var html = '';
-      self.props.datas.data.forEach(function (item) {
+      self.props.data.forEach(function (item) {
         html += self.genItem(item);
       });
       self.html = html;
@@ -1267,7 +1267,7 @@ var PostList = function (_migi$Component) {
           location.href = $(this).closest('li').find('.time').attr('href');
         });
         $list.on('click', '.comment', function () {
-          location.href = $(this).closest('.wrap').closest('li').find('.more').attr('href');
+          location.href = $(this).closest('.wrap').closest('li').find('.time').attr('href');
         });
         $list.on('click', '.del', function () {
           if (window.confirm('确认删除吗？')) {
@@ -1365,7 +1365,7 @@ var PostList = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-hotpost"]], [this.props.datas.Size ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"]), migi.createVd("div", [["class", "message"]], [new migi.Obj("message", this, function () {
+      return migi.createVd("div", [["class", "cp-hotpost"]], [this.props.data && this.props.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"]), migi.createVd("div", [["class", "message"]], [new migi.Obj("message", this, function () {
         return this.message;
       })])]);
     }

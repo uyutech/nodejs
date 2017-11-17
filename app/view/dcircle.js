@@ -1231,9 +1231,9 @@ var HotPost = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = HotPost.__proto__ || Object.getPrototypeOf(HotPost)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    if (self.props.datas && self.props.datas.data && self.props.datas.data.length) {
+    if (self.props.data && self.props.data.length) {
       var html = '';
-      self.props.datas.data.forEach(function (item) {
+      self.props.data.forEach(function (item) {
         html += self.genItem(item);
       });
       self.html = html;
@@ -1332,7 +1332,7 @@ var HotPost = function (_migi$Component) {
         }
         return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']]);
       }) : item.Image_Post.map(function (item) {
-        return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(imgLen === 1 ? _util2.default.img980_980_80(item.FileUrl) : _util2.default.img480_480_80(item.FileUrl)) + ')']]);
+        return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']]);
       })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", id]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", id]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", id]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
@@ -1355,7 +1355,7 @@ var HotPost = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-hotpost"]], [this.props.datas.data && this.props.datas.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"])]);
+      return migi.createVd("div", [["class", "cp-hotpost"]], [this.props.data && this.props.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"])]);
     }
   }]);
 

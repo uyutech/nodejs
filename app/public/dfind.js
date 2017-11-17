@@ -520,6 +520,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import HotPhotoAlbum from '../component/hotphotoalbum/HotPhotoAlbum.jsx';
 
 
+var loading = void 0;
+var take = 10;
+var skip = take;
+
 var Find = function (_migi$Component) {
   _inherits(Find, _migi$Component);
 
@@ -532,17 +536,51 @@ var Find = function (_migi$Component) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = Find.__proto__ || Object.getPrototypeOf(Find)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = Find.__proto__ || Object.getPrototypeOf(Find)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.on(migi.Event.DOM, function () {
+      var page = self.ref.page;
+      var page2 = self.ref.page2;
+      var hotPost = self.ref.hotPost;
+      page.on('page', function (i) {
+        page2.index = i;
+        self.load(i);
+      });
+      page2.on('page', function (i) {
+        page.index = i;
+        self.load(i);
+      });
+    });
+    return _this;
   }
 
   _createClass(Find, [{
+    key: 'load',
+    value: function load(i) {
+      var self = this;
+      if (loading) {
+        return;
+      }
+      loading = true;
+      skip = (i - 1) * take;
+      _net2.default.postJSON('/api/find/hotPostList', { skip: skip, take: take }, function (res) {
+        if (res.success) {
+          self.ref.hotPost.setData(res.data.data);
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+        loading = false;
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+        loading = false;
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createVd("div", [["class", "hot"]], [migi.createCp(_HotCircle2.default, [["ref", "hotCircle"], ["title", "推荐圈子"], ["dataList", this.props.hotCircleList]]), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "热门作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotMusicAlbum"], ["title", "热门专辑"], ["dataList", this.props.hotMusicAlbumList]]),, /*<HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList }/>*/
-      migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "入驻作者"], ["dataList", this.props.hotAuthorList]])]), migi.createVd("div", [["class", "hot2 fn-clear"]], [migi.createVd("div", [["class", "post"]], [,
-      /*<Page ref="page" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>*/
-      migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["datas", { Size: this.props.hotPostList.length, data: this.props.hotPostList }]])] /*<Page ref="page2" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>*/
-      ), migi.createCp(_HotPlayList2.default, [["ref", "hostPlayList"], ["dataList", this.props.hotPlayList.data]])])]);
+      migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "入驻作者"], ["dataList", this.props.hotAuthorList]])]), migi.createVd("div", [["class", "hot2 fn-clear"]], [migi.createVd("div", [["class", "post"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.hotPostList.Size / 10)]]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["data", this.props.hotPostList.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.hotPostList.Size / 10)]])]), migi.createCp(_HotPlayList2.default, [["ref", "hostPlayList"], ["dataList", this.props.hotPlayList.data]])])]);
     }
   }]);
 
@@ -1337,9 +1375,9 @@ var HotPost = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = HotPost.__proto__ || Object.getPrototypeOf(HotPost)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    if (self.props.datas && self.props.datas.data && self.props.datas.data.length) {
+    if (self.props.data && self.props.data.length) {
       var html = '';
-      self.props.datas.data.forEach(function (item) {
+      self.props.data.forEach(function (item) {
         html += self.genItem(item);
       });
       self.html = html;
@@ -1438,7 +1476,7 @@ var HotPost = function (_migi$Component) {
         }
         return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']]);
       }) : item.Image_Post.map(function (item) {
-        return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(imgLen === 1 ? _util2.default.img980_980_80(item.FileUrl) : _util2.default.img480_480_80(item.FileUrl)) + ')']]);
+        return migi.createVd("li", [["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img480_480_80(item.FileUrl)) + ')']]);
       })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", id]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", id]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", id]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
@@ -1461,7 +1499,7 @@ var HotPost = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-hotpost"]], [this.props.datas.data && this.props.datas.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"])]);
+      return migi.createVd("div", [["class", "cp-hotpost"]], [this.props.data && this.props.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"])]);
     }
   }]);
 

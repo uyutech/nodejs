@@ -36,7 +36,7 @@ class Find extends migi.Component {
       <div class="post">
         <h4>转圈</h4>
         <HotPost ref="hotPost" take={ 20 } url={ '/api/find/hotPostList' }
-                 datas={ { Size: this.props.hotPostList.length, data: this.props.hotPostList} }/>
+                 data={ this.props.hotPostList }/>
       </div>
     </div>;
   }

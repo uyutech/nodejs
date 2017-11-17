@@ -11,9 +11,9 @@ class HotPost extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.datas && self.props.datas.data && self.props.datas.data.length) {
+    if(self.props.data && self.props.data.length) {
       let html = '';
-      self.props.datas.data.forEach(function(item) {
+      self.props.data.forEach(function(item) {
         html += self.genItem(item);
       });
       self.html = html;
@@ -184,7 +184,7 @@ class HotPost extends migi.Component {
                     return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
                   })
                   : item.Image_Post.map(function(item) {
-                    return <li style={ 'background-image:url(' + util.autoSsl(imgLen === 1 ? util.img980_980_80(item.FileUrl) : util.img480_480_80(item.FileUrl)) + ')' }/>;
+                    return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
                   })
               }
             </ul>
@@ -217,7 +217,7 @@ class HotPost extends migi.Component {
   render() {
     return <div class="cp-hotpost">
       {
-        this.props.datas.data && this.props.datas.data.length
+        this.props.data && this.props.data.length
           ? <ol class="list" ref="list" dangerouslySetInnerHTML={ this.html }/>
           : <div class="empty">暂无内容</div>
       }

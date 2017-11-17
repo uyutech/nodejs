@@ -14,9 +14,47 @@ import HotPost from '../component/hotpost/HotPost.jsx';
 import HotPlayList from '../component/hotplaylist/HotPlayList.jsx';
 import Page from '../component/page/Page.jsx';
 
+let loading;
+let take = 10;
+let skip = take;
+
 class Find extends migi.Component {
   constructor(...data) {
     super(...data);
+    let self = this;
+    self.on(migi.Event.DOM, function() {
+      let page = self.ref.page;
+      let page2 = self.ref.page2;
+      let hotPost = self.ref.hotPost;
+      page.on('page', function(i) {
+        page2.index = i;
+        self.load(i);
+      });
+      page2.on('page', function(i) {
+        page.index = i;
+        self.load(i);
+      });
+    });
+  }
+  load(i) {
+    let self = this;
+    if(loading) {
+      return;
+    }
+    loading = true;
+    skip = (i - 1) * take;
+    net.postJSON('/api/find/hotPostList', { skip, take }, function(res) {
+      if(res.success) {
+        self.ref.hotPost.setData(res.data.data);
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      loading = false;
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      loading = false;
+    });
   }
   render() {
     return <div class="find">
@@ -30,9 +68,9 @@ class Find extends migi.Component {
       </div>
       <div class="hot2 fn-clear">
         <div class="post">
-          {/*<Page ref="page" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>*/}
-          <HotPost ref="hotPost" datas={ { Size: this.props.hotPostList.length, data: this.props.hotPostList } }/>
-          {/*<Page ref="page2" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>*/}
+          <Page ref="page" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>
+          <HotPost ref="hotPost" data={ this.props.hotPostList.data }/>
+          <Page ref="page2" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>
         </div>
         <HotPlayList ref="hostPlayList" dataList={ this.props.hotPlayList.data }/>
       </div>

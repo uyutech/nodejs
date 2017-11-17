@@ -26,17 +26,17 @@ class PostList extends migi.Component {
     else if(self.props.skip) {
       skip = self.props.skip;
     }
-    if(self.props.datas && self.props.datas.data) {
+    if(self.props.data) {
       if(self.props.take) {
         if(self.props.skip) {
           skip = self.props.skip;
         }
         else {
-          skip = self.props.datas.data.length;
+          skip = self.props.data.length;
         }
       }
       let html = '';
-      self.props.datas.data.forEach(function(item) {
+      self.props.data.forEach(function(item) {
         html += self.genItem(item);
       });
       self.html = html;
@@ -77,7 +77,7 @@ class PostList extends migi.Component {
           location.href = $(this).closest('li').find('.time').attr('href');
         });
         $list.on('click', '.comment', function() {
-          location.href = $(this).closest('.wrap').closest('li').find('.more').attr('href');
+          location.href = $(this).closest('.wrap').closest('li').find('.time').attr('href');
         });
         $list.on('click', '.del', function() {
           if(window.confirm('确认删除吗？')) {
@@ -248,7 +248,7 @@ class PostList extends migi.Component {
   render() {
     return <div class="cp-hotpost">
       {
-        this.props.datas.Size
+        this.props.data && this.props.data.length
           ? <ol class="list" ref="list" dangerouslySetInnerHTML={ this.html }/>
           : <div class="empty">暂无内容</div>
       }
