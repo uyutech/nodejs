@@ -324,6 +324,12 @@ class Works extends migi.Component {
               ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
               : ''
           }
+          {
+            this.props.worksDetail.WorksAuthorComment
+              ? <InspComment ref="inspComment"
+                             commentData={ this.props.worksDetail.WorksAuthorComment }/>
+              : ''
+          }
         </div>
         <WorkComment ref="workComment"
                      isLogin={ this.props.isLogin }
@@ -410,8 +416,12 @@ class Works extends migi.Component {
             ? <Lyric datas={ this.lyricData }/>
             : ''
         }
-        <InspComment ref="inspComment"
-                     commentData={ this.props.worksDetail.WorksAuthorComment }/>
+        {
+          this.props.worksDetail.WorksAuthorComment
+            ? <InspComment ref="inspComment"
+                           commentData={ this.props.worksDetail.WorksAuthorComment }/>
+            : ''
+        }
         {
           this.posterData
             ? <Poster datas={ this.posterData }/>
