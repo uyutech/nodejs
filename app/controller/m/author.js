@@ -27,9 +27,9 @@ module.exports = app => {
         homeDetail: ctx.helper.postServiceJSON('api/author/GetAuthorHomePage', {
           AuthorID: authorID,
         }),
-        tags: ctx.helper.postServiceJSON('api/author/GetAuthorWorks', {
-          AuthorID: authorID,
-        }),
+        // tags: ctx.helper.postServiceJSON('api/author/GetAuthorWorks', {
+        //   AuthorID: authorID,
+        // }),
         // playList: ctx.helper.postServiceJSON('api/author/SearchWorks', {
         //   AuthorID: authorID,
         //   Parameter: '',
@@ -53,15 +53,15 @@ module.exports = app => {
           MyComment: 0,
           CurrentCount: 0,
         }),
-        hotCommentData: ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
-          uid,
-          AuthorID: authorID,
-          Skip: 0,
-          Take: 2,
-          SortType: 1,
-          MyComment: 0,
-          CurrentCount: 0,
-        }),
+        // hotCommentData: ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
+        //   uid,
+        //   AuthorID: authorID,
+        //   Skip: 0,
+        //   Take: 2,
+        //   SortType: 1,
+        //   MyComment: 0,
+        //   CurrentCount: 0,
+        // }),
       };
       if(res.authorDetail.data.success) {
         authorDetail = res.authorDetail.data.data;
@@ -69,9 +69,9 @@ module.exports = app => {
       if(res.authorDetail.data.success) {
         homeDetail = res.homeDetail.data.data;
       }
-      if(res.tags.data.success) {
-        tags = res.tags.data.data;
-      }
+      // if(res.tags.data.success) {
+      //   tags = res.tags.data.data;
+      // }
       // if(res.playList.data.success) {
       //   playList = res.playList.data.data;
       // }
@@ -81,9 +81,9 @@ module.exports = app => {
       if(res.commentData.data.success) {
         commentData = res.commentData.data.data;
       }
-      if(res.hotCommentData.data.success) {
-        hotCommentData = res.hotCommentData.data.data;
-      }
+      // if(res.hotCommentData.data.success) {
+      //   hotCommentData = res.hotCommentData.data.data;
+      // }
       yield ctx.render('mauthor', {
         authorID,
         authorDetail,

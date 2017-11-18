@@ -6,7 +6,7 @@
 
 import net from '../common/net';
 import util from '../common/util';
-import Reply from './Reply.jsx';
+import Comment from '../component/comment/Comment.jsx';
 import SubCmt from '../component/subcmt/SubCmt.jsx';
 import Page from '../component/page/Page.jsx';
 
@@ -25,7 +25,7 @@ class Post extends migi.Component {
     self.likeCount = self.props.postData.LikeCount;
     self.on(migi.Event.DOM, function() {
       let subCmt = self.ref.subCmt;
-      let reply = self.ref.reply;
+      let comment = self.ref.comment;
       let page = self.ref.page;
       let page2 = self.ref.page2;
       page.on('page', function(i) {
@@ -38,12 +38,12 @@ class Post extends migi.Component {
         skip = (i - 1) * take;
         self.loadPage();
       });
-      reply.on('chooseSubComment', function(rid, cid, name) {
+      comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
         subCmt.to = name;
       });
-      reply.on('closeSubComment', function() {
+      comment.on('closeSubComment', function() {
         self.rootID = -1;
         self.parentID = -1;
         subCmt.to = null;
@@ -62,11 +62,11 @@ class Post extends migi.Component {
             subCmt.value = '';
             subCmt.hasCommentContent = false;
             if(rootID === -1) {
-              reply.prependData(res.data);
-              reply.message = '';
+              comment.prependData(res.data);
+              comment.message = '';
             }
             else {
-              reply.prependChild(res.data);
+              comment.prependChild(res.data);
             }
           }
           else if(res.code === 1000) {
@@ -109,10 +109,10 @@ class Post extends migi.Component {
   @bind isLike
   load() {
     let self = this;
-    let reply = self.ref.reply;
+    let comment = self.ref.comment;
     let page = self.ref.page;
     let page2 = self.ref.page2;
-    reply.message = '读取中...';
+    comment.message = '读取中...';
     if(ajax) {
       ajax.abort();
     }
@@ -123,32 +123,32 @@ class Post extends migi.Component {
         currentCount = data.Size;
         skip += take;
         if(data.data.length) {
-          reply.message = '';
-          reply.appendData(res.data.data);
+          comment.message = '';
+          comment.appendData(res.data.data);
           page.total = page2.total = Math.ceil(currentCount / take);
         }
         else {
-          reply.appendData(res.data.data);
-          reply.message = '暂无评论';
+          comment.appendData(res.data.data);
+          comment.message = '暂无评论';
         }
       }
       else {
         if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
         }
-        reply.message = res.message || util.ERROR_MESSAGE;
+        comment.message = res.message || util.ERROR_MESSAGE;
       }
       self.loading = false;
     }, function(res) {
-      reply.message = res.message || util.ERROR_MESSAGE;
+      comment.message = res.message || util.ERROR_MESSAGE;
       self.loading = false;
     });
   }
   loadPage() {
     let self = this;
-    let reply = self.ref.reply;
-    reply.message = '读取中...';
-    reply.setData();
+    let comment = self.ref.comment;
+    comment.message = '读取中...';
+    comment.setData();
     if(ajax) {
       ajax.abort();
     }
@@ -158,23 +158,23 @@ class Post extends migi.Component {
         let data = res.data;
         skip += take;
         if(data.data.length) {
-          reply.message = '';
-          reply.appendData(res.data.data);
+          comment.message = '';
+          comment.appendData(res.data.data);
         }
         else {
-          reply.appendData(res.data.data);
-          reply.message = '暂无评论';
+          comment.appendData(res.data.data);
+          comment.message = '暂无评论';
         }
       }
       else {
         if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
         }
-        reply.message = res.message || util.ERROR_MESSAGE;
+        comment.message = res.message || util.ERROR_MESSAGE;
       }
       self.loading = false;
     }, function(res) {
-      reply.message = res.message || util.ERROR_MESSAGE;
+      comment.message = res.message || util.ERROR_MESSAGE;
       self.loading = false;
     });
   }
@@ -190,7 +190,7 @@ class Post extends migi.Component {
       ajax.abort();
     }
     this.loading = false;
-    this.ref.reply.clearData();
+    this.ref.comment.clearData();
     this.load();
   }
   switchType2(e, vd, tvd) {
@@ -207,7 +207,7 @@ class Post extends migi.Component {
         ajax.abort();
       }
       this.loading = false;
-      this.ref.reply.clearData();
+      this.ref.comment.clearData();
       this.load();
     }
   }
@@ -271,7 +271,7 @@ class Post extends migi.Component {
           <h4>回复</h4>
           <div class="fn">
             <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
-              <li class="cur" rel="0">全部<small>{ this.props.replyData.Size }</small></li>
+              <li class="cur" rel="0">全部<small>{ this.props.replyData.Count }</small></li>
               {
                 this.props.isLogin
                   ? <li rel="1">我的</li>
@@ -284,7 +284,7 @@ class Post extends migi.Component {
             </ul>
           </div>
           <Page ref="page" total={ Math.ceil(this.props.replyData.Size / take) }/>
-          <Reply ref="reply"
+          <Comment ref="comment"
                  zanUrl="/api/post/likeComment"
                  subUrl="/api/post/subCommentList"
                  delUrl="/api/post/delComment"

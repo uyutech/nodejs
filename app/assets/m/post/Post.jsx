@@ -6,7 +6,7 @@
 
 import net from '../../d/common/net';
 import util from '../../d/common/util';
-import Reply from './Reply.jsx';
+import Comment from '../../d/component/comment/Comment.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 
 let skip = 10;
@@ -29,13 +29,13 @@ class Post extends migi.Component {
       });
 
       let subCmt = self.ref.subCmt;
-      let reply = self.ref.reply;
-      reply.on('chooseSubComment', function(rid, cid, name) {
+      let comment = self.ref.comment;
+      comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
         subCmt.to = name;
       });
-      reply.on('closeSubComment', function() {
+      comment.on('closeSubComment', function() {
         self.rootID = -1;
         self.parentID = -1;
         subCmt.to = null;
@@ -54,11 +54,11 @@ class Post extends migi.Component {
             subCmt.value = '';
             subCmt.hasCommentContent = false;
             if(rootID === -1) {
-              reply.prependData(res.data);
-              reply.message = '';
+              comment.prependData(res.data);
+              comment.message = '';
             }
             else {
-              reply.prependChild(res.data);
+              comment.prependChild(res.data);
             }
           }
           else if(res.code === 1000) {
@@ -109,22 +109,22 @@ class Post extends migi.Component {
   }
   load() {
     let self = this;
-    let reply = self.ref.reply;
+    let comment = self.ref.comment;
     if(ajax) {
       ajax.abort();
     }
     self.loading = true;
-    reply.message = '正在加载...';
+    comment.message = '正在加载...';
     ajax = net.postJSON('/api/post/commentList', { postID: self.props.id, skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         // currentCount = data.Size;
         if(data.data.length) {
-          reply.message = '';
-          reply.appendData(res.data.data);
+          comment.message = '';
+          comment.appendData(res.data.data);
         }
         else {
-          reply.message = skip === 0 ? '暂无回复' : '已经到底了';
+          comment.message = skip === 0 ? '暂无回复' : '已经到底了';
           self.loadEnd = true;
         }
         skip += take;
@@ -133,11 +133,11 @@ class Post extends migi.Component {
         if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
         }
-        reply.message = res.message || util.ERROR_MESSAGE;
+        comment.message = res.message || util.ERROR_MESSAGE;
       }
       self.loading = false;
     }, function(res) {
-      reply.message = res.message || util.ERROR_MESSAGE;
+      comment.message = res.message || util.ERROR_MESSAGE;
       self.loading = false;
     });
   }
@@ -153,7 +153,7 @@ class Post extends migi.Component {
       ajax.abort();
     }
     this.loading = false;
-    this.ref.reply.clearData();
+    this.ref.comment.clearData();
     this.load();
   }
   switchType2(e, vd, tvd) {
@@ -170,7 +170,7 @@ class Post extends migi.Component {
         ajax.abort();
       }
       this.loading = false;
-      this.ref.reply.clearData();
+      this.ref.comment.clearData();
       this.load();
     }
   }
@@ -233,7 +233,7 @@ class Post extends migi.Component {
         <h4>回复</h4>
         <div class="fn">
           <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
-            <li class="cur" rel="0">全部<small>{ this.props.replyData.Size }</small></li>
+            <li class="cur" rel="0">全部<small>{ this.props.replyData.Count }</small></li>
             {
               this.props.isLogin
                 ? <li rel="1">我的</li>
@@ -245,7 +245,7 @@ class Post extends migi.Component {
             <li rel="1">最热</li>
           </ul>
         </div>
-        <Reply ref="reply"
+        <Comment ref="comment"
                zanUrl="/api/post/likeComment"
                subUrl="/api/post/subCommentList"
                delUrl="/api/post/delComment"

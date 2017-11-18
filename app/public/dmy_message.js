@@ -581,9 +581,9 @@ var Message = function (_migi$Component) {
     key: 'render',
     value: function render() {
       if (this.props.messages.Size > take) {
-        return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.messages.Size / take)]]), migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.messages.Size / take)]])])]);
+        return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.messages.Size / take)]]), migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.messages.Size / take)]])]), migi.createCp(_SubCmt2.default, [])]);
       }
-      return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]])])]);
+      return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]])]), migi.createCp(_SubCmt2.default, [])]);
     }
   }]);
 
@@ -676,7 +676,7 @@ var SubCmt = function (_migi$Component) {
       })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("label", [], ["TO: ", new migi.Obj(["to", "originTo"], this, function () {
         return this.to || this.originTo;
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
-        return this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个作品吧';
+        return this.to ? '回复' + this.to + '的评论' : this.placeholder;
       })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
         return this.maxlength || 256;
       })], ["value", new migi.Obj("value", this, function () {
@@ -837,15 +837,9 @@ var Messages = function (_migi$Component) {
         url = '/post/' + item.urlID;
       }
       if (item.Send_UserISAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.Send_UserID], ["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]),,,, /*<ul class="btn fn-clear">*/
-        /*<li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>*/
-        /*</ul>*/
-        migi.createVd("b", [["class", "arrow"]])])]);
+        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.Send_UserID], ["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["rel", id]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]),,,, /*<ul class="btn fn-clear">*/
-      /*<li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>*/
-      /*</ul>*/
-      migi.createVd("b", [["class", "arrow"]])])]);
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["rel", id]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'setData',
@@ -870,7 +864,7 @@ var Messages = function (_migi$Component) {
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-messages"]], [this.props.data && this.props.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"])]);
+      return migi.createVd("div", [["class", "cp-messages"]], [this.props.data && this.props.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["还没有人回复你哦~"])]);
     }
   }]);
 

@@ -86,12 +86,14 @@ class Message extends migi.Component {
           <Messages ref="messages" data={this.props.messages.data}/>
           <Page ref="page2" total={Math.ceil(this.props.messages.Size / take)}/>
         </div>
+        <SubCmt/>
       </div>;
     }
     return <div class="message fn-clear">
       <div class="main">
         <Messages ref="messages" data={this.props.messages.data}/>
       </div>
+      <SubCmt/>
     </div>;
   }
 }

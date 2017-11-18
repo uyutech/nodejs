@@ -2,6 +2,8 @@
  * Created by army8735 on 2017/8/26.
  */
 
+'use strict';
+
 import net from '../../common/net';
 import util from '../../common/util';
 

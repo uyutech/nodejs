@@ -474,9 +474,9 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Reply = __webpack_require__(219);
+var _Comment = __webpack_require__(22);
 
-var _Reply2 = _interopRequireDefault(_Reply);
+var _Comment2 = _interopRequireDefault(_Comment);
 
 var _SubCmt = __webpack_require__(6);
 
@@ -520,7 +520,7 @@ var Post = function (_migi$Component) {
     self.likeCount = self.props.postData.LikeCount;
     self.on(migi.Event.DOM, function () {
       var subCmt = self.ref.subCmt;
-      var reply = self.ref.reply;
+      var comment = self.ref.comment;
       var page = self.ref.page;
       var page2 = self.ref.page2;
       page.on('page', function (i) {
@@ -533,12 +533,12 @@ var Post = function (_migi$Component) {
         skip = (i - 1) * take;
         self.loadPage();
       });
-      reply.on('chooseSubComment', function (rid, cid, name) {
+      comment.on('chooseSubComment', function (rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
         subCmt.to = name;
       });
-      reply.on('closeSubComment', function () {
+      comment.on('closeSubComment', function () {
         self.rootID = -1;
         self.parentID = -1;
         subCmt.to = null;
@@ -557,10 +557,10 @@ var Post = function (_migi$Component) {
             subCmt.value = '';
             subCmt.hasCommentContent = false;
             if (rootID === -1) {
-              reply.prependData(res.data);
-              reply.message = '';
+              comment.prependData(res.data);
+              comment.message = '';
             } else {
-              reply.prependChild(res.data);
+              comment.prependChild(res.data);
             }
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
@@ -599,10 +599,10 @@ var Post = function (_migi$Component) {
     key: 'load',
     value: function load() {
       var self = this;
-      var reply = self.ref.reply;
+      var comment = self.ref.comment;
       var page = self.ref.page;
       var page2 = self.ref.page2;
-      reply.message = '读取中...';
+      comment.message = '读取中...';
       if (ajax) {
         ajax.abort();
       }
@@ -613,22 +613,22 @@ var Post = function (_migi$Component) {
           currentCount = data.Size;
           skip += take;
           if (data.data.length) {
-            reply.message = '';
-            reply.appendData(res.data.data);
+            comment.message = '';
+            comment.appendData(res.data.data);
             page.total = page2.total = Math.ceil(currentCount / take);
           } else {
-            reply.appendData(res.data.data);
-            reply.message = '暂无评论';
+            comment.appendData(res.data.data);
+            comment.message = '暂无评论';
           }
         } else {
           if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           }
-          reply.message = res.message || _util2.default.ERROR_MESSAGE;
+          comment.message = res.message || _util2.default.ERROR_MESSAGE;
         }
         self.loading = false;
       }, function (res) {
-        reply.message = res.message || _util2.default.ERROR_MESSAGE;
+        comment.message = res.message || _util2.default.ERROR_MESSAGE;
         self.loading = false;
       });
     }
@@ -636,9 +636,9 @@ var Post = function (_migi$Component) {
     key: 'loadPage',
     value: function loadPage() {
       var self = this;
-      var reply = self.ref.reply;
-      reply.message = '读取中...';
-      reply.setData();
+      var comment = self.ref.comment;
+      comment.message = '读取中...';
+      comment.setData();
       if (ajax) {
         ajax.abort();
       }
@@ -648,21 +648,21 @@ var Post = function (_migi$Component) {
           var data = res.data;
           skip += take;
           if (data.data.length) {
-            reply.message = '';
-            reply.appendData(res.data.data);
+            comment.message = '';
+            comment.appendData(res.data.data);
           } else {
-            reply.appendData(res.data.data);
-            reply.message = '暂无评论';
+            comment.appendData(res.data.data);
+            comment.message = '暂无评论';
           }
         } else {
           if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
           }
-          reply.message = res.message || _util2.default.ERROR_MESSAGE;
+          comment.message = res.message || _util2.default.ERROR_MESSAGE;
         }
         self.loading = false;
       }, function (res) {
-        reply.message = res.message || _util2.default.ERROR_MESSAGE;
+        comment.message = res.message || _util2.default.ERROR_MESSAGE;
         self.loading = false;
       });
     }
@@ -680,7 +680,7 @@ var Post = function (_migi$Component) {
         ajax.abort();
       }
       this.loading = false;
-      this.ref.reply.clearData();
+      this.ref.comment.clearData();
       this.load();
     }
   }, {
@@ -699,7 +699,7 @@ var Post = function (_migi$Component) {
           ajax.abort();
         }
         this.loading = false;
-        this.ref.reply.clearData();
+        this.ref.comment.clearData();
         this.load();
       }
     }
@@ -730,7 +730,7 @@ var Post = function (_migi$Component) {
         return 'like' + (this.isLike ? ' has' : '');
       })], ["onClick", new migi.Cb(this, this.clickLike)]], [new migi.Obj("likeCount", this, function () {
         return this.likeCount;
-      })]), postData.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", postData.ID]]) : '']), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "box"]], [migi.createVd("h4", [], ["回复"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.replyData.Size])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.replyData.Size / take)]]), migi.createCp(_Reply2.default, [["ref", "reply"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.replyData.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.replyData.Size / take)]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "回复"], ["originTo", postData.SendUserNickName], ["placeholder", "交流一下吧~"]])])]);
+      })]), postData.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", postData.ID]]) : '']), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "box"]], [migi.createVd("h4", [], ["回复"]), migi.createVd("div", [["class", "fn"]], [migi.createVd("ul", [["class", "type fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType2)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["全部", migi.createVd("small", [], [this.props.replyData.Count])]), this.props.isLogin ? migi.createVd("li", [["rel", "1"]], ["我的"]) : '']), migi.createVd("ul", [["class", "type2 fn-clear"], ["onClick", [[{ "li": { "_v": true } }, new migi.Cb(this, this.switchType)]]]], [migi.createVd("li", [["class", "cur"], ["rel", "0"]], ["最新"]), migi.createVd("li", [["rel", "1"]], ["最热"])])]), migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.replyData.Size / take)]]), migi.createCp(_Comment2.default, [["ref", "comment"], ["zanUrl", "/api/post/likeComment"], ["subUrl", "/api/post/subCommentList"], ["delUrl", "/api/post/delComment"], ["data", this.props.replyData.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.replyData.Size / take)]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["subText", "回复"], ["originTo", postData.SendUserNickName], ["placeholder", "交流一下吧~"]])])]);
     }
   }, {
     key: 'rootID',
@@ -781,7 +781,7 @@ migi.name(Post, "Post");exports.default = Post;
 
 /***/ }),
 
-/***/ 219:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -818,19 +818,19 @@ var $last = void 0;
 var take = 10;
 var ajax = void 0;
 
-var Reply = function (_migi$Component) {
-  _inherits(Reply, _migi$Component);
+var Comment = function (_migi$Component) {
+  _inherits(Comment, _migi$Component);
 
-  function Reply() {
+  function Comment() {
     var _ref;
 
-    _classCallCheck(this, Reply);
+    _classCallCheck(this, Comment);
 
     for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
       data[_key] = arguments[_key];
     }
 
-    var _this = _possibleConstructorReturn(this, (_ref = Reply.__proto__ || Object.getPrototypeOf(Reply)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = Comment.__proto__ || Object.getPrototypeOf(Comment)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
     var html = '';
@@ -866,8 +866,20 @@ var Reply = function (_migi$Component) {
       $root.on('click', '.slide .sub, .slide span', function () {
         self.slide($(this).closest('li'));
       });
-      $root.on('click', '.list>li>.c>.con', function () {
+      $root.on('click', '.list>li>.c>pre', function () {
         self.slide($(this).closest('li'));
+      });
+      $root.on('click', '.list2 pre', function () {
+        var $pre = $(this);
+        var $li = $pre.closest('li');
+        if ($li.hasClass('on')) {
+          $li.removeClass('on');
+          var $slide = $last.find('.slide');
+          self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'));
+        } else {
+          $li.addClass('on');
+          self.emit('chooseSubComment', $pre.attr('rid'), $pre.attr('cid'), $pre.attr('name'));
+        }
       });
       $root.on('click', '.more', function () {
         var $message = $(this);
@@ -899,9 +911,6 @@ var Reply = function (_migi$Component) {
           $message.addClass('more').text(res.message || _util2.default.ERROR_MESSAGE);
         });
       });
-      $root.on('click', '.share', function (e) {
-        e.preventDefault();
-      });
       $root.on('click', '.remove', function () {
         var $btn = $(this);
         if (window.confirm('会删除子留言哦，确定要删除吗？')) {
@@ -923,7 +932,7 @@ var Reply = function (_migi$Component) {
     return _this;
   }
 
-  _createClass(Reply, [{
+  _createClass(Comment, [{
     key: 'slide',
     value: function slide($li) {
       var self = this;
@@ -940,6 +949,7 @@ var Reply = function (_migi$Component) {
       }
       if ($li.hasClass('on')) {
         $li.removeClass('on');
+        $li.find('li.on').removeClass('on');
         $list2.css('height', 0);
         self.emit('closeSubComment');
         $last = null;
@@ -1050,30 +1060,30 @@ var Reply = function (_migi$Component) {
     key: 'genComment',
     value: function genComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("div", [["dangerouslySetInnerHTML", item.Send_Content]]), migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.IsAuthor === true ? migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]) : migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
       }
-      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("div", [["class", "con"]], [migi.createVd("div", [["dangerouslySetInnerHTML", item.Send_Content]]), migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
     }
   }, {
     key: 'genChildComment',
     value: function genChildComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name2 fn-hide"]], [item.Send_ToUserName]), migi.createVd("b", [["class", "arrow fn-hide"]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_AuthorName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("div", [["class", "con"], ["dangerouslySetInnerHTML", item.Send_Content]]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.Send_ToUserID ? migi.createVd("span", [["class", "to"]], [item.Send_ToUserName]) : '', migi.createVd("b", [["class", "arrow"]]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", item.Send_UserHeadUrl || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png']]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name2 fn-hide"]], [item.Send_ToUserName]), migi.createVd("b", [["class", "arrow fn-hide"]]), migi.createVd("small", [["class", "time"]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("div", [["class", "con"], ["dangerouslySetInnerHTML", item.Send_Content]]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.Send_ToUserID ? migi.createVd("span", [["class", "to"]], [item.Send_ToUserName]) : '', migi.createVd("b", [["class", "arrow"]]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'hideLast',
     value: function hideLast() {
       if ($last && $last.hasClass('on')) {
-        $last.removeClass('on').find('.list2').css('height', 0);
+        $last.removeClass('on').find('.list2').css('height', 0).find('li.on').removeClass('on');
       }
       $last = null;
     }
   }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-comment reply"]], [migi.createVd("ul", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]), migi.createVd("p", [["class", new migi.Obj("message", this, function () {
+      return migi.createVd("div", [["class", "cp-comment"]], [migi.createVd("ul", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]), migi.createVd("p", [["class", new migi.Obj("message", this, function () {
         return 'message' + (this.message ? '' : ' fn-hide');
       })]], [new migi.Obj("message", this, function () {
         return this.message;
@@ -1089,10 +1099,10 @@ var Reply = function (_migi$Component) {
     }
   }]);
 
-  return Reply;
+  return Comment;
 }(migi.Component);
 
-migi.name(Reply, "Reply");exports.default = Reply;
+migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
@@ -1178,7 +1188,7 @@ var SubCmt = function (_migi$Component) {
       })], ["ref", "form"], ["onSubmit", new migi.Cb(this, this.submit)], ["onClick", new migi.Cb(this, this.click)]], [migi.createVd("label", [], ["TO: ", new migi.Obj(["to", "originTo"], this, function () {
         return this.to || this.originTo;
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
-        return this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个作品吧';
+        return this.to ? '回复' + this.to + '的评论' : this.placeholder;
       })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
         return this.maxlength || 256;
       })], ["value", new migi.Obj("value", this, function () {
