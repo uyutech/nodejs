@@ -74,4 +74,16 @@ document.addEventListener('DOMContentLoaded', function() {
       loading = false;
     });
   });
+  let $message = $('#topNav .message');
+  migi.eventBus.on('READ_MESSAGE_NUM', function(i) {
+    let n = $CONFIG.messageNum;
+    if(n) {
+      n = Math.max(0, n - i);
+      $CONFIG.messageNum = n;
+      $message.find('span').text(n > 99 ? '99+' : n);
+      if(n === 0) {
+        $message.find('span').addClass('fn-hide');
+      }
+    }
+  });
 });

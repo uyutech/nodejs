@@ -377,6 +377,9 @@ body {
   border-radius: 0.24rem;
   color: #FFF;
 }
+.cp-hotpost .list > li > .profile .circle li a {
+  color: #FFF;
+}
 .cp-hotpost .list > li.author > .profile .txt .name {
   color: #EC0;
 }

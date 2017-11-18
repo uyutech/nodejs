@@ -16,7 +16,7 @@ let cIframe;
 let url;
 
 let quanNiang = migi.render(
-  <QuanNiang messages={ $CONFIG.messages }/>,
+  <QuanNiang/>,
   document.body
 );
 
@@ -60,6 +60,9 @@ window.downZIndex = function() {
 };
 window.readMessage = function(n) {
   quanNiang.readMessage(n);
+};
+window.setMessageNum = function(n) {
+  quanNiang.num = n;
 };
 let commentType = {};
 window.comment = function(type) {

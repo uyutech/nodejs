@@ -460,7 +460,7 @@ var topNav = migi.preExist(migi.createCp(_TopNav2.default, [["userInfo", $CONFIG
 var cIframe = void 0;
 var url = void 0;
 
-var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, [["messages", $CONFIG.messages]]), document.body);
+var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, []), document.body);
 
 quanNiang.on('message', function () {
   setHash('/my/message');
@@ -496,6 +496,9 @@ window.downZIndex = function () {
 };
 window.readMessage = function (n) {
   quanNiang.readMessage(n);
+};
+window.setMessageNum = function (n) {
+  quanNiang.num = n;
 };
 var commentType = {};
 window.comment = function (type) {
@@ -770,7 +773,7 @@ var QuanNiang = function (_migi$Component) {
     var _this = _possibleConstructorReturn(this, (_ref = QuanNiang.__proto__ || Object.getPrototypeOf(QuanNiang)).call.apply(_ref, [this].concat(data)));
 
     var self = _this;
-    self.num = self.props.messages.Count;
+    self.num = $CONFIG.messageNum;
     return _this;
   }
 

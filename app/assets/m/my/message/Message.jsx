@@ -22,6 +22,7 @@ class Message extends migi.Component {
       $window.on('scroll', function() {
         self.checkMore($window);
       });
+      self.read(self.props.messages.data);
     });
   }
   @bind message
@@ -67,9 +68,7 @@ class Message extends migi.Component {
     if(ids.length) {
       net.postJSON('/api/my/readMessage', { ids }, function(res) {
         if(res.success) {
-          if(parent && parent.readMessage) {
-            parent.readMessage(ids.length);
-          }
+          migi.eventBus.emit('READ_MESSAGE_NUM', ids.length);
         }
         else {
           alert(res.message || util.ERROR_MESSAGE);

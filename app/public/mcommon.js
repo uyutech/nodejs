@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 90);
+/******/ 	return __webpack_require__(__webpack_require__.s = 85);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -7804,12 +7804,7 @@ migi.name(Share, "Share");exports.default = Share;
 /* 82 */,
 /* 83 */,
 /* 84 */,
-/* 85 */,
-/* 86 */,
-/* 87 */,
-/* 88 */,
-/* 89 */,
-/* 90 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7880,6 +7875,11 @@ window.requestAnimationFrame = function () {
 window.$ = _animaYoctoAjax2.default;
 
 /***/ }),
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
 /* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9387,6 +9387,18 @@ document.addEventListener('DOMContentLoaded', function () {
       alert(res.message || _util2.default.ERROR_MESSAGE);
       loading = false;
     });
+  });
+  var $message = $('#topNav .message');
+  migi.eventBus.on('READ_MESSAGE_NUM', function (i) {
+    var n = $CONFIG.messageNum;
+    if (n) {
+      n = Math.max(0, n - i);
+      $CONFIG.messageNum = n;
+      $message.find('span').text(n > 99 ? '99+' : n);
+      if (n === 0) {
+        $message.find('span').addClass('fn-hide');
+      }
+    }
   });
 });
 

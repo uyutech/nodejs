@@ -11,6 +11,9 @@ class HotWork extends migi.Component {
     this.dataList = this.props.dataList || [];
   }
   @bind dataList = []
+  setData(data) {
+    this.dataList = data;
+  }
   render() {
     return <div class="cp-hotwork">
       {

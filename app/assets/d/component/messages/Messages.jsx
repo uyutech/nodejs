@@ -47,9 +47,9 @@ class Messages extends migi.Component {
             <p>{ item.Content }</p>
           </div>
           <pre class="con">{ item.Send_Content }</pre>
-          <ul class="btn fn-clear">
-            <li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>
-          </ul>
+          {/*<ul class="btn fn-clear">*/}
+            {/*<li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>*/}
+          {/*</ul>*/}
           <b class="arrow"/>
         </div>
       </li>;
@@ -68,9 +68,9 @@ class Messages extends migi.Component {
           <p>{ item.Content }</p>
         </div>
         <pre class="con">{ item.Send_Content }</pre>
-        <ul class="btn fn-clear">
-          <li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>
-        </ul>
+        {/*<ul class="btn fn-clear">*/}
+          {/*<li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>*/}
+        {/*</ul>*/}
         <b class="arrow"/>
       </div>
     </li>;

@@ -7,9 +7,12 @@ let parent = window.parent;
 if(parent !== window) {
   let hostname = parent.location.hostname;
   if(hostname.indexOf('circling.cc') === -1) {
-    // location.href = '/404.html';
+    location.href = '/404.html';
   }
   else {
+    if(parent.setMessageNum) {
+      parent.setMessageNum($CONFIG.messageNum);
+    }
     function findA(node) {
       if(node && node !== document.body && node.nodeName === 'A') {
         let href = node.getAttribute('href') || '';

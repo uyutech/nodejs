@@ -511,6 +511,7 @@ var Message = function (_migi$Component) {
       $window.on('scroll', function () {
         self.checkMore($window);
       });
+      self.read(self.props.messages.data);
     });
     return _this;
   }
@@ -562,9 +563,7 @@ var Message = function (_migi$Component) {
       if (ids.length) {
         _net2.default.postJSON('/api/my/readMessage', { ids: ids }, function (res) {
           if (res.success) {
-            if (parent && parent.readMessage) {
-              parent.readMessage(ids.length);
-            }
+            migi.eventBus.emit('READ_MESSAGE_NUM', ids.length);
           } else {
             alert(res.message || _util2.default.ERROR_MESSAGE);
           }
@@ -664,9 +663,15 @@ var Messages = function (_migi$Component) {
         url = '/post/' + item.urlID;
       }
       if (item.Send_UserISAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.Send_UserID], ["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["rel", id]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.Send_UserID], ["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]),,,, /*<ul class="btn fn-clear">*/
+        /*<li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>*/
+        /*</ul>*/
+        migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["rel", id]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]),,,, /*<ul class="btn fn-clear">*/
+      /*<li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>*/
+      /*</ul>*/
+      migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'setData',

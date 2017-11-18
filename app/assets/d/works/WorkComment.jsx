@@ -209,7 +209,7 @@ class WorkComment extends migi.Component {
       <h4>评论</h4>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
-          <li class="cur" rel="0">全部<small>{ this.props.commentData.Size }</small></li>
+          <li class="cur" rel="0">全部<small>{ this.props.commentData.Count }</small></li>
           {
             this.props.isLogin
               ? <li rel="1">我的</li>

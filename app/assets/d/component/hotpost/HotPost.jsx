@@ -105,7 +105,7 @@ class HotPost extends migi.Component {
           <ul class="circle">
             {
               (item.Taglist || []).map(function(item) {
-                return <li>{ item.TagName }圈</li>;
+                return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
               })
             }
           </ul>
@@ -131,7 +131,7 @@ class HotPost extends migi.Component {
                       return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
                     })
                     : item.Image_Post.map(function(item) {
-                      return <li style={ 'background-image:url(' + util.autoSsl(imgLen === 1 ? util.img980_980_80(item.FileUrl) : util.img480_480_80(item.FileUrl)) + ')' }/>;
+                      return <li style={ 'background-image:url(' + util.autoSsl(util.img480_480_80(item.FileUrl)) + ')' }/>;
                     })
                 }
               </ul>
@@ -158,7 +158,7 @@ class HotPost extends migi.Component {
         <ul class="circle">
           {
             (item.Taglist || []).map(function(item) {
-              return <li>{ item.TagName }圈</li>;
+              return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
             })
           }
         </ul>

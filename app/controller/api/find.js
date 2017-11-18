@@ -8,11 +8,10 @@ module.exports = app => {
   class Controller extends app.Controller {
     * hotWorkList(ctx) {
       let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_works_List1', {
+      let res = yield ctx.helper.postServiceJSON('api/find/Hot_works_List', {
         uid,
-        Skip: body.skip,
-        Take: body.take,
+        Skip: 0,
+        Take: 10,
       });
       ctx.body = res.data;
     }

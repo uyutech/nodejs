@@ -9,10 +9,18 @@ module.exports = () => {
     let ctx = this;
     let helper = ctx.helper;
     if(ctx.session.uid) {
-      helper.$CONFIG += `$CONFIG.isLogin = true;\n$CONFIG.uid = '${ctx.session.uid}';\n$CONFIG.uname = '${ctx.session.uname}';\n$CONFIG.head='${ctx.session.head}';\n`;
+      helper.$CONFIG += `
+  $CONFIG.isLogin = true;
+  $CONFIG.uid = '${ctx.session.uid}';
+  $CONFIG.uname = '${ctx.session.uname}';
+  $CONFIG.head = '${ctx.session.head}';
+  $CONFIG.messageNum = ${ctx.session.messageNum || 0}`;
       if(ctx.session.authorID) {
-        helper.$CONFIG += `$CONFIG.isAuthor = true;\n$CONFIG.authorID = '${ctx.session.authorID}';\n$CONFIG.authorName = '${ctx.session.authorName}';\n`;
-        helper.$CONFIG += `$CONFIG.isPublic = ${!!ctx.session.isPublic};\n`;
+        helper.$CONFIG += `
+  $CONFIG.isAuthor = true;
+  $CONFIG.authorID = '${ctx.session.authorID}';
+  $CONFIG.authorName = '${ctx.session.authorName}';
+  $CONFIG.isPublic = ${!!ctx.session.isPublic};`;
       }
     }
     yield next;

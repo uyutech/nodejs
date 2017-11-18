@@ -139,12 +139,21 @@ class PostList extends migi.Component {
           }
           <p class="con" dangerouslySetInnerHTML={ html }/>
           {
-            item.Image_Post
-              ? <ul class="imgs fn-clear">
+            item.Image_Post && imgLen
+              ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
                 {
-                  item.Image_Post.map(function(item) {
-                    return <li style={ 'background-image:url(' + util.autoSsl(util.img120_120_80(item.FileUrl)) + ')' }/>;
-                  })
+                  item.Image_Post.length > 4
+                    ? item.Image_Post.slice(0, 4).map(function(item, i) {
+                      if(i === 3) {
+                        return <li class="all" style={ 'background-image:url(' + util.autoSsl(util.img240_240_80(item.FileUrl)) + ')' }>
+                          <a href={ '/post/' + id }>查看全部</a>
+                        </li>;
+                      }
+                      return <li style={ 'background-image:url(' + util.autoSsl(util.img240_240_80(item.FileUrl)) + ')' }/>;
+                    })
+                    : item.Image_Post.map(function(item) {
+                      return <li style={ 'background-image:url(' + util.autoSsl(util.img240_240_80(item.FileUrl)) + ')' }/>;
+                    })
                 }
               </ul>
               : ''
@@ -183,12 +192,21 @@ class PostList extends migi.Component {
         }
         <p class="con" dangerouslySetInnerHTML={ html }/>
         {
-          item.Image_Post
-            ? <ul class="imgs fn-clear">
+          item.Image_Post && imgLen
+            ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
               {
-                item.Image_Post.map(function(item) {
-                  return <li style={ 'background-image:url(' + util.autoSsl(util.img120_120_80(item.FileUrl)) + ')' }/>;
-                })
+                item.Image_Post.length > 4
+                  ? item.Image_Post.slice(0, 4).map(function(item, i) {
+                    if(i === 3) {
+                      return <li class="all" style={ 'background-image:url(' + util.autoSsl(util.img240_240_80(item.FileUrl)) + ')' }>
+                        <a href={ '/post/' + id }>查看全部</a>
+                      </li>;
+                    }
+                    return <li style={ 'background-image:url(' + util.autoSsl(util.img240_240_80(item.FileUrl)) + ')' }/>;
+                  })
+                  : item.Image_Post.map(function(item) {
+                    return <li style={ 'background-image:url(' + util.autoSsl(util.img240_240_80(item.FileUrl)) + ')' }/>;
+                  })
               }
             </ul>
             : ''

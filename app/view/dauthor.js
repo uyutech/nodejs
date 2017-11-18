@@ -650,6 +650,11 @@ var HotWork = function (_migi$Component) {
   }
 
   _createClass(HotWork, [{
+    key: 'setData',
+    value: function setData(data) {
+      this.dataList = data;
+    }
+  }, {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "cp-hotwork"]], [new migi.Obj("dataList", this, function () {

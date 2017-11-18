@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?60';
+    return '/public' + url + '?61';
   },
   getRemoteUrl(url) {
     if(url.indexOf('//') > -1) {
@@ -168,7 +168,7 @@ let helper = {
   weiboAppKey: '2345825162',
   weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
   weiboRedirect: 'https://circling.cc/oauth/login',
-  $CONFIG: 'var $CONFIG = {};\n',
+  $CONFIG: 'var $CONFIG = {};',
   rhymeAppKey: '4139489763',
   rhymeAppSecret: '1152af67bb15530c50d91728f86c43df',
   rhymeRedirect: 'http://rhymesland.com/oauth/rhymeLogin',

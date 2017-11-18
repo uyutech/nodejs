@@ -6,7 +6,7 @@ class QuanNiang extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.num = self.props.messages.Count;
+    self.num = $CONFIG.messageNum;
   }
   @bind message;
   @bind num
