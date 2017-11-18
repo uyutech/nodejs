@@ -356,8 +356,12 @@ class Works extends migi.Component {
               ? <Lyric datas={ this.lyricData }/>
               : ''
           }
-          <InspComment ref="inspComment"
-                       commentData={ this.props.worksDetail.WorksAuthorComment }/>
+          {
+            this.props.worksDetail.WorksAuthorComment
+              ? <InspComment ref="inspComment"
+                             commentData={ this.props.worksDetail.WorksAuthorComment }/>
+              : ''
+          }
           {
             this.posterData
               ? <Poster datas={ this.posterData }/>
