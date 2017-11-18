@@ -364,8 +364,12 @@ class Works extends migi.Component {
               ? <Text datas={ this.textData }/>
               : ''
           }
-          <InspComment ref="inspComment"
-                       commentData={ this.props.worksDetail.WorksAuthorComment }/>
+          {
+            this.props.worksDetail.WorksAuthorComment
+              ? <InspComment ref="inspComment"
+                             commentData={ this.props.worksDetail.WorksAuthorComment }/>
+              : ''
+          }
         </div>
         <WorkComment ref="workComment"
                      isLogin={ this.props.isLogin }
