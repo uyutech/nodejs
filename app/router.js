@@ -45,6 +45,7 @@ module.exports = app => {
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 
+  app.post('/api/find/hotWorkList', 'api.find.hotWorkList');
   app.post('/api/find/hotPostList', 'api.find.hotPostList');
 
   app.post('/api/user/settle', app.middlewares.needLoginJson(), 'api.user.settle');

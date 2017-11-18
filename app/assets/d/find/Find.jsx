@@ -55,11 +55,31 @@ class Find extends migi.Component {
       loading = false;
     });
   }
+  clickChangeWork() {
+    let self = this;
+    net.postJSON('/api/find/hotWorkList', function(res) {
+      if(res.success) {
+        self.ref.hotWork.setData(res.data);
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      loading = false;
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      loading = false;
+    });
+  }
   render() {
     return <div class="find">
       <Banner/>
       <div class="hot">
         <HotCircle ref="hotCircle" title="推荐圈子" dataList={ this.props.hotCircleList }/>
+        <h4>
+          <span>热门作品</span>
+          <small>{ '未来会根据你的口味进行精准智能的推送！>3<' }</small>
+          <span class="fn" onClick={ this.clickChangeWork }>换一换</span>
+        </h4>
         <HotWork ref="hotWork" title="热门作品" dataList={ this.props.hotWorkList }/>
         <HotMusicAlbum ref="hotMusicAlbum" title="热门专辑" dataList={ this.props.hotMusicAlbumList }/>
         {/*<HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList }/>*/}
