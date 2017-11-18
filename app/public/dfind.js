@@ -576,9 +576,25 @@ var Find = function (_migi$Component) {
       });
     }
   }, {
+    key: 'clickChangeWork',
+    value: function clickChangeWork() {
+      var self = this;
+      _net2.default.postJSON('/api/find/hotWorkList', function (res) {
+        if (res.success) {
+          self.ref.hotWork.setData(res.data);
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+        loading = false;
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+        loading = false;
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createVd("div", [["class", "hot"]], [migi.createCp(_HotCircle2.default, [["ref", "hotCircle"], ["title", "推荐圈子"], ["dataList", this.props.hotCircleList]]), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "热门作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotMusicAlbum"], ["title", "热门专辑"], ["dataList", this.props.hotMusicAlbumList]]),, /*<HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList }/>*/
+      return migi.createVd("div", [["class", "find"]], [migi.createCp(_Banner2.default, []), migi.createVd("div", [["class", "hot"]], [migi.createCp(_HotCircle2.default, [["ref", "hotCircle"], ["title", "推荐圈子"], ["dataList", this.props.hotCircleList]]), migi.createVd("h4", [], [migi.createVd("span", [], ["热门作品"]), migi.createVd("small", [], ['未来会根据你的口味进行精准智能的推送！>3<']), migi.createVd("span", [["class", "fn"], ["onClick", new migi.Cb(this, this.clickChangeWork)]], ["换一换"])]), migi.createCp(_HotWork2.default, [["ref", "hotWork"], ["title", "热门作品"], ["dataList", this.props.hotWorkList]]), migi.createCp(_HotMusicAlbum2.default, [["ref", "hotMusicAlbum"], ["title", "热门专辑"], ["dataList", this.props.hotMusicAlbumList]]),, /*<HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList }/>*/
       migi.createCp(_HotAuthor2.default, [["ref", "hotAuthor"], ["title", "入驻作者"], ["dataList", this.props.hotAuthorList]])]), migi.createVd("div", [["class", "hot2 fn-clear"]], [migi.createVd("div", [["class", "post"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.hotPostList.Size / 10)]]), migi.createCp(_HotPost2.default, [["ref", "hotPost"], ["data", this.props.hotPostList.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.hotPostList.Size / 10)]])]), migi.createCp(_HotPlayList2.default, [["ref", "hostPlayList"], ["dataList", this.props.hotPlayList.data]])])]);
     }
   }]);
@@ -1136,7 +1152,7 @@ var HotWork = function (_migi$Component) {
   _createClass(HotWork, [{
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "cp-hotwork"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ['未来会根据你的口味进行精准智能的推送！>3<'])]), new migi.Obj("dataList", this, function () {
+      return migi.createVd("div", [["class", "cp-hotwork"]], [new migi.Obj("dataList", this, function () {
         return this.dataList && this.dataList.length ? migi.createVd("ul", [["class", "list fn-clear"]], [this.dataList.map(function (item) {
           return migi.createVd("li", [], [migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "pic"]], [migi.createVd("img", [["src", _util2.default.autoSsl(_util2.default.img288_288_80(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png']]), migi.createVd("span", [["class", "type"]], ["音乐"]), migi.createVd("span", [["class", "num"]], [item.Popular])]), migi.createVd("a", [["href", '/works/' + item.WorksID], ["class", "txt"]], [migi.createVd("span", [], [item.Title]), migi.createVd("span", [["class", "author"]], [(item.SingerName || []).join(' ')])])]);
         })]) : migi.createVd("div", [["class", "empty"]]);
