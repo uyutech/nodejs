@@ -16,9 +16,13 @@ let cIframe;
 let url;
 
 let quanNiang = migi.render(
-  <QuanNiang/>,
+  <QuanNiang messages={ $CONFIG.messages }/>,
   document.body
 );
+
+quanNiang.on('message', function() {
+  setHash('/my/message');
+});
 
 migi.render(
   <div class="info"/>,
@@ -69,6 +73,9 @@ window.comment = function(type) {
 function iframeGoto(hash, noRedirect) {
   hash = hash || '';
   hash = hash.replace(/^#/, '');
+  if(hash.charAt(0) !== '/') {
+    hash = '/' + hash;
+  }
   // 兼容
   if(hash.indexOf('/musicalbum/') === 0) {
     location.hash = '#/works/' + hash.slice(12);

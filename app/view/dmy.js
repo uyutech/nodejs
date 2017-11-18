@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 97);
+/******/ 	return __webpack_require__(__webpack_require__.s = 98);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -455,6 +455,206 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// import Spark from 'spark-md5';
+
+var Profile = function (_migi$Component) {
+  _inherits(Profile, _migi$Component);
+
+  function Profile() {
+    var _ref;
+
+    _classCallCheck(this, Profile);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Profile.__proto__ || Object.getPrototypeOf(Profile)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.head = self.props.userInfo.Head_Url;
+    self.sname = self.props.userInfo.NickName;
+    self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
+    self.updateHeadTimeDiff = self.props.updateHeadTimeDiff || 0;
+    return _this;
+  }
+
+  _createClass(Profile, [{
+    key: 'click',
+    value: function click(e) {
+      e.preventDefault();
+      var self = this;
+      if (self.updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
+        alert('昵称一天只能修改一次哦~');
+        return;
+      }
+      $(self.ref.sname.element).addClass('fn-hide');
+      $(self.ref.edit.element).addClass('fn-hide');
+      $(self.ref.input.element).removeClass('fn-hide').focus().val(self.sname);
+    }
+  }, {
+    key: 'blur',
+    value: function blur() {
+      var self = this;
+      $(self.ref.sname.element).removeClass('fn-hide');
+      $(self.ref.input.element).addClass('fn-hide');
+      var $edit = $(self.ref.edit.element);
+      var newName = $(self.ref.input.element).val().trim();
+      var length = newName.length;
+      if (length < 4 || length > 8) {
+        alert('昵称长度需要在4~8个字之间哦~');
+        $edit.removeClass('fn-hide');
+        return;
+      }
+      if (newName !== self.sname) {
+        _net2.default.postJSON('/api/user/updateNickName', { nickName: newName }, function (res) {
+          if (res.success) {
+            self.sname = newName;
+            self.updateNickNameTimeDiff = 0;
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+          $edit.removeClass('fn-hide');
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          $edit.removeClass('fn-hide');
+        });
+      } else {
+        $edit.removeClass('fn-hide');
+      }
+    }
+  }, {
+    key: 'clickHead',
+    value: function clickHead(e) {
+      var self = this;
+      if (self.updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+        e.preventDefault();
+        alert('头像一天只能修改一次哦~');
+      }
+    }
+  }, {
+    key: 'change',
+    value: function change(e) {
+      var self = this;
+      if (self.updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+        e.preventDefault();
+        alert('头像一天只能修改一次哦~');
+        return;
+      }
+      if (window.FileReader) {
+        var file = e.target.files[0];
+        var size = file.size;
+        if (size && size !== 0 && size <= 1024 * 500) {
+          var $upload = $(self.ref.upload.element);
+          $upload.addClass('fn-hide');
+          var fileReader = new FileReader();
+          fileReader.onload = function () {
+            _net2.default.postJSON('/api/user/uploadHead', { img: fileReader.result }, function (res) {
+              if (res.success) {
+                self.head = res.url;
+                self.updateHeadTimeDiff = 0;
+              } else {
+                alert(res.message || _util2.default.ERROR_MESSAGE);
+              }
+              $upload.removeClass('fn-hide');
+            }, function (res) {
+              alert(res.message || _util2.default.ERROR_MESSAGE);
+              $upload.removeClass('fn-hide');
+            });
+          };
+          fileReader.readAsDataURL(file);
+        } else {
+          alert('图片体积太大啦，不能超过500k！');
+        }
+      } else {
+        alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器或者极速模式。');
+      }
+    }
+  }, {
+    key: 'clickPic',
+    value: function clickPic(e, vd, tvd) {
+      if (tvd.name === 'img') {
+        $(this.ref.file.element).click();
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"], ["onClick", new migi.Cb(this, this.clickPic)]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
+        return _util2.default.autoSsl(_util2.default.img220_220_80(this.head)) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png';
+      })]]), migi.createVd("div", [["class", "upload"], ["ref", "upload"]], [migi.createVd("input", [["ref", "file"], ["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["onClick", new migi.Cb(this, this.clickHead)], ["accept", "image/gif, image/jpeg, image/png"]])])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "sname"]], [new migi.Obj("sname", this, function () {
+        return this.sname;
+      })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["onBlur", new migi.Cb(this, this.blur)], ["maxlength", "8"]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]])])]);
+    }
+  }, {
+    key: 'head',
+    set: function set(v) {
+      this.__setBind("head", v);this.__data("head");
+    },
+    get: function get() {
+      return this.__getBind("head");
+    }
+  }, {
+    key: 'sname',
+    set: function set(v) {
+      this.__setBind("sname", v);this.__data("sname");
+    },
+    get: function get() {
+      return this.__getBind("sname");
+    }
+  }, {
+    key: 'updateNickNameTimeDiff',
+    set: function set(v) {
+      this.__setBind("updateNickNameTimeDiff", v);this.__data("updateNickNameTimeDiff");
+    },
+    get: function get() {
+      return this.__getBind("updateNickNameTimeDiff");
+    }
+  }, {
+    key: 'updateHeadTimeDiff',
+    set: function set(v) {
+      this.__setBind("updateHeadTimeDiff", v);this.__data("updateHeadTimeDiff");
+    },
+    get: function get() {
+      return this.__getBind("updateHeadTimeDiff");
+    }
+  }]);
+
+  return Profile;
+}(migi.Component);
+
+migi.name(Profile, "Profile");exports.default = Profile;
+
+/***/ }),
+
+/***/ 101:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var Follow = function (_migi$Component) {
   _inherits(Follow, _migi$Component);
 
@@ -674,7 +874,7 @@ migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
 
-/***/ 9:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -852,7 +1052,7 @@ migi.name(HotPost, "HotPost");exports.default = HotPost;
 
 /***/ }),
 
-/***/ 97:
+/***/ 98:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -888,7 +1088,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dmy.css') + '"/>\n</head>\n<body>\n<div id="page">' + my + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + data.helper.stringify(userInfo) + ';\n  $CONFIG.follows = ' + data.helper.stringify(follows) + ';\n  $CONFIG.favors = ' + data.helper.stringify(favors) + ';\n  $CONFIG.myPost = ' + data.helper.stringify(myPost) + ';\n  $CONFIG.updateNickNameTimeDiff = ' + data.helper.stringify(updateNickNameTimeDiff) + ';\n  $CONFIG.updateHeadTimeDiff = ' + data.helper.stringify(updateHeadTimeDiff) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dmy.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _My = __webpack_require__(98);
+var _My = __webpack_require__(99);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -898,7 +1098,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 98:
+/***/ 99:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -918,15 +1118,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Profile = __webpack_require__(99);
+var _Profile = __webpack_require__(100);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(100);
+var _Follow = __webpack_require__(101);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _HotPost = __webpack_require__(9);
+var _HotPost = __webpack_require__(7);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
@@ -1026,206 +1226,6 @@ var My = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(My, "My");exports.default = My;
-
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _net = __webpack_require__(1);
-
-var _net2 = _interopRequireDefault(_net);
-
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// import Spark from 'spark-md5';
-
-var Profile = function (_migi$Component) {
-  _inherits(Profile, _migi$Component);
-
-  function Profile() {
-    var _ref;
-
-    _classCallCheck(this, Profile);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Profile.__proto__ || Object.getPrototypeOf(Profile)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.head = self.props.userInfo.Head_Url;
-    self.sname = self.props.userInfo.NickName;
-    self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
-    self.updateHeadTimeDiff = self.props.updateHeadTimeDiff || 0;
-    return _this;
-  }
-
-  _createClass(Profile, [{
-    key: 'click',
-    value: function click(e) {
-      e.preventDefault();
-      var self = this;
-      if (self.updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
-        alert('昵称一天只能修改一次哦~');
-        return;
-      }
-      $(self.ref.sname.element).addClass('fn-hide');
-      $(self.ref.edit.element).addClass('fn-hide');
-      $(self.ref.input.element).removeClass('fn-hide').focus().val(self.sname);
-    }
-  }, {
-    key: 'blur',
-    value: function blur() {
-      var self = this;
-      $(self.ref.sname.element).removeClass('fn-hide');
-      $(self.ref.input.element).addClass('fn-hide');
-      var $edit = $(self.ref.edit.element);
-      var newName = $(self.ref.input.element).val().trim();
-      var length = newName.length;
-      if (length < 4 || length > 8) {
-        alert('昵称长度需要在4~8个字之间哦~');
-        $edit.removeClass('fn-hide');
-        return;
-      }
-      if (newName !== self.sname) {
-        _net2.default.postJSON('/api/user/updateNickName', { nickName: newName }, function (res) {
-          if (res.success) {
-            self.sname = newName;
-            self.updateNickNameTimeDiff = 0;
-          } else {
-            alert(res.message || _util2.default.ERROR_MESSAGE);
-          }
-          $edit.removeClass('fn-hide');
-        }, function (res) {
-          alert(res.message || _util2.default.ERROR_MESSAGE);
-          $edit.removeClass('fn-hide');
-        });
-      } else {
-        $edit.removeClass('fn-hide');
-      }
-    }
-  }, {
-    key: 'clickHead',
-    value: function clickHead(e) {
-      var self = this;
-      if (self.updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
-        e.preventDefault();
-        alert('头像一天只能修改一次哦~');
-      }
-    }
-  }, {
-    key: 'change',
-    value: function change(e) {
-      var self = this;
-      if (self.updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
-        e.preventDefault();
-        alert('头像一天只能修改一次哦~');
-        return;
-      }
-      if (window.FileReader) {
-        var file = e.target.files[0];
-        var size = file.size;
-        if (size && size !== 0 && size <= 1024 * 500) {
-          var $upload = $(self.ref.upload.element);
-          $upload.addClass('fn-hide');
-          var fileReader = new FileReader();
-          fileReader.onload = function () {
-            _net2.default.postJSON('/api/user/uploadHead', { img: fileReader.result }, function (res) {
-              if (res.success) {
-                self.head = res.url;
-                self.updateHeadTimeDiff = 0;
-              } else {
-                alert(res.message || _util2.default.ERROR_MESSAGE);
-              }
-              $upload.removeClass('fn-hide');
-            }, function (res) {
-              alert(res.message || _util2.default.ERROR_MESSAGE);
-              $upload.removeClass('fn-hide');
-            });
-          };
-          fileReader.readAsDataURL(file);
-        } else {
-          alert('图片体积太大啦，不能超过500k！');
-        }
-      } else {
-        alert('您的浏览器暂不支持上传，请暂时使用Chrome或者IE10以上浏览器或者极速模式。');
-      }
-    }
-  }, {
-    key: 'clickPic',
-    value: function clickPic(e, vd, tvd) {
-      if (tvd.name === 'img') {
-        $(this.ref.file.element).click();
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("div", [["class", "pic"], ["onClick", new migi.Cb(this, this.clickPic)]], [migi.createVd("img", [["src", new migi.Obj("head", this, function () {
-        return _util2.default.autoSsl(_util2.default.img220_220_80(this.head)) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png';
-      })]]), migi.createVd("div", [["class", "upload"], ["ref", "upload"]], [migi.createVd("input", [["ref", "file"], ["type", "file"], ["onChange", new migi.Cb(this, this.change)], ["onClick", new migi.Cb(this, this.clickHead)], ["accept", "image/gif, image/jpeg, image/png"]])])]), migi.createVd("div", [["class", "txt"]], [migi.createVd("strong", [["ref", "sname"]], [new migi.Obj("sname", this, function () {
-        return this.sname;
-      })]), migi.createVd("input", [["ref", "input"], ["type", "text"], ["class", "fn-hide"], ["value", ""], ["onBlur", new migi.Cb(this, this.blur)], ["maxlength", "8"]]), migi.createVd("b", [["class", "edit"], ["ref", "edit"], ["onClick", new migi.Cb(this, this.click)]])])]);
-    }
-  }, {
-    key: 'head',
-    set: function set(v) {
-      this.__setBind("head", v);this.__data("head");
-    },
-    get: function get() {
-      return this.__getBind("head");
-    }
-  }, {
-    key: 'sname',
-    set: function set(v) {
-      this.__setBind("sname", v);this.__data("sname");
-    },
-    get: function get() {
-      return this.__getBind("sname");
-    }
-  }, {
-    key: 'updateNickNameTimeDiff',
-    set: function set(v) {
-      this.__setBind("updateNickNameTimeDiff", v);this.__data("updateNickNameTimeDiff");
-    },
-    get: function get() {
-      return this.__getBind("updateNickNameTimeDiff");
-    }
-  }, {
-    key: 'updateHeadTimeDiff',
-    set: function set(v) {
-      this.__setBind("updateHeadTimeDiff", v);this.__data("updateHeadTimeDiff");
-    },
-    get: function get() {
-      return this.__getBind("updateHeadTimeDiff");
-    }
-  }]);
-
-  return Profile;
-}(migi.Component);
-
-migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ })
 

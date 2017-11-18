@@ -9,13 +9,15 @@ class QuanNiang extends migi.Component {
     super(...data);
   }
   @bind message;
-  click(e) {
-    e.preventDefault();
+  click() {
     this.show();
   }
   clickClose(e) {
     e.preventDefault();
     $(this.ref.txt.element).addClass('fn-hide');
+  }
+  clickMessage() {
+    this.emit('message');
   }
   show() {
     let $txt = $(this.ref.txt.element);
@@ -40,7 +42,12 @@ class QuanNiang extends migi.Component {
   }
   render() {
     return <div class="quaniang">
-      <a href="#" class="pic" onClick={ this.click }/>
+      {
+        $CONFIG.messages.Count
+          ? <div class="message" onClick={ this.clickMessage }><span>{ $CONFIG.messages.Count }</span></div>
+          : ''
+      }
+      <span class="pic" onClick={ this.click }/>
       <div class="txt fn-hide" ref="txt" onMouseEnter={ this.enter } onMouseLeave={ this.leave }>
         <h5>圈儿：</h5>
         <pre>{ this.message || '感谢参与转圈内测，现在我们还只有最基础的功能，程序员小哥哥们还在加班加点进行建设。\n欢迎随处逛逛，也欢迎给我们提出宝贵建议！我们一定会做得更好=3=' }</pre>

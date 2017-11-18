@@ -11,6 +11,7 @@ export default function(data) {
   let isAuthor = !!data.ctx.session.authorID;
   let userInfo = data.userInfo;
   let authorInfo = data.authorInfo;
+  let messages = data.messages;
 
   let topNav = migi.preRender(<TopNav userInfo={ userInfo }
                                       isLogin={ isLogin } isAuthor={ isAuthor }/>);
@@ -28,6 +29,7 @@ ${topNav}
   ${data.helper.$CONFIG}
   $CONFIG.userInfo = ${data.helper.stringify(userInfo)};
   $CONFIG.authorInfo = ${data.helper.stringify(authorInfo)};
+  $CONFIG.messages = ${data.helper.stringify(messages)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dindex.js')}"></script>

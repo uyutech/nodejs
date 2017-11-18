@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 206);
+/******/ 	return __webpack_require__(__webpack_require__.s = 208);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 206:
+/***/ 208:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(207);
+__webpack_require__(209);
 
-var _Guide = __webpack_require__(208);
+var _Guide = __webpack_require__(210);
 
 var _Guide2 = _interopRequireDefault(_Guide);
 
@@ -83,14 +83,14 @@ var guide = migi.preExist(migi.createCp(_Guide2.default, []));
 
 /***/ }),
 
-/***/ 207:
+/***/ 209:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 208:
+/***/ 210:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 87);
+/******/ 	return __webpack_require__(__webpack_require__.s = 88);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -650,22 +650,6 @@ var HotWork = function (_migi$Component) {
   }
 
   _createClass(HotWork, [{
-    key: 'clickPrev',
-    value: function clickPrev(e) {
-      e.preventDefault();
-    }
-  }, {
-    key: 'clickNext',
-    value: function clickNext(e) {
-      e.preventDefault();
-    }
-  }, {
-    key: 'clickChange',
-    value: function clickChange(e) {
-      e.preventDefault();
-      this.emit('change');
-    }
-  }, {
     key: 'render',
     value: function render() {
       return migi.createVd("div", [["class", "cp-hotwork"]], [migi.createVd("h4", [], [this.props.title, migi.createVd("small", [], ['未来会根据你的口味进行精准智能的推送！>3<'])]), new migi.Obj("dataList", this, function () {
@@ -1038,177 +1022,177 @@ let code2Data = {
   '901': {
     name: '出品',
     display: '出品',
-    css: 'producer',
+    css: 'ce',
   },
   '902': {
     name: '策划',
     display: '策划',
-    css: 'producer',
+    css: 'ce',
   },
   '111': {
     name: '演唱',
     display: '演唱',
-    css: 'singer',
+    css: 'ge',
   },
   '112': {
     name: '和声',
     display: '和声',
-    css: 'singer',
+    css: 'ge',
   },
   '113': {
     name: '伴唱',
     display: '伴唱',
-    css: 'singer',
+    css: 'ge',
   },
   '114': {
     name: '戏腔',
     display: '戏腔',
-    css: 'singer',
+    css: 'ge',
   },
   '115': {
     name: '合唱',
     display: '合唱',
-    css: 'singer',
+    css: 'ge',
   },
   '121': {
     name: '作曲',
     display: '作曲',
-    css: 'musician',
+    css: 'qu',
   },
   '122': {
     name: '编曲',
     display: '编曲',
-    css: 'musician',
+    css: 'qu',
   },
   '131': {
     name: '混音',
     display: '混音',
-    css: 'mixer',
+    css: 'hun',
   },
   '132': {
     name: '母带',
     display: '母带',
-    css: 'mixer',
+    css: 'hun',
   },
   '133': {
     name: '录音',
     display: '录音',
-    css: 'mixer',
+    css: 'hun',
   },
   '134': {
     name: '修音',
     display: '修音',
-    css: 'mixer',
+    css: 'hun',
   },
   '141': {
     name: '演奏',
     display: '演奏', //优先显示乐器名。
-    css: 'instrumental',
+    css: 'yue',
   },
   '151': {
     name: '配音',
     display: '配音',
-    css: 'singer',
+    css: 'yue',
   },
   '211': {
     name: '视频',
     display: '视频',
-    css: 'video',
+    css: 'ying',
   },
   '212': {
     name: '压制',
     display: '压制',
-    css: 'video',
+    css: 'ying',
   },
   '213': {
     name: '拍摄',
     display: '拍摄',
-    css: 'video',
+    css: 'ying',
   },
   '311': {
     name: '立绘',
     display: '立绘',
-    css: 'painter',
+    css: 'tu',
   },
   '312': {
     name: 'CG',
     display: 'CG',
-    css: 'painter',
+    css: 'tu',
   },
   '313': {
     name: '场景',
     display: '场景',
-    css: 'painter',
+    css: 'tu',
   },
   '314': {
     name: '线稿',
     display: '线稿',
-    css: 'painter',
+    css: 'tu',
   },
   '315': {
     name: '上色',
     display: '上色',
-    css: 'painter',
+    css: 'tu',
   },
   '316': {
     name: '手绘',
     display: '手绘',
-    css: 'painter',
+    css: 'tu',
   },
   '317': {
     name: '插画',
     display: '插画',
-    css: 'painter',
+    css: 'tu',
   },
   '331': {
     name: '设计',
     display: '设计',
-    css: 'designer',
+    css: 'she',
   },
   '332': {
     name: '海报',
     display: '海报',
-    css: 'designer',
+    css: 'she',
   },
   '333': {
     name: 'Logo设计',
     display: 'Logo设计',
-    css: 'designer',
+    css: 'she',
   },
   '341': {
     name: '漫画',
     display: '漫画',
-    css: 'painter',
+    css: 'she',
   },
   '351': {
     name: '书法',
     display: '书法',
-    css: 'handwriting',
+    css: 'ji',
   },
   '391': {
     name: '沙画',
     display: '沙画',
-    css: 'painter',
+    css: 'ji',
   },
   '411': {
     name: '作词',
     display: '作词',
-    css: 'writer',
+    css: 'wen',
   },
   '421': {
     name: '文案',
     display: '文案',
-    css: 'writer',
+    css: 'wen',
   },
   '422': {
     name: '剧本',
     display: '剧本',
-    css: 'writer',
+    css: 'wen',
   },
   '423': {
     name: '小说',
     display: '小说',
-    css: 'writer',
+    css: 'wen',
   },
 };
 
@@ -1375,6 +1359,18 @@ var Comment = function (_migi$Component) {
       $root.on('click', '.list>li>.c>pre', function () {
         self.slide($(this).closest('li'));
       });
+      $root.on('click', '.list2 pre', function () {
+        var $pre = $(this);
+        var $li = $pre.closest('li');
+        if ($li.hasClass('on')) {
+          $li.removeClass('on');
+          var $slide = $last.find('.slide');
+          self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'));
+        } else {
+          $li.addClass('on');
+          self.emit('chooseSubComment', $pre.attr('rid'), $pre.attr('cid'), $pre.attr('name'));
+        }
+      });
       $root.on('click', '.more', function () {
         var $message = $(this);
         var rid = $message.attr('rid');
@@ -1404,9 +1400,6 @@ var Comment = function (_migi$Component) {
         }, function (res) {
           $message.addClass('more').text(res.message || _util2.default.ERROR_MESSAGE);
         });
-      });
-      $root.on('click', '.share', function (e) {
-        e.preventDefault();
       });
       $root.on('click', '.remove', function () {
         var $btn = $(this);
@@ -1446,6 +1439,7 @@ var Comment = function (_migi$Component) {
       }
       if ($li.hasClass('on')) {
         $li.removeClass('on');
+        $li.find('li.on').removeClass('on');
         $list2.css('height', 0);
         self.emit('closeSubComment');
         $last = null;
@@ -1564,15 +1558,15 @@ var Comment = function (_migi$Component) {
     key: 'genChildComment',
     value: function genChildComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), item.IsAuthor === true ? migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]) : migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.Send_ToUserID ? migi.createVd("span", [["class", "to"]], [item.Send_ToUserName]) : '', migi.createVd("b", [["class", "arrow"]]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name2 fn-hide"]], [item.Send_ToUserName]), migi.createVd("b", [["class", "arrow fn-hide"]]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.Send_ToUserID ? migi.createVd("span", [["class", "to"]], [item.Send_ToUserName]) : '', migi.createVd("b", [["class", "arrow"]]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'hideLast',
     value: function hideLast() {
       if ($last && $last.hasClass('on')) {
-        $last.removeClass('on').find('.list2').css('height', 0);
+        $last.removeClass('on').find('.list2').css('height', 0).find('li.on').removeClass('on');
       }
       $last = null;
     }
@@ -1602,7 +1596,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 87:
+/***/ 88:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1628,7 +1622,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: authorDetail.AuthorName }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dauthor.css') + '"/>\n</head>\n<body>\n<div id="page">' + author + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.authorID = ' + data.helper.stringify(authorID) + ';\n  $CONFIG.authorDetail = ' + data.helper.stringify(authorDetail) + ';\n  $CONFIG.homeDetail = ' + data.helper.stringify(homeDetail) + ';\n  $CONFIG.tags = ' + data.helper.stringify(tags) + ';\n  $CONFIG.playList = ' + data.helper.stringify(playList) + ';\n  $CONFIG.playList2 = ' + data.helper.stringify(playList2) + ';\n  $CONFIG.commentData = ' + data.helper.stringify(commentData) + ';\n  $CONFIG.hotCommentData = ' + data.helper.stringify(hotCommentData) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dauthor.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Author = __webpack_require__(88);
+var _Author = __webpack_require__(89);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -1638,7 +1632,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 88:
+/***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1658,15 +1652,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Nav = __webpack_require__(89);
+var _Nav = __webpack_require__(90);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(92);
+var _Home = __webpack_require__(93);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _AuthorComment = __webpack_require__(94);
+var _AuthorComment = __webpack_require__(95);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
@@ -1801,7 +1795,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 89:
+/***/ 90:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1813,11 +1807,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(90);
+var _Profile = __webpack_require__(91);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(91);
+var _Link = __webpack_require__(92);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -1858,7 +1852,7 @@ migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
 
-/***/ 90:
+/***/ 91:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2074,7 +2068,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 91:
+/***/ 92:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2179,7 +2173,7 @@ migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
 
-/***/ 92:
+/***/ 93:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2203,7 +2197,7 @@ var _HotAuthor = __webpack_require__(25);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(93);
+var _Dynamic = __webpack_require__(94);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -2254,7 +2248,7 @@ migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
 
-/***/ 93:
+/***/ 94:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2328,7 +2322,7 @@ migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
 
-/***/ 94:
+/***/ 95:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 155);
+/******/ 	return __webpack_require__(__webpack_require__.s = 154);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -429,27 +429,27 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 155:
+/***/ 154:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(156);
+__webpack_require__(155);
 
-var _TopNav = __webpack_require__(157);
+var _TopNav = __webpack_require__(156);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(158);
+var _CIframe = __webpack_require__(157);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(159);
+var _QuanNiang = __webpack_require__(158);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
-var _Welcome = __webpack_require__(160);
+var _Welcome = __webpack_require__(159);
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
@@ -460,7 +460,11 @@ var topNav = migi.preExist(migi.createCp(_TopNav2.default, [["userInfo", $CONFIG
 var cIframe = void 0;
 var url = void 0;
 
-var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, []), document.body);
+var quanNiang = migi.render(migi.createCp(_QuanNiang2.default, [["messages", $CONFIG.messages]]), document.body);
+
+quanNiang.on('message', function () {
+  setHash('/my/message');
+});
 
 migi.render(migi.createVd("div", [["class", "info"]]), document.body);
 
@@ -505,6 +509,9 @@ window.comment = function (type) {
 function iframeGoto(hash, noRedirect) {
   hash = hash || '';
   hash = hash.replace(/^#/, '');
+  if (hash.charAt(0) !== '/') {
+    hash = '/' + hash;
+  }
   // 兼容
   if (hash.indexOf('/musicalbum/') === 0) {
     location.hash = '#/works/' + hash.slice(12);
@@ -539,14 +546,14 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 156:
+/***/ 155:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 157:
+/***/ 156:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -677,7 +684,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 158:
+/***/ 157:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -724,7 +731,7 @@ migi.name(CIframe, "CIframe");exports.default = CIframe;
 
 /***/ }),
 
-/***/ 159:
+/***/ 158:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -761,8 +768,7 @@ var QuanNiang = function (_migi$Component) {
 
   _createClass(QuanNiang, [{
     key: "click",
-    value: function click(e) {
-      e.preventDefault();
+    value: function click() {
       this.show();
     }
   }, {
@@ -770,6 +776,11 @@ var QuanNiang = function (_migi$Component) {
     value: function clickClose(e) {
       e.preventDefault();
       $(this.ref.txt.element).addClass('fn-hide');
+    }
+  }, {
+    key: "clickMessage",
+    value: function clickMessage() {
+      this.emit('message');
     }
   }, {
     key: "show",
@@ -801,7 +812,7 @@ var QuanNiang = function (_migi$Component) {
   }, {
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "quaniang"]], [migi.createVd("a", [["href", "#"], ["class", "pic"], ["onClick", new migi.Cb(this, this.click)]]), migi.createVd("div", [["class", "txt fn-hide"], ["ref", "txt"], ["onMouseEnter", new migi.Cb(this, this.enter)], ["onMouseLeave", new migi.Cb(this, this.leave)]], [migi.createVd("h5", [], ["圈儿："]), migi.createVd("pre", [], [new migi.Obj("message", this, function () {
+      return migi.createVd("div", [["class", "quaniang"]], [$CONFIG.messages.Count ? migi.createVd("div", [["class", "message"], ["onClick", new migi.Cb(this, this.clickMessage)]], [migi.createVd("span", [], [$CONFIG.messages.Count])]) : '', migi.createVd("span", [["class", "pic"], ["onClick", new migi.Cb(this, this.click)]]), migi.createVd("div", [["class", "txt fn-hide"], ["ref", "txt"], ["onMouseEnter", new migi.Cb(this, this.enter)], ["onMouseLeave", new migi.Cb(this, this.leave)]], [migi.createVd("h5", [], ["圈儿："]), migi.createVd("pre", [], [new migi.Obj("message", this, function () {
         return this.message || '感谢参与转圈内测，现在我们还只有最基础的功能，程序员小哥哥们还在加班加点进行建设。\n欢迎随处逛逛，也欢迎给我们提出宝贵建议！我们一定会做得更好=3=';
       })]), migi.createVd("p", [], ["欢迎点击右侧给我们留言！", migi.createVd("a", [["href", "http://weibo.com/u/6259241863"], ["target", "_blank"]], ["@转圈circling"])]), migi.createVd("a", [["class", "close"], ["href", "#"], ["onClick", new migi.Cb(this, this.clickClose)]], ["好的"])])]);
     }
@@ -822,7 +833,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 160:
+/***/ 159:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

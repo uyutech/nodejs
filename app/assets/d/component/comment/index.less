@@ -49,14 +49,17 @@
           padding:0 0 0 0.1rem;
           .remove{
             float:right;
-            width:0.3rem;
-            height:0.3rem;
-            background:url(remove.png) no-repeat center;
-            background-size:0.15rem;
+            width:0.24rem;
+            height:0.24rem;
+            background:url(../hotpost/del.png) no-repeat center;
+            background-size:contain;
             text-indent:999rem;
             white-space:nowrap;
             overflow:hidden;
             cursor:pointer;
+            &:hover{
+              background-image:url(../hotpost/del-hover.png);
+            }
           }
         }
       }
@@ -129,30 +132,36 @@
             margin-right:0.05rem;
             &:after{
               display:inline-block;
-              margin-left:0.05rem;
-              width:0.12rem;
-              height:0.13rem;
+              margin-left:0.02rem;
+              width:0.16rem;
+              height:0.16rem;
               background:url(like.png) no-repeat;
               background-size:contain;
               content:' ';
               vertical-align:top;
-              transform:translateY(0.03rem);
+              transform:translateY(0.02rem);
             }
             &.liked:after{
               background-image:url(liked.png);
+            }
+            &:hover:after{
+              background-image:url(like-hover.png);
             }
           }
           .sub{
             &:after{
               display:inline-block;
-              margin-left:0.05rem;
-              width:0.14rem;
-              height:0.14rem;
+              margin-left:0.02rem;
+              width:0.16rem;
+              height:0.16rem;
               background:url(comment.png) no-repeat;
               background-size:contain;
               content:' ';
               vertical-align:top;
-              transform:translateY(0.03rem);
+              transform:translateY(0.02rem);
+            }
+            &:hover:after{
+              background-image:url(comment-hover.png);
             }
           }
         }
@@ -212,7 +221,7 @@
                   border-top-color:transparent;
                   border-bottom-color:transparent;
                   border-left-color:transparent;
-                  transform:scaleX(2.2);
+                  transform:scaleX(1.5);
                 }
               }
             }
@@ -221,14 +230,17 @@
               margin-right:0.2rem;
               .remove{
                 float:right;
-                width:0.3rem;
-                height:0.3rem;
-                background:url(remove.png) no-repeat center;
-                background-size:0.15rem;
+                width:0.24rem;
+                height:0.24rem;
+                background:url(../hotpost/del.png) no-repeat center;
+                background-size:contain;
                 text-indent:999rem;
                 white-space:nowrap;
                 overflow:hidden;
                 cursor:pointer;
+                &:hover{
+                  background-image:url(../hotpost/del-hover.png);
+                }
               }
             }
           }
@@ -294,18 +306,36 @@
               .like{
                 &:after{
                   display:inline-block;
-                  margin-left:0.05rem;
-                  width:0.12rem;
-                  height:0.13rem;
+                  margin-left:0.02rem;
+                  width:0.16rem;
+                  height:0.16rem;
                   background:url(like.png) no-repeat;
                   background-size:contain;
                   content:' ';
                   vertical-align:top;
-                  transform:translateY(0.03rem);
+                  transform:translateY(0.02rem);
                 }
                 &.liked:after{
                   background-image:url(liked.png);
                 }
+                &:hover:after{
+                  background-image:url(like-hover.png);
+                }
+              }
+            }
+          }
+          &.on > .c{
+            background:#FFE;
+            .arrow:after{
+              background:#FFE;
+            }
+            > .slide2{
+              background:#FFE;
+              .sub{
+                display:none;
+              }
+              span{
+                display:inline-block;
               }
             }
           }

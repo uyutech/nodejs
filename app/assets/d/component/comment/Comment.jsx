@@ -57,6 +57,19 @@ class Comment extends migi.Component {
       $root.on('click', '.list>li>.c>pre', function() {
         self.slide($(this).closest('li'));
       });
+      $root.on('click', '.list2 pre', function() {
+        let $pre = $(this);
+        let $li = $pre.closest('li');
+        if($li.hasClass('on')) {
+          $li.removeClass('on');
+          let $slide = $last.find('.slide');
+          self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'));
+        }
+        else {
+          $li.addClass('on');
+          self.emit('chooseSubComment', $pre.attr('rid'), $pre.attr('cid'), $pre.attr('name'));
+        }
+      });
       $root.on('click', '.more', function() {
         let $message = $(this);
         let rid = $message.attr('rid');
@@ -89,9 +102,6 @@ class Comment extends migi.Component {
         }, function(res) {
           $message.addClass('more').text(res.message || util.ERROR_MESSAGE);
         });
-      });
-      $root.on('click', '.share', function(e) {
-        e.preventDefault();
       });
       $root.on('click', '.remove', function() {
         let $btn = $(this);
@@ -130,6 +140,7 @@ class Comment extends migi.Component {
     }
     if($li.hasClass('on')) {
       $li.removeClass('on');
+      $li.find('li.on').removeClass('on');
       $list2.css('height', 0);
       self.emit('closeSubComment');
       $last = null;
@@ -308,12 +319,14 @@ class Comment extends migi.Component {
             <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
             <div class="txt">
               <div>
-                <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
                 {
-                  item.IsAuthor === true
-                    ? <span class="name">{ item.Send_AuthorName }</span>
-                    : <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
+                  item.Send_ToUserID
+                    ? <span class="to">{ item.Send_ToUserName }</span>
+                    : ''
                 }
+                <b class="arrow"/>
+                <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
+                <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
               </div>
               <p>{ item.sign }</p>
             </div>
@@ -339,8 +352,12 @@ class Comment extends migi.Component {
           <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
             <div>
-              <span class="name2 fn-hide">{ item.Send_ToUserName }</span>
-              <b class="arrow fn-hide"/>
+              {
+                item.Send_ToUserID
+                  ? <span class="to">{ item.Send_ToUserName }</span>
+                  : ''
+              }
+              <b class="arrow"/>
               <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
               <span class="name">{ item.Send_UserName }</span>
             </div>
@@ -364,7 +381,7 @@ class Comment extends migi.Component {
   }
   hideLast() {
     if($last && $last.hasClass('on')) {
-      $last.removeClass('on').find('.list2').css('height', 0);
+      $last.removeClass('on').find('.list2').css('height', 0).find('li.on').removeClass('on');
     }
     $last = null;
   }

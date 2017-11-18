@@ -21,11 +21,13 @@ module.exports = app => {
   app.get('/d/author/:authorID', 'd.author.index');
   // app.get('/d/search/:kw', 'd.search.index');
   app.get('/d/my', app.middlewares.needLogin(), 'd.my.index');
+  app.get('/d/my/message', app.middlewares.needLogin(), 'd.my.message');
   app.get('/d/login', 'd.login.index');
   // app.get('/d/upload', 'd.upload.index');
   // app.get('/d/guide.index', 'd.guide.index');
   app.get('/d/circle/:circleID', 'd.circle.index');
   app.get('/d/post/:id', 'd.post.index');
+  app.get('/d/user/:userID', 'd.user.index');
 
   app.get('/m', 'm.find.index');
   app.get('/m/find', 'm.find.index');
@@ -38,6 +40,7 @@ module.exports = app => {
   app.get('/m/circle/:circleID', 'm.circle.index');
   app.get('/m/circle/post', app.middlewares.needLogin(), 'm.circle.post');
   app.get('/m/post/:id', 'm.post.index');
+  app.get('/m/user/:userID', 'm.user.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 

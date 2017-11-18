@@ -1,0 +1,186 @@
+/**
+ * Created by army8735 on 2017/11/17.
+ */
+/**
+ * Created by army8735 on 2017/9/1.
+ */
+/**
+ * Created by army8735 on 2017/11/18.
+ */
+.cp-messages .list .quote {
+  padding: 0.05rem 0.1rem;
+  background: #F0F0F0;
+}
+.cp-messages .list .quote p {
+  display: inline-block;
+}
+.cp-messages .empty,
+.cp-messages .message {
+  padding: 0.1rem 0;
+  text-align: center;
+  color: #919191;
+}
+/**
+ * Created by army8735 on 2017/9/21.
+ */
+.cp-page {
+  position: relative;
+}
+.cp-page > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+.cp-page .prev,
+.cp-page .next {
+  height: 0.2rem;
+  text-align: center;
+  line-height: 0.2rem;
+}
+.cp-page .prev.dis,
+.cp-page .next.dis {
+  opacity: 0.5;
+  color: #2D4D67;
+  text-decoration: none;
+  cursor: default;
+}
+.cp-page .prev b,
+.cp-page .next b {
+  display: inline-block;
+  width: 0.06rem;
+  height: 0.08rem;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQBAMAAADQT4M0AAAAJFBMVEUAAABemsVdmcZdmcVhns5dmsVemsRmmcxlotFgn99emsVdmcTmznu0AAAAC3RSTlMA6lWqFd/RFBAIq5oLHJAAAAA5SURBVAjXYwCDGWCSSRREsljvBlGKu0GU824QxSQNotitd4Mott3IFPvq3TAlMA0w7VDDoEZDLQIAcv8eK2Yw3vgAAAAASUVORK5CYII=) no-repeat;
+  background-size: contain;
+}
+.cp-page .prev b {
+  margin-right: 0.02rem;
+}
+.cp-page .next b {
+  margin-left: 0.02rem;
+  -webkit-transform: rotateZ(180deg);
+          transform: rotateZ(180deg);
+}
+.cp-page ol {
+  margin: 0 0.1rem;
+  padding: 0;
+}
+.cp-page li {
+  display: inline-block;
+  width: 0.2rem;
+  height: 0.2rem;
+  text-align: center;
+  line-height: 0.2rem;
+}
+.cp-page li span {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  line-height: 0.18rem;
+  box-sizing: border-box;
+  border: 1px solid #D9D9D9;
+  border-radius: 0.04rem;
+}
+.cp-page > span {
+  margin: 0 0.1rem;
+}
+.cp-page .num {
+  margin-right: 0.05rem;
+  padding: 0 0.05rem;
+  width: 0.24rem;
+  height: 0.18rem;
+  border: 1px solid #D9D9D9;
+  border-radius: 0.04rem;
+  -webkit-appearance: textfield;
+}
+.cp-page .sub {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.cp-page .sub:hover {
+  color: #0AE;
+}
+.cp-page input::-webkit-outer-spin-button,
+.cp-page input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+/**
+ * Created by army8735 on 2017/10/12.
+ */
+body {
+  padding-bottom: 0.4rem;
+}
+.cp-subcmt {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0.4rem;
+  background: #BBE1F4;
+  z-index: 99;
+}
+.cp-subcmt form {
+  position: relative;
+  margin: 0 auto;
+  padding-top: 0.05rem;
+  width: 10rem;
+  height: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(90deg, #BBE1F4 0%, #FFF6F8 30%, #FFF6F8 70%, #BBE1F4 100%);
+}
+.cp-subcmt form label {
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  display: none;
+  padding: 0 0.1rem;
+  width: 0.9rem;
+  height: 0.28rem;
+  line-height: 0.28rem;
+  border-radius: 0.3rem;
+  border: 1px solid #B1C0C9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+.cp-subcmt form .text {
+  float: left;
+  padding: 0 0.2rem;
+  width: 8.4rem;
+  height: 0.28rem;
+  background: #F1F6F9;
+  border-radius: 0.3rem;
+  border: 1px solid #B1C0C9;
+  font-size: 0.14rem;
+}
+.cp-subcmt form .text::-webkit-input-placeholder {
+  color: #B7C8D0;
+}
+.cp-subcmt form .submit {
+  float: right;
+  width: 0.8rem;
+  height: 0.3rem;
+  background: #4E8EB0;
+  color: #FFF;
+  border-radius: 0.3rem;
+  border: none;
+  cursor: pointer;
+}
+.cp-subcmt form .submit.dis {
+  background: #ccc;
+  cursor: default;
+}
+.cp-subcmt form.to label {
+  display: block;
+}
+.cp-subcmt form.to .text {
+  padding-left: 1.2rem;
+  width: 7.4rem;
+}
+.message .main {
+  float: left;
+  width: 6.48rem;
+}
+.cp-page {
+  text-align: right;
+}

@@ -899,6 +899,20 @@
 .cp-page input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
+.find h4 {
+  padding: 0 0.2rem;
+  height: 0.36rem;
+  line-height: 0.36rem;
+  background: #8BBDE1;
+  background-size: 0.24rem auto;
+  font-size: 0.14rem;
+  font-weight: 400;
+}
+.find h4 small {
+  margin-left: 0.2rem;
+  font-size: 0.12rem;
+  opacity: 0.8;
+}
 .find > .banner {
   position: relative;
   height: 3rem;
