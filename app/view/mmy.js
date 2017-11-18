@@ -676,7 +676,7 @@ var _Follow = __webpack_require__(55);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
-var _HotPost = __webpack_require__(9);
+var _HotPost = __webpack_require__(7);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
@@ -1048,7 +1048,7 @@ migi.name(Follow, "Follow");exports.default = Follow;
 
 /***/ }),
 
-/***/ 9:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

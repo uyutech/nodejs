@@ -41,38 +41,6 @@
 .cp-hotwork {
   position: relative;
 }
-.cp-hotwork h4 {
-  padding: 0 0.2rem;
-  height: 0.36rem;
-  line-height: 0.36rem;
-  background: #8BBDE1;
-  background-size: 0.24rem auto;
-  font-size: 0.14rem;
-  font-weight: 400;
-}
-.cp-hotwork h4 small {
-  margin-left: 0.2rem;
-  font-size: 0.12rem;
-  opacity: 0.8;
-}
-.cp-hotwork .fn {
-  position: absolute;
-  top: 0.05rem;
-  right: 0.2rem;
-  font-size: 0.12rem;
-  color: #FFF;
-}
-.cp-hotwork .fn .change {
-  float: left;
-  position: relative;
-  margin-left: 0.2rem;
-  padding: 0 0.1rem;
-  height: 0.24rem;
-  line-height: 0.24rem;
-  border: 1px solid #FFF;
-  border-radius: 0.24rem;
-  color: #FFF;
-}
 .cp-hotwork .list {
   margin-top: 0.2rem;
   margin-right: -1.44rem;
@@ -1452,12 +1420,22 @@ body {
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   border-radius: 0.1rem;
   border-top-left-radius: 0;
+  overflow: hidden;
 }
-.author > .home > .cp-hotwork h4 {
-  border-top-right-radius: 0.1rem;
+.author > .home h4 {
+  position: relative;
+  padding: 0 0.2rem;
+  height: 0.36rem;
+  line-height: 0.36rem;
+  background: #8BBDE1;
+  background-size: 0.24rem auto;
+  font-size: 0.14rem;
+  font-weight: 400;
 }
-.author > .home > .cp-hotwork .fn {
-  display: none;
+.author > .home h4 small {
+  margin-left: 0.2rem;
+  font-size: 0.12rem;
+  opacity: 0.8;
 }
 .author > .home > .cp-collection {
   margin-top: 0.2rem;

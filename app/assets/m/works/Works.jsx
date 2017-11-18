@@ -248,6 +248,10 @@ class Works extends migi.Component {
   }
   clickSel(e, vd, tvd) {
     let self = this;
+    //最后一个可能是文本节点
+    if(!tvd || !tvd.name) {
+      return;
+    }
     let $li = $(tvd.element);
     if(!$li.hasClass('cur') && !$li.hasClass('state')) {
       $(vd.element).find('.cur').removeClass('cur');
@@ -301,6 +305,7 @@ class Works extends migi.Component {
   }
   render() {
     let self = this;
+    let state = worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState);
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       return <div class={'works t' + self.worksType}>
         <MusicAlbum ref="musicAlbum"
@@ -312,7 +317,9 @@ class Works extends migi.Component {
           <li class="cur" rel="playList">曲目</li>
           <li rel="intro">简介</li>
           <li rel="comment">留言</li>
-          <li class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</li>
+          {
+            state ? <li class="state">{ state }</li> : ''
+          }
         </ul>
         <PlayList ref="playList"cover={ this.props.worksDetail.cover_Pic }
                   worksID={ this.worksID } workID={ this.workID } workList={ this.workList }/>
@@ -350,7 +357,9 @@ class Works extends migi.Component {
           <li class="cur" rel="photoAlbum">相册</li>
           <li rel="intro">简介</li>
           <li rel="comment">留言</li>
-          <li class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</li>
+          {
+            state ? <li class="state">{ state }</li> : ''
+          }
         </ul>
         <PhotoAlbum ref="photoAlbum" worksID={ this.worksID } labelList={ this.props.labelList }/>
         <div class="intro fn-hide" ref="intro">
@@ -397,7 +406,9 @@ class Works extends migi.Component {
       <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
         <li class="cur" rel="intro">简介</li>
         <li rel="comment">留言</li>
-        <li class="state">{ worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState) }</li>
+        {
+          state ? <li class="state">{ state }</li> : ''
+        }
       </ul>
       <div class="intro" ref="intro">
         <Author authorList={ this.authorList }/>

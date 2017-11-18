@@ -16,7 +16,7 @@ module.exports = app => {
       let hotPostList = [];
       let hotPlayList = [];
       let res = yield {
-        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List1', {
+        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
           Skip: 0,
           Take: 10,
         }),

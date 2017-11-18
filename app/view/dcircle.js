@@ -492,7 +492,7 @@ var _Page = __webpack_require__(3);
 
 var _Page2 = _interopRequireDefault(_Page);
 
-var _HotPost = __webpack_require__(9);
+var _HotPost = __webpack_require__(7);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
@@ -1363,7 +1363,7 @@ migi.name(Page, "Page");exports.default = Page;
 
 /***/ }),
 
-/***/ 9:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
