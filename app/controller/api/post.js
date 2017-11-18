@@ -40,7 +40,7 @@ module.exports = app => {
     }
     * likeComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/tag/AddWorkCommentLike', {
         uid,
         CommentID: body.commentID,
@@ -49,7 +49,7 @@ module.exports = app => {
     }
     * delComment(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/tag/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
@@ -58,7 +58,7 @@ module.exports = app => {
     }
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/tag/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
@@ -69,7 +69,7 @@ module.exports = app => {
     }
     * like(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/tag/AddLikeBehavior', {
         uid,
         PostID: body.postID,
@@ -78,7 +78,7 @@ module.exports = app => {
     }
     * favor(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/tag/AddCollection', {
         uid,
         PostID: body.postID,
@@ -87,7 +87,7 @@ module.exports = app => {
     }
     * unFavor(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/tag/RemoveCollection', {
         uid,
         PostID: body.postID,
@@ -96,7 +96,7 @@ module.exports = app => {
     }
     * del(ctx) {
       let uid = ctx.session.uid;
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON('api/tag/DelPost', {
         uid,
         PostID: body.postID,

@@ -14,7 +14,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead()}
+  ${data.helper.getDHead({ title: '消息' })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dmy_message.css')}"/>
 </head>

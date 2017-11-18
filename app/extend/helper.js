@@ -53,6 +53,7 @@ let helper = {
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
       <title>${title}</title>
+      <script>if(parent && parent !== window && parent.setTitle) { parent.setTitle("${title}") }</script>
       <link rel="icon" href="//zhuanquan.xin/img/526ac77cd8f453867cb378b4d22cffda.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>
@@ -89,17 +90,25 @@ let helper = {
       <meta name="wap-font-scale" content="no"/>
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">`;
   },
-  getMTopNav: function() {
+  getMTopNav: function(data) {
+    data = data || {}
     let session = this.ctx.session || {};
     let head = session.head || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png';
     if(head && /\/\/zhuanquan\./i.test(head)) {
       head += '-64_64_80';
     }
     if(session.uid) {
+      let num = session.messageNum || 0;
+      if(num > 99) {
+        num = '99+';
+      }
       if(session.authorID) {
         let isPublic = session.isPublic;
         return `<div class="top-nav" id="topNav">
           <a href="/" class="logo"></a>
+          <a class="message" href="/my/message">
+            <span>${ num || '' }</span>
+          </a>
           <span class="public">[${ isPublic ? '切换到马甲' : '切换到作者身份' }]</span>
           <a href="/my" class="user">
             <span class="${'name' + (isPublic ? ' public' : '')}">${helper.encode(isPublic ? session.authorName : session.uname)}</span>
@@ -108,7 +117,10 @@ let helper = {
         </div>`;
       }
       return `<div class="top-nav" id="topNav">
-      <a href="/find" class="logo"></a>
+      <a href="/" class="logo"></a>
+      <a class="message" href="/my/message">
+        <span>${ num || '' }</span>
+      </a>
       <a href="/my" class="user">
         <span class="name">${helper.encode(session.uname)}</span>
         <img src=${head}>

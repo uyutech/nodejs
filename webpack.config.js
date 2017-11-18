@@ -10,6 +10,7 @@ module.exports = {
     mauthor: './app/assets/m/author/index.jsx',
     msearch: './app/assets/m/search/index.jsx',
     mmy: './app/assets/m/my/index.jsx',
+    mmy_message: './app/assets/m/my/message/index.jsx',
     mlogin: './app/assets/m/login/index.jsx',
     mpost: './app/assets/m/post/index.jsx',
     mcircle: './app/assets/m/circle/index.jsx',

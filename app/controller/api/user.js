@@ -339,7 +339,6 @@ module.exports = app => {
       }
       ctx.body = res.data;
     }
-
     * uploadPic(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;

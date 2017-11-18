@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 193);
+/******/ 	return __webpack_require__(__webpack_require__.s = 198);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -429,15 +429,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 193:
+/***/ 198:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(194);
+__webpack_require__(199);
 
-var _My = __webpack_require__(195);
+var _My = __webpack_require__(200);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -447,14 +447,14 @@ var my = migi.preExist(migi.createCp(_My2.default, [["userInfo", $CONFIG.userInf
 
 /***/ }),
 
-/***/ 194:
+/***/ 199:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 195:
+/***/ 200:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -474,11 +474,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Profile = __webpack_require__(196);
+var _Profile = __webpack_require__(201);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(197);
+var _Follow = __webpack_require__(202);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
@@ -486,7 +486,7 @@ var _HotPost = __webpack_require__(23);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
-var _Page = __webpack_require__(8);
+var _Page = __webpack_require__(7);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -585,7 +585,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 196:
+/***/ 201:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -785,7 +785,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 197:
+/***/ 202:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1035,7 +1035,7 @@ migi.name(HotPost, "HotPost");exports.default = HotPost;
 
 /***/ }),
 
-/***/ 8:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

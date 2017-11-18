@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 160);
+/******/ 	return __webpack_require__(__webpack_require__.s = 165);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -429,19 +429,19 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 160:
+/***/ 165:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(161);
+__webpack_require__(166);
 
 var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Find = __webpack_require__(162);
+var _Find = __webpack_require__(167);
 
 var _Find2 = _interopRequireDefault(_Find);
 
@@ -451,14 +451,14 @@ var find = migi.preExist(migi.createCp(_Find2.default, [["hotWorkList", $CONFIG.
 
 /***/ }),
 
-/***/ 161:
+/***/ 166:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 162:
+/***/ 167:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -478,7 +478,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(163);
+var _Banner = __webpack_require__(168);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
@@ -494,7 +494,7 @@ var _HotMusicAlbum = __webpack_require__(69);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 
-var _HotCircle = __webpack_require__(164);
+var _HotCircle = __webpack_require__(169);
 
 var _HotCircle2 = _interopRequireDefault(_HotCircle);
 
@@ -502,11 +502,11 @@ var _HotPost = __webpack_require__(23);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
-var _HotPlayList = __webpack_require__(165);
+var _HotPlayList = __webpack_require__(170);
 
 var _HotPlayList2 = _interopRequireDefault(_HotPlayList);
 
-var _Page = __webpack_require__(8);
+var _Page = __webpack_require__(7);
 
 var _Page2 = _interopRequireDefault(_Page);
 
@@ -590,7 +590,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 163:
+/***/ 168:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -701,7 +701,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 164:
+/***/ 169:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -769,7 +769,7 @@ migi.name(HotCircle, "HotCircle");exports.default = HotCircle;
 
 /***/ }),
 
-/***/ 165:
+/***/ 170:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1318,7 +1318,7 @@ migi.name(HotMusicAlbum, "HotMusicAlbum");exports.default = HotMusicAlbum;
 
 /***/ }),
 
-/***/ 8:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

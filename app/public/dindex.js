@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 154);
+/******/ 	return __webpack_require__(__webpack_require__.s = 159);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -429,27 +429,27 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 154:
+/***/ 159:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(155);
+__webpack_require__(160);
 
-var _TopNav = __webpack_require__(156);
+var _TopNav = __webpack_require__(161);
 
 var _TopNav2 = _interopRequireDefault(_TopNav);
 
-var _CIframe = __webpack_require__(157);
+var _CIframe = __webpack_require__(162);
 
 var _CIframe2 = _interopRequireDefault(_CIframe);
 
-var _QuanNiang = __webpack_require__(158);
+var _QuanNiang = __webpack_require__(163);
 
 var _QuanNiang2 = _interopRequireDefault(_QuanNiang);
 
-var _Welcome = __webpack_require__(159);
+var _Welcome = __webpack_require__(164);
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
@@ -476,6 +476,9 @@ window.setHash = function (hash, noRedirect) {
   iframeGoto(hash, noRedirect);
   location.hash = hash;
 };
+window.setTitle = function (title) {
+  document.title = title;
+};
 window.goto = function (url) {
   location.href = url;
 };
@@ -490,6 +493,9 @@ window.upZIndex = function () {
 };
 window.downZIndex = function () {
   $(cIframe.element).removeClass('up');
+};
+window.readMessage = function (n) {
+  quanNiang.readMessage(n);
 };
 var commentType = {};
 window.comment = function (type) {
@@ -546,14 +552,14 @@ topNav.on('search', function (kw) {
 
 /***/ }),
 
-/***/ 155:
+/***/ 160:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 156:
+/***/ 161:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -684,7 +690,7 @@ migi.name(TopNav, "TopNav");exports.default = TopNav;
 
 /***/ }),
 
-/***/ 157:
+/***/ 162:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -731,7 +737,7 @@ migi.name(CIframe, "CIframe");exports.default = CIframe;
 
 /***/ }),
 
-/***/ 158:
+/***/ 163:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -749,8 +755,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var timeout = void 0;
-
 var QuanNiang = function (_migi$Component) {
   _inherits(QuanNiang, _migi$Component);
 
@@ -763,7 +767,11 @@ var QuanNiang = function (_migi$Component) {
       data[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_ref = QuanNiang.__proto__ || Object.getPrototypeOf(QuanNiang)).call.apply(_ref, [this].concat(data)));
+    var _this = _possibleConstructorReturn(this, (_ref = QuanNiang.__proto__ || Object.getPrototypeOf(QuanNiang)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.num = self.props.messages.Count;
+    return _this;
   }
 
   _createClass(QuanNiang, [{
@@ -787,32 +795,20 @@ var QuanNiang = function (_migi$Component) {
     value: function show() {
       var $txt = $(this.ref.txt.element);
       $txt.removeClass('fn-hide');
-      // timeout = setTimeout(function() {
-      //   $txt.addClass('fn-hide');
-      // }, 3000);
     }
   }, {
-    key: "enter",
-    value: function enter() {
-      // if(timeout) {
-      //   clearTimeout(timeout);
-      // }
-    }
-  }, {
-    key: "leave",
-    value: function leave() {
-      // if(timeout) {
-      //   clearTimeout(timeout);
-      // }
-      // let $txt = $(this.ref.txt.element);
-      // timeout = setTimeout(function() {
-      //   $txt.addClass('fn-hide');
-      // }, 3000);
+    key: "readMessage",
+    value: function readMessage(n) {
+      this.num = Math.max(0, this.num - n);
     }
   }, {
     key: "render",
     value: function render() {
-      return migi.createVd("div", [["class", "quaniang"]], [$CONFIG.messages.Count ? migi.createVd("div", [["class", "message"], ["onClick", new migi.Cb(this, this.clickMessage)]], [migi.createVd("span", [], [$CONFIG.messages.Count])]) : '', migi.createVd("span", [["class", "pic"], ["onClick", new migi.Cb(this, this.click)]]), migi.createVd("div", [["class", "txt fn-hide"], ["ref", "txt"], ["onMouseEnter", new migi.Cb(this, this.enter)], ["onMouseLeave", new migi.Cb(this, this.leave)]], [migi.createVd("h5", [], ["圈儿："]), migi.createVd("pre", [], [new migi.Obj("message", this, function () {
+      return migi.createVd("div", [["class", "quaniang"]], [migi.createVd("div", [["class", "message"], ["onClick", new migi.Cb(this, this.clickMessage)]], [migi.createVd("span", [["class", new migi.Obj("num", this, function () {
+        return this.num ? '' : 'fn-hide';
+      })]], [new migi.Obj("num", this, function () {
+        return this.num > 99 ? '99+' : this.num;
+      })])]), migi.createVd("span", [["class", "pic"], ["onClick", new migi.Cb(this, this.click)]]), migi.createVd("div", [["class", "txt fn-hide"], ["ref", "txt"]], [migi.createVd("h5", [], ["圈儿："]), migi.createVd("pre", [], [new migi.Obj("message", this, function () {
         return this.message || '感谢参与转圈内测，现在我们还只有最基础的功能，程序员小哥哥们还在加班加点进行建设。\n欢迎随处逛逛，也欢迎给我们提出宝贵建议！我们一定会做得更好=3=';
       })]), migi.createVd("p", [], ["欢迎点击右侧给我们留言！", migi.createVd("a", [["href", "http://weibo.com/u/6259241863"], ["target", "_blank"]], ["@转圈circling"])]), migi.createVd("a", [["class", "close"], ["href", "#"], ["onClick", new migi.Cb(this, this.clickClose)]], ["好的"])])]);
     }
@@ -824,6 +820,14 @@ var QuanNiang = function (_migi$Component) {
     get: function get() {
       return this.__getBind("message");
     }
+  }, {
+    key: "num",
+    set: function set(v) {
+      this.__setBind("num", v);this.__data("num");
+    },
+    get: function get() {
+      return this.__getBind("num");
+    }
   }]);
 
   return QuanNiang;
@@ -833,7 +837,7 @@ migi.name(QuanNiang, "QuanNiang");exports.default = QuanNiang;
 
 /***/ }),
 
-/***/ 159:
+/***/ 164:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

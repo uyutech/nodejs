@@ -15,12 +15,23 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['report', 'd2m', 'm2d', 'jsConfig', 'migiReset'];
+  config.middleware = ['report', 'd2m', 'm2d', 'message', 'jsConfig', 'migiReset'];
   config.d2m = {
     match: '/d',
   };
   config.m2d = {
     match: '/m',
+  };
+  config.message = {
+    match: function(ctx) {
+      if(ctx.request.path.startsWith('/m/')) {
+        return true;
+      }
+      if(ctx.request.path.startsWith('/d/')) {
+        return true;
+      }
+      return false;
+    },
   };
   config.jsConfig = {
     match: function(ctx) {

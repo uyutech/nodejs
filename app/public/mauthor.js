@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 114);
+/******/ 	return __webpack_require__(__webpack_require__.s = 116);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -429,15 +429,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 114:
+/***/ 116:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(115);
+__webpack_require__(117);
 
-var _Author = __webpack_require__(116);
+var _Author = __webpack_require__(118);
 
 var _Author2 = _interopRequireDefault(_Author);
 
@@ -447,14 +447,14 @@ var author = migi.preExist(migi.createCp(_Author2.default, [["isLogin", $CONFIG.
 
 /***/ }),
 
-/***/ 115:
+/***/ 117:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 116:
+/***/ 118:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -474,15 +474,15 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Nav = __webpack_require__(117);
+var _Nav = __webpack_require__(119);
 
 var _Nav2 = _interopRequireDefault(_Nav);
 
-var _Home = __webpack_require__(120);
+var _Home = __webpack_require__(122);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _AuthorComment = __webpack_require__(122);
+var _AuthorComment = __webpack_require__(124);
 
 var _AuthorComment2 = _interopRequireDefault(_AuthorComment);
 
@@ -611,7 +611,7 @@ migi.name(Author, "Author");exports.default = Author;
 
 /***/ }),
 
-/***/ 117:
+/***/ 119:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -623,11 +623,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Profile = __webpack_require__(118);
+var _Profile = __webpack_require__(120);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Link = __webpack_require__(119);
+var _Link = __webpack_require__(121);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -668,7 +668,7 @@ migi.name(Nav, "Nav");exports.default = Nav;
 
 /***/ }),
 
-/***/ 118:
+/***/ 120:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -688,7 +688,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _authorTemplate = __webpack_require__(12);
+var _authorTemplate = __webpack_require__(13);
 
 var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
 
@@ -884,7 +884,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 119:
+/***/ 121:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -989,212 +989,7 @@ migi.name(Link, "Link");exports.default = Link;
 
 /***/ }),
 
-/***/ 12:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/**
- * Created by army8735 on 2017/8/13.
- */
-
-var code2Data = {
-  '901': {
-    name: '出品',
-    display: '出品',
-    css: 'ce'
-  },
-  '902': {
-    name: '策划',
-    display: '策划',
-    css: 'ce'
-  },
-  '111': {
-    name: '演唱',
-    display: '演唱',
-    css: 'ge'
-  },
-  '112': {
-    name: '和声',
-    display: '和声',
-    css: 'ge'
-  },
-  '113': {
-    name: '伴唱',
-    display: '伴唱',
-    css: 'ge'
-  },
-  '114': {
-    name: '戏腔',
-    display: '戏腔',
-    css: 'ge'
-  },
-  '115': {
-    name: '合唱',
-    display: '合唱',
-    css: 'ge'
-  },
-  '121': {
-    name: '作曲',
-    display: '作曲',
-    css: 'qu'
-  },
-  '122': {
-    name: '编曲',
-    display: '编曲',
-    css: 'qu'
-  },
-  '131': {
-    name: '混音',
-    display: '混音',
-    css: 'hun'
-  },
-  '132': {
-    name: '母带',
-    display: '母带',
-    css: 'hun'
-  },
-  '133': {
-    name: '录音',
-    display: '录音',
-    css: 'hun'
-  },
-  '134': {
-    name: '修音',
-    display: '修音',
-    css: 'hun'
-  },
-  '141': {
-    name: '演奏',
-    display: '演奏', //优先显示乐器名。
-    css: 'yue'
-  },
-  '151': {
-    name: '配音',
-    display: '配音',
-    css: 'yue'
-  },
-  '211': {
-    name: '视频',
-    display: '视频',
-    css: 'ying'
-  },
-  '212': {
-    name: '压制',
-    display: '压制',
-    css: 'ying'
-  },
-  '213': {
-    name: '拍摄',
-    display: '拍摄',
-    css: 'ying'
-  },
-  '311': {
-    name: '立绘',
-    display: '立绘',
-    css: 'tu'
-  },
-  '312': {
-    name: 'CG',
-    display: 'CG',
-    css: 'tu'
-  },
-  '313': {
-    name: '场景',
-    display: '场景',
-    css: 'tu'
-  },
-  '314': {
-    name: '线稿',
-    display: '线稿',
-    css: 'tu'
-  },
-  '315': {
-    name: '上色',
-    display: '上色',
-    css: 'tu'
-  },
-  '316': {
-    name: '手绘',
-    display: '手绘',
-    css: 'tu'
-  },
-  '317': {
-    name: '插画',
-    display: '插画',
-    css: 'tu'
-  },
-  '331': {
-    name: '设计',
-    display: '设计',
-    css: 'she'
-  },
-  '332': {
-    name: '海报',
-    display: '海报',
-    css: 'she'
-  },
-  '333': {
-    name: 'Logo设计',
-    display: 'Logo设计',
-    css: 'she'
-  },
-  '341': {
-    name: '漫画',
-    display: '漫画',
-    css: 'she'
-  },
-  '351': {
-    name: '书法',
-    display: '书法',
-    css: 'ji'
-  },
-  '391': {
-    name: '沙画',
-    display: '沙画',
-    css: 'ji'
-  },
-  '411': {
-    name: '作词',
-    display: '作词',
-    css: 'wen'
-  },
-  '421': {
-    name: '文案',
-    display: '文案',
-    css: 'wen'
-  },
-  '422': {
-    name: '剧本',
-    display: '剧本',
-    css: 'wen'
-  },
-  '423': {
-    name: '小说',
-    display: '小说',
-    css: 'wen'
-  }
-};
-
-var label2Code = {};
-Object.keys(code2Data).forEach(function (k) {
-  var v = code2Data[k];
-  label2Code[v.css] = label2Code[v.css] || [];
-  label2Code[v.css].push(k);
-});
-
-exports.default = {
-  code2Data: code2Data,
-  label2Code: label2Code
-};
-
-/***/ }),
-
-/***/ 120:
+/***/ 122:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1206,19 +1001,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _HotWork = __webpack_require__(53);
+var _HotWork = __webpack_require__(52);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotMusicAlbum = __webpack_require__(55);
+var _HotMusicAlbum = __webpack_require__(54);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 
-var _HotAuthor = __webpack_require__(54);
+var _HotAuthor = __webpack_require__(53);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _Dynamic = __webpack_require__(121);
+var _Dynamic = __webpack_require__(123);
 
 var _Dynamic2 = _interopRequireDefault(_Dynamic);
 
@@ -1269,7 +1064,7 @@ migi.name(Home, "Home");exports.default = Home;
 
 /***/ }),
 
-/***/ 121:
+/***/ 123:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1343,7 +1138,7 @@ migi.name(Dynamics, "Dynamics");exports.default = Dynamics;
 
 /***/ }),
 
-/***/ 122:
+/***/ 124:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1563,6 +1358,211 @@ var AuthorComment = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(AuthorComment, "AuthorComment");exports.default = AuthorComment;
+
+/***/ }),
+
+/***/ 13:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Created by army8735 on 2017/8/13.
+ */
+
+var code2Data = {
+  '901': {
+    name: '出品',
+    display: '出品',
+    css: 'ce'
+  },
+  '902': {
+    name: '策划',
+    display: '策划',
+    css: 'ce'
+  },
+  '111': {
+    name: '演唱',
+    display: '演唱',
+    css: 'ge'
+  },
+  '112': {
+    name: '和声',
+    display: '和声',
+    css: 'ge'
+  },
+  '113': {
+    name: '伴唱',
+    display: '伴唱',
+    css: 'ge'
+  },
+  '114': {
+    name: '戏腔',
+    display: '戏腔',
+    css: 'ge'
+  },
+  '115': {
+    name: '合唱',
+    display: '合唱',
+    css: 'ge'
+  },
+  '121': {
+    name: '作曲',
+    display: '作曲',
+    css: 'qu'
+  },
+  '122': {
+    name: '编曲',
+    display: '编曲',
+    css: 'qu'
+  },
+  '131': {
+    name: '混音',
+    display: '混音',
+    css: 'hun'
+  },
+  '132': {
+    name: '母带',
+    display: '母带',
+    css: 'hun'
+  },
+  '133': {
+    name: '录音',
+    display: '录音',
+    css: 'hun'
+  },
+  '134': {
+    name: '修音',
+    display: '修音',
+    css: 'hun'
+  },
+  '141': {
+    name: '演奏',
+    display: '演奏', //优先显示乐器名。
+    css: 'yue'
+  },
+  '151': {
+    name: '配音',
+    display: '配音',
+    css: 'yue'
+  },
+  '211': {
+    name: '视频',
+    display: '视频',
+    css: 'ying'
+  },
+  '212': {
+    name: '压制',
+    display: '压制',
+    css: 'ying'
+  },
+  '213': {
+    name: '拍摄',
+    display: '拍摄',
+    css: 'ying'
+  },
+  '311': {
+    name: '立绘',
+    display: '立绘',
+    css: 'tu'
+  },
+  '312': {
+    name: 'CG',
+    display: 'CG',
+    css: 'tu'
+  },
+  '313': {
+    name: '场景',
+    display: '场景',
+    css: 'tu'
+  },
+  '314': {
+    name: '线稿',
+    display: '线稿',
+    css: 'tu'
+  },
+  '315': {
+    name: '上色',
+    display: '上色',
+    css: 'tu'
+  },
+  '316': {
+    name: '手绘',
+    display: '手绘',
+    css: 'tu'
+  },
+  '317': {
+    name: '插画',
+    display: '插画',
+    css: 'tu'
+  },
+  '331': {
+    name: '设计',
+    display: '设计',
+    css: 'she'
+  },
+  '332': {
+    name: '海报',
+    display: '海报',
+    css: 'she'
+  },
+  '333': {
+    name: 'Logo设计',
+    display: 'Logo设计',
+    css: 'she'
+  },
+  '341': {
+    name: '漫画',
+    display: '漫画',
+    css: 'she'
+  },
+  '351': {
+    name: '书法',
+    display: '书法',
+    css: 'ji'
+  },
+  '391': {
+    name: '沙画',
+    display: '沙画',
+    css: 'ji'
+  },
+  '411': {
+    name: '作词',
+    display: '作词',
+    css: 'wen'
+  },
+  '421': {
+    name: '文案',
+    display: '文案',
+    css: 'wen'
+  },
+  '422': {
+    name: '剧本',
+    display: '剧本',
+    css: 'wen'
+  },
+  '423': {
+    name: '小说',
+    display: '小说',
+    css: 'wen'
+  }
+};
+
+var label2Code = {};
+Object.keys(code2Data).forEach(function (k) {
+  var v = code2Data[k];
+  label2Code[v.css] = label2Code[v.css] || [];
+  label2Code[v.css].push(k);
+});
+
+exports.default = {
+  code2Data: code2Data,
+  label2Code: label2Code
+};
 
 /***/ }),
 
@@ -1951,7 +1951,7 @@ migi.name(Comment, "Comment");exports.default = Comment;
 
 /***/ }),
 
-/***/ 53:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2038,7 +2038,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 54:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2119,7 +2119,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 55:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

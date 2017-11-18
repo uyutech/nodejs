@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 102);
+/******/ 	return __webpack_require__(__webpack_require__.s = 105);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -427,7 +427,7 @@ let net = {
 
 /***/ }),
 
-/***/ 102:
+/***/ 105:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -442,10 +442,10 @@ exports.default = function (data) {
 
   var message = migi.preRender(migi.createCp(_Message2.default, [["messages", messages]]));
 
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dmy_message.css') + '"/>\n</head>\n<body>\n<div id="page">' + message + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.messages = ' + data.helper.stringify(messages) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dmy_message.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: '消息' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dmy_message.css') + '"/>\n</head>\n<body>\n<div id="page">' + message + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.messages = ' + data.helper.stringify(messages) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dmy_message.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Message = __webpack_require__(103);
+var _Message = __webpack_require__(106);
 
 var _Message2 = _interopRequireDefault(_Message);
 
@@ -455,7 +455,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 103:
+/***/ 106:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -467,7 +467,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Messages = __webpack_require__(120);
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _Messages = __webpack_require__(24);
 
 var _Messages2 = _interopRequireDefault(_Messages);
 
@@ -489,6 +497,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var take = 10;
 var skip = take;
+var loading = void 0;
 
 var Message = function (_migi$Component) {
   _inherits(Message, _migi$Component);
@@ -506,15 +515,76 @@ var Message = function (_migi$Component) {
 
     var self = _this;
     self.on(migi.Event.DOM, function () {
-      // console.log(self.props.messages);
+      var page = self.ref.page;
+      var page2 = self.ref.page2;
+      if (page) {
+        page.on('page', function (i) {
+          page2.index = i;
+          self.load(i);
+        });
+      }
+      if (page2) {
+        page2.on('page', function (i) {
+          page.index = i;
+          self.load(i);
+        });
+      }
+      self.read(self.props.messages.data);
     });
     return _this;
   }
 
   _createClass(Message, [{
+    key: 'load',
+    value: function load(i) {
+      if (loading) {
+        return;
+      }
+      loading = true;
+      var self = this;
+      skip = (i - 1) * take;
+      _net2.default.postJSON('/api/my/message', { skip: skip, take: take }, function (res) {
+        if (res.success) {
+          self.ref.messages.setData(res.data.data);
+          self.read(res.data.data);
+        } else {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        }
+        loading = false;
+      }, function (res) {
+        alert(res.message || _util2.default.ERROR_MESSAGE);
+        loading = false;
+      });
+    }
+  }, {
+    key: 'read',
+    value: function read(data) {
+      var ids = (data || []).filter(function (item) {
+        return !item.ISRead;
+      }).map(function (item) {
+        return item.NotifyID;
+      });
+      if (ids.length) {
+        _net2.default.postJSON('/api/my/readMessage', { ids: ids }, function (res) {
+          if (res.success) {
+            if (parent && parent.readMessage) {
+              parent.readMessage(ids.length);
+            }
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+          }
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+        });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.messages.Count / take)]]), migi.createCp(_Messages2.default, [["data", this.props.messages.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.messages.Count / take)]])]), migi.createCp(_SubCmt2.default, [])]);
+      if (this.props.messages.Size > take) {
+        return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.messages.Size / take)]]), migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.messages.Size / take)]])])]);
+      }
+      return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]])])]);
     }
   }]);
 
@@ -522,92 +592,6 @@ var Message = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(Message, "Message");exports.default = Message;
-
-/***/ }),
-
-/***/ 120:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _net = __webpack_require__(1);
-
-var _net2 = _interopRequireDefault(_net);
-
-var _util = __webpack_require__(0);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Messages = function (_migi$Component) {
-  _inherits(Messages, _migi$Component);
-
-  function Messages() {
-    var _ref;
-
-    _classCallCheck(this, Messages);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Messages.__proto__ || Object.getPrototypeOf(Messages)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    if (self.props.data && self.props.data.length) {
-      var html = '';
-      self.props.data.forEach(function (item) {
-        html += self.genItem(item);
-      });
-      self.html = html;
-    }
-    return _this;
-  }
-
-  _createClass(Messages, [{
-    key: 'genItem',
-    value: function genItem(item) {
-      console.log(item);
-      if (item.Send_UserISAuthor) {
-        return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]])]), migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])])]);
-      }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]])]), migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])])]);
-    }
-  }, {
-    key: 'setData',
-    value: function setData(data) {
-      var self = this;
-      var html = '';
-      data.forEach(function (item) {
-        html += self.genItem(item);
-      });
-      $(self.ref.list.element).html(html);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return migi.createVd("div", [["class", "cp-messages"]], [this.props.data && this.props.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"])]);
-    }
-  }]);
-
-  return Messages;
-}(migi.Component);
-
-migi.name(Messages, "Messages");exports.default = Messages;
 
 /***/ }),
 
@@ -784,6 +768,111 @@ var SubCmt = function (_migi$Component) {
 }(migi.Component);
 
 migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
+
+/***/ }),
+
+/***/ 24:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _net = __webpack_require__(1);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _util = __webpack_require__(0);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Messages = function (_migi$Component) {
+  _inherits(Messages, _migi$Component);
+
+  function Messages() {
+    var _ref;
+
+    _classCallCheck(this, Messages);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Messages.__proto__ || Object.getPrototypeOf(Messages)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    if (self.props.data && self.props.data.length) {
+      var html = '';
+      self.props.data.forEach(function (item) {
+        html += self.genItem(item);
+      });
+      self.html = html;
+    }
+    return _this;
+  }
+
+  _createClass(Messages, [{
+    key: 'genItem',
+    value: function genItem(item) {
+      var id = item.Target;
+      var type = item.TargetType;
+      var url = '#';
+      if (type === 1) {
+        url = '/author/' + item.urlID;
+      } else if (type === 2) {
+        url = '/works/' + item.urlID;
+      } else if (type === 3) {
+        url = '/post/' + item.urlID;
+      }
+      if (item.Send_UserISAuthor) {
+        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.Send_UserID], ["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["rel", id]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      }
+      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["rel", id]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+    }
+  }, {
+    key: 'setData',
+    value: function setData(data) {
+      var self = this;
+      var html = '';
+      data.forEach(function (item) {
+        html += self.genItem(item);
+      });
+      $(self.ref.list.element).html(html);
+    }
+  }, {
+    key: 'appendData',
+    value: function appendData(data) {
+      var self = this;
+      var html = '';
+      data.forEach(function (item) {
+        html += self.genItem(item);
+      });
+      $(self.ref.list.element).append(html);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return migi.createVd("div", [["class", "cp-messages"]], [this.props.data && this.props.data.length ? migi.createVd("ol", [["class", "list"], ["ref", "list"], ["dangerouslySetInnerHTML", this.html]]) : migi.createVd("div", [["class", "empty"]], ["暂无内容"])]);
+    }
+  }]);
+
+  return Messages;
+}(migi.Component);
+
+migi.name(Messages, "Messages");exports.default = Messages;
 
 /***/ }),
 

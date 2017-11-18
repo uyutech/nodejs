@@ -5,6 +5,7 @@ module.exports = {
     mauthor: './app/view/m/author.jsx',
     msearch: './app/view/m/search.jsx',
     mmy: './app/view/m/my.jsx',
+    mmy_message: './app/view/m/my/message.jsx',
     mlogin: './app/view/m/login.jsx',
     mpost: './app/view/m/post.jsx',
     mcircle: './app/view/m/circle.jsx',

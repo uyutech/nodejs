@@ -64,6 +64,18 @@ module.exports = app => {
         lastUpdateHeadTime,
       });
     }
+    * message(ctx) {
+      let uid = ctx.session.uid;
+      let messages = yield ctx.helper.postServiceJSON('api/users/GetUserNotify', {
+        uid,
+        Skip: 0,
+        Take: 10,
+      });
+      messages = messages.data.data;
+      yield ctx.render('mmy_message', {
+        messages,
+      });
+    }
   }
   return Controller;
 };

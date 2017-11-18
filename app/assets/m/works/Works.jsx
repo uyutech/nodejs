@@ -248,6 +248,10 @@ class Works extends migi.Component {
   }
   clickSel(e, vd, tvd) {
     let self = this;
+    //最后一个可能是文本节点
+    if(!tvd || !tvd.name) {
+      return;
+    }
     let $li = $(tvd.element);
     if(!$li.hasClass('cur') && !$li.hasClass('state')) {
       $(vd.element).find('.cur').removeClass('cur');

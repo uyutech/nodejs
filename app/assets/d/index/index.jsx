@@ -40,6 +40,9 @@ window.setHash = function(hash, noRedirect) {
   iframeGoto(hash, noRedirect);
   location.hash = hash;
 };
+window.setTitle = function(title) {
+  document.title = title;
+};
 window.goto = function(url) {
   location.href = url;
 };
@@ -54,6 +57,9 @@ window.upZIndex = function() {
 };
 window.downZIndex = function() {
   $(cIframe.element).removeClass('up');
+};
+window.readMessage = function(n) {
+  quanNiang.readMessage(n);
 };
 let commentType = {};
 window.comment = function(type) {

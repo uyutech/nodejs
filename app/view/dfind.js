@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 69);
+/******/ 	return __webpack_require__(__webpack_require__.s = 72);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -427,7 +427,7 @@ let net = {
 
 /***/ }),
 
-/***/ 24:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -499,7 +499,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 25:
+/***/ 26:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -577,7 +577,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 26:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -893,40 +893,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ 69:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (data) {
-  var hotWorkList = data.hotWorkList;
-  var hotAuthorList = data.hotAuthorList;
-  var hotMusicAlbumList = data.hotMusicAlbumList;
-  var hotPhotoAlbumList = data.hotPhotoAlbumList;
-  var hotCircleList = data.hotCircleList;
-  var hotPostList = data.hotPostList;
-  var hotPlayList = data.hotPlayList;
-
-  var find = migi.preRender(migi.createCp(_Find2.default, [["hotWorkList", hotWorkList], ["hotAuthorList", hotAuthorList], ["hotMusicAlbumList", hotMusicAlbumList], ["hotPhotoAlbumList", hotPhotoAlbumList], ["hotCircleList", hotCircleList], ["hotPostList", hotPostList], ["hotPlayList", hotPlayList]]));
-
-  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + data.helper.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + data.helper.stringify(hotAuthorList) + ';\n  $CONFIG.hotMusicAlbumList = ' + data.helper.stringify(hotMusicAlbumList) + ';\n  $CONFIG.hotPhotoAlbumList = ' + data.helper.stringify(hotPhotoAlbumList) + ';\n  $CONFIG.hotCircleList = ' + data.helper.stringify(hotCircleList) + ';\n  $CONFIG.hotPostList = ' + data.helper.stringify(hotPostList) + ';\n  $CONFIG.hotPlayList = ' + data.helper.stringify(hotPlayList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
-};
-
-var _Find = __webpack_require__(70);
-
-var _Find2 = _interopRequireDefault(_Find);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-;
-
-/***/ }),
-
 /***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1105,7 +1071,41 @@ migi.name(HotPost, "HotPost");exports.default = HotPost;
 
 /***/ }),
 
-/***/ 70:
+/***/ 72:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (data) {
+  var hotWorkList = data.hotWorkList;
+  var hotAuthorList = data.hotAuthorList;
+  var hotMusicAlbumList = data.hotMusicAlbumList;
+  var hotPhotoAlbumList = data.hotPhotoAlbumList;
+  var hotCircleList = data.hotCircleList;
+  var hotPostList = data.hotPostList;
+  var hotPlayList = data.hotPlayList;
+
+  var find = migi.preRender(migi.createCp(_Find2.default, [["hotWorkList", hotWorkList], ["hotAuthorList", hotAuthorList], ["hotMusicAlbumList", hotMusicAlbumList], ["hotPhotoAlbumList", hotPhotoAlbumList], ["hotCircleList", hotCircleList], ["hotPostList", hotPostList], ["hotPlayList", hotPlayList]]));
+
+  return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead({ title: '发现' }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dfind.css') + '"/>\n</head>\n<body>\n<div id="page">' + find + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.hotWorkList = ' + data.helper.stringify(hotWorkList) + ';\n  $CONFIG.hotAuthorList = ' + data.helper.stringify(hotAuthorList) + ';\n  $CONFIG.hotMusicAlbumList = ' + data.helper.stringify(hotMusicAlbumList) + ';\n  $CONFIG.hotPhotoAlbumList = ' + data.helper.stringify(hotPhotoAlbumList) + ';\n  $CONFIG.hotCircleList = ' + data.helper.stringify(hotCircleList) + ';\n  $CONFIG.hotPostList = ' + data.helper.stringify(hotPostList) + ';\n  $CONFIG.hotPlayList = ' + data.helper.stringify(hotPlayList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dfind.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
+};
+
+var _Find = __webpack_require__(73);
+
+var _Find2 = _interopRequireDefault(_Find);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+;
+
+/***/ }),
+
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1125,23 +1125,23 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Banner = __webpack_require__(71);
+var _Banner = __webpack_require__(74);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(24);
+var _HotWork = __webpack_require__(25);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
-var _HotAuthor = __webpack_require__(25);
+var _HotAuthor = __webpack_require__(26);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _HotMusicAlbum = __webpack_require__(26);
+var _HotMusicAlbum = __webpack_require__(27);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 
-var _HotCircle = __webpack_require__(72);
+var _HotCircle = __webpack_require__(75);
 
 var _HotCircle2 = _interopRequireDefault(_HotCircle);
 
@@ -1149,7 +1149,7 @@ var _HotPost = __webpack_require__(7);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
-var _HotPlayList = __webpack_require__(73);
+var _HotPlayList = __webpack_require__(76);
 
 var _HotPlayList2 = _interopRequireDefault(_HotPlayList);
 
@@ -1237,7 +1237,7 @@ migi.name(Find, "Find");exports.default = Find;
 
 /***/ }),
 
-/***/ 71:
+/***/ 74:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1348,7 +1348,7 @@ migi.name(Banner, "Banner");exports.default = Banner;
 
 /***/ }),
 
-/***/ 72:
+/***/ 75:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1416,7 +1416,7 @@ migi.name(HotCircle, "HotCircle");exports.default = HotCircle;
 
 /***/ }),
 
-/***/ 73:
+/***/ 76:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

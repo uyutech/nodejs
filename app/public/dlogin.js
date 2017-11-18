@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 201);
+/******/ 	return __webpack_require__(__webpack_require__.s = 206);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 201:
+/***/ 206:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(202);
+__webpack_require__(207);
 
-var _Login = __webpack_require__(203);
+var _Login = __webpack_require__(208);
 
 var _Login2 = _interopRequireDefault(_Login);
 
@@ -83,14 +83,14 @@ var login = migi.preExist(migi.createCp(_Login2.default, []));
 
 /***/ }),
 
-/***/ 202:
+/***/ 207:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 203:
+/***/ 208:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
