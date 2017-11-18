@@ -249,8 +249,12 @@ class Works extends migi.Component {
           <div class="box">
             <Describe data={ this.props.worksDetail.Describe }/>
             <Author authorList={ this.authorList }/>
-            <InspComment ref="inspComment"
-                         commentData={ this.props.worksDetail.WorksAuthorComment }/>
+            {
+              this.props.worksDetail.WorksAuthorComment
+                ? <InspComment ref="inspComment"
+                               commentData={ this.props.worksDetail.WorksAuthorComment }/>
+                : ''
+            }
           </div>
         </div>
         <div class="side">
@@ -290,8 +294,12 @@ class Works extends migi.Component {
                 ? <Text datas={ this.textData }/>
                 : ''
             }
-            <InspComment ref="inspComment"
-                         commentData={ this.props.worksDetail.WorksAuthorComment }/>
+            {
+              this.props.worksDetail.WorksAuthorComment
+                ? <InspComment ref="inspComment"
+                               commentData={ this.props.worksDetail.WorksAuthorComment }/>
+                : ''
+            }
           </div>
           <WorkComment ref="workComment"
                        isLogin={ this.props.isLogin }
