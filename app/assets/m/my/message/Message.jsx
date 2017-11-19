@@ -7,6 +7,7 @@
 import net from '../../../d/common/net';
 import util from '../../../d/common/util';
 import Messages from '../../../d/component/messages/Messages.jsx';
+import SubCmt from '../../../d/component/subcmt/SubCmt.jsx';
 
 let take = 10;
 let skip = take;
@@ -23,6 +24,58 @@ class Message extends migi.Component {
         self.checkMore($window);
       });
       self.read(self.props.messages.data);
+
+      let messages = self.ref.messages;
+      let subCmt = self.ref.subCmt;
+      messages.on('comment', function(mid, rid, cid, name, type, tid) {
+        subCmt.readOnly = false;
+        subCmt.to = name;
+        self.messageID = mid;
+        self.rootID = rid;
+        self.parentID = cid;
+        self.type = type;
+        self.targetID = tid;
+        subCmt.focus();
+      });
+      subCmt.on('submit', function(content) {
+        subCmt.invalid = true;
+        let rootID = self.rootID;
+        let parentID = self.parentID;
+        let url = '';
+        if(self.type === 1) {
+          url = '/api/author/addComment';
+        }
+        else if(self.type === 2) {
+          url = '/api/works/addComment';
+        }
+        else if(self.type === 3 || self.type === 4) {
+          url = '/api/post/addComment';
+        }
+        net.postJSON(url, {
+          parentID: parentID,
+          rootID: rootID,
+          worksID: self.targetID,
+          authorID: self.targetID,
+          postID: self.targetID,
+          content,
+        }, function(res) {
+          if(res.success) {
+            subCmt.value = '';
+            messages.appendChild(content, self.messageID);
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
+          }
+        }, function(res) {
+          alert(res.message || util.ERROR_MESSAGE);
+          subCmt.invalid = false;
+        });
+      });
     });
   }
   @bind message
@@ -82,6 +135,8 @@ class Message extends migi.Component {
     return <div class="message fn-clear">
       <Messages ref="messages" data={ this.props.messages.data }/>
       <div class="message">{ this.message }</div>
+      <SubCmt ref="subCmt" readOnly={ true } placeholder="请选择留言回复"
+              subText="发送" tipText="-${n}"/>
     </div>;
   }
 }

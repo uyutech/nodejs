@@ -54,15 +54,15 @@ module.exports = app => {
   app.post('/api/user/guideSuggest', app.middlewares.needLoginJson(), 'api.user.guideSuggest');
   app.post('/api/user/guideSave', app.middlewares.needLoginJson(), 'api.user.guideSave');
   app.post('/api/user/altSettle', app.middlewares.needLoginJson(), 'api.user.altSettle');
-  app.post('/api/user/updateNickName', app.middlewares.needLoginJson(), 'api.user.updateNickName');
-  app.post('/api/user/uploadHead', app.middlewares.needLoginJson(), 'api.user.uploadHead');
   app.post('/api/user/uploadPic', app.middlewares.needLoginJson(), 'api.user.uploadPic');
-  app.post('/api/user/myPost', app.middlewares.needLoginJson(), 'api.user.myPost');
   // app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
   // app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
 
+  app.post('/api/my/updateNickName', app.middlewares.needLoginJson(), 'api.my.updateNickName');
+  app.post('/api/my/uploadHead', app.middlewares.needLoginJson(), 'api.my.uploadHead');
   app.post('/api/my/message', app.middlewares.needLoginJson(), 'api.my.message');
   app.post('/api/my/readMessage', app.middlewares.needLoginJson(), 'api.my.readMessage');
+  app.post('/api/my/myPost', app.middlewares.needLoginJson(), 'api.my.myPost');
 
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');

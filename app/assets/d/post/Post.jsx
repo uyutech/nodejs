@@ -29,19 +29,24 @@ class Post extends migi.Component {
       let page = self.ref.page;
       let page2 = self.ref.page2;
       page.on('page', function(i) {
-        page2.index = i;
+        if(page2) {
+          page2.index = i;
+        }
         skip = (i - 1) * take;
         self.loadPage();
       });
-      page2.on('page', function(i) {
-        page.index = i;
-        skip = (i - 1) * take;
-        self.loadPage();
-      });
+      if(page2) {
+        page2.on('page', function(i) {
+          page.index = i;
+          skip = (i - 1) * take;
+          self.loadPage();
+        });
+      }
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
         subCmt.to = name;
+        subCmt.focus();
       });
       comment.on('closeSubComment', function() {
         self.rootID = -1;
@@ -66,7 +71,7 @@ class Post extends migi.Component {
               comment.message = '';
             }
             else {
-              comment.prependChild(res.data);
+              comment.prependChild(res.data, parentID);
             }
           }
           else if(res.code === 1000) {
@@ -289,7 +294,11 @@ class Post extends migi.Component {
                  subUrl="/api/post/subCommentList"
                  delUrl="/api/post/delComment"
                  data={ this.props.replyData.data }/>
-          <Page ref="page2" total={ Math.ceil(this.props.replyData.Size / take) }/>
+          {
+            this.props.replyData.Size > take
+              ? <Page ref="page2" total={ Math.ceil(this.props.replyData.Size / take) }/>
+              : ''
+          }
         </div>
         <SubCmt ref="subCmt"
                 subText="回复"

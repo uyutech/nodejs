@@ -47,6 +47,7 @@ class Works extends migi.Component {
         self.rootID = rid;
         self.parentID = cid;
         subCmt.to = name;
+        subCmt.focus();
       });
       comment.on('closeSubComment', function() {
         self.rootID = -1;
@@ -73,7 +74,7 @@ class Works extends migi.Component {
               comment.message = '';
             }
             else {
-              comment.prependChild(data);
+              comment.prependChild(data, parentID);
             }
             self.clickSel(null, self.ref.sel, self.ref.sel.children[self.ref.sel.children.length - 1]);
             migi.eventBus.emit('COMMENT', 'work');

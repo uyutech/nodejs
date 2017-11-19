@@ -60,208 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 99);
+/******/ 	return __webpack_require__(__webpack_require__.s = 98);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 100:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _authorTemplate = __webpack_require__(4);
-
-var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Search = function (_migi$Component) {
-  _inherits(Search, _migi$Component);
-
-  function Search() {
-    var _ref;
-
-    _classCallCheck(this, Search);
-
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
-
-    var _this = _possibleConstructorReturn(this, (_ref = Search.__proto__ || Object.getPrototypeOf(Search)).call.apply(_ref, [this].concat(data)));
-
-    var self = _this;
-    self.kw = self.props.kw;
-    {
-      var _data = self.props.datas.data;
-      var list = [];
-      _data.Author.forEach(function (item) {
-        list.push({
-          key: 'author',
-          value: item
-        });
-      });
-      _data.Audio.forEach(function (item) {
-        list.push({
-          key: 'audio',
-          value: item
-        });
-      });
-      if (list.length) {
-        self.list = list;
-        self.on(migi.Event.DOM, function () {
-          self.autoWidth();
-        });
-      } else {
-        self.message = '暂无搜索结果';
-      }
-    }
-    return _this;
-  }
-
-  _createClass(Search, [{
-    key: 'show',
-    value: function show() {
-      $(this.element).removeClass('fn-hide');
-    }
-  }, {
-    key: 'hide',
-    value: function hide() {
-      $(this.element).addClass('fn-hide');
-      this.list = [];
-    }
-  }, {
-    key: 'load',
-    value: function load(kw) {
-      var self = this;
-      self.kw = kw;
-      util.postJSON('api/search/Homesearch', { Parameter: kw }, function (res) {
-        if (res.success) {
-          var data = res.data;
-          var list = [];
-          data.Author.forEach(function (item) {
-            list.push({
-              key: 'author',
-              value: item
-            });
-          });
-          data.Audio.forEach(function (item) {
-            list.push({
-              key: 'audio',
-              value: item
-            });
-          });
-          if (list.length) {
-            self.list = list;
-            self.autoWidth();
-          } else {
-            self.message = '暂无搜索结果';
-          }
-        }
-      });
-    }
-  }, {
-    key: 'autoWidth',
-    value: function autoWidth() {
-      $(this.element).find('li.author .list').each(function (i, o) {
-        var $o = $(o);
-        var $c = $o.find('.c');
-        $c.css('width', '9999rem');
-        var $ul = $c.find('ul');
-        $c.css('width', $ul.width() + 1);
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var self = this;
-      return migi.createVd("div", [["class", "search"]], [migi.createVd("ul", [["class", new migi.Obj("list", this, function () {
-        return this.list.length ? '' : 'fn-hide';
-      })]], [new migi.Obj("list", this, function () {
-        return this.list.map(function (item) {
-          var key = item.key;
-          var value = item.value;
-          if (key === 'author') {
-            var name = value.AuthorName || '';
-            var i = name.indexOf(self.kw);
-            if (i > -1) {
-              name = migi.util.encodeHtml(name.slice(0, i)) + '<strong>' + name.slice(i, i + self.kw.length) + '</strong>' + migi.util.encodeHtml(name.slice(i + self.kw.length));
-            } else {
-              name = migi.util.encodeHtml(name);
-            }
-            var hash = {};
-            value.Authortype.forEach(function (item) {
-              var css = _authorTemplate2.default.code2Data[item.AuthorTypeID].css;
-              hash[css] = true;
-            });
-            var authorType = Object.keys(hash);
-            return migi.createVd("li", [["class", "author fn-clear"]], [migi.createVd("a", [["href", '/author/' + value.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", value.Head_url || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])]), migi.createVd("div", [["class", "info"]], [migi.createVd("a", [["href", '/author/' + value.AuthorID], ["class", "name"]], [migi.createVd("h4", [["dangerouslySetInnerHTML", name]]), authorType.map(function (item) {
-              return migi.createVd("span", [["class", 'cp-author-type-' + item]]);
-            })]), migi.createVd("p", [], ["粉丝：", value.FansNumber])])]);
-          } else if (key === 'audio') {
-            var _name = value.workName || '';
-            var _i = _name.indexOf(self.kw);
-            if (_i > -1) {
-              _name = migi.util.encodeHtml(_name.slice(0, _i)) + '<strong>' + _name.slice(_i, _i + self.kw.length) + '</strong>' + migi.util.encodeHtml(_name.slice(_i + self.kw.length));
-            } else {
-              _name = migi.util.encodeHtml(_name);
-            }
-            return migi.createVd("li", [["class", "audio fn-clear"]], [migi.createVd("a", [["href", '/works/' + value.workID], ["class", "pic"]], [migi.createVd("img", [["src", value.CoverPic || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("div", [["class", "info"]], [migi.createVd("a", [["href", '/works/' + value.workID], ["class", "name"], ["dangerouslySetInnerHTML", _name]])])]);
-          }
-        });
-      })]), migi.createVd("div", [["class", new migi.Obj("list", this, function () {
-        return 'message' + (this.list.length ? ' fn-hide' : '');
-      })]], [new migi.Obj("message", this, function () {
-        return this.message;
-      })])]);
-    }
-  }, {
-    key: 'list',
-    set: function set(v) {
-      this.__setBind("list", v);this.__data("list");
-    },
-    get: function get() {
-      if (this.__initBind("list")) this.__setBind("list", []);return this.__getBind("list");
-    }
-  }, {
-    key: 'message',
-    set: function set(v) {
-      this.__setBind("message", v);this.__data("message");
-    },
-    get: function get() {
-      return this.__getBind("message");
-    }
-  }, {
-    key: 'kw',
-    set: function set(v) {
-      this.__setBind("kw", v);this.__data("kw");
-    },
-    get: function get() {
-      return this.__getBind("kw");
-    }
-  }]);
-
-  return Search;
-}(migi.Component);
-
-migi.name(Search, "Search");exports.default = Search;
-
-/***/ }),
-
-/***/ 4:
+/***/ 5:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -463,7 +267,7 @@ Object.keys(code2Data).forEach(function(k) {
 
 /***/ }),
 
-/***/ 99:
+/***/ 98:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -482,13 +286,209 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dsearch.css') + '"/>\n</head>\n<body>\n<div id="page">' + search + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.kw = ' + JSON.stringify(kw) + ';\n  $CONFIG.datas = ' + JSON.stringify(datas) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dsearch.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Search = __webpack_require__(100);
+var _Search = __webpack_require__(99);
 
 var _Search2 = _interopRequireDefault(_Search);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 ;
+
+/***/ }),
+
+/***/ 99:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _authorTemplate = __webpack_require__(5);
+
+var _authorTemplate2 = _interopRequireDefault(_authorTemplate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Search = function (_migi$Component) {
+  _inherits(Search, _migi$Component);
+
+  function Search() {
+    var _ref;
+
+    _classCallCheck(this, Search);
+
+    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+      data[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = Search.__proto__ || Object.getPrototypeOf(Search)).call.apply(_ref, [this].concat(data)));
+
+    var self = _this;
+    self.kw = self.props.kw;
+    {
+      var _data = self.props.datas.data;
+      var list = [];
+      _data.Author.forEach(function (item) {
+        list.push({
+          key: 'author',
+          value: item
+        });
+      });
+      _data.Audio.forEach(function (item) {
+        list.push({
+          key: 'audio',
+          value: item
+        });
+      });
+      if (list.length) {
+        self.list = list;
+        self.on(migi.Event.DOM, function () {
+          self.autoWidth();
+        });
+      } else {
+        self.message = '暂无搜索结果';
+      }
+    }
+    return _this;
+  }
+
+  _createClass(Search, [{
+    key: 'show',
+    value: function show() {
+      $(this.element).removeClass('fn-hide');
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      $(this.element).addClass('fn-hide');
+      this.list = [];
+    }
+  }, {
+    key: 'load',
+    value: function load(kw) {
+      var self = this;
+      self.kw = kw;
+      util.postJSON('api/search/Homesearch', { Parameter: kw }, function (res) {
+        if (res.success) {
+          var data = res.data;
+          var list = [];
+          data.Author.forEach(function (item) {
+            list.push({
+              key: 'author',
+              value: item
+            });
+          });
+          data.Audio.forEach(function (item) {
+            list.push({
+              key: 'audio',
+              value: item
+            });
+          });
+          if (list.length) {
+            self.list = list;
+            self.autoWidth();
+          } else {
+            self.message = '暂无搜索结果';
+          }
+        }
+      });
+    }
+  }, {
+    key: 'autoWidth',
+    value: function autoWidth() {
+      $(this.element).find('li.author .list').each(function (i, o) {
+        var $o = $(o);
+        var $c = $o.find('.c');
+        $c.css('width', '9999rem');
+        var $ul = $c.find('ul');
+        $c.css('width', $ul.width() + 1);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var self = this;
+      return migi.createVd("div", [["class", "search"]], [migi.createVd("ul", [["class", new migi.Obj("list", this, function () {
+        return this.list.length ? '' : 'fn-hide';
+      })]], [new migi.Obj("list", this, function () {
+        return this.list.map(function (item) {
+          var key = item.key;
+          var value = item.value;
+          if (key === 'author') {
+            var name = value.AuthorName || '';
+            var i = name.indexOf(self.kw);
+            if (i > -1) {
+              name = migi.util.encodeHtml(name.slice(0, i)) + '<strong>' + name.slice(i, i + self.kw.length) + '</strong>' + migi.util.encodeHtml(name.slice(i + self.kw.length));
+            } else {
+              name = migi.util.encodeHtml(name);
+            }
+            var hash = {};
+            value.Authortype.forEach(function (item) {
+              var css = _authorTemplate2.default.code2Data[item.AuthorTypeID].css;
+              hash[css] = true;
+            });
+            var authorType = Object.keys(hash);
+            return migi.createVd("li", [["class", "author fn-clear"]], [migi.createVd("a", [["href", '/author/' + value.AuthorID], ["class", "pic"]], [migi.createVd("img", [["src", value.Head_url || '//zhuanquan.xin/img/f59284bd66f39bcfc70ef62eee10e186.png']])]), migi.createVd("div", [["class", "info"]], [migi.createVd("a", [["href", '/author/' + value.AuthorID], ["class", "name"]], [migi.createVd("h4", [["dangerouslySetInnerHTML", name]]), authorType.map(function (item) {
+              return migi.createVd("span", [["class", 'cp-author-type-' + item]]);
+            })]), migi.createVd("p", [], ["粉丝：", value.FansNumber])])]);
+          } else if (key === 'audio') {
+            var _name = value.workName || '';
+            var _i = _name.indexOf(self.kw);
+            if (_i > -1) {
+              _name = migi.util.encodeHtml(_name.slice(0, _i)) + '<strong>' + _name.slice(_i, _i + self.kw.length) + '</strong>' + migi.util.encodeHtml(_name.slice(_i + self.kw.length));
+            } else {
+              _name = migi.util.encodeHtml(_name);
+            }
+            return migi.createVd("li", [["class", "audio fn-clear"]], [migi.createVd("a", [["href", '/works/' + value.workID], ["class", "pic"]], [migi.createVd("img", [["src", value.CoverPic || '//zhuanquan.xin/img/blank.png']])]), migi.createVd("div", [["class", "info"]], [migi.createVd("a", [["href", '/works/' + value.workID], ["class", "name"], ["dangerouslySetInnerHTML", _name]])])]);
+          }
+        });
+      })]), migi.createVd("div", [["class", new migi.Obj("list", this, function () {
+        return 'message' + (this.list.length ? ' fn-hide' : '');
+      })]], [new migi.Obj("message", this, function () {
+        return this.message;
+      })])]);
+    }
+  }, {
+    key: 'list',
+    set: function set(v) {
+      this.__setBind("list", v);this.__data("list");
+    },
+    get: function get() {
+      if (this.__initBind("list")) this.__setBind("list", []);return this.__getBind("list");
+    }
+  }, {
+    key: 'message',
+    set: function set(v) {
+      this.__setBind("message", v);this.__data("message");
+    },
+    get: function get() {
+      return this.__getBind("message");
+    }
+  }, {
+    key: 'kw',
+    set: function set(v) {
+      this.__setBind("kw", v);this.__data("kw");
+    },
+    get: function get() {
+      return this.__getBind("kw");
+    }
+  }]);
+
+  return Search;
+}(migi.Component);
+
+migi.name(Search, "Search");exports.default = Search;
 
 /***/ })
 

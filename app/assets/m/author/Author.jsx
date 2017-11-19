@@ -36,7 +36,7 @@ class Author extends migi.Component {
               comment.message = '';
             }
             else {
-              comment.prependChild(data);
+              comment.prependChild(data, parentID);
             }
             let $tag = $(self.ref.type.element).find('.comments');
             if(!$tag.hasClass('cur')) {
@@ -59,6 +59,7 @@ class Author extends migi.Component {
       });
       comment.on('chooseSubComment', function(rid, cid, name) {
         subCmt.to = name;
+        subCmt.focus();
       });
       comment.on('closeSubComment', function() {
         subCmt.to = '';

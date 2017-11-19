@@ -59,17 +59,18 @@ class Comment extends migi.Component {
       $root.on('click', '.list>li>.c>pre', function() {
         self.slide($(this).closest('li'));
       });
-      $root.on('click', '.list2 pre', function() {
-        let $pre = $(this);
-        let $li = $pre.closest('li');
+      $root.on('click', '.list2 pre, .slide2 .sub', function() {
+        let $this = $(this);
+        let $li = $this.closest('li');
         if($li.hasClass('on')) {
           $li.removeClass('on');
           let $slide = $last.find('.slide');
           self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'));
         }
         else {
+          $li.parent().find('.on').removeClass('on');
           $li.addClass('on');
-          self.emit('chooseSubComment', $pre.attr('rid'), $pre.attr('cid'), $pre.attr('name'));
+          self.emit('chooseSubComment', $this.attr('rid'), $this.attr('cid'), $this.attr('name'));
         }
       });
       $root.on('click', '.more', function() {
@@ -80,7 +81,7 @@ class Comment extends migi.Component {
           if(res.success) {
             let data = res.data;
             if(data.data.length) {
-              subSkipHash[rid] = data.data[data.data.length - 1].Send_ID;
+              subSkipHash[rid] += data.data.length;
               let s = '';
               data.data.forEach(function (item) {
                 s += self.genChildComment(item);
@@ -175,7 +176,7 @@ class Comment extends migi.Component {
             }
             else {
               $message.addClass('more').text('点击加载更多');
-              subSkipHash[rid] = data.data[data.data.length - 1].Send_ID;
+              subSkipHash[rid] = data.data.length;
             }
             $ul.removeClass('fn-hide');
             $list2.css('height', 'auto');
@@ -226,7 +227,7 @@ class Comment extends migi.Component {
   prependData(item) {
     this.genComment(item).prependTo(this.ref.list.element);
   }
-  prependChild(item) {
+  prependChild(item, parentID) {
     let $comment = $('#comment_' + item.RootID);
     let $list2 = $comment.find('.list2');
     let $ul = $list2.find('ul');
@@ -240,23 +241,24 @@ class Comment extends migi.Component {
     }
     let $num = $comment.find('.slide small.sub');
     $num.text((parseInt($num.text()) || 0) + 1);
+    if(item.RootID !== parentID) {
+      let $num = $('#comment_' + parentID).find('small.sub');
+      $num.text((parseInt($num.text()) || 0) + 1);
+    }
   }
   genComment(item) {
     if(item.IsAuthor) {
       return <li class="author" id={ 'comment_' + item.Send_ID }>
-        <div class="t">
+        <div class="t fn-clear">
           <div class="profile fn-clear">
             <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
             <div class="txt">
-              <div>
-                {
-                  item.IsAuthor === true
-                    ? <span class="name">{ item.Send_AuthorName }</span>
-                    : <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
-                }
-                <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
-              </div>
-              <p>{ item.sign }</p>
+              {
+                item.IsAuthor === true
+                  ? <span class="name">{ item.Send_AuthorName }</span>
+                  : <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
+              }
+              <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
             </div>
           </div>
           <div class="fn fn-clear">
@@ -281,15 +283,12 @@ class Comment extends migi.Component {
       </li>;
     }
     return <li id={ 'comment_' + item.Send_ID }>
-      <div class="t">
+      <div class="t fn-clear">
         <div class="profile fn-clear">
           <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
-            <div>
-              <span class="name">{ item.Send_UserName }</span>
-              <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
-            </div>
-            <p>{ item.sign }</p>
+            <span class="name">{ item.Send_UserName }</span>
+            <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
           </div>
         </div>
         <div class="fn fn-clear">
@@ -315,22 +314,13 @@ class Comment extends migi.Component {
   }
   genChildComment(item) {
     if(item.IsAuthor) {
-      return <li class="author">
+      return <li class="author" id={ 'comment_' + item.Send_ID }>
         <div class="t fn-clear">
           <div class="profile fn-clear" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_AuthorName }>
             <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
             <div class="txt">
-              <div>
-                {
-                  item.Send_ToUserID
-                    ? <span class="to">{ item.Send_ToUserName }</span>
-                    : ''
-                }
-                <b class="arrow"/>
-                <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
-                <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
-              </div>
-              <p>{ item.sign }</p>
+              <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
+              <a href={ '/author/' + item.IsAuthor } class="name">{ item.Send_AuthorName }</a>
             </div>
           </div>
           <div class="fn fn-clear">
@@ -340,30 +330,26 @@ class Comment extends migi.Component {
           </div>
         </div>
         <div class="c">
+          <p class="quote">
+            <label>回复@{ item.Send_ToUserName }：</label>
+            <span>{ item.Content }</span>
+          </p>
           <pre cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_AuthorName }>{ item.Send_Content }</pre>
           <div class="slide2">
             <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
+            <small class="sub" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>{ item.sub_Count }</small>
           </div>
           <b class="arrow"/>
         </div>
       </li>;
     }
-    return <li>
+    return <li id={ 'comment_' + item.Send_ID }>
       <div class="t fn-clear">
         <div class="profile fn-clear" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>
           <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
-            <div>
-              {
-                item.Send_ToUserID
-                  ? <span class="to">{ item.Send_ToUserName }</span>
-                  : ''
-              }
-              <b class="arrow"/>
-              <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
-              <span class="name">{ item.Send_UserName }</span>
-            </div>
-            <p>{ item.sign }</p>
+            <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
+            <span class="name">{ item.Send_UserName }</span>
           </div>
         </div>
         <div class="fn fn-clear">
@@ -373,9 +359,14 @@ class Comment extends migi.Component {
         </div>
       </div>
       <div class="c">
+        <p class="quote">
+          <label>回复@{ item.Send_ToUserName }：</label>
+          <span>{ item.Content }</span>
+        </p>
         <pre cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>{ item.Send_Content }</pre>
         <div class="slide2">
           <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
+          <small class="sub" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>{ item.sub_Count }</small>
         </div>
         <b class="arrow"/>
       </div>

@@ -478,7 +478,7 @@ var _Banner = __webpack_require__(103);
 
 var _Banner2 = _interopRequireDefault(_Banner);
 
-var _HotWork = __webpack_require__(52);
+var _HotWork = __webpack_require__(53);
 
 var _HotWork2 = _interopRequireDefault(_HotWork);
 
@@ -486,11 +486,11 @@ var _HotPhotoAlbum = __webpack_require__(104);
 
 var _HotPhotoAlbum2 = _interopRequireDefault(_HotPhotoAlbum);
 
-var _HotAuthor = __webpack_require__(53);
+var _HotAuthor = __webpack_require__(54);
 
 var _HotAuthor2 = _interopRequireDefault(_HotAuthor);
 
-var _HotMusicAlbum = __webpack_require__(54);
+var _HotMusicAlbum = __webpack_require__(55);
 
 var _HotMusicAlbum2 = _interopRequireDefault(_HotMusicAlbum);
 
@@ -498,7 +498,7 @@ var _HotCircle = __webpack_require__(105);
 
 var _HotCircle2 = _interopRequireDefault(_HotCircle);
 
-var _HotPost = __webpack_require__(55);
+var _HotPost = __webpack_require__(56);
 
 var _HotPost2 = _interopRequireDefault(_HotPost);
 
@@ -851,7 +851,7 @@ migi.name(HotPost, "HotPost");exports.default = HotPost;
 
 /***/ }),
 
-/***/ 21:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -911,7 +911,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 52:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -927,7 +927,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _AuthorType = __webpack_require__(21);
+var _AuthorType = __webpack_require__(22);
 
 var _AuthorType2 = _interopRequireDefault(_AuthorType);
 
@@ -998,7 +998,7 @@ migi.name(HotWork, "HotWork");exports.default = HotWork;
 
 /***/ }),
 
-/***/ 53:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1079,7 +1079,7 @@ migi.name(HotAuthor, "HotAuthor");exports.default = HotAuthor;
 
 /***/ }),
 
-/***/ 54:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1163,7 +1163,7 @@ migi.name(HotMusicAlbum, "HotMusicAlbum");exports.default = HotMusicAlbum;
 
 /***/ }),
 
-/***/ 55:
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1305,7 +1305,7 @@ var PostList = function (_migi$Component) {
       html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/#(\S.*?)#/g, '<strong>#$1#</strong>').replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
       if (item.IsAuthor) {
         return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + id]], [_util2.default.formatDate(item.Createtime)])]), migi.createVd("ul", [["class", "circle"]], [(item.Taglist || []).map(function (item) {
-          return migi.createVd("li", [], [item.TagName, "圈"]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/circle/' + item.TagID]], [item.TagName, "圈"])]);
         })])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + id], ["class", "t"]], [item.Title]) : '', migi.createVd("p", [["class", "con"], ["dangerouslySetInnerHTML", html]]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 4).map(function (item, i) {
           if (i === 3) {
             return migi.createVd("li", [["class", "all"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img240_240_80(item.FileUrl)) + ')']], [migi.createVd("a", [["href", '/post/' + id]], ["查看全部"])]);
@@ -1316,7 +1316,7 @@ var PostList = function (_migi$Component) {
         })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", id]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", id]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", id]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
       }
       return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + id]], [_util2.default.formatDate(item.Createtime)])]), migi.createVd("ul", [["class", "circle"]], [(item.Taglist || []).map(function (item) {
-        return migi.createVd("li", [], [item.TagName, "圈"]);
+        return migi.createVd("li", [], [migi.createVd("a", [["href", '/circle/' + item.TagID]], [item.TagName, "圈"])]);
       })])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + id], ["class", "t"]], [item.Title]) : '', migi.createVd("p", [["class", "con"], ["dangerouslySetInnerHTML", html]]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 4).map(function (item, i) {
         if (i === 3) {
           return migi.createVd("li", [["class", "all"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img240_240_80(item.FileUrl)) + ')']], [migi.createVd("a", [["href", '/post/' + id]], ["查看全部"])]);

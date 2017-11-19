@@ -30,21 +30,26 @@ class WorkComment extends migi.Component {
       let page2 = self.ref.page2;
       let comment = self.ref.comment;
       page.on('page', function(i) {
-        page2.index = i;
+        if(page2) {
+          page2.index = i;
+        }
         skip = (i - 1) * take;
         self.loadPage();
         subCmt.to = '';
       });
-      page2.on('page', function(i) {
-        page.index = i;
-        skip = (i - 1) * take;
-        self.loadPage();
-        subCmt.to = '';
-      });
+      if(page2) {
+        page2.on('page', function(i) {
+          page.index = i;
+          skip = (i - 1) * take;
+          self.loadPage();
+          subCmt.to = '';
+        });
+      }
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
         self.parentID = cid;
         subCmt.to = name;
+        subCmt.focus();
       });
       comment.on('closeSubComment', function() {
         self.rootID = -1;
@@ -71,7 +76,7 @@ class WorkComment extends migi.Component {
               comment.message = '';
             }
             else {
-              comment.prependChild(data);
+              comment.prependChild(data, parentID);
             }
             migi.eventBus.emit('COMMENT', 'work');
           }
@@ -227,7 +232,11 @@ class WorkComment extends migi.Component {
                subUrl="/api/works/subCommentList"
                delUrl="/api/works/delComment"
                data={ this.props.commentData.data }/>
-      <Page ref="page2" total={ Math.ceil(this.props.commentData.Size / take) }/>
+      {
+        this.props.commentData.Size > take
+          ? <Page ref="page2" total={ Math.ceil(this.props.commentData.Size / take) }/>
+          : ''
+      }
       <SubCmt ref="subCmt"
               originTo={ this.props.originTo }
               placeholder="夸夸这个作品吧"/>

@@ -33,13 +33,16 @@ class SubCmt extends migi.Component {
       this.invalid = $(vd.element).val().trim().length < 3;
     }
   }
-  focus() {
+  onFocus() {
     if(!window.$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
     }
     else {
       this.emit('focus');
     }
+  }
+  focus() {
+    this.ref.input.element.focus();
   }
   click() {
     this.emit('click');
@@ -55,7 +58,7 @@ class SubCmt extends migi.Component {
       <form class={ 'fn-clear' + (this.to || this.originTo ? ' to' : '') } ref="form" onSubmit={ this.submit } onClick={ this.click }>
         <label>TO: { this.to || this.originTo }</label>
         <input type="text" class="text" ref="input" placeholder={ this.to ? '回复' + this.to + '的评论' : this.placeholder }
-               onInput={ this.input } onFocus={ this.focus } maxlength={ this.maxlength || 256 }
+               onInput={ this.input } onFocus={ this.onFocus } maxlength={ this.maxlength || 256 }
                value={ this.value } readonly={ this.readOnly}/>
         <input type="submit"
                class={ 'submit' + (this.invalid ? ' dis' : '') }

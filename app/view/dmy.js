@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 101);
+/******/ 	return __webpack_require__(__webpack_require__.s = 100);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -427,7 +427,7 @@ let net = {
 
 /***/ }),
 
-/***/ 101:
+/***/ 100:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -463,7 +463,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getDHead() + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/dmy.css') + '"/>\n</head>\n<body>\n<div id="page">' + my + '</div>\n' + data.helper.getDBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.userInfo = ' + data.helper.stringify(userInfo) + ';\n  $CONFIG.follows = ' + data.helper.stringify(follows) + ';\n  $CONFIG.favors = ' + data.helper.stringify(favors) + ';\n  $CONFIG.myPost = ' + data.helper.stringify(myPost) + ';\n  $CONFIG.updateNickNameTimeDiff = ' + data.helper.stringify(updateNickNameTimeDiff) + ';\n  $CONFIG.updateHeadTimeDiff = ' + data.helper.stringify(updateHeadTimeDiff) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/dcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/dmy.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _My = __webpack_require__(102);
+var _My = __webpack_require__(101);
 
 var _My2 = _interopRequireDefault(_My);
 
@@ -473,7 +473,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 102:
+/***/ 101:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -493,11 +493,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Profile = __webpack_require__(103);
+var _Profile = __webpack_require__(102);
 
 var _Profile2 = _interopRequireDefault(_Profile);
 
-var _Follow = __webpack_require__(104);
+var _Follow = __webpack_require__(103);
 
 var _Follow2 = _interopRequireDefault(_Follow);
 
@@ -604,7 +604,7 @@ migi.name(My, "My");exports.default = My;
 
 /***/ }),
 
-/***/ 103:
+/***/ 102:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -804,7 +804,7 @@ migi.name(Profile, "Profile");exports.default = Profile;
 
 /***/ }),
 
-/***/ 104:
+/***/ 103:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

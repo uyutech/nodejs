@@ -126,7 +126,7 @@ class PostList extends migi.Component {
           <ul class="circle">
             {
               (item.Taglist || []).map(function(item) {
-                return <li>{ item.TagName }圈</li>;
+                return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
               })
             }
           </ul>
@@ -179,7 +179,7 @@ class PostList extends migi.Component {
         <ul class="circle">
           {
             (item.Taglist || []).map(function(item) {
-              return <li>{ item.TagName }圈</li>;
+              return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
             })
           }
         </ul>

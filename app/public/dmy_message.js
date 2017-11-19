@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 203);
+/******/ 	return __webpack_require__(__webpack_require__.s = 202);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -429,15 +429,15 @@ exports.default = net;
 
 /***/ }),
 
-/***/ 203:
+/***/ 202:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(204);
+__webpack_require__(203);
 
-var _Message = __webpack_require__(205);
+var _Message = __webpack_require__(204);
 
 var _Message2 = _interopRequireDefault(_Message);
 
@@ -447,14 +447,14 @@ var message = migi.preExist(migi.createCp(_Message2.default, [["messages", $CONF
 
 /***/ }),
 
-/***/ 204:
+/***/ 203:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 205:
+/***/ 204:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -474,7 +474,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Messages = __webpack_require__(66);
+var _Messages = __webpack_require__(67);
 
 var _Messages2 = _interopRequireDefault(_Messages);
 
@@ -482,7 +482,7 @@ var _Page = __webpack_require__(7);
 
 var _Page2 = _interopRequireDefault(_Page);
 
-var _SubCmt = __webpack_require__(6);
+var _SubCmt = __webpack_require__(5);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -529,6 +529,54 @@ var Message = function (_migi$Component) {
         });
       }
       self.read(self.props.messages.data);
+
+      var messages = self.ref.messages;
+      var subCmt = self.ref.subCmt;
+      messages.on('comment', function (mid, rid, cid, name, type, tid) {
+        subCmt.readOnly = false;
+        subCmt.to = name;
+        self.messageID = mid;
+        self.rootID = rid;
+        self.parentID = cid;
+        self.type = type;
+        self.targetID = tid;
+        subCmt.focus();
+      });
+      subCmt.on('submit', function (content) {
+        subCmt.invalid = true;
+        var rootID = self.rootID;
+        var parentID = self.parentID;
+        var url = '';
+        if (self.type === 1) {
+          url = '/api/author/addComment';
+        } else if (self.type === 2) {
+          url = '/api/works/addComment';
+        } else if (self.type === 3 || self.type === 4) {
+          url = '/api/post/addComment';
+        }
+        _net2.default.postJSON(url, {
+          parentID: parentID,
+          rootID: rootID,
+          worksID: self.targetID,
+          authorID: self.targetID,
+          postID: self.targetID,
+          content: content
+        }, function (res) {
+          if (res.success) {
+            subCmt.value = '';
+            messages.appendChild(content, self.messageID);
+          } else if (res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
+          } else {
+            alert(res.message || _util2.default.ERROR_MESSAGE);
+            subCmt.invalid = false;
+          }
+        }, function (res) {
+          alert(res.message || _util2.default.ERROR_MESSAGE);
+          subCmt.invalid = false;
+        });
+      });
     });
     return _this;
   }
@@ -581,9 +629,9 @@ var Message = function (_migi$Component) {
     key: 'render',
     value: function render() {
       if (this.props.messages.Size > take) {
-        return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.messages.Size / take)]]), migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.messages.Size / take)]])]), migi.createCp(_SubCmt2.default, [])]);
+        return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.messages.Size / take)]]), migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]]), migi.createCp(_Page2.default, [["ref", "page2"], ["total", Math.ceil(this.props.messages.Size / take)]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["readOnly", true], ["placeholder", "请选择留言回复"]])]);
       }
-      return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]])]), migi.createCp(_SubCmt2.default, [])]);
+      return migi.createVd("div", [["class", "message fn-clear"]], [migi.createVd("div", [["class", "main"]], [migi.createCp(_Page2.default, [["ref", "page"], ["total", Math.ceil(this.props.messages.Size / take)]]), migi.createCp(_Messages2.default, [["ref", "messages"], ["data", this.props.messages.data]])]), migi.createCp(_SubCmt2.default, [["ref", "subCmt"], ["readOnly", true], ["placeholder", "请选择留言回复"]])]);
     }
   }]);
 
@@ -594,7 +642,7 @@ migi.name(Message, "Message");exports.default = Message;
 
 /***/ }),
 
-/***/ 6:
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -647,13 +695,18 @@ var SubCmt = function (_migi$Component) {
       }
     }
   }, {
-    key: 'focus',
-    value: function focus() {
+    key: 'onFocus',
+    value: function onFocus() {
       if (!window.$CONFIG.isLogin) {
         migi.eventBus.emit('NEED_LOGIN');
       } else {
         this.emit('focus');
       }
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      this.ref.input.element.focus();
     }
   }, {
     key: 'click',
@@ -677,7 +730,7 @@ var SubCmt = function (_migi$Component) {
         return this.to || this.originTo;
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
         return this.to ? '回复' + this.to + '的评论' : this.placeholder;
-      })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
+      })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.onFocus)], ["maxlength", new migi.Obj("maxlength", this, function () {
         return this.maxlength || 256;
       })], ["value", new migi.Obj("value", this, function () {
         return this.value;
@@ -770,7 +823,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 66:
+/***/ 67:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -820,26 +873,35 @@ var Messages = function (_migi$Component) {
       });
       self.html = html;
     }
+    self.on(migi.Event.DOM, function () {
+      var $list = $(self.ref.list.element);
+      $list.on('click', '.comment', function () {
+        var $comment = $(this);
+        var $li = $comment.closest('ul').closest('li');
+        $list.children('li.cur').removeClass('cur');
+        $li.addClass('cur');
+        self.emit('comment', $li.attr('id'), $comment.attr('rid'), $comment.attr('cid'), $comment.attr('name'), parseInt($comment.attr('type')), $comment.attr('tid'));
+      });
+    });
     return _this;
   }
 
   _createClass(Messages, [{
     key: 'genItem',
     value: function genItem(item) {
-      var id = item.Target;
       var type = item.TargetType;
       var url = '#';
       if (type === 1) {
         url = '/author/' + item.urlID;
       } else if (type === 2) {
         url = '/works/' + item.urlID;
-      } else if (type === 3) {
+      } else if (type === 3 || type === 4) {
         url = '/post/' + item.urlID;
       }
       if (item.Send_UserISAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.Send_UserID], ["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["rel", id]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+        return migi.createVd("li", [["class", "author"], ["id", 'message_' + item.NotifyID]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.Send_UserID], ["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("a", [["class", "quote"], ["href", url]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("span", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["cid", item.ParentID], ["rid", item.RootID], ["name", item.Send_UserName], ["tid", item.urlID]])]), migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("div", [["class", "quote"]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("p", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["rel", id]], [item.CommentCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      return migi.createVd("li", [["id", 'message_' + item.NotifyID]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("a", [["class", "time"], ["href", url]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "wrap"]], [migi.createVd("a", [["class", "quote"], ["href", url]], [migi.createVd("label", [], [item.Action, "："]), migi.createVd("span", [], [item.Content])]), migi.createVd("pre", [["class", "con"]], [item.Send_Content]), migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", "comment"], ["type", type], ["cid", item.ParentID], ["rid", item.RootID], ["name", item.Send_UserName], ["tid", item.urlID]])]), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'setData',
@@ -860,6 +922,12 @@ var Messages = function (_migi$Component) {
         html += self.genItem(item);
       });
       $(self.ref.list.element).append(html);
+    }
+  }, {
+    key: 'appendChild',
+    value: function appendChild(content, mid) {
+      var $li = $('#' + mid);
+      $li.find('.wrap').append('<pre class="reply">\u6211\uFF1A' + content + '</pre>');
     }
   }, {
     key: 'render',

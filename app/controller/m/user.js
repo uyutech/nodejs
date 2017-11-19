@@ -12,9 +12,6 @@ module.exports = app => {
       if(!userID) {
         return;
       }
-      if(userID === uid.toString()) {
-        return ctx.redirect('/my');
-      }
       ctx.body = userID;
     }
   }

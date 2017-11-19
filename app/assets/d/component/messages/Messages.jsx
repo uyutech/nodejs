@@ -18,9 +18,18 @@ class Messages extends migi.Component {
       });
       self.html = html;
     }
+    self.on(migi.Event.DOM, function() {
+      let $list = $(self.ref.list.element);
+      $list.on('click', '.comment', function() {
+        let $comment = $(this);
+        let $li = $comment.closest('ul').closest('li');
+        $list.children('li.cur').removeClass('cur');
+        $li.addClass('cur');
+        self.emit('comment', $li.attr('id'), $comment.attr('rid'), $comment.attr('cid'), $comment.attr('name'), parseInt($comment.attr('type')), $comment.attr('tid'));
+      });
+    });
   }
   genItem(item) {
-    let id = item.Target;
     let type = item.TargetType;
     let url = '#';
     if(type === 1) {
@@ -29,11 +38,11 @@ class Messages extends migi.Component {
     else if(type === 2) {
       url = '/works/' + item.urlID;
     }
-    else if(type === 3) {
+    else if(type === 3 || type === 4) {
       url = '/post/' + item.urlID;
     }
     if(item.Send_UserISAuthor) {
-      return <li class="author">
+      return <li class="author" id={ 'message_' + item.NotifyID }>
         <div class="profile fn-clear">
           <img class="pic" src={ util.autoSsl(util.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
@@ -42,19 +51,19 @@ class Messages extends migi.Component {
           </div>
         </div>
         <div class="wrap">
-          <div class="quote">
+          <a class="quote" href={ url }>
             <label>{ item.Action }：</label>
-            <p>{ item.Content }</p>
-          </div>
+            <span>{ item.Content }</span>
+          </a>
           <pre class="con">{ item.Send_Content }</pre>
           <ul class="btn fn-clear">
-            <li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>
+            <li class="comment" type={ type } cid={ item.ParentID } rid={ item.RootID } name={ item.Send_UserName } tid={ item.urlID }/>
           </ul>
           <b class="arrow"/>
         </div>
       </li>;
     }
-    return <li>
+    return <li id={ 'message_' + item.NotifyID }>
       <div class="profile fn-clear">
         <img class="pic" src={ util.autoSsl(util.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
         <div class="txt">
@@ -63,13 +72,13 @@ class Messages extends migi.Component {
         </div>
       </div>
       <div class="wrap">
-        <div class="quote">
+        <a class="quote" href={ url }>
           <label>{ item.Action }：</label>
-          <p>{ item.Content }</p>
-        </div>
+          <span>{ item.Content }</span>
+        </a>
         <pre class="con">{ item.Send_Content }</pre>
         <ul class="btn fn-clear">
-          <li class="comment" type={ type } rel={ id }>{ item.CommentCount }</li>
+          <li class="comment" type={ type } cid={ item.ParentID } rid={ item.RootID } name={ item.Send_UserName } tid={ item.urlID }/>
         </ul>
         <b class="arrow"/>
       </div>
@@ -90,6 +99,10 @@ class Messages extends migi.Component {
       html += self.genItem(item);
     });
     $(self.ref.list.element).append(html);
+  }
+  appendChild(content, mid) {
+    let $li = $('#' + mid);
+    $li.find('.wrap').append(`<pre class="reply">我：${content}</pre>`);
   }
   render() {
     return <div class="cp-messages">

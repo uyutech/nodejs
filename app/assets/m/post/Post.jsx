@@ -34,6 +34,7 @@ class Post extends migi.Component {
         self.rootID = rid;
         self.parentID = cid;
         subCmt.to = name;
+        subCmt.focus();
       });
       comment.on('closeSubComment', function() {
         self.rootID = -1;
@@ -41,7 +42,7 @@ class Post extends migi.Component {
         subCmt.to = null;
       });
       subCmt.on('submit', function(content) {
-        subCmt.isCommentSending = true;
+        subCmt.invalid = true;
         let rootID = self.rootID;
         let parentID = self.parentID;
         net.postJSON('/api/post/addComment', {
@@ -52,25 +53,25 @@ class Post extends migi.Component {
         }, function(res) {
           if(res.success) {
             subCmt.value = '';
-            subCmt.hasCommentContent = false;
             if(rootID === -1) {
               comment.prependData(res.data);
               comment.message = '';
             }
             else {
-              comment.prependChild(res.data);
+              comment.prependChild(res.data, parentID);
             }
           }
           else if(res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
           }
           else {
             alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
           }
-          subCmt.isCommentSending = false;
         }, function(res) {
           alert(res.message || util.ERROR_MESSAGE);
-          subCmt.isCommentSending = false;
+          subCmt.invalid = false;
         });
       });
 
@@ -146,13 +147,13 @@ class Post extends migi.Component {
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    currentCount = 0;
     sortType = rel;
     skip = 0;
     if(ajax) {
       ajax.abort();
     }
     this.loading = false;
+    this.loadEnd = false;
     this.ref.comment.clearData();
     this.load();
   }
@@ -163,13 +164,13 @@ class Post extends migi.Component {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       let rel = $ul.find('.cur').attr('rel');
-      currentCount = 0;
       myComment = rel;
       skip = 0;
       if(ajax) {
         ajax.abort();
       }
       this.loading = false;
+      this.loadEnd = false;
       this.ref.comment.clearData();
       this.load();
     }

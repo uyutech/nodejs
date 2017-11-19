@@ -34,6 +34,58 @@ class Message extends migi.Component {
         });
       }
       self.read(self.props.messages.data);
+
+      let messages = self.ref.messages;
+      let subCmt = self.ref.subCmt;
+      messages.on('comment', function(mid, rid, cid, name, type, tid) {
+        subCmt.readOnly = false;
+        subCmt.to = name;
+        self.messageID = mid;
+        self.rootID = rid;
+        self.parentID = cid;
+        self.type = type;
+        self.targetID = tid;
+        subCmt.focus();
+      });
+      subCmt.on('submit', function(content) {
+        subCmt.invalid = true;
+        let rootID = self.rootID;
+        let parentID = self.parentID;
+        let url = '';
+        if(self.type === 1) {
+          url = '/api/author/addComment';
+        }
+        else if(self.type === 2) {
+          url = '/api/works/addComment';
+        }
+        else if(self.type === 3 || self.type === 4) {
+          url = '/api/post/addComment';
+        }
+        net.postJSON(url, {
+          parentID: parentID,
+          rootID: rootID,
+          worksID: self.targetID,
+          authorID: self.targetID,
+          postID: self.targetID,
+          content,
+        }, function(res) {
+          if(res.success) {
+            subCmt.value = '';
+            messages.appendChild(content, self.messageID);
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
+          }
+        }, function(res) {
+          alert(res.message || util.ERROR_MESSAGE);
+          subCmt.invalid = false;
+        });
+      });
     });
   }
   load(i) {
@@ -82,18 +134,19 @@ class Message extends migi.Component {
     if(this.props.messages.Size > take) {
       return <div class="message fn-clear">
         <div class="main">
-          <Page ref="page" total={Math.ceil(this.props.messages.Size / take)}/>
-          <Messages ref="messages" data={this.props.messages.data}/>
-          <Page ref="page2" total={Math.ceil(this.props.messages.Size / take)}/>
+          <Page ref="page" total={ Math.ceil(this.props.messages.Size / take) }/>
+          <Messages ref="messages" data={ this.props.messages.data }/>
+          <Page ref="page2" total={ Math.ceil(this.props.messages.Size / take) }/>
         </div>
-        <SubCmt/>
+        <SubCmt ref="subCmt" readOnly={ true } placeholder="请选择留言回复"/>
       </div>;
     }
     return <div class="message fn-clear">
       <div class="main">
-        <Messages ref="messages" data={this.props.messages.data}/>
+        <Page ref="page" total={ Math.ceil(this.props.messages.Size / take) }/>
+        <Messages ref="messages" data={ this.props.messages.data }/>
       </div>
-      <SubCmt/>
+      <SubCmt ref="subCmt" readOnly={ true } placeholder="请选择留言回复"/>
     </div>;
   }
 }

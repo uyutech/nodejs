@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 64);
+/******/ 	return __webpack_require__(__webpack_require__.s = 63);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -569,7 +569,7 @@ var PostList = function (_migi$Component) {
       html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/#(\S.*?)#/g, '<strong>#$1#</strong>').replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
       if (item.IsAuthor) {
         return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("a", [["href", '/author/' + item.AuthorID], ["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + id]], [_util2.default.formatDate(item.Createtime)])]), migi.createVd("ul", [["class", "circle"]], [(item.Taglist || []).map(function (item) {
-          return migi.createVd("li", [], [item.TagName, "圈"]);
+          return migi.createVd("li", [], [migi.createVd("a", [["href", '/circle/' + item.TagID]], [item.TagName, "圈"])]);
         })])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + id], ["class", "t"]], [item.Title]) : '', migi.createVd("p", [["class", "con"], ["dangerouslySetInnerHTML", html]]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 4).map(function (item, i) {
           if (i === 3) {
             return migi.createVd("li", [["class", "all"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img240_240_80(item.FileUrl)) + ')']], [migi.createVd("a", [["href", '/post/' + id]], ["查看全部"])]);
@@ -580,7 +580,7 @@ var PostList = function (_migi$Component) {
         })]) : '', migi.createVd("ul", [["class", "btn fn-clear"]], [migi.createVd("li", [["class", 'like' + (item.ISLike ? ' has' : '')], ["rel", id]], [item.LikeCount]), migi.createVd("li", [["class", "comment"], ["rel", id]], [item.CommentCount]), item.IsOwn ? migi.createVd("li", [["class", "del"], ["rel", id]]) : '']), migi.createVd("b", [["class", "arrow"]])])]);
       }
       return migi.createVd("li", [], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.SendUserNickName]), migi.createVd("a", [["class", "time"], ["href", '/post/' + id]], [_util2.default.formatDate(item.Createtime)])]), migi.createVd("ul", [["class", "circle"]], [(item.Taglist || []).map(function (item) {
-        return migi.createVd("li", [], [item.TagName, "圈"]);
+        return migi.createVd("li", [], [migi.createVd("a", [["href", '/circle/' + item.TagID]], [item.TagName, "圈"])]);
       })])]), migi.createVd("div", [["class", "wrap"]], [item.Title ? migi.createVd("a", [["href", '/post/' + id], ["class", "t"]], [item.Title]) : '', migi.createVd("p", [["class", "con"], ["dangerouslySetInnerHTML", html]]), item.Image_Post && imgLen ? migi.createVd("ul", [["class", 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : ' n' + item.Image_Post.length)]], [item.Image_Post.length > 4 ? item.Image_Post.slice(0, 4).map(function (item, i) {
         if (i === 3) {
           return migi.createVd("li", [["class", "all"], ["style", 'background-image:url(' + _util2.default.autoSsl(_util2.default.img240_240_80(item.FileUrl)) + ')']], [migi.createVd("a", [["href", '/post/' + id]], ["查看全部"])]);
@@ -732,13 +732,18 @@ var SubCmt = function (_migi$Component) {
       }
     }
   }, {
-    key: 'focus',
-    value: function focus() {
+    key: 'onFocus',
+    value: function onFocus() {
       if (!window.$CONFIG.isLogin) {
         migi.eventBus.emit('NEED_LOGIN');
       } else {
         this.emit('focus');
       }
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      this.ref.input.element.focus();
     }
   }, {
     key: 'click',
@@ -762,7 +767,7 @@ var SubCmt = function (_migi$Component) {
         return this.to || this.originTo;
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
         return this.to ? '回复' + this.to + '的评论' : this.placeholder;
-      })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
+      })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.onFocus)], ["maxlength", new migi.Obj("maxlength", this, function () {
         return this.maxlength || 256;
       })], ["value", new migi.Obj("value", this, function () {
         return this.value;
@@ -855,7 +860,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 64:
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -876,7 +881,7 @@ exports.default = function (data) {
   return '<!DOCTYPE html>\n<html>\n<head>\n  ' + data.helper.getMHead({ title: circleDetail.TagName }) + '\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcommon.css') + '"/>\n  <link rel="stylesheet" href="' + data.helper.getAssetUrl('/mcircle.css') + '"/>\n</head>\n<body>\n<div id="page">' + circle + '</div>\n' + data.helper.getMTopNav() + '\n' + data.helper.getMBotNav() + '\n<script>\n  ' + data.helper.$CONFIG + '\n  $CONFIG.circleID = ' + data.helper.stringify(circleID) + ';\n  $CONFIG.circleDetail = ' + data.helper.stringify(circleDetail) + ';\n  $CONFIG.postList = ' + data.helper.stringify(postList) + ';\n</script>\n<script src="' + data.helper.getAssetUrl('/mcommon.js') + '"></script>\n<script src="' + data.helper.getAssetUrl('/mcircle.js') + '"></script>\n' + data.helper.getStat() + '\n</body>\n</html>';
 };
 
-var _Circle = __webpack_require__(65);
+var _Circle = __webpack_require__(64);
 
 var _Circle2 = _interopRequireDefault(_Circle);
 
@@ -886,7 +891,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ 65:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -898,7 +903,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Title = __webpack_require__(66);
+var _Title = __webpack_require__(65);
 
 var _Title2 = _interopRequireDefault(_Title);
 
@@ -956,7 +961,7 @@ migi.name(Circle, "Circle");exports.default = Circle;
 
 /***/ }),
 
-/***/ 66:
+/***/ 65:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

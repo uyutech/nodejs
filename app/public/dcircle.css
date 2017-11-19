@@ -462,7 +462,7 @@ body {
   width: 2.4rem;
   height: 2.4rem;
   background: #B1C0C9;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 0.1rem;

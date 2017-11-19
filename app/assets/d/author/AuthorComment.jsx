@@ -24,15 +24,19 @@ class AuthorComment extends migi.Component {
       let page = self.ref.page;
       let page2 = self.ref.page2;
       page.on('page', function(i) {
-        page2.index = i;
+        if(page2) {
+          page2.index = i;
+        }
         skip = (i - 1) * take;
         self.loadPage();
       });
-      page2.on('page', function(i) {
-        page.index = i;
-        skip = (i - 1) * take;
-        self.loadPage();
-      });
+      if(page2) {
+        page2.on('page', function(i) {
+          page.index = i;
+          skip = (i - 1) * take;
+          self.loadPage();
+        });
+      }
       let comment = self.ref.comment;
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
@@ -183,7 +187,11 @@ class AuthorComment extends migi.Component {
                subUrl="/api/author/subCommentList"
                delUrl="/api/author/delComment"
                data={ this.props.commentData.data }/>
-      <Page ref="page2" total={ Math.ceil(this.props.commentData.Size / take) }/>
+      {
+        this.props.commentData.Size > take
+          ? <Page ref="page2" total={ Math.ceil(this.props.commentData.Size / take) }/>
+          : ''
+      }
     </div>;
   }
 }

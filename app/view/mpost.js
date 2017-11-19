@@ -480,13 +480,18 @@ var SubCmt = function (_migi$Component) {
       }
     }
   }, {
-    key: 'focus',
-    value: function focus() {
+    key: 'onFocus',
+    value: function onFocus() {
       if (!window.$CONFIG.isLogin) {
         migi.eventBus.emit('NEED_LOGIN');
       } else {
         this.emit('focus');
       }
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      this.ref.input.element.focus();
     }
   }, {
     key: 'click',
@@ -510,7 +515,7 @@ var SubCmt = function (_migi$Component) {
         return this.to || this.originTo;
       })]), migi.createVd("input", [["type", "text"], ["class", "text"], ["ref", "input"], ["placeholder", new migi.Obj(["to", "placeholder"], this, function () {
         return this.to ? '回复' + this.to + '的评论' : this.placeholder;
-      })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.focus)], ["maxlength", new migi.Obj("maxlength", this, function () {
+      })], ["onInput", new migi.Cb(this, this.input)], ["onFocus", new migi.Cb(this, this.onFocus)], ["maxlength", new migi.Obj("maxlength", this, function () {
         return this.maxlength || 256;
       })], ["value", new migi.Obj("value", this, function () {
         return this.value;
@@ -603,7 +608,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 6:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -691,16 +696,17 @@ var Comment = function (_migi$Component) {
       $root.on('click', '.list>li>.c>pre', function () {
         self.slide($(this).closest('li'));
       });
-      $root.on('click', '.list2 pre', function () {
-        var $pre = $(this);
-        var $li = $pre.closest('li');
+      $root.on('click', '.list2 pre, .slide2 .sub', function () {
+        var $this = $(this);
+        var $li = $this.closest('li');
         if ($li.hasClass('on')) {
           $li.removeClass('on');
           var $slide = $last.find('.slide');
           self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'));
         } else {
+          $li.parent().find('.on').removeClass('on');
           $li.addClass('on');
-          self.emit('chooseSubComment', $pre.attr('rid'), $pre.attr('cid'), $pre.attr('name'));
+          self.emit('chooseSubComment', $this.attr('rid'), $this.attr('cid'), $this.attr('name'));
         }
       });
       $root.on('click', '.more', function () {
@@ -711,7 +717,7 @@ var Comment = function (_migi$Component) {
           if (res.success) {
             var _data2 = res.data;
             if (_data2.data.length) {
-              subSkipHash[rid] = _data2.data[_data2.data.length - 1].Send_ID;
+              subSkipHash[rid] += _data2.data.length;
               var s = '';
               _data2.data.forEach(function (item) {
                 s += self.genChildComment(item);
@@ -801,7 +807,7 @@ var Comment = function (_migi$Component) {
                 $message.addClass('fn-hide');
               } else {
                 $message.addClass('more').text('点击加载更多');
-                subSkipHash[rid] = data.data[data.data.length - 1].Send_ID;
+                subSkipHash[rid] = data.data.length;
               }
               $ul.removeClass('fn-hide');
               $list2.css('height', 'auto');
@@ -863,7 +869,7 @@ var Comment = function (_migi$Component) {
     }
   }, {
     key: 'prependChild',
-    value: function prependChild(item) {
+    value: function prependChild(item, parentID) {
       var $comment = $('#comment_' + item.RootID);
       var $list2 = $comment.find('.list2');
       var $ul = $list2.find('ul');
@@ -877,22 +883,26 @@ var Comment = function (_migi$Component) {
       }
       var $num = $comment.find('.slide small.sub');
       $num.text((parseInt($num.text()) || 0) + 1);
+      if (item.RootID !== parentID) {
+        var _$num = $('#comment_' + parentID).find('small.sub');
+        _$num.text((parseInt(_$num.text()) || 0) + 1);
+      }
     }
   }, {
     key: 'genComment',
     value: function genComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.IsAuthor === true ? migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]) : migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [item.IsAuthor === true ? migi.createVd("span", [["class", "name"]], [item.Send_AuthorName]) : migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_AuthorName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
       }
-      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
+      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("span", [["class", "name"]], [item.Send_UserName]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [], [item.Send_Content, migi.createVd("span", [["class", "placeholder"]])]), migi.createVd("div", [["class", "slide"], ["cid", item.Send_ID], ["rid", item.Send_ID], ["name", item.Send_UserName]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"]], [item.sub_Count]), migi.createVd("span", [], ["收起"])]), migi.createVd("b", [["class", "arrow"]])]), migi.createVd("div", [["class", "list2"]], [migi.createVd("ul", [["class", "fn-hide"]]), migi.createVd("p", [["class", "message"], ["cid", item.Send_ID], ["rid", item.Send_ID]], ["读取中..."])])]);
     }
   }, {
     key: 'genChildComment',
     value: function genChildComment(item) {
       if (item.IsAuthor) {
-        return migi.createVd("li", [["class", "author"]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.Send_ToUserID ? migi.createVd("span", [["class", "to"]], [item.Send_ToUserName]) : '', migi.createVd("b", [["class", "arrow"]]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+        return migi.createVd("li", [["class", "author"], ["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("a", [["href", '/author/' + item.IsAuthor], ["class", "name"]], [item.Send_AuthorName])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("p", [["class", "quote"]], [migi.createVd("label", [], ["回复@", item.Send_ToUserName, "："]), migi.createVd("span", [], [item.Content])]), migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_AuthorName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.sub_Count])]), migi.createVd("b", [["class", "arrow"]])])]);
       }
-      return migi.createVd("li", [], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("div", [], [item.Send_ToUserID ? migi.createVd("span", [["class", "to"]], [item.Send_ToUserName]) : '', migi.createVd("b", [["class", "arrow"]]), migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])]), migi.createVd("p", [], [item.sign])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount])]), migi.createVd("b", [["class", "arrow"]])])]);
+      return migi.createVd("li", [["id", 'comment_' + item.Send_ID]], [migi.createVd("div", [["class", "t fn-clear"]], [migi.createVd("div", [["class", "profile fn-clear"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [migi.createVd("img", [["class", "pic"], ["src", _util2.default.autoSsl(_util2.default.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'))]]), migi.createVd("div", [["class", "txt"]], [migi.createVd("small", [["class", "time"], ["rel", item.Send_Time]], [_util2.default.formatDate(item.Send_Time)]), migi.createVd("span", [["class", "name"]], [item.Send_UserName])])]), migi.createVd("div", [["class", "fn fn-clear"]], [item.ISOwn ? migi.createVd("span", [["cid", item.Send_ID], ["class", "remove"]], ["删除"]) : ''])]), migi.createVd("div", [["class", "c"]], [migi.createVd("p", [["class", "quote"]], [migi.createVd("label", [], ["回复@", item.Send_ToUserName, "："]), migi.createVd("span", [], [item.Content])]), migi.createVd("pre", [["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.Send_Content]), migi.createVd("div", [["class", "slide2"]], [migi.createVd("small", [["cid", item.Send_ID], ["class", 'like' + (item.IsLike ? ' liked' : '')]], [item.LikeCount]), migi.createVd("small", [["class", "sub"], ["cid", item.Send_ID], ["rid", item.RootID], ["name", item.Send_UserName]], [item.sub_Count])]), migi.createVd("b", [["class", "arrow"]])])]);
     }
   }, {
     key: 'hideLast',
@@ -979,7 +989,7 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Comment = __webpack_require__(6);
+var _Comment = __webpack_require__(4);
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -1031,6 +1041,7 @@ var Post = function (_migi$Component) {
         self.rootID = rid;
         self.parentID = cid;
         subCmt.to = name;
+        subCmt.focus();
       });
       comment.on('closeSubComment', function () {
         self.rootID = -1;
@@ -1038,7 +1049,7 @@ var Post = function (_migi$Component) {
         subCmt.to = null;
       });
       subCmt.on('submit', function (content) {
-        subCmt.isCommentSending = true;
+        subCmt.invalid = true;
         var rootID = self.rootID;
         var parentID = self.parentID;
         _net2.default.postJSON('/api/post/addComment', {
@@ -1049,22 +1060,22 @@ var Post = function (_migi$Component) {
         }, function (res) {
           if (res.success) {
             subCmt.value = '';
-            subCmt.hasCommentContent = false;
             if (rootID === -1) {
               comment.prependData(res.data);
               comment.message = '';
             } else {
-              comment.prependChild(res.data);
+              comment.prependChild(res.data, parentID);
             }
           } else if (res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
           } else {
             alert(res.message || _util2.default.ERROR_MESSAGE);
+            subCmt.invalid = false;
           }
-          subCmt.isCommentSending = false;
         }, function (res) {
           alert(res.message || _util2.default.ERROR_MESSAGE);
-          subCmt.isCommentSending = false;
+          subCmt.invalid = false;
         });
       });
 
@@ -1139,13 +1150,13 @@ var Post = function (_migi$Component) {
       $ul.toggleClass('alt');
       $ul.find('li').toggleClass('cur');
       var rel = $ul.find('.cur').attr('rel');
-      currentCount = 0;
       sortType = rel;
       skip = 0;
       if (ajax) {
         ajax.abort();
       }
       this.loading = false;
+      this.loadEnd = false;
       this.ref.comment.clearData();
       this.load();
     }
@@ -1158,13 +1169,13 @@ var Post = function (_migi$Component) {
         $ul.toggleClass('alt');
         $ul.find('li').toggleClass('cur');
         var rel = $ul.find('.cur').attr('rel');
-        currentCount = 0;
         myComment = rel;
         skip = 0;
         if (ajax) {
           ajax.abort();
         }
         this.loading = false;
+        this.loadEnd = false;
         this.ref.comment.clearData();
         this.load();
       }
