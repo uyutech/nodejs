@@ -4,6 +4,9 @@
 
 'use strict';
 
+const OSS = require('ali-oss');
+const Spark = require('spark-md5');
+
 module.exports = app => {
   class Controller extends app.Controller {
     * message(ctx) {
