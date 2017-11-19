@@ -130,6 +130,9 @@
           }
           .like{
             margin-right:0.05rem;
+            &:hover{
+              color:@mainHoverColor;
+            }
             &:after{
               display:inline-block;
               margin-left:0.02rem;
@@ -149,6 +152,9 @@
             }
           }
           .sub{
+            &:hover{
+              color:@mainHoverColor;
+            }
             &:after{
               display:inline-block;
               margin-left:0.02rem;
@@ -162,6 +168,11 @@
             }
             &:hover:after{
               background-image:url(comment-hover.png);
+            }
+          }
+          span{
+            &:hover{
+              color:@mainHoverColor;
             }
           }
         }
@@ -279,7 +290,6 @@
               }
             }
             > pre{
-              margin-top:0.05rem;
               padding-left:0.7rem;
               word-break:break-all;
               word-wrap:break-word;
@@ -306,6 +316,9 @@
               }
               .like{
                 margin-right:0.05rem;
+                &:hover{
+                  color:@mainHoverColor;
+                }
                 &:after{
                   display:inline-block;
                   margin-left:0.02rem;
@@ -325,20 +338,23 @@
                 }
               }
               .sub{
-                &:after{
-                  display:inline-block;
-                  margin-left:0.02rem;
-                  width:0.16rem;
-                  height:0.16rem;
-                  background:url(comment.png) no-repeat;
-                  background-size:contain;
-                  content:' ';
-                  vertical-align:top;
-                  transform:translateY(0.02rem);
+                &:hover{
+                  color:@mainHoverColor;
                 }
-                &:hover:after{
-                  background-image:url(comment-hover.png);
-                }
+                //&:after{
+                //  display:inline-block;
+                //  margin-left:0.02rem;
+                //  width:0.16rem;
+                //  height:0.16rem;
+                //  background:url(comment.png) no-repeat;
+                //  background-size:contain;
+                //  content:' ';
+                //  vertical-align:top;
+                //  transform:translateY(0.02rem);
+                //}
+                //&:hover:after{
+                //  background-image:url(comment-hover.png);
+                //}
               }
             }
           }

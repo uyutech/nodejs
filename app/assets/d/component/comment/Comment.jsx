@@ -241,10 +241,10 @@ class Comment extends migi.Component {
     }
     let $num = $comment.find('.slide small.sub');
     $num.text((parseInt($num.text()) || 0) + 1);
-    if(item.RootID !== parentID) {
-      let $num = $('#comment_' + parentID).find('small.sub');
-      $num.text((parseInt($num.text()) || 0) + 1);
-    }
+    // if(item.RootID !== parentID) {
+    //   let $num = $('#comment_' + parentID).find('small.sub');
+    //   $num.text((parseInt($num.text()) || 0) + 1);
+    // }
   }
   genComment(item) {
     if(item.IsAuthor) {
@@ -330,14 +330,18 @@ class Comment extends migi.Component {
           </div>
         </div>
         <div class="c">
-          <p class="quote">
-            <label>回复@{ item.Send_ToUserName }：</label>
-            <span>{ item.Content }</span>
-          </p>
+          {
+            item.Content
+              ? <p class="quote">
+                  <label>回复@{ item.Send_ToUserName }：</label>
+                  <span>{ item.Content }</span>
+                </p>
+              : ''
+          }
           <pre cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_AuthorName }>{ item.Send_Content }</pre>
           <div class="slide2">
             <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
-            <small class="sub" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>{ item.sub_Count }</small>
+            <small class="sub" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>回复</small>
           </div>
           <b class="arrow"/>
         </div>
@@ -359,14 +363,18 @@ class Comment extends migi.Component {
         </div>
       </div>
       <div class="c">
-        <p class="quote">
-          <label>回复@{ item.Send_ToUserName }：</label>
-          <span>{ item.Content }</span>
-        </p>
+        {
+          item.Content
+            ? <p class="quote">
+              <label>回复@{ item.Send_ToUserName }：</label>
+              <span>{ item.Content }</span>
+            </p>
+            : ''
+        }
         <pre cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>{ item.Send_Content }</pre>
         <div class="slide2">
           <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
-          <small class="sub" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>{ item.sub_Count }</small>
+          <small class="sub" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>回复</small>
         </div>
         <b class="arrow"/>
       </div>

@@ -29,7 +29,7 @@ class HotWork extends migi.Component {
                     </a>
                     <a href={ `/works/${item.WorksID}` } class="txt">
                       <span>{ item.Title }</span>
-                      <span class="author">{ (item.SingerName || []).join(' ') }</span>
+                      <span class="author">{ (item.SingerName || []).join(' ') || ' ' }</span>
                     </a>
                   </li>;
                 })
