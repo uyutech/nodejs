@@ -684,7 +684,7 @@ var Profile = function (_migi$Component) {
         return;
       }
       if (newName !== self.sname) {
-        _net2.default.postJSON('/api/user/updateNickName', { nickName: newName }, function (res) {
+        _net2.default.postJSON('/api/my/updateNickName', { nickName: newName }, function (res) {
           if (res.success) {
             self.sname = newName;
             self.updateNickNameTimeDiff = 0;
@@ -726,7 +726,7 @@ var Profile = function (_migi$Component) {
           $upload.addClass('fn-hide');
           var fileReader = new FileReader();
           fileReader.onload = function () {
-            _net2.default.postJSON('/api/user/uploadHead', { img: fileReader.result }, function (res) {
+            _net2.default.postJSON('/api/my/uploadHead', { img: fileReader.result }, function (res) {
               if (res.success) {
                 self.head = res.url;
                 self.updateHeadTimeDiff = 0;

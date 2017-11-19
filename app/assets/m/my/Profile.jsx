@@ -46,7 +46,7 @@ class Profile extends migi.Component {
       return;
     }
     if(newName !== self.sname) {
-      net.postJSON('/api/user/updateNickName', { nickName: newName }, function(res) {
+      net.postJSON('/api/my/updateNickName', { nickName: newName }, function(res) {
         if(res.success) {
           self.sname = newName;
           self.updateNickNameTimeDiff = 0;
@@ -86,7 +86,7 @@ class Profile extends migi.Component {
         $upload.addClass('fn-hide');
         let fileReader = new FileReader();
         fileReader.onload = function() {
-          net.postJSON('/api/user/uploadHead', { img: fileReader.result }, function(res) {
+          net.postJSON('/api/my/uploadHead', { img: fileReader.result }, function(res) {
             if(res.success) {
               self.head = res.url;
             }
