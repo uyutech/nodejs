@@ -287,7 +287,7 @@ class Comment extends migi.Component {
         <div class="profile fn-clear">
           <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
-            <span class="name">{ item.Send_UserName }</span>
+            <a class="name" href={ '/user/' + item.Send_UserID }>{ item.Send_UserName }</a>
             <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
           </div>
         </div>
@@ -353,7 +353,7 @@ class Comment extends migi.Component {
           <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           <div class="txt">
             <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
-            <span class="name">{ item.Send_UserName }</span>
+            <a class="name" href={ '/user/' + item.Send_UserID }>{ item.Send_UserName }</a>
           </div>
         </div>
         <div class="fn fn-clear">

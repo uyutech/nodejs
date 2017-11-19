@@ -22,13 +22,17 @@ class My extends migi.Component {
       let page = self.ref.page;
       let page2 = self.ref.page2;
       page.on('page', function(i) {
-        page2.index = i;
+        if(page2) {
+          page2.index = i;
+        }
         self.load(i);
       });
-      page2.on('page', function(i) {
-        page.index = i;
-        self.load(i);
-      });
+      if(page2) {
+        page2.on('page', function(i) {
+          page.index = i;
+          self.load(i);
+        });
+      }
     });
   }
   clickOut(e) {
@@ -51,7 +55,7 @@ class My extends migi.Component {
     }
     loading = true;
     skip = (i - 1) * take;
-    net.postJSON('/api/user/myPost', { skip, take }, function(res) {
+    net.postJSON('/api/my/postList', { skip, take }, function(res) {
       if(res.success) {
         self.ref.hotPost.setData(res.data.data);
       }
@@ -90,7 +94,11 @@ class My extends migi.Component {
         <h4>我画的圈</h4>
         <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>
         <HotPost ref="hotPost" data={ this.props.myPost.data }/>
-        <Page ref="page2" total={ Math.ceil(this.props.myPost.Size / take) }/>
+        {
+          this.props.myPost.Size > take
+            ? <Page ref="page2" total={ Math.ceil(this.props.myPost.Size / take) }/>
+            : ''
+        }
         {/*<Favor ref="favor" list={ this.props.favors }/>*/}
       </div>
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>

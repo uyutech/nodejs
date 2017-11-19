@@ -474,11 +474,11 @@ var _util = __webpack_require__(0);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _Messages = __webpack_require__(67);
+var _Messages = __webpack_require__(69);
 
 var _Messages2 = _interopRequireDefault(_Messages);
 
-var _SubCmt = __webpack_require__(5);
+var _SubCmt = __webpack_require__(6);
 
 var _SubCmt2 = _interopRequireDefault(_SubCmt);
 
@@ -648,7 +648,7 @@ migi.name(Message, "Message");exports.default = Message;
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -829,7 +829,7 @@ migi.name(SubCmt, "SubCmt");exports.default = SubCmt;
 
 /***/ }),
 
-/***/ 67:
+/***/ 69:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

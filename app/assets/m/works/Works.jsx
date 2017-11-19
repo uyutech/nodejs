@@ -424,7 +424,7 @@ class Works extends migi.Component {
             : ''
         }
         {
-          this.lyricData && this.lyricData.value && this.lyricData.value.length
+          this.lyricData && this.lyricData.value && this.lyricData.value.length && this.lyricData.value[0].Text
             ? <Lyric datas={ this.lyricData }/>
             : ''
         }

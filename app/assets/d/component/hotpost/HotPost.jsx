@@ -152,7 +152,7 @@ class HotPost extends migi.Component {
       <div class="profile fn-clear">
         <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
         <div class="txt">
-          <span class="name">{ item.SendUserNickName }</span>
+          <a class="name" href={ '/user/' + item.SendUserID }>{ item.SendUserNickName }</a>
           <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>
         </div>
         <ul class="circle">

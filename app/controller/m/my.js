@@ -24,7 +24,7 @@ module.exports = app => {
         favors: ctx.helper.postServiceJSON('api/users/GetLikeWorksList', {
           uid,
         }),
-        myPost: ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+        myPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
           uid,
           Skip: 0,
           Take: 10,

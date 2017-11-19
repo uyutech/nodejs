@@ -243,7 +243,7 @@ class Post extends migi.Component {
           <img class="pic" src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
           <div class="txt">
             <div>
-              <span class="name">{ postData.SendUserNickName }</span>
+              <a class="name" href={ '/user/' + postData.SendUserID }>{ postData.SendUserNickName }</a>
               <small class="time">{ util.formatDate(postData.Createtime) }</small>
             </div>
           </div>

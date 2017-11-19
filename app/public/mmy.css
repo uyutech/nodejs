@@ -400,13 +400,13 @@
 .cp-page input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-.my h4 {
+#page .my h4 {
   position: relative;
   margin: 0.1rem;
   padding-left: 0.05rem;
   font-size: 0.12rem;
 }
-.my h4:before {
+#page .my h4:before {
   position: absolute;
   left: 0;
   top: 0.02rem;
@@ -416,10 +416,10 @@
   content: ' ';
   border-radius: 0.05rem;
 }
-.my > .profile {
+#page .my > .profile {
   margin-top: 0.1rem;
 }
-.my > .profile .pic {
+#page .my > .profile .pic {
   position: relative;
   float: left;
   margin-left: 0.1rem;
@@ -427,13 +427,13 @@
   height: 0.75rem;
   overflow: hidden;
 }
-.my > .profile .pic img {
+#page .my > .profile .pic img {
   display: block;
   width: 100%;
   height: 100%;
   border-radius: 100%;
 }
-.my > .profile .pic .upload {
+#page .my > .profile .pic .upload {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -443,25 +443,25 @@
   background-size: contain;
   border-radius: 0.05rem;
 }
-.my > .profile .pic .upload input {
+#page .my > .profile .pic .upload input {
   height: 100%;
   opacity: 0;
 }
-.my > .profile .txt {
+#page .my > .profile .txt {
   float: left;
   margin-left: 0.2rem;
   margin-top: 0.2rem;
 }
-.my > .profile .txt strong {
+#page .my > .profile .txt strong {
   font-size: 0.18rem;
   font-weight: 400;
 }
-.my > .profile .txt input {
+#page .my > .profile .txt input {
   width: 1rem;
   font-size: 0.18rem;
   border: 1px solid #EEE;
 }
-.my > .profile .txt .edit {
+#page .my > .profile .txt .edit {
   display: inline-block;
   margin-left: 0.1rem;
   width: 0.2rem;
@@ -472,15 +472,15 @@
   overflow: hidden;
   cursor: pointer;
 }
-.my > .warn {
+#page .my > .warn {
   margin-top: 0.2rem;
   padding: 0 0.1rem;
 }
-.my > .warn > .t {
+#page .my > .warn > .t {
   position: relative;
   padding-right: 1rem;
 }
-.my > .warn > .t .pic {
+#page .my > .warn > .t .pic {
   float: left;
   display: block;
   margin-right: 0.05rem;
@@ -489,20 +489,20 @@
   border-radius: 0.3rem;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
 }
-.my > .warn > .t .txt {
+#page .my > .warn > .t .txt {
   float: left;
   line-height: 0.3rem;
 }
-.my > .warn > .t .txt .name {
+#page .my > .warn > .t .txt .name {
   display: inline-block;
   margin-right: 0.1rem;
 }
-.my > .warn > .t .txt .time {
+#page .my > .warn > .t .txt .time {
   display: inline-block;
   color: #B1C0C9;
   font-size: 0.12rem;
 }
-.my > .warn > .c {
+#page .my > .warn > .c {
   display: inline-block;
   max-width: 100%;
   position: relative;
@@ -513,7 +513,7 @@
   border-radius: 0.1rem;
   color: #B1C0C9;
 }
-.my > .warn > .c .arrow {
+#page .my > .warn > .c .arrow {
   position: absolute;
   left: 0.1rem;
   top: -1px;
@@ -522,7 +522,7 @@
   height: 0.1rem;
   border-top: 1px solid #FFF;
 }
-.my > .warn > .c .arrow:after {
+#page .my > .warn > .c .arrow:after {
   position: absolute;
   left: 0;
   top: -0.06rem;
@@ -536,27 +536,27 @@
           transform: scaleX(0.7) rotateZ(-45deg);
   content: ' ';
 }
-.my > .warn > .c > pre {
+#page .my > .warn > .c > pre {
   word-break: break-all;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
-.my > .warn > .c > pre .placeholder {
+#page .my > .warn > .c > pre .placeholder {
   display: inline-block;
   width: 0.7rem;
   height: 0.1rem;
 }
-.my .cp-hotauthor {
+#page .my .cp-hotauthor {
   margin-top: 0.1rem;
 }
-.my .cp-page {
+#page .my .cp-page {
   padding: 0 0.1rem;
   text-align: right;
 }
-.my .cp-page ol {
+#page .my .cp-page ol {
   margin: 0;
 }
-.my .cp-page .prev {
+#page .my .cp-page .prev {
   position: relative;
   width: 0.2rem;
   height: 0.2rem;
@@ -564,13 +564,13 @@
   overflow: hidden;
   white-space: nowrap;
 }
-.my .cp-page .prev b {
+#page .my .cp-page .prev b {
   margin: 0;
   position: absolute;
   left: 0.07rem;
   top: 0.06rem;
 }
-.my .cp-page .next {
+#page .my .cp-page .next {
   position: relative;
   width: 0.2rem;
   height: 0.2rem;
@@ -578,13 +578,13 @@
   overflow: hidden;
   white-space: nowrap;
 }
-.my .cp-page .next b {
+#page .my .cp-page .next b {
   margin: 0;
   position: absolute;
   left: 0.07rem;
   top: 0.06rem;
 }
-.my > .loginout {
+#page .my > .loginout {
   display: block;
   margin: 0.2rem auto;
   width: 1.5rem;
@@ -595,6 +595,6 @@
   background: #B65A58;
   text-align: center;
 }
-.my > .loginout:hover {
+#page .my > .loginout:hover {
   color: #0AE;
 }

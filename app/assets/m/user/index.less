@@ -1,0 +1,90 @@
+/**
+ * Created by army8735 on 2017/11/19.
+ */
+
+@import '../../d/common/var';
+@import '../component/hotpost/index';
+@import '../../d/component/page/index';
+
+#page .user{
+  h4{
+    position:relative;
+    margin:0.1rem;
+    padding-left:0.05rem;
+    font-size:0.12rem;
+    &:before{
+      position:absolute;
+      left:0;
+      top:0.02rem;
+      bottom:0.02rem;
+      width:0.02rem;
+      background:@secondColor;
+      content:' ';
+      border-radius:0.05rem;
+    }
+  }
+  > .profile{
+    margin-top:0.1rem;
+    .pic{
+      position:relative;
+      float:left;
+      margin-left:0.1rem;
+      width:0.75rem;
+      height:0.75rem;
+      //border-radius:100%;
+      //background:#F1F6F9;
+      overflow:hidden;
+      img{
+        display:block;
+        width:100%;
+        height:100%;
+        border-radius:100%;
+      }
+    }
+    .txt{
+      float:left;
+      margin-left:0.2rem;
+      margin-top:0.2rem;
+      //line-height:1.1rem;
+      strong{
+        font-size:0.18rem;
+        font-weight:400;
+      }
+    }
+  }
+  .cp-page{
+    padding:0 0.1rem;
+    text-align:right;
+    ol{
+      margin:0;
+    }
+    .prev{
+      position:relative;
+      width:0.2rem;
+      height:0.2rem;
+      text-indent:999rem;
+      overflow:hidden;
+      white-space:nowrap;
+      b{
+        margin:0;
+        position:absolute;
+        left:0.07rem;
+        top:0.06rem;
+      }
+    }
+    .next{
+      position:relative;
+      width:0.2rem;
+      height:0.2rem;
+      text-indent:999rem;
+      overflow:hidden;
+      white-space:nowrap;
+      b{
+        margin:0;
+        position:absolute;
+        left:0.07rem;
+        top:0.06rem;
+      }
+    }
+  }
+}

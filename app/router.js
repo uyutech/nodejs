@@ -55,6 +55,7 @@ module.exports = app => {
   app.post('/api/user/guideSave', app.middlewares.needLoginJson(), 'api.user.guideSave');
   app.post('/api/user/altSettle', app.middlewares.needLoginJson(), 'api.user.altSettle');
   app.post('/api/user/uploadPic', app.middlewares.needLoginJson(), 'api.user.uploadPic');
+  app.post('/api/user/postList', 'api.user.postList');
   // app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
   // app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
 
@@ -62,7 +63,7 @@ module.exports = app => {
   app.post('/api/my/uploadHead', app.middlewares.needLoginJson(), 'api.my.uploadHead');
   app.post('/api/my/message', app.middlewares.needLoginJson(), 'api.my.message');
   app.post('/api/my/readMessage', app.middlewares.needLoginJson(), 'api.my.readMessage');
-  app.post('/api/my/myPost', app.middlewares.needLoginJson(), 'api.my.myPost');
+  app.post('/api/my/postList', app.middlewares.needLoginJson(), 'api.my.postList');
 
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');

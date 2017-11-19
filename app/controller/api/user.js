@@ -236,6 +236,19 @@ module.exports = app => {
         success: false,
       };
     }
+    * postList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      if(!body.userID) {
+        return;
+      }
+      let res = yield ctx.helper.postServiceJSON('api/users/User_Post_List', {
+        uid: body.userID,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };
