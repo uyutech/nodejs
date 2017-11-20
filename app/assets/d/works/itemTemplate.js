@@ -10,6 +10,11 @@ export default {
           bigType: 'audio',
           name: '原创音乐',
         };
+      case 1112:
+        return {
+          bigType: 'audio',
+          name: '纯音乐',
+        };
       case 1113:
         return {
           bigType: 'audio',
