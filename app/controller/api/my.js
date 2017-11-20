@@ -51,7 +51,7 @@ module.exports = app => {
         let temp = img.slice(0, equalIndex);
         let strLen = temp.length;
         let fileLen = Math.ceil(strLen - (strLen / 8) * 2);
-        if(fileLen > 1024 * 300) {
+        if(fileLen > 1024 * 500) {
           return ctx.body = {
             success: false,
             message: '图片体积太大啦，不能超过500k！',
