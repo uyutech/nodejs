@@ -14,7 +14,7 @@ module.exports = app => {
       }
       let userInfo = {};
       let userPost = {};
-      let followState = 0;
+      let followState = uid ? 0 : 2;
       let res = yield {
         userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
           uid: userID,
@@ -36,7 +36,7 @@ module.exports = app => {
       if(res.userPost.data.success) {
         userPost = res.userPost.data.data;
       }
-      if(uid.toString() !== userID && res.followState.data.success) {
+      if(uid && uid.toString() !== userID && res.followState.data.success) {
         followState = res.followState.data.data;
       }
       yield ctx.render('muser', {
