@@ -30,7 +30,7 @@ class Title extends migi.Component {
     net.postJSON('/api/circle/join', { circleID: this.props.circleDetail.TagID, state: self.joined }, function(res) {
       if(res.success) {
         self.joined = !!res.data.ISLike;
-        self.count = res.data.UserCount;
+        self.count = res.data.FansNumber;
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);
