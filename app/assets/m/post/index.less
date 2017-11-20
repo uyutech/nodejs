@@ -14,6 +14,7 @@
     text-align:center;
   }
   > .profile{
+    position:relative;
     margin-bottom:0.2rem;
     line-height:0.3rem;
     font-weight:400;
@@ -33,6 +34,22 @@
         margin-left:0.1rem;
         font-size:0.14rem;
         color:@fourthTextColor;
+      }
+    }
+    .circle{
+      position:absolute;
+      top:0;
+      right:0;
+      li{
+        display:inline-block;
+        padding:0 0.1rem;
+        line-height:0.24rem;
+        background:@mainColor;
+        border-radius:0.24rem;
+        color:@thirdTextColor;
+        a{
+          color:#FFF;
+        }
       }
     }
     &.author{

@@ -247,6 +247,13 @@ class Post extends migi.Component {
               <small class="time">{ util.formatDate(postData.Createtime) }</small>
             </div>
           </div>
+          <ul class="circle">
+            {
+              (postData.Taglist || []).map(function(item) {
+                return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
+              })
+            }
+          </ul>
         </div>
         <div class="wrap">
           <p class="con" dangerouslySetInnerHTML={ html }/>
