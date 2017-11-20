@@ -17,6 +17,8 @@ let helper = {
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
     url += 'traceID=' + this.ctx.traceID || '';
+    let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
+    let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
     let res;
     try {
@@ -29,11 +31,11 @@ let helper = {
     }
     catch(e) {
       let end = Date.now();
-      this.ctx.getLogger('serviceLogger').error('[-/-/%s/%sms POST %s]', this.ctx.traceID, end - start, url);
+      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
       throw new Error(e);
     }
     let end = Date.now();
-    this.ctx.getLogger('serviceLogger').info('[-/-/%s/%sms POST %s]', this.ctx.traceID, end - start, url);
+    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
     return res;
   },
   weiboAppKey: '1987340303',
