@@ -12,15 +12,16 @@ class Profile extends migi.Component {
     let self = this;
     self.head = self.props.userInfo.Head_Url;
     self.sname = self.props.userInfo.NickName;
+    self.sign = self.props.userInfo.User_Sign || '';
     self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
     self.updateHeadTimeDiff = self.props.updateHeadTimeDiff || 0;
   }
   @bind head
   @bind sname
+  @bind sign
   @bind updateNickNameTimeDiff
   @bind updateHeadTimeDiff
-  click(e) {
-    e.preventDefault();
+  click() {
     let self = this;
     if(self.updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
       alert('昵称一天只能修改一次哦~');
@@ -112,6 +113,42 @@ class Profile extends migi.Component {
       $(this.ref.file.element).click();
     }
   }
+  click2() {
+    let self = this;
+    $(self.ref.sign.element).addClass('fn-hide');
+    $(self.ref.edit2.element).addClass('fn-hide');
+    $(self.ref.input2.element).removeClass('fn-hide').focus().val(self.sign);
+  }
+  blur2() {
+    let self = this;
+    $(self.ref.sign.element).removeClass('fn-hide');
+    $(self.ref.input2.element).addClass('fn-hide');
+    let $edit = $(self.ref.edit2.element);
+    let newSign = $(self.ref.input2.element).val().trim();
+    let length = newSign.length;
+    if(length > 16) {
+      alert('签名长度不能超过16个字哦~');
+      $edit.removeClass('fn-hide');
+      return;
+    }
+    if(newSign !== self.sign) {
+      net.postJSON('/api/my/updateSign', { sign: newSign }, function(res) {
+        if(res.success) {
+          self.sign = newSign;
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $edit.removeClass('fn-hide');
+      }, function(res) {
+        alert(res.message || util.ERROR_MESSAGE);
+        $edit.removeClass('fn-hide');
+      });
+    }
+    else {
+      $edit.removeClass('fn-hide');
+    }
+  }
   render() {
     return <div class="profile fn-clear">
       <div class="pic" onClick={ this.clickPic }>
@@ -122,8 +159,12 @@ class Profile extends migi.Component {
       </div>
       <div class="txt">
         <strong ref="sname">{ this.sname }</strong>
-        <input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur } maxlength="8"/>
+        <input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur } maxlength="8" placeholder="请输入昵称"/>
         <b class="edit" ref="edit" onClick={ this.click }/>
+        <br/>
+        <p ref="sign" class={ this.sign ? 'sign' : 'sign empty' }>{ this.sign || '暂无签名' }</p>
+        <input ref="input2" type="text" class="input2 fn-hide" value="" onBlur={ this.blur2 } maxlength="16" placeholder="请输入签名"/>
+        <b class="edit edit2" ref="edit2" onClick={ this.click2 }/>
       </div>
     </div>;
   }

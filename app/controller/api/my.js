@@ -171,6 +171,22 @@ module.exports = app => {
         success: false,
       };
     }
+    * updateSign(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let length = (body.sign || '').length;
+      if(length > 16) {
+        return ctx.body = {
+          success: false,
+          message: '签名长度不能超过16个字哦~',
+        };
+      }
+      let res = yield ctx.helper.postServiceJSON('api/users/UpdateUserSign', {
+        uid,
+        sign: body.sign || '',
+      });
+      ctx.body = res.data;
+    }
   }
 
   return Controller;

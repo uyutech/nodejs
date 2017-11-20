@@ -42,18 +42,22 @@
     .txt{
       float:left;
       margin-left:0.3rem;
-      margin-top:0.4rem;
-      //line-height:1.1rem;
+      margin-top:0.3rem;
       strong{
+        margin-right:0.1rem;
         font-size:0.18rem;
         font-weight:400;
       }
       input{
         font-size:0.18rem;
+        &.input2{
+          margin-top:0.05rem;
+          height:0.2rem;
+          font-size:0.12rem;
+        }
       }
       .edit{
         display:inline-block;
-        margin-left:0.1rem;
         width:0.2rem;
         height:0.2rem;
         background:url(edit.png) no-repeat center;
@@ -61,6 +65,20 @@
         text-indent:999rem;
         overflow:hidden;
         cursor:pointer;
+        &.edit2{
+          transform:translateY(0.03rem);
+        }
+      }
+      .sign{
+        display:inline-block;
+        margin-right:0.1rem;
+        height:0.2rem;
+        line-height:0.2rem;
+        color:@fourthTextColor;
+        vertical-align:middle;
+        &.empty{
+          color:#CCC;
+        }
       }
     }
   }

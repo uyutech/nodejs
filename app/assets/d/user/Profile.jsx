@@ -13,9 +13,11 @@ class Profile extends migi.Component {
     let self = this;
     self.head = self.props.userInfo.Head_Url;
     self.sname = self.props.userInfo.NickName;
+    self.sign = self.props.userInfo.User_Sign;
   }
   @bind head
   @bind sname
+  @bind sign
   render() {
     return <div class="profile fn-clear">
       <div class="pic">
@@ -23,6 +25,7 @@ class Profile extends migi.Component {
       </div>
       <div class="txt">
         <strong ref="sname">{ this.sname }</strong>
+        <p class={ this.sign ? 'sign' : 'sign empty' }>{ this.sign || '暂无签名' }</p>
       </div>
     </div>;
   }
