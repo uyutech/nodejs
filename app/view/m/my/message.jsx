@@ -8,6 +8,12 @@ import Message from '../../../assets/m/my/message/Message.jsx';
 
 export default function(data) {
   let messages = data.messages;
+  (messages.data || []).forEach(function(item) {
+    let content = item.Content;
+    if(content.length > 64) {
+      item.Content = content.slice(0, 64) + '...';
+    }
+  });
 
   let message = migi.preRender(<Message messages={ messages }/>);
 

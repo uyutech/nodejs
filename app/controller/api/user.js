@@ -183,6 +183,13 @@ module.exports = app => {
       if(ctx.session.authorID) {
         ctx.session.isPublic = body.public === 'true';
       }
+      let userInfo = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        uid,
+      });
+      if(userInfo.data.success) {
+        ctx.session.uname = userInfo.data.data.NickName;
+        ctx.session.head = userInfo.data.data.Head_Url;
+      }
       ctx.body = res.data;
     }
     * uploadPic(ctx) {

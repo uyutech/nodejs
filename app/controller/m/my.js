@@ -55,6 +55,8 @@ module.exports = app => {
       if(res.lastUpdateHeadTime.data.success) {
         lastUpdateHeadTime = res.lastUpdateHeadTime.data.data;
       }
+      ctx.session.uname = userInfo.NickName;
+      ctx.session.head = userInfo.Head_Url;
       yield ctx.render('mmy', {
         userInfo,
         follows,

@@ -107,6 +107,7 @@ module.exports = app => {
               Head_Url: url,
             });
             if(res.data && res.data.success) {
+              ctx.session.head = url;
               return ctx.body = {
                 success: true,
                 url,
@@ -115,10 +116,17 @@ module.exports = app => {
           }
         }
         else {
-          return ctx.body = {
-            success: true,
-            url,
-          };
+          let res = yield ctx.helper.postServiceJSON('api/users/UpdateHead_Url', {
+            uid,
+            Head_Url: url,
+          });
+          if(res.data && res.data.success) {
+            ctx.session.head = url;
+            return ctx.body = {
+              success: true,
+              url,
+            };
+          }
         }
       }
       ctx.body = {

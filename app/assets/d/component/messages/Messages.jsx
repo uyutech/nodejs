@@ -67,7 +67,7 @@ class Messages extends migi.Component {
       <div class="profile fn-clear">
         <img class="pic" src={ util.autoSsl(util.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
         <div class="txt">
-          <span class="name">{ item.Send_UserName }</span>
+          <a href={ '/author/' + item.Send_UserID } class="name">{ item.Send_UserName }</a>
           <a class="time" href={ url }>{ util.formatDate(item.Send_Time) }</a>
         </div>
       </div>
