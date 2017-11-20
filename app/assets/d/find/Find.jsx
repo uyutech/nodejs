@@ -6,13 +6,13 @@ import net from '../common/net';
 import util from '../common/util';
 import Banner from './Banner.jsx';
 import HotWork from '../component/hotwork/HotWork.jsx';
-// import HotPhotoAlbum from '../component/hotphotoalbum/HotPhotoAlbum.jsx';
 import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
 import HotMusicAlbum from '../component/hotmusicalbum/HotMusicAlbum.jsx';
 import HotCircle from '../component/hotcircle/HotCircle.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
 import HotPlayList from '../component/hotplaylist/HotPlayList.jsx';
 import Page from '../component/page/Page.jsx';
+import SubPost from '../circle/SubPost.jsx';
 
 let loading;
 let take = 10;
@@ -32,6 +32,14 @@ class Find extends migi.Component {
       page2.on('page', function(i) {
         page.index = i;
         self.load(i);
+      });
+      self.ref.subPost.on('add_post', function(data) {
+        if(parent && parent.setHash) {
+          parent.setHash('/post/' + data.ID);
+        }
+        else {
+          location.href = '/post/' + data.ID;
+        }
       });
     });
   }
@@ -93,6 +101,8 @@ class Find extends migi.Component {
         </div>
         <HotPlayList ref="hostPlayList" dataList={ this.props.hotPlayList.data }/>
       </div>
+      <SubPost ref="subPost" placeholder={ '在转圈圈画个圈吧' }
+               circleID={ 0 } originTo={ '转圈圈' }/>
     </div>;
   }
 }

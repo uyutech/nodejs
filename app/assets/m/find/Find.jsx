@@ -11,12 +11,17 @@ import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
 import HotMusicAlbum from '../component/hotmusicalbum/HotMusicAlbum.jsx';
 import HotCircle from '../component/hotcircle/HotCircle.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
+import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 
 class Find extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
     self.on(migi.Event.DOM, function() {
+      let subCmt = self.ref.subCmt;
+      subCmt.on('click', function() {
+        location.href = '/circle/post?circleID=0';
+      });
     });
   }
   show() {
@@ -32,12 +37,16 @@ class Find extends migi.Component {
       <HotWork ref="hotWork" title="热门作品" dataList={ this.props.hotWorkList }/>
       <HotMusicAlbum ref="hotMusicAlbum" title="热门专辑" dataList={ this.props.hotMusicAlbumList }/>
       <HotAuthor ref="hotAuthor" title="入驻作者" dataList={ this.props.hotAuthorList }/>
-      {/*<HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList}/>*/}
       <div class="post">
         <h4>转圈</h4>
         <HotPost ref="hotPost" skip={ 10 } url={ '/api/find/hotPostList' }
                  data={ this.props.hotPostList }/>
       </div>
+      <SubCmt ref="subCmt"
+              tipText="-${n}"
+              subText="发送"
+              readOnly={ true }
+              placeholder={ '在转圈圈画个圈吧' }/>
     </div>;
   }
 }
