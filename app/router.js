@@ -49,6 +49,8 @@ module.exports = app => {
   app.post('/api/user/altSettle', app.middlewares.needLoginJson(), 'api.user.altSettle');
   app.post('/api/user/uploadPic', app.middlewares.needLoginJson(), 'api.user.uploadPic');
   app.post('/api/user/postList', 'api.user.postList');
+  app.post('/api/user/follow', app.middlewares.needLoginJson(), 'api.user.follow');
+  app.post('/api/user/unFollow', app.middlewares.needLoginJson(), 'api.user.unFollow');
   // app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
   // app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
 

@@ -257,6 +257,30 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * follow(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      if(!body.userID) {
+        return;
+      }
+      let res = yield ctx.helper.postServiceJSON('api/users/AddFollowUser', {
+        uid,
+        touid: body.userID,
+      });
+      ctx.body = res.data;
+    }
+    * unFollow(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      if(!body.userID) {
+        return;
+      }
+      let res = yield ctx.helper.postServiceJSON('api/users/RemoveFollowUser', {
+        uid,
+        touid: body.userID,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

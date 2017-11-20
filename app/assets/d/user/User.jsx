@@ -57,7 +57,7 @@ class User extends migi.Component {
   }
   render() {
     return <div class="user">
-      <Profile userInfo={ this.props.userInfo }/>
+      <Profile userInfo={ this.props.userInfo } followState={ this.props.followState }/>
       <div class="c">
         <h4>TA画的圈</h4>
         <Page ref="page" total={ Math.ceil(this.props.userPost.Size / take) }/>

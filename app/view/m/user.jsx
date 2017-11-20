@@ -9,8 +9,9 @@ import User from '../../assets/m/user/User.jsx';
 export default function(data) {
   let userInfo = data.userInfo;
   let userPost = data.userPost;
+  let followState = data.followState;
 
-  let user = migi.preRender(<User userInfo={ userInfo } userPost={ userPost }/>);
+  let user = migi.preRender(<User userInfo={ userInfo } userPost={ userPost } followState={ followState }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -27,6 +28,7 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.userInfo = ${data.helper.stringify(userInfo)};
   $CONFIG.userPost = ${data.helper.stringify(userPost)};
+  $CONFIG.followState = ${data.helper.stringify(followState)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/muser.js')}"></script>

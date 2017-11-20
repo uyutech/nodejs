@@ -43,6 +43,31 @@
         }
       }
     }
+    .rel{
+      float:left;
+      margin-left:0.3rem;
+      margin-top:0.3rem;
+      span{
+        display:block;
+        width:0.8rem;
+        height:0.32rem;
+        line-height:0.32rem;
+        text-align:center;
+        border-radius:0.1rem;
+        font-size:0.14rem;
+        color:#FFF;
+        cursor:pointer;
+        &:hover{
+          text-decoration:underline;
+        }
+        &.s1,&.s3{
+          background:@fourthTextColor;
+        }
+        &.s2{
+          background:#5D99C4;
+        }
+      }
+    }
   }
   > .c{
     margin-top:0.2rem;

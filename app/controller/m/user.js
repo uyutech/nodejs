@@ -14,15 +14,20 @@ module.exports = app => {
       }
       let userInfo = {};
       let userPost = {};
+      let followState = 0;
       let res = yield {
         userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
           uid: userID,
         }),
         userPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
           uid: userID,
+          currentuid: uid,
           Skip: 0,
           Take: 10,
-          currentuid: uid,
+        }),
+        followState: ctx.helper.postServiceJSON('api/users/User_FollowState', {
+          uid,
+          touid: userID,
         }),
       };
       if(res.userInfo.data.success) {
@@ -31,9 +36,13 @@ module.exports = app => {
       if(res.userPost.data.success) {
         userPost = res.userPost.data.data;
       }
+      if(uid.toString() !== userID && res.followState.data.success) {
+        followState = res.followState.data.data;
+      }
       yield ctx.render('muser', {
         userInfo,
         userPost,
+        followState,
       });
     }
   }

@@ -18,7 +18,7 @@ module.exports = () => {
           }
           else {
             var hash = location.hash;
-            hash = hash || '#/find';
+            hash = hash || '#/';
             hash = hash.replace(/^#/, '').replace(/^\\//, '');
             location.replace('//m.' + location.host + '/' + hash);
           }
