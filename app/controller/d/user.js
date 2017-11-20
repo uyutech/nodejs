@@ -20,9 +20,9 @@ module.exports = app => {
         }),
         userPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
           uid: userID,
+          currentuid: uid,
           Skip: 0,
           Take: 10,
-          MyPost: 1,
         }),
       };
       if(res.userInfo.data.success) {

@@ -4551,7 +4551,7 @@ var Player = function (_migi$Component) {
         return '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)';
       })]], [new migi.Obj("formatLyrics", this, function () {
         return (this.formatLyrics.data || []).map(function (item) {
-          return migi.createVd("pre", [], [item.txt || '&nbsp;']);
+          return migi.createVd("pre", [], [item.txt || ' ']);
         });
       })])]), migi.createVd("div", [["class", new migi.Obj(["showLyricsMode", "formatLyrics"], this, function () {
         return 'line' + (this.showLyricsMode && this.formatLyrics.txt ? '' : ' fn-hide');

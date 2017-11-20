@@ -57,7 +57,7 @@ class Messages extends migi.Component {
           </a>
           <pre class="con">{ item.Send_Content }</pre>
           <ul class="btn fn-clear">
-            <li class="comment" type={ type } cid={ item.ParentID } rid={ item.RootID } name={ item.Send_UserName } tid={ item.urlID }/>
+            <li class="comment" type={ type } cid={ item.ParentID } rid={ item.RootID } name={ item.Send_UserName } tid={ item.urlID }>回复</li>
           </ul>
           <b class="arrow"/>
         </div>
@@ -78,7 +78,7 @@ class Messages extends migi.Component {
         </a>
         <pre class="con">{ item.Send_Content }</pre>
         <ul class="btn fn-clear">
-          <li class="comment" type={ type } cid={ item.ParentID } rid={ item.RootID } name={ item.Send_UserName } tid={ item.urlID }/>
+          <li class="comment" type={ type } cid={ item.ParentID } rid={ item.RootID } name={ item.Send_UserName } tid={ item.urlID }>回复</li>
         </ul>
         <b class="arrow"/>
       </div>

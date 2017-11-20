@@ -1769,7 +1769,7 @@ var Audio = function (_migi$Component) {
         return '-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)';
       })]], [new migi.Obj(["datas", "index"], this, function () {
         return (this.datas[this.index].formatLyrics.data || []).map(function (item) {
-          return migi.createVd("pre", [], [item.txt || '&nbsp;']);
+          return migi.createVd("pre", [], [item.txt || ' ']);
         });
       })])]), migi.createVd("div", [["class", new migi.Obj(["showLyricsMode", "datas", "index"], this, function () {
         return 'line' + (this.showLyricsMode && this.datas[this.index].formatLyrics.txt ? '' : ' fn-hide');
@@ -3210,7 +3210,7 @@ var MusicAlbum = function (_migi$Component) {
         return '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)';
       })]], [new migi.Obj("formatLyrics", this, function () {
         return (this.formatLyrics.data || []).map(function (item) {
-          return migi.createVd("pre", [], [item.txt || '&nbsp;']);
+          return migi.createVd("pre", [], [item.txt || ' ']);
         });
       })])]), migi.createVd("div", [["class", new migi.Obj(["showLyricsMode", "formatLyrics"], this, function () {
         return 'line' + (this.showLyricsMode && this.formatLyrics.txt ? '' : ' fn-hide');

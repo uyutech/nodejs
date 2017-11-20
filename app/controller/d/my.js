@@ -26,9 +26,9 @@ module.exports = app => {
         }),
         myPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
           uid,
+          currentuid: uid,
           Skip: 0,
           Take: 10,
-          MyPost: 1,
         }),
         lastUpdateNickNameTime: ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
           uid,

@@ -378,7 +378,7 @@ class Player extends migi.Component {
             <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.lyricsIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
               {
                 (this.formatLyrics.data || []).map(function(item) {
-                  return <pre>{ item.txt || '&nbsp;' }</pre>
+                  return <pre>{ item.txt || ' ' }</pre>
                 })
               }
             </div>

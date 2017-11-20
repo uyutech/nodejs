@@ -35,6 +35,7 @@ module.exports = app => {
         uid,
         Skip: body.skip,
         Take: body.take,
+        currentuid: uid,
       });
       ctx.body = res.data;
     }

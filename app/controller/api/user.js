@@ -246,6 +246,7 @@ module.exports = app => {
         uid: body.userID,
         Skip: body.skip,
         Take: body.take,
+        currentuid: uid,
       });
       ctx.body = res.data;
     }

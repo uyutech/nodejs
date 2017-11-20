@@ -93,6 +93,7 @@
   overflow: hidden;
 }
 .cp-hotwork .list li .txt .author {
+  min-width: 1px;
   font-size: 0.12rem;
   color: #919191;
 }
@@ -218,6 +219,7 @@
   text-overflow: ellipsis;
 }
 .cp-hotmusicalbum .list li .txt .author {
+  min-width: 1px;
   font-size: 0.12rem;
   color: #919191;
 }
@@ -482,7 +484,6 @@
   margin: 0.1rem 0.1rem 0 0;
   width: 2.4rem;
   height: 2.4rem;
-  background: #B1C0C9;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

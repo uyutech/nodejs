@@ -22,7 +22,7 @@ module.exports = app => {
           uid: userID,
           Skip: 0,
           Take: 10,
-          MyPost: 1,
+          currentuid: uid,
         }),
       };
       if(res.userInfo.data.success) {
