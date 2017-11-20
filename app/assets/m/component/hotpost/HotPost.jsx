@@ -118,7 +118,9 @@ class PostList extends migi.Component {
     if(item.IsAuthor) {
       return <li class="author">
         <div class="profile fn-clear">
-          <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+          <a class="pic" href={ '/author/' + item.AuthorID }>
+            <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+          </a>
           <div class="txt">
             <a href={ '/author/' + item.AuthorID } class="name">{ item.SendUserNickName }</a>
             <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>
@@ -171,7 +173,9 @@ class PostList extends migi.Component {
     }
     return <li>
       <div class="profile fn-clear">
-        <img class="pic" src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+        <a class="pic" href={ '/user/' + item.SendUserID }>
+          <img src={ util.autoSsl(util.img96_96_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+        </a>
         <div class="txt">
           <a class="name" href={ '/user/' + item.SendUserID }>{ item.SendUserNickName }</a>
           <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>

@@ -198,10 +198,22 @@ class Post extends migi.Component {
     return <div class="post">
       <h2>{ postData.Title }</h2>
       <div class={ 'profile fn-clear' + (postData.IsAuthor ? ' author' : '') }>
-        <img class="pic" src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
+        {
+          postData.IsAuthor
+            ? <a class="pic" href={ '/author/' + postData.AuthorID }>
+              <img src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
+            </a>
+            : <a class="pic" href={ '/user/' + postData.SendUserID }>
+              <img src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
+            </a>
+        }
         <div class="txt">
           <div>
-            <a class="name" href={ '/user/' + postData.SendUserID }>{ postData.SendUserNickName }</a>
+            {
+              postData.IsAuthor
+                ? <a class="name" href={ '/author/' + postData.AuthorID }>{ postData.SendUserNickName }</a>
+                : <a class="name" href={ '/user/' + postData.SendUserID }>{ postData.SendUserNickName }</a>
+            }
             <small class="time">{ util.formatDate(postData.Createtime) }</small>
           </div>
         </div>
