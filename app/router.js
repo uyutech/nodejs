@@ -5,13 +5,6 @@ module.exports = app => {
   app.get('/home/qr', 'error.qr');
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
-  app.get('/oauth/rhymeWeibo', 'oauth.rhymeWeibo');
-  app.get('/oauth/rhymeLogin', 'oauth.rhymeLogin');
-  app.get('/rhymes', 'rhyme.index');
-  app.get('/rhymes/rjrjs', 'rhyme.rjrjs');
-  app.get('/rhymes/jrj', 'rhyme.jrj');
-  app.get('/rhymes/shuomeng', 'rhyme.shuomeng');
-  app.get('/rhymes/music/jrjbz', 'rhyme.jrjbz');
 
   app.get('/d', 'd.index.index');
   app.get('/d/find', 'd.find.index');
