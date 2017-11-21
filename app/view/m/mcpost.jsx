@@ -14,7 +14,7 @@ export default function(data) {
   let hotCircleList = data.hotCircleList;
 
   let subPost = migi.preRender(<SubPost circleID={ circleID } circleDetail={ circleDetail }
-                                        placeholder={ '在' + circleDetail.TagName +'圈画个圈吧' }
+                                        placeholder={ '在' + (circleDetail.TagName || '转圈') +'圈画个圈吧' }
                                         isPublic={ isPublic } head={ head }
                                         to={ hotCircleList }/>);
 

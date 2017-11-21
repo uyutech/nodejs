@@ -160,10 +160,6 @@ class SubPost extends migi.Component {
       $(self.ref.label.element).find('.cur,.on').each(function(i, li) {
         circleID.push($(li).attr('rel'));
       });
-      if(!circleID.length) {
-        alert('请至少选择一个圈子~');
-        return;
-      }
       net.postJSON('/api/circle/add', { content: self.value, imgs, circleID: circleID.join(',') }, function(res) {
         if(res.success) {
           self.value = '';
@@ -353,7 +349,7 @@ class SubPost extends migi.Component {
               <dt>画个圈</dt>
               {
                 (this.to || []).map(function(item) {
-                  return <dd rel={ item.TagID } class={ item.TagID === this.props.circleID ? 'cur' : '' }>{ item.TagName }圈</dd>;
+                  return <dd rel={ item.TagID } class={ item.TagID === this.props.circleID ? 'on' : '' }>{ item.TagName }圈</dd>;
                 }.bind(this))
               }
             </dl>

@@ -31,16 +31,17 @@ module.exports = app => {
     * add(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let circleID = body.circleID;
-      if(!circleID) {
-        return;
-      }
+      let circleID = body.circleID || '';
       let ids = circleID.split(',');
       if(ids.length > 3) {
         return ctx.body = {
           success: false,
           message: '最多只能选择3个圈子哦~',
         };
+      }
+      // 默认圈子
+      if(ids.indexOf('0') === -1) {
+        circleID += (!circleID || circleID.endsWith(',')) ? '0' : ',0';
       }
       let content = (body.content || '').trim();
       let imgs = body.imgs;

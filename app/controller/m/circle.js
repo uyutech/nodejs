@@ -42,23 +42,20 @@ module.exports = app => {
     * post(ctx) {
       let uid = ctx.session.uid;
       let circleID = ctx.query.circleID;
-      if(!circleID) {
-        return;
-      }
       let circleDetail = {};
       let hotCircleList = [];
       let res = yield {
-        circleDetail: ctx.helper.postServiceJSON('api/tag/GetTagDetails', {
+        circleDetail: circleID ? ctx.helper.postServiceJSON('api/tag/GetTagDetails', {
           uid,
           TagID: circleID,
-        }),
+        }) : null,
         hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
           uid,
           Skip: 0,
           Take: 6,
         }),
       };
-      if(res.circleDetail.data.success) {
+      if(res.circleDetail && res.circleDetail.data.success) {
         circleDetail = res.circleDetail.data.data;
       }
       if(res.hotCircleList.data.success) {
