@@ -32,6 +32,16 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       let circleID = body.circleID;
+      if(!circleID) {
+        return;
+      }
+      let ids = circleID.split(',');
+      if(ids.length > 3) {
+        return ctx.body = {
+          success: false,
+          message: '最多只能选择3个圈子哦~',
+        };
+      }
       let content = (body.content || '').trim();
       let imgs = body.imgs;
       if(content.length < 3 || content.length > 512) {

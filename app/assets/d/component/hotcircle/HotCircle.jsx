@@ -19,7 +19,7 @@ class HotCircle extends migi.Component {
         this.dataList && this.dataList.length
           ? <ul class="list fn-clear">
             {
-              this.dataList.map(function(item) {
+              this.dataList.slice(0, 6).map(function(item) {
                 return <li>
                   <a href={ `/circle/${item.TagID}` } class="pic">
                     <img src={ util.autoSsl(util.img288_288_80(item.TagCover)) || '//zhuanquan.xin/img/blank.png' }/>

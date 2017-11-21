@@ -10,6 +10,8 @@
       > .profile{
         position:relative;
         padding-left:0.12rem;
+        line-height:0.3rem;
+        font-weight:400;
         .pic{
           float:left;
           margin-right:0.1rem;
@@ -39,11 +41,12 @@
           }
         }
         .circle{
-          position:absolute;
-          top:0;
-          right:0;
+          float:right;
+          max-width:50%;
+          text-align:right;
           li{
             display:inline-block;
+            margin-left:0.05rem;
             padding:0 0.1rem;
             line-height:0.24rem;
             background:@mainColor;

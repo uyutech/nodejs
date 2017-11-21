@@ -35,23 +35,55 @@ body{
         position:relative;
         transition:all 0.2s;
       }
-      label{
+      .label{
         position:absolute;
         left:0;
         top:0;
         display:none;
-        padding:0 0.1rem;
-        width:0.9rem;
-        height:0.28rem;
-        line-height:0.28rem;
-        border-radius:0.1rem;
-        border:1px solid #B1C0C9;
-        overflow:hidden;
-        text-overflow:ellipsis;
-        white-space:nowrap;
-        text-align:center;
-        background:#F1F6F9;
         transition:transform 0.2s;
+        dt{
+          float:left;
+          padding:0 0.1rem;
+          width:0.5rem;
+          height:0.28rem;
+          line-height:0.28rem;
+          border-radius:0.1rem;
+          border:1px solid #B1C0C9;
+          background:#F1F6F9;
+          overflow:hidden;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+          text-align:center;
+        }
+        dd{
+          float:left;
+          display:none;
+          margin-top:0.03rem;
+          margin-left:0.05rem;
+          padding:0 0.1rem;
+          max-width:0.9rem;
+          height:0.22rem;
+          line-height:0.22rem;
+          border-radius:0.22rem;
+          border:1px solid @mainColor;
+          overflow:hidden;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+          text-align:center;
+          color:@mainColor;
+          cursor:pointer;
+          &.cur{
+            background:@mainColor;
+            color:#FFF;
+          }
+          &.on{
+            background:@mainColor;
+            color:#FFF;
+          }
+          &:hover{
+            text-decoration:underline;
+          }
+        }
       }
       .text{
         display:block;
@@ -204,11 +236,11 @@ body{
         }
       }
       &.to{
-        label{
+        .label{
           display:block;
         }
         .text{
-          padding-left:1.2rem;
+          padding-left:0.8rem;
         }
       }
     }
@@ -223,8 +255,11 @@ body{
         .wrap{
           padding:0.35rem 0.05rem 0;
         }
-        label{
+        .label{
           transform:translateX(0.05rem);
+          dd{
+            display:block;
+          }
         }
         .text{
           padding:0.04rem 0.1rem;

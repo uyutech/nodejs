@@ -2,10 +2,10 @@
  * Created by army8735 on 2017/10/11.
  */
 
-@import '../common/var.less';
-@import '../component/page/index.less';
-@import '../component/comment/index.less';
-@import '../component/subcmt/index.less';
+@import '../common/var';
+@import '../component/page/index';
+@import '../component/comment/index';
+@import '../component/subcmt/index';
 
 .cp-page{
   text-align:right;
@@ -42,19 +42,25 @@
       }
       .txt{
         float:left;
-        font-size:0.18rem;
+        line-height:0.64rem;
+        .name{
+          margin-right:0.1rem;
+          font-size:0.18rem;
+          vertical-align:middle;
+        }
         small{
-          margin-left:0.1rem;
           font-size:0.14rem;
           color:@fourthTextColor;
+          vertical-align:middle;
         }
       }
       .circle{
-        position:absolute;
-        top:0;
-        right:0;
+        float:right;
+        max-width:50%;
+        text-align:right;
         li{
           display:inline-block;
+          margin-left:0.05rem;
           padding:0 0.1rem;
           line-height:0.24rem;
           background:@mainColor;
@@ -99,7 +105,7 @@
       }
       .arrow{
         position:absolute;
-        left:0.3rem;
+        left:0.25rem;
         top:-1px;
         display:block;
         width:0.1rem;

@@ -46,7 +46,6 @@ module.exports = app => {
   app.post('/api/user/settleShadow', app.middlewares.needLoginJson(), 'api.user.settleShadow');
   app.post('/api/user/guideSuggest', app.middlewares.needLoginJson(), 'api.user.guideSuggest');
   app.post('/api/user/guideSave', app.middlewares.needLoginJson(), 'api.user.guideSave');
-  app.post('/api/user/altSettle', app.middlewares.needLoginJson(), 'api.user.altSettle');
   app.post('/api/user/uploadPic', app.middlewares.needLoginJson(), 'api.user.uploadPic');
   app.post('/api/user/postList', 'api.user.postList');
   app.post('/api/user/follow', app.middlewares.needLoginJson(), 'api.user.follow');
@@ -60,6 +59,7 @@ module.exports = app => {
   app.post('/api/my/message', app.middlewares.needLoginJson(), 'api.my.message');
   app.post('/api/my/readMessage', app.middlewares.needLoginJson(), 'api.my.readMessage');
   app.post('/api/my/postList', app.middlewares.needLoginJson(), 'api.my.postList');
+  app.post('/api/my/altSettle', app.middlewares.needLoginJson(), 'api.my.altSettle');
 
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');

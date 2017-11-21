@@ -14,6 +14,7 @@ module.exports = app => {
       }
       let circleDetail = {};
       let postList = {};
+      let hotCircleList = [];
       let res = yield {
         circleDetail: ctx.helper.postServiceJSON('api/tag/GetTagDetails', {
           uid,
@@ -25,6 +26,11 @@ module.exports = app => {
           Skip: 0,
           Take: 20,
         }),
+        hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
+          uid,
+          Skip: 0,
+          Take: 6,
+        }),
       };
       if(res.circleDetail.data.success) {
         circleDetail = res.circleDetail.data.data;
@@ -32,11 +38,15 @@ module.exports = app => {
       if(res.postList.data.success) {
         postList = res.postList.data.data;
       }
+      if(res.hotCircleList.data.success) {
+        hotCircleList = res.hotCircleList.data.data.data;
+      }
       yield ctx.render('dcircle', {
         uid,
         circleID,
         circleDetail,
         postList,
+        hotCircleList,
       });
     }
   }

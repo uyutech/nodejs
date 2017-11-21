@@ -20,6 +20,7 @@ module.exports = () => {
   $CONFIG.isAuthor = true;
   $CONFIG.authorID = '${ctx.session.authorID}';
   $CONFIG.authorName = '${ctx.session.authorName}';
+  $CONFIG.authorHead = '${ctx.session.authorHead}';
   $CONFIG.isPublic = ${!!ctx.session.isPublic};`;
       }
     }

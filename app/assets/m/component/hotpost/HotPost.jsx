@@ -125,13 +125,15 @@ class PostList extends migi.Component {
             <a href={ '/author/' + item.AuthorID } class="name">{ item.SendUserNickName }</a>
             <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>
           </div>
-          <ul class="circle">
-            {
-              (item.Taglist || []).map(function(item) {
-                return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
-              })
-            }
-          </ul>
+          <div class="circle">
+            <ul>
+              {
+                (item.Taglist || []).map(function(item) {
+                  return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
+                })
+              }
+            </ul>
+          </div>
         </div>
         <div class="wrap">
           {
@@ -180,13 +182,15 @@ class PostList extends migi.Component {
           <a class="name" href={ '/user/' + item.SendUserID }>{ item.SendUserNickName }</a>
           <a class="time" href={ '/post/' + id }>{ util.formatDate(item.Createtime) }</a>
         </div>
-        <ul class="circle">
-          {
-            (item.Taglist || []).map(function(item) {
-              return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
-            })
-          }
-        </ul>
+        <div class="circle">
+          <ul>
+            {
+              (item.Taglist || []).map(function(item) {
+                return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
+              })
+            }
+          </ul>
+        </div>
       </div>
       <div class="wrap">
         {

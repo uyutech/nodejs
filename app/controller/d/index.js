@@ -32,6 +32,7 @@ module.exports = app => {
         if(userInfo.ISAuthor) {
           ctx.session.authorID = userInfo.AuthorID;
           ctx.session.authorName = userInfo.AuthorName;
+          ctx.session.authorHead = userInfo.AuthorHead_Url;
         }
         let authorInfo = {};
         if(ctx.session.authorID) {

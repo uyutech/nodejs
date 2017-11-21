@@ -195,6 +195,29 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * altSettle(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
+        uid,
+        AuthorID: ctx.session.authorID,
+        SettledType: body.public === 'true' ? 0 : 1,
+      });
+      if(ctx.session.authorID) {
+        ctx.session.isPublic = body.public === 'true';
+      }
+      let userInfo = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        uid,
+      });
+      if(userInfo.data.success) {
+        ctx.session.uname = userInfo.data.data.NickName;
+        ctx.session.head = userInfo.data.data.Head_Url;
+        ctx.session.authorID = userInfo.data.data.AuthorID;
+        ctx.session.authorName = userInfo.data.data.AuthorName;
+        ctx.session.authorHead = userInfo.data.data.AuthorHead_Url;
+      }
+      ctx.body = res.data;
+    }
   }
 
   return Controller;

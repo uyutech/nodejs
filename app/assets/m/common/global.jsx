@@ -51,18 +51,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     loading = true;
     let isPublic = $CONFIG.isPublic;
-    net.postJSON('/api/user/altSettle', { public: !isPublic }, function(res) {
+    net.postJSON('/api/my/altSettle', { public: !isPublic }, function(res) {
       if(res.success) {
         $CONFIG.isPublic = !isPublic;
         if(!isPublic) {
           $name.addClass('public');
           $name.text($CONFIG.authorName);
           $public.text('[切换到马甲]');
+          $head.attr('src', $CONFIG.authorHead);
         }
         else {
           $name.removeClass('public');
           $name.text($CONFIG.uname);
           $public.text('[切换到作者]');
+          $head.attr('src', $CONFIG.head);
         }
       }
       else {

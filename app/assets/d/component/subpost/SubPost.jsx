@@ -4,8 +4,8 @@
 
 'use strict';
 
-import net from '../common/net';
-import util from '../common/util';
+import net from '../../common/net';
+import util from '../../common/util';
 
 const STATE = {
   LOADING: 0,
@@ -27,12 +27,36 @@ class SubPost extends migi.Component {
     super(...data);
     let self = this;
     self.value = self.props.value || '';
+    self.to = self.props.to ? self.props.to.slice(0) : undefined;
     self.invalid = self.value.trim().length < 3;
     self.maxlength = self.props.maxlength;
     self.subText = self.props.subText;
     self.tipText = self.props.tipText;
     self.placeholder = self.props.placeholder;
-    self.originTo = self.props.originTo;
+    if(self.to && self.to.length && self.props.circleID !== undefined) {
+      let has = false;
+      self.to.forEach(function(item) {
+        if(item.TagID === self.props.circleID) {
+          has = true;
+        }
+      });
+      if(has) {
+        migi.sort(self.to, function(a, b) {
+          if(a.TagID === self.props.circleID) {
+            return false;
+          }
+          else if(b.TagID === self.props.circleID) {
+            return true;
+          }
+        });
+      }
+      else {
+        self.to.unshift({
+          TagID: self.props.circleID,
+          TagName: self.props.circleName,
+        });
+      }
+    }
     self.on(migi.Event.DOM, function() {
       if($CONFIG.isLogin) {
         let key = self.getImgKey();
@@ -67,6 +91,16 @@ class SubPost extends migi.Component {
           }
         }
       });
+      let $label = $(self.ref.label.element);
+      $label.on('click', 'dd', function() {
+        let $li = $(this);
+        let len = $label.find('.cur,.on').length;
+        if(!$li.hasClass('on') && !$li.hasClass('cur') && len >= 3) {
+          alert('最多只能选择3个圈子哦~');
+          return;
+        }
+        $li.toggleClass('on');
+      });
     });
   }
   @bind placeholder
@@ -74,7 +108,6 @@ class SubPost extends migi.Component {
   @bind tipText
   @bind value = ''
   @bind to
-  @bind originTo
   @bind invalid = true
   @bind expand
   @bind num = 0
@@ -123,7 +156,15 @@ class SubPost extends migi.Component {
         }
       }
       self.sending = true;
-      net.postJSON('/api/circle/add', { content: self.value, imgs, circleID: self.props.circleID }, function(res) {
+      let circleID = [];
+      $(self.ref.label.element).find('.cur,.on').each(function(i, li) {
+        circleID.push($(li).attr('rel'));
+      });
+      if(!circleID.length) {
+        alert('请至少选择一个圈子~');
+        return;
+      }
+      net.postJSON('/api/circle/add', { content: self.value, imgs, circleID: circleID.join(',') }, function(res) {
         if(res.success) {
           self.value = '';
           self.invalid = true;
@@ -306,11 +347,18 @@ class SubPost extends migi.Component {
   render() {
     return <div class={ 'mod-sub' + (this.expand ? ' expand' : '') }>
       <div class="c">
-        <form class={ 'fn-clear' + (this.to || this.originTo ? ' to' : '') } ref="form" onSubmit={ this.submit }>
+        <form class={ 'fn-clear' + (this.to ? ' to' : '') } ref="form" onSubmit={ this.submit }>
           <div class="wrap">
-            <label>{ this.to || this.originTo }</label>
+            <dl class="label fn-clear" ref="label">
+              <dt>画个圈</dt>
+              {
+                (this.to || []).map(function(item) {
+                  return <dd rel={ item.TagID } class={ item.TagID === this.props.circleID ? 'cur' : '' }>{ item.TagName }圈</dd>;
+                }.bind(this))
+              }
+            </dl>
             <textarea class={ 'text' + (this.sending ? ' dis' : '') } ref="input" disabled={ !!this.sending }
-                      placeholder={ this.to ? '回复' + this.to + '的评论' : this.placeholder || '夸夸这个圈子吧' }
+                      placeholder={ this.placeholder }
                       onInput={ this.input } onFocus={ this.focus } onBlur={ this.blur }>{ this.value }</textarea>
             <span class={ 'limit' + (this.warnLength ? ' warn' : '') }><strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }</span>
             <div class={ 'upload' + (this.disableUpload ? ' dis' : '') }>

@@ -37,7 +37,7 @@ class TopNav extends migi.Component {
     }
     self.loading = true;
     let isPublic = self.isPublic;
-    net.postJSON('/api/user/altSettle', { public: !isPublic }, function(res) {
+    net.postJSON('/api/my/altSettle', { public: !isPublic }, function(res) {
       if(res.success) {
         self.isPublic = !isPublic;
         $CONFIG.isPublic = !isPublic;
@@ -56,9 +56,6 @@ class TopNav extends migi.Component {
     return <div class="cp-topnav">
       <div class="c">
         <a class="logo" href="#/">转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！</a>
-        {/*<form class="search" onSubmit={ this.submit }>*/}
-          {/*<input type="text" ref="input" maxlength="16" placeholder="弱弱的初级搜索功能QAQ"/>*/}
-        {/*</form>*/}
         <div class="user fn-clear">
           {
             this.props.isLogin && this.props.isAuthor
@@ -66,7 +63,7 @@ class TopNav extends migi.Component {
               : ''
           }
           <span class={ 'name' + (this.isPublic ? ' public' : '') } onClick={ this.click }>{ (this.isPublic ? userInfo.AuthorName : userInfo.NickName) || '登陆/注册' }</span>
-          <img onClick={ this.click } src={ userInfo.Head_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
+          <img onClick={ this.click } src={ (this.isPublic ? userInfo.AuthorHead_Url : userInfo.Head_Url) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
         </div>
       </div>
     </div>;

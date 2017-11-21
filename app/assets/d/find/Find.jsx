@@ -12,7 +12,7 @@ import HotCircle from '../component/hotcircle/HotCircle.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
 import HotPlayList from '../component/hotplaylist/HotPlayList.jsx';
 import Page from '../component/page/Page.jsx';
-import SubPost from '../circle/SubPost.jsx';
+import SubPost from '../component/subpost/SubPost.jsx';
 
 let loading;
 let take = 10;
@@ -90,7 +90,6 @@ class Find extends migi.Component {
         </h4>
         <HotWork ref="hotWork" title="热门作品" dataList={ this.props.hotWorkList }/>
         <HotMusicAlbum ref="hotMusicAlbum" title="热门专辑" dataList={ this.props.hotMusicAlbumList }/>
-        {/*<HotPhotoAlbum ref="hotPhotoAlbum" title="推荐相册" dataList={ this.props.hotPhotoAlbumList }/>*/}
         <HotAuthor ref="hotAuthor" title="入驻作者" dataList={ this.props.hotAuthorList }/>
       </div>
       <div class="hot2 fn-clear">
@@ -102,7 +101,7 @@ class Find extends migi.Component {
         <HotPlayList ref="hostPlayList" dataList={ this.props.hotPlayList.data }/>
       </div>
       <SubPost ref="subPost" placeholder={ '在转圈圈画个圈吧' }
-               circleID={ 0 } originTo={ '转圈圈' }/>
+               circleID={ 0 } circleName="转圈" to={ this.props.hotCircleList }/>
     </div>;
   }
 }

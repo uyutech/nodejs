@@ -2,9 +2,9 @@
  * Created by army8735 on 2017/10/28.
  */
 
-@import '../../d/common/var.less';
-@import '../../d/component/comment/index.less';
-@import '../component/subcmt/index.less';
+@import '../../d/common/var';
+@import '../../d/component/comment/index';
+@import '../component/subcmt/index';
 
 .post{
   padding:0.1rem;
@@ -15,18 +15,29 @@
   }
   > .profile{
     position:relative;
+    display:flex;
     margin-bottom:0.2rem;
     line-height:0.3rem;
     font-weight:400;
+    align-items:center;
+    &:after{
+      position:absolute;
+      top:0;
+      right:0;
+      display:block;
+      width:0.2rem;
+      height:100%;
+      background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,1));
+      content:' ';
+      visibility:visible;
+    }
     .pic{
-      float:left;
-      margin-right:0.2rem;
-      width:0.64rem;
-      height:0.64rem;
-      overflow:hidden;
+      margin-right:0.05rem;
+      width:0.48rem;
+      height:0.48rem;
       border-radius:100%;
       box-shadow:@picShadow;
-      vertical-align:middle;
+      overflow:hidden;
       img{
         display:block;
         width:100%;
@@ -34,25 +45,33 @@
       }
     }
     .txt{
-      float:left;
-      font-size:0.18rem;
+      font-size:0.16rem;
+      .name{
+        margin-right:0.05rem;
+        vertical-align:middle;
+      }
       small{
-        margin-left:0.1rem;
-        font-size:0.14rem;
+        font-size:0.12rem;
         color:@fourthTextColor;
       }
     }
     .circle{
-      position:absolute;
-      top:0;
-      right:0;
+      flex:1;
+      height:0.24rem;
+      overflow-x:auto;
+      transform:translate3d(0,0,0);
+      ul{
+        display:flex;
+      }
       li{
         display:inline-block;
+        margin-left:0.05rem;
         padding:0 0.1rem;
         line-height:0.24rem;
         background:@mainColor;
         border-radius:0.24rem;
         color:@thirdTextColor;
+        white-space:nowrap;
         a{
           color:#FFF;
         }
@@ -92,7 +111,7 @@
     }
     .arrow{
       position:absolute;
-      left:0.3rem;
+      left:0.2rem;
       top:-1px;
       display:block;
       width:0.1rem;

@@ -11,10 +11,12 @@ export default function(data) {
   let isPublic = data.ctx.session.isPublic;
   let circleID = data.circleID;
   let circleDetail = data.circleDetail;
+  let hotCircleList = data.hotCircleList;
 
   let subPost = migi.preRender(<SubPost circleID={ circleID } circleDetail={ circleDetail }
                                         placeholder={ '在' + circleDetail.TagName +'圈画个圈吧' }
-                                        isPublic={ isPublic } head={ head }/>);
+                                        isPublic={ isPublic } head={ head }
+                                        to={ hotCircleList }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -31,6 +33,7 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.circleID = ${data.helper.stringify(circleID)};
   $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
+  $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mcpost.js')}"></script>

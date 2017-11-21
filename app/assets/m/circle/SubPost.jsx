@@ -26,8 +26,32 @@ class SubPost extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.originTo = self.props.circleDetail.TagName;
+    self.to = self.props.to ? self.props.to.slice(0) : undefined;
     self.placeholder = self.props.placeholder;
+    if(self.to && self.to.length && self.props.circleID !== undefined) {
+      let has = false;
+      self.to.forEach(function(item) {
+        if(item.TagID === self.props.circleID) {
+          has = true;
+        }
+      });
+      if(has) {
+        migi.sort(self.to, function(a, b) {
+          if(a.TagID === self.props.circleID) {
+            return false;
+          }
+          else if(b.TagID === self.props.circleID) {
+            return true;
+          }
+        });
+      }
+      else {
+        self.to.unshift({
+          TagID: self.props.circleID,
+          TagName: self.props.circleDetail.TagName,
+        });
+      }
+    }
     self.on(migi.Event.DOM, function() {
       let key = self.getImgKey();
       let cache = localStorage[key];
@@ -51,12 +75,21 @@ class SubPost extends migi.Component {
         let length = self.value.trim().length;
         self.invalid = length < 3 || length > MAX_TEXT_LENGTH;
       }
+      let $label = $(self.ref.label.element);
+      $label.on('click', 'li', function() {
+        let $li = $(this);
+        let len = $label.find('.cur,.on').length;
+        if(!$li.hasClass('on') && !$li.hasClass('cur') && len >= 3) {
+          alert('最多只能选择3个圈子哦~');
+          return;
+        }
+        $li.toggleClass('on');
+      });
     });
   }
   @bind placeholder
   @bind value = ''
   @bind to
-  @bind originTo
   @bind invalid = true
   @bind num = 0
   @bind disableUpload
@@ -97,7 +130,15 @@ class SubPost extends migi.Component {
         }
       }
       self.sending = true;
-      net.postJSON('/api/circle/add', { content: self.value, imgs, circleID: self.props.circleID }, function(res) {
+      let circleID = [];
+      $(self.ref.label.element).find('.cur,.on').each(function(i, li) {
+        circleID.push($(li).attr('rel'));
+      });
+      if(!circleID.length) {
+        alert('请至少选择一个圈子~');
+        return;
+      }
+      net.postJSON('/api/circle/add', { content: self.value, imgs, circleID: circleID.join(',') }, function(res) {
         if(res.success) {
           self.value = '';
           self.invalid = true;
@@ -107,7 +148,7 @@ class SubPost extends migi.Component {
           localStorage[key] = '';
           let key2 = self.getContentKey();
           localStorage[key2] = '';
-          location.href = '/circle/' + self.props.circleID;
+          location.href = '/post/' + res.data.ID;
         }
         else {
           alert(res.message || util.ERROR_MESSAGE);
@@ -278,11 +319,6 @@ class SubPost extends migi.Component {
     return <form class="mod-sub" ref="form" onSubmit={ this.submit }>
       <div class="ti">
         <a href={ '/circle/' + this.props.circleID } class="close" title="返回"/>
-        {
-          this.props.isPublic
-            ? <img src={ this.props.head }/>
-            : ''
-        }
         <span class={ 'limit' + (this.warnLength ? ' warn' : '') }><strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }</span>
         <input type="submit"
                class={ 'submit' + (this.sending || this.invalid || this.disableUpload ? ' dis' : '') }
@@ -293,7 +329,15 @@ class SubPost extends migi.Component {
                  : '发送' }/>
       </div>
       <div class="ti2">
-        <label class="cur">{ this.to || this.originTo }圈</label>
+        <div class="label" ref="label">
+          <ul>
+            {
+              (this.to || []).map(function(item) {
+                return <li rel={ item.TagID } class={ item.TagID === this.props.circleID ? 'cur' : '' }>{ item.TagName }圈</li>;
+              }.bind(this))
+            }
+          </ul>
+        </div>
         <div class={ 'upload' + (this.disableUpload ? ' dis' : '') }>
           图片
           <input type="file" ref="file" class="file" onChange={ this.change } disabled={ !!this.disableUpload }

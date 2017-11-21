@@ -8,7 +8,7 @@ import net from '../common/net';
 import util from '../common/util';
 
 import Title from './Title.jsx';
-import SubPost from './SubPost.jsx';
+import SubPost from '../component/subpost/SubPost.jsx';
 import Page from '../component/page/Page.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
 
@@ -67,7 +67,8 @@ class Circle extends migi.Component {
         <Page ref="page2" total={ Math.ceil(this.props.postList.Size / take) }/>
       </div>
       <SubPost ref="subPost" placeholder={ '在' + this.props.circleDetail.TagName +'圈画个圈吧' }
-               circleID={ this.props.circleDetail.TagID } originTo={ this.props.circleDetail.TagName + '圈' }/>
+               circleID={ this.props.circleDetail.TagID } circleName={ this.props.circleDetail.TagName }
+               to={ this.props.hotCircleList }/>
     </div>;
   }
 }
