@@ -54,7 +54,7 @@ class Post extends migi.Component {
         subCmt.to = null;
       });
       subCmt.on('submit', function(content) {
-        subCmt.isCommentSending = true;
+        subCmt.invalid = true;
         let rootID = self.rootID;
         let parentID = self.parentID;
         net.postJSON('/api/post/addComment', {
@@ -65,7 +65,6 @@ class Post extends migi.Component {
         }, function(res) {
           if(res.success) {
             subCmt.value = '';
-            subCmt.hasCommentContent = false;
             if(rootID === -1) {
               comment.prependData(res.data);
               comment.message = '';
@@ -76,14 +75,15 @@ class Post extends migi.Component {
           }
           else if(res.code === 1000) {
             migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
           }
           else {
             alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
           }
-          subCmt.isCommentSending = false;
         }, function(res) {
           alert(res.message || util.ERROR_MESSAGE);
-          subCmt.isCommentSending = false;
+          subCmt.invalid = false;
         });
       });
 
