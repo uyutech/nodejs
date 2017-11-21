@@ -46,7 +46,7 @@ class Find extends migi.Component {
               tipText="-${n}"
               subText="发送"
               readOnly={ true }
-              placeholder={ '在转圈圈画个圈吧' }/>
+              placeholder={ '在转圈圈画个圈吧。小小的提示：现在可以把一个圈画在好几个圈子里哦！' }/>
     </div>;
   }
 }

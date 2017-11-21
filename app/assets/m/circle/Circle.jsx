@@ -27,7 +27,7 @@ class Circle extends migi.Component {
               tipText="-${n}"
               subText="发送"
               readOnly={ true }
-              placeholder={ '在' + this.props.circleDetail.TagName +'圈画个圈吧' }/>
+              placeholder={ '在' + this.props.circleDetail.TagName +'圈画个圈吧。小小的提示：现在可以把一个圈画在好几个圈子里哦！' }/>
     </div>;
   }
 }
