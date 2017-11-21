@@ -98,6 +98,7 @@ class Message extends migi.Component {
         let data = res.data;
         skip += take;
         self.ref.messages.appendData(data.data);
+        self.read(data.data);
         if(!data.data.length || data.data.length < take) {
           self.loadEnd = true;
           self.message = '已经到底了';
