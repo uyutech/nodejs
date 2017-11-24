@@ -30,7 +30,7 @@ class Banner extends migi.Component {
     let self = this;
     interval = setInterval(function() {
       self.index++;
-      if(self.index >= 4) {
+      if(self.index > 2) {
         self.index = 0;
       }
       self.setOffset(self.index * $(window).width());
@@ -38,8 +38,8 @@ class Banner extends migi.Component {
   }
   left() {
     this.index++;
-    if(this.index > 3) {
-      this.index = 3;
+    if(this.index > 2) {
+      this.index = 2;
     }
     this.setOffset(Math.floor(this.index * $(window).width()));
     this.addInterval();
@@ -65,10 +65,6 @@ class Banner extends migi.Component {
       {
         url: '/works/2015000000000002',
         pic: '//zhuanquan.xin/pic/b1284084f38e8cac0c35eddd60948af1.jpg-750_'
-      },
-      {
-        url: 'http://weibo.com/6284548625/FrrsUbDyo',
-        pic: '//zhuanquan.xin/pic/7dc30aca98d4975fd6c3a5b23d1abf8d.jpg-750_'
       }
     ];
     return <div class="banner" onSwipeLeft={ this.left } onSwipeRight={ this.right }>
