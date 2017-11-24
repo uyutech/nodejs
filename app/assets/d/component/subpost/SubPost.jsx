@@ -343,7 +343,7 @@ class SubPost extends migi.Component {
   render() {
     return <div class={ 'mod-sub' + (this.expand ? ' expand' : '') }>
       <div class="c">
-        <form class={ 'fn-clear' + (this.to ? ' to' : '') } ref="form" onSubmit={ this.submit }>
+        <form class={ this.to ? ' to' : '' } ref="form" onSubmit={ this.submit }>
           <div class="wrap">
             <dl class="label fn-clear" ref="label">
               <dt>画个圈</dt>

@@ -64,6 +64,9 @@ class ImageView extends migi.Component {
     }
   }
   render() {
+    if(!this.dataList.length) {
+      return <div class="mod-iv fn-hide"/>;
+    }
     return <div class="mod-iv fn-hide">
       <div class="c" style={ 'top:' + this.tops + 'px' }>
         <img style={ 'background-image:url("' + util.autoSsl(util.img1200__80(this.dataList[this.idx].FileUrl)) || '//zhuanquan.xin/img/blank.png' + '")'}
