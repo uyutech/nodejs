@@ -71,7 +71,9 @@ class Audio extends migi.Component {
                        onPlaying={ this.onPlaying.bind(this) }
                        onPause={ this.onPause.bind(this) }
                        onProgress={ this.onProgress.bind(this) }
-                       preload="meta">
+                       preload="meta"
+                       playsinline="true"
+                       webkit-playsinline="true">
       your browser does not support the audio tag
     </audio>;
     this.audio = audio;
@@ -100,6 +102,7 @@ class Audio extends migi.Component {
   }
   onTimeupdate(e) {
     let currentTime = this.currentTime = e.target.currentTime;
+    this.duration = e.target.duration;
     let item = this.datas[this.index];
     let formatLyrics = item.formatLyrics;
     let formatLyricsData = formatLyrics.data;
@@ -121,10 +124,24 @@ class Audio extends migi.Component {
     this.setBarPercent(percent);
   }
   onProgress(e) {
+    let buffered = e.target.buffered;
+    if(buffered && buffered.length) {
+      let self = this;
+      let load = self.ref.load.element;
+      load.innerHTML = '';
+      for(let i = 0, len = buffered.length; i < len; i++) {
+        let start = buffered.start(i);
+        let end = buffered.end(i);
+        if(self.duration > 0) {
+          load.innerHTML += `<b style="left:${Math.floor(start * 100 / self.duration)}%;width:${Math.floor((end - start) * 100 / self.duration)}%"/>`;
+        }
+      }
+    }
   }
   onLoadedmetadata(e) {
     this.duration = e.target.duration;
     this.canControl = true;
+    this.onProgress(e);
   }
   onPlaying(e) {
     this.duration = e.target.duration;
@@ -183,7 +200,11 @@ class Audio extends migi.Component {
     }
   }
   setBarPercent(percent) {
+    if(isNaN(percent)) {
+      percent = 0;
+    }
     percent *= 100;
+    percent = Math.min(percent, 100);
     $(this.ref.vol.element).css('width', percent + '%');
     $(this.ref.p.element).css('-moz-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
@@ -304,7 +325,7 @@ class Audio extends migi.Component {
         <div class="bar">
           <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
           <div class="progress" ref="progress" onClick={ this.clickProgress }>
-            <b class="load"/>
+            <div class="load" ref="load"/>
             <b class="vol" ref="vol"/>
             <b class="p" ref="p" onTouchStart={ this.touchStart } onTouchMove={ this.touchMove } onTouchEnd={ this.touchEnd }/>
           </div>

@@ -135,10 +135,11 @@ class MusicAlbum extends migi.Component {
   onTimeupdate(e) {
     let self = this;
     let currentTime = self.currentTime = e.target.currentTime;
+    self.duration = e.target.duration;
     let formatLyrics = self.formatLyrics || {};
     let formatLyricsData = formatLyrics.data;
     if(formatLyrics.is && formatLyricsData.length) {
-      let tempIndex = this.lyricsIndex;
+      let tempIndex = self.lyricsIndex;
       for (let i = 0, len = formatLyricsData.length; i < len; i++) {
         if(currentTime * 1000 >= formatLyricsData[i].timestamp) {
           tempIndex = i;
@@ -147,18 +148,32 @@ class MusicAlbum extends migi.Component {
           break;
         }
       }
-      if(tempIndex !== this.lyricsIndex) {
-        this.lyricsIndex = tempIndex;
+      if(tempIndex !== self.lyricsIndex) {
+        self.lyricsIndex = tempIndex;
       }
     }
-    let percent = currentTime / this.duration;
-    this.setBarPercent(percent);
+    let percent = currentTime / self.duration;
+    self.setBarPercent(percent);
   }
   onProgress(e) {
+    let buffered = e.target.buffered;
+    if(buffered && buffered.length) {
+      let self = this;
+      let load = self.ref.load.element;
+      load.innerHTML = '';
+      for(let i = 0, len = buffered.length; i < len; i++) {
+        let start = buffered.start(i);
+        let end = buffered.end(i);
+        if(self.duration > 0) {
+          load.innerHTML += `<b style="left:${Math.floor(start * 100 / self.duration)}%;width:${Math.floor((end - start) * 100 / self.duration)}%"/>`;
+        }
+      }
+    }
   }
   onLoadedmetadata(e) {
     this.duration = e.target.duration;
     this.canControl = true;
+    this.onProgress(e);
   }
   onPlaying(e) {
     this.duration = e.target.duration;
@@ -219,7 +234,11 @@ class MusicAlbum extends migi.Component {
     }
   }
   setBarPercent(percent) {
+    if(isNaN(percent)) {
+      percent = 0;
+    }
     percent *= 100;
+    percent = Math.min(percent, 100);
     $(this.ref.vol.element).css('width', percent + '%');
     $(this.ref.p.element).css('-moz-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
@@ -338,7 +357,7 @@ class MusicAlbum extends migi.Component {
         <div class="bar">
           <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
           <div class="progress" ref="progress" onClick={ this.clickProgress }>
-            <b class="load"/>
+            <div class="load" ref="load"/>
             <b class="vol" ref="vol"/>
             <b class="p" ref="p" onTouchStart={ this.touchStart } onTouchMove={ this.touchMove } onTouchEnd={ this.touchEnd }/>
           </div>

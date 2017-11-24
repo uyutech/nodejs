@@ -53,6 +53,7 @@ class Video extends migi.Component {
                        onClick={ this.clickPlay.bind(this) }
                        onTimeupdate={ this.onTimeupdate.bind(this) }
                        onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
+                       onProgress={ this.onProgress.bind(this) }
                        onPause={ this.onPause.bind(this) }
                        onPlaying={ this.onPlaying.bind(this) }
                        preload="meta"
@@ -86,14 +87,29 @@ class Video extends migi.Component {
   }
   onTimeupdate(e) {
     let currentTime = this.currentTime = e.target.currentTime;
+    this.duration = e.target.duration;
     let percent = currentTime / this.duration;
     this.setBarPercent(percent);
   }
   onProgress(e) {
+    let buffered = e.target.buffered;
+    if(buffered && buffered.length) {
+      let self = this;
+      let load = self.ref.load.element;
+      load.innerHTML = '';
+      for(let i = 0, len = buffered.length; i < len; i++) {
+        let start = buffered.start(i);
+        let end = buffered.end(i);
+        if(self.duration > 0) {
+          load.innerHTML += `<b style="left:${Math.floor(start * 100 / self.duration)}%;width:${Math.floor((end - start) * 100 / self.duration)}%"/>`;
+        }
+      }
+    }
   }
   onLoadedmetadata(e) {
     this.duration = e.target.duration;
     this.canControl = true;
+    this.onProgress(e);
   }
   onPlaying(e) {
     this.duration = e.target.duration;
@@ -173,7 +189,11 @@ class Video extends migi.Component {
     }
   }
   setBarPercent(percent) {
+    if(isNaN(percent)) {
+      percent = 0;
+    }
     percent *= 100;
+    percent = Math.min(percent, 100);
     $(this.ref.vol.element).css('width', percent + '%');
     $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('transform', `translateX(${percent}%)`);
@@ -279,7 +299,7 @@ class Video extends migi.Component {
         <div class="bar">
           <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
           <div class="progress" ref="progress" onClick={ this.clickProgress }>
-            <b class="load"/>
+            <div class="load" ref="load"/>
             <b class="vol" ref="vol"/>
             <b class="p" ref="p" onTouchStart={ this.touchStart } onTouchMove={ this.touchMove } onTouchEnd={ this.touchEnd }/>
           </div>

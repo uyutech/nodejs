@@ -109,7 +109,9 @@ class Player extends migi.Component {
                               onPlaying={ self.onPlaying.bind(self) }
                               onPause={ self.onPause.bind(self) }
                               onProgress={ self.onProgress.bind(self) }
-                              preload="meta">
+                              preload="meta"
+                              playsinline="true"
+                              webkit-playsinline="true">
             your browser does not support the audio tag
           </audio>;
           self.audio.appendTo(self.ref.c.element);
@@ -150,6 +152,7 @@ class Player extends migi.Component {
   onTimeupdate(e) {
     let self = this;
     let currentTime = self.currentTime = e.target.currentTime;
+    this.duration = e.target.duration;
     let formatLyrics = self.formatLyrics || {};
     let formatLyricsData = formatLyrics.data;
     if(formatLyrics.is && formatLyricsData.length) {
@@ -170,10 +173,24 @@ class Player extends migi.Component {
     this.setBarPercent(percent);
   }
   onProgress(e) {
+    let buffered = e.target.buffered;
+    if(buffered && buffered.length) {
+      let self = this;
+      let load = self.ref.load.element;
+      load.innerHTML = '';
+      for(let i = 0, len = buffered.length; i < len; i++) {
+        let start = buffered.start(i);
+        let end = buffered.end(i);
+        if(self.duration > 0) {
+          load.innerHTML += `<b style="left:${Math.floor(start * 100 / self.duration)}%;width:${Math.floor((end - start) * 100 / self.duration)}%"/>`;
+        }
+      }
+    }
   }
   onLoadedmetadata(e) {
     this.duration = e.target.duration;
     this.canControl = true;
+    this.onProgress(e);
   }
   onPlaying(e) {
     this.duration = e.target.duration;
@@ -275,7 +292,11 @@ class Player extends migi.Component {
     }
   }
   setBarPercent(percent) {
+    if(isNaN(percent)) {
+      percent = 0;
+    }
     percent *= 100;
+    percent = Math.min(percent, 100);
     $(this.ref.vol.element).css('width', percent + '%');
     $(this.ref.p.element).css('-moz-transform', `translateX(${percent}%)`);
     $(this.ref.p.element).css('-webkit-transform', `translateX(${percent}%)`);
@@ -405,7 +426,7 @@ class Player extends migi.Component {
           <small class="time">{ util.formatTime(this.currentTime * 1000) }</small>
           <small class="time end">{ util.formatTime(this.duration * 1000) }</small>
           <div class="progress" ref="progress" onClick={ this.clickProgress }>
-            <b class="load"/>
+            <div class="load" ref="load"/>
             <b class="vol" ref="vol"/>
             <b class="p" ref="p" onMouseDown={ this.mousedown }/>
           </div>
