@@ -50,6 +50,10 @@ class Find extends migi.Component {
     }
     loading = true;
     skip = (i - 1) * take;
+    self.ref.hot2.element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
     net.postJSON('/api/find/hotPostList', { skip, take }, function(res) {
       if(res.success) {
         self.ref.hotPost.setData(res.data.data);
@@ -81,7 +85,7 @@ class Find extends migi.Component {
   render() {
     return <div class="find">
       <Banner/>
-      <div class="hot">
+      <div class="hot" ref="hot">
         <HotCircle ref="hotCircle" title="推荐圈子" dataList={ this.props.hotCircleList }/>
         <h4>
           <span>热门作品</span>
@@ -92,7 +96,7 @@ class Find extends migi.Component {
         <HotMusicAlbum ref="hotMusicAlbum" title="热门专辑" dataList={ this.props.hotMusicAlbumList }/>
         <HotAuthor ref="hotAuthor" title="入驻作者" dataList={ this.props.hotAuthorList }/>
       </div>
-      <div class="hot2 fn-clear">
+      <div class="hot2 fn-clear" ref="hot2">
         <div class="post">
           <Page ref="page" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>
           <HotPost ref="hotPost" data={ this.props.hotPostList.data }/>

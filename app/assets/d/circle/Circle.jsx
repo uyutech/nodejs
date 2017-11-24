@@ -35,6 +35,10 @@ class Circle extends migi.Component {
       });
       self.ref.subPost.on('add_post', function(data) {
         self.ref.hotPost.addData(data);
+        self.ref.main.element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
       });
     });
   }
@@ -48,6 +52,10 @@ class Circle extends migi.Component {
       if(res.success) {
         let data = res.data;
         self.ref.hotPost.setData(data.data);
+        self.ref.main.element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);
@@ -60,8 +68,8 @@ class Circle extends migi.Component {
   }
   render() {
     return <div class="circle fn-clear">
-      <Title circleDetail={ this.props.circleDetail }/>
-      <div class="main">
+      <Title circleDetail={ this.props.circleDetail } ref="title"/>
+      <div class="main" ref="main">
         <Page ref="page" total={ Math.ceil(this.props.postList.Size / take) }/>
         <HotPost ref="hotPost" data={ this.props.postList.data }/>
         <Page ref="page2" total={ Math.ceil(this.props.postList.Size / take) }/>

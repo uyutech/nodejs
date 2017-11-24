@@ -218,6 +218,9 @@ class HotPost extends migi.Component {
     let html = self.genItem(data);
     $(self.ref.list.element).prepend(html.toString());
   }
+  clearData() {
+    $(this.ref.list.element).html('');
+  }
   render() {
     return <div class="cp-hotpost">
       {
