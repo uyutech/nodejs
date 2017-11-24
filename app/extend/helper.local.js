@@ -5,15 +5,9 @@
 'use strict';
 
 let helper = {
-  getRemoteUrl(url) {
-    if(url.indexOf('//') > -1) {
-      return url;
-    }
-    return 'http://192.168.0.3/' + url.replace(/^\//, '');
-  },
   * postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {
-      url = 'http://192.168.0.3/' + url.replace(/^\//, '');
+      url = 'http://192.168.0.6/' + url.replace(/^\//, '');
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
     url += 'traceID=' + this.ctx.traceID || '';

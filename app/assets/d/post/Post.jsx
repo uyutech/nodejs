@@ -9,6 +9,7 @@ import util from '../common/util';
 import Comment from '../component/comment/Comment.jsx';
 import SubCmt from '../component/subcmt/SubCmt.jsx';
 import Page from '../component/page/Page.jsx';
+import ImageView from './ImageView.jsx';
 
 let skip = 10;
 let take = 10;
@@ -87,7 +88,8 @@ class Post extends migi.Component {
         });
       });
 
-      $(self.element).on('click', '.del', function() {
+      let $root = $(self.element);
+      $root.on('click', '.del', function() {
         if(window.confirm('确认删除吗？')) {
           let postID = $(this).attr('rel');
           net.postJSON('/api/post/del', { postID }, function(res) {
@@ -104,6 +106,14 @@ class Post extends migi.Component {
             alert(res.message || util.ERROR_MESSAGE);
           });
         }
+      });
+      $root.on('click', '.imgs img', function() {
+        migi.eventBus.emit('choosePic', $(this).attr('rel'));
+      });
+
+      let imageView = self.ref.imageView;
+      imageView.on('clickLike', function() {
+        self.clickLike();
       });
     });
   }
@@ -221,7 +231,7 @@ class Post extends migi.Component {
     net.postJSON('/api/post/like', { postID: self.props.postData.ID }, function(res) {
       if(res.success) {
         let data = res.data;
-        self.isLike = data.ISLike;
+        self.isLike = self.ref.imageView.isLike = data.ISLike;
         self.likeCount = data.LikeCount;
       }
       else {
@@ -274,10 +284,8 @@ class Post extends migi.Component {
               ?
               <div class="imgs">
                 {
-                  postData.Image_Post.map(function(item) {
-                    return <a href={ item.FileUrl } target="_blank">
-                      <img src={ util.autoSsl(util.img1200__80(item.FileUrl)) }/>
-                    </a>;
+                  postData.Image_Post.map(function(item, i) {
+                    return <img src={ util.autoSsl(util.img1200__80(item.FileUrl)) } rel={ i }/>;
                   })
                 }
               </div>
@@ -323,6 +331,7 @@ class Post extends migi.Component {
                 subText="回复"
                 originTo={ postData.SendUserNickName }
                 placeholder="交流一下吧~"/>
+        <ImageView ref="imageView" dataList={ postData.Image_Post } isLike={ this.isLike }/>
       </div>
     </div>;
   }

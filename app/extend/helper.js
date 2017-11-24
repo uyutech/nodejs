@@ -11,13 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?77';
-  },
-  getRemoteUrl(url) {
-    if(url.indexOf('//') > -1) {
-      return url;
-    }
-    return 'http://172.19.118.93/' + url.replace(/^\//, '');
+    return '/public' + url + '?78';
   },
   * postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {

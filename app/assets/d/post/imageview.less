@@ -1,9 +1,8 @@
 /**
- * Created by army8735 on 2017/10/19.
+ * Created by army8735 on 2017/11/24.
  */
 
-.image-view{
-  width:100%;
+.mod-iv{
   &:before{
     position:fixed;
     left:0;
@@ -13,7 +12,7 @@
     height:100%;
     background:rgba(0, 0, 0, 0.7);
     content:' ';
-    z-index:1001;
+    z-index:100;
   }
   .c{
     position:absolute;
@@ -22,41 +21,31 @@
     padding:0.1rem 0;
     min-height:4rem;
     transform:translateX(-50%);
-    z-index:1001;
+    z-index:101;
+    &:before{
+      position:absolute;
+      left:0;
+      top:0.1rem;
+      width:100%;
+      height:0.4rem;
+      background:linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+      content:' ';
+      z-index:2;
+    }
     img{
       position:relative;
       display:block;
       margin:0 auto;
-      max-width:3.55rem;
+      max-width:9rem;
       transition:all 0.2s;
+      background-size:100% auto;
       background-repeat:no-repeat;
       background-position:center 0;
-      background-size:100% auto;
-    }
-    h3{
-      position:absolute;
-      left:1rem;
-      right:0.5rem;
-      top:0.2rem;
-      text-align:center;
-      color:#FFF;
-      text-shadow:0 0 2px rgba(0, 0, 0, 0.7);
-      z-index:2;
-      font-size:0.14rem;
-      font-weight:400;
-      small{
-        display:block;
-        font-size:0.12rem;
-      }
-      &.loading{
-        opacity:0.7;
-        cursor:wait;
-      }
     }
     .btn{
       position:absolute;
       top:0.16rem;
-      left:0.1rem;
+      right:0.1rem;
       z-index:2;
       li{
         display:inline-block;
@@ -72,22 +61,24 @@
           margin-right:0;
         }
         &.like{
-          background:url(../../d/works/like.png) no-repeat center;
+          background:url(../works/like.png) no-repeat center;
           background-size:contain;
-          &.has{
-            background-image:url(../../d/works/liked.png);
+          &:hover{
+            background-image:url(../works/like-hover.png);
           }
-        }
-        &.favor{
-          background:url(../../d/works/favor.png) no-repeat center;
-          background-size:contain;
           &.has{
-            background-image:url(../../d/works/favored.png);
+            background-image:url(../works/liked.png);
+            &:hover{
+              background-image:url(../works/liked-hover.png);
+            }
           }
         }
         &.download{
-          background:url(../../d/works/download.png) no-repeat center;
+          background:url(../works/download.png) no-repeat center;
           background-size:contain;
+          &:hover{
+            background-image:url(../works/download-hover.png);
+          }
         }
       }
     }
@@ -95,14 +86,14 @@
   .prev{
     position:fixed;
     top:50%;
-    left:0.1rem;
     display:block;
     width:0.3rem;
     height:0.3rem;
     border-left:1px solid #FFF;
     border-top:1px solid #FFF;
-    transform:rotateZ(-45deg);
-    z-index:1001;
+    transform:translateY(-50%) rotateZ(-45deg);
+    cursor:pointer;
+    z-index:101;
     opacity:0.7;
     &:hover{
       opacity:1;
@@ -111,14 +102,14 @@
   .next{
     position:fixed;
     top:50%;
-    right:0.1rem;
     display:block;
     width:0.3rem;
     height:0.3rem;
     border-right:1px solid #FFF;
     border-top:1px solid #FFF;
-    transform:rotateZ(45deg);
-    z-index:1001;
+    transform:translate3d(9.7rem, -50%, 0) rotateZ(45deg);
+    cursor:pointer;
+    z-index:101;
     opacity:0.7;
     &:hover{
       opacity:1;
@@ -126,30 +117,18 @@
   }
   .close{
     position:fixed;
-    top:0.05rem;
-    right:0.05rem;
+    top:0.2rem;
     display:block;
-    width:0.21rem;
-    height:0.21rem;
-    background:url(../../d/works/close.png) no-repeat center;
+    width:0.42rem;
+    height:0.42rem;
+    background:url(../works/close.png) no-repeat center;
     background-size:contain;
     cursor:pointer;
+    transform:translateX(9.7rem);
     opacity:0.7;
-    z-index:1001;
+    z-index:101;
     &:hover{
       opacity:1;
     }
-  }
-}
-
-@media screen and (max-device-width:320px){
-  .image-view .c img{
-    max-width:3rem;
-  }
-}
-
-@media screen and (min-device-width:414px){
-  .image-view .c img{
-    max-width:3.94rem;
   }
 }

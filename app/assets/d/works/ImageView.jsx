@@ -18,7 +18,7 @@ class ImageView extends migi.Component {
       let $window = $(window);
       migi.eventBus.on('choosePic', function(l, i) {
         self.show();
-        self.top = $window.scrollTop();
+        self.tops = $window.scrollTop();
         list = l;
         index = i;
         self.data = list[index];
@@ -26,7 +26,7 @@ class ImageView extends migi.Component {
     });
   }
   @bind data = {}
-  @bind top = 0
+  @bind tops = 0
   @bind fnLike
   @bind fnFavor
   show() {
@@ -145,7 +145,7 @@ class ImageView extends migi.Component {
   }
   render() {
     return <div class="image-view fn-hide">
-      <div class="c" style={ 'top:' + this.top + 'px' }>
+      <div class="c" style={ 'top:' + this.tops + 'px' }>
         <img src={ util.autoSsl(util.img__60(this.data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } style={ 'width:' + this.data.Width + 'px;' }/>
         <h3>{ this.data.ItemName }<small>{ this.data.Tips }</small></h3>
         <ul class="btn">

@@ -18,6 +18,12 @@ let util = {
     }
     return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
   },
+  img1600__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-1600__80' : url;
+    },
   img1296_1296_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
