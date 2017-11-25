@@ -50,10 +50,7 @@ class Find extends migi.Component {
     }
     loading = true;
     skip = (i - 1) * take;
-    self.ref.hot2.element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    util.scrollTop($(self.ref.hot2.element).offset().top);
     net.postJSON('/api/find/hotPostList', { skip, take }, function(res) {
       if(res.success) {
         self.ref.hotPost.setData(res.data.data);

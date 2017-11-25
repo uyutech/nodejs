@@ -35,10 +35,7 @@ class Circle extends migi.Component {
       });
       self.ref.subPost.on('add_post', function(data) {
         self.ref.hotPost.addData(data);
-        self.ref.main.element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+        util.scrollTop($(self.ref.main.element).offset().top);
       });
     });
   }
@@ -52,10 +49,7 @@ class Circle extends migi.Component {
       if(res.success) {
         let data = res.data;
         self.ref.hotPost.setData(data.data);
-        self.ref.main.element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+        util.scrollTop($(self.ref.main.element).offset().top);
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);

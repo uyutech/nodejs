@@ -257,7 +257,10 @@ let util = {
     }
     return '刚刚';
   },
-  ERROR_MESSAGE: '人气大爆发，请稍后再试。'
+  ERROR_MESSAGE: '人气大爆发，请稍后再试。',
+  scrollTop: function(y) {
+    $(window).scrollTop(y - 70);
+  },
 };
 
 export default util;
