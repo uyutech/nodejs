@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?83';
+    return '/public' + url + '?84';
   },
   * postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {

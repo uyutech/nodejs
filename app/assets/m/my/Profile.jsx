@@ -14,12 +14,14 @@ class Profile extends migi.Component {
     self.head = self.props.userInfo.Head_Url;
     self.sname = self.props.userInfo.NickName;
     self.sign = self.props.userInfo.User_Sign || '';
+    self.address = self.props.userInfo.address;
     self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
     self.updateHeadTimeDiff = self.props.updateHeadTimeDiff || 0;
   }
   @bind head
   @bind sname
   @bind sign
+  @bind address
   @bind updateNickNameTimeDiff
   @bind updateHeadTimeDiff
   click() {
@@ -148,26 +150,71 @@ class Profile extends migi.Component {
       $edit.removeClass('fn-hide');
     }
   }
+  click3() {
+    let self = this;
+    $(self.ref.address.element).addClass('fn-hide');
+    $(self.ref.edit3.element).addClass('fn-hide');
+    $(self.ref.input3.element).removeClass('fn-hide').focus().val(self.address);
+    $(self.ref.ok3.element).removeClass('fn-hide')
+  }
+  clickOk3() {
+    let self = this;
+    $(self.ref.address.element).removeClass('fn-hide');
+    $(self.ref.input3.element).addClass('fn-hide');
+    $(self.ref.ok3.element).addClass('fn-hide');
+    let $edit = $(self.ref.edit3.element);
+    let newAddress = $(self.ref.input3.element).val().trim();
+    let length = newAddress.length;
+    if(length > 256) {
+      alert('地址长度不能超过256个字哦~');
+      $edit.removeClass('fn-hide');
+      return;
+    }
+    if(newAddress !== self.address) {
+      net.postJSON('/api/my/updateAddress', { address: newAddress }, function(res) {
+        if(res.success) {
+          self.address = newAddress;
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $edit.removeClass('fn-hide');
+      }, function(res) {
+        alert(res.message || util.ERROR_MESSAGE);
+        $edit.removeClass('fn-hide');
+      });
+    }
+    else {
+      $edit.removeClass('fn-hide');
+    }
+  }
   render() {
-    return <div class="profile fn-clear">
+    return <div class="profile">
       <h4>我的资料</h4>
-      <div class="pic" onClick={ this.clickPic }>
-        <img src={ util.autoSsl(util.img200_200_80(this.head)) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
-        <div class="upload" ref="upload">
-          <input ref="file" type="file" onChange={ this.change } onClick={ this.clickHead } accept="image/gif, image/jpeg, image/png"/>
+      <div class="c">
+        <div class="pic" onClick={ this.clickPic }>
+          <img src={ util.autoSsl(util.img200_200_80(this.head)) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
+          <div class="upload" ref="upload">
+            <input ref="file" type="file" onChange={ this.change } onClick={ this.clickHead } accept="image/gif, image/jpeg, image/png"/>
+          </div>
+        </div>
+        <div class="txt">
+          <strong ref="sname">{ this.sname }</strong>
+          <input ref="input" type="text" class="fn-hide" value="" maxlength="8" placeholder="请输入昵称"/>
+          <b class="edit" ref="edit" onClick={ this.click }/>
+          <button class="fn-hide" ref="ok" onClick={ this.clickOk }>确定</button>
+          <br/>
+          <p ref="sign" class={ this.sign ? 'sign' : 'sign empty' }>{ this.sign || '暂无签名' }</p>
+          <input ref="input2" type="text" class="input2 fn-hide" value="" maxlength="16" placeholder="请输入签名"/>
+          <b class="edit edit2" ref="edit2" onClick={ this.click2 }/>
+          <button class="fn-hide" ref="ok2" onClick={ this.clickOk2 }>确定</button>
         </div>
       </div>
-      <div class="txt">
-        <strong ref="sname">{ this.sname }</strong>
-        <input ref="input" type="text" class="fn-hide" value="" maxlength="8" placeholder="请输入昵称"/>
-        <b class="edit" ref="edit" onClick={ this.click }/>
-        <button class="fn-hide" ref="ok" onClick={ this.clickOk }>确定</button>
-        <br/>
-        <p ref="sign" class={ this.sign ? 'sign' : 'sign empty' }>{ this.sign || '暂无签名' }</p>
-        <input ref="input2" type="text" class="input2 fn-hide" value="" maxlength="16" placeholder="请输入签名"/>
-        <b class="edit edit2" ref="edit2" onClick={ this.click2 }/>
-        <button class="fn-hide" ref="ok2" onClick={ this.clickOk2 }>确定</button>
-      </div>
+      <label>收货地址：</label>
+      <span ref="address" class={ 'address' + (this.address ? '' : ' empty') }>{ this.address || '暂无地址' }</span>
+      <textarea ref="input3" class="fn-hide" maxlength="256" placeholder="请输入地址"/>
+      <b class="edit edit3" ref="edit3" onClick={ this.click3 }/>
+      <button class="fn-hide" ref="ok3" onClick={ this.clickOk3 }>确定</button>
     </div>;
   }
 }

@@ -195,6 +195,22 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * updateAddress(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let length = (body.address || '').length;
+      if(length > 256) {
+        return ctx.body = {
+          success: false,
+          message: '地址长度不能超过256个字哦~',
+        };
+      }
+      let res = yield ctx.helper.postServiceJSON('api/users/UpdateUserAddress', {
+        uid,
+        address: body.address || '',
+      });
+      ctx.body = res.data;
+    }
     * altSettle(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;

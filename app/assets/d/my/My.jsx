@@ -90,6 +90,7 @@ class My extends migi.Component {
         </div>
       </div>
       <div class="c">
+        <h4>我的关注</h4>
         <Follow ref="follow" list={ this.props.follows }/>
         <h4>我画的圈</h4>
         <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>
@@ -99,7 +100,6 @@ class My extends migi.Component {
             ? <Page ref="page2" total={ Math.ceil(this.props.myPost.Size / take) }/>
             : ''
         }
-        {/*<Favor ref="favor" list={ this.props.favors }/>*/}
       </div>
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>
     </div>;

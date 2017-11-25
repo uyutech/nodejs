@@ -13,12 +13,14 @@ class Profile extends migi.Component {
     self.head = self.props.userInfo.Head_Url;
     self.sname = self.props.userInfo.NickName;
     self.sign = self.props.userInfo.User_Sign || '';
+    self.address = self.props.userInfo.address;
     self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
     self.updateHeadTimeDiff = self.props.updateHeadTimeDiff || 0;
   }
   @bind head
   @bind sname
   @bind sign
+  @bind address
   @bind updateNickNameTimeDiff
   @bind updateHeadTimeDiff
   click() {
@@ -119,6 +121,12 @@ class Profile extends migi.Component {
     $(self.ref.edit2.element).addClass('fn-hide');
     $(self.ref.input2.element).removeClass('fn-hide').focus().val(self.sign);
   }
+  click3() {
+    let self = this;
+    $(self.ref.address.element).addClass('fn-hide');
+    $(self.ref.edit3.element).addClass('fn-hide');
+    $(self.ref.input3.element).removeClass('fn-hide').focus().val(self.address);
+  }
   blur2() {
     let self = this;
     $(self.ref.sign.element).removeClass('fn-hide');
@@ -149,6 +157,36 @@ class Profile extends migi.Component {
       $edit.removeClass('fn-hide');
     }
   }
+  blur3() {
+    let self = this;
+    $(self.ref.address.element).removeClass('fn-hide');
+    $(self.ref.input3.element).addClass('fn-hide');
+    let $edit = $(self.ref.edit3.element);
+    let newAddress = $(self.ref.input3.element).val().trim();
+    let length = newAddress.length;
+    if(length > 256) {
+      alert('地址长度不能超过256个字哦~');
+      $edit.removeClass('fn-hide');
+      return;
+    }
+    if(newAddress !== self.address) {
+      net.postJSON('/api/my/updateAddress', { address: newAddress }, function(res) {
+        if(res.success) {
+          self.address = newAddress;
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+        $edit.removeClass('fn-hide');
+      }, function(res) {
+        alert(res.message || util.ERROR_MESSAGE);
+        $edit.removeClass('fn-hide');
+      });
+    }
+    else {
+      $edit.removeClass('fn-hide');
+    }
+  }
   render() {
     return <div class="profile fn-clear">
       <div class="pic" onClick={ this.clickPic }>
@@ -165,6 +203,11 @@ class Profile extends migi.Component {
         <p ref="sign" class={ this.sign ? 'sign' : 'sign empty' }>{ this.sign || '暂无签名' }</p>
         <input ref="input2" type="text" class="input2 fn-hide" value="" onBlur={ this.blur2 } maxlength="16" placeholder="请输入签名"/>
         <b class="edit edit2" ref="edit2" onClick={ this.click2 }/>
+        <br/>
+        <label>收货地址：</label>
+        <span ref="address" class={ 'address' + (this.address ? '' : ' empty') }>{ this.address || '暂无地址' }</span>
+        <textarea ref="input3" class="fn-hide" onBlur={ this.blur3 } maxlength="256" placeholder="请输入地址"/>
+        <b class="edit edit3" ref="edit3" onClick={ this.click3 }/>
       </div>
     </div>;
   }

@@ -129,6 +129,7 @@ class Player extends migi.Component {
                               onTimeupdate={ self.onTimeupdate.bind(self) }
                               onLoadedmetadata={ self.onLoadedmetadata.bind(self) }
                               onPause={ self.onPause.bind(self) }
+                              onProgress={ self.onProgress.bind(self) }
                               onPlaying={ self.onPlaying.bind(self) }
                               preload="meta"
                               playsinline="true"
