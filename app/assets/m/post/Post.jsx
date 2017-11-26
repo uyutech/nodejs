@@ -23,6 +23,8 @@ class Post extends migi.Component {
     let self = this;
     self.isLike = self.props.postData.ISLike;
     self.likeCount = self.props.postData.LikeCount;
+    self.isFavor = self.props.postData.ISFavor;
+    self.favorCount = self.props.postData.FavorCount;
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
       $window.on('scroll', function() {
@@ -77,21 +79,6 @@ class Post extends migi.Component {
       });
 
       let $root = $(self.element);
-      $root.on('click', '.del', function() {
-        if(window.confirm('确认删除吗？')) {
-          let postID = $(this).attr('rel');
-          net.postJSON('/api/post/del', { postID }, function(res) {
-            if(res.success) {
-              location.reload(true);
-            }
-            else {
-              alert(res.message || util.ERROR_MESSAGE);
-            }
-          }, function(res) {
-            alert(res.message || util.ERROR_MESSAGE);
-          });
-        }
-      });
       $root.on('click', '.imgs img', function() {
         migi.eventBus.emit('choosePic', $(this).attr('rel'));
       });
@@ -105,9 +92,11 @@ class Post extends migi.Component {
   @bind rootID = -1
   @bind parentID = -1
   @bind loading
-  @bidn loadEnd
-  @bind likeCount
+  @bind loadEnd
   @bind isLike
+  @bind likeCount
+  @bind isFavor
+  @bind favorCount
   checkMore($window) {
     let self = this;
     let WIN_HEIGHT = $window.height();
@@ -185,9 +174,50 @@ class Post extends migi.Component {
       this.load();
     }
   }
-  clickLike() {
+  clickFavor() {
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
+    let $li = $(this);
+    if($li.hasClass('loading')) {
+      return;
+    }
+    $li.addClass('loading');
     let self = this;
-    net.postJSON('/api/post/like', { postID: self.props.postData.ID }, function(res) {
+    let postID = self.props.postData.ID;
+    let url = '/api/post/favor';
+    if(self.isFavor) {
+      url = '/api/post/unFavor';
+    }
+    net.postJSON(url, { postID }, function(res) {
+      if(res.success) {
+        let data = res.data;
+        self.isFavor = data.State === 'favorWork';
+        self.favorCount = data.FavorCount;
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      $li.removeClass('loading');
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      $li.removeClass('loading');
+    });
+  }
+  clickLike() {
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
+    let $li = $(this);
+    if($li.hasClass('loading')) {
+      return;
+    }
+    $li.addClass('loading');
+    let self = this;
+    let postID = self.props.postData.ID;
+    net.postJSON('/api/post/like', { postID }, function(res) {
       if(res.success) {
         let data = res.data;
         self.isLike = self.ref.imageView.isLike = data.ISLike;
@@ -196,9 +226,26 @@ class Post extends migi.Component {
       else {
         alert(res.message || util.ERROR_MESSAGE);
       }
-    }, function() {
+      $li.removeClass('loading');
+    }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
+      $li.removeClass('loading');
     });
+  }
+  clickDel(e, vd) {
+    if(window.confirm('确认删除吗？')) {
+      let postID = this.props.postData.ID;
+      net.postJSON('/api/post/del', { postID }, function(res) {
+        if(res.success) {
+          location.reload(true);
+        }
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
+      }, function(res) {
+        alert(res.message || util.ERROR_MESSAGE);
+      });
+    }
   }
   render() {
     let postData = this.props.postData;
@@ -251,13 +298,13 @@ class Post extends migi.Component {
             </div>
             : ''
         }
-        <ul class="btn fn-clear">
-          <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }>{ this.likeCount }</li>
-          {
-            postData.IsOwn ? <li class="del" rel={ postData.ID }/> : ''
-          }
-        </ul>
         <b class="arrow"/>
+        <ul class="btn">
+          <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }><b/><span>{ this.favorCount }</span></li>
+          <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }><b/><span>{ this.likeCount }</span></li>
+          <li class="comment"><b/><span>{ postData.CommentCount }</span></li>
+          { postData.IsOwn ? <li class="del" onClick={ this.clickDel }><b/></li> : '' }
+        </ul>
       </div>
       <div class="box">
         <h4>回复</h4>

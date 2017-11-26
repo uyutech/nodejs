@@ -31,16 +31,16 @@ class SubPost extends migi.Component {
     if(self.to && self.to.length && self.props.circleID !== undefined) {
       let has = false;
       self.to.forEach(function(item) {
-        if(item.TagID === self.props.circleID) {
+        if(item.TagID.toString() === self.props.circleID.toString()) {
           has = true;
         }
       });
       if(has) {
         migi.sort(self.to, function(a, b) {
-          if(a.TagID === self.props.circleID) {
+          if(a.TagID.toString() === self.props.circleID.toString()) {
             return false;
           }
-          else if(b.TagID === self.props.circleID) {
+          else if(b.TagID.toString() === self.props.circleID.toString()) {
             return true;
           }
         });
@@ -329,7 +329,7 @@ class SubPost extends migi.Component {
           <ul>
             {
               (this.to || []).map(function(item) {
-                return <li rel={ item.TagID } class={ item.TagID === this.props.circleID ? 'on' : '' }>{ item.TagName }圈</li>;
+                return <li rel={ item.TagID } class={ item.TagID.toString() === this.props.circleID.toString() ? 'on' : '' }>{ item.TagName }圈</li>;
               }.bind(this))
             }
           </ul>

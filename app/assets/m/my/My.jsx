@@ -8,7 +8,7 @@ import net from '../../d/common/net';
 import util from '../../d/common/util';
 import Profile from './Profile.jsx';
 import Follow from './Follow.jsx';
-import HotPost from '../../d/component/hotpost/HotPost.jsx';
+import HotPost from '../component/hotpost/HotPost.jsx';
 import Page from '../../d/component/page/Page.jsx';
 
 let loading;
@@ -96,7 +96,8 @@ class My extends migi.Component {
       <Follow ref="follow" list={ this.props.follows }/>
       <h4>我画的圈</h4>
       <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>
-      <HotPost ref="hotPost" data={ this.props.myPost.data }/>
+      <HotPost ref="hotPost" data={ this.props.myPost.data } size={ this.props.myPost.Size }
+               url="/api/my/postList"/>
       {
         this.props.myPost.Size > take
           ? <Page ref="page2" total={ Math.ceil(this.props.myPost.Size / take) }/>

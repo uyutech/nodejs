@@ -54,7 +54,7 @@ module.exports = app => {
         myPost = res.myPost.data.data;
       }
       if(res.bonusPoint.data.success) {
-        bonusPoint = res.bonusPoint.data.data;
+        bonusPoint = res.bonusPoint.data.data || {};
       }
       if(res.lastUpdateNickNameTime.data.success) {
         lastUpdateNickNameTime = res.lastUpdateNickNameTime.data.data;

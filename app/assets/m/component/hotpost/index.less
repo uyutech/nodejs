@@ -7,10 +7,11 @@
   padding:0 0.1rem;
   .list{
     > li{
+      position:relative;
+      margin-bottom:0.15rem;
       > .profile{
         position:relative;
         display:flex;
-        line-height:0.3rem;
         font-weight:400;
         align-items:center;
         &:after{
@@ -28,8 +29,9 @@
           margin-right:0.1rem;
           width:0.48rem;
           height:0.48rem;
+          box-sizing:border-box;
           border-radius:100%;
-          box-shadow:@picShadow;
+          border:1px solid @secondLinkColor;
           overflow:hidden;
           img{
             display:block;
@@ -40,35 +42,36 @@
         .txt{
           font-size:0.16rem;
           .name{
-            display:inline-block;
-            margin-right:0.05rem;
+            display:block;
             max-width:1.5rem;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
           }
           .time{
+            display:block;
             font-size:0.12rem;
             color:@fourthTextColor;
           }
         }
         .circle{
+          margin-left:0.05rem;
           flex:1;
-          height:0.24rem;
+          height:0.48rem;
           overflow-x:auto;
           transform:translate3d(0,0,0);
-          line-height:1;
-          ul{
-            display:flex;
-          }
           li{
             display:inline-block;
             margin-left:0.05rem;
+            margin-top:0.02rem;
             padding:0 0.1rem;
-            line-height:0.24rem;
-            background:@mainColor;
-            border-radius:0.24rem;
-            color:@thirdTextColor;
-            white-space:nowrap;
+            box-sizing:border-box;
+            line-height:0.22rem;
+            border:1px solid @mainColor;
+            border-radius:0.22rem;
+            color:@mainColor;
             a{
-              color:#FFF;
+              color:@mainColor;
             }
           }
         }
@@ -80,7 +83,7 @@
       }
       > .wrap{
         position:relative;
-        margin:0.15rem 0;
+        margin:0.1rem 0;
         padding:0.1rem;
         background:#FFF;
         border:1px solid #EDF3F7;
@@ -95,7 +98,7 @@
         }
         .arrow{
           position:absolute;
-          left:0.2rem;
+          left:0.18rem;
           top:-1px;
           display:block;
           width:0.1rem;
@@ -133,28 +136,47 @@
             font-weight:400;
             color:@mainHoverColor;
           }
-          .more{
+          .placeholder{
             display:inline-block;
-            margin-left:0.05rem;
-            font-size:0.13rem;
+            width:0.56rem;
+          }
+          .more{
+            position:absolute;
+            right:0;
+            bottom:0;
+            margin:0;
+            font-size:0.14rem;
             color:@secondLinkColor;
             line-height:1.8;
             white-space:nowrap;
+            &:hover{
+              color:@mainHoverColor;
+            }
           }
         }
         .imgs{
+          margin-right:-0.1rem;
+          overflow:hidden;
           li{
+            position:relative;
             float:left;
             margin:0.1rem 0.1rem 0 0;
-            width:1.2rem;
-            height:1.2rem;
+            width:1.04rem;
+            height:1.04rem;
             background-size:cover;
             background-repeat:no-repeat;
             background-position:center;
             border-radius:0.1rem;
             overflow:hidden;
+            img{
+              position:absolute;
+              left:0;
+              top:0;
+              width:100%;
+              height:100%;
+              opacity:0;
+            }
             &.all{
-              position:relative;
               &:before{
                 position:absolute;
                 left:0;
@@ -166,45 +188,102 @@
               }
               a{
                 position:relative;
-                display:block;
+                display:flex;
+                align-items:center;
                 width:100%;
                 height:100%;
-                line-height:1.2rem;
                 text-align:center;
+                justify-content:center;
                 color:@thirdTextColor;
               }
             }
           }
         }
-        .btn{
-          margin-top:0.1rem;
-          text-align:right;
-          li{
+      }
+      .btn{
+        display:flex;
+        margin-top:0.1rem;
+        padding-top:0.05rem;
+        border-top:1px solid @borderColor;
+        li{
+          position:relative;
+          flex:1;
+          height:0.24rem;
+          text-align:center;
+          &:after{
+            position:absolute;
+            top:0.05rem;
+            bottom:0.05rem;
+            display:block;
+            width:0;
+            border-left:1px solid @borderColor;
+            content:' ';
+          }
+          &:first-child:after{
+            content:'';
+            display:none;
+          }
+          b{
             display:inline-block;
-            margin-right:0.1rem;
+            margin-right:0.05rem;
+            width:0.24rem;
             height:0.24rem;
-            line-height:0.24rem;
+            background-repeat:no-repeat;
+            background-position:center;
+            background-size:contain;
             vertical-align:middle;
-            &:last-child{
-              margin-right:0;
+          }
+          span{
+            display:inline-block;
+            line-height:0.24rem;
+            transform:translateY(0.01rem);
+          }
+          &.favor{
+            b{
+              background-image:url(../../../d/works/favor.png);
             }
-            &.like{
-              padding-left:0.3rem;
-              background:url(../../../d/works/like.png) no-repeat 0 center;
-              background-size:contain;
-              &.has{
-                background-image:url(../../../d/works/liked.png);
+            &:hover b{
+              background-image:url(../../../d/works/favor-hover.png);
+            }
+            &.has{
+              b{
+                background-image:url(../../../d/works/favored.png);
+              }
+              &:hover b{
+                background-image:url(../../../d/works/favored-hover.png);
               }
             }
-            &.comment{
-              padding-left:0.3rem;
-              background:url(../../../d/component/hotpost/comment.png) no-repeat 0 center;
-              background-size:contain;
+          }
+          &.like{
+            b{
+              background-image:url(../../../d/works/like.png);
             }
-            &.del{
-              width:0.24rem;
-              background:url(../../../d/component/hotpost/del.png) no-repeat 0 center;
-              background-size:contain;
+            &:hover b{
+              background-image:url(../../../d/works/like-hover.png);
+            }
+            &.has{
+              b{
+                background-image:url(../../../d/works/liked.png);
+              }
+              &:hover b{
+                background-image:url(../../../d/works/liked-hover.png);
+              }
+            }
+          }
+          &.comment{
+            b{
+              background-image:url(../../../d/component/hotpost/comment.png);
+            }
+            &:hover b{
+              background-image:url(../../../d/component/hotpost/comment-hover.png);
+            }
+          }
+          &.del{
+            b{
+              background-image:url(../../../d/component/hotpost/del.png);
+            }
+            &:hover b{
+              background-image:url(../../../d/component/hotpost/del-hover.png);
             }
           }
         }
@@ -214,5 +293,12 @@
   .empty,.message{
     text-align:center;
     color:@fourthTextColor;
+  }
+}
+
+@media screen and (max-device-width:320px){
+  .cp-hotpost .list > li > .wrap .imgs li{
+    width:0.86rem;
+    height:0.86rem;
   }
 }
