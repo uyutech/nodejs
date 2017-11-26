@@ -11,6 +11,7 @@ export default function(data) {
   let follows = data.follows;
   let favors = data.favors;
   let myPost = data.myPost;
+  let bonusPoint = data.bonusPoint;
   let now = Date.now();
   let lastUpdateNickNameTime = data.lastUpdateNickNameTime;
   if(lastUpdateNickNameTime) {
@@ -30,7 +31,8 @@ export default function(data) {
   let updateHeadTimeDiff = now - lastUpdateHeadTime;
 
   let my = migi.preRender(<My userInfo={ userInfo } follows={ follows } favors={ favors } myPost={ myPost }
-                              updateNickNameTimeDiff={ updateNickNameTimeDiff } updateHeadTimeDiff={ updateHeadTimeDiff }/>);
+                              bonusPoint={ bonusPoint } updateNickNameTimeDiff={ updateNickNameTimeDiff }
+                              updateHeadTimeDiff={ updateHeadTimeDiff }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -48,6 +50,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.follows = ${data.helper.stringify(follows)};
   $CONFIG.favors = ${data.helper.stringify(favors)};
   $CONFIG.myPost = ${data.helper.stringify(myPost)};
+  $CONFIG.bonusPoint = ${data.helper.stringify(bonusPoint)};
   $CONFIG.updateNickNameTimeDiff = ${data.helper.stringify(updateNickNameTimeDiff)};
   $CONFIG.updateHeadTimeDiff = ${data.helper.stringify(updateHeadTimeDiff)};
 </script>

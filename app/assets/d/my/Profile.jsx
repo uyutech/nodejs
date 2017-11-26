@@ -196,18 +196,15 @@ class Profile extends migi.Component {
         </div>
       </div>
       <div class="txt">
+        <label>昵称：</label>
         <strong ref="sname">{ this.sname }</strong>
         <input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur } maxlength="8" placeholder="请输入昵称"/>
         <b class="edit" ref="edit" onClick={ this.click }/>
         <br/>
+        <label>签名：</label>
         <p ref="sign" class={ this.sign ? 'sign' : 'sign empty' }>{ this.sign || '暂无签名' }</p>
         <input ref="input2" type="text" class="input2 fn-hide" value="" onBlur={ this.blur2 } maxlength="16" placeholder="请输入签名"/>
         <b class="edit edit2" ref="edit2" onClick={ this.click2 }/>
-        <br/>
-        <label>收货地址：</label>
-        <span ref="address" class={ 'address' + (this.address ? '' : ' empty') }>{ this.address || '暂无地址' }</span>
-        <textarea ref="input3" class="fn-hide" onBlur={ this.blur3 } maxlength="256" placeholder="请输入地址"/>
-        <b class="edit edit3" ref="edit3" onClick={ this.click3 }/>
       </div>
     </div>;
   }

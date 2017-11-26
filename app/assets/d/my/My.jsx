@@ -89,6 +89,14 @@ class My extends migi.Component {
           <b class="arrow"/>
         </div>
       </div>
+      {
+        this.props.bonusPoint.ranking
+          ? <div class="bp">
+            <p>全站排名 { this.props.bonusPoint.ranking } 名</p>
+            <p><small>以上是截止到11月25日的积分排名哦，之后会尽快更新实时显示的功能-3-</small></p>
+          </div>
+          : ''
+      }
       <div class="c">
         <h4>我的关注</h4>
         <Follow ref="follow" list={ this.props.follows }/>

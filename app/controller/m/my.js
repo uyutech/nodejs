@@ -12,6 +12,7 @@ module.exports = app => {
       let follows = [];
       let favors = [];
       let myPost = {};
+      let bonusPoint = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
       let res = yield {
@@ -29,6 +30,9 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
           currentuid: uid,
+        }),
+        bonusPoint: ctx.helper.postServiceJSON('api/users/getuserrank', {
+          uid,
         }),
         lastUpdateNickNameTime: ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
           uid,
@@ -49,6 +53,9 @@ module.exports = app => {
       if(res.myPost.data.success) {
         myPost = res.myPost.data.data;
       }
+      if(res.bonusPoint.data.success) {
+        bonusPoint = res.bonusPoint.data.data;
+      }
       if(res.lastUpdateNickNameTime.data.success) {
         lastUpdateNickNameTime = res.lastUpdateNickNameTime.data.data;
       }
@@ -67,6 +74,7 @@ module.exports = app => {
         follows,
         favors,
         myPost,
+        bonusPoint,
         lastUpdateNickNameTime,
         lastUpdateHeadTime,
       });
