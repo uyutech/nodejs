@@ -288,18 +288,26 @@ class HotPost extends migi.Component {
                 {
                   item.Image_Post.length > 9
                     ? item.Image_Post.slice(0, 9).map(function(item, i) {
+                      let cn = '';
+                      if(item.Width !== 0 && item.Height !== 0 && item.Width < 116 && item.Height < 116) {
+                        cn = 'no-scale';
+                      }
                       if(i === 8) {
-                        return <li class="all" style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
+                        return <li class={ 'all ' + cn } style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
                           <img src={ util.autoSsl(util.img332_332_80(item.FileUrl)) }/>
                           <a href={ '/post/' + id }>查看全部</a>
                         </li>;
                       }
-                      return <li style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
+                      return <li class={ cn } style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
                         <img src={ util.autoSsl(util.img332_332_80(item.FileUrl)) }/>
                       </li>;
                     })
                     : item.Image_Post.map(function(item) {
-                      return <li style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
+                      let cn = '';
+                      if(item.Width !== 0 && item.Height !== 0 && item.Width < 116 && item.Height < 116) {
+                        cn = 'no-scale';
+                      }
+                      return <li class={ cn } style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
                         <img src={ util.autoSsl(util.img332_332_80(item.FileUrl)) }/>
                       </li>;
                     })
@@ -358,18 +366,26 @@ class HotPost extends migi.Component {
               {
                 item.Image_Post.length > 9
                   ? item.Image_Post.slice(0, 9).map(function(item, i) {
+                    let cn = '';
+                    if(item.Width !== 0 && item.Height !== 0 && item.Width < 116 && item.Height < 116) {
+                      cn = 'no-scale';
+                    }
                     if(i === 8) {
-                      return <li class="all" style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
+                      return <li class={ 'all ' + cn } style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
                         <img src={ util.autoSsl(util.img332_332_80(item.FileUrl)) }/>
                         <a href={ '/post/' + id }>查看全部</a>
                       </li>;
                     }
-                    return <li style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
+                    return <li class={ cn } style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
                       <img src={ util.autoSsl(util.img332_332_80(item.FileUrl)) }/>
                     </li>;
                   })
                   : item.Image_Post.map(function(item) {
-                    return <li style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
+                    let cn = '';
+                    if(item.Width !== 0 && item.Height !== 0 && item.Width < 116 && item.Height < 116) {
+                      cn = 'no-scale';
+                    }
+                    return <li class={ cn } style={ 'background-image:url(' + util.autoSsl(util.img332_332_80(item.FileUrl)) + ')' }>
                       <img src={ util.autoSsl(util.img332_332_80(item.FileUrl)) }/>
                     </li>;
                   })
