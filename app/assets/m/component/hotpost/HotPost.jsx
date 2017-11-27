@@ -42,10 +42,10 @@ class PostList extends migi.Component {
       self.html = html;
       self.on(migi.Event.DOM, function() {
         let $list = $(this.ref.list.element);
-        $list.on('click', '.wrap > .con .snap', function() {
+        $list.on('click', '.wrap .con .snap', function() {
           $(this).closest('li').addClass('expand');
         });
-        $list.on('click', '.wrap > .con .shrink', function() {
+        $list.on('click', '.wrap .con .shrink', function() {
           let $li = $(this).closest('li');
           $li.removeClass('expand');
           $li[0].scrollIntoView(true);

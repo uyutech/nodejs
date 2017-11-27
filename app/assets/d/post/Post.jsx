@@ -70,7 +70,6 @@ class Post extends migi.Component {
             subCmt.value = '';
             if(rootID === -1) {
               comment.prependData(res.data);
-              comment.message = '';
             }
             else {
               comment.prependChild(res.data, parentID);
@@ -123,14 +122,14 @@ class Post extends migi.Component {
         let data = res.data;
         currentCount = data.Size;
         skip += take;
+        comment.message = '';
         if(data.data.length) {
-          comment.message = '';
           comment.appendData(res.data.data);
           page.total = page2.total = Math.ceil(currentCount / take);
         }
         else {
           comment.appendData(res.data.data);
-          comment.message = '暂无评论';
+          comment.empty = true;
         }
       }
       else {

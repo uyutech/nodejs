@@ -33,7 +33,6 @@ class Author extends migi.Component {
             subCmt.value = '';
             if(rootID === -1) {
               comment.prependData(data);
-              comment.message = '';
             }
             else {
               comment.prependChild(data, parentID);

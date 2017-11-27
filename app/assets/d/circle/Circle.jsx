@@ -80,7 +80,6 @@ class Circle extends migi.Component {
             subCmt.value = '';
             if(rootID === -1) {
               comment.prependData(res.data);
-              comment.message = '';
             }
             else {
               comment.prependChild(res.data, parentID);

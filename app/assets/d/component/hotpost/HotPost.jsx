@@ -99,7 +99,7 @@ class HotPost extends migi.Component {
             $li.removeClass('loading');
           });
         });
-        $list.on('click', '>li>.btn .like', function() {
+        $list.on('click', 'li > .btn .like', function() {
           if(!$CONFIG.isLogin) {
             migi.eventBus.emit('NEED_LOGIN');
             return;
@@ -188,13 +188,12 @@ class HotPost extends migi.Component {
                 $commentList.find('.type small').text(res.data.Count);
                 comment.appendData(res.data.data);
                 if(res.data.Size) {
-                  comment.message = '';
                   if(res.data.Size > take) {
                     $commentList.append(`<a href="/post/${postID}" class="comment-more">查看更多 ٩(ˊᗜˋ*)و</a>`);
                   }
                 }
                 else {
-                  comment.message = '暂无评论';
+                  comment.empty = true;
                 }
                 commentData.skip += take;
               }

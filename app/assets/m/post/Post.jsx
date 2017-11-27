@@ -58,7 +58,6 @@ class Post extends migi.Component {
             subCmt.value = '';
             if(rootID === -1) {
               comment.prependData(res.data);
-              comment.message = '';
             }
             else {
               comment.prependChild(res.data, parentID);
@@ -118,13 +117,11 @@ class Post extends migi.Component {
     ajax = net.postJSON('/api/post/commentList', { postID: self.props.id, skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        // currentCount = data.Size;
         if(data.data.length) {
-          comment.message = '';
           comment.appendData(res.data.data);
         }
         else {
-          comment.message = skip === 0 ? '暂无回复' : '已经到底了';
+          comment.message = skip === 0 ? '' : '已经到底了';
           self.loadEnd = true;
         }
         skip += take;
@@ -326,7 +323,8 @@ class Post extends migi.Component {
                zanUrl="/api/post/likeComment"
                subUrl="/api/post/subCommentList"
                delUrl="/api/post/delComment"
-               data={ this.props.replyData.data }/>
+               data={ this.props.replyData.data }
+               message={ this.props.replyData.Size > take ? '' : '已经到底了' }/>
       </div>
       <SubCmt ref="subCmt"
               tipText="-${n}"

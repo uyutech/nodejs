@@ -28,9 +28,7 @@ class Comment extends migi.Component {
     if(self.props.message !== undefined) {
       self.message = self.props.message;
     }
-    else if(!html) {
-      self.message = '暂无评论';
-    }
+    self.empty = !html;
 
     self.on(migi.Event.DOM, function() {
       let $root = $(self.element);
@@ -116,6 +114,7 @@ class Comment extends migi.Component {
           net.postJSON(self.props.delUrl, {commentID: cid}, function(res) {
             if(res.success) {
               $btn.closest('li').remove();
+              self.empty = !$(self.ref.list.element).children('li').length;
             }
             else if(res.code === 1000) {
               migi.eventBus.emit('NEED_LOGIN');
@@ -131,6 +130,7 @@ class Comment extends migi.Component {
     });
   }
   @bind message
+  @bind empty
   slide($li) {
     let self = this;
     if(ajax) {
@@ -218,6 +218,7 @@ class Comment extends migi.Component {
       s += self.genComment(item);
     });
     $(self.ref.list.element).html(s);
+    self.empty = !s;
   }
   appendData(data) {
     let self = this;
@@ -226,9 +227,13 @@ class Comment extends migi.Component {
       s += self.genComment(item);
     });
     $(self.ref.list.element).append(s);
+    if(s) {
+      self.empty = false;
+    }
   }
   prependData(item) {
     this.genComment(item).prependTo(this.ref.list.element);
+    this.empty = false;
   }
   prependChild(item, parentID) {
     let $comment = $('#comment_' + item.RootID);
@@ -397,6 +402,7 @@ class Comment extends migi.Component {
     return <div class="cp-comment">
       <ul class="list" ref="list" dangerouslySetInnerHTML={ this.html }/>
       <p class={ 'message' + (this.message ? '' : ' fn-hide') }>{ this.message }</p>
+      <p class={ 'empty' + (this.empty ? '' : ' fn-hide') }>这儿空空的，需要你的留言噢(* ॑꒳ ॑* )</p>
     </div>;
   }
 }

@@ -70,13 +70,12 @@ class AuthorComment extends migi.Component {
     ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID, skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        // currentCount = data.Size;
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
         }
         else {
-          comment.message = skip === 0 ? '暂无评论' : '已经到底了';
+          comment.message = skip === 0 ? '' : '已经到底了';
           self.loadEnd = true;
         }
         skip += take;
@@ -145,7 +144,8 @@ class AuthorComment extends migi.Component {
                zanUrl="/api/author/likeComment"
                subUrl="/api/author/subCommentList"
                delUrl="/api/author/delComment"
-               data={ this.props.commentData.data }/>
+               data={ this.props.commentData.data }
+               message={ (!this.props.commentData.Size || this.props.commentData.Size > take) ? '' : '已经到底了' }/>
     </div>;
   }
 }

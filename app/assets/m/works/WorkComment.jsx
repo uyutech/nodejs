@@ -55,13 +55,12 @@ class WorkComment extends migi.Component {
     ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID, skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
-        // currentCount = data.Size;
         if(data.data.length) {
           comment.message = '';
           comment.appendData(res.data.data);
         }
         else {
-          comment.message = skip === 0 ? '暂无评论' : '已经到底了';
+          comment.message = skip === 0 ? '' : '已经到底了';
           self.loadEnd = true;
         }
         skip += take;
@@ -133,7 +132,8 @@ class WorkComment extends migi.Component {
                zanUrl="/api/works/likeComment"
                subUrl="/api/works/subCommentList"
                delUrl="/api/works/delComment"
-               data={ this.props.commentData.data }/>
+               data={ this.props.commentData.data }
+               message={ (!this.props.commentData.Size || this.props.commentData.Size > take) ? '' : '已经到底了' }/>
     </div>;
   }
 }
