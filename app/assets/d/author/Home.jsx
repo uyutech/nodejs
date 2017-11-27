@@ -24,9 +24,8 @@ class Home extends migi.Component {
         <small>{ '未来会根据你的口味进行精准智能的推送！>3<' }</small>
       </h4>
       <HotWork ref="hotWork" dataList={ this.props.homeDetail.Hot_Works_Items }/>
-      <HotMusicAlbum ref="hotCollection" title="专辑"/>
+      <HotMusicAlbum ref="hotCollection" title="专辑" dataList={ this.props.album }/>
       <HotAuthor ref="hotAuthor" title="合作关系" dataList={ this.props.homeDetail.AuthorToAuthor }/>
-      <Dynamic title="全网动态"/>
     </div>;
   }
 }

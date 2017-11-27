@@ -41,6 +41,14 @@ module.exports = app => {
       }
       let content = (body.content || '').trim();
       let imgs = body.imgs;
+      let widths = body.widths;
+      let heights = body.heights;
+      if(!Array.isArray(widths)) {
+        widths = [];
+      }
+      if(!Array.isArray(heights)) {
+        heights = [];
+      }
       if(content.length < 3 || content.length > 512) {
         return {
           success: false,
@@ -58,11 +66,11 @@ module.exports = app => {
         Content: content,
         Title: '',
         ImageList: imgs
-          ? JSON.stringify(imgs.map(function(item) {
+          ? JSON.stringify(imgs.map(function(item, i) {
             return {
               FileUrl: item,
-              Width: 0,
-              Height: 0,
+              Width: widths[i] || 0,
+              Height: heights[i] || 0,
             }
           }).slice(0, 10))
           : '',

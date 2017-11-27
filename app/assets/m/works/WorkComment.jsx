@@ -6,8 +6,8 @@ import util from '../../d/common/util';
 import net from '../../d/common/net';
 import Comment from '../../d/component/comment/Comment.jsx';
 
-let skip = 10;
 let take = 10;
+let skip = take;
 let sortType = 0;
 let myComment = 0;
 let currentCount = 0;
@@ -25,6 +25,7 @@ class WorkComment extends migi.Component {
       $window.on('scroll', function() {
         self.checkMore($window);
       });
+      self.loadEnd = self.props.commentData.Size <= take;
     });
   }
   @bind loading

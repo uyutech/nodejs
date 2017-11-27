@@ -6,7 +6,6 @@ import net from '../common/net';
 import util from '../common/util';
 import Nav from './Nav.jsx';
 import Home from './Home.jsx';
-// import Work from './Work.jsx';
 import AuthorComment from './AuthorComment.jsx';
 import SubCmt from '../component/subcmt/SubCmt.jsx';
 
@@ -107,16 +106,14 @@ class Author extends migi.Component {
             ? <li class="home cur" rel="0">主页</li>
             : ''
         }
-        {/*<li class="home cur" rel="0">主页</li>*/}
-        {/*<li class="works" rel="1">作品</li>*/}
         <li class={ 'comments' + (this.props.authorDetail.ISSettled ? '' : ' cur') } rel="2">留言</li>
       </ul>
       {
         this.props.authorDetail.ISSettled
-          ? <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail } playList={ this.props.playList.data }/>
+          ? <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }
+                  album={ this.props.album }/>
           : ''
       }
-      {/*<Work ref="works" authorID={ this.props.authorID } tags={ this.props.tags } playList={ this.props.playList } playList2={ this.props.playList2 }/>*/}
       <AuthorComment
         ref="authorComment"
         show={ !this.props.authorDetail.ISSettled }

@@ -20,9 +20,8 @@ class Home extends migi.Component {
   render() {
     return <div class="home">
       <HotWork ref="hotWork" title="主打作品" dataList={ this.props.homeDetail.Hot_Works_Items }/>
-      <HotMusicAlbum ref="hotCollection" title="专辑"/>
+      <HotMusicAlbum ref="hotCollection" title="专辑" dataList={ this.props.album }/>
       <HotAuthor ref="hotAuthor" title="合作关系" dataList={ this.props.homeDetail.AuthorToAuthor }/>
-      <Dynamic title="全网动态"/>
     </div>;
   }
 }

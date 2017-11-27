@@ -11,6 +11,7 @@ export default function(data) {
   let authorID = data.authorID;
   let authorDetail = data.authorDetail;
   let homeDetail = data.homeDetail;
+  let album = data.album;
   let tags = data.tags;
   let playList = data.playList;
   let playList2 = data.playList2;
@@ -22,6 +23,7 @@ export default function(data) {
     authorID={ authorID }
     authorDetail={ authorDetail }
     homeDetail={ homeDetail }
+    album={ album }
     tags={ tags }
     playList={ playList }
     playList2={ playList2 }
@@ -43,6 +45,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.authorID = ${data.helper.stringify(authorID)};
   $CONFIG.authorDetail = ${data.helper.stringify(authorDetail)};
   $CONFIG.homeDetail = ${data.helper.stringify(homeDetail)};
+  $CONFIG.album = ${data.helper.stringify(album)};
   $CONFIG.tags = ${data.helper.stringify(tags)};
   $CONFIG.playList = ${data.helper.stringify(playList)};
   $CONFIG.playList2 = ${data.helper.stringify(playList2)};

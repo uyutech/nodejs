@@ -401,8 +401,8 @@ class Comment extends migi.Component {
   render() {
     return <div class="cp-comment">
       <ul class="list" ref="list" dangerouslySetInnerHTML={ this.html }/>
-      <p class={ 'message' + (this.message ? '' : ' fn-hide') }>{ this.message }</p>
       <p class={ 'empty' + (this.empty ? '' : ' fn-hide') }>这儿空空的，需要你的留言噢(* ॑꒳ ॑* )</p>
+      <p class={ 'message' + (this.message ? '' : ' fn-hide') }>{ this.message }</p>
     </div>;
   }
 }

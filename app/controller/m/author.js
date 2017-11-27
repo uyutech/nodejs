@@ -14,6 +14,7 @@ module.exports = app => {
       }
       let authorDetail = {};
       let homeDetail = {};
+      let album = {};
       let tags = {};
       let playList = {};
       let playList2 = {};
@@ -26,6 +27,11 @@ module.exports = app => {
         }),
         homeDetail: ctx.helper.postServiceJSON('api/author/GetAuthorHomePage', {
           AuthorID: authorID,
+        }),
+        album: ctx.helper.postServiceJSON('api/author/GetAuthoralbum_List', {
+          AuthorID: authorID,
+          Skip: 0,
+          Take: 10,
         }),
         // tags: ctx.helper.postServiceJSON('api/author/GetAuthorWorks', {
         //   AuthorID: authorID,
@@ -66,8 +72,11 @@ module.exports = app => {
       if(res.authorDetail.data.success) {
         authorDetail = res.authorDetail.data.data;
       }
-      if(res.authorDetail.data.success) {
+      if(res.homeDetail.data.success) {
         homeDetail = res.homeDetail.data.data;
+      }
+      if(res.album.data.success) {
+        album = res.album.data.data;
       }
       // if(res.tags.data.success) {
       //   tags = res.tags.data.data;
@@ -88,6 +97,7 @@ module.exports = app => {
         authorID,
         authorDetail,
         homeDetail,
+        album,
         tags,
         playList,
         playList2,

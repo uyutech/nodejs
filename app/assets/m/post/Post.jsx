@@ -10,8 +10,8 @@ import Comment from '../../d/component/comment/Comment.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 import ImageView from './ImageView.jsx';
 
-let skip = 10;
 let take = 10;
+let skip = take;
 let sortType = 0;
 let myComment = 0;
 let currentCount = 0;
@@ -25,6 +25,7 @@ class Post extends migi.Component {
     self.likeCount = self.props.postData.LikeCount;
     self.isFavor = self.props.postData.ISFavor;
     self.favorCount = self.props.postData.FavorCount;
+    self.loadEnd = self.props.replyData.Size <= take;
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
       $window.on('scroll', function() {
@@ -119,9 +120,10 @@ class Post extends migi.Component {
         let data = res.data;
         if(data.data.length) {
           comment.appendData(res.data.data);
+          comment.message = '';
         }
         else {
-          comment.message = skip === 0 ? '' : '已经到底了';
+          comment.message = '已经到底了';
           self.loadEnd = true;
         }
         skip += take;
@@ -249,6 +251,7 @@ class Post extends migi.Component {
     let html = (postData.Content || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
       .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
+    let replyData = this.props.replyData;console.log(replyData.Size);
     return <div class="post">
       <h2>{ postData.Title }</h2>
       <div class={ 'profile fn-clear' + (postData.IsAuthor ? ' author' : '') }>
@@ -307,7 +310,7 @@ class Post extends migi.Component {
         <h4>回复</h4>
         <div class="fn">
           <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
-            <li class="cur" rel="0">全部<small>{ this.props.replyData.Count }</small></li>
+            <li class="cur" rel="0">全部<small>{ replyData.Count }</small></li>
             {
               this.props.isLogin
                 ? <li rel="1">我的</li>
@@ -323,8 +326,8 @@ class Post extends migi.Component {
                zanUrl="/api/post/likeComment"
                subUrl="/api/post/subCommentList"
                delUrl="/api/post/delComment"
-               data={ this.props.replyData.data }
-               message={ this.props.replyData.Size > take ? '' : '已经到底了' }/>
+               data={ replyData.data }
+               message={ (!replyData.Size || replyData.Size > take) ? '' : '已经到底了' }/>
       </div>
       <SubCmt ref="subCmt"
               tipText="-${n}"

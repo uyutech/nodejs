@@ -147,9 +147,13 @@ class SubPost extends migi.Component {
     let self = this;
     if(!self.sending && !self.invalid && !self.disableUpload) {
       let imgs = [];
+      let widths = [];
+      let heights = [];
       self.list.forEach(function(item) {
         if(item.state === STATE.LOADED) {
           imgs.push(item.url);
+          widths.push(item.width || 0);
+          heights.push(item.height || 0);
         }
       });
       if(self.list.length > imgs.length) {
@@ -162,7 +166,7 @@ class SubPost extends migi.Component {
       $(self.ref.label.element).find('.cur,.on').each(function(i, li) {
         circleID.push($(li).attr('rel'));
       });
-      net.postJSON('/api/circle/add', { content: self.value, imgs, circleID: circleID.join(',') }, function(res) {
+      net.postJSON('/api/circle/add', { content: self.value, imgs, widths, heights, circleID: circleID.join(',') }, function(res) {
         if(res.success) {
           self.value = '';
           self.invalid = true;
@@ -237,7 +241,19 @@ class SubPost extends migi.Component {
           self.list[i + self.imgNum].state = STATE.SENDING;
           self.list[i + self.imgNum].url = fileReader.result;
           self.list = self.list;
-          net.postJSON('/api/user/uploadPic', { img: fileReader.result }, function(res) {
+          let img = fileReader.result;
+          let node = document.createElement('img');
+          node.style.position = 'absolute';
+          node.style.left = '-9999rem';
+          node.style.top = '-9999rem';
+          node.src = img;
+          node.onload = function() {
+            self.list[i + self.imgNum].width = node.width;
+            self.list[i + self.imgNum].height = node.height;
+            document.body.removeChild(node);
+          };
+          document.body.appendChild(node);
+          net.postJSON('/api/user/uploadPic', { img }, function(res) {
             if(res.success) {
               let url = res.data;
               let has;

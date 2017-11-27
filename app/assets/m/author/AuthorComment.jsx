@@ -6,8 +6,8 @@ import util from '../../d/common/util';
 import net from '../../d/common/net';
 import Comment from '../../d/component/comment/Comment.jsx';
 
-let skip = 10;
 let take = 10;
+let skip = take;
 let sortType = 0;
 let myComment = 0;
 let currentCount = 0;
@@ -24,7 +24,7 @@ class AuthorComment extends migi.Component {
       $window.on('scroll', function() {
         self.checkMore($window);
       });
-
+      self.loadEnd = self.props.commentData.Size <= take;
       let comment = self.ref.comment;
       comment.on('chooseSubComment', function(rid, cid, name) {
         self.rootID = rid;
@@ -75,7 +75,7 @@ class AuthorComment extends migi.Component {
           comment.appendData(res.data.data);
         }
         else {
-          comment.message = skip === 0 ? '' : '已经到底了';
+          comment.message = '已经到底了';
           self.loadEnd = true;
         }
         skip += take;

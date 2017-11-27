@@ -187,6 +187,7 @@ class HotPost extends migi.Component {
               if(res.success) {
                 $commentList.find('.type small').text(res.data.Count);
                 comment.appendData(res.data.data);
+                comment.message = '';
                 if(res.data.Size) {
                   if(res.data.Size > take) {
                     $commentList.append(`<a href="/post/${postID}" class="comment-more">查看更多 ٩(ˊᗜˋ*)و</a>`);
