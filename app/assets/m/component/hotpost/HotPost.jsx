@@ -7,7 +7,7 @@
 import net from '../../../d/common/net';
 import util from '../../../d/common/util';
 
-let take = 20;
+let take = 30;
 let skip = take;
 
 class PostList extends migi.Component {
@@ -26,7 +26,7 @@ class PostList extends migi.Component {
     else if(self.props.skip) {
       skip = self.props.skip;
     }
-    if(self.props.data) {
+    if(self.props.data && self.props.data.length) {
       if(self.props.take) {
         if(self.props.skip) {
           skip = self.props.skip;
@@ -42,9 +42,21 @@ class PostList extends migi.Component {
       self.html = html;
       self.on(migi.Event.DOM, function() {
         let $list = $(this.ref.list.element);
-        $list.on('click', '.con a', function(e) {
-          e.stopPropagation();
-          e.stopImmediatePropagation();
+        $list.on('click', '.wrap > .con .snap', function() {
+          $(this).closest('li').addClass('expand');
+        });
+        $list.on('click', '.wrap > .con .shrink', function() {
+          let $li = $(this).closest('li');
+          $li.removeClass('expand');
+          $li[0].scrollIntoView(true);
+        });
+        $list.on('click', '.imgs', function() {
+          $(this).closest('li').addClass('expand');
+        });
+        $list.on('click', '.imgs2', function() {
+          let $li = $(this).closest('li');
+          $li.removeClass('expand');
+          $li[0].scrollIntoView(true);
         });
         $list.on('click', '.favor', function() {
           if(!$CONFIG.isLogin) {
@@ -108,9 +120,6 @@ class PostList extends migi.Component {
             $li.removeClass('loading');
           });
         });
-        $list.on('click', '.con,.imgs', function() {
-          location.href = $(this).closest('li').find('.time').attr('href');
-        });
         $list.on('click', '.comment', function() {
           location.href = $(this).parent().closest('li').find('.time').attr('href');
         });
@@ -141,16 +150,23 @@ class PostList extends migi.Component {
   @bind loading
   @bind loadEnd
   @bind message
+  encode(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
+      .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
+  }
   genItem(item) {
     let len = item.Content.length;
     let id = item.ID;
     let maxLen = 144;
     let imgLen = item.Image_Post.length;
     let html = len > maxLen ? (item.Content.slice(0, maxLen) + '...') : item.Content;
-    html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
-      .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
-    html += `<span class="placeholder"></span><a href="${'/post/' + id}" class="more">查看全部</a>`;
+    html = this.encode(html);
+    if(len > maxLen) {
+      html += '<span class="placeholder"></span><span class="more">查看全文</span>';
+      let full = this.encode(item.Content) + '<span class="placeholder"></span><span class="shrink">收起全文</span>';
+      html = '<p class="snap">' + html + '</p><p class="full">' + full + '</p>';
+    }
     if(item.IsAuthor) {
       return <li class="author">
         <div class="profile fn-clear">
@@ -177,7 +193,7 @@ class PostList extends migi.Component {
               ? <a href={ '/post/' + id } class="t">{ item.Title }</a>
               : ''
           }
-          <p class="con" dangerouslySetInnerHTML={ html }/>
+          <div class="con" dangerouslySetInnerHTML={ html }/>
           {
             item.Image_Post && imgLen
               ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
@@ -201,6 +217,17 @@ class PostList extends migi.Component {
                     })
                 }
               </ul>
+              : ''
+          }
+          {
+            item.Image_Post && imgLen
+              ? <div class="imgs2">
+                {
+                  item.Image_Post.map(function(item, i) {
+                    return <img src={ util.autoSsl(util.img1200__80(item.FileUrl)) } rel={ i }/>;
+                  })
+                }
+              </div>
               : ''
           }
           <b class="arrow"/>
@@ -238,7 +265,7 @@ class PostList extends migi.Component {
             ? <a href={ '/post/' + id } class="t">{ item.Title }</a>
             : ''
         }
-        <p class="con" dangerouslySetInnerHTML={ html }/>
+        <div class="con" dangerouslySetInnerHTML={ html }/>
         {
           item.Image_Post && imgLen
             ? <ul class={ 'imgs fn-clear' + (item.Image_Post.length > 4 ? '' : (' n' + item.Image_Post.length)) }>
@@ -262,6 +289,17 @@ class PostList extends migi.Component {
                   })
               }
             </ul>
+            : ''
+        }
+        {
+          item.Image_Post && imgLen
+            ? <div class="imgs2">
+              {
+                item.Image_Post.map(function(item, i) {
+                  return <img src={ util.autoSsl(util.img1200__80(item.FileUrl)) } rel={ i }/>;
+                })
+              }
+            </div>
             : ''
         }
         <b class="arrow"/>

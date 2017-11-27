@@ -63,7 +63,7 @@
           li{
             display:inline-block;
             margin-left:0.05rem;
-            margin-top:0.02rem;
+            margin-top:0.03rem;
             padding:0 0.1rem;
             box-sizing:border-box;
             line-height:0.22rem;
@@ -140,7 +140,7 @@
             display:inline-block;
             width:0.56rem;
           }
-          .more{
+          .more,.shrink{
             position:absolute;
             right:0;
             bottom:0;
@@ -149,9 +149,13 @@
             color:@secondLinkColor;
             line-height:1.8;
             white-space:nowrap;
+            cursor:pointer;
             &:hover{
               color:@mainHoverColor;
             }
+          }
+          .full{
+            display:none;
           }
         }
         .imgs{
@@ -197,6 +201,14 @@
                 color:@thirdTextColor;
               }
             }
+          }
+        }
+        .imgs2{
+          display:none;
+          img{
+            display:block;
+            margin:0.1rem 0;
+            max-width:100%;
           }
         }
       }
@@ -286,6 +298,14 @@
               background-image:url(../../../d/component/hotpost/del-hover.png);
             }
           }
+        }
+      }
+      &.expand{
+        .wrap .con .snap,.imgs{
+          display:none;
+        }
+        .wrap .con .full,.imgs2{
+          display:block;
         }
       }
     }

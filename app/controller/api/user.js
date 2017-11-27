@@ -176,10 +176,15 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       let file = /^data:image\/(\w+);base64,(.*)$/.exec(body.img);
+      if(!file) {
+        return ctx.body = {
+          success: false,
+        };
+      }
       let img = file[2];
       let suffix = file[1];
 
-      let equalIndex =  img.indexOf('=');
+      let equalIndex = img.indexOf('=');
       if(equalIndex > 0) {
         let temp = img.slice(0, equalIndex);
         let strLen = temp.length;

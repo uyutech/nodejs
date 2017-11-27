@@ -9,7 +9,7 @@ class Dynamics extends migi.Component {
   @bind list = []
   render() {
     return <div class="cp-dynamic">
-      <h4>{ this.props.title }<small>等这个功能上线，就再也不用担心特关是死的啦！>3&lt;</small></h4>
+      <h4>{ this.props.title }<small>{ '等这个功能上线，就再也不用担心特关是死的啦！>3<' }</small></h4>
       <ul class={ this.list.length ? '' : 'fn-hide' } onClick={ { li: this.click } }>
         {
           this.list.map(function(item) {

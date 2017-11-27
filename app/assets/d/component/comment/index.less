@@ -6,10 +6,6 @@
   position:relative;
   .list{
     > li{
-      &.empty{
-        text-align:center;
-        color:#999;
-      }
       &.author{
         > .t > .profile .txt .name{
           color:#EC0;
@@ -385,10 +381,12 @@
       }
     }
   }
-  .message{
-    color:#999;
+  > .message{
+    background:#EDF3F7;
+    color:@mainTextColor;
     font-size:0.14rem;
     text-align:center;
-    line-height:2;
+    line-height:0.3rem;
+    border-radius:0.3rem;
   }
 }

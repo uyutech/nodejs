@@ -2,13 +2,15 @@
  * Created by army8735 on 2017/10/30.
  */
 
+@import '../comment/index';
+
 .cp-hotpost{
   position:relative;
-  .list{
+  > .list{
     > li{
       position:relative;
       margin:0.15rem 0;
-      padding:0.15rem;
+      padding:0.15rem 0.15rem 0;
       border-radius:0.1rem;
       box-shadow:@tagShadow;
       > .profile{
@@ -68,7 +70,7 @@
       }
       > .wrap{
         position:relative;
-        margin:0.15rem 0;
+        margin:0.15rem 0 0.1rem;
         padding:0.1rem 0.15rem;
         background:#FFF;
         border:1px solid #EDF3F7;
@@ -126,7 +128,7 @@
             display:inline-block;
             width:0.56rem;
           }
-          .more{
+          .more,.shrink{
             position:absolute;
             right:0;
             bottom:0;
@@ -135,9 +137,13 @@
             color:@secondLinkColor;
             line-height:1.8;
             white-space:nowrap;
+            cursor:pointer;
             &:hover{
               color:@mainHoverColor;
             }
+          }
+          .full{
+            display:none;
           }
         }
         .imgs{
@@ -186,8 +192,18 @@
             }
           }
         }
+        .imgs2{
+          display:none;
+          img{
+            display:block;
+            margin:0.1rem 0;
+            max-width:100%;
+            cursor:url(http://zhuanquan.xin/s.cur), auto;
+          }
+        }
       }
       .btn{
+        padding-bottom:0.1rem;
         li{
           position:relative;
           display:inline-block;
@@ -263,6 +279,14 @@
             &:hover b{
               background-image:url(comment-hover.png);
             }
+            &.on{
+              b{
+                background-image:url(comment-on.png);
+              }
+              &:hover b{
+                background-image:url(comment-on-hover.png);
+              }
+            }
           }
         }
       }
@@ -270,7 +294,7 @@
         position:absolute;
         top:0.15rem;
         right:0.15rem;
-        display:block;
+        display:none;
         width:0.24rem;
         height:0.24rem;
         background:url(del.png) no-repeat center;
@@ -280,9 +304,123 @@
           background-image:url(del-hover.png);
         }
       }
+      &:hover{
+        .del{
+          display:block;
+        }
+      }
+      > .comment-list{
+        padding-bottom:0.1rem;
+        > .fn{
+          position:relative;
+          margin:0.1rem -0.15rem;
+          padding-bottom:0.05rem;
+          height:0.3rem;
+          line-height:0.3rem;
+          background:@mainColor;
+          font-size:0.13rem;
+          color:#B9B9B9;
+          .type{
+            position:absolute;
+            top:0;
+            left:0;
+            padding:0 0.1rem 0.05rem 0.15rem;
+            height:0.3rem;
+            border-radius:0.18rem;
+            li{
+              position:relative;
+              margin-right:0.2rem;
+              float:left;
+              height:100%;
+              line-height:0.3rem;
+              cursor:pointer;
+              color:@thirdTextColor;
+              &:hover{
+                color:@mainHoverColor;
+              }
+              &:last-child{
+                margin:0;
+              }
+              &.cur{
+                color:@mainTextColor;
+                cursor:default;
+                &:after{
+                  position:absolute;
+                  left:20%;
+                  right:20%;
+                  bottom:0.02rem;
+                  display:block;
+                  height:0.02rem;
+                  background:#58A2CE;
+                  border-radius:0.02rem;
+                  content:' ';
+                }
+              }
+              small{
+                padding-left:0.05rem;
+                color:#58A2CE;
+                font-size:0.12rem;
+              }
+            }
+          }
+          .type2{
+            position:absolute;
+            top:0.05rem;
+            right:0.1rem;
+            border-radius:0.24rem;
+            color:@thirdTextColor;
+            background:#B1C0C9;
+            &:before{
+              position:absolute;
+              left:0;
+              top:0;
+              width:0.44rem;
+              height:100%;
+              background:#F1F6F9;
+              border-radius:0.24rem;
+              content:' ';
+              transition:transform 0.2s;
+            }
+            &.alt:before{
+              transform:translateX(100%);
+            }
+            li{
+              position:relative;
+              float:left;
+              padding:0 0.1rem;
+              width:0.24rem;
+              height:0.24rem;
+              line-height:0.24rem;
+              border-radius:0.24rem;
+              font-size:0.12rem;
+              white-space:nowrap;
+              overflow:hidden;
+              &.cur{
+                color:@mainTextColor;
+                cursor:pointer;
+              }
+            }
+          }
+        }
+        > .comment-more{
+          display:block;
+          margin:0.1rem -0.15rem -0.1rem;
+          border-top:1px solid @borderColor;
+          text-align:center;
+          line-height:0.3rem;
+        }
+      }
+      &.expand{
+        .wrap .con .snap,.imgs{
+          display:none;
+        }
+        .wrap .con .full,.imgs2{
+          display:block;
+        }
+      }
     }
   }
-  .empty,.message{
+  > .message{
     padding:0.1rem 0;
     text-align:center;
     color:@fourthTextColor;

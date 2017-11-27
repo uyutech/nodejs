@@ -26,6 +26,7 @@ class SubPost extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    self.hidden = self.props.hidden;
     self.value = self.props.value || '';
     self.to = self.props.to ? self.props.to.slice(0) : undefined;
     self.invalid = self.value.trim().length < 3;
@@ -103,6 +104,7 @@ class SubPost extends migi.Component {
       });
     });
   }
+  @bind hidden
   @bind placeholder
   @bind subText
   @bind tipText
@@ -341,7 +343,7 @@ class SubPost extends migi.Component {
     }
   }
   render() {
-    return <div class={ 'mod-sub' + (this.expand ? ' expand' : '') }>
+    return <div class={ 'mod-sub' + (this.expand ? ' expand' : '') + (!this.hidden ? '' : ' fn-hide') }>
       <div class="c">
         <form class={ this.to ? ' to' : '' } ref="form" onSubmit={ this.submit }>
           <div class="wrap">

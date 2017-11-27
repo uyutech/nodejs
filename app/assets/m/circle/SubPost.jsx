@@ -31,16 +31,16 @@ class SubPost extends migi.Component {
     if(self.to && self.to.length && self.props.circleID !== undefined) {
       let has = false;
       self.to.forEach(function(item) {
-        if(item.TagID.toString() === self.props.circleID.toString()) {
+        if(item.TagID.toString() === (self.props.circleID || '').toString()) {
           has = true;
         }
       });
       if(has) {
         migi.sort(self.to, function(a, b) {
-          if(a.TagID.toString() === self.props.circleID.toString()) {
+          if(a.TagID.toString() === (self.props.circleID || '').toString()) {
             return false;
           }
-          else if(b.TagID.toString() === self.props.circleID.toString()) {
+          else if(b.TagID.toString() === (self.props.circleID || '').toString()) {
             return true;
           }
         });
@@ -109,10 +109,7 @@ class SubPost extends migi.Component {
     localStorage[key2] = content;
   }
   focus() {
-    this.ref.form.element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    this.ref.form.element.scrollIntoView(true);
   }
   submit(e) {
     e.preventDefault();
@@ -329,7 +326,7 @@ class SubPost extends migi.Component {
           <ul>
             {
               (this.to || []).map(function(item) {
-                return <li rel={ item.TagID } class={ item.TagID.toString() === this.props.circleID.toString() ? 'on' : '' }>{ item.TagName }圈</li>;
+                return <li rel={ item.TagID } class={ item.TagID.toString() === (this.props.circleID || '').toString() ? 'on' : '' }>{ item.TagName }圈</li>;
               }.bind(this))
             }
           </ul>

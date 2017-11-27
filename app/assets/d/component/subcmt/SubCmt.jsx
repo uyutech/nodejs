@@ -7,21 +7,26 @@
 class SubCmt extends migi.Component {
   constructor(...data) {
     super(...data);
-    this.value = this.props.value || '';
-    this.invalid = this.value.trim().length < 3;
-    this.maxlength = this.props.maxlength;
-    this.subText = this.props.subText;
-    this.tipText = this.props.tipText;
-    this.placeholder = this.props.placeholder;
-    this.originTo = this.props.originTo;
-    this.readOnly = this.props.readOnly;
+    let self = this;
+    self.hidden = self.props.hidden;
+    self.value = self.props.value || '';
+    self.invalid = self.value.trim().length < 3;
+    self.maxlength = self.props.maxlength;
+    self.subText = self.props.subText;
+    self.tipText = self.props.tipText;
+    self.placeholder = self.props.placeholder;
+    self.toPlaceholder = self.props.toPlaceholder;
+    self.originTo = self.props.originTo;
+    self.readOnly = self.props.readOnly;
   }
+  @bind hidden
   @bind maxlength
   @bind placeholder
   @bind subText
   @bind tipText
   @bind value = ''
   @bind to
+  @bind toPlaceholder
   @bind originTo
   @bind invalid = true
   @bind readOnly
@@ -54,10 +59,10 @@ class SubCmt extends migi.Component {
     }
   }
   render() {
-    return <div class="cp-subcmt">
+    return <div class={ 'cp-subcmt' + (!this.hidden ? '' : ' fn-hide') }>
       <form class={ 'fn-clear' + (this.to || this.originTo ? ' to' : '') } ref="form" onSubmit={ this.submit } onClick={ this.click }>
         <label>TO: { this.to || this.originTo }</label>
-        <input type="text" class="text" ref="input" placeholder={ this.to ? '回复' + this.to + '的评论' : this.placeholder }
+        <input type="text" class="text" ref="input" placeholder={ this.to ? ('回复' + this.to + (this.toPlaceholder || '的评论')) : this.placeholder }
                onInput={ this.input } onFocus={ this.onFocus } maxlength={ this.maxlength || 256 }
                value={ this.value } readonly={ this.readOnly}/>
         <input type="submit"

@@ -375,8 +375,8 @@ class Post extends migi.Component {
                 subText="回复"
                 originTo={ postData.SendUserNickName }
                 placeholder="交流一下吧~"/>
-        <ImageView ref="imageView" dataList={ postData.Image_Post } isLike={ this.isLike }/>
       </div>
+      <ImageView ref="imageView" dataList={ postData.Image_Post } isLike={ this.isLike }/>
     </div>;
   }
 }

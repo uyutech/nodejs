@@ -24,7 +24,7 @@ module.exports = app => {
           uid,
           TagID: circleID,
           Skip: 0,
-          Take: 20,
+          Take: 30,
         }),
         hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
           uid,

@@ -76,7 +76,7 @@ let code2Data = {
   '151': {
     name: '配音',
     display: '配音',
-    css: 'yue',
+    css: 'cv',
   },
   '211': {
     name: '视频',
@@ -146,7 +146,7 @@ let code2Data = {
   '341': {
     name: '漫画',
     display: '漫画',
-    css: 'she',
+    css: 'tu',
   },
   '351': {
     name: '书法',

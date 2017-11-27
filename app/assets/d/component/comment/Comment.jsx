@@ -25,7 +25,10 @@ class Comment extends migi.Component {
       html += self.genComment(item);
     });
     self.html = html;
-    if(!html) {
+    if(self.props.message !== undefined) {
+      self.message = self.props.message;
+    }
+    else if(!html) {
       self.message = '暂无评论';
     }
 
