@@ -159,9 +159,9 @@ class Find extends migi.Component {
       </div>
       <div class="hot2 fn-clear" ref="hot2">
         <div class="post">
-          <Page ref="page" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>
+          <Page ref="page" total={ Math.ceil(this.props.hotPostList.Size / take) }/>
           <HotPost ref="hotPost" data={ this.props.hotPostList.data }/>
-          <Page ref="page2" total={ Math.ceil(this.props.hotPostList.Size / 10) }/>
+          <Page ref="page2" total={ Math.ceil(this.props.hotPostList.Size / take) }/>
         </div>
         <HotPlayList ref="hostPlayList" dataList={ this.props.hotPlayList.data }/>
       </div>
