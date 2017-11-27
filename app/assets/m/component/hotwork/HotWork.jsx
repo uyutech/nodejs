@@ -47,7 +47,7 @@ class HotWork extends migi.Component {
                   })
                 }
               </ul>
-              : <div class="empty"/>
+              : <div class="empty">暂无数据</div>
           }
         </div>
       </div>
