@@ -121,7 +121,8 @@ class PostList extends migi.Component {
           });
         });
         $list.on('click', '.comment', function() {
-          location.href = $(this).parent().closest('li').find('.time').attr('href');
+          let id = $(this).attr('rel');
+          location.href = '/post/' + id + '#name';
         });
         $list.on('click', '.del', function() {
           if(window.confirm('确认删除吗？')) {

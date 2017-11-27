@@ -10,6 +10,8 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let userInfo = {};
       let follows = [];
+      let userFollows = [];
+      let userFans = [];
       let favors = [];
       let myPost = {};
       let bonusPoint = {};
@@ -21,6 +23,16 @@ module.exports = app => {
         }),
         follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
           uid,
+        }),
+        userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
+          uid,
+          Skip: 0,
+          Take: 10,
+        }),
+        userFans: ctx.helper.postServiceJSON('api/users/User_FansList', {
+          uid,
+          Skip: 0,
+          Take: 10,
         }),
         favors: ctx.helper.postServiceJSON('api/users/GetLikeWorksList', {
           uid,
@@ -47,6 +59,12 @@ module.exports = app => {
       if(res.follows.data.success) {
         follows = res.follows.data.data;
       }
+      if(res.userFollows.data.success) {
+        userFollows = res.userFollows.data.data;
+      }
+      if(res.userFans.data.success) {
+        userFans = res.userFans.data.data;
+      }
       if(res.favors.data.success) {
         favors = res.favors.data.data;
       }
@@ -72,6 +90,8 @@ module.exports = app => {
       yield ctx.render('dmy', {
         userInfo,
         follows,
+        userFollows,
+        userFans,
         favors,
         myPost,
         bonusPoint,

@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2017/8/9.
+ * Created by army8735 on 2017/11/27.
  */
 
 'use strict';
@@ -23,7 +23,7 @@ class HotAuthor extends migi.Component {
     $c.css('width', $ul.width() + 1);
   }
   render() {
-    return <div class="cp-hotauthor">
+    return <div class="cp-hotuser">
       <div class="list" ref="list">
         <div class="c">
           {
@@ -32,15 +32,13 @@ class HotAuthor extends migi.Component {
                 {
                   this.dataList.map(function(item) {
                     return <li>
-                      <a href={ `/author/${item.AuthorID}` } class="pic">
-                        <img src={ util.autoSsl(util.img120_120_80(item.Head_url || '//zhuanquan.xin/img/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+                      <a href={ `/user/${item.UserID}` } class="pic">
+                        <img src={ util.autoSsl(util.img120_120_80(item.User_HeadUrl || '//zhuanquan.xin/img/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
                       </a>
-                      <a href={ `/author/${item.AuthorID}` } class="txt">
-                        <span class="name">{ item.AuthorName }</span>
-                        <span class="fans">{ item.FansNumber || 0 }</span>
-                        <span class="comment">{ item.Popular || 0 }</span>
+                      <a href={ `/user/${item.UserID}` } class="txt">
+                        <span class="name">{ item.UserNickName }</span>
                       </a>
-                      <div class="info">合作{ item.CooperationTimes }次</div>
+                      <div class="info">{ item.followMe ? '互相关注' : '' }</div>
                     </li>;
                   })
                 }

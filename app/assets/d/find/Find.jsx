@@ -155,7 +155,11 @@ class Find extends migi.Component {
         </h4>
         <HotWork ref="hotWork" title="热门作品" dataList={ this.props.hotWorkList }/>
         <HotMusicAlbum ref="hotMusicAlbum" title="热门专辑" dataList={ this.props.hotMusicAlbumList }/>
-        <HotAuthor ref="hotAuthor" title="入驻作者" dataList={ this.props.hotAuthorList }/>
+        <h4>
+          <span>入驻作者</span>
+          <small>{ '我们会邀请更多作者入驻！也诚邀你在转圈发布作品、交流创作>3<' }</small>
+        </h4>
+        <HotAuthor ref="hotAuthor" dataList={ this.props.hotAuthorList }/>
       </div>
       <div class="hot2 fn-clear" ref="hot2">
         <div class="post">

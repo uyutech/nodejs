@@ -202,7 +202,7 @@ class Profile extends migi.Component {
         <b class="edit" ref="edit" onClick={ this.click }/>
         <br/>
         <label>签名：</label>
-        <p ref="sign" class={ this.sign ? 'sign' : 'sign empty' }>{ this.sign || '暂无签名' }</p>
+        <p ref="sign" class={ this.sign ? 'sign' : 'sign empty' }>{ this.sign || '大家一起来转圈~' }</p>
         <input ref="input2" type="text" class="input2 fn-hide" value="" onBlur={ this.blur2 } maxlength="16" placeholder="请输入签名"/>
         <b class="edit edit2" ref="edit2" onClick={ this.click2 }/>
       </div>

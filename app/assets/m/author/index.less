@@ -197,6 +197,23 @@
     }
   }
   > .home{
+    h4{
+      position:relative;
+      margin-top:0.1rem;
+      margin-left:0.1rem;
+      padding-left:0.05rem;
+      font-size:0.12rem;
+      &:before{
+        position:absolute;
+        left:0;
+        top:0.02rem;
+        bottom:0.02rem;
+        width:0.02rem;
+        background:@secondColor;
+        content:' ';
+        border-radius:0.05rem;
+      }
+    }
     > .cp-hotwork{
       margin-top:0.1rem;
     }
@@ -523,10 +540,5 @@
   pre{
     margin:0;
     padding:0;
-  }
-  .cp-hotauthor .list .c ul li .txt{
-    .comment,.fans{
-      display:none;
-    }
   }
 }

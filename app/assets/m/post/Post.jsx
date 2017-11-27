@@ -307,6 +307,7 @@ class Post extends migi.Component {
         </ul>
       </div>
       <div class="box">
+        <a name="name"/>
         <h4>回复</h4>
         <div class="fn">
           <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>

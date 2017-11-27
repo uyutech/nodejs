@@ -10,4 +10,5 @@ import My from './My.jsx';
 
 let my = migi.preExist(<My userInfo={ $CONFIG.userInfo } follows={ $CONFIG.follows } favors={ $CONFIG.favors }
                            myPost={ $CONFIG.myPost } updateNickNameTimeDiff={ $CONFIG.updateNickNameTimeDiff }
-                           updateHeadTimeDiff={ $CONFIG.updateHeadTimeDiff } bonusPoint={ $CONFIG.bonusPoint }/>);
+                           updateHeadTimeDiff={ $CONFIG.updateHeadTimeDiff } bonusPoint={ $CONFIG.bonusPoint }
+                           userFollows={ $CONFIG.userFollows } userFans={ $CONFIG.userFans }/>);

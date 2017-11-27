@@ -36,7 +36,8 @@ class Find extends migi.Component {
       <HotCircle ref="HotCircle" title="推荐圈子" dataList={ this.props.hotCircleList }/>
       <HotWork ref="hotWork" title="热门作品" dataList={ this.props.hotWorkList }/>
       <HotMusicAlbum ref="hotMusicAlbum" title="热门专辑" dataList={ this.props.hotMusicAlbumList }/>
-      <HotAuthor ref="hotAuthor" title="入驻作者" dataList={ this.props.hotAuthorList }/>
+      <h4>入驻作者</h4>
+      <HotAuthor ref="hotAuthor" dataList={ this.props.hotAuthorList }/>
       <div class="post">
         <h4>转圈</h4>
         <HotPost ref="hotPost" skip={ 10 } url={ '/api/find/hotPostList' }
