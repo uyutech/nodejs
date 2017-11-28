@@ -193,7 +193,7 @@ class Post extends migi.Component {
       if(res.success) {
         let data = res.data;
         self.isFavor = data.State === 'favorWork';
-        self.favorCount = data.FavorCount;
+        self.favorCount = data.FavorCount || '收藏';
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);
@@ -223,7 +223,7 @@ class Post extends migi.Component {
       if(res.success) {
         let data = res.data;
         self.isLike = self.ref.imageView.isLike = data.ISLike;
-        self.likeCount = data.LikeCount;
+        self.likeCount = data.LikeCount || '点赞';
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);
@@ -303,10 +303,10 @@ class Post extends migi.Component {
         }
         <b class="arrow"/>
         <ul class="btn">
-          <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }><b/><span>{ this.favorCount }</span></li>
           <li class="share" onClick={ this.clickShare }><b/><span>分享</span></li>
-          <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }><b/><span>{ this.likeCount }</span></li>
-          <li class="comment"><b/><span>{ postData.CommentCount }</span></li>
+          <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }><b/><span>{ this.favorCount || '收藏' }</span></li>
+          <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }><b/><span>{ this.likeCount || '点赞' }</span></li>
+          <li class="comment"><b/><span>{ postData.CommentCount || '评论' }</span></li>
           { postData.IsOwn ? <li class="del" onClick={ this.clickDel }><b/></li> : '' }
         </ul>
       </div>

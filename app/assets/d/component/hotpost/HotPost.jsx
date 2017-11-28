@@ -92,7 +92,7 @@ class HotPost extends migi.Component {
               else {
                 $li.removeClass('has');
               }
-              $li.find('span').text(data.FavorCount);
+              $li.find('span').text(data.FavorCount || '收藏');
             }
             else {
               alert(res.message || util.ERROR_MESSAGE);
@@ -123,7 +123,7 @@ class HotPost extends migi.Component {
               else {
                 $li.removeClass('has');
               }
-              $li.find('span').text(data.LikeCount);
+              $li.find('span').text(data.LikeCount || '点赞');
             }
             else {
               alert(res.message || util.ERROR_MESSAGE);
@@ -337,10 +337,10 @@ class HotPost extends migi.Component {
           <b class="arrow"/>
         </div>
         <ul class="btn fn-clear">
-          <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }><b/><span>{ item.FavorCount }</span></li>
           <li class="share" rel={ id }><b/><span>分享</span></li>
-          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount }</span></li>
-          <li class="comment" rel={ id }><b/><span>{ item.CommentCount }</span></li>
+          <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }><b/><span>{ item.FavorCount || '收藏' }</span></li>
+          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount || '点赞' }</span></li>
+          <li class="comment" rel={ id }><b/><span>{ item.CommentCount || '评论' }</span></li>
         </ul>
         { item.IsOwn ? <b class="del" rel={ id }/> : '' }
       </li>;
@@ -416,10 +416,10 @@ class HotPost extends migi.Component {
         <b class="arrow"/>
       </div>
       <ul class="btn fn-clear">
-        <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }><b/><span>{ item.FavorCount }</span></li>
         <li class="share" rel={ id }><b/><span>分享</span></li>
-        <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount }</span></li>
-        <li class="comment" rel={ id }><b/><span>{ item.CommentCount }</span></li>
+        <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }><b/><span>{ item.FavorCount || '收藏' }</span></li>
+        <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount || '点赞' }</span></li>
+        <li class="comment" rel={ id }><b/><span>{ item.CommentCount || '评论' }</span></li>
       </ul>
       { item.IsOwn ? <b class="del" rel={ id }/> : '' }
     </li>;
