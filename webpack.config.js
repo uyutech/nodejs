@@ -8,7 +8,6 @@ module.exports = {
     mfind: './app/assets/m/find/index.jsx',
     mworks: './app/assets/m/works/index.jsx',
     mauthor: './app/assets/m/author/index.jsx',
-    msearch: './app/assets/m/search/index.jsx',
     mmy: './app/assets/m/my/index.jsx',
     mmy_message: './app/assets/m/my/message/index.jsx',
     mlogin: './app/assets/m/login/index.jsx',
@@ -21,7 +20,6 @@ module.exports = {
     dfind: './app/assets/d/find/index.jsx',
     dworks: './app/assets/d/works/index.jsx',
     dauthor: './app/assets/d/author/index.jsx',
-    dsearch: './app/assets/d/search/index.jsx',
     dmy: './app/assets/d/my/index.jsx',
     dmy_message: './app/assets/d/my/message/index.jsx',
     dlogin: './app/assets/d/login/index.jsx',
@@ -63,7 +61,7 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: extractLESS.extract([ 'css-loader', 'autoprefixer-loader', 'less-loader' ])
+        use: extractLESS.extract(['css-loader', 'autoprefixer-loader', 'less-loader'])
       },
       {
         test: /(\.jpg)|(\.jpeg)|(\.gif)|(\.png)$/,

@@ -16,7 +16,7 @@ let util = {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
-    return url ? url.replace(/\.(\w+)-\d+_\d*/, '.$1') : url;
+    return url ? url.replace(/\.(\w+)-\d*_\d*_\d*/, '.$1') : url;
   },
   img1600__80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {

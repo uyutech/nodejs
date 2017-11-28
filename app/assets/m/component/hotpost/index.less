@@ -269,6 +269,14 @@
               }
             }
           }
+          &.share{
+            b{
+              background-image:url(../../../d/works/share.png);
+            }
+            &:hover b{
+              background-image:url(../../../d/works/share-hover.png);
+            }
+          }
           &.like{
             b{
               background-image:url(../../../d/works/like.png);
@@ -294,7 +302,11 @@
             }
           }
           &.del{
+            flex:none;
+            width:0.4rem;
+            opacity:0.5;
             b{
+              margin:0;
               background-image:url(../../../d/component/hotpost/del.png);
             }
             &:hover b{

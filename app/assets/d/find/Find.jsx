@@ -14,6 +14,7 @@ import HotPlayList from '../component/hotplaylist/HotPlayList.jsx';
 import Page from '../component/page/Page.jsx';
 import SubPost from '../component/subpost/SubPost.jsx';
 import SubCmt from '../component/subcmt/SubCmt.jsx';
+import ImageView from './ImageView.jsx';
 
 let loading;
 let take = 30;
@@ -175,6 +176,7 @@ class Find extends migi.Component {
               hidden={ true }
               subText="回复"
               placeholder="交流一下吧~"/>
+      <ImageView ref="imageView"/>
     </div>;
   }
 }

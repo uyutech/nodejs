@@ -143,11 +143,14 @@
         }
       }
       .btn{
+        margin-top:0.1rem;
+        padding-top:0.05rem;
+        border-top:1px solid @borderColor;
         li{
           position:relative;
           display:inline-block;
           box-sizing:border-box;
-          width:33%;
+          width:25%;
           height:0.24rem;
           cursor:pointer;
           text-align:center;
@@ -193,6 +196,14 @@
               &:hover b{
                 background-image:url(../works/favored-hover.png);
               }
+            }
+          }
+          &.share{
+            b{
+              background-image:url(../works/share.png);
+            }
+            &:hover b{
+              background-image:url(../works/share-hover.png);
             }
           }
           &.like{

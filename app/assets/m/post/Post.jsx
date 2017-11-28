@@ -204,6 +204,9 @@ class Post extends migi.Component {
       $li.removeClass('loading');
     });
   }
+  clickShare() {
+    migi.eventBus.emit('SHARE', location.origin + '/post/' + this.props.postData.ID);
+  }
   clickLike() {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
@@ -301,6 +304,7 @@ class Post extends migi.Component {
         <b class="arrow"/>
         <ul class="btn">
           <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }><b/><span>{ this.favorCount }</span></li>
+          <li class="share" onClick={ this.clickShare }><b/><span>分享</span></li>
           <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }><b/><span>{ this.likeCount }</span></li>
           <li class="comment"><b/><span>{ postData.CommentCount }</span></li>
           { postData.IsOwn ? <li class="del" onClick={ this.clickDel }><b/></li> : '' }

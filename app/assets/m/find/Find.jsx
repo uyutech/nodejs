@@ -12,6 +12,7 @@ import HotMusicAlbum from '../component/hotmusicalbum/HotMusicAlbum.jsx';
 import HotCircle from '../component/hotcircle/HotCircle.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
+import ImageView from './ImageView.jsx';
 
 class Find extends migi.Component {
   constructor(...data) {
@@ -48,6 +49,7 @@ class Find extends migi.Component {
               subText="发送"
               readOnly={ true }
               placeholder={ '小小的提示：现在可以把一个圈画在好几个圈子里哦！' }/>
+      <ImageView ref="imageView"/>
     </div>;
   }
 }

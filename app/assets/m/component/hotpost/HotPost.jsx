@@ -53,10 +53,14 @@ class PostList extends migi.Component {
         $list.on('click', '.imgs', function() {
           $(this).closest('li').addClass('expand');
         });
-        $list.on('click', '.imgs2', function() {
-          let $li = $(this).closest('li');
-          $li.removeClass('expand');
-          $li[0].scrollIntoView(true);
+        $list.on('click', '.imgs2 img', function() {
+          let $this = $(this);
+          let index = $this.attr('rel');
+          let urls = [];
+          $this.parent().find('img').each(function(i, img) {
+            urls.push($(img).attr('src'));
+          });
+          migi.eventBus.emit('choosePic', urls, index);
         });
         $list.on('click', '.favor', function() {
           if(!$CONFIG.isLogin) {
@@ -92,6 +96,10 @@ class PostList extends migi.Component {
             alert(res.message || util.ERROR_MESSAGE);
             $li.removeClass('loading');
           });
+        });
+        $list.on('click', '.share', function() {
+          let postID = $(this).attr('rel');
+          migi.eventBus.emit('SHARE', location.origin + '/post/' + postID);
         });
         $list.on('click', '.like', function() {
           let $li = $(this);
@@ -242,6 +250,7 @@ class PostList extends migi.Component {
           <b class="arrow"/>
           <ul class="btn">
             <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }><b/><span>{ item.FavorCount }</span></li>
+            <li class="share" rel={ id }><b/><span>分享</span></li>
             <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount }</span></li>
             <li class="comment" rel={ id }><b/><span>{ item.CommentCount }</span></li>
             { item.IsOwn ? <li class="del" rel={ id }><b/></li> : '' }
@@ -322,6 +331,7 @@ class PostList extends migi.Component {
         <b class="arrow"/>
         <ul class="btn">
           <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }><b/><span>{ item.FavorCount }</span></li>
+          <li class="share" rel={ id }><b/><span>分享</span></li>
           <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount }</span></li>
           <li class="comment" rel={ id }><b/><span>{ item.CommentCount }</span></li>
           { item.IsOwn ? <li class="del" rel={ id }><b/></li> : '' }
