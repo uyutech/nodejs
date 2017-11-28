@@ -40,7 +40,7 @@ class Find extends migi.Component {
       <HotAuthor ref="hotAuthor" dataList={ this.props.hotAuthorList }/>
       <div class="post">
         <h4>转圈</h4>
-        <HotPost ref="hotPost" skip={ 10 } url={ '/api/find/hotPostList' }
+        <HotPost ref="hotPost" url={ '/api/find/hotPostList' }
                  data={ this.props.hotPostList }/>
       </div>
       <SubCmt ref="subCmt"
