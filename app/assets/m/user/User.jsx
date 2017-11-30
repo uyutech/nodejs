@@ -42,7 +42,7 @@ class User extends migi.Component {
     }
     loading = true;
     skip = (i - 1) * take;
-    net.postJSON('/api/my/postList', { userID: $CONFIG.userInfo.UID, skip, take }, function(res) {
+    net.postJSON('/api/user/postList', { userID: $CONFIG.userInfo.UID, skip, take }, function(res) {
       if(res.success) {
         self.ref.hotPost.setData(res.data.data);
       }

@@ -9,6 +9,8 @@ import util from '../common/util';
 import Profile from './Profile.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
 import Page from '../component/page/Page.jsx';
+import SubCmt from '../component/subcmt/SubCmt.jsx';
+import ImageView from '../find/ImageView.jsx';
 
 let loading;
 let take = 10;
