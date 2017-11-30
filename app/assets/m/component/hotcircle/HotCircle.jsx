@@ -34,15 +34,14 @@ class HotCircle extends migi.Component {
               ? <ul>
                 {
                   this.dataList.map(function(item) {
-                    let n = item.Popular ? (item.Popular > 999 ? '999+' : item.Popular) : 0;
                     return <li>
                       <a href={ `/circle/${item.TagID}` } class="pic">
                         <img src={ util.autoSsl(util.img288_288_80(item.TagCover)) || '//zhuanquan.xin/img/blank.png' }/>
                       </a>
                       <a href={ `/circle/${item.TagID}` } class="txt">
                         <span class="name">{ item.TagName }</span>
-                        <span class="fans">成员 { item.FansNumber || 0 }</span>
-                        <span class="comment">画圈 { n }</span>
+                        <span class="fans">成员 { util.abbrNum(item.FansNumber) }</span>
+                        <span class="comment">画圈 { util.abbrNum(item.Popular) }</span>
                       </a>
                     </li>;
                   })

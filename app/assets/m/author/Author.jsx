@@ -18,20 +18,28 @@ class Author extends migi.Component {
       let comment = authorComment.ref.comment;
       let subCmt = self.ref.subCmt;
       comment.on('chooseSubComment', function(rid, cid, name, n) {
-        // subCmt.to = name;
-        // subCmt.focus();
+        subCmt.to = name;
+        self.rid = rid;
+        self.cid = cid;
         if(!n || n === '0') {
           location.href = '/subComment?type=2&id=' + self.props.authorID + '&cid=' + cid + '&rid=' + rid;
         }
       });
       comment.on('closeSubComment', function() {
-        // subCmt.to = '';
+        subCmt.to = '';
       });
       subCmt.on('focus', function() {
-        location.href = '/subComment?type=2&id=' + self.props.authorID;
+        if(subCmt.to) {
+          location.href = '/subComment?type=2&id=' + self.props.authorID + '&cid=' + self.cid + '&rid=' + self.rid;
+        }
+        else {
+          location.href = '/subComment?type=2&id=' + self.props.authorID;
+        }
       });
     });
   }
+  @bind rid
+  @bind cid
   clickType(e, vd ,tvd) {
     let $li = $(tvd.element);
     if($li.hasClass('cur')) {

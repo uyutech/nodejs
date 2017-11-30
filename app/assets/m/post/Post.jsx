@@ -35,21 +35,23 @@ class Post extends migi.Component {
       let subCmt = self.ref.subCmt;
       let comment = self.ref.comment;
       comment.on('chooseSubComment', function(rid, cid, name, n) {
-        // self.rootID = rid;
-        // self.parentID = cid;
-        // subCmt.to = name;
-        // subCmt.focus();
+        subCmt.to = name;
+        self.rid = rid;
+        self.cid = cid;
         if(!n || n === '0') {
           location.href = '/subComment?type=1&id=' + self.props.postData.ID + '&cid=' + cid + '&rid=' + rid;
         }
       });
       comment.on('closeSubComment', function() {
-        // self.rootID = -1;
-        // self.parentID = -1;
-        // subCmt.to = null;
+        subCmt.to = '';
       });
       subCmt.on('focus', function() {
-        location.href = '/subComment?type=1&id=' + self.props.postData.ID;
+        if(subCmt.to) {
+          location.href = '/subComment?type=1&id=' + self.props.postData.ID + '&cid=' + self.cid + '&rid=' + self.rid;
+        }
+        else {
+          location.href = '/subComment?type=1&id=' + self.props.postData.ID;
+        }
       });
 
       let $root = $(self.element);
@@ -71,6 +73,8 @@ class Post extends migi.Component {
   @bind likeCount
   @bind isFavor
   @bind favorCount
+  @bind rid
+  @bind cid
   checkMore($window) {
     let self = this;
     let WIN_HEIGHT = $window.height();

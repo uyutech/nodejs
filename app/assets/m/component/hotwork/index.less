@@ -32,7 +32,7 @@
             background:url(works_bg.png) no-repeat center;
             background-size:contain;
             border-radius:0.05rem;
-            color:#fff;
+            color:#FFF;
             overflow:hidden;
             &:before{
               position:absolute;
@@ -55,11 +55,14 @@
               top:0.05rem;
               right:0.05rem;
               display:block;
-              padding:0 0.1rem;
-              line-height:0.24rem;
-              background:@mainColor;
-              border-radius:0.24rem;
-              box-shadow:@picShadow;
+              padding:0 0.05rem;
+              line-height:0.14rem;
+              //background:rgba(0,0,0,0.1);
+              border:1px solid #FFF;
+              border-radius:0.14rem;
+              box-shadow:inset @picShadow, @picShadow;
+              font-size:0.11rem;
+              text-shadow:@picHoverShadow;
             }
             .num{
               position:absolute;

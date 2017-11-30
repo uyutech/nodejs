@@ -44,21 +44,23 @@ class Works extends migi.Component {
         });
       }
       comment.on('chooseSubComment', function(rid, cid, name, n) {
-        // self.rootID = rid;
-        // self.parentID = cid;
-        // subCmt.to = name;
-        // subCmt.focus();
+        subCmt.to = name;
+        self.rid = rid;
+        self.cid = cid;
         if(!n || n === '0') {
           location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID + '&cid=' + cid + '&rid=' + rid;
         }
       });
       comment.on('closeSubComment', function() {
-        // self.rootID = -1;
-        // self.parentID = -1;
-        // subCmt.to = '';
+        subCmt.to = '';
       });
       subCmt.on('focus', function() {
-        location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID;
+        if(subCmt.to) {
+          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID + '&cid=' + self.cid + '&rid=' + self.rid;
+        }
+        else {
+          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID;
+        }
       });
     });
   }
@@ -68,6 +70,8 @@ class Works extends migi.Component {
   @bind rootID = -1
   @bind parentID = -1
   @bind barrageTime = 0
+  @bind rid
+  @bind cid
   setWorks(works) {
     let self = this;
     let workList = [];

@@ -2,6 +2,8 @@
  * Created by army on 2017/5/20.
  */
 
+import BigNumber from 'bignumber.js';
+
 let util = {
   goto: function(url) {
     location.href = url;
@@ -237,7 +239,6 @@ let util = {
   decode: function(str) {
     return str.replace(/&lt;/g, '<').replace(/&amp;/g, '&');
   },
-  formatPost: function(str) {},
   formatTime: function(time) {
     if(!time) {
       return '00:00';
@@ -286,6 +287,24 @@ let util = {
       return Math.floor(diff / (1000 * 60)) + '分钟前';
     }
     return '刚刚';
+  },
+  abbrNum: function(n, fix) {
+    if(!n) {
+      return 0;
+    }
+    if(n >= 10000) {
+      n = new BigNumber(n).div(10000).toFixed(fix || 2);
+      n = n.replace(/(\.[1-9]*)0+$/, '$1');
+      n = n.replace(/\.0$/, '');
+      n += 'w';
+    }
+    if(n >= 1000) {
+      n = new BigNumber(n).div(1000).toFixed(fix || 2);
+      n = n.replace(/(\.[1-9]*)0+$/, '$1');
+      n = n.replace(/\.0$/, '');
+      n += 'k';
+    }
+    return n;
   },
   ERROR_MESSAGE: '人气大爆发，请稍后再试。',
   scrollTop: function(y) {
