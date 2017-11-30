@@ -29,13 +29,14 @@ module.exports = app => {
         };
       }
       let cid = body.cid || -1;
+      let rid = body.rid || -1;
       let res;
       switch(type) {
         case TYPE.POST:
           res = yield ctx.helper.postServiceJSON('api/tag/AddComment', {
             uid,
             ParentID: cid,
-            RootID: cid,
+            RootID: rid,
             Content: content,
             PostID: id,
           });
@@ -45,7 +46,7 @@ module.exports = app => {
           res = yield ctx.helper.postServiceJSON('api/author/AddComment', {
             uid,
             ParentID: cid,
-            RootID: cid,
+            RootID: rid,
             Content: content,
             AuthorCommentID: id,
           });
@@ -55,7 +56,7 @@ module.exports = app => {
           res = yield ctx.helper.postServiceJSON('api/works/AddComment', {
             uid,
             ParentID: cid,
-            RootID: cid,
+            RootID: rid,
             Content: content,
             WorkID: id,
             subWorkID: body.sid,

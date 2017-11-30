@@ -34,12 +34,14 @@ class Post extends migi.Component {
 
       let subCmt = self.ref.subCmt;
       let comment = self.ref.comment;
-      comment.on('chooseSubComment', function(rid, cid, name) {
+      comment.on('chooseSubComment', function(rid, cid, name, n) {
         // self.rootID = rid;
         // self.parentID = cid;
         // subCmt.to = name;
         // subCmt.focus();
-        location.href = '/subComment?type=1&id=' + self.props.postData.ID + '&cid=' + rid;
+        if(!n || n === '0') {
+          location.href = '/subComment?type=1&id=' + self.props.postData.ID + '&cid=' + cid + '&rid=' + rid;
+        }
       });
       comment.on('closeSubComment', function() {
         // self.rootID = -1;

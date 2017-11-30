@@ -10,8 +10,9 @@ export default function(data) {
   let id = data.id;
   let type = data.type;
   let cid = data.cid;
+  let rid = data.rid;
 
-  let subCmt = migi.preRender(<SubCmt id={ id } type={ type } cid={ cid }/>);
+  let subCmt = migi.preRender(<SubCmt id={ id } type={ type } cid={ cid } rid={ rid }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -29,6 +30,7 @@ ${data.helper.getMBotNav()}
   $CONFIG.id = ${data.helper.stringify(id)};
   $CONFIG.type = ${data.helper.stringify(type)};
   $CONFIG.cid = ${data.helper.stringify(cid)};
+  $CONFIG.rid = ${data.helper.stringify(rid)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/msubcomment.js')}"></script>

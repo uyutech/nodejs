@@ -8,4 +8,4 @@ import './index.less';
 
 import SubCmt from './SubCmt.jsx';
 
-let subCmt = migi.preExist(<SubCmt id={ $CONFIG.id } type={ $CONFIG.type } cid={ $CONFIG.cid }/>);
+let subCmt = migi.preExist(<SubCmt id={ $CONFIG.id } type={ $CONFIG.type } cid={ $CONFIG.cid } rid={ $CONFIG.rid }/>);

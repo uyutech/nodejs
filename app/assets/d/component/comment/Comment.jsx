@@ -157,7 +157,7 @@ class Comment extends migi.Component {
     else {
       $last = $li;
       $li.addClass('on');
-      self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'));
+      self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'), $slide.find('.sub').text());
       let state = subLoadHash[rid];
       if(state === HAS_LOADED || state === IS_LOADING) {
         $list2.css('height', 'auto');

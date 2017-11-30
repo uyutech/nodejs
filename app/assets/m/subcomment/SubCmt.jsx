@@ -36,8 +36,13 @@ class SubCmt extends migi.Component {
     let self = this;
     if(!self.sending && !self.invalid) {
       self.sending = true;
-      net.postJSON('/api/subComment',
-        { content: self.value, id: self.props.id, type: self.props.type, cid: self.props.cid }, function(res) {
+      net.postJSON('/api/subComment', {
+        content: self.value,
+        id: self.props.id,
+        type: self.props.type,
+        cid: self.props.cid,
+        rid: self.props.rid
+      }, function(res) {
         if(res.success) {
           switch(self.props.type) {
             case '1':
@@ -87,7 +92,7 @@ class SubCmt extends migi.Component {
       </div>
       <div class="c">
         <textarea class="text" ref="input" placeholder={ this.placeholder || '请输入评论' }
-                  onInput={ this.input } onFocus={ this.focus }>{ this.value }</textarea>
+                  onInput={ this.input } onFocus={ this.focus } maxLength={ MAX_TEXT_LENGTH }>{ this.value }</textarea>
       </div>
     </form>;
   }

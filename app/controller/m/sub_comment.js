@@ -11,6 +11,7 @@ module.exports = app => {
       let id = ctx.query.id;
       let type = ctx.query.type;
       let cid = ctx.query.cid;
+      let rid = ctx.query.rid;
       if(!id || !type) {
         return;
       }
@@ -19,6 +20,7 @@ module.exports = app => {
         id,
         type,
         cid,
+        rid,
       });
     }
   }

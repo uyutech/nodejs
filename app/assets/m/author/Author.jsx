@@ -17,10 +17,12 @@ class Author extends migi.Component {
       let authorComment = self.ref.authorComment;
       let comment = authorComment.ref.comment;
       let subCmt = self.ref.subCmt;
-      comment.on('chooseSubComment', function(rid, cid, name) {
+      comment.on('chooseSubComment', function(rid, cid, name, n) {
         // subCmt.to = name;
         // subCmt.focus();
-        location.href = '/subComment?type=2&id=' + self.props.authorID + '&cid=' + rid;
+        if(!n || n === '0') {
+          location.href = '/subComment?type=2&id=' + self.props.authorID + '&cid=' + cid + '&rid=' + rid;
+        }
       });
       comment.on('closeSubComment', function() {
         // subCmt.to = '';

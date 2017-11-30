@@ -43,12 +43,14 @@ class Works extends migi.Component {
           workComment.workID = data.ItemID;
         });
       }
-      comment.on('chooseSubComment', function(rid, cid, name) {
+      comment.on('chooseSubComment', function(rid, cid, name, n) {
         // self.rootID = rid;
         // self.parentID = cid;
         // subCmt.to = name;
         // subCmt.focus();
-        location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID + '&cid=' + rid;
+        if(!n || n === '0') {
+          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID + '&cid=' + cid + '&rid=' + rid;
+        }
       });
       comment.on('closeSubComment', function() {
         // self.rootID = -1;
