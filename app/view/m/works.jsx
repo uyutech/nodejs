@@ -10,6 +10,7 @@ export default function(data) {
   let isLogin = !!data.ctx.session.uid;
   let worksID = data.worksID;
   let workID = data.workID;
+  let tag = data.tag;
   let worksDetail = data.worksDetail;
   let commentData = data.commentData;
   let labelList = data.labelList;
@@ -40,6 +41,7 @@ ${data.helper.getStat()}
     isLogin={ isLogin }
     worksID={ worksID }
     workID={ workID }
+    tag={ tag }
     worksDetail={ worksDetail }
     labelList={ labelList }
     commentData={ commentData }/>);
@@ -59,6 +61,7 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.worksID = ${data.helper.stringify(worksID)};
   $CONFIG.workID = ${data.helper.stringify(workID)};
+  $CONFIG.tag = ${data.helper.stringify(tag)};
   $CONFIG.worksDetail = ${data.helper.stringify(worksDetail)};
   $CONFIG.labelList = ${data.helper.stringify(labelList)};
   $CONFIG.commentData = ${data.helper.stringify(commentData)};

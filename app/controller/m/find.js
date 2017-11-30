@@ -13,7 +13,6 @@ module.exports = app => {
       let hotMusicAlbumList = [];
       let hotPhotoAlbumList = [];
       let hotCircleList = [];
-      let hotPostList = [];
       let hotPlayList = [];
       let res = yield {
         hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
@@ -37,15 +36,10 @@ module.exports = app => {
           Skip: 0,
           Take: 6,
         }),
-        hotPostList: ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
-          uid,
-          Skip: 0,
-          Take: 30,
-        }),
         hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
           uid,
           Skip: 0,
-          Take: 5,
+          Take: 10,
         }),
       };
       if(res.hotWorkList.data.success) {
@@ -63,9 +57,6 @@ module.exports = app => {
       if(res.hotCircleList.data.success) {
         hotCircleList = res.hotCircleList.data.data.data;
       }
-      if(res.hotPostList.data.success) {
-        hotPostList = res.hotPostList.data.data.data;
-      }
       if(res.hotPlayList.data.success) {
         hotPlayList = res.hotPlayList.data.data;
       }
@@ -76,7 +67,6 @@ module.exports = app => {
         hotMusicAlbumList,
         hotPhotoAlbumList,
         hotCircleList,
-        hotPostList,
         hotPlayList,
       });
     }

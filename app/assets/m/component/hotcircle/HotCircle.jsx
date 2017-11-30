@@ -6,7 +6,7 @@
 
 import util from '../../../d/common/util';
 
-class HotPost extends migi.Component {
+class HotCircle extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
@@ -26,8 +26,7 @@ class HotPost extends migi.Component {
     $c.css('width', $ul.width() + 1);
   }
   render() {
-    return <div class="cp-hotpost">
-      <h4>{ this.props.title }</h4>
+    return <div class="cp-hotcircle">
       <div class="list" ref="list">
         <div class="c">
           {
@@ -35,14 +34,15 @@ class HotPost extends migi.Component {
               ? <ul>
                 {
                   this.dataList.map(function(item) {
+                    let n = item.Popular ? (item.Popular > 999 ? '999+' : item.Popular) : 0;
                     return <li>
                       <a href={ `/circle/${item.TagID}` } class="pic">
                         <img src={ util.autoSsl(util.img288_288_80(item.TagCover)) || '//zhuanquan.xin/img/blank.png' }/>
                       </a>
                       <a href={ `/circle/${item.TagID}` } class="txt">
                         <span class="name">{ item.TagName }</span>
-                        <span class="fans">{ item.FansNumber || 0 }</span>
-                        <span class="comment">{ item.Popular || 0 }</span>
+                        <span class="fans">成员 { item.FansNumber || 0 }</span>
+                        <span class="comment">画圈 { n }</span>
                       </a>
                     </li>;
                   })
@@ -56,4 +56,4 @@ class HotPost extends migi.Component {
   }
 }
 
-export default HotPost;
+export default HotCircle;

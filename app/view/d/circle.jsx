@@ -7,7 +7,6 @@
 import Circle from '../../assets/d/circle/Circle.jsx';
 
 export default function(data) {
-  let isLogin = !!data.ctx.session.uid;
   let circleID = data.circleID;
   let circleDetail = data.circleDetail;
   let postList = data.postList;

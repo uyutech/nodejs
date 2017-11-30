@@ -3,12 +3,12 @@
  */
 
 .cp-hotpost{
-  margin-top:0.1rem;
-  padding:0 0.1rem;
   .list{
     > li{
       position:relative;
       margin-bottom:0.15rem;
+      padding:0.1rem 0.1rem;
+      box-shadow:@tagShadow;
       > .profile{
         position:relative;
         display:flex;
@@ -31,7 +31,7 @@
           height:0.48rem;
           box-sizing:border-box;
           border-radius:100%;
-          border:1px solid @secondTextColor;
+          border:1px solid rgba(255, 255, 255, 0.1);
           overflow:hidden;
           img{
             display:block;
@@ -150,7 +150,7 @@
             line-height:1.8;
             white-space:nowrap;
             cursor:pointer;
-            &:hover{
+            &:active{
               color:@mainHoverColor;
             }
           }
@@ -217,9 +217,6 @@
       }
       .btn{
         display:flex;
-        margin-top:0.1rem;
-        padding-top:0.05rem;
-        border-top:1px solid @borderColor;
         li{
           position:relative;
           flex:1;
@@ -257,14 +254,14 @@
             b{
               background-image:url(../../../d/works/favor.png);
             }
-            &:hover b{
+            &:active b{
               background-image:url(../../../d/works/favor-hover.png);
             }
             &.has{
               b{
                 background-image:url(../../../d/works/favored.png);
               }
-              &:hover b{
+              &:active b{
                 background-image:url(../../../d/works/favored-hover.png);
               }
             }
@@ -273,7 +270,7 @@
             b{
               background-image:url(../../../d/works/share.png);
             }
-            &:hover b{
+            &:active b{
               background-image:url(../../../d/works/share-hover.png);
             }
           }
@@ -281,23 +278,27 @@
             b{
               background-image:url(../../../d/works/like.png);
             }
-            &:hover b{
+            &:active b{
               background-image:url(../../../d/works/like-hover.png);
             }
             &.has{
               b{
                 background-image:url(../../../d/works/liked.png);
               }
-              &:hover b{
+              &:active b{
                 background-image:url(../../../d/works/liked-hover.png);
               }
             }
           }
           &.comment{
+            a{
+              display:block;
+              height:100%;
+            }
             b{
               background-image:url(../../../d/component/hotpost/comment.png);
             }
-            &:hover b{
+            &:active b{
               background-image:url(../../../d/component/hotpost/comment-hover.png);
             }
           }
@@ -309,7 +310,7 @@
               margin:0;
               background-image:url(../../../d/component/hotpost/del.png);
             }
-            &:hover b{
+            &:active b{
               background-image:url(../../../d/component/hotpost/del-hover.png);
             }
           }

@@ -33,6 +33,66 @@ class User extends migi.Component {
           self.load(i);
         });
       }
+      let hotPost = self.ref.hotPost;
+      let subCmt = self.ref.subCmt;
+      hotPost.on('openComment', function(postID, name, comment) {
+        self.postID = postID;
+        self.comment = comment;
+        subCmt.to = null;
+        subCmt.originTo = name;
+        subCmt.hidden = false;
+        self.rootID = -1;
+        self.parentID = -1;
+      });
+      hotPost.on('closeComment', function() {
+        subCmt.to = null;
+        subCmt.hidden = true;
+      });
+      hotPost.on('chooseSubComment', function(rid, cid, name) {
+        self.rootID = rid;
+        self.parentID = cid;
+        subCmt.to = name;
+      });
+      hotPost.on('closeSubComment', function() {
+        self.rootID = -1;
+        self.parentID = -1;
+        subCmt.to = null;
+      });
+      subCmt.on('submit', function(content) {
+        subCmt.invalid = true;
+        let postID = self.postID;
+        let rootID = self.rootID;
+        let parentID = self.parentID;
+        let comment = self.comment;
+        net.postJSON('/api/post/addComment', {
+          parentID,
+          rootID,
+          postID,
+          content,
+        }, function(res) {
+          if(res.success) {
+            subCmt.value = '';
+            if(rootID === -1) {
+              comment.prependData(res.data);
+              comment.message = '';
+            }
+            else {
+              comment.prependChild(res.data, parentID);
+            }
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
+          }
+        }, function(res) {
+          alert(res.message || util.ERROR_MESSAGE);
+          subCmt.invalid = false;
+        });
+      });
     });
   }
   load(i) {
@@ -68,6 +128,11 @@ class User extends migi.Component {
             : ''
         }
       </div>
+      <SubCmt ref="subCmt"
+              hidden={ true }
+              subText="回复"
+              placeholder="交流一下吧~"/>
+      <ImageView ref="imageView"/>
     </div>;
   }
 }

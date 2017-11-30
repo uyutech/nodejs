@@ -53,6 +53,8 @@ class Find extends migi.Component {
         subCmt.to = null;
         subCmt.originTo = name;
         subCmt.hidden = false;
+        self.rootID = -1;
+        self.parentID = -1;
       });
       hotPost.on('closeComment', function() {
         subCmt.to = null;
@@ -138,10 +140,8 @@ class Find extends migi.Component {
       else {
         alert(res.message || util.ERROR_MESSAGE);
       }
-      loading = false;
     }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
-      loading = false;
     });
   }
   render() {
@@ -152,7 +152,7 @@ class Find extends migi.Component {
         <h4>
           <span>热门作品</span>
           <small>{ '未来会根据你的口味进行精准智能的推送！>3<' }</small>
-          <span class="fn" onClick={ this.clickChangeWork }>换一换</span>
+          <span class="fn" onClick={ this.clickChangeWork }>换一批</span>
         </h4>
         <HotWork ref="hotWork" title="热门作品" dataList={ this.props.hotWorkList }/>
         <HotMusicAlbum ref="hotMusicAlbum" title="热门专辑" dataList={ this.props.hotMusicAlbumList }/>

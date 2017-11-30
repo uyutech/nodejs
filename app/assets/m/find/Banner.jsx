@@ -2,6 +2,8 @@
  * Created by army on 2017/6/18.
  */
 
+'use strict';
+
 let interval;
 
 class Banner extends migi.Component {

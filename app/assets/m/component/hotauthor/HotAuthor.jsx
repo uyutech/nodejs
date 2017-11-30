@@ -19,8 +19,8 @@ class HotAuthor extends migi.Component {
     let $list = $(this.ref.list.element);
     let $c = $list.find('.c');
     $c.css('width', '9999rem');
-    let $ul = $c.find('ul');
-    $c.css('width', $ul.width() + 1);
+    let $elem = $c.children();
+    $c.css('width', $elem.width() + 1);
   }
   render() {
     return <div class="cp-hotauthor">
@@ -37,15 +37,15 @@ class HotAuthor extends migi.Component {
                       </a>
                       <a href={ `/author/${item.AuthorID}` } class="txt">
                         <span class="name">{ item.AuthorName }</span>
-                        <span class="fans">{ item.FansNumber || 0 }</span>
-                        <span class="comment">{ item.Popular || 0 }</span>
+                        <span class="fans">粉丝 { item.FansNumber || 0 }</span>
+                        <span class="comment">留言 { item.Popular || 0 }</span>
                       </a>
                       <div class="info">合作{ item.CooperationTimes }次</div>
                     </li>;
                   })
                 }
               </ul>
-              : <div class="empty">暂无数据</div>
+              : <div class="empty">{ this.props.empty || '暂无数据' }</div>
           }
         </div>
       </div>

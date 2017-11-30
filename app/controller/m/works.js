@@ -12,6 +12,7 @@ module.exports = app => {
       if(!worksID) {
         return;
       }
+      let tag = ctx.query.tag;
       let workID = ctx.params.workID;
       let worksDetail = {};
       let commentData = {};
@@ -45,6 +46,7 @@ module.exports = app => {
       yield ctx.render('mworks', {
         worksID,
         workID,
+        tag,
         worksDetail,
         commentData,
         labelList,

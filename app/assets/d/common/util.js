@@ -180,6 +180,12 @@ let util = {
     }
     return url ? url + '-120_120_80' : url;
   },
+  img108_108_80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-108_108_80' : url;
+  },
   img100_100: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;

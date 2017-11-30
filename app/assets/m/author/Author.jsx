@@ -15,52 +15,18 @@ class Author extends migi.Component {
     let self = this;
     self.on(migi.Event.DOM, function() {
       let authorComment = self.ref.authorComment;
-      let comment = self.ref.authorComment.ref.comment;
+      let comment = authorComment.ref.comment;
       let subCmt = self.ref.subCmt;
-      subCmt.on('submit', function(content) {
-        subCmt.invalid = true;
-        let rootID = authorComment.rootID;
-        let parentID = authorComment.parentID;
-        net.postJSON('/api/author/addComment', {
-          parentID: parentID,
-          rootID: rootID,
-          authorID: authorComment.authorID,
-          content,
-        }, function(res) {
-          if(res.success) {
-            let data = res.data;
-            subCmt.value = '';
-            if(rootID === -1) {
-              comment.prependData(data);
-            }
-            else {
-              comment.prependChild(data, parentID);
-            }
-            let $tag = $(self.ref.type.element).find('.comments');
-            if(!$tag.hasClass('cur')) {
-              $tag.click();
-            }
-            migi.eventBus.emit('COMMENT', 'work');
-          }
-          else if(res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-            subCmt.invalid = false;
-          }
-          else {
-            alert(res.message || util.ERROR_MESSAGE);
-            subCmt.invalid = false;
-          }
-        }, function(res) {
-          alert(res.message || util.ERROR_MESSAGE);
-          subCmt.invalid = false;
-        });
-      });
       comment.on('chooseSubComment', function(rid, cid, name) {
-        subCmt.to = name;
-        subCmt.focus();
+        // subCmt.to = name;
+        // subCmt.focus();
+        location.href = '/subComment?type=2&id=' + self.props.authorID + '&cid=' + rid;
       });
       comment.on('closeSubComment', function() {
-        subCmt.to = '';
+        // subCmt.to = '';
+      });
+      subCmt.on('focus', function() {
+        location.href = '/subComment?type=2&id=' + self.props.authorID;
       });
     });
   }
@@ -80,37 +46,54 @@ class Author extends migi.Component {
     authorComment.hide();
     let rel = tvd.props.rel;
     switch(rel) {
-      case '0':
+      case 'home':
         home.show();
+        history.replaceState(null, '', '?tag=home');
         break;
       // case '1':
       //   works.show();
       //   break;
-      case '2':
+      case 'comment':
         authorComment.show();
+        history.replaceState(null, '', '?tag=comment');
         break;
     }
   }
   render() {
+    if(!this.props.authorDetail.ISSettled) {
+      return <div class="author">
+        <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
+        <ul class="type fn-clear" ref="type">
+          <li class="comments cur" rel="2">留言</li>
+        </ul>
+        <AuthorComment
+          ref="authorComment"
+          isLogin={ this.props.isLogin }
+          authorID={ this.props.authorID }
+          commentData={ this.props.commentData }/>
+        <SubCmt ref="subCmt"
+                originTo={ this.props.authorDetail.AuthorName }
+                subText="发送"
+                tipText="-${n}"
+                placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
+      </div>;
+    }
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
       <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
         {
           this.props.authorDetail.ISSettled
-            ? <li class="home cur" rel="0">主页</li>
+            ? <li class={ 'home' + (this.props.tag !== 'comment' ? ' cur' : '') } rel="home">主页</li>
             : ''
         }
-        <li class={ 'comments' + (this.props.authorDetail.ISSettled ? '' : ' cur') } rel="2">留言</li>
+        <li class={ 'comments' + (this.props.tag === 'comment' ? ' cur' : '') } rel="comment">留言</li>
       </ul>
-      {
-        this.props.authorDetail.ISSettled
-          ? <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }
-                  album={ this.props.album }/>
-          : ''
-      }
+      <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }
+            hidden={ this.props.tag === 'comment' }
+            album={ this.props.album }/>
       <AuthorComment
         ref="authorComment"
-        show={ !this.props.authorDetail.ISSettled }
+        hidden={ this.props.tag !== 'comment' }
         isLogin={ this.props.isLogin }
         authorID={ this.props.authorID }
         commentData={ this.props.commentData }/>

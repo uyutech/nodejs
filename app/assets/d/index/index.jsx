@@ -38,6 +38,7 @@ if($CONFIG.isLogin && $CONFIG.userInfo.User_Reg_Stat !== 99 && $CONFIG.userInfo.
 
 window.setHash = function(hash, noRedirect) {
   iframeGoto(hash, noRedirect);
+  setMenu(hash);
   location.hash = hash;
 };
 window.setTitle = function(title) {
@@ -110,12 +111,27 @@ function iframeGoto(hash, noRedirect) {
   cIframe.element.contentWindow.location.href = hash;
 }
 
+function setMenu(hash) {
+  hash = hash || '';
+  hash = hash.replace(/^#/, '');
+  if(!hash || hash === '/' || hash === '/find') {
+    topNav.setCur(0);
+  }
+  else if(hash === '/circling') {
+    topNav.setCur(1);
+  }
+  else if(hash === '/follow') {
+    topNav.setCur(2);
+  }
+  else {
+    topNav.setCur();
+  }
+}
+
+let hash = location.hash;
 window.addEventListener('hashchange', function() {
   iframeGoto(location.hash);
+  setMenu(location.hash);
 });
-
-iframeGoto(location.hash);
-
-topNav.on('search', function(kw) {
-  location.hash = '/search/' + kw;
-});
+iframeGoto(hash);
+setMenu(hash);

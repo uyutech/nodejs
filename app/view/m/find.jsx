@@ -12,7 +12,6 @@ export default function(data) {
   let hotMusicAlbumList = data.hotMusicAlbumList;
   let hotPhotoAlbumList = data.hotPhotoAlbumList;
   let hotCircleList = data.hotCircleList;
-  let hotPostList = data.hotPostList;
   let hotPlayList = data.hotPlayList;
 
   let find = migi.preRender(<Find
@@ -21,7 +20,6 @@ export default function(data) {
     hotMusicAlbumList={ hotMusicAlbumList }
     hotPhotoAlbumList={ hotPhotoAlbumList }
     hotCircleList={ hotCircleList }
-    hotPostList={ hotPostList }
     hotPlayList={ hotPlayList }/>);
 
   return `<!DOCTYPE html>
@@ -34,6 +32,7 @@ export default function(data) {
 <body>
 <div id="page">${find}</div>
 ${data.helper.getMTopNav()}
+${data.helper.getMTopMenu(0)}
 ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
@@ -42,7 +41,6 @@ ${data.helper.getMBotNav()}
   $CONFIG.hotMusicAlbumList = ${data.helper.stringify(hotMusicAlbumList)};
   $CONFIG.hotPhotoAlbumList = ${data.helper.stringify(hotPhotoAlbumList)};
   $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
-  $CONFIG.hotPostList = ${data.helper.stringify(hotPostList)};
   $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>

@@ -9,8 +9,6 @@ import util from '../../d/common/util';
 import Profile from './Profile.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
 import Page from '../../d/component/page/Page.jsx';
-import HotUser from '../component/hotuser/HotUser.jsx';
-import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
 
 let loading;
 let take = 10;
@@ -72,7 +70,7 @@ class My extends migi.Component {
                updateHeadTimeDiff={ this.props.updateHeadTimeDiff }/>
       <div class="warn">
         <div class="t fn-clear">
-          <img class="pic" src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>
+          <img class="pic" src={ util.autoSsl(util.img60_60_80('//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg')) }/>
           <div class="txt">
             <div>
               <span class="name">圈儿</span>
@@ -90,16 +88,10 @@ class My extends migi.Component {
         this.props.bonusPoint.ranking
           ? <div class="bp">
             <p>全站排名 { this.props.bonusPoint.ranking } 名</p>
-            <p><small>以上是截止到11月27日中午12点的积分排名哦，之后会尽快更新实时显示的功能-3-</small></p>
+            <p><small>以上是截止到11月30日中午12点的积分排名哦，本次活动将于11月30日晚0点结束。本次活动最终排名会在12月1日中午12点之后公布~</small></p>
           </div>
           : ''
       }
-      <h4>关注作者</h4>
-      <HotAuthor ref="hotAuthor" dataList={ this.props.follows }/>
-      <h4>关注圈er</h4>
-      <HotUser ref="hotuser" dataList={ this.props.userFollows }/>
-      <h4>关注我的</h4>
-      <HotUser ref="hotuser" dataList={ this.props.userFans }/>
       <h4>我画的圈</h4>
       <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>
       <HotPost ref="hotPost" data={ this.props.myPost.data } size={ this.props.myPost.Size }

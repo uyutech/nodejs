@@ -13,14 +13,19 @@ class Home extends migi.Component {
   }
   show() {
     $(this.element).removeClass('fn-hide');
+    this.ref.hotWork.autoWidth();
+    this.ref.hotCollection.autoWidth();
+    this.ref.hotAuthor.autoWidth();
   }
   hide() {
     $(this.element).addClass('fn-hide');
   }
   render() {
-    return <div class="home">
-      <HotWork ref="hotWork" title="主打作品" dataList={ this.props.homeDetail.Hot_Works_Items }/>
-      <HotMusicAlbum ref="hotCollection" title="专辑" dataList={ this.props.album }/>
+    return <div class={ 'home' + (this.props.hidden ? ' fn-hide' : '' ) }>
+      <h4>主打作品</h4>
+      <HotWork ref="hotWork" dataList={ this.props.homeDetail.Hot_Works_Items }/>
+      <h4>专辑</h4>
+      <HotMusicAlbum ref="hotCollection" dataList={ this.props.album }/>
       <h4>合作关系</h4>
       <HotAuthor ref="hotAuthor" dataList={ this.props.homeDetail.AuthorToAuthor }/>
     </div>;

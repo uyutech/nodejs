@@ -21,6 +21,8 @@ module.exports = app => {
   app.get('/d/circle/:circleID', 'd.circle.index');
   app.get('/d/post/:id', 'd.post.index');
   app.get('/d/user/:userID', 'd.user.index');
+  app.get('/d/circling', 'd.circling.index');
+  app.get('/d/follow', app.middlewares.needLogin(), 'd.follow.index');
 
   app.get('/m', 'm.find.index');
   app.get('/m/find', 'm.find.index');
@@ -35,10 +37,14 @@ module.exports = app => {
   app.get('/m/circle/post', app.middlewares.needLogin(), 'm.circle.post');
   app.get('/m/post/:id', 'm.post.index');
   app.get('/m/user/:userID', 'm.user.index');
+  app.get('/m/circling', 'm.circling.index');
+  app.get('/m/follow', app.middlewares.needLogin(), 'm.follow.index');
+  app.get('/m/subComment', app.middlewares.needLogin(), 'm.subComment.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 
   app.post('/api/find/hotWorkList', 'api.find.hotWorkList');
+  //TODO: del
   app.post('/api/find/hotPostList', 'api.find.hotPostList');
 
   app.post('/api/user/settle', app.middlewares.needLoginJson(), 'api.user.settle');
@@ -100,6 +106,15 @@ module.exports = app => {
   app.post('/api/post/unFavor', app.middlewares.needLoginJson(), 'api.post.unFavor');
   app.post('/api/post/del', app.middlewares.needLoginJson(), 'api.post.del');
 
+  app.post('/api/circling/list', 'api.circling.list');
+
+  app.post('/api/subComment', app.middlewares.needLogin(), 'api.subComment.index');
+
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
+
+  app.post('/h5/find/index', app.middlewares.crossDomain(), 'h5.find.index');
+  app.post('/h5/find/hotWorkList', app.middlewares.crossDomain(), 'h5.find.hotWorkList');
+
+  app.post('/h5/my/index', app.middlewares.crossDomain(), 'h5.my.index');
 };

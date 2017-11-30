@@ -7,7 +7,9 @@
 import Login from '../../assets/m/login/Login.jsx';
 
 export default function(data) {
-  let login = migi.preRender(<Login/>);
+  let goto = data.goto;
+
+  let login = migi.preRender(<Login goto={ goto }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -22,6 +24,7 @@ ${data.helper.getMTopNav()}
 ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
+  $CONFIG.goto = ${data.helper.stringify(goto)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mlogin.js')}"></script>

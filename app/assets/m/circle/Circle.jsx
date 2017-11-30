@@ -4,9 +4,14 @@
 
 'use strict';
 
+import net from '../../d/common/net';
+import util from '../../d/common/util';
 import Title from './Title.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
+
+let take = 10;
+let skip = take;
 
 class Circle extends migi.Component {
   constructor(...data) {
@@ -17,12 +22,57 @@ class Circle extends migi.Component {
       subCmt.on('click', function() {
         location.href = '/circle/post?circleID=' + $CONFIG.circleID;
       });
+      if(self.props.postList.Size > take) {
+        let $window = $(window);
+        $window.on('scroll', function() {
+          self.checkMore($window);
+        });
+      }
+    });
+  }
+  @bind loading
+  @bind loadEnd
+  checkMore($window) {
+    let self = this;
+    let WIN_HEIGHT = $window.height();
+    let HEIGHT = $(document.body).height();
+    let bool;
+    bool = $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
+    if(!self.loading && !self.loadEnd && bool) {
+      self.load();
+    }
+  }
+  load() {
+    let self = this;
+    let hotPost = self.ref.hotPost;
+    self.loading = true;
+    hotPost.message = '正在加载...';
+    net.postJSON('/api/circle/list', { skip, take, circleID: $CONFIG.circleID }, function(res) {
+      if(res.success) {
+        let data = res.data;
+        skip += take;
+        hotPost.appendData(data.data);
+        if(!data.data.length || data.data.length < take) {
+          self.loadEnd = true;
+          hotPost.message = '已经到底了';
+        }
+        else {
+          hotPost.message = '';
+        }
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      self.loading = false;
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      self.loading = false;
     });
   }
   render() {
     return <div class="circle fn-clear">
       <Title circleDetail={ this.props.circleDetail }/>
-      <HotPost ref="hotPost" data={ this.props.postList.data } params={ { circleID: this.props.circleDetail.TagID } }/>
+      <HotPost ref="hotPost" data={ this.props.postList.data }/>
       <SubCmt ref="subCmt"
               tipText="-${n}"
               subText="发送"

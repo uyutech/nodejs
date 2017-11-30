@@ -44,53 +44,19 @@ class Works extends migi.Component {
         });
       }
       comment.on('chooseSubComment', function(rid, cid, name) {
-        self.rootID = rid;
-        self.parentID = cid;
-        subCmt.to = name;
-        subCmt.focus();
+        // self.rootID = rid;
+        // self.parentID = cid;
+        // subCmt.to = name;
+        // subCmt.focus();
+        location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID + '&cid=' + rid;
       });
       comment.on('closeSubComment', function() {
-        self.rootID = -1;
-        self.parentID = -1;
-        subCmt.to = '';
+        // self.rootID = -1;
+        // self.parentID = -1;
+        // subCmt.to = '';
       });
-      subCmt.on('submit', function(content) {
-        subCmt.invalid = true;
-        let rootID = self.rootID;
-        let parentID = self.parentID;
-        net.postJSON('/api/works/addComment', {
-          parentID: parentID,
-          rootID: rootID,
-          worksID: self.worksID,
-          workID: self.workID,
-          barrageTime: self.barrageTime,
-          content,
-        }, function(res) {
-          if(res.success) {
-            let data = res.data;
-            subCmt.value = '';
-            if(rootID === -1) {
-              comment.prependData(data);
-              comment.message = '';
-            }
-            else {
-              comment.prependChild(data, parentID);
-            }
-            self.clickSel(null, self.ref.sel, self.ref.sel.children[self.ref.sel.children.length - 1]);
-            migi.eventBus.emit('COMMENT', 'work');
-          }
-          else if(res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-            subCmt.invalid = false;
-          }
-          else {
-            alert(res.message || util.ERROR_MESSAGE);
-            subCmt.invalid = false;
-          }
-        }, function(res) {
-          alert(res.message || util.ERROR_MESSAGE);
-          subCmt.invalid = false;
-        });
+      subCmt.on('focus', function() {
+        location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID;
       });
     });
   }
@@ -258,6 +224,7 @@ class Works extends migi.Component {
       $(vd.element).find('.cur').removeClass('cur');
       $li.addClass('cur');
       let rel = tvd.props.rel;
+      history.replaceState(null, '', '?tag=' + rel);
       if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
         if(rel === 'playList') {
           $(self.ref.workComment.element).addClass('fn-hide');
@@ -280,6 +247,9 @@ class Works extends migi.Component {
           $(self.ref.workComment.element).addClass('fn-hide');
           $(self.ref.intro.element).addClass('fn-hide');
           $(self.ref.photoAlbum.element).removeClass('fn-hide');
+          if(self.props.tag !== 'intro' && self.props.tag !== 'comment') {
+            self.ref.photoAlbum.load($(window));
+          }
         }
         else if(rel === 'intro') {
           $(self.ref.workComment.element).addClass('fn-hide');
@@ -307,6 +277,7 @@ class Works extends migi.Component {
   render() {
     let self = this;
     let state = worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState);
+    let tag = self.props.tag;
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       return <div class={'works t' + self.worksType}>
         <MusicAlbum ref="musicAlbum"
@@ -315,16 +286,17 @@ class Works extends migi.Component {
                     cover={ this.props.worksDetail.cover_Pic }
                     workList={ this.workList }/>
         <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
-          <li class="cur" rel="playList">曲目</li>
-          <li rel="intro">简介</li>
-          <li rel="comment">留言</li>
+          <li class={ tag !== 'intro' && tag !== 'comment' ? 'cur' : '' } rel="playList">曲目</li>
+          <li class={ tag === 'intro' ? 'cur' : '' } rel="intro">简介</li>
+          <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
           {
             state ? <li class="state">{ state }</li> : ''
           }
         </ul>
-        <PlayList ref="playList"cover={ this.props.worksDetail.cover_Pic }
+        <PlayList ref="playList" cover={ this.props.worksDetail.cover_Pic }
+                  hidden={ tag === 'intro' || tag === 'comment' }
                   worksID={ this.worksID } workID={ this.workID } workList={ this.workList }/>
-        <div class="intro fn-hide" ref="intro">
+        <div class={ 'intro' + (tag === 'intro' ? '' : ' fn-hide') } ref="intro">
           <Describe data={ this.props.worksDetail.Describe }/>
           <Author authorList={ this.authorList }/>
           {
@@ -343,6 +315,7 @@ class Works extends migi.Component {
                      isLogin={ this.props.isLogin }
                      worksID={ this.worksID }
                      workID={ this.workID }
+                     hidden={ tag !== 'comment' }
                      originTo={ this.props.worksDetail.Title }
                      commentData={ this.props.commentData }/>
         <SubCmt ref="subCmt"
@@ -355,15 +328,16 @@ class Works extends migi.Component {
     if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
       return <div class={ 'works t' + self.worksType }>
         <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
-          <li class="cur" rel="photoAlbum">相册</li>
-          <li rel="intro">简介</li>
-          <li rel="comment">留言</li>
+          <li class={ tag !== 'intro' && tag !== 'comment' ? 'cur' : '' } rel="photoAlbum">相册</li>
+          <li class={ tag === 'intro' ? 'cur' : '' } rel="intro">简介</li>
+          <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
           {
             state ? <li class="state">{ state }</li> : ''
           }
         </ul>
-        <PhotoAlbum ref="photoAlbum" worksID={ this.worksID } labelList={ this.props.labelList }/>
-        <div class="intro fn-hide" ref="intro">
+        <PhotoAlbum ref="photoAlbum" worksID={ this.worksID } labelList={ this.props.labelList }
+                    hidden={ tag === 'intro' || tag === 'comment' }/>
+        <div class={ 'intro' + (tag === 'intro' ? '' : ' fn-hide') } ref="intro">
           <Author authorList={ this.authorList }/>
           {
             this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
@@ -386,6 +360,7 @@ class Works extends migi.Component {
                      isLogin={ this.props.isLogin }
                      worksID={ this.worksID }
                      workID={ this.workID }
+                     hidden={ tag !== 'comment' }
                      originTo={ this.props.worksDetail.Title }
                      commentData={ this.props.commentData }/>
         <SubCmt ref="subCmt"
@@ -405,13 +380,13 @@ class Works extends migi.Component {
              videoData={ this.videoData }
              first={ first }/>
       <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
-        <li class="cur" rel="intro">简介</li>
-        <li rel="comment">留言</li>
+        <li class={ tag !== 'comment' ? 'cur' : '' } rel="intro">简介</li>
+        <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
         {
           state ? <li class="state">{ state }</li> : ''
         }
       </ul>
-      <div class="intro" ref="intro">
+      <div class={ 'intro' + (tag === 'comment' ? ' fn-hide' : '') } ref="intro">
         <Author authorList={ this.authorList }/>
         {
           this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
@@ -444,6 +419,7 @@ class Works extends migi.Component {
                    isLogin={ this.props.isLogin }
                    worksID={ this.worksID }
                    workID={ this.workID }
+                   hidden={ tag !== 'comment' }
                    originTo={ this.props.worksDetail.Title }
                    commentData={ this.props.commentData }/>
       <SubCmt ref="subCmt"

@@ -24,9 +24,11 @@ class HotWork extends migi.Component {
     let $ul = $c.find('ul');
     $c.css('width', $ul.width() + 1);
   }
+  setData(data) {
+    this.dataList = data;
+  }
   render() {
     return <div class="cp-hotwork">
-      <h4>{ this.props.title }</h4>
       <div class="list" ref="list">
         <div class="c">
           {

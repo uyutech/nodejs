@@ -11,6 +11,9 @@ module.exports = {
     mcircle: './app/view/m/circle.jsx',
     mcpost: './app/view/m/mcpost.jsx',
     muser: './app/view/m/user.jsx',
+    mcircling: './app/view/m/circling.jsx',
+    mfollow: './app/view/m/follow.jsx',
+    msubcomment: './app/view/m/subcomment.jsx',
     dindex: './app/view/d/index.jsx',
     dfind: './app/view/d/find.jsx',
     dworks: './app/view/d/works.jsx',
@@ -24,6 +27,8 @@ module.exports = {
     dpost: './app/view/d/post.jsx',
     dcircle: './app/view/d/circle.jsx',
     duser: './app/view/d/user.jsx',
+    dcircling: './app/view/d/circling.jsx',
+    dfollow: './app/view/d/follow.jsx',
   },
   output: {
     path: __dirname + '/app/view',

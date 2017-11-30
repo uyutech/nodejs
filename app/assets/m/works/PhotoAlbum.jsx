@@ -21,10 +21,12 @@ class PhotoAlbum extends migi.Component {
     let self = this;
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
-      self.load($window);
       $window.on('scroll', function() {
         self.checkMore($window);
       });
+      if(!$(self.element).hasClass('fn-hide')) {
+        self.load($window);
+      }
 
       let $c = $(self.ref.c.element);
       $c.on('click', '.like', function() {
@@ -174,6 +176,9 @@ class PhotoAlbum extends migi.Component {
   }
   checkMore($window) {
     let self = this;
+    if($(self.element).hasClass('fn-hide')) {
+      return;
+    }
     let WIN_HEIGHT = $window.height();
     let HEIGHT = $(document.body).height();
     let bool;
@@ -268,7 +273,7 @@ class PhotoAlbum extends migi.Component {
     }
   }
   render() {
-    return <div class="mod mod-photoalbum">
+    return <div class={ 'mod mod-photoalbum' + (this.props.hidden ? ' fn-hide' : '') }>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="">全部</li>

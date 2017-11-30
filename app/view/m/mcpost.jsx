@@ -7,7 +7,6 @@
 import SubPost from '../../assets/m/circle/SubPost.jsx';
 
 export default function(data) {
-  let head = data.ctx.session.head;
   let isPublic = data.ctx.session.isPublic;
   let circleID = data.circleID;
   let circleDetail = data.circleDetail;
@@ -15,8 +14,7 @@ export default function(data) {
 
   let subPost = migi.preRender(<SubPost circleID={ circleID } circleDetail={ circleDetail }
                                         placeholder={ '在' + (circleDetail.TagName || '转圈') +'圈画个圈吧' }
-                                        isPublic={ isPublic } head={ head }
-                                        to={ hotCircleList }/>);
+                                        isPublic={ isPublic } to={ hotCircleList }/>);
 
   return `<!DOCTYPE html>
 <html>

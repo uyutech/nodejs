@@ -9,32 +9,12 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let userInfo = {};
-      let follows = [];
-      let userFollows = [];
-      let userFans = [];
-      let favors = [];
       let myPost = {};
       let bonusPoint = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
       let res = yield {
         userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
-          uid,
-        }),
-        follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
-          uid,
-        }),
-        userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
-          uid,
-          Skip: 0,
-          Take: 10,
-        }),
-        userFans: ctx.helper.postServiceJSON('api/users/User_FansList', {
-          uid,
-          Skip: 0,
-          Take: 10,
-        }),
-        favors: ctx.helper.postServiceJSON('api/users/GetLikeWorksList', {
           uid,
         }),
         myPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
@@ -55,18 +35,6 @@ module.exports = app => {
       };
       if(res.userInfo.data.success) {
         userInfo = res.userInfo.data.data;
-      }
-      if(res.follows.data.success) {
-        follows = res.follows.data.data;
-      }
-      if(res.userFollows.data.success) {
-        userFollows = res.userFollows.data.data;
-      }
-      if(res.userFans.data.success) {
-        userFans = res.userFans.data.data;
-      }
-      if(res.favors.data.success) {
-        favors = res.favors.data.data;
       }
       if(res.myPost.data.success) {
         myPost = res.myPost.data.data;
@@ -89,10 +57,6 @@ module.exports = app => {
       }
       yield ctx.render('dmy', {
         userInfo,
-        follows,
-        userFollows,
-        userFans,
-        favors,
         myPost,
         bonusPoint,
         lastUpdateNickNameTime,

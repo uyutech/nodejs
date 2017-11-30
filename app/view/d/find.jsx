@@ -27,7 +27,7 @@ export default function(data) {
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead()}
+  ${data.helper.getDHead({ title: '发现' })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dfind.css')}"/>
 </head>

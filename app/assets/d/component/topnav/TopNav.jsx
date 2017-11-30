@@ -8,7 +8,8 @@ import util from '../../common/util';
 class TopNav extends migi.Component {
   constructor(...data) {
     super(...data);
-    this.isPublic = !!this.props.userInfo.ISOpen;
+    let self = this;
+    self.isPublic = !!self.props.userInfo.ISOpen;
   }
   @bind isPublic
   @bind loading
@@ -51,11 +52,32 @@ class TopNav extends migi.Component {
       self.loading = false;
     });
   }
+  clickMenu(e, vd, tvd) {
+    e.preventDefault();
+    let $a = $(tvd.element);
+    if(!$a.hasClass('cur')) {
+      window.setHash(tvd.props.href);
+      $(vd.element).find('.cur').removeClass('cur');
+      $a.addClass('cur');
+    }
+  }
+  setCur(i) {
+    let $menu = $(this.ref.menu.element);
+    $menu.find('a').removeClass('cur');
+    if(i !== undefined) {
+      $menu.find('a').eq(i).addClass('cur');
+    }
+  }
   render() {
     let userInfo = this.props.userInfo || {};
     return <div class="cp-topnav">
       <div class="c">
-        <a class="logo" href="#/">转圈还在测试中，感谢您的关注和包涵！我们会努力做得更好！</a>
+        <a class="logo" href="#/"/>
+        <ul class="menu" ref="menu" onClick={ { a: this.clickMenu } }>
+          <li><a href="/">发现</a></li>
+          <li><a href="/circling">转圈</a></li>
+          <li><a href="/follow">关注</a></li>
+        </ul>
         <div class="user fn-clear">
           {
             this.props.isLogin && this.props.isAuthor

@@ -7,34 +7,11 @@
 import net from '../../../d/common/net';
 import util from '../../../d/common/util';
 
-let take = 30;
-let skip = take;
-
-class PostList extends migi.Component {
+class HotPost extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.take) {
-      take = self.props.take;
-      if(self.props.skip) {
-        skip = self.props.skip;
-      }
-      else {
-        skip = take;
-      }
-    }
-    else if(self.props.skip) {
-      skip = self.props.skip;
-    }
     if(self.props.data && self.props.data.length) {
-      if(self.props.take) {
-        if(self.props.skip) {
-          skip = self.props.skip;
-        }
-        else {
-          skip = self.props.data.length;
-        }
-      }
       let html = '';
       self.props.data.forEach(function(item) {
         html += self.genItem(item);
@@ -130,7 +107,7 @@ class PostList extends migi.Component {
         });
         $list.on('click', '.comment', function() {
           let id = $(this).attr('rel');
-          location.href = '/post/' + id + '#name';
+          location.href = '/post/' + id + '#comment';
         });
         $list.on('click', '.del', function() {
           if(window.confirm('确认删除吗？')) {
@@ -148,16 +125,9 @@ class PostList extends migi.Component {
             });
           }
         });
-
-        let $window = $(window);
-        $window.on('scroll', function() {
-          self.checkMore($window);
-        });
       });
     }
   }
-  @bind loading
-  @bind loadEnd
   @bind message
   encode(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -180,7 +150,8 @@ class PostList extends migi.Component {
       return <li class="author">
         <div class="profile fn-clear">
           <a class="pic" href={ '/author/' + item.AuthorID }>
-            <img src={ util.autoSsl(util.img208_208_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+            <img src={ util.autoSsl(util.img208_208_80(item.SendUserHead_Url
+              || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           </a>
           <div class="txt">
             <a href={ '/author/' + item.AuthorID } class="name">{ item.SendUserNickName }</a>
@@ -214,12 +185,14 @@ class PostList extends migi.Component {
                         cn = 'no-scale';
                       }
                       if(i === 8) {
-                        return <li class={ 'all ' + cn } style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
+                        return <li class={ 'all ' + cn }
+                                   style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
                           <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
                           <a href={ '/post/' + id }>查看全部</a>
                         </li>;
                       }
-                      return <li class={ cn } style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
+                      return <li class={ cn }
+                                 style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
                         <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
                       </li>;
                     })
@@ -228,7 +201,8 @@ class PostList extends migi.Component {
                       if(item.Width !== 0 && item.Height !== 0 && item.Width < 86 && item.Height < 86) {
                         cn = 'no-scale';
                       }
-                      return <li class={ cn } style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
+                      return <li class={ cn }
+                                 style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
                         <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
                       </li>;
                     })
@@ -248,20 +222,29 @@ class PostList extends migi.Component {
               : ''
           }
           <b class="arrow"/>
-          <ul class="btn">
-            <li class="share" rel={ id }><b/><span>分享</span></li>
-            <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }><b/><span>{ item.FavorCount || '收藏' }</span></li>
-            <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount || '点赞' }</span></li>
-            <li class="comment" rel={ id }><b/><span>{ item.CommentCount || '评论' }</span></li>
-            { item.IsOwn ? <li class="del" rel={ id }><b/></li> : '' }
-          </ul>
         </div>
+        <ul class="btn">
+          <li class="share" rel={ id }><b/><span>分享</span></li>
+          <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }>
+            <b/><span>{ item.FavorCount || '收藏' }</span>
+          </li>
+          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }>
+            <b/><span>{ item.LikeCount || '点赞' }</span>
+          </li>
+          <li class="comment" rel={ id }>
+            <a href={ item.CommentCount ? '/post/' + id + '#comment' : '/subComment?type=1&id=' + id }>
+              <b/><span>{ item.CommentCount || '评论' }</span>
+            </a>
+          </li>
+          { item.IsOwn ? <li class="del" rel={ id }><b/></li> : '' }
+        </ul>
       </li>;
     }
     return <li>
       <div class="profile fn-clear">
         <a class="pic" href={ '/user/' + item.SendUserID }>
-          <img src={ util.autoSsl(util.img208_208_80(item.SendUserHead_Url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+          <img src={ util.autoSsl(util.img208_208_80(item.SendUserHead_Url
+            || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
         </a>
         <div class="txt">
           <a class="name" href={ '/user/' + item.SendUserID }>{ item.SendUserNickName }</a>
@@ -295,12 +278,14 @@ class PostList extends migi.Component {
                       cn = 'no-scale';
                     }
                     if(i === 8) {
-                      return <li class={ 'all ' + cn } style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
+                      return <li class={ 'all ' + cn }
+                                 style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
                         <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
                         <a href={ '/post/' + id }>查看全部</a>
                       </li>;
                     }
-                    return <li class={ cn } style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
+                    return <li class={ cn }
+                               style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
                       <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
                     </li>;
                   })
@@ -309,7 +294,8 @@ class PostList extends migi.Component {
                     if(item.Width !== 0 && item.Height !== 0 && item.Width < 86 && item.Height < 86) {
                       cn = 'no-scale';
                     }
-                    return <li class={ cn } style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
+                    return <li class={ cn }
+                               style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
                       <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
                     </li>;
                   })
@@ -329,56 +315,34 @@ class PostList extends migi.Component {
             : ''
         }
         <b class="arrow"/>
-        <ul class="btn">
-          <li class="share" rel={ id }><b/><span>分享</span></li>
-          <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }><b/><span>{ item.FavorCount || '收藏' }</span></li>
-          <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount || '点赞' }</span></li>
-          <li class="comment" rel={ id }><b/><span>{ item.CommentCount || '评论' }</span></li>
-          { item.IsOwn ? <li class="del" rel={ id }><b/></li> : '' }
-        </ul>
       </div>
+      <ul class="btn">
+        <li class="share" rel={ id }><b/><span>分享</span></li>
+        <li class={ 'favor' + (item.ISFavor ? ' has' : '') } rel={ id }>
+          <b/><span>{ item.FavorCount || '收藏' }</span></li>
+        <li class={ 'like' + (item.ISLike ? ' has' : '') } rel={ id }><b/><span>{ item.LikeCount || '点赞' }</span>
+        </li>
+        <li class="comment" rel={ id }>
+          <a href={ item.CommentCount ? '/post/' + id + '#comment' : '/subComment?type=1&id=' + id }>
+            <b/><span>{ item.CommentCount || '评论' }</span>
+          </a>
+        </li>
+        { item.IsOwn ? <li class="del" rel={ id }><b/></li> : '' }
+      </ul>
     </li>;
-  }
-  checkMore($window) {
-    let self = this;
-    let WIN_HEIGHT = $window.height();
-    let HEIGHT = $(document.body).height();
-    let bool;
-    bool = $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
-    if(!self.loading && !self.loadEnd && bool) {
-      self.load();
-    }
-  }
-  load() {
-    let self = this;
-    self.loading = true;
-    self.message = '正在加载...';
-    let params = self.props.params || {};
-    params.skip = skip;
-    params.take = take;
-    net.postJSON(self.props.url || '/api/circle/list', params, function(res) {
-      if(res.success) {
-        let data = res.data;
-        skip += take;
-        self.setData(data.data);
-        if(!data.data.length || data.data.length < take) {
-          self.loadEnd = true;
-          self.message = '已经到底了';
-        }
-      }
-      else {
-        alert(res.message || util.ERROR_MESSAGE);
-      }
-      self.loading = false;
-    }, function(res) {
-      alert(res.message || util.ERROR_MESSAGE);
-      self.loading = false;
-    });
   }
   setData(data) {
     let self = this;
     let html = '';
-    data.forEach(function(item) {
+    (data || []).forEach(function(item) {
+      html += self.genItem(item);
+    });
+    $(self.ref.list.element).html(html);
+  }
+  appendData(data) {
+    let self = this;
+    let html = '';
+    (data || []).forEach(function(item) {
       html += self.genItem(item);
     });
     $(self.ref.list.element).append(html);
@@ -395,4 +359,4 @@ class PostList extends migi.Component {
   }
 }
 
-export default PostList;
+export default HotPost;

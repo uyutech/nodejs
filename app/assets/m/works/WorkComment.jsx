@@ -32,8 +32,6 @@ class WorkComment extends migi.Component {
   @bind loadEnd
   @bind worksID
   @bind workID
-  @bind rootID = -1
-  @bind parentID = -1
   @bind barrageTime = 0
   checkMore($window) {
     let self = this;
@@ -114,7 +112,7 @@ class WorkComment extends migi.Component {
     }
   }
   render() {
-    return <div class="mod mod-comment fn-hide">
+    return <div class={ 'mod mod-comment' + (this.props.hidden ? ' fn-hide' : '') }>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="0">全部<small>{ this.props.commentData.Size }</small></li>

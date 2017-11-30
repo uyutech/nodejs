@@ -49,7 +49,7 @@ module.exports = app => {
       if(!Array.isArray(heights)) {
         heights = [];
       }
-      if(content.length < 3 || content.length > 512) {
+      if(content.length < 3 || content.length > 2048) {
         return {
           success: false,
         };

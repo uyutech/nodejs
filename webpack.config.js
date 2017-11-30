@@ -15,6 +15,9 @@ module.exports = {
     mcircle: './app/assets/m/circle/index.jsx',
     mcpost: './app/assets/m/circle/mcpost.jsx',
     muser: './app/assets/m/user/index.jsx',
+    mcircling: './app/assets/m/circling/index.jsx',
+    mfollow: './app/assets/m/follow/index.jsx',
+    msubcomment: './app/assets/m/subcomment/index.jsx',
     dcommon: './app/assets/d/common/index.js',
     dindex: './app/assets/d/index/index.jsx',
     dfind: './app/assets/d/find/index.jsx',
@@ -28,6 +31,8 @@ module.exports = {
     dpost: './app/assets/d/post/index.jsx',
     dcircle: './app/assets/d/circle/index.jsx',
     duser: './app/assets/d/user/index.jsx',
+    dcircling: './app/assets/d/circling/index.jsx',
+    dfollow: './app/assets/d/follow/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

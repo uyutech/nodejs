@@ -93,5 +93,11 @@ module.exports = appInfo => {
     formLimit: '20mb',
   };
 
+  config.security = {
+    csrf: {
+      ignore: '/h5',
+    },
+  };
+
   return config;
 };

@@ -9,6 +9,7 @@ import Author from './Author.jsx';
 let author = migi.preExist(<Author
   isLogin={ $CONFIG.isLogin }
   authorID={ $CONFIG.authorID }
+  tag={ $CONFIG.tag }
   authorDetail={ $CONFIG.authorDetail }
   homeDetail={ $CONFIG.homeDetail }
   album={ $CONFIG.album }

@@ -23,7 +23,7 @@ module.exports = app => {
           uid,
           TagID: circleID,
           Skip: 0,
-          Take: 30,
+          Take: 10,
         }),
       };
       if(res.circleDetail.data.success) {

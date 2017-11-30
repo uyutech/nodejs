@@ -48,6 +48,8 @@ class Circle extends migi.Component {
         subCmt.to = null;
         subCmt.originTo = name;
         subCmt.hidden = false;
+        self.rootID = -1;
+        self.parentID = -1;
       });
       hotPost.on('closeComment', function() {
         subCmt.to = null;

@@ -7,27 +7,12 @@
     overflow:hidden;
     li{
       position:relative;
-      height:0.46rem;
-      line-height:0.46rem;
+      height:0.54rem;
+      line-height:0.54rem;
       cursor:pointer;
       transition:transform 0.2s;
-      color:#919191;
       overflow:hidden;
-      &:after{
-        position:absolute;
-        left:0.1rem;
-        right:0.1rem;
-        bottom:0;
-        height:2px;
-        background:#EDF3F7;
-        content:' ';
-      }
-      &:last-child,&.cur{
-        &:after{
-          display:none;
-          content:'';
-        }
-      }
+      border-bottom:1px solid #EDF3F7;
       &.private{
         padding-left:0.5rem;
         opacity:0.7;
@@ -52,15 +37,15 @@
         }
       }
       &.rel{
-        padding-left:0.5rem;
+        padding-left:0.6rem;
       }
       .pic{
         position:absolute;
-        left:0.1rem;
-        top:0.06rem;
+        left:1px;
+        top:0;
         display:block;
-        width:0.32rem;
-        height:0.32rem;
+        width:0.54rem;
+        height:0.54rem;
         border-radius:0.05rem;
         overflow:hidden;
         box-shadow:@picShadow;
@@ -93,13 +78,14 @@
       }
       .icon{
         position:absolute;
-        top:0.14rem;
+        top:50%;
         right:0.1rem;
         display:block;
-        width:0.18rem;
-        height:0.18rem;
-        background:url(../../works/pl-icon.png) no-repeat center;
+        width:0.24rem;
+        height:0.24rem;
+        background:url(play.png) no-repeat center;
         background-size:contain;
+        transform:translateY(-50%);
         b{
           display:none;
         }

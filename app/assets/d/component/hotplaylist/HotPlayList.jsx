@@ -32,14 +32,14 @@ class HotPlayList extends migi.Component {
             if(item.WorksState === 2) {
               return <li class={ type + ' rel' }>
                 <a href={ '/works/' + item.WorksID + '/' + item.ItemID } class="pic">
-                  <img src={ util.autoSsl(util.img64_64_80(item.WorksCoverPic || this.props.cover)) || '//zhuanquan.xin/img/blank.png' }/>
+                  <img src={ util.autoSsl(util.img108_108_80(item.WorksCoverPic || this.props.cover)) || '//zhuanquan.xin/img/blank.png' }/>
                 </a>
                 <a href={ '/works/' + item.WorksID + '/' + item.ItemID } class={ 'name' + (item.ItemName ? '' : ' empty') }>{ item.ItemName || '待揭秘' }</a>
               </li>;
             }
             return <li class={ type + ' rel' }>
               <a href={ '/works/' + item.WorksID + '/' + item.ItemID } class="pic">
-                <img src={ util.autoSsl(util.img64_64_80(item.WorksCoverPic || this.props.cover)) || '//zhuanquan.xin/img/blank.png' }/>
+                <img src={ util.autoSsl(util.img108_108_80(item.WorksCoverPic || this.props.cover)) || '//zhuanquan.xin/img/blank.png' }/>
               </a>
               <a href={ '/works/' + item.WorksID + '/' + item.ItemID } class={ 'name' + (item.ItemName ? '' : ' empty') }>{ item.ItemName || '待揭秘' }</a>
               <span class="icon"/>

@@ -83,7 +83,7 @@ class PlayList extends migi.Component {
     }
   }
   render() {
-    return <div class="mod mod-playlist">
+    return <div class={ 'mod mod-playlist' + (this.props.hidden ? ' fn-hide' : '') }>
       <ul class="type fn-clear" onClick={ { li: this.clickType } }>
         {/*<li class="video" rel="video">播放视频</li>*/}
         {/*<li class="audio" rel="audio">播放音频</li>*/}

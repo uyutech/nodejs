@@ -12,6 +12,7 @@ module.exports = app => {
       if(!authorID) {
         return;
       }
+      let tag = ctx.query.tag;
       let authorDetail = {};
       let homeDetail = {};
       let album = {};
@@ -95,6 +96,7 @@ module.exports = app => {
       // }
       yield ctx.render('mauthor', {
         authorID,
+        tag,
         authorDetail,
         homeDetail,
         album,

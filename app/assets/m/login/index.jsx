@@ -8,4 +8,4 @@ import './index.less';
 
 import Login from './Login.jsx';
 
-let login = migi.preExist(<Login/>);
+let login = migi.preExist(<Login goto={ $CONFIG.goto }/>);

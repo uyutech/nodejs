@@ -27,7 +27,6 @@ class HotMusicAlbum extends migi.Component {
   }
   render() {
     return <div class="cp-hotmusicalbum">
-      <h4>{ this.props.title }</h4>
       <div class="list" ref="list">
         <div class="c">
           {
@@ -35,7 +34,7 @@ class HotMusicAlbum extends migi.Component {
               ? <ul>
                 {
                   this.dataList.map(function(item) {
-                    let url = item.WorkType === 5 ? `/musicalbum/${item.WorksID}` : `/works/${item.WorksID}`;
+                    let url = `/works/${item.WorksID}`;
                     return <li>
                       <b class="bg"/>
                       <a href={ url } class="pic">

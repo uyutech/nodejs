@@ -20,7 +20,7 @@ const TEXT = {
   3: '加载失败',
 };
 const MAX_IMG_NUM = 10;
-const MAX_TEXT_LENGTH = 512;
+const MAX_TEXT_LENGTH = 2048;
 
 class SubPost extends migi.Component {
   constructor(...data) {
@@ -324,10 +324,18 @@ class SubPost extends migi.Component {
       self.imgNum = self.list.length;
     }
   }
+  clickClose(e) {
+    let ref = document.referrer;
+    if(ref && ref.indexOf(location.origin) > -1) {
+      e.preventDefault();
+      history.back();
+    }
+  }
   render() {
     return <form class="mod-sub" ref="form" onSubmit={ this.submit }>
       <div class="ti">
-        <a href={ '/circle/' + this.props.circleID } class="close" title="返回"/>
+        <a onClick={ this.clickClose } class="close" title="返回"
+           href={ this.props.circleID ? ('/circle/' + this.props.circleID) : '/' }/>
         <span class={ 'limit' + (this.warnLength ? ' warn' : '') }><strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }</span>
         <input type="submit"
                class={ 'submit' + (this.sending || this.invalid || this.disableUpload ? ' dis' : '') }

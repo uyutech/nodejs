@@ -7,8 +7,8 @@ import util from '../common/util';
 import Profile from './Profile.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
 import Page from '../component/page/Page.jsx';
-import HotUser from '../component/hotuser/HotUser.jsx';
-import HotAuthor from '../component/hotauthor/HotAuthor.jsx';
+import SubCmt from '../component/subcmt/SubCmt.jsx';
+import ImageView from '../find/ImageView.jsx';
 
 let loading;
 let take = 10;
@@ -33,6 +33,66 @@ class My extends migi.Component {
           self.load(i);
         });
       }
+      let hotPost = self.ref.hotPost;
+      let subCmt = self.ref.subCmt;
+      hotPost.on('openComment', function(postID, name, comment) {
+        self.postID = postID;
+        self.comment = comment;
+        subCmt.to = null;
+        subCmt.originTo = name;
+        subCmt.hidden = false;
+        self.rootID = -1;
+        self.parentID = -1;
+      });
+      hotPost.on('closeComment', function() {
+        subCmt.to = null;
+        subCmt.hidden = true;
+      });
+      hotPost.on('chooseSubComment', function(rid, cid, name) {
+        self.rootID = rid;
+        self.parentID = cid;
+        subCmt.to = name;
+      });
+      hotPost.on('closeSubComment', function() {
+        self.rootID = -1;
+        self.parentID = -1;
+        subCmt.to = null;
+      });
+      subCmt.on('submit', function(content) {
+        subCmt.invalid = true;
+        let postID = self.postID;
+        let rootID = self.rootID;
+        let parentID = self.parentID;
+        let comment = self.comment;
+        net.postJSON('/api/post/addComment', {
+          parentID,
+          rootID,
+          postID,
+          content,
+        }, function(res) {
+          if(res.success) {
+            subCmt.value = '';
+            if(rootID === -1) {
+              comment.prependData(res.data);
+              comment.message = '';
+            }
+            else {
+              comment.prependChild(res.data, parentID);
+            }
+          }
+          else if(res.code === 1000) {
+            migi.eventBus.emit('NEED_LOGIN');
+            subCmt.invalid = false;
+          }
+          else {
+            alert(res.message || util.ERROR_MESSAGE);
+            subCmt.invalid = false;
+          }
+        }, function(res) {
+          alert(res.message || util.ERROR_MESSAGE);
+          subCmt.invalid = false;
+        });
+      });
     });
   }
   clickOut(e) {
@@ -93,17 +153,11 @@ class My extends migi.Component {
         this.props.bonusPoint.ranking
           ? <div class="bp">
             <p>全站排名 { this.props.bonusPoint.ranking } 名</p>
-            <p><small>以上是截止到11月27日中午12点的积分排名哦，之后会尽快更新实时显示的功能-3-</small></p>
+            <p><small>以上是截止到11月30日中午12点的积分排名哦，本次活动将于11月30日晚0点结束。本次活动最终排名会在12月1日中午12点之后公布~</small></p>
           </div>
           : ''
       }
       <div class="c">
-        <h4>关注作者</h4>
-        <HotAuthor ref="hotAuthor" dataList={ this.props.follows }/>
-        <h4>关注圈er</h4>
-        <HotUser ref="userFollow" dataList={ this.props.userFollows }/>
-        <h4>关注我的</h4>
-        <HotUser ref="userFans" dataList={ this.props.userFans }/>
         <h4>我画的圈</h4>
         <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>
         <HotPost ref="hotPost" data={ this.props.myPost.data }/>
@@ -114,6 +168,11 @@ class My extends migi.Component {
         }
       </div>
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>
+      <SubCmt ref="subCmt"
+              hidden={ true }
+              subText="回复"
+              placeholder="交流一下吧~"/>
+      <ImageView ref="imageView"/>
     </div>;
   }
 }

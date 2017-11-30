@@ -1,0 +1,50 @@
+/**
+ * Created by army8735 on 2017/11/29.
+ */
+
+@import '../common/var';
+@import '../component/hotpost/index';
+@import '../component/page/index';
+@import '../component/subpost/index';
+@import '../component/subcmt/index';
+@import '../post/imageview';
+
+#page > .circling{
+  .circles{
+    li{
+      display:inline-block;
+      margin-right:0.05rem;
+      margin-bottom:0.02rem;
+      padding:0 0.1rem;
+      line-height:0.22rem;
+      border:1px solid @mainColor;
+      color:@mainColor;
+      border-radius:0.22rem;
+      white-space:nowrap;
+      cursor:pointer;
+      &:hover{
+        color:@secondColor;
+        border-color:@secondColor;
+      }
+      &.cur{
+        background:@mainColor;
+        color:@thirdTextColor;
+        &:hover{
+          background:@secondColor;
+        }
+      }
+    }
+  }
+  .cinfo{
+    margin-bottom:0.1rem;
+    padding:0 0.1rem;
+    color:@secondTextColor;
+  }
+  .main{
+    width:6.48rem;
+  }
+  .cp-page{
+    margin:0.1rem 0;
+    text-align:right;
+  }
+}

@@ -9,6 +9,7 @@ import Author from '../../assets/m/author/Author.jsx';
 export default function(data) {
   let isLogin = !!data.ctx.session.uid;
   let authorID = data.authorID;
+  let tag = data.tag;
   let authorDetail = data.authorDetail;
   let homeDetail = data.homeDetail;
   let album = data.album;
@@ -21,6 +22,7 @@ export default function(data) {
   let author = migi.preRender(<Author
     isLogin={ isLogin }
     authorID={ authorID }
+    tag={ tag }
     authorDetail={ authorDetail }
     homeDetail={ homeDetail }
     album={ album }
@@ -44,6 +46,7 @@ ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.authorID = ${data.helper.stringify(authorID)};
+  $CONFIG.tag = ${data.helper.stringify(tag)};
   $CONFIG.authorDetail = ${data.helper.stringify(authorDetail)};
   $CONFIG.homeDetail = ${data.helper.stringify(homeDetail)};
   $CONFIG.album = ${data.helper.stringify(album)};

@@ -4,20 +4,20 @@
 
 @import '../../d/common/var';
 @import '../component/hotwork/index';
-@import '../component/hotphotoalbum/index';
 @import '../component/hotmusicalbum/index';
 @import '../component/hotauthor/index';
 @import '../component/hotcircle/index';
-@import '../component/hotpost/index';
 @import '../component/subcmt/index';
-@import '../post/imageview';
+@import '../../d/component/hotplaylist/index';
 
-.find{
+#page{
+  margin-top:0.72rem;
+}
+#page > .find{
   > .banner{
     position:relative;
     height:1rem;
     overflow:hidden;
-    box-shadow:@picShadow;
     .list{
       display:flex;
       width:400%;
@@ -41,76 +41,111 @@
       text-align:center;
       li{
         display:inline-block;
-        margin:0 0.1rem;
-        width:0.1rem;
-        height:0.1rem;
-        border:1px solid #B1C0C9;
+        margin:0 0.05rem;
+        width:0.06rem;
+        height:0.06rem;
+        border:1px solid @mainColor;
         background:#FFF;
-        border-radius:100%;
+        border-radius:0.1rem;
         text-indent:99rem;
         overflow:hidden;
-        opacity:0.8;
         &.cur{
-          background:#9ECDDB;
-        }
-        &:hover{
-          opacity:1;
+          width:0.1rem;
+          background:@mainColor;
         }
       }
     }
   }
   h4{
     position:relative;
-    margin-top:0.1rem;
-    margin-left:0.1rem;
+    margin:0.1rem 0.1rem 0.05rem;
     padding-left:0.05rem;
-    font-size:0.12rem;
+    font-size:0.16rem;
+    small{
+      position:absolute;
+      top:0;
+      right:0;
+      padding-right:0.08rem;
+      font-size:0.12rem;
+      font-weight:400;
+      color:#B1C0C9;
+      &:active{
+        color:@mainHoverColor;
+      }
+      &:after{
+        position:absolute;
+        top:50%;
+        right:0;
+        width:0.07rem;
+        height:0.07rem;
+        border-top:1px solid #B1C0C9;
+        border-right:1px solid #B1C0C9;
+        transform:translateY(-50%) rotateZ(45deg);
+        content:' ';
+      }
+    }
     &:before{
       position:absolute;
       left:0;
-      top:0.02rem;
-      bottom:0.02rem;
+      top:50%;
       width:0.02rem;
-      background:@secondColor;
+      height:0.14rem;
+      background:@mainColor;
       content:' ';
-      border-radius:0.05rem;
+      border-radius:0.02rem;
+      transform:translateY(-50%);
     }
   }
-  > .cp-hotwork{
-    margin-top:0.1rem;
-  }
-  > .cp-hotmusicalbum{
-    margin-top:0.1rem;
-  }
-  > .cp-hotphotoalbum{
-    margin-top:0.1rem;
-  }
-  > .cp-hotpost{
-    margin-top:0.1rem;
-    padding:0;
-  }
-  > .cp-hotauthor{
-    margin-top:0.1rem;
-    .list .c ul li .info{
-      display:none;
+  .cp-hotauthor{
+    .list .c ul li{
+      .comment,.info{
+        display:none;
+      }
     }
   }
-  .post{
+  > .type{
     margin-top:0.1rem;
-    h4{
+    margin-bottom:1px;
+    padding-top:0.01rem;
+    height:0.4rem;
+    display:flex;
+    border-bottom:0.08rem solid @mainColor;
+    overflow:hidden;
+    li{
       position:relative;
-      margin-left:0.1rem;
-      padding-left:0.05rem;
-      font-size:0.12rem;
-      &:before{
-        position:absolute;
-        left:0;
-        top:0.02rem;
-        bottom:0.02rem;
-        width:0.02rem;
-        background:@secondColor;
-        content:' ';
-        border-radius:0.05rem;
+      padding:0 0.2rem 0 0.4rem;
+      width:0.3rem;
+      height:100%;
+      box-shadow:@tagShadow;
+      border-top-left-radius:0.24rem;
+      border-top-right-radius:0.24rem;
+      color:@secondTextColor;
+      line-height:0.48rem;
+      font-size:0.14rem;
+      cursor:pointer;
+      text-align:right;
+      background-color:rgba(255, 255, 255, 0.7);
+      background-repeat:no-repeat;
+      &.ma{
+        background-image:url(tag-ma.png);
+        background-size:0.18rem auto;
+        background-position:0.2rem 0.17rem;
+        &.cur{
+          background-image:url(tag-ma-cur.png);
+        }
+      }
+      &.pic{
+        background-image:url(tag-pic.png);
+        background-size:0.18rem auto;
+        background-position:0.2rem 0.16rem;
+        &.cur{
+          background-image:url(tag-pic-cur.png);
+        }
+      }
+      &.cur{
+        background-color:@mainColor;
+        color:@mainTextColor;
+        z-index:10;
       }
     }
   }

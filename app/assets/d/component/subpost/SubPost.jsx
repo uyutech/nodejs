@@ -20,7 +20,7 @@ const TEXT = {
   3: '加载失败',
 };
 const MAX_IMG_NUM = 10;
-const MAX_TEXT_LENGTH = 512;
+const MAX_TEXT_LENGTH = 2048;
 
 class SubPost extends migi.Component {
   constructor(...data) {

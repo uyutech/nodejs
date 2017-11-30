@@ -25,22 +25,11 @@ class AuthorComment extends migi.Component {
         self.checkMore($window);
       });
       self.loadEnd = self.props.commentData.Size <= take;
-      let comment = self.ref.comment;
-      comment.on('chooseSubComment', function(rid, cid, name) {
-        self.rootID = rid;
-        self.parentID = cid;
-      });
-      comment.on('closeSubComment', function() {
-        self.rootID = -1;
-        self.parentID = -1;
-      });
     });
   }
   @bind loading
   @bind loadEnd
   @bind authorID
-  @bind rootID = -1
-  @bind parentID = -1
   show() {
     let self = this;
     $(self.element).removeClass('fn-hide');
@@ -125,7 +114,7 @@ class AuthorComment extends migi.Component {
     this.load();
   }
   render() {
-    return <div class={ 'comments' + (this.props.show ? '' : ' fn-hide') }>
+    return <div class={ 'comments' + (this.props.hidden ? ' fn-hide' : '') }>
       <div class="fn">
         <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>
           <li class="cur" rel="0">全部评论<small>{ this.props.commentData.Count }</small></li>

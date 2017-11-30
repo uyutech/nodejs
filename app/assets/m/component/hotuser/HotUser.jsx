@@ -19,8 +19,8 @@ class HotAuthor extends migi.Component {
     let $list = $(this.ref.list.element);
     let $c = $list.find('.c');
     $c.css('width', '9999rem');
-    let $ul = $c.find('ul');
-    $c.css('width', $ul.width() + 1);
+    let $elem = $c.children();
+    $c.css('width', $elem.width() + 1);
   }
   render() {
     return <div class="cp-hotuser">
@@ -43,7 +43,7 @@ class HotAuthor extends migi.Component {
                   })
                 }
               </ul>
-              : <div class="empty">暂无数据</div>
+              : <div class="empty">{ this.props.empty || '暂无数据' }</div>
           }
         </div>
       </div>

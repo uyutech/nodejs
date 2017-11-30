@@ -9,8 +9,9 @@ class Login extends migi.Component {
     super(...data);
   }
   render() {
+    let goto = this.props.goto;
     return <div class="login">
-      <a href="/oauth/weibo" class="weibo" onClick={ this.clickWeibo }>微博登录</a>
+      <a href={ '/oauth/weibo?goto=' + encodeURIComponent(goto) } class="weibo">微博登录</a>
     </div>;
   }
 }

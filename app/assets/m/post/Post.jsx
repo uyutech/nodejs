@@ -35,47 +35,19 @@ class Post extends migi.Component {
       let subCmt = self.ref.subCmt;
       let comment = self.ref.comment;
       comment.on('chooseSubComment', function(rid, cid, name) {
-        self.rootID = rid;
-        self.parentID = cid;
-        subCmt.to = name;
-        subCmt.focus();
+        // self.rootID = rid;
+        // self.parentID = cid;
+        // subCmt.to = name;
+        // subCmt.focus();
+        location.href = '/subComment?type=1&id=' + self.props.postData.ID + '&cid=' + rid;
       });
       comment.on('closeSubComment', function() {
-        self.rootID = -1;
-        self.parentID = -1;
-        subCmt.to = null;
+        // self.rootID = -1;
+        // self.parentID = -1;
+        // subCmt.to = null;
       });
-      subCmt.on('submit', function(content) {
-        subCmt.invalid = true;
-        let rootID = self.rootID;
-        let parentID = self.parentID;
-        net.postJSON('/api/post/addComment', {
-          parentID,
-          rootID,
-          postID: self.props.id,
-          content,
-        }, function(res) {
-          if(res.success) {
-            subCmt.value = '';
-            if(rootID === -1) {
-              comment.prependData(res.data);
-            }
-            else {
-              comment.prependChild(res.data, parentID);
-            }
-          }
-          else if(res.code === 1000) {
-            migi.eventBus.emit('NEED_LOGIN');
-            subCmt.invalid = false;
-          }
-          else {
-            alert(res.message || util.ERROR_MESSAGE);
-            subCmt.invalid = false;
-          }
-        }, function(res) {
-          alert(res.message || util.ERROR_MESSAGE);
-          subCmt.invalid = false;
-        });
+      subCmt.on('focus', function() {
+        location.href = '/subComment?type=1&id=' + self.props.postData.ID;
       });
 
       let $root = $(self.element);
@@ -115,7 +87,8 @@ class Post extends migi.Component {
     }
     self.loading = true;
     comment.message = '正在加载...';
-    ajax = net.postJSON('/api/post/commentList', { postID: self.props.id, skip, take, sortType, myComment, currentCount }, function(res) {
+    ajax = net.postJSON('/api/post/commentList',
+      { postID: self.props.id, skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         if(data.data.length) {
@@ -254,17 +227,19 @@ class Post extends migi.Component {
     let html = (postData.Content || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
       .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
-    let replyData = this.props.replyData;console.log(replyData.Size);
+    let replyData = this.props.replyData;
     return <div class="post">
       <h2>{ postData.Title }</h2>
       <div class={ 'profile fn-clear' + (postData.IsAuthor ? ' author' : '') }>
         {
           postData.IsAuthor
             ? <a class="pic" href={ '/author/' + postData.AuthorID }>
-              <img src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
+              <img src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url
+                || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
             </a>
             : <a class="pic" href={ '/user/' + postData.SendUserID }>
-              <img src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
+              <img src={ util.autoSsl(util.img128_128_80(postData.SendUserHead_Url
+                || '//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png')) }/>
             </a>
         }
         <div class="txt">
@@ -304,14 +279,20 @@ class Post extends migi.Component {
         <b class="arrow"/>
         <ul class="btn">
           <li class="share" onClick={ this.clickShare }><b/><span>分享</span></li>
-          <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }><b/><span>{ this.favorCount || '收藏' }</span></li>
-          <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }><b/><span>{ this.likeCount || '点赞' }</span></li>
-          <li class="comment"><b/><span>{ postData.CommentCount || '评论' }</span></li>
+          <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }>
+            <b/><span>{ this.favorCount || '收藏' }</span>
+          </li>
+          <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }>
+            <b/><span>{ this.likeCount || '点赞' }</span>
+          </li>
+          <li class="comment"><a href={ '/subComment?type=1&id=' + this.props.postData.ID }>
+            <b/><span>{ postData.CommentCount || '评论' }</span></a>
+          </li>
           { postData.IsOwn ? <li class="del" onClick={ this.clickDel }><b/></li> : '' }
         </ul>
       </div>
       <div class="box">
-        <a name="name"/>
+        <a name="comment"/>
         <h4>回复</h4>
         <div class="fn">
           <ul class="type fn-clear" onClick={ { li: this.switchType2 } }>

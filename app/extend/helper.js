@@ -11,7 +11,21 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?97';
+    return '/public' + url + '?98';
+  },
+  okJSON(data) {
+    return {
+      success: true,
+      data,
+    };
+  },
+  errorJSON(data) {
+    return {
+      success: false,
+      code: data.code,
+      message: data.message,
+      data: data.data,
+    };
   },
   * postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {
@@ -130,6 +144,13 @@ let helper = {
         <img src="//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png">
       </a>
     </div>`;
+  },
+  getMTopMenu: function(index) {
+    return `<ul class="top-menu" id="topMenu">
+      <li class="${index === 0 ? 'cur' : ''}"><a href="/">发现</a></li>
+      <li class="${index === 1 ? 'cur' : ''}"><a href="/circling">转圈</a></li>
+      <li class="${index === 2 ? 'cur' : ''}"><a href="/follow">关注</a></li>
+    </ul>`;
   },
   getMBotNav: function() {
     return `<div class="cp-botnav">All Rights Reserved 转圈circling 浙ICP备17029501号-2</div>`;

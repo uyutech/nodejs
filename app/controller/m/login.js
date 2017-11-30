@@ -10,7 +10,9 @@ module.exports = app => {
       if(ctx.session.uid) {
         return ctx.redirect('/my');
       }
+      let goto = ctx.query.goto;
       yield ctx.render('mlogin', {
+        goto,
       });
     }
   }
