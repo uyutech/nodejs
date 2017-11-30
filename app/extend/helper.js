@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?103';
+    return '/public' + url + '?104';
   },
   okJSON(data) {
     return {
@@ -150,6 +150,7 @@ let helper = {
       <li class="${index === 0 ? 'cur' : ''}"><a href="/">发现</a></li>
       <li class="${index === 1 ? 'cur' : ''}"><a href="/circling">转圈</a></li>
       <li class="${index === 2 ? 'cur' : ''}"><a href="/follow">关注</a></li>
+      <li class="app"><span>加班赶制app中~(๑•̀ᄇ•́)و ✧ </span></li>
     </ul>`;
   },
   getMBotNav: function() {

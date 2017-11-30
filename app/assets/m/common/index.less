@@ -204,7 +204,7 @@ a{
   border-bottom:0.01rem solid #C5DEF0;
   li{
     position:relative;
-    display:block;
+    flex:1;
     height:100%;
     margin-right:0.1rem;
     padding-right:0.1rem;
@@ -227,10 +227,25 @@ a{
       line-height:0.3rem;
       color:#B1C0C9;
       font-size:0.14rem;
+      text-align:center;
     }
     &.cur{
       a{
         color:@mainColor;
+      }
+    }
+    &.app{
+      display:flex;
+      align-items:center;
+      flex:none;
+      span{
+        display:block;
+        width:1.4rem;
+        padding:0 0.1rem;
+        background:@mainColor;
+        border-radius:0.16rem;
+        white-space:nowrap;
+        color:#FFF;
       }
     }
   }

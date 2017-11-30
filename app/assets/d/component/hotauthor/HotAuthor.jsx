@@ -2,7 +2,12 @@
  * Created by army8735 on 2017/8/9.
  */
 
+'use strict';
+
 import util from '../../common/util';
+import authorTemplate from '../../../d/component/author/authorTemplate';
+
+let seq = ['ge', 'qu', 'ci', 'cv', 'hun'];
 
 class HotAuthor extends migi.Component {
   constructor(...data) {
@@ -17,9 +22,33 @@ class HotAuthor extends migi.Component {
           ? <ul class="list fn-clear">
               {
                 this.dataList.map(function(item) {
+                  let type = [];
+                  if(item.Authortype) {
+                    for(let i = 0, len = item.Authortype.length; i < len; i++) {
+                      let code = authorTemplate.code2Data[item.Authortype[i].AuthorTypeID].css;
+                      if(code && type.indexOf(code) === -1) {
+                        type.push(code);
+                      }
+                    }
+                  }
+                  migi.sort(type, function(a, b) {
+                    if(seq.indexOf(a) === -1) {
+                      return true;
+                    }
+                    if(seq.indexOf(b) === -1) {
+                      return false;
+                    }
+                    return seq.indexOf(a) > seq.indexOf(b);
+                  });
                   return <li authorID={ item.AuthorID }>
                     <a href={ `/author/${item.AuthorID}` } class="pic">
-                      <img src={ util.autoSsl(util.img144_144_80(item.Head_url || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+                      <img src={ util.autoSsl(util.img144_144_80(item.Head_url
+                        || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+                      {
+                        type.slice(0, 2).map(function(item) {
+                          return <b class={ 'cp-author-type-' + item }/>;
+                        })
+                      }
                     </a>
                     <a href={ `/author/${item.AuthorID}` } class="txt">
                       <span class="name">{ item.AuthorName }</span>

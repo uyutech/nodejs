@@ -5,6 +5,7 @@
 'use strict';
 
 import util from '../../../d/common/util';
+import WorksTypeEnum from '../../../d/works/WorksTypeEnum';
 
 class HotMusicAlbum extends migi.Component {
   constructor(...data) {
@@ -38,8 +39,15 @@ class HotMusicAlbum extends migi.Component {
                     return <li>
                       <b class="bg"/>
                       <a href={ url } class="pic">
-                        <img src={ util.autoSsl(util.img200_200_80(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
+                        <img src={ util.autoSsl(util.img200_200_80(item.cover_Pic
+                          || '//zhuanquan.xin/img/blank.png')) }/>
+                        <span class="type">{ WorksTypeEnum.NAME[item.WorkType] }</span>
                         <span class="num">{ util.abbrNum(item.Popular) }</span>
+                        {
+                          item.WorkState === 2 || item.WorkState === 3
+                            ? <span class="state">填坑中</span>
+                            : ''
+                        }
                       </a>
                       <a href={ url } class="txt">
                         <span>{ item.Title }</span>

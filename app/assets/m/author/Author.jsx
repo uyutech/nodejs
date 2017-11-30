@@ -70,7 +70,10 @@ class Author extends migi.Component {
     }
   }
   render() {
-    if(!this.props.authorDetail.ISSettled) {
+    let empty = !this.props.album.length
+      && !this.props.homeDetail.Hot_Works_Items.length
+      && !this.props.homeDetail.AuthorToAuthor.length;
+    if(!this.props.authorDetail.ISSettled || empty) {
       return <div class="author">
         <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
         <ul class="type fn-clear" ref="type">
@@ -91,11 +94,7 @@ class Author extends migi.Component {
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
       <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
-        {
-          this.props.authorDetail.ISSettled
-            ? <li class={ 'home' + (this.props.tag !== 'comment' ? ' cur' : '') } rel="home">主页</li>
-            : ''
-        }
+        <li class={ 'home' + (this.props.tag !== 'comment' ? ' cur' : '') } rel="home">主页</li>
         <li class={ 'comments' + (this.props.tag === 'comment' ? ' cur' : '') } rel="comment">留言</li>
       </ul>
       <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }

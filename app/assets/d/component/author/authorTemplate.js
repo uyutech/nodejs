@@ -21,17 +21,14 @@ let code2Data = {
   '112': {
     name: '和声',
     display: '和声',
-    css: 'ge',
   },
   '113': {
     name: '伴唱',
     display: '伴唱',
-    css: 'ge',
   },
   '114': {
     name: '戏腔',
     display: '戏腔',
-    css: 'ge',
   },
   '115': {
     name: '合唱',
@@ -61,7 +58,6 @@ let code2Data = {
   '133': {
     name: '录音',
     display: '录音',
-    css: 'hun',
   },
   '134': {
     name: '修音',

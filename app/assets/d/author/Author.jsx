@@ -98,25 +98,37 @@ class Author extends migi.Component {
     }
   }
   render() {
+    let empty = !this.props.album.length
+      && !this.props.homeDetail.Hot_Works_Items.length
+      && !this.props.homeDetail.AuthorToAuthor.length;
+    if(!this.props.authorDetail.ISSettled || empty) {
+      return <div class="author">
+        <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
+        <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
+          <li class="comments cur" rel="2">留言</li>
+        </ul>
+        <AuthorComment
+          ref="authorComment"
+          show={ true }
+          isLogin={ !!this.props.uid }
+          authorID={ this.props.authorID }
+          commentData={ this.props.commentData }/>
+        <SubCmt ref="subCmt"
+                originTo={ this.props.authorDetail.AuthorName }
+                placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
+      </div>;
+    }
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
       <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
-        {
-          this.props.authorDetail.ISSettled
-            ? <li class="home cur" rel="0">主页</li>
-            : ''
-        }
-        <li class={ 'comments' + (this.props.authorDetail.ISSettled ? '' : ' cur') } rel="2">留言</li>
+        <li class="home cur" rel="0">主页</li>
+        <li class="comments" rel="2">留言</li>
       </ul>
-      {
-        this.props.authorDetail.ISSettled
-          ? <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }
-                  album={ this.props.album }/>
-          : ''
-      }
+      <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }
+            album={ this.props.album }/>
       <AuthorComment
         ref="authorComment"
-        show={ !this.props.authorDetail.ISSettled }
+        show={ false }
         isLogin={ !!this.props.uid }
         authorID={ this.props.authorID }
         commentData={ this.props.commentData }/>

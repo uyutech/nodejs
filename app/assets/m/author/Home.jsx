@@ -22,12 +22,30 @@ class Home extends migi.Component {
   }
   render() {
     return <div class={ 'home' + (this.props.hidden ? ' fn-hide' : '' ) }>
-      <h4>主打作品</h4>
-      <HotWork ref="hotWork" dataList={ this.props.homeDetail.Hot_Works_Items }/>
-      <h4>专辑</h4>
-      <HotMusicAlbum ref="hotCollection" dataList={ this.props.album }/>
-      <h4>合作关系</h4>
-      <HotAuthor ref="hotAuthor" dataList={ this.props.homeDetail.AuthorToAuthor }/>
+      {
+        this.props.homeDetail.Hot_Works_Items.length
+          ? <div>
+              <h4>主打作品</h4>
+              <HotWork ref="hotWork" dataList={ this.props.homeDetail.Hot_Works_Items }/>
+            </div>
+          : ''
+      }
+      {
+        this.props.album.length
+          ? <div>
+              <h4>专辑</h4>
+              <HotMusicAlbum ref="hotCollection" dataList={ this.props.album }/>
+            </div>
+          : ''
+      }
+      {
+        this.props.homeDetail.AuthorToAuthor.length
+          ? <div>
+              <h4>合作关系</h4>
+              <HotAuthor ref="hotAuthor" dataList={ this.props.homeDetail.AuthorToAuthor }/>
+            </div>
+          : ''
+      }
     </div>;
   }
 }

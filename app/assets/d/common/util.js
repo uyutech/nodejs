@@ -74,12 +74,18 @@ let util = {
     }
     return url ? url + '-480_480_80' : url;
   },
+  img336__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-336__80' : url;
+  },
   img332_332_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
     }
     return url ? url + '-332_332_80' : url;
-    },
+  },
   img288__80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
       return url;
@@ -133,6 +139,12 @@ let util = {
       return url;
     }
     return url ? url + '-172_172_80' : url;
+  },
+  img168__80: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return url ? url + '-168__80' : url;
   },
   img150_150_80: function(url) {
     if(!/\/\/zhuanquan\./i.test(url)) {
@@ -293,13 +305,13 @@ let util = {
       return 0;
     }
     if(n >= 10000) {
-      n = new BigNumber(n).div(10000).toFixed(fix || 2);
+      n = new BigNumber(n).div(10000).toFixed(fix || 1);
       n = n.replace(/(\.[1-9]*)0+$/, '$1');
       n = n.replace(/\.0$/, '');
       n += 'w';
     }
     if(n >= 1000) {
-      n = new BigNumber(n).div(1000).toFixed(fix || 2);
+      n = new BigNumber(n).div(1000).toFixed(fix || 1);
       n = n.replace(/(\.[1-9]*)0+$/, '$1');
       n = n.replace(/\.0$/, '');
       n += 'k';

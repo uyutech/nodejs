@@ -46,6 +46,8 @@ module.exports = app => {
   app.post('/api/find/hotWorkList', 'api.find.hotWorkList');
   //TODO: del
   app.post('/api/find/hotPostList', 'api.find.hotPostList');
+  app.post('/api/find/hotPlayList', 'api.find.hotPlayList');
+  app.post('/api/find/hotPicList', 'api.find.hotPicList');
 
   app.post('/api/user/settle', app.middlewares.needLoginJson(), 'api.user.settle');
   app.post('/api/user/settleShadowName', app.middlewares.needLoginJson(), 'api.user.settleShadowName');

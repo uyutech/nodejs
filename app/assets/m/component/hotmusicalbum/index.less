@@ -52,15 +52,39 @@
             }
             .num{
               position:absolute;
-              right:0.05rem;
+              right:0.04rem;
               bottom:0;
-              display:block;
               padding-left:0.22rem;
               line-height:0.18rem;
               background:url(../hotwork/comment-white.png) no-repeat 0.05rem center;
               background-size:0.14rem auto;
               font-size:0.11rem;
               z-index:1;
+            }
+            .state{
+              position:absolute;
+              left:0.05rem;
+              top:0.02rem;
+              text-shadow:@picHoverShadow;
+              font-size:0.1rem;
+            }
+            .type{
+              position:absolute;
+              top:0.04rem;
+              right:0.04rem;
+              display:block;
+              padding:0 0.03rem;
+              line-height:0.14rem;
+              //background:rgba(0,0,0,0.1);
+              border:1px solid #FFF;
+              border-radius:0.14rem;
+              box-shadow:inset @picShadow, @picShadow;
+              font-size:0.1rem;
+              text-shadow:@picHoverShadow;
+              .android &{
+                padding-top:0.02rem;
+                line-height:0.11rem;
+              }
             }
           }
           .txt{

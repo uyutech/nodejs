@@ -41,6 +41,11 @@ class HotWork extends migi.Component {
                         <img src={ util.autoSsl(util.img200_200_80(item.cover_Pic)) || '//zhuanquan.xin/img/blank.png' }/>
                         <span class="type">原创音乐</span>
                         <span class="num">{ util.abbrNum(item.Popular) }</span>
+                        {
+                          item.WorkState === 2 || item.WorkState === 3
+                            ? <span class="state">填坑中</span>
+                            : ''
+                        }
                       </a>
                       <a href={ `/works/${item.WorksID}` } class="txt">
                         <span>{ item.Title }</span>

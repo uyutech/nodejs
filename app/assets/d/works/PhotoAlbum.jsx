@@ -213,16 +213,16 @@ class PhotoAlbum extends migi.Component {
   }
   genItem(data) {
     list.push(data);
-    if(data.Width <= 144) {
+    if(data.Width <= 288) {
       return <li rel={ index++ } id={ 'photo_' + data.ItemID }>
-        <img src={ util.autoSsl(util.img288__80(data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } height={ data.Height }/>
+        <img src={ util.autoSsl(util.img288__80(data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } height={ data.Height / 2 }/>
         <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
         <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>
       </li>;
     }
-    let height = data.Height * 144 / data.Width;
+    let height = data.Height * 288 / data.Width;
     return <li rel={ index++ } id={ 'photo_' + data.ItemID }>
-      <img src={ util.autoSsl(util.img288__80(data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } height={ height }/>
+      <img src={ util.autoSsl(util.img288__80(data.FileUrl)) || '//zhuanquan.xin/img/blank.png' } height={ height / 2 }/>
       <b class={ 'like' + (data.ISLike ? ' has' : '') } itemID={ data.ItemID }/>
       <b class={ 'favor' + (data.ISFavor ? ' has' : '') } itemID={ data.ItemID }/>
     </li>;
