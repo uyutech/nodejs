@@ -12,6 +12,17 @@ const MAX_TEXT_LENGTH = 2048;
 class SubCmt extends migi.Component {
   constructor(...data) {
     super(...data);
+    let self = this;
+    self.on(migi.Event.DOM, function() {
+      let key2 = self.getContentKey();
+      let cache2 = localStorage[key2];
+      if(cache2) {
+        self.value = cache2.trim();
+        self.input(null, self.ref.input);
+        let length = self.value.trim().length;
+        self.invalid = length < 3 || length > MAX_TEXT_LENGTH;
+      }
+    });
   }
   @bind placeholder
   @bind value = ''
@@ -19,6 +30,9 @@ class SubCmt extends migi.Component {
   @bind invalid = true
   @bind warnLength
   @bind sending
+  getContentKey() {
+    return $CONFIG.uid + '_subcmt_content';
+  }
   input(e, vd) {
     let self = this;
     let $vd = $(vd.element);
@@ -27,6 +41,8 @@ class SubCmt extends migi.Component {
     let content = $vd.val().trim();
     self.invalid = content.length < 3 || content.length > MAX_TEXT_LENGTH;
     self.warnLength = content.length > MAX_TEXT_LENGTH;
+    let key2 = self.getContentKey();
+    localStorage[key2] = content;
   }
   focus() {
     this.ref.form.element.scrollIntoView(true);
@@ -44,6 +60,8 @@ class SubCmt extends migi.Component {
         rid: self.props.rid
       }, function(res) {
         if(res.success) {
+          let key2 = self.getContentKey();
+          localStorage[key2] = '';
           switch(self.props.type) {
             case '1':
               location.href = '/post/' + self.props.id + '#comment';
