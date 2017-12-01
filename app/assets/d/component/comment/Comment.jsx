@@ -28,7 +28,9 @@ class Comment extends migi.Component {
     if(self.props.message !== undefined) {
       self.message = self.props.message;
     }
-    self.empty = !html;
+    if(self.props.data && self.props.data.length === 0) {
+      self.empty = true;
+    }
 
     self.on(migi.Event.DOM, function() {
       let $root = $(self.element);

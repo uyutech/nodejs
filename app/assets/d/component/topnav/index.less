@@ -21,8 +21,7 @@
     display:block;
     left:-0.3rem;
     top:0;
-    padding-left:2rem;
-    width:4rem;
+    width:1.5rem;
     height:0.7rem;
     background:url(logo-beta-white.png) no-repeat 0 center;
     background-size:1.34rem auto;
@@ -33,7 +32,7 @@
   .menu{
     position:absolute;
     left:1.3rem;
-    top:0.25rem;
+    top:0.2rem;
     line-height:1.5;
     li{
       float:left;
@@ -43,17 +42,20 @@
       padding-right:0.1rem;
       &:after{
         position:absolute;
-        top:0.05rem;
-        bottom:0.05rem;
+        top:50%;
         right:0;
         width:0;
+        height:0.1rem;
         border-right:1px solid #CCC;
         content:' ';
+        transform:translateY(-50%);
       }
       &:last-child:after{
         border:none;
       }
       a{
+        display:block;
+        padding:0.1rem;
         color:@secondTextColor;
         &.cur{
           color:@mainTextColor;
