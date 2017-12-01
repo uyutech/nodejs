@@ -17,7 +17,7 @@ let activityLabel = {
       value: '#每日练字打卡# #31天任务挑战# Day 1 #我在转圈上听的第一首歌#'
     },
     {
-      name: '个人书法展',
+      name: '#个人书法展#',
       value: '#个人书法展#',
     }
   ],
@@ -27,7 +27,7 @@ let activityLabel = {
       value: '#汉服种草活动#'
     },
     {
-      name: '传统文化之美',
+      name: '#传统文化之美#',
       value: '#传统文化之美#'
     }
   ],
