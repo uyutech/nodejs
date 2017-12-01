@@ -63,7 +63,7 @@ class HotPost extends migi.Component {
               else {
                 $li.removeClass('has');
               }
-              $li.find('span').text(data.FavorCount || '分享');
+              $li.find('span').text(data.FavorCount || '收藏');
             }
             else {
               alert(res.message || util.ERROR_MESSAGE);

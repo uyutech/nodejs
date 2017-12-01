@@ -48,7 +48,7 @@ class Works extends migi.Component {
         self.rid = rid;
         self.cid = cid;
         if(!n || n === '0') {
-          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID + '&cid=' + cid + '&rid=' + rid;
+          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + (self.workID || '') + '&cid=' + cid + '&rid=' + rid;
         }
       });
       comment.on('closeSubComment', function() {
@@ -56,10 +56,10 @@ class Works extends migi.Component {
       });
       subCmt.on('focus', function() {
         if(subCmt.to) {
-          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID + '&cid=' + self.cid + '&rid=' + self.rid;
+          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + (self.workID || '') + '&cid=' + self.cid + '&rid=' + self.rid;
         }
         else {
-          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + self.workID;
+          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + (self.workID || '');
         }
       });
     });
