@@ -7,7 +7,7 @@
 import util from "../../d/common/util";
 import net from "../../d/common/net";
 
-const MAX_TEXT_LENGTH = 2048;
+const MAX_TEXT_LENGTH = 1024;
 
 class SubCmt extends migi.Component {
   constructor(...data) {
