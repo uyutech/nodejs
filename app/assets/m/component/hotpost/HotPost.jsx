@@ -11,6 +11,7 @@ class HotPost extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    self.message = self.props.message;
     if(self.props.data && self.props.data.length) {
       let html = '';
       self.props.data.forEach(function(item) {

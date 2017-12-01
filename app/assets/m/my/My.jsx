@@ -7,60 +7,17 @@
 import net from '../../d/common/net';
 import util from '../../d/common/util';
 import Profile from './Profile.jsx';
-import HotPost from '../component/hotpost/HotPost.jsx';
-import Page from '../../d/component/page/Page.jsx';
-
-let loading;
-let take = 10;
-let skip = take;
 
 class My extends migi.Component {
   constructor(...data) {
     super(...data);
-    let self = this;
-    self.on(migi.Event.DOM, function() {
-      let page = self.ref.page;
-      let page2 = self.ref.page2;
-      page.on('page', function(i) {
-        if(page2) {
-          page2.index = i;
-        }
-        self.load(i);
-      });
-      if(page2) {
-        page2.on('page', function(i) {
-          page.index = i;
-          self.load(i);
-        });
-      }
-    });
   }
   clickOut(e) {
     e.preventDefault();
-    net.postJSON('/api/login/loginOut', function(res) {
+    net.postJSON('/api/login/loginOut', function() {
       location.href = '/login';
     }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
-    });
-  }
-  load(i) {
-    let self = this;
-    if(loading) {
-      return;
-    }
-    loading = true;
-    skip = (i - 1) * take;
-    net.postJSON('/api/my/postList', { skip, take }, function(res) {
-      if(res.success) {
-        self.ref.hotPost.setData(res.data.data);
-      }
-      else {
-        alert(res.message || util.ERROR_MESSAGE);
-      }
-      loading = false;
-    }, function(res) {
-      alert(res.message || util.ERROR_MESSAGE);
-      loading = false;
     });
   }
   render() {
@@ -84,6 +41,12 @@ class My extends migi.Component {
           <b class="arrow"/>
         </div>
       </div>
+      <ul class="list">
+        <li><a href="/my/relation" class="relation">圈关系</a></li>
+        <li><a href="/my/message" class="message">圈消息</a></li>
+        <li><a href="/my/post" class="post">我画的圈</a></li>
+        <li><a href="/my/favor" class="favor">我的收藏</a></li>
+      </ul>
       {
         this.props.bonusPoint.ranking
           ? <div class="bp">
@@ -93,15 +56,6 @@ class My extends migi.Component {
               <br/>另外本周末我们将在11-100名中随机抽取3名小伙伴升级为随机签名手账。
               <br/>没进前200的小伙伴们也不用气馁，之前的所有努力都会积累圈币~很快就会上线圈币兑换福利的功能哦！</small></p>
           </div>
-          : ''
-      }
-      <h4>我画的圈</h4>
-      <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>
-      <HotPost ref="hotPost" data={ this.props.myPost.data } size={ this.props.myPost.Size }
-               url="/api/my/postList"/>
-      {
-        this.props.myPost.Size > take
-          ? <Page ref="page2" total={ Math.ceil(this.props.myPost.Size / take) }/>
           : ''
       }
       <a href="#" class="loginout" onClick={ this.clickOut }>退出登录</a>

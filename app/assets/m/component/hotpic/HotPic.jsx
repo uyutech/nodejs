@@ -15,6 +15,7 @@ class HotPic extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    self.message = self.props.message;
     self.on(migi.Event.DOM, function() {
       let $root = $(self.element);
       $root.on('click', '.like', function() {
@@ -81,6 +82,7 @@ class HotPic extends migi.Component {
       });
     });
   }
+  @bind message
   show() {
     $(this.element).removeClass('fn-hide');
   }
@@ -126,7 +128,7 @@ class HotPic extends migi.Component {
         return;
       }
     }
-    migi.eventBus.emit('poolEnd');
+    this.emit('poolEnd');
   }
   append(li) {
     let self = this;
@@ -179,12 +181,15 @@ class HotPic extends migi.Component {
   }
   render() {
     return <div class={ 'cp-hotpic' + (this.props.hidden ? ' fn-hide' : '') }>
-      <div>
-        <ul ref="l1"/>
+      <div class="c">
+        <div>
+          <ul ref="l1"/>
+        </div>
+        <div>
+          <ul ref="l2"/>
+        </div>
       </div>
-      <div>
-        <ul ref="l2"/>
-      </div>
+      <div class= { 'cp-message' + (this.message ? '' : 'fn-hide') }>{ this.message }</div>
     </div>;
   }
 }

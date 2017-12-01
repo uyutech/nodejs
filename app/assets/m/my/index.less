@@ -3,15 +3,14 @@
  */
 
 @import '../../d/common/var';
-@import '../component/hotpost/index';
-@import '../../d/component/page/index';
 
 #page .my{
   h4{
     position:relative;
     margin:0.1rem;
     padding-left:0.05rem;
-    font-size:0.12rem;
+    font-size:0.14rem;
+    font-weight:400;
     &:before{
       position:absolute;
       left:0;
@@ -226,45 +225,37 @@
     }
   }
   > .bp{
+    margin-top:0.1rem;
     padding:0 0.1rem;
     font-size:0.12rem;
     small{
       font-size:0.1rem;
     }
   }
-  .cp-page{
-    margin-bottom:0.1rem;
-    padding:0 0.1rem;
-    text-align:right;
-    ol{
-      margin:0;
-    }
-    .prev{
+  > .list{
+    a{
       position:relative;
-      width:0.2rem;
-      height:0.2rem;
-      text-indent:999rem;
-      overflow:hidden;
-      white-space:nowrap;
-      b{
-        margin:0;
-        position:absolute;
-        left:0.07rem;
-        top:0.06rem;
+      display:block;
+      margin:0.1rem;
+      padding-left:0.32rem;
+      line-height:0.3rem;
+      font-size:0.14rem;
+      border-radius:0.05rem;
+      &.relation{
+        background:#F3F3F3 url(../../icon/my-relation.png) no-repeat 0.05rem center;
+        background-size:0.24rem auto;
       }
-    }
-    .next{
-      position:relative;
-      width:0.2rem;
-      height:0.2rem;
-      text-indent:999rem;
-      overflow:hidden;
-      white-space:nowrap;
-      b{
-        margin:0;
-        position:absolute;
-        left:0.07rem;
-        top:0.06rem;
+      &.message{
+        background:#F3F3F3 url(../../icon/my-message.png) no-repeat 0.05rem center;
+        background-size:0.24rem auto;
+      }
+      &.post{
+        background:#F3F3F3 url(../../icon/my-post.png) no-repeat 0.05rem center;
+        background-size:0.24rem auto;
+      }
+      &.favor{
+        background:#F3F3F3 url(../../icon/my-favor.png) no-repeat 0.05rem center;
+        background-size:0.24rem auto;
       }
     }
   }

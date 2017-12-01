@@ -10,6 +10,7 @@ class HotPlayList extends migi.Component {
   constructor(...data) {
     super(...data);
     this.dataList = this.props.dataList;
+    this.message = this.props.message;
   }
   @bind dataList
   @bind message

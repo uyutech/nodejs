@@ -63,6 +63,45 @@ module.exports = app => {
         lastUpdateHeadTime,
       });
     }
+    * relation(ctx) {
+      let uid = ctx.session.uid;
+      let tag = ctx.query.tag;
+      let userFriends = {};
+      let userFollows = {};
+      let userFollowers = {};
+      let res = yield {
+        userFriends: ctx.helper.postServiceJSON('api/users/User_Friends', {
+          uid,
+          Skip: 0,
+          Take: 15,
+        }),
+        userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
+          uid,
+          Skip: 0,
+          Take: 15,
+        }),
+        userFollowers: ctx.helper.postServiceJSON('api/users/User_FansList', {
+          uid,
+          Skip: 0,
+          Take: 15,
+        }),
+      };
+      if(res.userFriends.data.success) {
+        userFriends = res.userFriends.data.data;
+      }
+      if(res.userFollows.data.success) {
+        userFollows = res.userFollows.data.data;
+      }
+      if(res.userFollowers.data.success) {
+        userFollowers = res.userFollowers.data.data;
+      }
+      yield ctx.render('mmy_relation', {
+        tag,
+        userFriends,
+        userFollows,
+        userFollowers,
+      });
+    }
     * message(ctx) {
       let uid = ctx.session.uid;
       let messages = yield ctx.helper.postServiceJSON('api/users/GetUserNotify', {
@@ -73,6 +112,55 @@ module.exports = app => {
       messages = messages.data.data;
       yield ctx.render('mmy_message', {
         messages,
+      });
+    }
+    * post(ctx) {
+      let uid = ctx.session.uid;
+      let postList = yield ctx.helper.postServiceJSON('api/users/User_Post_List', {
+        uid,
+        Skip: 0,
+        Take: 10,
+        CurrentUid: uid,
+      });
+      postList = postList.data.data;
+      yield ctx.render('mmy_post', {
+        postList,
+      });
+    }
+    * favor(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        uid,
+        ItemsType: 1,
+        Skip: 0,
+        Take: 30,
+      });
+      yield ctx.render('mmy_favor', {
+        dataList: res.data.data,
+      });
+    }
+    * favorPic(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        uid,
+        ItemsType: 2,
+        Skip: 0,
+        Take: 10,
+      });
+      yield ctx.render('mmy_favor_pic', {
+        dataList: res.data.data,
+      });
+    }
+    * favorPost(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        uid,
+        ItemsType: 3,
+        Skip: 0,
+        Take: 30,
+      });
+      yield ctx.render('mmy_favor_post', {
+        dataList: res.data.data,
       });
     }
   }

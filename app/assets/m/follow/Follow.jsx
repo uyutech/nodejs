@@ -87,9 +87,9 @@ class Follow extends migi.Component {
       <h4>关注作者</h4>
       <HotAuthor ref="hotAuthor" empty={ '你还没有关注作者哦，快去发现页看看有没有喜欢的作者吧！' } dataList={ this.props.follows }/>
       <h4>关注圈er</h4>
-      <HotUser ref="hotuser" empty={ '你还没有关注的圈er哦，快去转圈页看看有没有有趣的小伙伴吧~' } dataList={ this.props.userFollows }/>
+      <HotUser ref="hotuser" empty={ '你还没有关注的圈er哦，快去转圈页看看有没有有趣的小伙伴吧~' } dataList={ this.props.userFollows.data }/>
       <h4>关注我的</h4>
-      <HotUser ref="hotuser" empty={ '还没有人关注你哦，快去转圈页看看有没有有趣的小伙伴吧~' } dataList={ this.props.userFans }/>
+      <HotUser ref="hotuser" empty={ '还没有人关注你哦，快去转圈页看看有没有有趣的小伙伴吧~' } dataList={ this.props.userFans.data }/>
       <h4>Ta们画的圈</h4>
       <HotPost ref="hotPost" data={ this.props.postList.data }/>
     </div>;

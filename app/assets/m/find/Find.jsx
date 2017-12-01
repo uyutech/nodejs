@@ -17,6 +17,7 @@ let take = 30;
 let skip = 10;
 let take2 = 10;
 let skip2 = 0;
+let size2 = 0;
 let type = '0';
 
 class Find extends migi.Component {
@@ -32,11 +33,10 @@ class Find extends migi.Component {
       $window.on('scroll', function() {
         self.checkMore($window);
       });
-      migi.eventBus.on('poolEnd', function() {
+      let hotPic = self.ref.hotPic;
+      hotPic.on('poolEnd', function() {
         self.loading2 = false;
-        if(type === '1') {
-          self.message = self.loadEnd2 ? '已经到底了' : '';
-        }
+        hotPic.message = skip2 >= size2 ? '已经到底了' : '';
       });
     });
   }
@@ -67,22 +67,18 @@ class Find extends migi.Component {
     }
     let hotPlayList = self.ref.hotPlayList;
     self.loading = true;
-    self.message = '正在加载...';
+    hotPlayList.message = '正在加载...';
     net.postJSON('/api/find/hotPlayList', { skip, take }, function(res) {
       if(res.success) {
         let data = res.data;
         skip += take;
         hotPlayList.appendData(data.data);
-        if(!data.data.length || data.data.length < take) {
+        if(skip >= data.Size) {
           self.loadEnd = true;
-          if(type === '0') {
-            self.message = '已经到底了';
-          }
+          hotPlayList.message = '已经到底了';
         }
         else {
-          if(type === '0') {
-            self.message = '';
-          }
+          hotPlayList.message = '';
         }
       }
       else {
@@ -101,31 +97,26 @@ class Find extends migi.Component {
     }
     self.loading2 = true;
     let hotPic = self.ref.hotPic;
-    self.message = '正在加载...';
+    hotPic.message = '正在加载...';
     net.postJSON('/api/find/hotPicList', { skip: skip2, take: take2 }, function(res) {
       if(res.success) {
         let data = res.data;
         skip2 += take2;
-        if(!data.data.length || data.data.length < take2) {
+        size2 = data.Size;
+        if(skip2 >= data.Size) {
           self.loadEnd2 = true;
-          if(type === '1') {
-            self.message = '已经到底了';
-          }
+          hotPic.message = '已经到底了';
         }
         else {
-          if(type === '1') {
-            self.message = '正在渲染图片....';
-          }
+          hotPic.message = '正在渲染图片....';
         }
         hotPic.appendData(data.data);
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);
-        self.message = '';
       }
     }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
-      self.message = '';
     });
   }
   show() {
@@ -158,12 +149,10 @@ class Find extends migi.Component {
       if(rel === '0') {
         hotPic.hide();
         hotPlayList.show();
-        this.message = this.loadEnd ? '已经到底了' : '';
       }
       else if(rel === '1') {
         hotPlayList.hide();
         hotPic.show();
-        this.message = this.loadEnd2 ? '已经到底了' : '';
         if(skip2 === 0) {
           this.load2();
         }
@@ -187,7 +176,6 @@ class Find extends migi.Component {
       </ul>
       <HotPlayList ref="hotPlayList" dataList={ this.props.hotPlayList.data }/>
       <HotPic ref="hotPic" hidden={ true }/>
-      <div class="message">{ this.message }</div>
       <SubCmt ref="subCmt"
               tipText="-${n}"
               subText="发送"

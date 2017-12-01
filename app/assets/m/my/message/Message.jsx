@@ -134,8 +134,9 @@ class Message extends migi.Component {
   }
   render() {
     return <div class="message fn-clear">
+      <h4>圈消息</h4>
       <Messages ref="messages" data={ this.props.messages.data }/>
-      <div class="message">{ this.message }</div>
+      <div class="cp-message">{ this.message }</div>
       <SubCmt ref="subCmt" readOnly={ true } placeholder="请选择留言回复"
               subText="发送" tipText="-${n}"/>
     </div>;

@@ -31,7 +31,12 @@ module.exports = app => {
   app.get('/m/author/:authorID', 'm.author.index');
   // app.get('/m/search/:kw', 'm.search.index');
   app.get('/m/my', app.middlewares.needLogin(), 'm.my.index');
+  app.get('/m/my/relation', app.middlewares.needLogin(), 'm.my.relation');
   app.get('/m/my/message', app.middlewares.needLogin(), 'm.my.message');
+  app.get('/m/my/post', app.middlewares.needLogin(), 'm.my.post');
+  app.get('/m/my/favor', app.middlewares.needLogin(), 'm.my.favor');
+  app.get('/m/my/favorPic', app.middlewares.needLogin(), 'm.my.favorPic');
+  app.get('/m/my/favorPost', app.middlewares.needLogin(), 'm.my.favorPost');
   app.get('/m/login', 'm.login.index');
   app.get('/m/circle/:circleID', 'm.circle.index');
   app.get('/m/circle/post', app.middlewares.needLogin(), 'm.circle.post');
@@ -67,8 +72,14 @@ module.exports = app => {
   app.post('/api/my/updateAddress', app.middlewares.needLoginJson(), 'api.my.updateAddress');
   app.post('/api/my/message', app.middlewares.needLoginJson(), 'api.my.message');
   app.post('/api/my/readMessage', app.middlewares.needLoginJson(), 'api.my.readMessage');
-  app.post('/api/my/postList', app.middlewares.needLoginJson(), 'api.my.postList');
   app.post('/api/my/altSettle', app.middlewares.needLoginJson(), 'api.my.altSettle');
+  app.post('/api/my/friendList', app.middlewares.needLoginJson(), 'api.my.friendList');
+  app.post('/api/my/followList', app.middlewares.needLoginJson(), 'api.my.followList');
+  app.post('/api/my/followerList', app.middlewares.needLoginJson(), 'api.my.followerList');
+  app.post('/api/my/postList', app.middlewares.needLoginJson(), 'api.my.postList');
+  app.post('/api/my/favor', app.middlewares.needLoginJson(), 'api.my.favor');
+  app.post('/api/my/favorPic', app.middlewares.needLoginJson(), 'api.my.favorPic');
+  app.post('/api/my/favorPost', app.middlewares.needLoginJson(), 'api.my.favorPost');
 
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');
