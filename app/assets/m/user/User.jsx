@@ -7,7 +7,7 @@
 import net from '../../d/common/net';
 import util from '../../d/common/util';
 import Profile from './Profile.jsx';
-import HotPost from '../../d/component/hotpost/HotPost.jsx';
+import HotPost from '../component/hotpost/HotPost.jsx';
 import Page from '../../d/component/page/Page.jsx';
 
 let loading;

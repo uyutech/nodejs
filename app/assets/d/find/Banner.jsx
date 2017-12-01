@@ -3,24 +3,6 @@
  */
 
 let interval;
-let datas = [
-  {
-    url: '/works/2015000000001582',
-    pic: '//zhuanquan.xin/pic/3fc9dc8f4aa54ccfae45294dd689e820.jpg'
-  },
-  {
-    url: '/works/2015000000001368',
-    pic: '//zhuanquan.xin/pic/379af10b78315ded5948e813d2e64a69.jpg'
-  },
-  {
-    url: '/works/2015000000000001',
-    pic: '//zhuanquan.xin/pic/e34cc1fb3102e63b507293f6e5a20515.jpg'
-  },
-  {
-    url: '/works/2015000000000002',
-    pic: '//zhuanquan.xin/pic/b1284084f38e8cac0c35eddd60948af1.jpg'
-  }
-];
 
 class Banner extends migi.Component {
   constructor(...data) {
@@ -46,6 +28,7 @@ class Banner extends migi.Component {
       clearInterval(interval);
     }
     let self = this;
+    let datas = self.props.dataList;
     interval = setInterval(function() {
       self.index++;
       if(self.index >= datas.length) {
@@ -55,6 +38,7 @@ class Banner extends migi.Component {
     }, 5000);
   }
   render() {
+    let datas = this.props.dataList;
     return <div class="banner">
       <ul class="list fn-clear" ref="list" style={ 'width:' + datas.length * 100 + '%' }>
         {

@@ -60,7 +60,28 @@ module.exports = app => {
       if(res.hotPlayList.data.success) {
         hotPlayList = res.hotPlayList.data.data;
       }
-
+      let banner = [
+        {
+          url: '/post/2020000000030405',
+          pic: '//zhuanquan.xyz/pic/f3e188709eaccc78f6737f9fcf6992e9.png-750_'
+        },
+        {
+          url: '/works/2015000000001582',
+          pic: '//zhuanquan.xyz/pic/3fc9dc8f4aa54ccfae45294dd689e820.jpg-750_'
+        },
+        {
+          url: '/works/2015000000001368',
+          pic: '//zhuanquan.xyz/pic/379af10b78315ded5948e813d2e64a69.jpg-750_'
+        },
+        {
+          url: '/works/2015000000000001',
+          pic: '//zhuanquan.xyz/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_'
+        },
+        {
+          url: '/works/2015000000000002',
+          pic: '//zhuanquan.xyz/pic/b1284084f38e8cac0c35eddd60948af1.jpg-750_'
+        }
+      ];
       yield ctx.render('mfind', {
         hotWorkList,
         hotAuthorList,
@@ -68,6 +89,7 @@ module.exports = app => {
         hotPhotoAlbumList,
         hotCircleList,
         hotPlayList,
+        banner,
       });
     }
   }

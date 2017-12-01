@@ -14,4 +14,5 @@ let find = migi.preExist(<Find
   hotPhotoAlbumList={ $CONFIG.hotPhotoAlbumList }
   hotPostList={ $CONFIG.hotPostList }
   hotCircleList={ $CONFIG.hotCircleList }
-  hotPlayList={ $CONFIG.hotPlayList }/>);
+  hotPlayList={ $CONFIG.hotPlayList }
+  banner={ $CONFIG.banner }/>);

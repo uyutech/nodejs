@@ -173,7 +173,7 @@ class Find extends migi.Component {
   }
   render() {
     return <div class="find">
-      <Banner/>
+      <Banner dataList={ this.props.banner }/>
       <h4>推荐圈子</h4>
       <HotCircle ref="HotCircle" dataList={ this.props.hotCircleList }/>
       <h4>热门作品<small onClick={ this.clickChangeWork }>换一批</small></h4>

@@ -13,6 +13,7 @@ export default function(data) {
   let hotPhotoAlbumList = data.hotPhotoAlbumList;
   let hotCircleList = data.hotCircleList;
   let hotPlayList = data.hotPlayList;
+  let banner = data.banner;
 
   let find = migi.preRender(<Find
     hotWorkList={ hotWorkList }
@@ -20,7 +21,8 @@ export default function(data) {
     hotMusicAlbumList={ hotMusicAlbumList }
     hotPhotoAlbumList={ hotPhotoAlbumList }
     hotCircleList={ hotCircleList }
-    hotPlayList={ hotPlayList }/>);
+    hotPlayList={ hotPlayList }
+    banner={ banner }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -42,6 +44,7 @@ ${data.helper.getMBotNav()}
   $CONFIG.hotPhotoAlbumList = ${data.helper.stringify(hotPhotoAlbumList)};
   $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
   $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
+  $CONFIG.banner = ${data.helper.stringify(banner)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/mfind.js')}"></script>
