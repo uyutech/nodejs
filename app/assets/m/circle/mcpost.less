@@ -132,6 +132,32 @@
       }
     }
   }
+  > .ti3{
+    position:relative;
+    margin-top:0.1rem;
+    &:after{
+      position:absolute;
+      top:0;
+      right:0;
+      display:block;
+      width:0.2rem;
+      height:100%;
+      background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,1));
+      content:' ';
+    }
+    ul{
+      display:flex;
+      overflow-x:auto;
+      transform:translate3d(0,0,0);
+    }
+    li{
+      margin-right:0.05rem;
+      white-space:nowrap;
+      &:active{
+        text-decoration:underline;
+      }
+    }
+  }
   > .c{
     flex:1;
     display:flex;

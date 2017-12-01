@@ -10,7 +10,7 @@ import Comment from '../../d/component/comment/Comment.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 import ImageView from './ImageView.jsx';
 
-let take = 10;
+let take = 30;
 let skip = take;
 let sortType = 0;
 let myComment = 0;

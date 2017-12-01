@@ -11,9 +11,7 @@ let skip = 0;
 let take = 10;
 let sortType = 0;
 let myComment = 0;
-let currentCount = 0;
 let ajax;
-let loadEnd;
 
 class AuthorComment extends migi.Component {
   constructor(...data) {
@@ -28,13 +26,13 @@ class AuthorComment extends migi.Component {
           page2.index = i;
         }
         skip = (i - 1) * take;
-        self.loadPage();
+        self.load();
       });
       if(page2) {
         page2.on('page', function(i) {
           page.index = i;
           skip = (i - 1) * take;
-          self.loadPage();
+          self.load();
         });
       }
       let comment = self.ref.comment;
@@ -48,7 +46,6 @@ class AuthorComment extends migi.Component {
       });
     });
   }
-  @bind loading
   @bind authorID
   @bind rootID = -1
   @bind parentID = -1
@@ -63,73 +60,19 @@ class AuthorComment extends migi.Component {
   load() {
     let self = this;
     let comment = self.ref.comment;
-    let page = self.ref.page;
-    let page2 = self.ref.page2;
-    comment.message = '读取中...';
     if(ajax) {
       ajax.abort();
     }
-    self.loading = true;
-    ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment, currentCount }, function(res) {
+    ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment }, function(res) {
       if(res.success) {
         let data = res.data;
-        currentCount = data.Size;
-        skip += take;
-        comment.message = '';
-        if(data.data.length) {
-          comment.appendData(res.data.data);
-          page.total = page2.total = Math.ceil(currentCount / take);
-        }
-        else {
-          comment.appendData(res.data.data);
-          comment.empty = true;
-          loadEnd = true;
-        }
+        comment.setData(res.data.data);
       }
       else {
-        if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        comment.message = res.message || util.ERROR_MESSAGE;
+        alert(res.message || util.ERROR_MESSAGE);
       }
-      self.loading = false;
     }, function(res) {
-      comment.message = res.message || util.ERROR_MESSAGE;
-      self.loading = false;
-    });
-  }
-  loadPage() {
-    let self = this;
-    let comment = self.ref.comment;
-    comment.message = '读取中...';
-    comment.setData();
-    if(ajax) {
-      ajax.abort();
-    }
-    self.loading = true;
-    ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment, currentCount }, function(res) {
-      if(res.success) {
-        let data = res.data;
-        skip += take;
-        comment.message = '';
-        if(data.data.length) {
-          comment.appendData(res.data.data);
-        }
-        else {
-          comment.message = '已经到底了';
-          loadEnd = true;
-        }
-      }
-      else {
-        if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        comment.message = res.message || util.ERROR_MESSAGE;
-      }
-      self.loading = false;
-    }, function(res) {
-      comment.message = res.message || util.ERROR_MESSAGE;
-      self.loading = false;
+      alert(res.message || util.ERROR_MESSAGE);
     });
   }
   switchType(e, vd) {
@@ -137,15 +80,15 @@ class AuthorComment extends migi.Component {
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    currentCount = 0;
     sortType = rel;
     skip = 0;
+    this.ref.page.index = 1;
+    if(this.ref.page2) {
+      this.ref.page2.index = 1;
+    }
     if(ajax) {
       ajax.abort();
     }
-    loadEnd = false;
-    this.loading = false;
-    this.ref.comment.clearData();
     this.load();
   }
   switchType2(e, vd) {
@@ -153,15 +96,15 @@ class AuthorComment extends migi.Component {
     $ul.toggleClass('alt');
     $ul.find('li').toggleClass('cur');
     let rel = $ul.find('.cur').attr('rel');
-    currentCount = 0;
     myComment = rel;
     skip = 0;
+    this.ref.page.index = 1;
+    if(this.ref.page2) {
+      this.ref.page2.index = 1;
+    }
     if(ajax) {
       ajax.abort();
     }
-    loadEnd = false;
-    this.loading = false;
-    this.ref.comment.clearData();
     this.load();
   }
   render() {

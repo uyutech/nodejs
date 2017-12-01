@@ -12,51 +12,46 @@ import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 let take = 10;
 let skip = take;
 let ajax;
+let loading;
+let loadEnd;
 
 class Circling extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
     self.on(migi.Event.DOM, function() {
-      self.loadEnd = self.props.postList.Size <= take;
+      loadEnd = self.props.postList.Size <= take;
       let $window = $(window);
       $window.on('scroll', function() {
         self.checkMore($window);
       });
-      self.autoWidth();
       let subCmt = self.ref.subCmt;
       subCmt.on('click', function() {
         location.href = '/circle/post';
       });
     });
   }
-  @bind loading
-  @bind loadEnd
   @bind circleID
-  autoWidth() {
-    let $list = $(this.ref.circles.element);
-    let $c = $list.find('.c');
-    $c.css('width', '9999rem');
-    let $elem = $c.children();
-    $c.css('width', $elem.width() + 1);
-  }
   checkMore($window) {
+    if(loading || loadEnd) {
+      return;
+    }
     let self = this;
     let WIN_HEIGHT = $window.height();
     let HEIGHT = $(document.body).height();
     let bool;
     bool = $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
-    if(!self.loading && !self.loadEnd && bool) {
+    if(bool) {
       self.load();
     }
   }
   load() {
     let self = this;
-    if(self.loading) {
+    if(loading) {
       return;
     }
     let hotPost = self.ref.hotPost;
-    self.loading = true;
+    loading = true;
     hotPost.message = '正在加载...';
     if(ajax) {
       ajax.abort();
@@ -66,8 +61,8 @@ class Circling extends migi.Component {
         let data = res.data;
         skip += take;
         hotPost.appendData(data.data);
-        if(!data.data.length || data.data.length < take) {
-          self.loadEnd = true;
+        if(skip >= data.Size) {
+          loadEnd = true;
           hotPost.message = '已经到底了';
         }
         else {
@@ -77,10 +72,10 @@ class Circling extends migi.Component {
       else {
         alert(res.message || util.ERROR_MESSAGE);
       }
-      self.loading = false;
+      loading = false;
     }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
-      self.loading = false;
+      loading = false;
     });
   }
   clickTag(e, vd, tvd) {
@@ -92,7 +87,7 @@ class Circling extends migi.Component {
       let hotPost = self.ref.hotPost;
       self.circleID = tvd.props.rel;
       skip = 0;
-      self.loading = true;
+      loading = true;
       if(ajax) {
         ajax.abort();
       }
@@ -101,12 +96,11 @@ class Circling extends migi.Component {
           let data = res.data;
           skip += take;
           hotPost.setData(data.data);
-          if(data.Size <= take) {
-            self.loadEnd = true;
+          if(skip >= data.Size) {
+            loadEnd = true;
             hotPost.message = '已经到底了';
           }
           else {
-            self.loadEnd = false;
             hotPost.message = '';
           }
         }
@@ -114,27 +108,23 @@ class Circling extends migi.Component {
           hotPost.setData();
           alert(res.message || util.ERROR_MESSAGE);
         }
-        self.loading = false;
+        loading = false;
       }, function(res) {
         alert(res.message || util.ERROR_MESSAGE);
-        self.loading = false;
+        loading = false;
       });
     }
   }
   render() {
     return <div class="circling">
-      <div class="circles" ref="circles">
-        <div class="c">
-          <ul onClick={ { li: this.clickTag } }>
-            <li class="cur">全部</li>
-            {
-              (this.props.hotCircle.data || []).map(function(item, i) {
-                return <li rel={ item.TagID }>{ item.TagName }</li>;
-              }.bind(this))
-            }
-          </ul>
-        </div>
-      </div>
+      <ul class="circles" onClick={ { li: this.clickTag } }>
+        <li class="cur">全部</li>
+        {
+          (this.props.hotCircle.data || []).map(function(item, i) {
+            return <li rel={ item.TagID }>{ item.TagName }</li>;
+          }.bind(this))
+        }
+      </ul>
       <p class="cinfo">↑未来，这里将可以复选多个圈子一起逛哦↑</p>
       <HotPost ref="hotPost" data={ this.props.postList.data }/>
       <SubCmt ref="subCmt"

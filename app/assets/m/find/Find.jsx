@@ -139,7 +139,6 @@ class Find extends migi.Component {
     net.postJSON('/api/find/hotWorkList', function(res) {
       if(res.success) {
         self.ref.hotWork.setData(res.data);
-        self.ref.hotWork.autoWidth();
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);

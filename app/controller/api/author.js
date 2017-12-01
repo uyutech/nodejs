@@ -6,25 +6,6 @@
 
 module.exports = app => {
   class Controller extends app.Controller {
-    * tagB(ctx) {
-      let query = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/GetAuthorFilterlevelB', {
-        AuthorID: query.authorID,
-        FilterlevelA: query.tagA,
-      });
-      ctx.body = res.data;
-    }
-    * playList(ctx) {
-      let query = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/SearchWorks', {
-        AuthorID: query.authorID,
-        Parameter: query.parameter,
-        Skip: 0,
-        Take: 10,
-        SortType: 1,
-      });
-      ctx.body = res.data;
-    }
     * follow(ctx) {
       let uid = ctx.session.uid;
       let authorID = ctx.request.body.authorID;
@@ -104,24 +85,14 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
-    // 异世谣特殊接口，其中AuthorID字段为评论属于总作者的ID
-    * singleComment(ctx) {
+    * maList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/GetCommentByID', {
+      let res = yield ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
         uid,
-        CommentID: body.commentID,
-      });
-      ctx.body = res.data;
-    }
-    * searchWorks(ctx) {
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/SearchWorks', {
         AuthorID: body.authorID,
-        Parameter: body.parameter,
         Skip: body.skip,
         Take: body.take,
-        SortType: body.sortType,
       });
       ctx.body = res.data;
     }

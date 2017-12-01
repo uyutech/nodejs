@@ -6,45 +6,54 @@ import util from '../../d/common/util';
 import net from '../../d/common/net';
 import Comment from '../../d/component/comment/Comment.jsx';
 
-let take = 10;
+let take = 30;
 let skip = take;
 let sortType = 0;
 let myComment = 0;
 let currentCount = 0;
 let ajax;
+let loading;
 let loadEnd;
+let hidden;
 
 class AuthorComment extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    hidden = this.props.hidden;
     self.authorID = self.props.authorID;
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
       $window.on('scroll', function() {
         self.checkMore($window);
       });
-      self.loadEnd = self.props.commentData.Size <= take;
+      if(self.props.commentData.Size <= take) {
+        loadEnd = true;
+        self.ref.comment.message = '已经到底了';
+      }
     });
   }
-  @bind loading
-  @bind loadEnd
   @bind authorID
   show() {
     let self = this;
     $(self.element).removeClass('fn-hide');
+    hidden = false;
   }
   hide() {
     let self = this;
     $(self.element).addClass('fn-hide');
+    hidden = true;
   }
   checkMore($window) {
+    if(hidden || loading || loadEnd) {
+      return;
+    }
     let self = this;
     let WIN_HEIGHT = $window.height();
     let HEIGHT = $(document.body).height();
     let bool;
-    bool = !$(self.element).hasClass('fn-hide') && $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
-    if(!self.loading && !self.loadEnd && bool) {
+    bool = $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
+    if(bool) {
       self.load();
     }
   }
@@ -54,31 +63,35 @@ class AuthorComment extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    self.loading = true;
+    loading = true;
     comment.message = '正在加载...';
     ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID, skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
+        skip += take;
         if(data.data.length) {
-          comment.message = '';
-          comment.appendData(res.data.data);
+          comment.appendData(data.data);
+        }
+        if(skip >= data.Size) {
+          loadEnd = true;
+          comment.message = '已经到底了';
         }
         else {
-          comment.message = '已经到底了';
-          self.loadEnd = true;
+          comment.message = '';
         }
-        skip += take;
       }
       else {
         if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');
         }
-        comment.message = res.message || util.ERROR_MESSAGE;
+        else {
+          alert(res.message || util.ERROR_MESSAGE);
+        }
       }
-      self.loading = false;
+      loading = false;
     }, function(res) {
-      comment.message = res.message || util.ERROR_MESSAGE;
-      self.loading = false;
+      alert(res.message || util.ERROR_MESSAGE);
+      loading = false;
     });
   }
   switchType(e, vd) {
@@ -93,7 +106,7 @@ class AuthorComment extends migi.Component {
       ajax.abort();
     }
     loadEnd = false;
-    this.loading = false;
+    loading = false;
     this.ref.comment.clearData();
     this.load();
   }
@@ -109,7 +122,7 @@ class AuthorComment extends migi.Component {
       ajax.abort();
     }
     loadEnd = false;
-    this.loading = false;
+    loading = false;
     this.ref.comment.clearData();
     this.load();
   }

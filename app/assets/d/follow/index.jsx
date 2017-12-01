@@ -8,4 +8,5 @@ import './index.less';
 import Follow from './Follow.jsx';
 
 let follow = migi.preExist(<Follow hotCircle={ $CONFIG.hotCircle } follows={ $CONFIG.follows }
-                                   userFollows={ $CONFIG.userFollows } userFans={ $CONFIG.userFans }/>);
+                                   userFollows={ $CONFIG.userFollows } userFans={ $CONFIG.userFans }
+                                   postList={ $CONFIG.postList }/>);

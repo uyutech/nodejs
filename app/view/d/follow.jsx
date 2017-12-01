@@ -11,9 +11,10 @@ export default function(data) {
   let follows = data.follows;
   let userFollows = data.userFollows;
   let userFans = data.userFans;
+  let postList = data.postList;
 
   let follow = migi.preRender(<Follow hotCircle={ hotCircle } follows={ follows } userFollows={ userFollows }
-                                      userFans={ userFans }/>);
+                                      userFans={ userFans } postList={ postList }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -33,6 +34,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.follows = ${data.helper.stringify(follows)};
   $CONFIG.userFollows = ${data.helper.stringify(userFollows)};
   $CONFIG.userFans = ${data.helper.stringify(userFans)};
+  $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
 <script src="${data.helper.getAssetUrl('/dfollow.js')}"></script>

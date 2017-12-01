@@ -3,88 +3,83 @@
  */
 
 .cp-hotuser{
-  .list{
-    overflow:auto;
+  ul{
+    display:flex;
+    padding-left:0.1rem;
+    align-items:start;
+    overflow-x:auto;
     transform:translate3d(0,0,0);
-    .c{
-      width:999rem;
-      .empty{
-        margin-left:0.1rem;
-        padding:0.05rem 0;
-        color:@fourthTextColor;
-      }
-      ul{
-        display:inline-block;
-        padding-left:0.1rem;
-        li{
-          display:inline-block;
-          margin-right:0.05rem;
-          width:0.75rem;
-          vertical-align:top;
-          overflow:hidden;
-          .pic{
-            position:relative;
-            display:block;
-            margin:0 auto;
-            width:0.6rem;
-            height:0.6rem;
-            background-color:#E1E3E4;
-            border-radius:100%;
-            box-shadow:@picShadow;
-            overflow:hidden;
-            img{
-              display:block;
-              width:100%;
-              height:100%;
-            }
-            b{
-              position:absolute;
-              display:block;
-              width:0.18rem;
-              height:0.18rem;
-            }
-          }
-          .txt{
-            display:block;
-            margin-top:0.04rem;
-            font-size:0.12rem;
-            color:#2A2A2A;
-            overflow:hidden;
-            .name{
-              display:block;
-              text-align:center;
-              white-space:nowrap;
-              overflow:hidden;
-              text-overflow:ellipsis;
-            }
-            .fans{
-              display:inline-block;
-              margin-right:0.1rem;
-              padding-left:0.18rem;
-              background:url(../../../d/component/hotauthor/fans.png) no-repeat 0 center;
-              background-size:0.16rem auto;
-              color:@fourthTextColor;
-              font-size:0.1rem;
-            }
-            .comment{
-              display:inline-block;
-              padding-left:0.18rem;
-              background:url(../../../d/component/hotauthor/comment.png) no-repeat 0 center;
-              background-size:0.16rem auto;
-              color:@fourthTextColor;
-              font-size:0.1rem;
-            }
-          }
-          .info{
-            font-size:0.12rem;
-            color:#B1C0C9;
-            text-align:center;
-            white-space:nowrap;
-            text-overflow:ellipsis;
-            overflow:hidden;
-          }
+    li{
+      display:block;
+      margin-right:0.05rem;
+      width:0.75rem;
+      .pic{
+        position:relative;
+        display:block;
+        margin:0 auto;
+        width:0.6rem;
+        height:0.6rem;
+        background-color:#E1E3E4;
+        border-radius:100%;
+        box-shadow:@picShadow;
+        overflow:hidden;
+        img{
+          display:block;
+          width:100%;
+          height:100%;
+        }
+        b{
+          position:absolute;
+          display:block;
+          width:0.18rem;
+          height:0.18rem;
         }
       }
+      .txt{
+        display:block;
+        margin-top:0.04rem;
+        width:0.75rem;
+        font-size:0.12rem;
+        color:#2A2A2A;
+        overflow:hidden;
+        .name{
+          display:block;
+          text-align:center;
+          white-space:nowrap;
+          overflow:hidden;
+          text-overflow:ellipsis;
+        }
+        .fans{
+          display:inline-block;
+          margin-right:0.1rem;
+          padding-left:0.18rem;
+          background:url(../../../d/component/hotauthor/fans.png) no-repeat 0 center;
+          background-size:0.16rem auto;
+          color:@fourthTextColor;
+          font-size:0.1rem;
+        }
+        .comment{
+          display:inline-block;
+          padding-left:0.18rem;
+          background:url(../../../d/component/hotauthor/comment.png) no-repeat 0 center;
+          background-size:0.16rem auto;
+          color:@fourthTextColor;
+          font-size:0.1rem;
+        }
+      }
+      .info{
+        font-size:0.12rem;
+        color:#B1C0C9;
+        text-align:center;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        overflow:hidden;
+      }
     }
+  }
+  .empty{
+    margin-left:0.1rem;
+    padding:0.05rem 0;
+    color:@fourthTextColor;
   }
 }

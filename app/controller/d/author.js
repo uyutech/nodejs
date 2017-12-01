@@ -20,6 +20,7 @@ module.exports = app => {
       let playList2 = {};
       let commentData = [];
       let hotCommentData = [];
+      let hotPlayList = {};
       let res = yield {
         authorDetail: ctx.helper.postServiceJSON('api/author/GetAuthorDetails', {
           uid,
@@ -59,6 +60,12 @@ module.exports = app => {
           MyComment: 0,
           CurrentCount: 0,
         }),
+        hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+          uid,
+          Skip: 0,
+          Take: 10,
+          AuthorID: authorID,
+        }),
         // hotCommentData: ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
         //   uid,
         //   AuthorID: authorID,
@@ -90,6 +97,9 @@ module.exports = app => {
       if(res.commentData.data.success) {
         commentData = res.commentData.data.data;
       }
+      if(res.hotPlayList.data.success) {
+        hotPlayList = res.hotPlayList.data.data;
+      }
       // if(res.hotCommentData.data.success) {
       //   hotCommentData = res.hotCommentData.data.data;
       // }
@@ -103,6 +113,7 @@ module.exports = app => {
         playList2,
         commentData,
         hotCommentData,
+        hotPlayList,
       });
     }
   }

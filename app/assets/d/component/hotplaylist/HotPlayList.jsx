@@ -12,6 +12,7 @@ class HotPlayList extends migi.Component {
     this.dataList = this.props.dataList;
   }
   @bind dataList
+  @bind message
   show() {
     $(this.element).removeClass('fn-hide');
   }
@@ -72,6 +73,7 @@ class HotPlayList extends migi.Component {
           }.bind(this))
         }
       </ol>
+      <div class={ 'cp-message' + (this.message ? '' : ' fn-hide') }>{ this.message }</div>
     </div>;
   }
 }

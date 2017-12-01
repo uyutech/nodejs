@@ -6,6 +6,7 @@ import net from '../common/net';
 import util from '../common/util';
 import Nav from './Nav.jsx';
 import Home from './Home.jsx';
+import MAList from './MAList.jsx';
 import AuthorComment from './AuthorComment.jsx';
 import SubCmt from '../component/subcmt/SubCmt.jsx';
 
@@ -66,8 +67,6 @@ class Author extends migi.Component {
       page.on('page', function() {
         subCmt.to = '';
       });
-      // self.ref.home.hide();
-      // self.ref.works.show();
     });
   }
   clickType(e, vd ,tvd) {
@@ -79,20 +78,20 @@ class Author extends migi.Component {
     $li.addClass('cur');
     let self = this;
     let home = self.ref.home;
-    // let works = self.ref.works;
+    let maList = self.ref.maList;
     let authorComment = self.ref.authorComment;
-    home.hide();
-    // works.hide();
-    authorComment.hide();
+    home && home.hide();
+    maList && maList.hide();
+    authorComment && authorComment.hide();
     let rel = tvd.props.rel;
     switch(rel) {
-      case '0':
+      case 'home':
         home.show();
         break;
-      // case '1':
-      //   works.show();
-      //   break;
-      case '2':
+      case 'ma':
+        maList.show();
+        break;
+      case 'comment':
         authorComment.show();
         break;
     }
@@ -101,10 +100,10 @@ class Author extends migi.Component {
     let empty = !this.props.album.length
       && !this.props.homeDetail.Hot_Works_Items.length
       && !this.props.homeDetail.AuthorToAuthor.length;
-    if(!this.props.authorDetail.ISSettled || empty) {
+    if(!this.props.authorDetail.ISSettled) {
       return <div class="author">
         <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
-        <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
+        <ul class="type fn-clear" onClick={ { li: this.clickType } }>
           <li class="comments cur" rel="2">留言</li>
         </ul>
         <AuthorComment
@@ -118,14 +117,36 @@ class Author extends migi.Component {
                 placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
       </div>;
     }
+    if(empty) {
+      return <div class="author">
+        <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
+        <ul class="type fn-clear" onClick={ { li: this.clickType } }>
+          <li class="ma cur" rel="ma">音乐</li>
+          <li class="comments" rel="comment">留言</li>
+        </ul>
+        <MAList ref="maList" authorID={ this.props.authorID } first={ true }
+                dataList={ this.props.hotPlayList }/>
+        <AuthorComment
+          ref="authorComment"
+          isLogin={ !!this.props.uid }
+          authorID={ this.props.authorID }
+          commentData={ this.props.commentData }/>
+        <SubCmt ref="subCmt"
+                originTo={ this.props.authorDetail.AuthorName }
+                placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
+      </div>;
+    }
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail } uid={ this.props.uid }/>
       <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
-        <li class="home cur" rel="0">主页</li>
-        <li class="comments" rel="2">留言</li>
+        <li class="home cur" rel="home">主页</li>
+        <li class="ma" rel="ma">音乐</li>
+        <li class="comments" rel="comment">留言</li>
       </ul>
       <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }
             album={ this.props.album }/>
+      <MAList ref="maList" authorID={ this.props.authorID }
+              dataList={ this.props.hotPlayList } hidden={ true }/>
       <AuthorComment
         ref="authorComment"
         show={ false }

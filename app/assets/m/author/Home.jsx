@@ -13,9 +13,6 @@ class Home extends migi.Component {
   }
   show() {
     $(this.element).removeClass('fn-hide');
-    this.ref.hotWork.autoWidth();
-    this.ref.hotCollection.autoWidth();
-    this.ref.hotAuthor.autoWidth();
   }
   hide() {
     $(this.element).addClass('fn-hide');
@@ -34,7 +31,7 @@ class Home extends migi.Component {
         this.props.album.length
           ? <div>
               <h4>专辑</h4>
-              <HotMusicAlbum ref="hotCollection" dataList={ this.props.album }/>
+              <HotMusicAlbum ref="hotMusicAlbum" dataList={ this.props.album }/>
             </div>
           : ''
       }

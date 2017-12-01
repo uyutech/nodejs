@@ -13,7 +13,7 @@ module.exports = app => {
       let hotMusicAlbumList = [];
       let hotPhotoAlbumList = [];
       let hotCircleList = [];
-      let hotPlayList = [];
+      let hotPlayList = {};
       let res = yield {
         hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
           Skip: 0,

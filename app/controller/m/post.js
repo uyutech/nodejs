@@ -23,7 +23,7 @@ module.exports = app => {
           uid,
           PostID: id,
           Skip: 0,
-          Take: 10,
+          Take: 30,
           sortType: 0,
           currentCount: 0,
           myComment: 0,

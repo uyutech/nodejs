@@ -6,6 +6,7 @@
 
 import net from '../../common/net';
 import util from '../../common/util';
+import config from '../../../config';
 
 const STATE = {
   LOADING: 0,
@@ -22,6 +23,8 @@ const TEXT = {
 const MAX_IMG_NUM = 10;
 const MAX_TEXT_LENGTH = 2048;
 
+let activityLabel = config.activityLabel;
+
 class SubPost extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -34,6 +37,7 @@ class SubPost extends migi.Component {
     self.subText = self.props.subText;
     self.tipText = self.props.tipText;
     self.placeholder = self.props.placeholder;
+    self.tagList = (activityLabel['0'] || []).concat(activityLabel[self.props.circleID] || []);
     if(self.to && self.to.length && self.props.circleID !== undefined) {
       let has = false;
       self.to.forEach(function(item) {
@@ -101,6 +105,12 @@ class SubPost extends migi.Component {
           return;
         }
         $li.toggleClass('on');
+        let temp = activityLabel['0'] || [];
+        $label.find('.cur,.on').each(function(i, li) {
+          let id = $(li).attr('rel');
+          temp = temp.concat(activityLabel[id] || []);
+        });
+        self.tagList = temp;
       });
     });
   }
@@ -118,6 +128,7 @@ class SubPost extends migi.Component {
   @bind imgNum = 0
   @bind warnLength
   @bind sending
+  @bind tagList = []
   input(e, vd) {
     let self = this;
     let $vd = $(vd.element);
@@ -358,6 +369,9 @@ class SubPost extends migi.Component {
       this.imgNum = this.list.length;
     }
   }
+  clickTag(e, vd, tvd) {
+    this.value += ' ' + tvd.props.rel;
+  }
   render() {
     return <div class={ 'mod-sub' + (this.expand ? ' expand' : '') + (!this.hidden ? '' : ' fn-hide') }>
       <div class="c">
@@ -371,6 +385,13 @@ class SubPost extends migi.Component {
                 }.bind(this))
               }
             </dl>
+            <ul class={ 'ti3' + (this.tagList.length ? '' : ' fn-hide') } onClick={ { li: this.clickTag }}>
+              {
+                this.tagList.map(function(item) {
+                  return <li rel={ item.value }>{ item.name }</li>;
+                })
+              }
+            </ul>
             <textarea class={ 'text' + (this.sending ? ' dis' : '') } ref="input" disabled={ !!this.sending }
                       placeholder={ this.placeholder }
                       onInput={ this.input } onFocus={ this.focus } onBlur={ this.blur }>{ this.value }</textarea>

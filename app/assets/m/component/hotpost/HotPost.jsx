@@ -186,14 +186,14 @@ class HotPost extends migi.Component {
                       }
                       if(i === 8) {
                         return <li class={ 'all ' + cn }
-                                   style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
-                          <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
+                                   style={ 'background-image:url(' + util.autoSsl(util.img208_208_80(item.FileUrl)) + ')' }>
+                          <img src={ util.autoSsl(util.img208_208_80(item.FileUrl)) }/>
                           <a href={ '/post/' + id }>查看全部</a>
                         </li>;
                       }
                       return <li class={ cn }
-                                 style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
-                        <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
+                                 style={ 'background-image:url(' + util.autoSsl(util.img208_208_80(item.FileUrl)) + ')' }>
+                        <img src={ util.autoSsl(util.img208_208_80(item.FileUrl)) }/>
                       </li>;
                     })
                     : item.Image_Post.map(function(item) {
@@ -202,8 +202,8 @@ class HotPost extends migi.Component {
                         cn = 'no-scale';
                       }
                       return <li class={ cn }
-                                 style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
-                        <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
+                                 style={ 'background-image:url(' + util.autoSsl(util.img208_208_80(item.FileUrl)) + ')' }>
+                        <img src={ util.autoSsl(util.img208_208_80(item.FileUrl)) }/>
                       </li>;
                     })
                 }
@@ -279,14 +279,14 @@ class HotPost extends migi.Component {
                     }
                     if(i === 8) {
                       return <li class={ 'all ' + cn }
-                                 style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
-                        <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
+                                 style={ 'background-image:url(' + util.autoSsl(util.img208_208_80(item.FileUrl)) + ')' }>
+                        <img src={ util.autoSsl(util.img208_208_80(item.FileUrl)) }/>
                         <a href={ '/post/' + id }>查看全部</a>
                       </li>;
                     }
                     return <li class={ cn }
-                               style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
-                      <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
+                               style={ 'background-image:url(' + util.autoSsl(util.img208_208_80(item.FileUrl)) + ')' }>
+                      <img src={ util.autoSsl(util.img208_208_80(item.FileUrl)) }/>
                     </li>;
                   })
                   : item.Image_Post.map(function(item) {
@@ -295,8 +295,8 @@ class HotPost extends migi.Component {
                       cn = 'no-scale';
                     }
                     return <li class={ cn }
-                               style={ 'background-image:url(' + util.autoSsl(util.img172_172_80(item.FileUrl)) + ')' }>
-                      <img src={ util.autoSsl(util.img172_172_80(item.FileUrl)) }/>
+                               style={ 'background-image:url(' + util.autoSsl(util.img208_208_80(item.FileUrl)) + ')' }>
+                      <img src={ util.autoSsl(util.img208_208_80(item.FileUrl)) }/>
                     </li>;
                   })
               }
@@ -354,7 +354,7 @@ class HotPost extends migi.Component {
           ? <ol class="list" ref="list" dangerouslySetInnerHTML={ this.html }/>
           : <div class="empty">暂无内容</div>
       }
-      <div class="message">{ this.message }</div>
+      <div class={ 'cp-message' + (this.message ? '' : ' fn-hide') } >{ this.message }</div>
     </div>;
   }
 }

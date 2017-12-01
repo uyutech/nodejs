@@ -25,6 +25,8 @@ module.exports = app => {
           uid,
           WorkID: worksID,
           WorksID: worksID,
+          Skip: 0,
+          Take: 30,
         }),
       };
       if(res.worksDetail.data.success) {

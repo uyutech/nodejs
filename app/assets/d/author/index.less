@@ -6,8 +6,7 @@
 @import '../component/hotwork/index';
 @import '../component/hotmusicalbum/index';
 @import '../component/hotauthor/index';
-@import '../component/dynamic/index';
-@import '../component/playlist/index';
+@import '../component/hotplaylist/index';
 @import '../component/comment/index';
 @import '../component/page/index';
 @import '../component/subcmt/index';
@@ -18,7 +17,6 @@
     margin:0 auto;
     padding:0.5rem 0.3rem;
     box-sizing:border-box;
-    //height:3rem;
     overflow:hidden;
     border-radius:0.1rem;
     box-shadow:@boxShadow;
@@ -156,23 +154,23 @@
             white-space:nowrap;
             color:@fourthTextColor;
             &.sing5{
-              background:url(../works/5sing.png) no-repeat center 0.05rem;
+              background:url(../../icon/5sing.png) no-repeat center 0.05rem;
               background-size:0.14rem auto;
             }
             &.bilibili{
-              background:url(../works/bilibili.png) no-repeat center 0.02rem;
+              background:url(../../icon/bilibili.png) no-repeat center 0.02rem;
               background-size:0.17rem auto;
             }
             &.wangyi{
-              background:url(../works/163.png) no-repeat center 0.02rem;
+              background:url(../../icon/163.png) no-repeat center 0.02rem;
               background-size:0.14rem auto;
             }
             &.baidu{
-              background:url(../works/baidu.png) no-repeat center 0.02rem;
+              background:url(../../icon/baidu.png) no-repeat center 0.02rem;
               background-size:0.16rem auto;
             }
             &.weibo{
-              background:url(../works/weibo.png) no-repeat center 0.02rem;
+              background:url(../../icon/weibo.png) no-repeat center 0.02rem;
               background-size:0.14rem auto;
             }
           }
@@ -262,43 +260,41 @@
       text-align:right;
       background-position:0.2rem 0.12rem;
       background-repeat:no-repeat;
+      background-size:0.24rem auto;
       &.home{
-        background-image:url(home.png);
-        background-size:0.24rem auto;
+        background-image:url(../../icon/tag-home.png);
         &.cur{
-          background-image:url(home-cur.png);
+          background-image:url(../../icon/tag-home-cur.png);
           &:hover{
-            background-image:url(home-cur.png);
+            background-image:url(../../icon/tag-home-cur.png);
           }
         }
         &:hover{
-          background-image:url(home-cur.png);
+          background-image:url(../../icon/tag-home-cur.png);
         }
       }
-      &.works{
-        background-image:url(works.png);
-        background-size:0.24rem auto;
+      &.ma{
+        background-image:url(../../icon/tag-ma.png);
         &.cur{
-          background-image:url(works.png);
+          background-image:url(../../icon/tag-ma-cur.png);
           &:hover{
-            background-image:url(works.png);
+            background-image:url(../../icon/tag-ma-cur.png);
           }
         }
         &:hover{
-          background-image:url(works.png);
+          background-image:url(../../icon/tag-ma-cur.png);
         }
       }
       &.comments{
-        background-image:url(comments.png);
-        background-size:0.24rem auto;
+        background-image:url(../../icon/tag-comments.png);
         &.cur{
-          background-image:url(comments-cur.png);
+          background-image:url(../../icon/tag-comments-cur.png);
           &:hover{
-            background-image:url(comments-cur.png);
+            background-image:url(../../icon/tag-comments-cur.png);
           }
         }
         &:hover{
-          background-image:url(comments-cur.png);
+          background-image:url(../../icon/tag-comments-cur.png);
         }
       }
       &:hover{
@@ -333,17 +329,38 @@
         opacity:0.8;
       }
     }
-    > .cp-collection{
+    .cp-collection{
       margin-top:0.2rem;
     }
   }
-  > .works{
-    > .cp-playlist{
-      padding:0.2rem;
-      background:#FFF;
-      box-shadow:@boxShadow;
-      border-bottom-left-radius:0.1rem;
-      border-bottom-right-radius:0.1rem;
+  > .ma-list{
+    box-shadow:@boxShadow;
+    border-radius:0.1rem;
+    overflow:hidden;
+    &.first{
+      border-top-left-radius:0;
+    }
+    h4{
+      position:relative;
+      padding:0 0.2rem;
+      height:0.36rem;
+      line-height:0.36rem;
+      background:@mainColor;
+      background-size:0.24rem auto;
+      font-size:0.14rem;
+      font-weight:400;
+      small{
+        margin-left:0.2rem;
+        font-size:0.12rem;
+        opacity:0.8;
+      }
+    }
+    .cp-hotplaylist{
+      padding:0 0.1rem;
+    }
+    .cp-page{
+      padding:0.1rem;
+      text-align:right;
     }
   }
   > .comments{
@@ -455,6 +472,11 @@
   .cp-hotauthor{
     .list{
       margin:0.1rem 0 0.1rem 0.25rem;
+      li .txt{
+        .fans,.comment{
+          display:none;
+        }
+      }
     }
   }
 }

@@ -127,6 +127,12 @@ class Comment extends migi.Component {
           });
         }
       });
+      migi.eventBus.on('subCmtDelTo', function() {
+        if($last && $last.hasClass('on')) {
+          self.hideLast();
+          self.emit('closeSubComment');
+        }
+      });
     });
   }
   @bind message
@@ -351,7 +357,7 @@ class Comment extends migi.Component {
           <pre cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_AuthorName }>{ item.Send_Content }</pre>
           <div class="slide2">
             <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
-            <small class="sub" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_UserName }>回复</small>
+            <small class="sub" cid={ item.Send_ID } rid={ item.RootID } name={ item.Send_AuthorName }>回复</small>
           </div>
           <b class="arrow"/>
         </div>

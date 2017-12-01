@@ -6,6 +6,7 @@ import net from '../../d/common/net';
 import util from '../../d/common/util';
 import Nav from './Nav.jsx';
 import Home from './Home.jsx';
+import MAList from './MAList.jsx';
 import AuthorComment from './AuthorComment.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 
@@ -49,20 +50,21 @@ class Author extends migi.Component {
     $li.addClass('cur');
     let self = this;
     let home = self.ref.home;
-    // let works = self.ref.works;
+    let maList = self.ref.maList;
     let authorComment = self.ref.authorComment;
-    home.hide();
-    // works.hide();
-    authorComment.hide();
+    home && home.hide();
+    maList && maList.hide();
+    authorComment && authorComment.hide();
     let rel = tvd.props.rel;
     switch(rel) {
       case 'home':
         home.show();
         history.replaceState(null, '', '?tag=home');
         break;
-      // case '1':
-      //   works.show();
-      //   break;
+      case 'ma':
+        maList.show();
+        history.replaceState(null, '', '?tag=ma');
+        break;
       case 'comment':
         authorComment.show();
         history.replaceState(null, '', '?tag=comment');
@@ -73,11 +75,11 @@ class Author extends migi.Component {
     let empty = !this.props.album.length
       && !this.props.homeDetail.Hot_Works_Items.length
       && !this.props.homeDetail.AuthorToAuthor.length;
-    if(!this.props.authorDetail.ISSettled || empty) {
+    if(!this.props.authorDetail.ISSettled) {
       return <div class="author">
         <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
-        <ul class="type fn-clear" ref="type">
-          <li class="comments cur" rel="2">留言</li>
+        <ul class="type fn-clear">
+          <li class="comments cur">留言</li>
         </ul>
         <AuthorComment
           ref="authorComment"
@@ -91,15 +93,40 @@ class Author extends migi.Component {
                 placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
       </div>;
     }
+    if(empty) {
+      return <div class="author">
+        <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
+        <ul class="type fn-clear" onClick={ { li: this.clickType } }>
+          <li class={ 'ma' + (this.props.tag !== 'comment' ? ' cur' : '') } rel="ma">音乐</li>
+          <li class={ 'comments' + (this.props.tag === 'comment' ? ' cur' : '') } rel="comment">留言</li>
+        </ul>
+        <MAList ref="maList" authorID={ this.props.authorID }
+                dataList={ this.props.hotPlayList } hidden={ this.props.tag === 'comment' }/>
+        <AuthorComment
+          ref="authorComment"
+          hidden={ this.props.tag !== 'comment' }
+          isLogin={ this.props.isLogin }
+          authorID={ this.props.authorID }
+          commentData={ this.props.commentData }/>
+        <SubCmt ref="subCmt"
+                originTo={ this.props.authorDetail.AuthorName }
+                subText="发送"
+                tipText="-${n}"
+                placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
+      </div>;
+    }
     return <div class="author">
       <Nav ref="nav" authorID={ this.props.authorID } authorDetail={ this.props.authorDetail }/>
-      <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
-        <li class={ 'home' + (this.props.tag !== 'comment' ? ' cur' : '') } rel="home">主页</li>
+      <ul class="type fn-clear" onClick={ { li: this.clickType } }>
+        <li class={ 'home' + (this.props.tag !== 'comment' && this.props.tag !== 'ma' ? ' cur' : '') } rel="home">主页</li>
+        <li class={ 'ma' + (this.props.tag === 'ma' ? ' cur' : '') } rel="ma">音乐</li>
         <li class={ 'comments' + (this.props.tag === 'comment' ? ' cur' : '') } rel="comment">留言</li>
       </ul>
       <Home ref="home" authorID={ this.props.authorID } homeDetail={ this.props.homeDetail }
-            hidden={ this.props.tag === 'comment' }
+            hidden={ this.props.tag === 'comment' || this.props.tag === 'ma' }
             album={ this.props.album }/>
+      <MAList ref="maList" authorID={ this.props.authorID }
+              dataList={ this.props.hotPlayList } hidden={ this.props.tag !== 'ma' }/>
       <AuthorComment
         ref="authorComment"
         hidden={ this.props.tag !== 'comment' }

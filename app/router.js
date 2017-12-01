@@ -82,8 +82,6 @@ module.exports = app => {
   app.post('/api/works/photoList', 'api.works.photoList');
   app.post('/api/works/addTempLink', app.middlewares.needLoginJson(), 'api.works.addTempLink');
 
-  app.post('/api/author/tagB', 'api.author.tagB');
-  app.post('/api/author/playList', 'api.author.playList');
   app.post('/api/author/commentList', 'api.author.commentList');
   app.post('/api/author/follow', app.middlewares.needLoginJson(), 'api.author.follow');
   app.post('/api/author/unFollow', app.middlewares.needLoginJson(), 'api.author.unFollow');
@@ -91,8 +89,7 @@ module.exports = app => {
   app.post('/api/author/likeComment', app.middlewares.needLoginJson(), 'api.author.likeComment');
   app.post('/api/author/subCommentList', 'api.author.subCommentList');
   app.post('/api/author/delComment', app.middlewares.needLoginJson(), 'api.author.delComment');
-  app.post('/api/author/singleComment', 'api.author.singleComment');
-  app.post('/api/author/searchWorks', 'api.author.searchWorks');
+  app.post('/api/author/maList', 'api.author.maList');
 
   app.post('/api/circle/join', app.middlewares.needLoginJson(), 'api.circle.join');
   app.post('/api/circle/add', app.middlewares.needLoginJson(), 'api.circle.add');
@@ -109,6 +106,8 @@ module.exports = app => {
   app.post('/api/post/del', app.middlewares.needLoginJson(), 'api.post.del');
 
   app.post('/api/circling/list', 'api.circling.list');
+
+  app.post('/api/follow/postList', 'api.follow.postList');
 
   app.post('/api/subComment', app.middlewares.needLogin(), 'api.subComment.index');
 
