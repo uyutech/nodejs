@@ -30,6 +30,11 @@ class HotAuthor extends migi.Component {
                 </li>;
               })
             }
+            {
+              this.props.more
+                ? <li class="more"><a href={ this.props.more }>查看更多</a></li>
+                : ''
+            }
           </ul>
           : <div class="empty">{ this.props.empty || '暂无数据' }</div>
       }

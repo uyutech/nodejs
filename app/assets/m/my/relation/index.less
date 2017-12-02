@@ -52,7 +52,7 @@
       transform:translateY(-50%);
     }
   }
-  > .friends, > .follows, > .followers{
+  > .friend, > .follow, > .follower, > .author{
     ul{
       margin:0 auto;
       padding:0.1rem 0 0;
@@ -127,22 +127,33 @@
       }
     }
   }
-  > .follows, > .followers{
+  > .author{
+
+  }
+  > .follow, > .follower, > .author{
     display:none;
   }
   &.follow{
-    > .friends, > .followers{
+    > .friend, > .follower, > .author{
       display:none;
     }
-    > .follows{
+    > .follow{
       display:block;
     }
   }
   &.follower{
-    > .friends, > .follows{
+    > .friend, > .follow, > .author{
       display:none;
     }
-    > .followers{
+    > .follower{
+      display:block;
+    }
+  }
+  &.author{
+    > .friend, > .follow, > .follower{
+      display:none;
+    }
+    > .author{
       display:block;
     }
   }

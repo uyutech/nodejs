@@ -76,6 +76,7 @@ module.exports = app => {
   app.post('/api/my/friendList', app.middlewares.needLoginJson(), 'api.my.friendList');
   app.post('/api/my/followList', app.middlewares.needLoginJson(), 'api.my.followList');
   app.post('/api/my/followerList', app.middlewares.needLoginJson(), 'api.my.followerList');
+  app.post('/api/my/followerAuthor', app.middlewares.needLoginJson(), 'api.my.followerAuthor');
   app.post('/api/my/postList', app.middlewares.needLoginJson(), 'api.my.postList');
   app.post('/api/my/favor', app.middlewares.needLoginJson(), 'api.my.favor');
   app.post('/api/my/favorPic', app.middlewares.needLoginJson(), 'api.my.favorPic');

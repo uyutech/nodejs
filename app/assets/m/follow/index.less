@@ -29,27 +29,23 @@
     }
   }
   .circles{
-    overflow:auto;
+    display:flex;
+    padding-left:0.1rem;
+    overflow-x:auto;
     transform:translate3d(0,0,0);
-    .c{
-      width:999rem;
-    }
-    ul{
-      display:inline-block;
-      padding-left:0.1rem;
-    }
     li{
-      display:inline-block;
+      display:block;
       margin-right:0.05rem;
-      margin-bottom:0.02rem;
       padding:0 0.1rem;
       line-height:0.22rem;
       border:1px solid @mainColor;
       color:@mainColor;
       border-radius:0.22rem;
       white-space:nowrap;
+      flex-shrink:0;
       a{
         color:@mainColor;
+        white-space:nowrap;
       }
       &:active{
         a{
@@ -57,6 +53,14 @@
         }
         border-color:@secondColor;
       }
+    }
+  }
+  > p{
+    padding:0.1rem 0.1rem 0;
+    color:@secondTextColor;
+    font-size:0.11rem;
+    small{
+      font-size:0.11rem;
     }
   }
   .cp-hotauthor{

@@ -8,12 +8,14 @@ import Relation from '../../../assets/m/my/relation/Relation.jsx';
 
 export default function(data) {
   let tag = data.tag;
+  let follows = data.follows;
   let userFriends = data.userFriends;
   let userFollows = data.userFollows;
   let userFollowers = data.userFollowers;
 
   let relation = migi.preRender(
     <Relation tag={ tag }
+              follows={ follows }
               userFriends={ userFriends }
               userFollows={ userFollows }
               userFollowers={ userFollowers }/>
@@ -33,6 +35,7 @@ ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.tag = ${data.helper.stringify(tag)};
+  $CONFIG.follows = ${data.helper.stringify(follows)};
   $CONFIG.userFriends = ${data.helper.stringify(userFriends)};
   $CONFIG.userFollows = ${data.helper.stringify(userFollows)};
   $CONFIG.userFollowers = ${data.helper.stringify(userFollowers)};

@@ -9,6 +9,7 @@ import Relation from './Relation.jsx';
 
 let relation = migi.preExist(
   <Relation tag={ $CONFIG.tag }
+            follows={ $CONFIG.follows }
             userFriends={ $CONFIG.userFriends }
             userFollows={ $CONFIG.userFollows }
             userFollowers={ $CONFIG.userFollowers }/>,

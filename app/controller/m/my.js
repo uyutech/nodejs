@@ -66,10 +66,16 @@ module.exports = app => {
     * relation(ctx) {
       let uid = ctx.session.uid;
       let tag = ctx.query.tag;
+      let follows = {};
       let userFriends = {};
       let userFollows = {};
       let userFollowers = {};
       let res = yield {
+        follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+          uid,
+          Skip: 0,
+          Take: 10,
+        }),
         userFriends: ctx.helper.postServiceJSON('api/users/User_Friends', {
           uid,
           Skip: 0,
@@ -86,6 +92,9 @@ module.exports = app => {
           Take: 15,
         }),
       };
+      if(res.follows.data.success) {
+        follows = res.follows.data.data;
+      }
       if(res.userFriends.data.success) {
         userFriends = res.userFriends.data.data;
       }
@@ -97,6 +106,7 @@ module.exports = app => {
       }
       yield ctx.render('mmy_relation', {
         tag,
+        follows,
         userFriends,
         userFollows,
         userFollowers,

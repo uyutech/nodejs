@@ -9,9 +9,7 @@ class HotWork extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.dataList) {
-      self.dataList = self.props.dataList;
-    }
+    self.dataList = self.props.dataList;
   }
   @bind dataList = []
   setData(data) {

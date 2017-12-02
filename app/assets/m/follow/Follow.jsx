@@ -72,24 +72,25 @@ class Follow extends migi.Component {
   }
   render() {
     return <div class="follow">
-      {/*<h4>关注话题</h4>*/}
-      {/*<div class="circles" ref="circles">*/}
-        {/*<div class="c">*/}
-          {/*<ul>*/}
-            {/*{*/}
-              {/*(this.props.hotCircle || []).map(function(item) {*/}
-                {/*return <li rel={ item.Cid }><a href={ '/circle/' + item.Cid }>{ item.CirclingName }</a></li>;*/}
-              {/*}.bind(this))*/}
-            {/*}*/}
-          {/*</ul>*/}
-        {/*</div>*/}
-      {/*</div>*/}
+      <h4>关注话题</h4>
+      <ul class="circles">
+        {
+          (this.props.hotCircle || []).map(function(item) {
+            return <li rel={ item.Cid }><a href={ '/circle/' + item.Cid }>{ item.CirclingName }</a></li>;
+          }.bind(this))
+        }
+      </ul>
       <h4>关注作者</h4>
-      <HotAuthor ref="hotAuthor" empty={ '你还没有关注作者哦，快去发现页看看有没有喜欢的作者吧！' } dataList={ this.props.follows }/>
+      <HotAuthor ref="hotAuthor"
+                 dataList={ this.props.follows.data }
+                 empty={ '你还没有关注作者哦，快去发现页看看有没有喜欢的作者吧！' }
+                 more={ this.props.follows.Size > 10 ? '/my/relation?tag=author' : '' }/>
       <h4>关注圈er</h4>
-      <HotUser ref="hotuser" empty={ '你还没有关注的圈er哦，快去转圈页看看有没有有趣的小伙伴吧~' } dataList={ this.props.userFollows.data }/>
-      <h4>关注我的</h4>
-      <HotUser ref="hotuser" empty={ '还没有人关注你哦，快去转圈页看看有没有有趣的小伙伴吧~' } dataList={ this.props.userFans.data }/>
+      <HotUser ref="hotuser"
+               dataList={ this.props.userFollows.data }
+               empty={ '你还没有关注的圈er哦，快去转圈页看看有没有有趣的小伙伴吧~' }
+               more={ this.props.userFollows.Size > 10 ? '/my/relation?tag=follow' : '' }/>
+      <p><small>小提示：</small>互相关注和关注我的可以在 <a href="/my/relation">圈关系</a> 里查看</p>
       <h4>Ta们画的圈</h4>
       <HotPost ref="hotPost" data={ this.props.postList.data }/>
     </div>;

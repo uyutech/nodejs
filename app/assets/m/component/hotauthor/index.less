@@ -14,6 +14,7 @@
     li{
       display:block;
       margin-right:0.1rem;
+      padding-top:0.01rem;
       width:0.75rem;
       flex-basis:0.75rem;
       flex-shrink:0;
@@ -85,6 +86,19 @@
         white-space:nowrap;
         text-overflow:ellipsis;
         overflow:hidden;
+      }
+      &.more{
+        a{
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          margin:0 auto;
+          width:0.6rem;
+          height:0.6rem;
+          text-align:center;
+          box-shadow:@headShadow;
+          border-radius:100%;
+        }
       }
     }
   }

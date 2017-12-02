@@ -253,6 +253,16 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * followerAuthor(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
     * postList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
