@@ -16,7 +16,6 @@ class NeedLogin extends migi.Component {
     parent.downZIndex && parent.downZIndex();
   }
   clickClose(e) {
-    e.preventDefault();
     this.hide();
   }
   clickWeibo(e) {
@@ -36,7 +35,7 @@ class NeedLogin extends migi.Component {
         <h3>还没有登录哦~</h3>
         <p>{ this.message || '点击下方微博登录按钮登录或注册~' }</p>
         <a href="/oauth/weibo" class="weibo" onClick={ this.clickWeibo }>微博登录</a>
-        <a href="#" class="close" onClick={ this.clickClose }/>
+        <span class="close" onClick={ this.clickClose }/>
       </div>
     </div>;
   }

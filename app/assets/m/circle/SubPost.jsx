@@ -108,6 +108,7 @@ class SubPost extends migi.Component {
   @bind warnLength
   @bind sending
   @bind tagList = []
+  @bind tagList2 = []
   input(e, vd) {
     let self = this;
     let $vd = $(vd.element);
@@ -343,7 +344,17 @@ class SubPost extends migi.Component {
     }
   }
   clickTag(e, vd, tvd) {
-    this.value += ' ' + tvd.props.rel;
+    if(tvd.props.class === 'more') {
+      let i = tvd.props.i;
+      this.tagList2 = this.tagList[i].value;
+    }
+    else {
+      this.value += tvd.props.rel;
+      this.tagList2 = [];
+    }
+  }
+  clickTag2(e, vd, tvd) {
+    this.value += tvd.props.rel;
   }
   render() {
     return <form class="mod-sub" ref="form" onSubmit={ this.submit }>
@@ -378,9 +389,20 @@ class SubPost extends migi.Component {
       <div class={ 'ti3' + (this.tagList.length ? '' : ' fn-hide') } onClick={ { li: this.clickTag }}>
         <ul>
           {
-            this.tagList.map(function(item) {
-              return <li rel={ item.value }>{ item.name }</li>;
-            })
+            this.tagList.map(function(item, i) {
+              return <li class={ Array.isArray(item.value) ? 'more' : '' }
+                         i={ i }
+                         rel={ item.value }>{ item.name }</li>;
+            }.bind(this))
+          }
+        </ul>
+      </div>
+      <div class={ 'ti4' + (this.tagList2.length ? '' : ' fn-hide') } onClick={ { li: this.clickTag2 }}>
+        <ul>
+          {
+            this.tagList2.map(function(item) {
+              return <li rel={ item }>{ item }</li>;
+            }.bind(this))
           }
         </ul>
       </div>

@@ -129,6 +129,7 @@ class SubPost extends migi.Component {
   @bind warnLength
   @bind sending
   @bind tagList = []
+  @bind tagList2 = []
   input(e, vd) {
     let self = this;
     let $vd = $(vd.element);
@@ -177,7 +178,13 @@ class SubPost extends migi.Component {
       $(self.ref.label.element).find('.cur,.on').each(function(i, li) {
         circleID.push($(li).attr('rel'));
       });
-      net.postJSON('/api/circle/add', { content: self.value, imgs, widths, heights, circleID: circleID.join(',') }, function(res) {
+      net.postJSON('/api/circle/add', {
+        content: self.value,
+        imgs,
+        widths,
+        heights,
+        circleID: circleID.join(',')
+      }, function(res) {
         if(res.success) {
           self.value = '';
           self.invalid = true;
@@ -370,7 +377,24 @@ class SubPost extends migi.Component {
     }
   }
   clickTag(e, vd, tvd) {
-    this.value += ' ' + tvd.props.rel;
+    if(tvd.props.class === 'more') {
+      let i = tvd.props.i;
+      this.tagList2 = this.tagList[i].value;
+    }
+    else {
+      this.value += tvd.props.rel;
+      this.tagList2 = [];
+    }
+  }
+  clickTag2(e, vd, tvd) {
+    e.stopPropagation();
+    this.value += tvd.props.rel;
+    this.tagList2 = [];
+  }
+  clickClose(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.tagList2 = [];
   }
   render() {
     return <div class={ 'mod-sub' + (this.expand ? ' expand' : '') + (!this.hidden ? '' : ' fn-hide') }>
@@ -381,24 +405,29 @@ class SubPost extends migi.Component {
               <dt>画个圈</dt>
               {
                 (this.to || []).map(function(item) {
-                  return <dd rel={ item.TagID } class={ item.TagID === this.props.circleID ? 'on' : '' }>{ item.TagName }圈</dd>;
+                  return <dd rel={ item.TagID }
+                             class={ item.TagID === this.props.circleID ? 'on' : '' }>{ item.TagName }圈</dd>;
                 }.bind(this))
               }
             </dl>
             <ul class={ 'ti3' + (this.tagList.length ? '' : ' fn-hide') } onClick={ { li: this.clickTag }}>
               {
-                this.tagList.map(function(item) {
-                  return <li rel={ item.value }>{ item.name }</li>;
-                })
+                this.tagList.map(function(item, i) {
+                  return <li class={ Array.isArray(item.value) ? 'more' : '' }
+                             i={ i }
+                             rel={ item.value }>{ item.name }</li>;
+                }.bind(this))
               }
             </ul>
             <textarea class={ 'text' + (this.sending ? ' dis' : '') } ref="input" disabled={ !!this.sending }
-                      placeholder={ this.placeholder }
-                      onInput={ this.input } onFocus={ this.focus } onBlur={ this.blur }>{ this.value }</textarea>
-            <span class={ 'limit' + (this.warnLength ? ' warn' : '') }><strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }</span>
+                      placeholder={ this.placeholder } onInput={ this.input } onFocus={ this.focus }
+                      onBlur={ this.blur }>{ this.value }</textarea>
+            <span class={ 'limit' + (this.warnLength ? ' warn' : '') }>
+              <strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }</span>
             <div class={ 'upload' + (this.disableUpload ? ' dis' : '') }>
               添加图片
-              <input type="file" ref="file" class="file" onChange={ this.change } disabled={ !!this.disableUpload }
+              <input type="file" ref="file" class="file" onChange={ this.change }
+                     disabled={ !!this.disableUpload }
                      multiple="multiple" accept="image/gif, image/jpeg, image/png"/>
             </div>
             <input type="submit"
@@ -422,6 +451,19 @@ class SubPost extends migi.Component {
             }
           </ul>
         </form>
+      </div>
+      <div class={ 'pop' + (this.tagList2.length ? '' : ' fn-hide') }>
+        <div class="c">
+          <h3>选择标签</h3>
+          <ul onClick={ { li: this.clickTag2 } }>
+            {
+              this.tagList2.map(function(item) {
+                return <li rel={ item }>{ item }</li>;
+              }.bind(this))
+            }
+          </ul>
+          <span class="close" onClick={ this.clickClose }/>
+        </div>
       </div>
     </div>;
   }
