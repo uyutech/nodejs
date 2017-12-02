@@ -45,11 +45,11 @@ let activityLabel = {
       name: '每日荐歌',
       value: [
         {
-          key: 'Day2 1',
+          key: 'Day 1',
           value: '#每日荐歌# #31天画圈挑战# #一首让我入坑的歌#'
         },
         {
-          key: 'Day2',
+          key: 'Day 2',
           value: '#31天任务挑战# #每日荐歌# #一首让你少女心爆棚甜到掉牙的歌#'
         }
       ]
