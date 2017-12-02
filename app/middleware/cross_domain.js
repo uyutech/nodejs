@@ -8,7 +8,7 @@ module.exports = () => {
   return function* (next) {
     let origin = this.request.header.origin;
     let allowOrigin;
-    if(origin.indexOf('circling.cc') > -1) {
+    if(origin && origin.indexOf('circling.cc') > -1) {
       allowOrigin = origin;
     }
     if(allowOrigin) {
