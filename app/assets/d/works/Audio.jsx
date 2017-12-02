@@ -94,6 +94,7 @@ class Audio extends migi.Component {
                        onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
                        onPlaying={ this.onPlaying.bind(this) }
                        onPause={ this.onPause.bind(this) }
+                       onEnded={ this.onEnded.bind(this) }
                        onProgress={ this.onProgress.bind(this) }
                        preload="meta"
                        playsinline="true"
@@ -170,6 +171,10 @@ class Audio extends migi.Component {
     this.duration = e.target.duration;
   }
   onPause(e) {
+    this.isPlaying = false;
+  }
+  onEnded(e) {
+    this.isPlaying = false;
   }
   play() {
     if(this.datas[this.index || 0].FileUrl) {

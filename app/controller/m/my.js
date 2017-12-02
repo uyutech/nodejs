@@ -9,19 +9,12 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let userInfo = {};
-      let myPost = {};
       let bonusPoint = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
       let res = yield {
         userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
           uid,
-        }),
-        myPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
-          uid,
-          Skip: 0,
-          Take: 10,
-          currentuid: uid,
         }),
         bonusPoint: ctx.helper.postServiceJSON('api/users/getuserrank', {
           uid,
@@ -35,9 +28,6 @@ module.exports = app => {
       };
       if(res.userInfo.data.success) {
         userInfo = res.userInfo.data.data;
-      }
-      if(res.myPost.data.success) {
-        myPost = res.myPost.data.data;
       }
       if(res.bonusPoint.data.success) {
         bonusPoint = res.bonusPoint.data.data || {};
@@ -57,7 +47,6 @@ module.exports = app => {
       }
       yield ctx.render('mmy', {
         userInfo,
-        myPost,
         bonusPoint,
         lastUpdateNickNameTime,
         lastUpdateHeadTime,

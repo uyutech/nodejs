@@ -93,6 +93,7 @@ class MusicAlbum extends migi.Component {
                               onLoadedmetadata={ self.onLoadedmetadata.bind(self) }
                               onPlaying={ self.onPlaying.bind(self) }
                               onPause={ self.onPause.bind(self) }
+                              onEnded={ self.onEnded.bind(self) }
                               onProgress={ self.onProgress.bind(self) }
                               preload="meta">
             your browser does not support the audio tag
@@ -112,6 +113,7 @@ class MusicAlbum extends migi.Component {
                               onTimeupdate={ self.onTimeupdate.bind(self) }
                               onLoadedmetadata={ self.onLoadedmetadata.bind(self) }
                               onPause={ self.onPause.bind(self) }
+                              onEnded={ self.onEnded.bind(self) }
                               onPlaying={ self.onPlaying.bind(self) }
                               preload="meta"
                               playsinline="true"
@@ -179,6 +181,10 @@ class MusicAlbum extends migi.Component {
     this.duration = e.target.duration;
   }
   onPause(e) {
+    this.isPlaying = false;
+  }
+  onEnded(e) {
+    this.isPlaying = false;
   }
   play() {
     this.av && this.av.element.play();

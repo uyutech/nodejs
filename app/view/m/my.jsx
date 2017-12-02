@@ -8,7 +8,6 @@ import My from '../../assets/m/my/My.jsx';
 
 export default function(data) {
   let userInfo = data.userInfo;
-  let myPost = data.myPost;
   let bonusPoint = data.bonusPoint;
   let now = Date.now();
   let lastUpdateNickNameTime = data.lastUpdateNickNameTime;
@@ -28,7 +27,7 @@ export default function(data) {
   }
   let updateHeadTimeDiff = now - lastUpdateHeadTime;
 
-  let my = migi.preRender(<My userInfo={ userInfo } myPost={ myPost } bonusPoint={ bonusPoint }
+  let my = migi.preRender(<My userInfo={ userInfo } bonusPoint={ bonusPoint }
                               updateNickNameTimeDiff={ updateNickNameTimeDiff }
                               updateHeadTimeDiff={ updateHeadTimeDiff }/>);
 
@@ -47,7 +46,6 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.userInfo = ${data.helper.stringify(userInfo)};
   $CONFIG.follows = ${data.helper.stringify(data.follows)};
-  $CONFIG.myPost = ${data.helper.stringify(myPost)};
   $CONFIG.bonusPoint = ${data.helper.stringify(bonusPoint)};
   $CONFIG.updateNickNameTimeDiff = ${data.helper.stringify(updateNickNameTimeDiff)};
   $CONFIG.updateHeadTimeDiff = ${data.helper.stringify(updateHeadTimeDiff)};
