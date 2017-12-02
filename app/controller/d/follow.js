@@ -14,13 +14,15 @@ module.exports = app => {
       let userFans = [];
       let postList = {};
       let res = yield {
-        // hotCircle: ctx.helper.postServiceJSON('api/users/User_Follow_Circling', {
-        //   uid,
-        //   Skip: 0,
-        //   Take: 6,
-        // }),
+        hotCircle: ctx.helper.postServiceJSON('api/users/User_Follow_Circling', {
+          uid,
+          Skip: 0,
+          Take: 6,
+        }),
         follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
           uid,
+          Skip: 0,
+          Take: 10,
         }),
         userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
           uid,
@@ -38,9 +40,9 @@ module.exports = app => {
           Take: 10,
         }),
       };
-      // if(res.hotCircle.data.success) {
-      //   hotCircle = res.hotCircle.data.data;
-      // }
+      if(res.hotCircle.data.success) {
+        hotCircle = res.hotCircle.data.data;
+      }
       if(res.follows.data.success) {
         follows = res.follows.data.data;
       }

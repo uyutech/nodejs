@@ -120,16 +120,16 @@ class Follow extends migi.Component {
   render() {
     return <div class="follow">
       <div class="c">
-        {/*<h4>关注话题</h4>*/}
-        {/*<ul class="circles" onClick={ { li: this.clickTag } }>*/}
-          {/*{*/}
-            {/*(this.props.hotCircle || []).map(function(item) {*/}
-              {/*return <li rel={ item.Cid }><a href={ '/circle/' + item.Cid }>{ item.CirclingName }</a></li>;*/}
-            {/*}.bind(this))*/}
-          {/*}*/}
-        {/*</ul>*/}
+        <h4>关注话题</h4>
+        <ul class="circles" onClick={ { li: this.clickTag } }>
+          {
+            (this.props.hotCircle || []).map(function(item) {
+              return <li rel={ item.Cid }><a href={ '/circle/' + item.Cid }>{ item.CirclingName }</a></li>;
+            }.bind(this))
+          }
+        </ul>
         <h4>关注作者</h4>
-        <HotAuthor ref="hotAuthor" dataList={ this.props.follows }/>
+        <HotAuthor ref="hotAuthor" dataList={ this.props.follows.data }/>
         <h4>关注圈er</h4>
         <HotUser ref="userFollow" dataList={ this.props.userFollows.data }/>
         <h4>关注我的</h4>
