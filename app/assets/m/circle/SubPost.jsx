@@ -401,7 +401,7 @@ class SubPost extends migi.Component {
         <ul>
           {
             this.tagList2.map(function(item) {
-              return <li rel={ item }>{ item }</li>;
+              return <li rel={ item.value }>{ item.key }</li>;
             }.bind(this))
           }
         </ul>

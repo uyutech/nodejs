@@ -15,7 +15,7 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['report', 'd2m', 'm2d', 'message', 'jsConfig', 'migiReset'];
+  config.middleware = ['report', 'd2m', 'm2d', 'message', 'jsConfig', 'migiReset', 'crossDomain'];
   config.d2m = {
     match: '/d',
   };
@@ -54,6 +54,9 @@ module.exports = appInfo => {
       }
       return false;
     },
+  };
+  config.crossDomain = {
+    match: '/h5',
   };
 
   config.view = {

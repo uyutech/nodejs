@@ -126,8 +126,11 @@ module.exports = app => {
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
 
-  app.post('/h5/find/index', app.middlewares.crossDomain(), 'h5.find.index');
-  app.post('/h5/find/hotWorkList', app.middlewares.crossDomain(), 'h5.find.hotWorkList');
+  app.post('/h5/oauth/weibo', 'h5.oauth.weibo');
+  app.post('/h5/login/loginOut', 'h5.login.loginOut');
 
-  app.post('/h5/my/index', app.middlewares.crossDomain(), 'h5.my.index');
+  app.post('/h5/find/index', 'h5.find.index');
+  app.post('/h5/find/hotWorkList', 'h5.find.hotWorkList');
+
+  app.post('/h5/my/index', 'h5.my.index');
 };
