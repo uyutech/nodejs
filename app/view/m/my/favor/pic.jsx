@@ -28,8 +28,8 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.dataList = ${data.helper.stringify(dataList)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mmy_favor_pic.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mmy_favor_pic.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

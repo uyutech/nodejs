@@ -47,8 +47,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
   $CONFIG.banner = ${data.helper.stringify(banner)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dfind.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dfind.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

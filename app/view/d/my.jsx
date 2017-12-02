@@ -59,8 +59,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.updateNickNameTimeDiff = ${data.helper.stringify(updateNickNameTimeDiff)};
   $CONFIG.updateHeadTimeDiff = ${data.helper.stringify(updateHeadTimeDiff)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dmy.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dmy.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

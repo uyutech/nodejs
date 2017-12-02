@@ -31,8 +31,8 @@ ${data.helper.getDBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.messages = ${data.helper.stringify(messages)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dmy_message.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dmy_message.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

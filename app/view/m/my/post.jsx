@@ -28,8 +28,8 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mmy_post.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mmy_post.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

@@ -31,8 +31,8 @@ ${topNav}
   $CONFIG.authorInfo = ${data.helper.stringify(authorInfo)};
   $CONFIG.messages = ${data.helper.stringify(messages)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dindex.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dindex.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

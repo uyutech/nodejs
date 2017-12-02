@@ -26,8 +26,8 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.goto = ${data.helper.stringify(goto)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mlogin.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mlogin.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

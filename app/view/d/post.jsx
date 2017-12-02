@@ -36,8 +36,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.postData = ${data.helper.stringify(postData)};
   $CONFIG.replyData = ${data.helper.stringify(replyData)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dpost.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dpost.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

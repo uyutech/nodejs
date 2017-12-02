@@ -38,8 +38,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.userFollows = ${data.helper.stringify(userFollows)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mfollow.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mfollow.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

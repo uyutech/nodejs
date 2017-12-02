@@ -47,8 +47,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.commentData = ${data.helper.stringify(commentData)};
   $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mauthor.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mauthor.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

@@ -32,8 +32,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.cid = ${data.helper.stringify(cid)};
   $CONFIG.rid = ${data.helper.stringify(rid)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/msubcomment.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/msubcomment.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

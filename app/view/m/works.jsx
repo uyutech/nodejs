@@ -31,7 +31,7 @@ ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;
@@ -66,8 +66,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.labelList = ${data.helper.stringify(labelList)};
   $CONFIG.commentData = ${data.helper.stringify(commentData)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mworks.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mworks.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

@@ -29,8 +29,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.userPost = ${data.helper.stringify(userPost)};
   $CONFIG.followState = ${data.helper.stringify(followState)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/duser.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/duser.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

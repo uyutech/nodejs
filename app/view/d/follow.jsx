@@ -36,8 +36,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.userFans = ${data.helper.stringify(userFans)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dfollow.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dfollow.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

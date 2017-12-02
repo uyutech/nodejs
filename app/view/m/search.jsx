@@ -32,8 +32,8 @@ ${ botNav }
   $CONFIG.kw = ${JSON.stringify(kw)};
   $CONFIG.datas = ${JSON.stringify(datas)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/msearch.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/msearch.js')}" defer="defer"></script>
 </body>
 </html>`;
 };

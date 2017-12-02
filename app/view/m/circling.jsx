@@ -29,8 +29,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.hotCircle = ${data.helper.stringify(hotCircle)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mcircling.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mcircling.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

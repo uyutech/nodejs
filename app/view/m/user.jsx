@@ -30,8 +30,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.userPost = ${data.helper.stringify(userPost)};
   $CONFIG.followState = ${data.helper.stringify(followState)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/muser.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/muser.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

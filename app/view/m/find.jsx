@@ -46,8 +46,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
   $CONFIG.banner = ${data.helper.stringify(banner)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mfind.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mfind.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

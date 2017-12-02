@@ -33,8 +33,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
   $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mcpost.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mcpost.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

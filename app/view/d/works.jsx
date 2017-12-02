@@ -30,7 +30,7 @@ ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;
@@ -63,8 +63,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.labelList = ${data.helper.stringify(labelList)};
   $CONFIG.commentData = ${data.helper.stringify(commentData)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dworks.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dworks.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

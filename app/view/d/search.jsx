@@ -27,8 +27,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.kw = ${JSON.stringify(kw)};
   $CONFIG.datas = ${JSON.stringify(datas)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dsearch.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dsearch.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

@@ -43,8 +43,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.commentData = ${data.helper.stringify(commentData)};
   $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dauthor.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dauthor.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

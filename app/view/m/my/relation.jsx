@@ -40,8 +40,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.userFollows = ${data.helper.stringify(userFollows)};
   $CONFIG.userFollowers = ${data.helper.stringify(userFollowers)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mmy_relation.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mmy_relation.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

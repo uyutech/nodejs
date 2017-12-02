@@ -34,8 +34,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.postList = ${data.helper.stringify(postList)};
   $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dcircle.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dcircle.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

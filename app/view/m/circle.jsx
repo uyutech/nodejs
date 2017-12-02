@@ -31,8 +31,8 @@ ${data.helper.getMBotNav()}
   $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/mcircle.js')}"></script>
+<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/mcircle.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

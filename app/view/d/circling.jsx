@@ -29,8 +29,8 @@ ${data.helper.getDBotNav()}
   $CONFIG.hotCircle = ${data.helper.stringify(hotCircle)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dcircling.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dcircling.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;

@@ -22,8 +22,8 @@ ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
 </script>
-<script src="${data.helper.getAssetUrl('/dcommon.js')}"></script>
-<script src="${data.helper.getAssetUrl('/dlogin.js')}"></script>
+<script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/dlogin.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;
