@@ -11,19 +11,15 @@ module.exports = app => {
       let hotWorkList = [];
       let hotAuthorList = [];
       let hotMusicAlbumList = [];
-      let hotPhotoAlbumList = [];
       let hotCircleList = [];
       let hotPlayList = [];
+      let hotPicList = [];
       let res = yield {
         hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
           Skip: 0,
           Take: 10,
         }),
         hotAuthorList: ctx.helper.postServiceJSON('api/find/Hot_Author_List', {
-          Skip: 0,
-          Take: 10,
-        }),
-        hotPhotoAlbumList: ctx.helper.postServiceJSON('api/find/Hot_PHOTO_List', {
           Skip: 0,
           Take: 10,
         }),
@@ -41,6 +37,11 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
+        hotPicList: ctx.helper.postServiceJSON('api/find/Hot_PicWorkItems', {
+          uid,
+          Skip: 0,
+          Take: 10,
+        }),
       };
       if(res.hotWorkList.data.success) {
         hotWorkList = res.hotWorkList.data.data;
@@ -51,14 +52,14 @@ module.exports = app => {
       if(res.hotMusicAlbumList.data.success) {
         hotMusicAlbumList = res.hotMusicAlbumList.data.data;
       }
-      if(res.hotPhotoAlbumList.data.success) {
-        hotPhotoAlbumList = res.hotPhotoAlbumList.data.data;
-      }
       if(res.hotCircleList.data.success) {
         hotCircleList = res.hotCircleList.data.data.data;
       }
       if(res.hotPlayList.data.success) {
         hotPlayList = res.hotPlayList.data.data;
+      }
+      if(res.hotPicList.data.success) {
+        hotPicList = res.hotPicList.data.data;
       }
       let banner = [
         {
@@ -86,9 +87,9 @@ module.exports = app => {
         hotWorkList,
         hotAuthorList,
         hotMusicAlbumList,
-        hotPhotoAlbumList,
         hotCircleList,
         hotPlayList,
+        hotPicList,
         banner,
       });
     }

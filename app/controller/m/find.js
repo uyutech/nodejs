@@ -23,10 +23,6 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
-        hotPhotoAlbumList: ctx.helper.postServiceJSON('api/find/Hot_PHOTO_List', {
-          Skip: 0,
-          Take: 10,
-        }),
         hotMusicAlbumList: ctx.helper.postServiceJSON('api/find/Hot_album_List', {
           Skip: 0,
           Take: 10,
@@ -50,9 +46,6 @@ module.exports = app => {
       }
       if(res.hotMusicAlbumList.data.success) {
         hotMusicAlbumList = res.hotMusicAlbumList.data.data;
-      }
-      if(res.hotPhotoAlbumList.data.success) {
-        hotPhotoAlbumList = res.hotPhotoAlbumList.data.data;
       }
       if(res.hotCircleList.data.success) {
         hotCircleList = res.hotCircleList.data.data.data;
