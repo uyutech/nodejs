@@ -17,7 +17,7 @@ class Upload extends migi.Component {
   change(e) {
     let file = e.target.files[0];
     let size = file.size;
-    if(size && size !== 0 && size < 1024 * 1024 * 100) {
+    if(size && size !== 0 && size < 2048 * 2048 * 100) {
       let fileReader = new FileReader();
       fileReader.onload = function() {
         let spark = new Spark.ArrayBuffer();

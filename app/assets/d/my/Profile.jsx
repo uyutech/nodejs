@@ -81,7 +81,7 @@ class Profile extends migi.Component {
     if(window.FileReader) {
       let file = e.target.files[0];
       let size = file.size;
-      if(size && size !== 0 && size <= 1024 * 500) {
+      if(size && size !== 0 && size <= 2048 * 500) {
         let $upload = $(self.ref.upload.element);
         $upload.addClass('fn-hide');
         let fileReader = new FileReader();

@@ -21,7 +21,7 @@ const TEXT = {
   3: '加载失败',
 };
 const MAX_IMG_NUM = 10;
-const MAX_TEXT_LENGTH = 2048;
+const MAX_TEXT_LENGTH = 4096;
 
 let activityLabel = config.activityLabel;
 

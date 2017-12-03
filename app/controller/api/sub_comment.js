@@ -23,7 +23,7 @@ module.exports = app => {
         };
       }
       let content = (body.content || '').trim();
-      if(content.length < 3 || content.length > 1024) {
+      if(content.length < 3 || content.length > 2048) {
         return ctx.body = {
           success: false,
         };

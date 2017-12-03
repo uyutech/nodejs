@@ -42,7 +42,7 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       let content = (body.content || '').trim();
-      if(content.length < 3 || content.length > 1024) {
+      if(content.length < 3 || content.length > 2048) {
         return ctx.body = {
           success: false,
         };
