@@ -397,9 +397,6 @@ class Player extends migi.Component {
   render() {
     return <div class={ 'player fn-hide' } style={ 'background-image:url("' + (this.cover || '//zhuanquan.xin/img/blank.png') + '")' }>
       <h3>{ this.sname }</h3>
-      <div class="num fn-hide">
-        <small class="play">{ this.playNum || 0 }</small>
-      </div>
       <div class={ 'c' + (this.isPlaying ? ' playing' : '') + (this.type === 2110 ? ' tvideo' : '') } ref="c">
         <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hide') } ref="lyrics">
           <div class={ 'roll' + (!this.showLyricsMode && this.formatLyrics.data ? '' : ' fn-hide') }>

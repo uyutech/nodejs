@@ -133,4 +133,12 @@ module.exports = app => {
   app.post('/h5/find/hotWorkList', 'h5.find.hotWorkList');
 
   app.post('/h5/my/index', app.middlewares.needLoginJson(), 'h5.my.index');
+
+  app.post('/h5/works/index', 'h5.works.index');
+  app.post('/h5/works/commentList', 'h5.works.commentList');
+
+  app.post('/h5/circle/index', 'h5.circle.index');
+  app.post('/h5/circle/postList', 'h5.circle.postList');
+
+  app.post('/h5/author/index', 'h5.author.index');
 };

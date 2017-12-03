@@ -369,9 +369,6 @@ class Video extends migi.Component {
         }
       </ul>
       <h3 ref="title">{ this.datas[this.index || 0].ItemName }</h3>
-      <div class="num fn-hide">
-        <small class="play">{ this.datas[this.index || 0].PlayHis || 0 }</small>
-      </div>
       <div class={ 'c' + ( this.isPlaying ? ' playing' : '') } ref="c">
         <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
       </div>

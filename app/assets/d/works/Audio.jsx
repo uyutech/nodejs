@@ -390,9 +390,6 @@ class Audio extends migi.Component {
         }
       </ul>
       <h3>{ this.datas[this.index || 0].ItemName }</h3>
-      <div class="num fn-hide">
-        <small class="play">{ this.datas[this.index || 0].PlayHis || 0 }</small>
-      </div>
       <div class="c">
         <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
           <div class={ 'roll' + (!this.showLyricsMode && this.datas[this.index || 0].formatLyrics.data ? '' : ' fn-hide') }>
