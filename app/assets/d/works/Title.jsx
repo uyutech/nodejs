@@ -44,16 +44,11 @@ class Title extends migi.Component {
         <h3>{ WorksTypeEnum.NAME[this.type] }</h3>
         <h1 class={ this.title ? '' : 'empty' }>{ this.title || '待揭秘' }</h1>
         <h2 class={ this.subTitle ? '' : 'fn-hide' }>{ this.subTitle }</h2>
-        {/*<b class="edit" ref="edit" onClick={ this.clickEdit }/>*/}
-        {/*<small class="pop">{ this.popular }</small>*/}
         <ul class={ 'tags fn-clear' }>
           {
             (this.tags || []).map(function(item) {
               return <li rel={ item.ID }>{ item.Tag_Name }</li>;
             })
-          }
-          {
-            // this.type === 1 ? <li class="add" onClick={ this.clickAdd }/> : ''
           }
         </ul>
       </div>
