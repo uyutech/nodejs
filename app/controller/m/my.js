@@ -12,6 +12,7 @@ module.exports = app => {
       let bonusPoint = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
+      let privateInfo = {};
       let res = yield {
         userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
           uid,
@@ -23,6 +24,9 @@ module.exports = app => {
           uid,
         }),
         lastUpdateHeadTime: ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+          uid,
+        }),
+        privateInfo: ctx.helper.postServiceJSON('api/users/GetUserAddressInfo', {
           uid,
         }),
       };
@@ -38,6 +42,9 @@ module.exports = app => {
       if(res.lastUpdateHeadTime.data.success) {
         lastUpdateHeadTime = res.lastUpdateHeadTime.data.data;
       }
+      if(res.privateInfo.data.success) {
+        privateInfo = res.privateInfo.data.data;
+      }
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {
@@ -50,6 +57,7 @@ module.exports = app => {
         bonusPoint,
         lastUpdateNickNameTime,
         lastUpdateHeadTime,
+        privateInfo,
       });
     }
     * relation(ctx) {

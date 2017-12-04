@@ -132,7 +132,8 @@ class My extends migi.Component {
     return <div class="my">
       <Profile userInfo={ this.props.userInfo }
                updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }
-               updateHeadTimeDiff={ this.props.updateHeadTimeDiff }/>
+               updateHeadTimeDiff={ this.props.updateHeadTimeDiff }
+               privateInfo={ this.props.privateInfo }/>
       <div class="warn">
         <div class="t fn-clear">
           <img class="pic" src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>

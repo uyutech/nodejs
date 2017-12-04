@@ -69,7 +69,7 @@ module.exports = app => {
   app.post('/api/my/updateNickName', app.middlewares.needLoginJson(), 'api.my.updateNickName');
   app.post('/api/my/uploadHead', app.middlewares.needLoginJson(), 'api.my.uploadHead');
   app.post('/api/my/updateSign', app.middlewares.needLoginJson(), 'api.my.updateSign');
-  app.post('/api/my/updateAddress', app.middlewares.needLoginJson(), 'api.my.updateAddress');
+  app.post('/api/my/updatePrivate', app.middlewares.needLoginJson(), 'api.my.updatePrivate');
   app.post('/api/my/message', app.middlewares.needLoginJson(), 'api.my.message');
   app.post('/api/my/readMessage', app.middlewares.needLoginJson(), 'api.my.readMessage');
   app.post('/api/my/altSettle', app.middlewares.needLoginJson(), 'api.my.altSettle');
@@ -135,8 +135,8 @@ module.exports = app => {
   app.post('/h5/circling/index', 'h5.circling.index');
   app.post('/h5/circling/postList', 'h5.circling.postList');
 
-  app.post('/h5/follow/index', 'h5.follow.index');
-  app.post('/h5/follow/postList', 'h5.follow.postList');
+  app.post('/h5/follow/index', app.middlewares.needLoginJson(), 'h5.follow.index');
+  app.post('/h5/follow/postList', app.middlewares.needLoginJson(), 'h5.follow.postList');
 
   app.post('/h5/my/index', app.middlewares.needLoginJson(), 'h5.my.index');
 

@@ -184,19 +184,35 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
-    * updateAddress(ctx) {
+    * updatePrivate(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let length = (body.address || '').length;
-      if(length > 256) {
+      let realName = body.realName;
+      let phone = body.phone;
+      let address = body.address;
+      if(realName && realName.length > 8) {
         return ctx.body = {
           success: false,
-          message: '地址长度不能超过256个字哦~',
+          message: '姓名不能超过256个字哦~',
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/UpdateUserAddress', {
+      if(phone && !/^1\d{10}$/.test(phone)) {
+        return ctx.body = {
+          success: false,
+          message: '手机号码不合法~',
+        };
+      }
+      if(address && address.length > 256) {
+        return ctx.body = {
+          success: false,
+          message: '地址不能超过256个字哦~',
+        };
+      }
+      let res = yield ctx.helper.postServiceJSON('api/users/SaveUserAddressInfo', {
         uid,
-        address: body.address || '',
+        Name: realName,
+        Phone: phone,
+        Address: address,
       });
       ctx.body = res.data;
     }
