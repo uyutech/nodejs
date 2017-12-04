@@ -31,6 +31,7 @@ module.exports = app => {
   app.get('/m/author/:authorID', 'm.author.index');
   // app.get('/m/search/:kw', 'm.search.index');
   app.get('/m/my', app.middlewares.needLogin(), 'm.my.index');
+  app.get('/m/my/private', app.middlewares.needLogin(), 'm.my.private');
   app.get('/m/my/relation', app.middlewares.needLogin(), 'm.my.relation');
   app.get('/m/my/message', app.middlewares.needLogin(), 'm.my.message');
   app.get('/m/my/post', app.middlewares.needLogin(), 'm.my.post');

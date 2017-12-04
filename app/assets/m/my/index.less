@@ -4,7 +4,7 @@
 
 @import '../../d/common/var';
 
-#page .my{
+#page > .my{
   h4{
     position:relative;
     margin:0.1rem;
@@ -59,6 +59,9 @@
       flex:1;
       margin-left:0.1rem;
     }
+    .private{
+      margin-top:0.1rem;
+    }
     label{
       display:inline-block;
       color:@secondTextColor;
@@ -112,10 +115,6 @@
       &.empty{
         color:#CCC;
       }
-    }
-    .private{
-      margin:0.1rem;
-      line-height:0.22rem;
     }
     textarea{
       display:block;

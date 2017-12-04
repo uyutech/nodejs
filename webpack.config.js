@@ -9,6 +9,7 @@ module.exports = {
     mworks: './app/assets/m/works/index.jsx',
     mauthor: './app/assets/m/author/index.jsx',
     mmy: './app/assets/m/my/index.jsx',
+    mmy_private: './app/assets/m/my/private/index.jsx',
     mmy_message: './app/assets/m/my/message/index.jsx',
     mmy_relation: './app/assets/m/my/relation/index.jsx',
     mmy_post: './app/assets/m/my/post/index.jsx',
