@@ -16,7 +16,6 @@ let sortType = 0;
 let myComment = 0;
 let currentCount = 0;
 let ajax;
-let loadEnd;
 
 class WorkComment extends migi.Component {
   constructor(...data) {
@@ -94,7 +93,6 @@ class WorkComment extends migi.Component {
       });
     });
   }
-  @bind loading
   @bind worksID
   @bind workID
   @bind rootID = -1
@@ -105,26 +103,16 @@ class WorkComment extends migi.Component {
     let comment = self.ref.comment;
     let page = self.ref.page;
     let page2 = self.ref.page2;
-    comment.message = '读取中...';
     if(ajax) {
       ajax.abort();
     }
-    self.loading = true;
     ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         currentCount = data.Size;
         skip += take;
-        comment.message = '';
-        if(data.data.length) {
-          comment.appendData(res.data.data);
-          page.total = page2.total = Math.ceil(currentCount / take);
-        }
-        else {
-          comment.appendData(res.data.data);
-          comment.empty = true;
-          loadEnd = true;
-        }
+        comment.setData(data.data);
+        page.total = page2.total = Math.ceil(currentCount / take);
       }
       else {
         if(res.code === 1000) {
@@ -132,33 +120,21 @@ class WorkComment extends migi.Component {
         }
         comment.message = res.message || util.ERROR_MESSAGE;
       }
-      self.loading = false;
     }, function(res) {
       comment.message = res.message || util.ERROR_MESSAGE;
-      self.loading = false;
     });
   }
   loadPage() {
     let self = this;
     let comment = self.ref.comment;
-    comment.message = '读取中...';
-    comment.setData();
     if(ajax) {
       ajax.abort();
     }
-    self.loading = true;
     ajax = net.postJSON('/api/works/commentList', { worksID: self.worksID , skip, take, sortType, myComment, currentCount }, function(res) {
       if(res.success) {
         let data = res.data;
         skip += take;
-        if(data.data.length) {
-          comment.message = '';
-          comment.appendData(res.data.data);
-        }
-        else {
-          comment.message = '已经到底了';
-          loadEnd = true;
-        }
+        comment.setData(data.data);
       }
       else {
         if(res.code === 1000) {
@@ -166,10 +142,8 @@ class WorkComment extends migi.Component {
         }
         comment.message = res.message || util.ERROR_MESSAGE;
       }
-      self.loading = false;
     }, function(res) {
       comment.message = res.message || util.ERROR_MESSAGE;
-      self.loading = false;
     });
   }
   switchType(e, vd) {
@@ -183,8 +157,6 @@ class WorkComment extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    loadEnd = false;
-    this.loading = false;
     this.ref.comment.clearData();
     this.load();
   }
@@ -201,8 +173,6 @@ class WorkComment extends migi.Component {
       if(ajax) {
         ajax.abort();
       }
-      loadEnd = false;
-      this.loading = false;
       this.ref.comment.clearData();
       this.load();
     }

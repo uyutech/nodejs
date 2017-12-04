@@ -26,13 +26,13 @@ class AuthorComment extends migi.Component {
           page2.index = i;
         }
         skip = (i - 1) * take;
-        self.load();
+        self.loadPage();
       });
       if(page2) {
         page2.on('page', function(i) {
           page.index = i;
           skip = (i - 1) * take;
-          self.load();
+          self.loadPage();
         });
       }
       let comment = self.ref.comment;
@@ -60,13 +60,34 @@ class AuthorComment extends migi.Component {
   load() {
     let self = this;
     let comment = self.ref.comment;
+    let page = self.ref.page;
+    let page2 = self.ref.page2;
     if(ajax) {
       ajax.abort();
     }
     ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment }, function(res) {
       if(res.success) {
         let data = res.data;
-        comment.setData(res.data.data);
+        comment.setData(data.data);
+        page.total = page2.total = Math.ceil(data.Size / take);
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+    });
+  }
+  loadPage() {
+    let self = this;
+    let comment = self.ref.comment;
+    if(ajax) {
+      ajax.abort();
+    }
+    ajax = net.postJSON('/api/author/commentList', { authorID: self.authorID , skip, take, sortType, myComment }, function(res) {
+      if(res.success) {
+        let data = res.data;
+        comment.setData(data.data);
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);
