@@ -99,7 +99,9 @@ class SubCmt extends migi.Component {
       <div class="ti">
         <a onClick={ this.clickClose } class="close" title="返回"
            href={ this.props.circleID ? ('/circle/' + this.props.circleID) : '/' }/>
-        <span class={ 'limit' + (this.warnLength ? ' warn' : '') }><strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }</span>
+        <span class={ 'limit' + (this.warnLength ? ' warn' : '') }>
+          <strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }
+        </span>
         <input type="submit"
                class={ 'submit' + (this.sending || this.invalid || this.disableUpload ? ' dis' : '') }
                value={ this.value.trim().length
@@ -110,7 +112,8 @@ class SubCmt extends migi.Component {
       </div>
       <div class="c">
         <textarea class="text" ref="input" placeholder={ this.placeholder || '请输入评论' }
-                  onInput={ this.input } onFocus={ this.focus } maxLength={ MAX_TEXT_LENGTH }>{ this.value }</textarea>
+                  onInput={ this.input } onFocus={ this.focus }
+                  maxLength={ MAX_TEXT_LENGTH }>{ this.value }</textarea>
       </div>
     </form>;
   }

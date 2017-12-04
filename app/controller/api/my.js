@@ -196,7 +196,7 @@ module.exports = app => {
           message: '姓名不能超过256个字哦~',
         };
       }
-      if(phone && !/^1\d{10}$/.test(phone)) {
+      if(phone && !/^1\d{10}$/.test(phone) && !/^09\d{8}$/.test(phone)) {
         return ctx.body = {
           success: false,
           message: '手机号码不合法~',

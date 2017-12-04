@@ -49,6 +49,7 @@ class Video extends migi.Component {
   }
   addMedia() {
     let video = <video ref="video"
+                       poster="//zhuanquan.xin/img/blank.png"
                        src={ this.datas[this.index].FileUrl }
                        onClick={ this.clickPlay.bind(this) }
                        onTimeupdate={ this.onTimeupdate.bind(this) }

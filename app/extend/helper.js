@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?126';
+    return '/public' + url + '?127';
   },
   okJSON(data) {
     return {

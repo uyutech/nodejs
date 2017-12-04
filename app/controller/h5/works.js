@@ -66,6 +66,75 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * likeComment(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/AddWorkCommentLike', {
+        uid,
+        CommentID: body.commentID,
+      });
+      ctx.body = res.data;
+    }
+    * delComment(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/DeleteCommentByID', {
+        uid,
+        CommentID: body.commentID,
+      });
+      ctx.body = res.data;
+    }
+    * subCommentList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/GetTocomment_T_List', {
+        uid,
+        RootID: body.rootID,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * likeWork(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/AddLikeBehavior', {
+        uid,
+        WorkItemsID: body.workID,
+      });
+      ctx.body = res.data;
+    }
+    * favorWork(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/AddCollection', {
+        uid,
+        WorkItemsID: body.workID,
+      });
+      ctx.body = res.data;
+    }
+    * unFavorWork(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/RemoveCollection', {
+        uid,
+        WorkItemsID: body.workID,
+      });
+      ctx.body = res.data;
+    }
+    * photoList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/works/GetPhotoPicByWorkID', {
+        uid,
+        WorksID: body.worksID,
+        Skip: body.skip,
+        Take: body.take,
+        SortType: body.sortType,
+        TagName: body.tagName,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

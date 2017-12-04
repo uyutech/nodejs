@@ -11,8 +11,6 @@ import HotPic from '../component/hotpic/HotPic.jsx';
 let skip = 0;
 let take = 12;
 let sortType = 0;
-let list = [];
-let index = 0;
 let tagName = '';
 let ajax;
 

@@ -291,8 +291,10 @@ class Post extends migi.Component {
           <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }>
             <b/><span>{ this.likeCount || '点赞' }</span>
           </li>
-          <li class="comment"><a href={ '/subComment?type=1&id=' + this.props.postData.ID }>
-            <b/><span>{ postData.CommentCount || '评论' }</span></a>
+          <li class="comment">
+            <a href={ '/subComment?type=1&id=' + this.props.postData.ID }>
+              <b/><span>{ postData.CommentCount || '评论' }</span>
+            </a>
           </li>
           { postData.IsOwn ? <li class="del" onClick={ this.clickDel }><b/></li> : '' }
         </ul>

@@ -239,7 +239,7 @@ class Profile extends migi.Component {
     $(self.ref.ok4.element).addClass('fn-hide');
     let $edit = $(self.ref.edit4.element);
     let phone = $(self.ref.input4.element).val().trim();
-    if(phone && !/^1\d{10}$/.test(phone)) {
+    if(phone && !/^1\d{10}$/.test(phone) && !/^09\d{8}$/.test(phone)) {
       alert('手机号码不合法~');
       $edit.removeClass('fn-hide');
       return;

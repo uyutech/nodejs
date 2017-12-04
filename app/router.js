@@ -143,6 +143,13 @@ module.exports = app => {
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');
+  app.post('/h5/works/likeWork', 'h5.works.likeWork');
+  app.post('/h5/works/favorWork', 'h5.works.favorWork');
+  app.post('/h5/works/unFavorWork', 'h5.works.unFavorWork');
+  app.post('/h5/works/likeComment', app.middlewares.needLoginJson(), 'api.works.likeComment');
+  app.post('/h5/works/subCommentList', 'api.works.subCommentList');
+  app.post('/h5/works/delComment', app.middlewares.needLoginJson(), 'api.works.delComment');
+  app.post('/h5/works/photoList', 'api.works.photoList');
 
   app.post('/h5/circle/index', 'h5.circle.index');
   app.post('/h5/circle/postList', 'h5.circle.postList');
@@ -150,4 +157,6 @@ module.exports = app => {
   app.post('/h5/author/index', 'h5.author.index');
 
   app.post('/h5/subpost/index', 'h5.subpost.index');
+
+  app.post('/h5/post/index', 'h5.post.index');
 };
