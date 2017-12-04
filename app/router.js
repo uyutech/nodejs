@@ -147,4 +147,6 @@ module.exports = app => {
   app.post('/h5/circle/postList', 'h5.circle.postList');
 
   app.post('/h5/author/index', 'h5.author.index');
+
+  app.post('/h5/subpost/index', 'h5.subpost.index');
 };
