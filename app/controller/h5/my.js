@@ -52,6 +52,106 @@ module.exports = app => {
         lastUpdateHeadTime,
       });
     }
+    * relation(ctx) {
+      let uid = ctx.session.uid;
+      let follows = {};
+      let userFriends = {};
+      let userFollows = {};
+      let userFollowers = {};
+      let res = yield {
+        follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
+        userFriends: ctx.helper.postServiceJSON('api/users/User_Friends', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
+        userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
+        userFollowers: ctx.helper.postServiceJSON('api/users/User_FansList', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
+      };
+      if(res.follows.data.success) {
+        follows = res.follows.data.data;
+      }
+      if(res.userFriends.data.success) {
+        userFriends = res.userFriends.data.data;
+      }
+      if(res.userFollows.data.success) {
+        userFollows = res.userFollows.data.data;
+      }
+      if(res.userFollowers.data.success) {
+        userFollowers = res.userFollowers.data.data;
+      }
+      ctx.body = ctx.helper.okJSON({
+        follows,
+        userFriends,
+        userFollows,
+        userFollowers,
+      });
+    }
+    * message(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUserNotify', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * readMessage(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/UserNotifyIsRead', {
+        uid,
+        NotifyIDList: (body.ids || []).join(','),
+      });
+      ctx.body = res.data;
+    }
+    * postList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/User_Post_List', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+        currentUid: uid,
+      });
+      ctx.body = res.data;
+    }
+    * altSettle(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
+        uid,
+        AuthorID: ctx.session.authorID,
+        SettledType: body.public === 'true' ? 0 : 1,
+      });
+      if(ctx.session.authorID) {
+        ctx.session.isPublic = body.public === 'true';
+      }
+      let userInfo = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        uid,
+      });
+      if(userInfo.data.success) {
+        ctx.session.uname = userInfo.data.data.NickName;
+        ctx.session.head = userInfo.data.data.Head_Url;
+        ctx.session.authorID = userInfo.data.data.AuthorID;
+        ctx.session.authorName = userInfo.data.data.AuthorName;
+        ctx.session.authorHead = userInfo.data.data.AuthorHead_Url;
+      }
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

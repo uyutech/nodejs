@@ -66,6 +66,26 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * addComment(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let content = (body.content || '').trim();
+      if(content.length < 3 || content.length > 2048) {
+        return ctx.body = {
+          success: false,
+        };
+      }
+      let res = yield ctx.helper.postServiceJSON('api/works/AddComment', {
+        uid,
+        ParentID: body.parentID,
+        RootID: body.rootID,
+        Content: content,
+        subWorkID: body.workID || '',
+        WorkID: body.worksID,
+        BarrageTime: body.barrageTime,
+      });
+      ctx.body = res.data;
+    }
     * likeComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;

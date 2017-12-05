@@ -7,7 +7,7 @@
 import util from "../../../d/common/util";
 import net from "../../../d/common/net";
 
-let take = 15;
+let take = 30;
 let skip = take;
 let skip2 = take;
 let skip3 = take;
@@ -33,14 +33,26 @@ class Relation extends migi.Component {
     if(!self.props.userFriends.Size) {
       self.message = '暂无数据';
     }
+    else if(self.props.userFriends.Size <= take && self.props.userFriends.Size > 12) {
+      self.message = '已经到底了';
+    }
     if(!self.props.userFollows.Size) {
       self.message2 = '暂无数据';
+    }
+    else if(self.props.userFollows.Size <= take && self.props.userFollows.Size > 12) {
+      self.message2 = '已经到底了';
     }
     if(!self.props.userFollowers.Size) {
       self.message3 = '暂无数据';
     }
+    else if(self.props.userFollowers.Size <= take && self.props.userFollowers.Size > 12) {
+      self.message3 = '已经到底了';
+    }
     if(!self.props.follows.Size) {
       self.message4 = '暂无数据';
+    }
+    else if(self.props.follows.Size <= take && self.props.follows.Size > 12) {
+      self.message4 = '已经到底了';
     }
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
@@ -66,7 +78,6 @@ class Relation extends migi.Component {
       let rel = $a.attr('rel');
       history.replaceState(null, '', '?tag=' + rel);
       this.tag = rel;
-      this.checkMore($(window));
     }
   }
   checkMore($window) {

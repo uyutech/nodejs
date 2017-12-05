@@ -140,6 +140,11 @@ module.exports = app => {
   app.post('/h5/follow/postList', app.middlewares.needLoginJson(), 'h5.follow.postList');
 
   app.post('/h5/my/index', app.middlewares.needLoginJson(), 'h5.my.index');
+  app.post('/h5/my/message', app.middlewares.needLoginJson(), 'h5.my.message');
+  app.post('/h5/my/relation', app.middlewares.needLoginJson(), 'h5.my.relation');
+  app.post('/h5/my/readMessage', app.middlewares.needLoginJson(), 'h5.my.readMessage');
+  app.post('/h5/my/postList', app.middlewares.needLoginJson(), 'h5.my.postList');
+  app.post('/h5/my/altSettle', app.middlewares.needLoginJson(), 'h5.my.altSettle');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');
@@ -156,6 +161,11 @@ module.exports = app => {
   app.post('/h5/circle/join', 'h5.circle.join');
 
   app.post('/h5/author/index', 'h5.author.index');
+  app.post('/h5/author/addComment', app.middlewares.needLoginJson(), 'h5.author.addComment');
+  app.post('/h5/author/likeComment', app.middlewares.needLoginJson(), 'h5.author.likeComment');
+  app.post('/h5/author/subCommentList', 'h5.author.subCommentList');
+  app.post('/h5/author/delComment', app.middlewares.needLoginJson(), 'h5.author.delComment');
+  app.post('/h5/works/addComment', app.middlewares.needLoginJson(), 'h5.works.addComment');
 
   app.post('/h5/subpost/index', 'h5.subpost.index');
 
@@ -164,6 +174,11 @@ module.exports = app => {
   app.post('/h5/post/favor', app.middlewares.needLoginJson(), 'h5.post.favor');
   app.post('/h5/post/unFavor', app.middlewares.needLoginJson(), 'h5.post.unFavor');
   app.post('/h5/post/del', app.middlewares.needLoginJson(), 'h5.post.del');
+  app.post('/h5/post/commentList', 'h5.post.commentList');
+  app.post('/h5/post/subCommentList', 'h5.post.subCommentList');
+  app.post('/h5/post/addComment', app.middlewares.needLoginJson(), 'h5.post.addComment');
+  app.post('/h5/post/likeComment', app.middlewares.needLoginJson(), 'h5.post.likeComment');
+  app.post('/h5/post/delComment', app.middlewares.needLoginJson(), 'h5.post.delComment');
 
   app.post('/h5/user/index', 'h5.user.index');
 

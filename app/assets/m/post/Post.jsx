@@ -152,12 +152,12 @@ class Post extends migi.Component {
       this.load();
     }
   }
-  clickFavor() {
+  clickFavor(e, vd) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
-    let $li = $(this);
+    let $li = $(vd.element);
     if($li.hasClass('loading')) {
       return;
     }
@@ -186,12 +186,12 @@ class Post extends migi.Component {
   clickShare() {
     migi.eventBus.emit('SHARE', location.origin + '/post/' + this.props.postData.ID);
   }
-  clickLike() {
+  clickLike(e, vd) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
-    let $li = $(this);
+    let $li = $(vd.element);
     if($li.hasClass('loading')) {
       return;
     }

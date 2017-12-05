@@ -78,22 +78,22 @@ module.exports = app => {
         follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
           uid,
           Skip: 0,
-          Take: 10,
+          Take: 30,
         }),
         userFriends: ctx.helper.postServiceJSON('api/users/User_Friends', {
           uid,
           Skip: 0,
-          Take: 15,
+          Take: 30,
         }),
         userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
           uid,
           Skip: 0,
-          Take: 15,
+          Take: 30,
         }),
         userFollowers: ctx.helper.postServiceJSON('api/users/User_FansList', {
           uid,
           Skip: 0,
-          Take: 15,
+          Take: 30,
         }),
       };
       if(res.follows.data.success) {

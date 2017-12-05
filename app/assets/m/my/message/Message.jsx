@@ -12,6 +12,7 @@ import SubCmt from '../../../d/component/subcmt/SubCmt.jsx';
 let take = 10;
 let skip = take;
 let loading;
+let loadEnd;
 
 class Message extends migi.Component {
   constructor(...data) {
@@ -81,17 +82,20 @@ class Message extends migi.Component {
   @bind message
   checkMore($window) {
     let self = this;
+    if(loading || loadEnd) {
+      return;
+    }
     let WIN_HEIGHT = $window.height();
     let HEIGHT = $(document.body).height();
     let bool;
     bool = $window.scrollTop() + WIN_HEIGHT + 30 > HEIGHT;
-    if(!self.loading && !self.loadEnd && bool) {
+    if(bool) {
       self.load();
     }
   }
   load() {
     let self = this;
-    self.loading = true;
+    loading = true;
     self.message = '正在加载...';
     net.postJSON('/api/my/message', { skip, take }, function(res) {
       if(res.success) {
@@ -100,17 +104,17 @@ class Message extends migi.Component {
         self.ref.messages.appendData(data.data);
         self.read(data.data);
         if(!data.data.length || data.data.length < take) {
-          self.loadEnd = true;
+          loadEnd = true;
           self.message = '已经到底了';
         }
       }
       else {
         alert(res.message || util.ERROR_MESSAGE);
       }
-      self.loading = false;
+      loading = false;
     }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
-      self.loading = false;
+      loading = false;
     });
   }
   read(data) {

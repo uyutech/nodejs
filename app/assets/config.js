@@ -33,7 +33,7 @@ let activityLabel = {
         },
         {
           key: 'Day 5',
-          value: '#每日练字打卡# #31天画圈挑战#  Day4  #国漫崛起#  '
+          value: '#每日练字打卡# #31天画圈挑战#  Day5  #国漫崛起#  '
         }
       ]
     },
