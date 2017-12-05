@@ -75,7 +75,7 @@ class Favor extends migi.Component {
       <ul class="type">
         <li><span>我收藏的音乐</span></li>
         <li><a href="favorPic">我收藏的图片</a></li>
-        <li><a href="favorPost">我收藏的帖子</a></li>
+        <li><a href="favorPost">我收藏的画圈</a></li>
       </ul>
       <HotPlayList ref="hotPlayList"
                    message={ this.props.dataList.Size ? '' : '暂无数据' }

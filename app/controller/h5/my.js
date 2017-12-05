@@ -99,6 +99,46 @@ module.exports = app => {
         userFollowers,
       });
     }
+    * friendList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/User_Friends', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * followList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/User_FollowList', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * followerList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/User_FansList', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * followerAuthor(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
     * message(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
@@ -126,6 +166,80 @@ module.exports = app => {
         Skip: body.skip,
         Take: body.take,
         currentUid: uid,
+      });
+      ctx.body = res.data;
+    }
+    * favor(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield {
+        favorMV: ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+          uid,
+          ItemsType: 1,
+          Skip: 0,
+          Take: 20,
+        }),
+        favorPic: ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+          uid,
+          ItemsType: 2,
+          Skip: 0,
+          Take: 10,
+        }),
+        favorPost: ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+          uid,
+          ItemsType: 3,
+          Skip: 0,
+          Take: 10,
+        }),
+      };
+      let favorMV = {};
+      let favorPic = {};
+      let favorPost = {};
+      if(res.favorMV.data.success) {
+        favorMV = res.favorMV.data.data;
+      }
+      if(res.favorPic.data.success) {
+        favorPic = res.favorPic.data.data;
+      }
+      if(res.favorPost.data.success) {
+        favorPost = res.favorPost.data.data;
+      }
+      ctx.body = ctx.helper.okJSON({
+        favorMV,
+        favorPic,
+        favorPost,
+      });
+    }
+    * favorMV(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        uid,
+        ItemsType: 1,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * favorPic(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        uid,
+        ItemsType: 2,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * favorPost(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        uid,
+        ItemsType: 3,
+        Skip: body.skip,
+        Take: body.take,
       });
       ctx.body = res.data;
     }

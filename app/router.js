@@ -145,6 +145,14 @@ module.exports = app => {
   app.post('/h5/my/readMessage', app.middlewares.needLoginJson(), 'h5.my.readMessage');
   app.post('/h5/my/postList', app.middlewares.needLoginJson(), 'h5.my.postList');
   app.post('/h5/my/altSettle', app.middlewares.needLoginJson(), 'h5.my.altSettle');
+  app.post('/h5/my/friendList', app.middlewares.needLoginJson(), 'h5.my.friendList');
+  app.post('/h5/my/followList', app.middlewares.needLoginJson(), 'h5.my.followList');
+  app.post('/h5/my/followerList', app.middlewares.needLoginJson(), 'h5.my.followerList');
+  app.post('/h5/my/followerAuthor', app.middlewares.needLoginJson(), 'h5.my.followerAuthor');
+  app.post('/h5/my/favor', app.middlewares.needLoginJson(), 'h5.my.favor');
+  app.post('/h5/my/favorMV', app.middlewares.needLoginJson(), 'h5.my.favorMV');
+  app.post('/h5/my/favorPic', app.middlewares.needLoginJson(), 'h5.my.favorPic');
+  app.post('/h5/my/favorPost', app.middlewares.needLoginJson(), 'h5.my.favorPost');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');

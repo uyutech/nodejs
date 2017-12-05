@@ -73,8 +73,10 @@ class FavorPic extends migi.Component{
       else {
         alert(res.message || util.ERROR_MESSAGE);
       }
+      loading = false;
     }, function(res) {
       alert(res.message || util.ERROR_MESSAGE);
+      loading = false;
     });
   }
   render() {
