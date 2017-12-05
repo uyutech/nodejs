@@ -41,6 +41,42 @@ module.exports = app => {
         replyData,
       });
     }
+    * like(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/tag/AddLikeBehavior', {
+        uid,
+        PostID: body.postID,
+      });
+      ctx.body = res.data;
+    }
+    * favor(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/tag/AddCollection', {
+        uid,
+        PostID: body.postID,
+      });
+      ctx.body = res.data;
+    }
+    * unFavor(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/tag/RemoveCollection', {
+        uid,
+        PostID: body.postID,
+      });
+      ctx.body = res.data;
+    }
+    * del(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/tag/DelPost', {
+        uid,
+        PostID: body.postID,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

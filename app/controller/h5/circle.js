@@ -52,6 +52,26 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * join(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let circleID = body.circleID;
+      let state = body.state;
+      if(state === 'true') {
+        let res = yield ctx.helper.postServiceJSON('api/tag/RemoveTagToUser', {
+          uid,
+          TagID: circleID,
+        });
+        ctx.body = res.data;
+      }
+      else {
+        let res = yield ctx.helper.postServiceJSON('api/tag/SaveTagToUser', {
+          uid,
+          TagID: circleID,
+        });
+        ctx.body = res.data;
+      }
+    }
   }
   return Controller;
 };

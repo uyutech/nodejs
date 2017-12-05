@@ -46,6 +46,5 @@ module.exports = app => {
       });
     }
   }
-
   return Controller;
 };

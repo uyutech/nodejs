@@ -153,10 +153,21 @@ module.exports = app => {
 
   app.post('/h5/circle/index', 'h5.circle.index');
   app.post('/h5/circle/postList', 'h5.circle.postList');
+  app.post('/h5/circle/join', 'h5.circle.join');
 
   app.post('/h5/author/index', 'h5.author.index');
 
   app.post('/h5/subpost/index', 'h5.subpost.index');
 
   app.post('/h5/post/index', 'h5.post.index');
+  app.post('/h5/post/like', app.middlewares.needLoginJson(), 'h5.post.like');
+  app.post('/h5/post/favor', app.middlewares.needLoginJson(), 'h5.post.favor');
+  app.post('/h5/post/unFavor', app.middlewares.needLoginJson(), 'h5.post.unFavor');
+  app.post('/h5/post/del', app.middlewares.needLoginJson(), 'h5.post.del');
+
+  app.post('/h5/user/index', 'h5.user.index');
+
+  app.post('/h5/user/postList', 'h5.user.postList');
+  app.post('/h5/user/follow', app.middlewares.needLoginJson(), 'h5.user.follow');
+  app.post('/h5/user/unFollow', app.middlewares.needLoginJson(), 'h5.user.unFollow');
 };
