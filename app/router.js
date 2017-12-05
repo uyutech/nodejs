@@ -167,6 +167,7 @@ module.exports = app => {
   app.post('/h5/circle/index', 'h5.circle.index');
   app.post('/h5/circle/postList', 'h5.circle.postList');
   app.post('/h5/circle/join', 'h5.circle.join');
+  app.post('/h5/circle/post', app.middlewares.needLoginJson(), 'h5.circle.post');
 
   app.post('/h5/author/index', 'h5.author.index');
   app.post('/h5/author/addComment', app.middlewares.needLoginJson(), 'h5.author.addComment');
@@ -193,4 +194,6 @@ module.exports = app => {
   app.post('/h5/user/postList', 'h5.user.postList');
   app.post('/h5/user/follow', app.middlewares.needLoginJson(), 'h5.user.follow');
   app.post('/h5/user/unFollow', app.middlewares.needLoginJson(), 'h5.user.unFollow');
+
+  app.post('/h5/comment/sub', app.middlewares.needLoginJson(), 'h5.comment.sub');
 };

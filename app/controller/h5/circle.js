@@ -72,6 +72,49 @@ module.exports = app => {
         ctx.body = res.data;
       }
     }
+    * post(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let circleID = body.circleID || '0';
+      let ids = circleID.split(',');
+      if(ids.length > 3) {
+        return ctx.body = {
+          success: false,
+          message: '最多只能选择3个圈子哦~',
+        };
+      }
+      let content = (body.content || '').trim();
+      let imgs = body.imgs;
+      let widths = body.widths;
+      let heights = body.heights;
+      if(!Array.isArray(widths)) {
+        widths = [];
+      }
+      if(!Array.isArray(heights)) {
+        heights = [];
+      }
+      if(content.length < 3 || content.length > 4096) {
+        return {
+          success: false,
+        };
+      }
+      let res = yield ctx.helper.postServiceJSON('api/tag/AddPost', {
+        uid,
+        TagID: circleID,
+        Content: content,
+        Title: '',
+        ImageList: imgs
+          ? JSON.stringify(imgs.map(function(item, i) {
+            return {
+              FileUrl: item,
+              Width: widths[i] || 0,
+              Height: heights[i] || 0,
+            }
+          }).slice(0, 10))
+          : '',
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

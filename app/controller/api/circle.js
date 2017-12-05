@@ -54,12 +54,6 @@ module.exports = app => {
           success: false,
         };
       }
-      // let jaq = new ALY.JAQ({
-      //   accessKeyId: 'LTAIN9cQrKIIscBn',
-      //   secretAccessKey: '4TWusjSuUoBtosh6t15E6pPXKba35U',
-      //   endpoint: 'http://jaq.aliyuncs.com',
-      //   apiVersion: '2016-11-23',
-      // });
       let res = yield ctx.helper.postServiceJSON('api/tag/AddPost', {
         uid,
         TagID: circleID,
