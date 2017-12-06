@@ -175,14 +175,18 @@ module.exports = app => {
     * uploadPic(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let file = /^data:image\/(\w+);base64,(.*)$/.exec(body.img);
-      if(!file) {
-        return ctx.body = {
-          success: false,
-        };
+      let img = body.img;
+      let suffix = 'jpg';
+      if(/^data:image\/(\w+);base64,/.test(img)) {
+        let file = /^data:image\/(\w+);base64,(.*)$/.exec(img);
+        if(!file) {
+          return ctx.body = {
+            success: false,
+          };
+        }
+        img = file[2];
+        suffix = file[1]
       }
-      let img = file[2];
-      let suffix = file[1];
 
       let equalIndex = img.indexOf('=');
       if(equalIndex > 0) {

@@ -153,6 +153,10 @@ module.exports = app => {
   app.post('/h5/my/favorMV', app.middlewares.needLoginJson(), 'h5.my.favorMV');
   app.post('/h5/my/favorPic', app.middlewares.needLoginJson(), 'h5.my.favorPic');
   app.post('/h5/my/favorPost', app.middlewares.needLoginJson(), 'h5.my.favorPost');
+  app.post('/h5/my/uploadPic', app.middlewares.needLoginJson(), 'h5.my.uploadPic');
+  app.post('/h5/my/updateNickName', app.middlewares.needLoginJson(), 'h5.my.updateNickName');
+  app.post('/h5/my/updateSign', app.middlewares.needLoginJson(), 'h5.my.updateSign');
+  app.post('/h5/my/uploadHead', app.middlewares.needLoginJson(), 'h5.my.uploadHead');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');

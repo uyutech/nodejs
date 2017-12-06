@@ -216,7 +216,7 @@ class SubPost extends migi.Component {
         let fileReader = new FileReader();
         fileReader.onload = function() {
           self.list[i + self.imgNum].state = STATE.SENDING;
-          self.list[i + self.imgNum].url = fileReader.result;
+          self.list[i + self.imgNum].url = /^data:image\/(\w+);base64,/.test(fileReader.result) ? fileReader.result : 'data:image/jpeg;base64,' + fileReader.result;
           self.list = self.list;
           let img = fileReader.result;
           let node = document.createElement('img');
