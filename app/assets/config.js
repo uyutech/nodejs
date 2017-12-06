@@ -4,11 +4,13 @@
 
 'use strict';
 
+let now = new Date();
+
 let activityLabel = {
   '0': [
     {
       name: '日记',
-      value: '#日记#'
+      value: '#日记# ' + now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + ' 星期' + now.getDay()
     }
   ],
   '2019000000000032': [
@@ -29,7 +31,7 @@ let activityLabel = {
         },
         {
           key: 'Day 4',
-          value: '#每日练字打卡# #31天画圈挑战#  Day4  #余音绕梁#'
+          value: '#每日练字打卡# #31天画圈挑战#  Day4  #喜爱的CV#'
         },
         {
           key: 'Day 5',
@@ -74,7 +76,7 @@ let activityLabel = {
         },
         {
           key: 'Day 4',
-          value: '#每日荐歌# #31天画圈挑战# Day4 #余音绕梁#'
+          value: '#每日荐歌# #31天画圈挑战# Day4 #喜爱的CV#'
         },
         {
           key: 'Day 5',
