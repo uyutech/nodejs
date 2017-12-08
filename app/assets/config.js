@@ -6,11 +6,21 @@
 
 let now = new Date();
 
+let hash = {
+  '1': '一',
+  '2': '二',
+  '3': '三',
+  '4': '四',
+  '5': '五',
+  '6': '六',
+  '7': '七'
+};
+
 let activityLabel = {
   '0': [
     {
       name: '日记',
-      value: '#日记# ' + now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + ' 星期' + now.getDay()
+      value: '#日记# ' + (now.getMonth() + 1) + '月' + now.getDate() + '日 星期' + hash[now.getDay()] + '\n'
     }
   ],
   '2019000000000032': [
@@ -27,11 +37,11 @@ let activityLabel = {
         },
         {
           key: 'Day 3',
-          value: '#每日练字打卡# #31天画圈挑战# Day3 #手写诗词歌赋飞花令#'
+          value: '#每日练字打卡# #31天画圈挑战# Day3 #手写诗词歌赋飞花令# 主题：#花#'
         },
         {
           key: 'Day 4',
-          value: '#每日练字打卡# #31天画圈挑战#  Day4  #喜爱的CV#'
+          value: '#每日练字打卡# #31天画圈挑战#  Day4  #我喜爱的CV#'
         },
         {
           key: 'Day 5',
@@ -40,6 +50,10 @@ let activityLabel = {
         {
           key: 'Day 6',
           value: '#每日练字打卡# #31天画圈挑战#  Day6  #网文推荐#'
+        },
+        {
+          key: 'Day 7',
+          value: '#每日练字打卡# #31天画圈挑战#  Day7  #手抄古风歌词飞花令# 主题：#雪#'
         }
       ]
     },
@@ -76,7 +90,7 @@ let activityLabel = {
         },
         {
           key: 'Day 4',
-          value: '#每日荐歌# #31天画圈挑战# Day4 #喜爱的CV#'
+          value: '#每日荐歌# #31天画圈挑战# Day4 #我喜欢的CV#唱的歌'
         },
         {
           key: 'Day 5',
@@ -85,6 +99,10 @@ let activityLabel = {
         {
           key: 'Day 6',
           value: '#每日荐歌# #31天画圈挑战# Day6 #播放列表No.3#'
+        },
+        {
+          key: 'Day 7',
+          value: '#每日荐歌# #31天画圈挑战# Day7 #一首带雪字的歌#'
         }
       ]
     },
