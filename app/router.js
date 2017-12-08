@@ -179,6 +179,9 @@ module.exports = app => {
   app.post('/h5/author/likeComment', app.middlewares.needLoginJson(), 'h5.author.likeComment');
   app.post('/h5/author/subCommentList', 'h5.author.subCommentList');
   app.post('/h5/author/delComment', app.middlewares.needLoginJson(), 'h5.author.delComment');
+  app.post('/h5/author/follow', app.middlewares.needLoginJson(), 'h5.author.follow');
+  app.post('/h5/author/unFollow', app.middlewares.needLoginJson(), 'h5.author.unFollow');
+
   app.post('/h5/works/addComment', app.middlewares.needLoginJson(), 'h5.works.addComment');
 
   app.post('/h5/subpost/index', 'h5.subpost.index');

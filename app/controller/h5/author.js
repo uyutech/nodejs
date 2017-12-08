@@ -70,6 +70,24 @@ module.exports = app => {
         hotPlayList,
       });
     }
+    * follow(ctx) {
+      let uid = ctx.session.uid;
+      let authorID = ctx.request.body.authorID;
+      let res = yield ctx.helper.postServiceJSON('api/author/SaveAuthorToUser', {
+        uid,
+        Author: authorID,
+      });
+      ctx.body = res.data;
+    }
+    * unFollow(ctx) {
+      let uid = ctx.session.uid;
+      let authorID = ctx.request.body.authorID;
+      let res = yield ctx.helper.postServiceJSON('api/author/RemoveAuthorToUser', {
+        uid,
+        Author: authorID,
+      });
+      ctx.body = res.data;
+    }
     * addComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
