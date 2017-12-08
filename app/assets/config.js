@@ -21,6 +21,10 @@ let activityLabel = {
     {
       name: '日记',
       value: '#日记# ' + (now.getMonth() + 1) + '月' + now.getDate() + '日 星期' + hash[now.getDay()] + '\n'
+    },
+    {
+      name: '岁慕天寒',
+      value: '#岁慕天寒#'
     }
   ],
   '2019000000000032': [
