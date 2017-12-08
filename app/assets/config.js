@@ -20,7 +20,7 @@ let activityLabel = {
   '0': [
     {
       name: '日记',
-      value: '#日记# ' + (now.getMonth() + 1) + '月' + now.getDate() + '日 星期' + hash[now.getDay()] + '\n'
+      value: '#日记#'
     }
   ],
   '2019000000000032': [
@@ -54,6 +54,10 @@ let activityLabel = {
         {
           key: 'Day 7',
           value: '#每日练字打卡# #31天画圈挑战#  Day7  #手抄古风歌词飞花令# 主题：#雪#'
+        },
+        {
+          key: 'Day 8',
+          value: '#每日练字打卡# #31天画圈挑战#  Day8  #手抄古风歌词飞花令# 主题：#茶#'
         }
       ]
     },
@@ -103,6 +107,10 @@ let activityLabel = {
         {
           key: 'Day 7',
           value: '#每日荐歌# #31天画圈挑战# Day7 #一首带雪字的歌#'
+        },
+        {
+          key: 'Day 8',
+          value: '#每日荐歌# #31天画圈挑战# Day8 #那首歌带我到想去的地方#'
         }
       ]
     },

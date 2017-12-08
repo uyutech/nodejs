@@ -10,7 +10,7 @@ module.exports = app => {
       ctx.body = {
         success: true,
         version: 0,
-        url: '',
+        url: 'http://army8735.circling.cc/github/uyutech/h5/dist/h5.zip',
       };
     }
   }
