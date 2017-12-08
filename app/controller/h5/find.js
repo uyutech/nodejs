@@ -107,6 +107,26 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * hotPlayList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * hotPicList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/find/Hot_PicWorkItems', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

@@ -64,17 +64,17 @@ class ImageView extends migi.Component {
     }
   }
   render() {
-    if(!this.dataList.length) {
-      return <div class="mod-iv fn-hide"/>;
-    }
     return <div class="mod-iv fn-hide">
       <div class="c" style={ 'top:' + this.tops + 'px' }>
-        <img style={ 'background-image:url("' + util.autoSsl(util.img720__80(this.dataList[this.idx].FileUrl)) || '//zhuanquan.xin/img/blank.png' + '")'}
-             src={ util.autoSsl(util.img720__80(this.dataList[this.idx].FileUrl)) || '//zhuanquan.xin/img/blank.png' }/>
+        <img src={ this.dataList && this.dataList[this.idx]
+          ? util.autoSsl(util.img720__80(this.dataList[this.idx].FileUrl)) || '//zhuanquan.xin/img/blank.png'
+          : '//zhuanquan.xin/img/blank.png' }/>
         <ul class="btn">
           <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }/>
           <li class="download">
-            <a href={ this.dataList[this.idx].FileUrl }
+            <a href={ this.dataList && this.dataList[this.idx]
+              ? this.dataList[this.idx].FileUrl
+              : ''}
                target="_blank"
                onClick={ this.clickDownload }/>
           </li>

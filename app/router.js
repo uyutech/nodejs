@@ -133,6 +133,8 @@ module.exports = app => {
 
   app.post('/h5/find/index', 'h5.find.index');
   app.post('/h5/find/hotWorkList', 'h5.find.hotWorkList');
+  app.post('/h5/find/hotPlayList', 'h5.find.hotPlayList');
+  app.post('/h5/find/hotPicList', 'h5.find.hotPicList');
 
   app.post('/h5/circling/index', 'h5.circling.index');
   app.post('/h5/circling/postList', 'h5.circling.postList');
