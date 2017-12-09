@@ -135,6 +135,20 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * commentList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
+        uid,
+        AuthorID: body.authorID,
+        Skip: body.skip,
+        Take: body.take,
+        SortType: body.sortType,
+        MyComment: body.myComment,
+        CurrentCount: body.currentCount,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };
