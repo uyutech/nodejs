@@ -6,7 +6,7 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
-      yield ctx.render('h5.html');
+      yield ctx.render('404.html');
     }
   }
   return Controller;
