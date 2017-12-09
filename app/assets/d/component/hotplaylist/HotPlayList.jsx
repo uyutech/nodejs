@@ -44,7 +44,7 @@ class HotPlayList extends migi.Component {
       return item.WorksAuthorType === '111';
     }).map(function(item) {
       return item.AuthName;
-    }).slice(0, 2);
+    });
     if(item.WorksState === 2) {
       return <li class={ type + ' rel' }>
         <a href={ '/works/' + item.WorksID + '/' + item.ItemID } class="pic">
