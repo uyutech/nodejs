@@ -14,9 +14,11 @@ class ImageView extends migi.Component {
     self.isLike = self.props.isLike;
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
-      migi.eventBus.on('choosePic', function(dataList, i) {
+      migi.eventBus.on('choosePic', function(dataList, i, isLike, sid) {
         self.dataList = dataList;
         self.idx = i;
+        self.isLike = isLike;
+        self.sid = sid;
         self.show();
         self.tops = $window.scrollTop();
       });
@@ -26,19 +28,12 @@ class ImageView extends migi.Component {
   @bind idx = 0
   @bind tops = 0
   @bind isLike
+  @bind sid
   show() {
     $(this.element).removeClass('fn-hide');
-    let parent = window.parent;
-    if(parent !== window && parent.upZIndex) {
-      parent.upZIndex();
-    }
   }
   hide() {
     $(this.element).addClass('fn-hide');
-    let parent = window.parent;
-    if(parent !== window && parent.downZIndex) {
-      parent.downZIndex();
-    }
   }
   clickPrev() {
     let self = this;
@@ -64,11 +59,14 @@ class ImageView extends migi.Component {
   render() {
     return <div class="mod-iv fn-hide">
       <div class="c" style={ 'top:' + this.tops + 'px' }>
-        <img src={ this.dataList[this.idx] || '//zhuanquan.xin/img/blank.png' }/>
+        <img src={ this.dataList && this.dataList[this.idx]
+          ? util.autoSsl(util.img720__80(this.dataList[this.idx].FileUrl)) || '//zhuanquan.xin/img/blank.png'
+          : '//zhuanquan.xin/img/blank.png' }/>
         <ul class="btn">
           <li class="download">
-            <a href={ util.img(this.dataList[this.idx] || '#') }
-               target="_blank"
+            <a href={ this.dataList && this.dataList[this.idx]
+              ? this.dataList[this.idx].FileUrl
+              : ''}
                onClick={ this.clickDownload }/>
           </li>
         </ul>

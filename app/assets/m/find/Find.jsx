@@ -12,6 +12,7 @@ import HotCircle from '../component/hotcircle/HotCircle.jsx';
 import HotPlayList from '../../d/component/hotplaylist/HotPlayList.jsx';
 import HotPic from '../component/hotpic/HotPic.jsx';
 import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
+import ImageView from './ImageView.jsx';
 
 let take = 30;
 let skip = 10;
@@ -167,9 +168,9 @@ class Find extends migi.Component {
       <h4>热门作品<small onClick={ this.clickChangeWork }>换一批</small></h4>
       <HotWork ref="hotWork" dataList={ this.props.hotWorkList }/>
       <h4>热门专辑</h4>
-      <HotMusicAlbum ref="hotMusicAlbum" dataList={ this.props.hotMusicAlbumList }/>
+      <HotMusicAlbum ref="hotMusicAlbum" dataList={ this.props.hotMusicAlbumList.data || this.props.hotMusicAlbumList }/>
       <h4>入驻作者</h4>
-      <HotAuthor ref="hotAuthor" dataList={ this.props.hotAuthorList }/>
+      <HotAuthor ref="hotAuthor" dataList={ this.props.hotAuthorList.data || this.props.hotAuthorList }/>
       <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
         <li class="ma cur" rel="0">音乐</li>
         <li class="pic" rel="1">美图</li>
@@ -181,6 +182,7 @@ class Find extends migi.Component {
               subText="发送"
               readOnly={ true }
               placeholder={ '小小的提示：现在可以把一个圈画在好几个圈子里哦！' }/>
+      <ImageView ref="imageView"/>
     </div>;
   }
 }

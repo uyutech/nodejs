@@ -127,6 +127,46 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * allWorks(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/find/GetAllWorks_List', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * allAlbums(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/find/Hot_album_List', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * allAuthors(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/find/Hot_Author_List', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * allCircles(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/find/GetAllCircling', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };
