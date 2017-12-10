@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?151';
+    return '/public' + url + '?152';
   },
   okJSON(data) {
     return {
@@ -150,7 +150,7 @@ let helper = {
       <li class="${index === 0 ? 'cur' : ''}"><a href="/">发现</a></li>
       <li class="${index === 1 ? 'cur' : ''}"><a href="/circling">转圈</a></li>
       <li class="${index === 2 ? 'cur' : ''}"><a href="/follow">关注</a></li>
-      <li class="app"><a href="http://circling.cc/h5/index" target="_blank">下载安卓App</a></li>
+      <li class="app"><a href="http://m.circling.cc/post/2020000000056611" target="_blank">下载安卓App</a></li>
     </ul>`;
   },
   getMBotNav: function() {

@@ -13,8 +13,7 @@ class QuanNiang extends migi.Component {
   click() {
     this.show();
   }
-  clickClose(e) {
-    e.preventDefault();
+  clickClose() {
     $(this.ref.txt.element).addClass('fn-hide');
   }
   clickMessage() {
@@ -40,8 +39,7 @@ class QuanNiang extends migi.Component {
         '有什么使用上的反馈和建议可以点击下面的【联系小哥哥】按钮，给程序员小哥哥留言。\n' +
         '使用苹果手机的小伙伴们也不要着急，我们会尽快完成iOS端的开发。目前所有功能都可以在Web端使用。' }</pre>
         <p><a href="http://circling.cc/h5/index" target="_blank">【下载安卓App】</a><a href="http://circling.cc/post/2020000000056611" target="_blank">【联系小哥哥】</a></p>
-        <p>欢迎点击右侧给我们留言！<a href="http://weibo.com/u/6259241863" target="_blank">@转圈circling</a></p>
-        <a class="close" href="#" onClick={ this.clickClose }>好的</a>
+        <b class="close" onClick={ this.clickClose }/>
       </div>
     </div>;
   }
