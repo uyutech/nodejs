@@ -35,7 +35,11 @@ class QuanNiang extends migi.Component {
       <span class="pic" onClick={ this.click }/>
       <div class="txt fn-hide" ref="txt">
         <h5>圈儿：</h5>
-        <pre>{ this.message || '感谢参与转圈内测，现在我们还只有最基础的功能，程序员小哥哥们还在加班加点进行建设。\n欢迎随处逛逛，也欢迎给我们提出宝贵建议！我们一定会做得更好=3=' }</pre>
+        <pre>{ this.message || '安卓版的App测试版已经做好啦，正在调试bug的阶段，预计于下周在各大应用商店上线。\n' +
+        '为了让大家在这个阶段就可以体验App，并且帮助我们发现各种Bug，在正式上线之前，小伙伴们可以点击下面的【下载安卓App】按钮，抢先体验哦！\n\n' +
+        '有什么使用上的反馈和建议可以点击下面的【联系小哥哥】按钮，给程序员小哥哥留言。\n' +
+        '使用苹果手机的小伙伴们也不要着急，我们会尽快完成iOS端的开发。目前所有功能都可以在Web端使用。' }</pre>
+        <p><a href="http://circling.cc/h5/index" target="_blank">【下载安卓App】</a><a href="http://circling.cc/post/2020000000056611" target="_blank">【联系小哥哥】</a></p>
         <p>欢迎点击右侧给我们留言！<a href="http://weibo.com/u/6259241863" target="_blank">@转圈circling</a></p>
         <a class="close" href="#" onClick={ this.clickClose }>好的</a>
       </div>
