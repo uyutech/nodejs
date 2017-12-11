@@ -15,22 +15,22 @@ module.exports = app => {
       let lastUpdateHeadTime;
       let privateInfo = {};
       let res = yield {
-        userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
           uid,
         }),
-        myPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
+        myPost: ctx.helper.postServiceJSON2('api/users/User_Post_List', {
           uid,
           currentuid: uid,
           Skip: 0,
           Take: 10,
         }),
-        bonusPoint: ctx.helper.postServiceJSON('api/users/getuserrank', {
+        bonusPoint: ctx.helper.postServiceJSON2('api/users/GetUserRank', {
           uid,
         }),
-        lastUpdateNickNameTime: ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
+        lastUpdateNickNameTime: ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
           uid,
         }),
-        lastUpdateHeadTime: ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+        lastUpdateHeadTime: ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
           uid,
         }),
         privateInfo: ctx.helper.postServiceJSON('api/users/GetUserAddressInfo', {
@@ -73,7 +73,7 @@ module.exports = app => {
     }
     * message(ctx) {
       let uid = ctx.session.uid;
-      let messages = yield ctx.helper.postServiceJSON('api/users/GetUserNotify', {
+      let messages = yield ctx.helper.postServiceJSON2('api/users/GetUserNotify', {
         uid,
         Skip: 0,
         Take: 10,

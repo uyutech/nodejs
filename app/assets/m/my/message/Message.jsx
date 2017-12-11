@@ -18,7 +18,6 @@ class Message extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.message = '正在加载...';
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
       $window.on('scroll', function() {

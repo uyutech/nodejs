@@ -12,10 +12,10 @@ module.exports = app => {
         let userInfo = {};
         let messages = {};
         let res = yield {
-          userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+          userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
             uid,
           }),
-          messages: ctx.helper.postServiceJSON('api/users/GetUserNotify', {
+          messages: ctx.helper.postServiceJSON2('api/users/GetUserNotify', {
             uid,
             Skip: 0,
             Take: 10,
@@ -36,7 +36,7 @@ module.exports = app => {
         }
         let authorInfo = {};
         if(ctx.session.authorID) {
-          let res2 = yield ctx.helper.postServiceJSON('api/users/GetAuthorRelevant', {
+          let res2 = yield ctx.helper.postServiceJSON2('api/users/GetAuthorRelevant', {
             uid,
             AuthorID: ctx.session.authorID,
             HotWork_Skip: 0,

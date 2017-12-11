@@ -28,7 +28,7 @@ module.exports = app => {
     * hotPlayList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -38,7 +38,7 @@ module.exports = app => {
     * hotPicList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_PicWorkItems', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
         uid,
         Skip: body.skip,
         Take: body.take,

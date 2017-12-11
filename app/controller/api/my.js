@@ -12,7 +12,7 @@ module.exports = app => {
     * message(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserNotify', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserNotify', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -22,7 +22,7 @@ module.exports = app => {
     * readMessage(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/UserNotifyIsRead', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/UserNotifyIsRead', {
         uid,
         NotifyIDList: (body.ids || []).join(','),
       });
@@ -48,7 +48,7 @@ module.exports = app => {
         }
       }
 
-      let lastUpdateHeadTime = yield ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+      let lastUpdateHeadTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
         uid,
       });
       if(lastUpdateHeadTime.data && lastUpdateHeadTime.data.success) {
@@ -91,7 +91,7 @@ module.exports = app => {
         if(!objects || objects.length === 0) {
           let upload = yield client.put(name, b);
           if(upload.res && upload.res.status === 200) {
-            let res = yield ctx.helper.postServiceJSON('api/users/UpdateHead_Url', {
+            let res = yield ctx.helper.postServiceJSON2('api/users/UpdateHead_Url', {
               uid,
               Head_Url: url,
             });
@@ -105,7 +105,7 @@ module.exports = app => {
           }
         }
         else {
-          let res = yield ctx.helper.postServiceJSON('api/users/UpdateHead_Url', {
+          let res = yield ctx.helper.postServiceJSON2('api/users/UpdateHead_Url', {
             uid,
             Head_Url: url,
           });
@@ -132,7 +132,7 @@ module.exports = app => {
           message: '昵称长度需要在4~8个字之间哦~',
         };
       }
-      let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
+      let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
         uid,
       });
       if(lastUpdateNickNameTime.data && lastUpdateNickNameTime.data.success) {
@@ -157,7 +157,7 @@ module.exports = app => {
             message: '昵称不能以"转圈"开头哦！',
           };
         }
-        let res = yield ctx.helper.postServiceJSON('api/users/UpdateNickName', {
+        let res = yield ctx.helper.postServiceJSON2('api/users/UpdateNickName', {
           uid,
           NickName: body.nickName,
         });
@@ -178,7 +178,7 @@ module.exports = app => {
           message: '签名长度不能超过16个字哦~',
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/UpdateUserSign', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/UpdateUserSign', {
         uid,
         sign: body.sign || '',
       });
@@ -193,7 +193,7 @@ module.exports = app => {
       if(realName && realName.length > 8) {
         return ctx.body = {
           success: false,
-          message: '姓名不能超过256个字哦~',
+          message: '姓名不能超过8个字哦~',
         };
       }
       if(phone && !/^1\d{10}$/.test(phone) && !/^09\d{8}$/.test(phone)) {
@@ -219,7 +219,7 @@ module.exports = app => {
     * altSettle(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
         uid,
         AuthorID: ctx.session.authorID,
         SettledType: body.public === 'true' ? 0 : 1,
@@ -227,7 +227,7 @@ module.exports = app => {
       if(ctx.session.authorID) {
         ctx.session.isPublic = body.public === 'true';
       }
-      let userInfo = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+      let userInfo = yield ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
         uid,
       });
       if(userInfo.data.success) {
@@ -242,7 +242,7 @@ module.exports = app => {
     * friendList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/User_Friends', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_Friends', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -252,7 +252,7 @@ module.exports = app => {
     * followList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/User_FollowList', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_FollowList', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -262,7 +262,7 @@ module.exports = app => {
     * followerList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/User_FansList', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_FansList', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -272,7 +272,7 @@ module.exports = app => {
     * followerAuthor(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetLikeAuthorList', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -282,7 +282,7 @@ module.exports = app => {
     * postList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/User_Post_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_Post_List', {
         uid,
         Skip: body.skip,
         Take: body.take,

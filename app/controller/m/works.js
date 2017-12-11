@@ -17,11 +17,11 @@ module.exports = app => {
       let worksDetail = {};
       let commentData = {};
       let res = yield {
-        worksDetail: ctx.helper.postServiceJSON('api/works/GetWorkDetails', {
+        worksDetail: ctx.helper.postServiceJSON2('api/works/GetWorkDetails', {
           uid,
           WorksID: worksID,
         }),
-        commentData: ctx.helper.postServiceJSON('api/works/GetToWorkMessage_List', {
+        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToWorkMessage_List', {
           uid,
           WorkID: worksID,
           WorksID: worksID,

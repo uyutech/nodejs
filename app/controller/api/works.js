@@ -9,7 +9,7 @@ module.exports = app => {
     * detail(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/GetWorkDetails', {
+      let res = yield ctx.helper.postServiceJSON2('api/works/GetWorkDetails', {
         uid,
         WorksID: body.worksID,
         WorkID: body.worksID,
@@ -19,7 +19,7 @@ module.exports = app => {
     * commentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/GetToWorkMessage_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToWorkMessage_List', {
         uid,
         WorksID: body.worksID,
         WorkID: body.worksID,

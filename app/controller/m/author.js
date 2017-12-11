@@ -23,36 +23,19 @@ module.exports = app => {
       let hotCommentData = [];
       let hotPlayList = {};
       let res = yield {
-        authorDetail: ctx.helper.postServiceJSON('api/author/GetAuthorDetails', {
+        authorDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorDetails', {
           uid,
           AuthorID: authorID,
         }),
-        homeDetail: ctx.helper.postServiceJSON('api/author/GetAuthorHomePage', {
+        homeDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorHomePage', {
           AuthorID: authorID,
         }),
-        album: ctx.helper.postServiceJSON('api/author/GetAuthoralbum_List', {
+        album: ctx.helper.postServiceJSON2('api/author/GetAuthoralbum_List', {
           AuthorID: authorID,
           Skip: 0,
           Take: 10,
         }),
-        // tags: ctx.helper.postServiceJSON('api/author/GetAuthorWorks', {
-        //   AuthorID: authorID,
-        // }),
-        // playList: ctx.helper.postServiceJSON('api/author/SearchWorks', {
-        //   AuthorID: authorID,
-        //   Parameter: '',
-        //   Skip: 0,
-        //   Take: 10,
-        //   SortType: 1,
-        // }),
-        // playList2: ctx.helper.postServiceJSON('api/author/SearchWorks', {
-        //   AuthorID: authorID,
-        //   Parameter: '',
-        //   Skip: 0,
-        //   Take: 10,
-        //   SortType: 0,
-        // }),
-        commentData: ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
+        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
           uid,
           AuthorID: authorID,
           Skip: 0,
@@ -61,21 +44,12 @@ module.exports = app => {
           MyComment: 0,
           CurrentCount: 0,
         }),
-        hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+        hotPlayList: ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
           uid,
           Skip: 0,
           Take: 30,
           AuthorID: authorID,
         }),
-        // hotCommentData: ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
-        //   uid,
-        //   AuthorID: authorID,
-        //   Skip: 0,
-        //   Take: 2,
-        //   SortType: 1,
-        //   MyComment: 0,
-        //   CurrentCount: 0,
-        // }),
       };
       if(res.authorDetail.data.success) {
         authorDetail = res.authorDetail.data.data;
@@ -86,24 +60,12 @@ module.exports = app => {
       if(res.album.data.success) {
         album = res.album.data.data;
       }
-      // if(res.tags.data.success) {
-      //   tags = res.tags.data.data;
-      // }
-      // if(res.playList.data.success) {
-      //   playList = res.playList.data.data;
-      // }
-      // if(res.playList2.data.success) {
-      //   playList2 = res.playList2.data.data;
-      // }
       if(res.commentData.data.success) {
         commentData = res.commentData.data.data;
       }
       if(res.hotPlayList.data.success) {
         hotPlayList = res.hotPlayList.data.data;
       }
-      // if(res.hotCommentData.data.success) {
-      //   hotCommentData = res.hotCommentData.data.data;
-      // }
       yield ctx.render('mauthor', {
         authorID,
         tag,

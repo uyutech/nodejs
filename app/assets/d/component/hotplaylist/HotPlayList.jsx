@@ -45,21 +45,22 @@ class HotPlayList extends migi.Component {
     }).map(function(item) {
       return item.AuthName;
     });
+    let works = item.Works_Items_Works[0];
     if(item.WorksState === 2) {
       return <li class={ type + ' rel' }>
-        <a href={ '/works/' + item.WorksID + '/' + item.ItemID } class="pic">
-          <img src={ util.autoSsl(util.img108_108_80(item.WorksCoverPic || '//zhuanquan.xin/img/blank.png')) }/>
+        <a href={ '/works/' + works.WorksID + '/' + item.ItemID } class="pic">
+          <img src={ util.autoSsl(util.img108_108_80(works.WorksCoverPic || '//zhuanquan.xin/img/blank.png')) }/>
         </a>
-        <a href={ '/works/' + item.WorksID + '/' + item.ItemID }
+        <a href={ '/works/' + works.WorksID + '/' + item.ItemID }
            class={ 'name' + (item.ItemName ? '' : ' empty') }>{ item.ItemName || '待揭秘' }</a>
         <p class="author">{ author.join(' ') }</p>
       </li>;
     }
     return <li class={ type + ' rel' }>
-      <a href={ '/works/' + item.WorksID + '/' + item.ItemID } class="pic">
-        <img src={ util.autoSsl(util.img108_108_80(item.WorksCoverPic || '//zhuanquan.xin/img/blank.png')) }/>
+      <a href={ '/works/' + works.WorksID + '/' + item.ItemID } class="pic">
+        <img src={ util.autoSsl(util.img108_108_80(works.WorksCoverPic || '//zhuanquan.xin/img/blank.png')) }/>
       </a>
-      <a href={ '/works/' + item.WorksID + '/' + item.ItemID }
+      <a href={ '/works/' + works.WorksID + '/' + item.ItemID }
          class={ 'name' + (item.ItemName ? '' : ' empty') }>{ item.ItemName || '待揭秘' }</a>
       <p class="author">{ author.join(' ') }</p>
       <span class="icon"/>

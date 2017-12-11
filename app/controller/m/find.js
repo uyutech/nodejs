@@ -15,24 +15,24 @@ module.exports = app => {
       let hotCircleList = [];
       let hotPlayList = {};
       let res = yield {
-        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
+        hotWorkList: ctx.helper.postServiceJSON2('api/find/Hot_works_List', {
           Skip: 0,
           Take: 10,
         }),
-        hotAuthorList: ctx.helper.postServiceJSON('api/find/Hot_Author_List', {
+        hotAuthorList: ctx.helper.postServiceJSON2('api/find/Hot_Author_List', {
           Skip: 0,
           Take: 10,
         }),
-        hotMusicAlbumList: ctx.helper.postServiceJSON('api/find/Hot_album_List', {
+        hotMusicAlbumList: ctx.helper.postServiceJSON2('api/find/Hot_album_List', {
           Skip: 0,
           Take: 10,
         }),
-        hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
+        hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 6,
         }),
-        hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+        hotPlayList: ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
           uid,
           Skip: 0,
           Take: 10,

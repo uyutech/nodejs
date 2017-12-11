@@ -32,6 +32,40 @@ let helper = {
     this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
     return res;
   },
+  * postServiceJSON2(url, data) {
+    if(url.indexOf('//') === -1) {
+      url = 'http://192.168.0.3/' + url.replace(/^\//, '');
+    }
+    url += url.indexOf('?') > -1 ? '&' : '?';
+    url += 'traceID=' + this.ctx.traceID || '';
+    let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
+    let ip = this.ctx.request.header['x-real-ip'];
+    let start = Date.now();
+    let res;
+    console.log(111,data.uid);
+    if(data && data.uid && data.uid.toString().length !== 16) {
+      let temp = parseInt(data.uid);
+      temp = 2018000000000000 + temp;
+      data.uid = temp.toString().slice(0, 16);
+    }
+    console.log(222,data.uid);
+    try {
+      res = yield this.ctx.curl(url, {
+        method: 'POST',
+        data,
+        dataType: 'json',
+        gzip: true,
+      });
+    }
+    catch(e) {
+      let end = Date.now();
+      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+      throw new Error(e);
+    }
+    let end = Date.now();
+    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+    return res;
+  },
   weiboAppKey: '1987340303',
   weiboAppSecret: 'ae82c745736d8dc78230d96388790b22',
   weiboRedirect: 'http://dev.circling.cc2/oauth/login',

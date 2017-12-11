@@ -14,16 +14,16 @@ module.exports = app => {
       let lastUpdateHeadTime;
       let prize = {};
       let res = yield {
-        userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
           uid,
         }),
-        bonusPoint: ctx.helper.postServiceJSON('api/users/getuserrank', {
+        bonusPoint: ctx.helper.postServiceJSON2('api/users/GetUserRank', {
           uid,
         }),
-        lastUpdateNickNameTime: ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
+        lastUpdateNickNameTime: ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
           uid,
         }),
-        lastUpdateHeadTime: ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+        lastUpdateHeadTime: ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
           uid,
         }),
         prize: ctx.helper.postServiceJSON('api/users/GetMallCartList', {
@@ -83,22 +83,22 @@ module.exports = app => {
       let userFollows = {};
       let userFollowers = {};
       let res = yield {
-        follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+        follows: ctx.helper.postServiceJSON2('api/users/GetLikeAuthorList', {
           uid,
           Skip: 0,
           Take: 30,
         }),
-        userFriends: ctx.helper.postServiceJSON('api/users/User_Friends', {
+        userFriends: ctx.helper.postServiceJSON2('api/users/User_Friends', {
           uid,
           Skip: 0,
           Take: 30,
         }),
-        userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
+        userFollows: ctx.helper.postServiceJSON2('api/users/User_FollowList', {
           uid,
           Skip: 0,
           Take: 30,
         }),
-        userFollowers: ctx.helper.postServiceJSON('api/users/User_FansList', {
+        userFollowers: ctx.helper.postServiceJSON2('api/users/User_FansList', {
           uid,
           Skip: 0,
           Take: 30,
@@ -126,7 +126,7 @@ module.exports = app => {
     }
     * message(ctx) {
       let uid = ctx.session.uid;
-      let messages = yield ctx.helper.postServiceJSON('api/users/GetUserNotify', {
+      let messages = yield ctx.helper.postServiceJSON2('api/users/GetUserNotify', {
         uid,
         Skip: 0,
         Take: 10,
@@ -138,7 +138,7 @@ module.exports = app => {
     }
     * post(ctx) {
       let uid = ctx.session.uid;
-      let postList = yield ctx.helper.postServiceJSON('api/users/User_Post_List', {
+      let postList = yield ctx.helper.postServiceJSON2('api/users/User_Post_List', {
         uid,
         Skip: 0,
         Take: 10,

@@ -16,27 +16,22 @@ module.exports = app => {
       let hotPostList = [];
       let hotPlayList = [];
       let res = yield {
-        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
+        hotWorkList: ctx.helper.postServiceJSON2('api/find/Hot_works_List', {
           uid,
           Skip: 0,
           Take: 10,
         }),
-        hotAuthorList: ctx.helper.postServiceJSON('api/find/Hot_Author_List', {
+        hotAuthorList: ctx.helper.postServiceJSON2('api/find/Hot_Author_List', {
           uid,
           Skip: 0,
           Take: 10,
         }),
-        hotPhotoAlbumList: ctx.helper.postServiceJSON('api/find/Hot_PHOTO_List', {
+        hotMusicAlbumList: ctx.helper.postServiceJSON2('api/find/Hot_album_List', {
           uid,
           Skip: 0,
           Take: 10,
         }),
-        hotMusicAlbumList: ctx.helper.postServiceJSON('api/find/Hot_album_List', {
-          uid,
-          Skip: 0,
-          Take: 10,
-        }),
-        hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
+        hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 6,
@@ -46,7 +41,7 @@ module.exports = app => {
           Skip: 0,
           Take: 30,
         }),
-        hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+        hotPlayList: ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
           uid,
           Skip: 0,
           Take: 30,
@@ -60,9 +55,6 @@ module.exports = app => {
       }
       if(res.hotMusicAlbumList.data.success) {
         hotMusicAlbumList = res.hotMusicAlbumList.data.data;
-      }
-      if(res.hotPhotoAlbumList.data.success) {
-        hotPhotoAlbumList = res.hotPhotoAlbumList.data.data;
       }
       if(res.hotCircleList.data.success) {
         hotCircleList = res.hotCircleList.data.data.data;

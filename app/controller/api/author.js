@@ -9,7 +9,7 @@ module.exports = app => {
     * follow(ctx) {
       let uid = ctx.session.uid;
       let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.postServiceJSON('api/author/SaveAuthorToUser', {
+      let res = yield ctx.helper.postServiceJSON2('api/author/SaveAuthorToUser', {
         uid,
         Author: authorID,
       });
@@ -18,7 +18,7 @@ module.exports = app => {
     * unFollow(ctx) {
       let uid = ctx.session.uid;
       let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.postServiceJSON('api/author/RemoveAuthorToUser', {
+      let res = yield ctx.helper.postServiceJSON2('api/author/RemoveAuthorToUser', {
         uid,
         Author: authorID,
       });
@@ -27,7 +27,7 @@ module.exports = app => {
     * commentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
         uid,
         AuthorID: body.authorID,
         Skip: body.skip,

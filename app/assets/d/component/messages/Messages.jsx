@@ -17,17 +17,17 @@ class Messages extends migi.Component {
         html += self.genItem(item);
       });
       self.html = html;
-    }
-    self.on(migi.Event.DOM, function() {
-      let $list = $(self.ref.list.element);
-      $list.on('click', '.comment', function() {
-        let $comment = $(this);
-        let $li = $comment.closest('ul').closest('li');
-        $list.children('li.cur').removeClass('cur');
-        $li.addClass('cur');
-        self.emit('comment', $li.attr('id'), $comment.attr('rid'), $comment.attr('cid'), $comment.attr('name'), parseInt($comment.attr('type')), $comment.attr('tid'));
+      self.on(migi.Event.DOM, function() {
+        let $list = $(self.ref.list.element);
+        $list.on('click', '.comment', function() {
+          let $comment = $(this);
+          let $li = $comment.closest('ul').closest('li');
+          $list.children('li.cur').removeClass('cur');
+          $li.addClass('cur');
+          self.emit('comment', $li.attr('id'), $comment.attr('rid'), $comment.attr('cid'), $comment.attr('name'), parseInt($comment.attr('type')), $comment.attr('tid'));
+        });
       });
-    });
+    }
   }
   genItem(item) {
     let type = item.TargetType;

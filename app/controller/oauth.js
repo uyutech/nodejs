@@ -36,7 +36,7 @@ module.exports = app => {
       let access_token = data.access_token;
       let weiboUid = data.uid;
       if(access_token && weiboUid) {
-        let res = yield ctx.helper.postServiceJSON('api/users/WeibouidToUid', {
+        let res = yield ctx.helper.postServiceJSON2('api/users/WeibouidToUid', {
           openid: weiboUid,
           Token: access_token,
         });
@@ -45,7 +45,7 @@ module.exports = app => {
           ctx.rotateCsrfSecret();
           let uid = data.data;
           ctx.session.uid = uid;
-          let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+          let res = yield ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
             uid,
           });
           let data2 = res.data;
@@ -85,7 +85,7 @@ module.exports = app => {
             ctx.rotateCsrfSecret();
             let uid = create.data;
             ctx.session.uid = uid;
-            let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+            let res = yield ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
               uid,
             });
             let data2 = res.data;
