@@ -113,6 +113,10 @@ let activityLabel = {
         {
           key: 'Day 10',
           value: '#每日练字打卡# #31天画圈挑战#  Day10  #难忘的漫展#'
+        },
+        {
+          key: 'Day 11',
+          value: '#每日练字打卡# #31天画圈挑战#  Day11  #我的家乡#'
         }
       ]
     },
