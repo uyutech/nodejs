@@ -494,6 +494,45 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * pri(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON('api/users/GetUserAddressInfo', {
+        uid,
+      });
+      ctx.body = res.data;
+    }
+    * updatePrivate(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let realName = body.realName;
+      let phone = body.phone;
+      let address = body.address;
+      if(realName && realName.length > 8) {
+        return ctx.body = {
+          success: false,
+          message: '姓名不能超过8个字哦~',
+        };
+      }
+      if(phone && !/^1\d{10}$/.test(phone) && !/^09\d{8}$/.test(phone)) {
+        return ctx.body = {
+          success: false,
+          message: '手机号码不合法~',
+        };
+      }
+      if(address && address.length > 256) {
+        return ctx.body = {
+          success: false,
+          message: '地址不能超过256个字哦~',
+        };
+      }
+      let res = yield ctx.helper.postServiceJSON('api/users/SaveUserAddressInfo', {
+        uid,
+        Name: realName,
+        Phone: phone,
+        Address: address,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };
