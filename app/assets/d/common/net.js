@@ -7,7 +7,7 @@
 let net = {
   ajax: function(url, data, success, error, type, timeout) {
     let csrfToken = $.cookie('csrfToken');
-    Object.keys(data).forEach(function(k) {
+    data && Object.keys(data).forEach(function(k) {
       if(data[k] === undefined || data[k] === null) {
         delete data[k];
       }

@@ -124,6 +124,8 @@ module.exports = app => {
 
   app.post('/api/subComment', app.middlewares.needLogin(), 'api.subComment.index');
 
+  app.post('/api/count/index', 'api.count.index');
+
   app.get('/h5/index', 'h5.index.index');
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
