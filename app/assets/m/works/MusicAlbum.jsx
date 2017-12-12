@@ -265,7 +265,7 @@ class MusicAlbum extends migi.Component {
       let data = self.item;
       net.postJSON('/api/works/likeWork', { workID: self.workID }, function (res) {
         if(res.success) {
-          data.ISLike = self.like = res.data === 211;
+          data.ISLike = self.like = res.data.BehaviorNumber === 211;
         }
         else if(res.code === 1000) {
           migi.eventBus.emit('NEED_LOGIN');

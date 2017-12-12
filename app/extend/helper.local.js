@@ -42,13 +42,11 @@ let helper = {
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
     let res;
-    console.log(111,data.uid);
     if(data && data.uid && data.uid.toString().length !== 16) {
       let temp = parseInt(data.uid);
       temp = 2018000000000000 + temp;
       data.uid = temp.toString().slice(0, 16);
-    }
-    console.log(222,data.uid);
+    }console.log(data.uid);
     try {
       res = yield this.ctx.curl(url, {
         method: 'POST',

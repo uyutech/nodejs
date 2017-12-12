@@ -61,7 +61,7 @@ class My extends migi.Component {
             if(item.State === 1) {
               return <li>{ item.ProductName }<button rel={ item.ID } idx={ i }>发货</button></li>
             }
-            return <li>{ item.ProductName }<span>已发货</span></li>;
+            return <li>{ item.ProductName }<span>已确认发货</span></li>;
           })
         }
       </ul>

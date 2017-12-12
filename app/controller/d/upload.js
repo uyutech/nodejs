@@ -9,7 +9,6 @@ module.exports = app => {
     * index(ctx) {
       yield app.redis.set('a', null);
       let a = yield app.redis.get('a');
-      console.log(a);
       if(ctx.session.uid) {
         // let uid = ctx.session.uid;
         // let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {

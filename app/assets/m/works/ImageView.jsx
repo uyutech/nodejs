@@ -82,7 +82,7 @@ class ImageView extends migi.Component {
       let data = self.data;
       net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
-          data.ISLike = res.data === 211;
+          data.ISLike = res.data.BehaviorNumber === 211;
           self.fnLike = null;
           migi.eventBus.emit('photoLike', data);
         }

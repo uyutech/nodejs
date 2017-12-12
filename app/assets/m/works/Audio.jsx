@@ -230,7 +230,7 @@ class Audio extends migi.Component {
       let data = self.datas[self.index];
       net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
         if(res.success) {
-          data.ISLike = res.data === 211;
+          data.ISLike = res.data.BehaviorNumber === 211;
           self.fnLike = null;
         }
         else if(res.code === 1000) {

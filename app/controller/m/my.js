@@ -44,7 +44,7 @@ module.exports = app => {
       }
       if(res.prize.data.success) {
         prize = res.prize.data.data;
-      }
+      }console.log(userInfo);
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {

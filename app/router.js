@@ -94,7 +94,6 @@ module.exports = app => {
   app.post('/api/works/subCommentList', 'api.works.subCommentList');
   app.post('/api/works/delComment', app.middlewares.needLoginJson(), 'api.works.delComment');
   app.post('/api/works/photoList', 'api.works.photoList');
-  app.post('/api/works/addTempLink', app.middlewares.needLoginJson(), 'api.works.addTempLink');
 
   app.post('/api/author/commentList', 'api.author.commentList');
   app.post('/api/author/follow', app.middlewares.needLoginJson(), 'api.author.follow');

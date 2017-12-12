@@ -54,7 +54,7 @@ module.exports = app => {
     * likeComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/AddWorkCommentLike', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
         uid,
         CommentID: body.commentID,
       });
@@ -63,7 +63,7 @@ module.exports = app => {
     * delComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/DeleteCommentByID', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
       });
@@ -72,7 +72,7 @@ module.exports = app => {
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/GetTocomment_T_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
         Skip: body.skip,
@@ -83,7 +83,7 @@ module.exports = app => {
     * likeWork(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/AddLikeBehavior', {
+      let res = yield ctx.helper.postServiceJSON2('api/works/AddLikeBehavior', {
         uid,
         WorkItemsID: body.workID,
       });
@@ -92,7 +92,7 @@ module.exports = app => {
     * favorWork(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/AddCollection', {
+      let res = yield ctx.helper.postServiceJSON2('api/works/AddCollection', {
         uid,
         WorkItemsID: body.workID,
       });
@@ -101,7 +101,7 @@ module.exports = app => {
     * unFavorWork(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/RemoveCollection', {
+      let res = yield ctx.helper.postServiceJSON2('api/works/RemoveCollection', {
         uid,
         WorkItemsID: body.workID,
       });
@@ -117,18 +117,6 @@ module.exports = app => {
         Take: body.take,
         SortType: body.sortType,
         tagname: body.tagName,
-      });
-      ctx.body = res.data;
-    }
-    * addTempLink(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/UserAddOutsite', {
-        uid,
-        workid: body.worksID,
-        workitemid: body.workID,
-        OutSiteUrl: body.url,
-        OutSiteName: body.name,
       });
       ctx.body = res.data;
     }
