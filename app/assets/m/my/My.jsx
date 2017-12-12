@@ -54,6 +54,7 @@ class My extends migi.Component {
                updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }
                updateHeadTimeDiff={ this.props.updateHeadTimeDiff }
                privateInfo={ this.props.privateInfo }/>
+      <p class="info">大家注意啦~活动奖励均不包邮。本次发货为到付形式，请大家谨慎选择。圈币抵扣运费功能将与圈币兑换福利系统一同上线，需要使用圈币抵扣的小伙伴请勿点击‘发货’按钮哦~可以等待之后使用圈币抵扣~</p>
       <ul class="prize" onClick={ { button: this.click } }>
         {
           (this.prize || []).map(function(item, i) {
