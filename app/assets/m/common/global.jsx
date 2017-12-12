@@ -88,4 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   });
+
+  net.postJSON('/api/count/index');
 });

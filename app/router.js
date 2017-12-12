@@ -82,6 +82,7 @@ module.exports = app => {
   app.post('/api/my/favor', app.middlewares.needLoginJson(), 'api.my.favor');
   app.post('/api/my/favorPic', app.middlewares.needLoginJson(), 'api.my.favorPic');
   app.post('/api/my/favorPost', app.middlewares.needLoginJson(), 'api.my.favorPost');
+  app.post('/api/my/sendPrize', app.middlewares.needLoginJson(), 'api.my.sendPrize');
 
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');
@@ -124,6 +125,8 @@ module.exports = app => {
 
   app.post('/api/subComment', app.middlewares.needLogin(), 'api.subComment.index');
 
+  app.post('/api/count/index', 'api.count.index');
+
   app.get('/h5/index', 'h5.index.index');
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
@@ -164,8 +167,9 @@ module.exports = app => {
   app.post('/h5/my/updateNickName', app.middlewares.needLoginJson(), 'h5.my.updateNickName');
   app.post('/h5/my/updateSign', app.middlewares.needLoginJson(), 'h5.my.updateSign');
   app.post('/h5/my/uploadHead', app.middlewares.needLoginJson(), 'h5.my.uploadHead');
-  app.post('/h5/my/pri', app.middlewares.needLoginJson(), 'h5.my.pri');
+  app.post('/h5/my/private', app.middlewares.needLoginJson(), 'h5.my.private');
   app.post('/h5/my/updatePrivate', app.middlewares.needLoginJson(), 'h5.my.updatePrivate');
+  app.post('/h5/my/sendPrize', app.middlewares.needLoginJson(), 'h5.my.sendPrize');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');

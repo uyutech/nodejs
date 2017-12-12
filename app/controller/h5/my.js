@@ -15,6 +15,7 @@ module.exports = app => {
       let bonusPoint = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
+      let prize = [];
       let res = yield {
         userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
           uid,
@@ -26,6 +27,9 @@ module.exports = app => {
           uid,
         }),
         lastUpdateHeadTime: ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+          uid,
+        }),
+        prize: ctx.helper.postServiceJSON('api/users/GetMallCartList', {
           uid,
         }),
       };
@@ -41,6 +45,9 @@ module.exports = app => {
       if(res.lastUpdateHeadTime.data.success) {
         lastUpdateHeadTime = res.lastUpdateHeadTime.data.data;
       }
+      if(res.prize.data.success) {
+        prize = res.prize.data.data;
+      }
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {
@@ -53,6 +60,7 @@ module.exports = app => {
         bonusPoint,
         lastUpdateNickNameTime,
         lastUpdateHeadTime,
+        prize,
       });
     }
     * relation(ctx) {
@@ -494,7 +502,7 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
-    * pri(ctx) {
+    * private(ctx) {
       let uid = ctx.session.uid;
       let res = yield ctx.helper.postServiceJSON('api/users/GetUserAddressInfo', {
         uid,
@@ -530,6 +538,15 @@ module.exports = app => {
         Name: realName,
         Phone: phone,
         Address: address,
+      });
+      ctx.body = res.data;
+    }
+    * sendPrize(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/SendProduct', {
+        uid,
+        cartID: body.cartID,
       });
       ctx.body = res.data;
     }
