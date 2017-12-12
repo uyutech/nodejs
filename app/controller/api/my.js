@@ -323,6 +323,15 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * sendPrize(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/SendProduct', {
+        uid,
+        cartID: body.cartID,
+      });
+      ctx.body = res.data;
+    }
   }
 
   return Controller;

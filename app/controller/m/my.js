@@ -26,9 +26,9 @@ module.exports = app => {
         lastUpdateHeadTime: ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
           uid,
         }),
-        // prize: ctx.helper.postServiceJSON('api/users/GetMallCartList', {
-        //   uid,
-        // }),
+        prize: ctx.helper.postServiceJSON('api/users/GetMallCartList', {
+          uid,
+        }),
       };
       if(res.userInfo.data.success) {
         userInfo = res.userInfo.data.data;
@@ -42,9 +42,9 @@ module.exports = app => {
       if(res.lastUpdateHeadTime.data.success) {
         lastUpdateHeadTime = res.lastUpdateHeadTime.data.data;
       }
-      // if(res.prize.data.success) {
-      //   prize = res.prize.data.data;
-      // }
+      if(res.prize.data.success) {
+        prize = res.prize.data.data;
+      }
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {

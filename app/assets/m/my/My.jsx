@@ -11,7 +11,9 @@ import Profile from './Profile.jsx';
 class My extends migi.Component {
   constructor(...data) {
     super(...data);
+    this.prize = this.props.prize;
   }
+  @bind prize
   clickOut(e) {
     e.preventDefault();
     net.postJSON('/api/login/loginOut', function() {
@@ -20,12 +22,45 @@ class My extends migi.Component {
       alert(res.message || util.ERROR_MESSAGE);
     });
   }
+  click(e, vd, tvd) {
+    let $button = $(tvd.element);
+    if($button.hasClass('loading')) {
+      return;
+    }
+    $button.addClass('loading');
+    let cartID = tvd.props.rel;
+    let idx = tvd.props.idx;
+    let self = this;
+    net.postJSON('/api/my/sendPrize', { cartID }, function(res) {
+      if(res.success) {
+        self.prize[idx].State = 2;
+        self.prize = self.prize;
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      $button.removeClass('loading');
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      $button.removeClass('loading');
+    });
+  }
   render() {
     return <div class="my">
       <Profile userInfo={ this.props.userInfo }
                updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }
                updateHeadTimeDiff={ this.props.updateHeadTimeDiff }
                privateInfo={ this.props.privateInfo }/>
+      <ul class="prize" onClick={ { button: this.click } }>
+        {
+          (this.prize || []).map(function(item, i) {
+            if(item.State === 1) {
+              return <li>{ item.ProductName }<button rel={ item.ID } idx={ i }>发货</button></li>
+            }
+            return <li>{ item.ProductName }<span>已发货</span></li>;
+          })
+        }
+      </ul>
       <div class="warn">
         <div class="t fn-clear">
           <img class="pic" src={ util.autoSsl(util.img60_60_80('//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg')) }/>

@@ -82,6 +82,7 @@ module.exports = app => {
   app.post('/api/my/favor', app.middlewares.needLoginJson(), 'api.my.favor');
   app.post('/api/my/favorPic', app.middlewares.needLoginJson(), 'api.my.favorPic');
   app.post('/api/my/favorPost', app.middlewares.needLoginJson(), 'api.my.favorPost');
+  app.post('/api/my/sendPrize', app.middlewares.needLoginJson(), 'api.my.sendPrize');
 
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');
