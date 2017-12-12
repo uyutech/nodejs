@@ -494,7 +494,7 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
-    * pri(ctx) {
+    * private(ctx) {
       let uid = ctx.session.uid;
       let res = yield ctx.helper.postServiceJSON('api/users/GetUserAddressInfo', {
         uid,

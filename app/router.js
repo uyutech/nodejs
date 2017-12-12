@@ -164,7 +164,7 @@ module.exports = app => {
   app.post('/h5/my/updateNickName', app.middlewares.needLoginJson(), 'h5.my.updateNickName');
   app.post('/h5/my/updateSign', app.middlewares.needLoginJson(), 'h5.my.updateSign');
   app.post('/h5/my/uploadHead', app.middlewares.needLoginJson(), 'h5.my.uploadHead');
-  app.post('/h5/my/pri', app.middlewares.needLoginJson(), 'h5.my.pri');
+  app.post('/h5/my/private', app.middlewares.needLoginJson(), 'h5.my.private');
   app.post('/h5/my/updatePrivate', app.middlewares.needLoginJson(), 'h5.my.updatePrivate');
 
   app.post('/h5/works/index', 'h5.works.index');
