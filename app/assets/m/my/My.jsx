@@ -11,7 +11,10 @@ import Profile from './Profile.jsx';
 class My extends migi.Component {
   constructor(...data) {
     super(...data);
-    this.prize = this.props.prize;
+    this.prize = this.props.prize || [];
+    if(!Array.isArray(this.prize)) {
+      this.prize = [];
+    }
   }
   @bind prize
   clickOut(e) {

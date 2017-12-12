@@ -12,7 +12,7 @@ module.exports = app => {
       let bonusPoint = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
-      let prize = {};
+      let prize = [];
       let res = yield {
         userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
           uid,
