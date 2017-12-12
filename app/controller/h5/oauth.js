@@ -13,6 +13,33 @@ module.exports = app => {
         Token: body.token,
       });
       let data = res.data;
+      ctx.logger.info('openid %s, token %s, res', body.openID, body.token, data.success);
+      if(data && !data.success && data.code === 1002) {
+        let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
+          data: {
+            uid: body.openID,
+            access_token: body.token,
+          },
+          dataType: 'json',
+          gzip: true,
+        });
+        userInfo = userInfo.data;
+        let name = userInfo.screen_name || userInfo.name;
+        let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
+        let create = yield ctx.helper.postServiceJSON('api/users/CreateWeiboUser', {
+          openid: body.openID,
+          Token: body.token,
+          Head_Url: head,
+          NickName: name,
+        });
+        create = create.data;
+        if(create && create.success) {
+          let uid = create.data;
+          data.success = true;
+          data.data = uid;
+        }
+      }
+      ctx.logger.info('openid %s, token %s, res', body.openID, body.token, data.success);
       if(data && data.success) {
         let uid = data.data;
         ctx.session.uid = uid;
@@ -61,6 +88,7 @@ module.exports = app => {
           lastUpdateHeadTime,
         });
       }
+      ctx.body = ctx.helper.errorJSON(data || {});
     }
   }
   return Controller;
