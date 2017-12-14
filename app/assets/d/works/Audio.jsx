@@ -89,7 +89,7 @@ class Audio extends migi.Component {
     return this;
   }
   addMedia() {
-    let audio = <audio src={ this.datas[0].FileUrl }
+    let audio = <audio src={ this.datas[this.index || 0].FileUrl }
                        onTimeupdate={ this.onTimeupdate.bind(this) }
                        onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
                        onPlaying={ this.onPlaying.bind(this) }
