@@ -44,7 +44,7 @@ module.exports = app => {
       }
       if(res.prize.data.success) {
         prize = res.prize.data.data;
-      }console.log(userInfo);
+      }
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {
@@ -151,7 +151,7 @@ module.exports = app => {
     }
     * favor(ctx) {
       let uid = ctx.session.uid;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 1,
         Skip: 0,
@@ -163,7 +163,7 @@ module.exports = app => {
     }
     * favorPic(ctx) {
       let uid = ctx.session.uid;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 2,
         Skip: 0,
@@ -175,7 +175,7 @@ module.exports = app => {
     }
     * favorPost(ctx) {
       let uid = ctx.session.uid;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 3,
         Skip: 0,
