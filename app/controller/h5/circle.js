@@ -18,11 +18,11 @@ module.exports = app => {
       let res = yield {
         circleDetail: ctx.helper.postServiceJSON2('api/circling/GetCirclingDetails', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
         }),
         postList: ctx.helper.postServiceJSON2('api/circling/GetPostList', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
           Skip: 0,
           Take: 10,
         }),
@@ -46,7 +46,7 @@ module.exports = app => {
       let take = body.take;
       let res = yield ctx.helper.postServiceJSON2('api/circling/GetPostList', {
         uid,
-        TagID: circleID,
+        circlingID: circleID,
         Skip: skip,
         Take: take,
       });
@@ -60,14 +60,14 @@ module.exports = app => {
       if(state === 'true') {
         let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveUserFollowCircling', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
         });
         ctx.body = res.data;
       }
       else {
         let res = yield ctx.helper.postServiceJSON2('api/circling/SaveUserFollowCircling', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
         });
         ctx.body = res.data;
       }
@@ -100,7 +100,7 @@ module.exports = app => {
       }
       let res = yield ctx.helper.postServiceJSON('api/tag/AddPost', {
         uid,
-        TagID: circleID,
+        circlingID: circleID,
         Content: content,
         Title: '',
         ImageList: imgs

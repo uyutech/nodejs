@@ -70,9 +70,9 @@ module.exports = app => {
     * like(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/AddLikeBehavior', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
         uid,
-        PostID: body.postID,
+        CommentID: body.postID,
       });
       ctx.body = res.data;
     }
@@ -97,9 +97,9 @@ module.exports = app => {
     * del(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/DelPost', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
-        PostID: body.postID,
+        CommentID: body.postID,
       });
       ctx.body = res.data;
     }
