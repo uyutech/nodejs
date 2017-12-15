@@ -61,7 +61,7 @@ module.exports = app => {
           lastUpdateHeadTime: ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
             uid,
           }),
-          prize: ctx.helper.postServiceJSON('api/users/GetMallCartList', {
+          prize: ctx.helper.postServiceJSON2('api/users/GetMallCartList', {
             uid,
           }),
         };

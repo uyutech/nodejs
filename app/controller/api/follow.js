@@ -9,7 +9,7 @@ module.exports = app => {
     * postList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFollowUserCircling', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFollowUserCircling', {
         uid,
         Skip: body.skip,
         Take: body.take,

@@ -110,7 +110,7 @@ module.exports = app => {
     * guideSuggest(ctx) {
       let uid = ctx.session.uid;
       let res = yield {
-        tags: ctx.helper.postServiceJSON('api/users/GetTag', {
+        tags: ctx.helper.postServiceJSON2('api/users/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 99,

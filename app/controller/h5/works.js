@@ -37,7 +37,7 @@ module.exports = app => {
       }
       let labelList = [];
       if(worksDetail.WorkType === 11) {
-        let res = yield ctx.helper.postServiceJSON('api/works/GetPhotoInfo', {
+        let res = yield ctx.helper.postServiceJSON2('api/works/GetPhotoInfo', {
           uid,
           WorksID: worksID,
         });
@@ -145,7 +145,7 @@ module.exports = app => {
     * photoList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/GetPhotoPicByWorkID', {
+      let res = yield ctx.helper.postServiceJSON2('api/works/GetPhotoPicByWorkID', {
         uid,
         WorksID: body.worksID,
         Skip: body.skip,
