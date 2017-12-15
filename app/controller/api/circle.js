@@ -14,16 +14,16 @@ module.exports = app => {
       let circleID = body.circleID;
       let state = body.state;
       if(state === 'true') {
-        let res = yield ctx.helper.postServiceJSON('api/tag/RemoveTagToUser', {
+        let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveUserFollowCircling', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
         });
         ctx.body = res.data;
       }
       else {
-        let res = yield ctx.helper.postServiceJSON('api/tag/SaveTagToUser', {
+        let res = yield ctx.helper.postServiceJSON2('api/circling/SaveUserFollowCircling', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
         });
         ctx.body = res.data;
       }

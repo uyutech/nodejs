@@ -15,13 +15,13 @@ module.exports = app => {
       let circleDetail = {};
       let postList = {};
       let res = yield {
-        circleDetail: ctx.helper.postServiceJSON('api/tag/GetTagDetails', {
+        circleDetail: ctx.helper.postServiceJSON2('api/circling/GetCirclingDetails', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
         }),
-        postList: ctx.helper.postServiceJSON('api/tag/GetTagPost', {
+        postList: ctx.helper.postServiceJSON2('api/circling/GetPostList', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
           Skip: 0,
           Take: 10,
         }),

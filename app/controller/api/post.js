@@ -79,18 +79,18 @@ module.exports = app => {
     * favor(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/AddCollection', {
+      let res = yield ctx.helper.postServiceJSON2('api/circling/AddCollection', {
         uid,
-        PostID: body.postID,
+        CommentID: body.postID,
       });
       ctx.body = res.data;
     }
     * unFavor(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/RemoveCollection', {
+      let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveCollection', {
         uid,
-        PostID: body.postID,
+        CommentID: body.postID,
       });
       ctx.body = res.data;
     }
