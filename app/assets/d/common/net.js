@@ -37,6 +37,9 @@ let net = {
           success(data, state, xhr);
         },
         error: function (data) {
+          if(data && data.statusText === 'abort') {
+            return;
+          }
           if(!error.__hasExec) {
             error.__hasExec = true;
             error(data || {});
