@@ -17,16 +17,16 @@ module.exports = app => {
       let lastUpdateHeadTime;
       let prize = [];
       let res = yield {
-        userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
           uid,
         }),
-        bonusPoint: ctx.helper.postServiceJSON('api/users/getuserrank', {
+        bonusPoint: ctx.helper.postServiceJSON2('api/users/GetUserRank', {
           uid,
         }),
-        lastUpdateNickNameTime: ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
+        lastUpdateNickNameTime: ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
           uid,
         }),
-        lastUpdateHeadTime: ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+        lastUpdateHeadTime: ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
           uid,
         }),
         prize: ctx.helper.postServiceJSON('api/users/GetMallCartList', {
@@ -70,22 +70,22 @@ module.exports = app => {
       let userFollows = {};
       let userFollowers = {};
       let res = yield {
-        follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+        follows: ctx.helper.postServiceJSON2('api/users/GetLikeAuthorList', {
           uid,
           Skip: 0,
           Take: 30,
         }),
-        userFriends: ctx.helper.postServiceJSON('api/users/User_Friends', {
+        userFriends: ctx.helper.postServiceJSON2('api/users/User_Friends', {
           uid,
           Skip: 0,
           Take: 30,
         }),
-        userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
+        userFollows: ctx.helper.postServiceJSON2('api/users/User_FollowList', {
           uid,
           Skip: 0,
           Take: 30,
         }),
-        userFollowers: ctx.helper.postServiceJSON('api/users/User_FansList', {
+        userFollowers: ctx.helper.postServiceJSON2('api/users/User_FansList', {
           uid,
           Skip: 0,
           Take: 30,
@@ -113,7 +113,7 @@ module.exports = app => {
     * friendList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/User_Friends', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_Friends', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -123,7 +123,7 @@ module.exports = app => {
     * followList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/User_FollowList', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_FollowList', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -133,7 +133,7 @@ module.exports = app => {
     * followerList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/User_FansList', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_FansList', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -143,7 +143,7 @@ module.exports = app => {
     * followerAuthor(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetLikeAuthorList', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -153,7 +153,7 @@ module.exports = app => {
     * message(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserNotify', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserNotify', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -163,7 +163,7 @@ module.exports = app => {
     * readMessage(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/UserNotifyIsRead', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/UserNotifyIsRead', {
         uid,
         NotifyIDList: (body.ids || []).join(','),
       });
@@ -172,7 +172,7 @@ module.exports = app => {
     * postList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/User_Post_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_Post_List', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -184,19 +184,19 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       let res = yield {
-        favorMV: ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        favorMV: ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
           uid,
           ItemsType: 1,
           Skip: 0,
           Take: 20,
         }),
-        favorPic: ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        favorPic: ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
           uid,
           ItemsType: 2,
           Skip: 0,
           Take: 10,
         }),
-        favorPost: ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+        favorPost: ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
           uid,
           ItemsType: 3,
           Skip: 0,
@@ -224,7 +224,7 @@ module.exports = app => {
     * favorMV(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 1,
         Skip: body.skip,
@@ -235,7 +235,7 @@ module.exports = app => {
     * favorPic(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 2,
         Skip: body.skip,
@@ -246,7 +246,7 @@ module.exports = app => {
     * favorPost(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 3,
         Skip: body.skip,
@@ -257,7 +257,7 @@ module.exports = app => {
     * altSettle(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
         uid,
         AuthorID: ctx.session.authorID,
         SettledType: body.public === 'true' ? 0 : 1,
@@ -265,7 +265,7 @@ module.exports = app => {
       if(ctx.session.authorID) {
         ctx.session.isPublic = body.public === 'true';
       }
-      let userInfo = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+      let userInfo = yield ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
         uid,
       });
       if(userInfo.data.success) {
@@ -366,7 +366,7 @@ module.exports = app => {
         }
       }
 
-      let lastUpdateHeadTime = yield ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+      let lastUpdateHeadTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
         uid,
       });
       if(lastUpdateHeadTime.data && lastUpdateHeadTime.data.success) {
@@ -409,7 +409,7 @@ module.exports = app => {
         if(!objects || objects.length === 0) {
           let upload = yield client.put(name, b);
           if(upload.res && upload.res.status === 200) {
-            let res = yield ctx.helper.postServiceJSON('api/users/UpdateHead_Url', {
+            let res = yield ctx.helper.postServiceJSON2('api/users/UpdateHead_Url', {
               uid,
               Head_Url: url,
             });
@@ -423,7 +423,7 @@ module.exports = app => {
           }
         }
         else {
-          let res = yield ctx.helper.postServiceJSON('api/users/UpdateHead_Url', {
+          let res = yield ctx.helper.postServiceJSON2('api/users/UpdateHead_Url', {
             uid,
             Head_Url: url,
           });
@@ -450,7 +450,7 @@ module.exports = app => {
           message: '昵称长度需要在4~8个字之间哦~',
         };
       }
-      let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
+      let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
         uid,
       });
       if(lastUpdateNickNameTime.data && lastUpdateNickNameTime.data.success) {
@@ -475,7 +475,7 @@ module.exports = app => {
             message: '昵称不能以"转圈"开头哦！',
           };
         }
-        let res = yield ctx.helper.postServiceJSON('api/users/UpdateNickName', {
+        let res = yield ctx.helper.postServiceJSON2('api/users/UpdateNickName', {
           uid,
           NickName: body.nickName,
         });
@@ -496,7 +496,7 @@ module.exports = app => {
           message: '签名长度不能超过16个字哦~',
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/UpdateUserSign', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/UpdateUserSign', {
         uid,
         sign: body.sign || '',
       });
@@ -504,7 +504,7 @@ module.exports = app => {
     }
     * private(ctx) {
       let uid = ctx.session.uid;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserAddressInfo', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserAddressInfo', {
         uid,
       });
       ctx.body = res.data;
@@ -533,7 +533,7 @@ module.exports = app => {
           message: '地址不能超过256个字哦~',
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/SaveUserAddressInfo', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/SaveUserAddressInfo', {
         uid,
         Name: realName,
         Phone: phone,

@@ -19,19 +19,19 @@ module.exports = app => {
       let commentData = {};
       let hotPlayList = {};
       let res = yield {
-        authorDetail: ctx.helper.postServiceJSON('api/author/GetAuthorDetails', {
+        authorDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorDetails', {
           uid,
           AuthorID: authorID,
         }),
-        homeDetail: ctx.helper.postServiceJSON('api/author/GetAuthorHomePage', {
+        homeDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorHomePage', {
           AuthorID: authorID,
         }),
-        album: ctx.helper.postServiceJSON('api/author/GetAuthoralbum_List', {
+        album: ctx.helper.postServiceJSON2('api/author/GetAuthoralbum_List', {
           AuthorID: authorID,
           Skip: 0,
           Take: 10,
         }),
-        commentData: ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
+        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
           uid,
           AuthorID: authorID,
           Skip: 0,
@@ -40,7 +40,7 @@ module.exports = app => {
           MyComment: 0,
           CurrentCount: 0,
         }),
-        hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+        hotPlayList: ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
           uid,
           Skip: 0,
           Take: 30,
@@ -73,7 +73,7 @@ module.exports = app => {
     * follow(ctx) {
       let uid = ctx.session.uid;
       let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.postServiceJSON('api/author/SaveAuthorToUser', {
+      let res = yield ctx.helper.postServiceJSON2('api/author/SaveAuthorToUser', {
         uid,
         Author: authorID,
       });
@@ -82,7 +82,7 @@ module.exports = app => {
     * unFollow(ctx) {
       let uid = ctx.session.uid;
       let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.postServiceJSON('api/author/RemoveAuthorToUser', {
+      let res = yield ctx.helper.postServiceJSON2('api/author/RemoveAuthorToUser', {
         uid,
         Author: authorID,
       });
@@ -109,7 +109,7 @@ module.exports = app => {
     * likeComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/AddWorkCommentLike', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddWorkCommentLike', {
         uid,
         CommentID: body.commentID,
       });
@@ -118,7 +118,7 @@ module.exports = app => {
     * delComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/DeleteCommentByID', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
       });
@@ -127,7 +127,7 @@ module.exports = app => {
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/GetTocomment_T_List', {
+      let res = yield ctx.helper.postServiceJSON2z('api/Users_Comment/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
         Skip: body.skip,
@@ -138,7 +138,7 @@ module.exports = app => {
     * commentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/author/GetToAuthorMessage_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
         uid,
         AuthorID: body.authorID,
         Skip: body.skip,

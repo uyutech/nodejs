@@ -208,7 +208,7 @@ module.exports = app => {
           message: '地址不能超过256个字哦~',
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/SaveUserAddressInfo', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/SaveUserAddressInfo', {
         uid,
         Name: realName,
         Phone: phone,
@@ -293,7 +293,7 @@ module.exports = app => {
     * favor(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 1,
         Skip: body.skip,
@@ -304,7 +304,7 @@ module.exports = app => {
     * favorPic(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 2,
         Skip: body.skip,
@@ -315,7 +315,7 @@ module.exports = app => {
     * favorPost(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFavor', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
         uid,
         ItemsType: 3,
         Skip: body.skip,

@@ -64,7 +64,7 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let privateInfo = {};
       let res = yield {
-        privateInfo: ctx.helper.postServiceJSON('api/users/GetUserAddressInfo', {
+        privateInfo: ctx.helper.postServiceJSON2('api/users/GetUserAddressInfo', {
           uid,
         }),
       };

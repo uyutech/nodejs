@@ -9,7 +9,7 @@ module.exports = app => {
     * commentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
         uid,
         PostID: body.postID,
         Skip: body.skip,
@@ -41,7 +41,7 @@ module.exports = app => {
     * likeComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/AddWorkCommentLike', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
         uid,
         CommentID: body.commentID,
       });
@@ -50,7 +50,7 @@ module.exports = app => {
     * delComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/DeleteCommentByID', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
       });
@@ -59,7 +59,7 @@ module.exports = app => {
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/GetTocomment_T_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
         Skip: body.skip,

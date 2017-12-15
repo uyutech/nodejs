@@ -15,29 +15,29 @@ module.exports = app => {
       let hotPlayList = [];
       let hotPicList = [];
       let res = yield {
-        hotWorkList: ctx.helper.postServiceJSON('api/find/Hot_works_List', {
+        hotWorkList: ctx.helper.postServiceJSON2('api/find/Hot_works_List', {
           Skip: 0,
           Take: 10,
         }),
-        hotAuthorList: ctx.helper.postServiceJSON('api/find/Hot_Author_List', {
+        hotAuthorList: ctx.helper.postServiceJSON2('api/find/Hot_Author_List', {
           Skip: 0,
           Take: 10,
         }),
-        hotMusicAlbumList: ctx.helper.postServiceJSON('api/find/Hot_album_List', {
+        hotMusicAlbumList: ctx.helper.postServiceJSON2('api/find/Hot_album_List', {
           Skip: 0,
           Take: 10,
         }),
-        hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
+        hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 6,
         }),
-        hotPlayList: ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+        hotPlayList: ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
           uid,
           Skip: 0,
           Take: 10,
         }),
-        hotPicList: ctx.helper.postServiceJSON('api/find/Hot_PicWorkItems', {
+        hotPicList: ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
           uid,
           Skip: 0,
           Take: 10,
@@ -104,7 +104,7 @@ module.exports = app => {
     }
     * hotWorkList(ctx) {
       let uid = ctx.session.uid;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_works_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_works_List', {
         uid,
         Skip: 0,
         Take: 10,
@@ -114,7 +114,7 @@ module.exports = app => {
     * hotPlayList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_WorkItems', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -124,7 +124,7 @@ module.exports = app => {
     * hotPicList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_PicWorkItems', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -144,7 +144,7 @@ module.exports = app => {
     * allAlbums(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_album_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_album_List', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -154,7 +154,7 @@ module.exports = app => {
     * allAuthors(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_Author_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_Author_List', {
         uid,
         Skip: body.skip,
         Take: body.take,

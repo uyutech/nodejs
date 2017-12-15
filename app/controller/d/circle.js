@@ -26,7 +26,7 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
-        hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
+        hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 6,

@@ -32,11 +32,13 @@ class Follow extends migi.Component {
         skip = (i - 1) * take;
         self.load();
       });
-      page2.on('page', function(i) {
-        page.index = i;
-        skip = (i - 1) * take;
-        self.load();
-      });
+      if(page2) {
+        page2.on('page', function(i) {
+          page.index = i;
+          skip = (i - 1) * take;
+          self.load();
+        });
+      }
       let hotPost = self.ref.hotPost;
       let subCmt = self.ref.subCmt;
       hotPost.on('openComment', function(postID, name, comment) {

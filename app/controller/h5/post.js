@@ -16,11 +16,11 @@ module.exports = app => {
       let postData = {};
       let replyData = {};
       let res = yield {
-        postData: ctx.helper.postServiceJSON('api/tag/GetTagPostDetailes', {
+        postData: ctx.helper.postServiceJSON2('api/circling/GetPostDetailes', {
           uid,
           PostID: postID,
         }),
-        replyData: ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
+        replyData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
           uid,
           PostID: postID,
           Skip: 0,
@@ -53,7 +53,7 @@ module.exports = app => {
     * favor(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/AddCollection', {
+      let res = yield ctx.helper.postServiceJSON2('api/circling/AddCollection', {
         uid,
         PostID: body.postID,
       });
@@ -62,7 +62,7 @@ module.exports = app => {
     * unFavor(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/RemoveCollection', {
+      let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveCollection', {
         uid,
         PostID: body.postID,
       });
@@ -80,7 +80,7 @@ module.exports = app => {
     * commentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
         uid,
         PostID: body.postID,
         Skip: body.skip,
@@ -112,7 +112,7 @@ module.exports = app => {
     * likeComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/AddWorkCommentLike', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
         uid,
         CommentID: body.commentID,
       });
@@ -121,7 +121,7 @@ module.exports = app => {
     * delComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/DeleteCommentByID', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
       });
@@ -130,7 +130,7 @@ module.exports = app => {
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/tag/GetTocomment_T_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
         Skip: body.skip,

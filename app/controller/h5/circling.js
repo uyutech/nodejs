@@ -11,12 +11,12 @@ module.exports = app => {
       let hotCircle = {};
       let postList = {};
       let res = yield {
-        hotCircle: ctx.helper.postServiceJSON('api/find/GetPost', {
+        hotCircle: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 6,
         }),
-        postList: ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+        postList: ctx.helper.postServiceJSON2('api/find/Hot_Post_List', {
           uid,
           Skip: 0,
           Take: 10,
@@ -38,7 +38,7 @@ module.exports = app => {
       let body = ctx.request.body;
       let skip = body.skip;
       let take = body.take;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_Post_List', {
         uid,
         Skip: skip,
         Take: take,

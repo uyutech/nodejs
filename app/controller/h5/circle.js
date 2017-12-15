@@ -16,11 +16,11 @@ module.exports = app => {
       let circleDetail = {};
       let postList = {};
       let res = yield {
-        circleDetail: ctx.helper.postServiceJSON('api/tag/GetTagDetails', {
+        circleDetail: ctx.helper.postServiceJSON2('api/circling/GetCirclingDetails', {
           uid,
           TagID: circleID,
         }),
-        postList: ctx.helper.postServiceJSON('api/tag/GetTagPost', {
+        postList: ctx.helper.postServiceJSON2('api/circling/GetPostList', {
           uid,
           TagID: circleID,
           Skip: 0,
@@ -44,7 +44,7 @@ module.exports = app => {
       let circleID = body.circleID;
       let skip = body.skip;
       let take = body.take;
-      let res = yield ctx.helper.postServiceJSON('api/tag/GetTagPost', {
+      let res = yield ctx.helper.postServiceJSON2('api/circling/GetPostList', {
         uid,
         TagID: circleID,
         Skip: skip,
@@ -58,14 +58,14 @@ module.exports = app => {
       let circleID = body.circleID;
       let state = body.state;
       if(state === 'true') {
-        let res = yield ctx.helper.postServiceJSON('api/tag/RemoveTagToUser', {
+        let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveUserFollowCircling', {
           uid,
           TagID: circleID,
         });
         ctx.body = res.data;
       }
       else {
-        let res = yield ctx.helper.postServiceJSON('api/tag/SaveTagToUser', {
+        let res = yield ctx.helper.postServiceJSON2('api/circling/SaveUserFollowCircling', {
           uid,
           TagID: circleID,
         });

@@ -14,22 +14,22 @@ module.exports = app => {
       let userFans = [];
       let postList = {};
       let res = yield {
-        hotCircle: ctx.helper.postServiceJSON('api/users/User_Follow_Circling', {
+        hotCircle: ctx.helper.postServiceJSON2('api/users/User_Follow_Circling', {
           uid,
           Skip: 0,
           Take: 6,
         }),
-        follows: ctx.helper.postServiceJSON('api/users/GetLikeAuthorList', {
+        follows: ctx.helper.postServiceJSON2('api/users/GetLikeAuthorList', {
           uid,
           Skip: 0,
           Take: 10,
         }),
-        userFollows: ctx.helper.postServiceJSON('api/users/User_FollowList', {
+        userFollows: ctx.helper.postServiceJSON2('api/users/User_FollowList', {
           uid,
           Skip: 0,
           Take: 10,
         }),
-        userFans: ctx.helper.postServiceJSON('api/users/User_FansList', {
+        userFans: ctx.helper.postServiceJSON2('api/users/User_FansList', {
           uid,
           Skip: 0,
           Take: 10,

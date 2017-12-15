@@ -45,11 +45,11 @@ module.exports = app => {
       let circleDetail = {};
       let hotCircleList = [];
       let res = yield {
-        circleDetail: circleID ? ctx.helper.postServiceJSON('api/tag/GetTagDetails', {
+        circleDetail: circleID ? ctx.helper.postServiceJSON2('api/circling/GetCirclingDetails', {
           uid,
           TagID: circleID,
         }) : null,
-        hotCircleList: ctx.helper.postServiceJSON('api/find/GetPost', {
+        hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 6,

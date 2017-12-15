@@ -257,7 +257,7 @@ module.exports = app => {
 
       let uid = ctx.session.uid;
       let hotCircleList = [];
-      let res = yield ctx.helper.postServiceJSON('api/find/GetPost', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
         uid,
         Skip: 0,
         Take: 6,

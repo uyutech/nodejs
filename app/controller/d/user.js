@@ -16,16 +16,16 @@ module.exports = app => {
       let userPost = {};
       let followState = uid ? 0 : 2;
       let res = yield {
-        userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
           uid: userID,
         }),
-        userPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
+        userPost: ctx.helper.postServiceJSON2('api/users/User_Post_List', {
           uid: userID,
           currentuid: uid,
           Skip: 0,
           Take: 10,
         }),
-        followState: ctx.helper.postServiceJSON('api/users/User_FollowState', {
+        followState: ctx.helper.postServiceJSON2('api/users/User_FollowState', {
           uid,
           touid: userID,
         }),

@@ -19,7 +19,7 @@ module.exports = app => {
           uid,
           CommentID: id,
         }),
-        replyData: ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
+        replyData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
           uid,
           PostID: id,
           Skip: 0,

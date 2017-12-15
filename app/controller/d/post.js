@@ -15,11 +15,11 @@ module.exports = app => {
       let postData = {};
       let replyData = {};
       let res = yield {
-        postData: ctx.helper.postServiceJSON('api/tag/GetTagPostDetailes', {
+        postData: ctx.helper.postServiceJSON2('api/circling/GetPostDetailes', {
           uid,
           PostID: id,
         }),
-        replyData: ctx.helper.postServiceJSON('api/tag/GetToPostMessage_List', {
+        replyData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
           uid,
           PostID: id,
           Skip: 0,

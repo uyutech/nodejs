@@ -17,16 +17,16 @@ module.exports = app => {
       let userPost = {};
       let followState = uid ? 0 : 2;
       let res = yield {
-        userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
           uid: userID,
         }),
-        userPost: ctx.helper.postServiceJSON('api/users/User_Post_List', {
+        userPost: ctx.helper.postServiceJSON2('api/users/User_Post_List', {
           uid: userID,
           currentUid: uid,
           Skip: 0,
           Take: 10,
         }),
-        followState: ctx.helper.postServiceJSON('api/users/User_FollowState', {
+        followState: ctx.helper.postServiceJSON2('api/users/User_FollowState', {
           uid,
           toUid: userID,
         }),
@@ -52,7 +52,7 @@ module.exports = app => {
       if(!body.userID) {
         return;
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/User_Post_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_Post_List', {
         uid: body.userID,
         Skip: body.skip,
         Take: body.take,
@@ -66,7 +66,7 @@ module.exports = app => {
       if(!body.userID) {
         return;
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/AddFollowUser', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/AddFollowUser', {
         uid,
         toUid: body.userID,
       });
@@ -78,7 +78,7 @@ module.exports = app => {
       if(!body.userID) {
         return;
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/RemoveFollowUser', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/RemoveFollowUser', {
         uid,
         toUid: body.userID,
       });

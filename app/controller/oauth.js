@@ -74,7 +74,7 @@ module.exports = app => {
           userInfo = userInfo.data;
           let name = userInfo.screen_name || userInfo.name;
           let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
-          let create = yield ctx.helper.postServiceJSON('api/users/CreateWeiboUser', {
+          let create = yield ctx.helper.postServiceJSON2('api/users/CreateWeiboUser', {
             openid: weiboUid,
             Token: access_token,
             Head_Url: head,

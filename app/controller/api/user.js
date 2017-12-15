@@ -9,31 +9,12 @@ const Spark = require('spark-md5');
 
 module.exports = app => {
   class Controller extends app.Controller {
-    * labelList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetLabelList', {
-        uid,
-        workid: body.worksID,
-      });
-      ctx.body = res.data;
-    }
-    * addLabel(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/UserAddWorkLabel', {
-        uid,
-        workid: body.worksID,
-        labelID: body.labelID || '',
-      });
-      ctx.body = res.data;
-    }
     * settle(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       // 不入驻，设置状态为10走普通用户流程
       if(body.settle === 'false') {
-        let res = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+        let res = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
           uid,
           User_Reg_Stat: 10,
         });
@@ -41,13 +22,13 @@ module.exports = app => {
       }
       // 入驻，设置状态为1，走设置马甲昵称流程
       else if(body.settle === 'true') {
-        let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
+        let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
           uid,
           AuthorID: ctx.session.authorID,
           SettledType: body.public === 'true' ? 0 : 1,
         });
         if(res.data.success) {
-          let res2 = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+          let res2 = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
             uid,
             User_Reg_Stat: 1,
           });
@@ -83,12 +64,12 @@ module.exports = app => {
             message: '昵称中可能含有违规信息，请尝试换一个哦~',
           };
         }
-        let res = yield ctx.helper.postServiceJSON('api/users/UpdateNickName', {
+        let res = yield ctx.helper.postServiceJSON2('api/users/UpdateNickName', {
           uid,
           NickName: body.nickName,
         });
         if(res.data.success) {
-          let res2 = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+          let res2 = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
             uid,
             User_Reg_Stat: 10,
           });
@@ -110,13 +91,13 @@ module.exports = app => {
     }
     * settleShadow(ctx) {
       let uid = ctx.session.uid;
-      let res = yield ctx.helper.postServiceJSON('api/users/SaveAuthorSettled', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
         uid,
         AuthorID: ctx.session.authorID,
         SettledType: 1,
       });
       if(res.data.success) {
-        let res2 = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+        let res2 = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
           uid,
           User_Reg_Stat: 10,
         });
@@ -134,7 +115,7 @@ module.exports = app => {
           Skip: 0,
           Take: 99,
         }),
-        authors: ctx.helper.postServiceJSON('api/users/GetAuthor', {
+        authors: ctx.helper.postServiceJSON2('api/users/GetAuthor', {
           uid,
           Skip: 0,
           Take: 30,
@@ -155,18 +136,18 @@ module.exports = app => {
       let authors = body.authors || [];
       // 关注接口降级
       if(tags.length) {
-        yield ctx.helper.postServiceJSON('api/users/SaveTagToUser', {
+        yield ctx.helper.postServiceJSON2('api/users/SaveTagToUser', {
           uid,
           TaglID: tags.join(',')
         });
       }
       if(authors.length) {
-        yield ctx.helper.postServiceJSON('api/users/SaveAuthorToUser', {
+        yield ctx.helper.postServiceJSON2('api/users/SaveAuthorToUser', {
           uid,
           AuthorID: authors.join(',')
         });
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/SaveUser_Reg_Stat', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
         uid,
         User_Reg_Stat: body.isAuthor ? 100 : 99,
       });
@@ -238,7 +219,7 @@ module.exports = app => {
       if(!body.userID) {
         return;
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/User_Post_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/User_Post_List', {
         uid: body.userID,
         Skip: body.skip,
         Take: body.take,
@@ -252,7 +233,7 @@ module.exports = app => {
       if(!body.userID) {
         return;
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/AddFollowUser', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/AddFollowUser', {
         uid,
         touid: body.userID,
       });
@@ -264,7 +245,7 @@ module.exports = app => {
       if(!body.userID) {
         return;
       }
-      let res = yield ctx.helper.postServiceJSON('api/users/RemoveFollowUser', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/RemoveFollowUser', {
         uid,
         touid: body.userID,
       });

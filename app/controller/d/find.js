@@ -36,7 +36,7 @@ module.exports = app => {
           Skip: 0,
           Take: 6,
         }),
-        hotPostList: ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+        hotPostList: ctx.helper.postServiceJSON2('api/find/Hot_Post_List', {
           uid,
           Skip: 0,
           Take: 30,

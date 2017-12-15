@@ -33,7 +33,7 @@ module.exports = app => {
         lastUpdateHeadTime: ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
           uid,
         }),
-        privateInfo: ctx.helper.postServiceJSON('api/users/GetUserAddressInfo', {
+        privateInfo: ctx.helper.postServiceJSON2('api/users/GetUserAddressInfo', {
           uid,
         }),
       };

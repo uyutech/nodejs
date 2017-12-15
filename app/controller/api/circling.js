@@ -9,7 +9,7 @@ module.exports = app => {
     * list(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/Hot_Post_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_Post_List', {
         uid,
         Skip: body.skip,
         Take: body.take,

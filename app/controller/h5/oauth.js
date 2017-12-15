@@ -8,7 +8,7 @@ module.exports = app => {
   class Controller extends app.Controller {
     * weibo(ctx) {
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/WeibouidToUid', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/WeibouidToUid', {
         openid: body.openID,
         Token: body.token,
       });
@@ -26,7 +26,7 @@ module.exports = app => {
         userInfo = userInfo.data;
         let name = userInfo.screen_name || userInfo.name;
         let head = userInfo.avatar_hd || userInfo.avatar_large || userInfo.profile_image_url;
-        let create = yield ctx.helper.postServiceJSON('api/users/CreateWeiboUser', {
+        let create = yield ctx.helper.postServiceJSON2('api/users/CreateWeiboUser', {
           openid: body.openID,
           Token: body.token,
           Head_Url: head,
@@ -49,16 +49,16 @@ module.exports = app => {
         let lastUpdateHeadTime;
         let prize = [];
         let res = yield {
-          userInfo: ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+          userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
             uid,
           }),
-          bonusPoint: ctx.helper.postServiceJSON('api/users/getuserrank', {
+          bonusPoint: ctx.helper.postServiceJSON2('api/users/GetUserRank', {
             uid,
           }),
-          lastUpdateNickNameTime: ctx.helper.postServiceJSON('api/users/GetUpdateNickNameLastTime', {
+          lastUpdateNickNameTime: ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
             uid,
           }),
-          lastUpdateHeadTime: ctx.helper.postServiceJSON('api/users/GetUpdateHead_UrlLastTime', {
+          lastUpdateHeadTime: ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
             uid,
           }),
           prize: ctx.helper.postServiceJSON('api/users/GetMallCartList', {

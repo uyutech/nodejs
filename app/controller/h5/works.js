@@ -17,11 +17,11 @@ module.exports = app => {
       let worksDetail = {};
       let commentData = {};
       let res = yield {
-        worksDetail: ctx.helper.postServiceJSON('api/works/GetWorkDetails', {
+        worksDetail: ctx.helper.postServiceJSON2('api/works/GetWorkDetails', {
           uid,
           WorksID: worksID,
         }),
-        commentData: ctx.helper.postServiceJSON('api/works/GetToWorkMessage_List', {
+        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToWorkMessage_List', {
           uid,
           WorkID: worksID,
           WorksID: worksID,
@@ -54,7 +54,7 @@ module.exports = app => {
     * commentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/GetToWorkMessage_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToWorkMessage_List', {
         uid,
         WorksID: body.worksID,
         WorkID: body.worksID,
@@ -89,7 +89,7 @@ module.exports = app => {
     * likeComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/AddWorkCommentLike', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
         uid,
         CommentID: body.commentID,
       });
@@ -98,7 +98,7 @@ module.exports = app => {
     * delComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/DeleteCommentByID', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
       });
@@ -107,7 +107,7 @@ module.exports = app => {
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/GetTocomment_T_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
         Skip: body.skip,
@@ -118,7 +118,7 @@ module.exports = app => {
     * likeWork(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/AddLikeBehavior', {
+      let res = yield ctx.helper.postServiceJSON2('api/works/AddLikeBehavior', {
         uid,
         WorkItemsID: body.workID,
       });
@@ -127,7 +127,7 @@ module.exports = app => {
     * favorWork(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/AddCollection', {
+      let res = yield ctx.helper.postServiceJSON2('api/works/AddCollection', {
         uid,
         WorkItemsID: body.workID,
       });
@@ -136,7 +136,7 @@ module.exports = app => {
     * unFavorWork(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/works/RemoveCollection', {
+      let res = yield ctx.helper.postServiceJSON2('api/works/RemoveCollection', {
         uid,
         WorkItemsID: body.workID,
       });

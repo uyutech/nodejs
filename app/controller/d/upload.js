@@ -11,7 +11,7 @@ module.exports = app => {
       let a = yield app.redis.get('a');
       if(ctx.session.uid) {
         // let uid = ctx.session.uid;
-        // let res = yield ctx.helper.postServiceJSON('api/users/GetUserInfo', {
+        // let res = yield ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
         //   uid,
         // });
         // let userInfo = res.data.data || {};

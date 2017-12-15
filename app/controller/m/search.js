@@ -10,7 +10,7 @@ module.exports = app => {
       let kw = ctx.params.kw;
       let datas = {};
       let res = yield {
-        datas: ctx.curl(ctx.helper.postServiceJSON('api/search/Homesearch'), {
+        datas: ctx.curl(ctx.helper.postServiceJSON2('api/search/Homesearch'), {
           Parameter: kw,
         }),
       };

@@ -77,7 +77,7 @@ module.exports = app => {
       let circleID = body.circleID;
       let skip = body.skip;
       let take = body.take;
-      let res = yield ctx.helper.postServiceJSON('api/tag/GetTagPost', {
+      let res = yield ctx.helper.postServiceJSON2('api/circling/GetPostList', {
         uid,
         TagID: circleID,
         Skip: skip,
