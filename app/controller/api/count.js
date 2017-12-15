@@ -9,7 +9,7 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let ip = ctx.request.header['x-real-ip'];
-      yield ctx.helper.postServiceJSON('api/users/PostRecordUserIP', {
+      yield ctx.helper.postServiceJSON2('api/users/PostRecordUserIP', {
         uid,
         ip,
       });

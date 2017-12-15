@@ -42,7 +42,7 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
-        count: ctx.helper.postServiceJSON('api/users/PostRecordUserIP', {
+        count: ctx.helper.postServiceJSON2('api/users/PostRecordUserIP', {
           uid,
           ip: ctx.request.header['x-real-ip'],
         }),
@@ -134,7 +134,7 @@ module.exports = app => {
     * allWorks(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/GetAllWorks_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/GetAllWorks_List', {
         uid,
         Skip: body.skip,
         Take: body.take,
@@ -164,7 +164,7 @@ module.exports = app => {
     * allCircles(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/find/GetAllCircling', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/GetAllCircling', {
         uid,
         Skip: body.skip,
         Take: body.take,

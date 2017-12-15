@@ -28,7 +28,7 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
-        postList: ctx.helper.postServiceJSON('api/users/GetUserFollowUserCircling', {
+        postList: ctx.helper.postServiceJSON2('api/users/GetUserFollowUserCircling', {
           uid,
           Skip: 0,
           Take: 10,
@@ -56,7 +56,7 @@ module.exports = app => {
     * postList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/GetUserFollowUserCircling', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFollowUserCircling', {
         uid,
         Skip: body.skip,
         Take: body.take,
