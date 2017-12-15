@@ -10,7 +10,7 @@ module.exports = app => {
       ctx.body = {
         success: true,
         version: 13,
-        url: 'http://circling.net.cn/h5/h5-0.2.3.zip',
+        url: 'http://circling.net.cn/h5/h5-0.2.4.zip',
       };
     }
   }
