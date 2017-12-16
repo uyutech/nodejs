@@ -157,7 +157,6 @@ class WorkComment extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    this.ref.comment.clearData();
     this.load();
   }
   switchType2(e, vd, tvd) {
@@ -173,7 +172,6 @@ class WorkComment extends migi.Component {
       if(ajax) {
         ajax.abort();
       }
-      this.ref.comment.clearData();
       this.load();
     }
   }

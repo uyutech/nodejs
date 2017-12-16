@@ -100,6 +100,7 @@ class WorkComment extends migi.Component {
     loadEnd = false;
     loading = false;
     this.ref.comment.clearData();
+    this.ref.comment.empty = false;
     this.load();
   }
   switchType2(e, vd, tvd) {
@@ -118,6 +119,7 @@ class WorkComment extends migi.Component {
       loadEnd = false;
       loading = false;
       this.ref.comment.clearData();
+      this.ref.comment.empty = false;
       this.load();
     }
   }
