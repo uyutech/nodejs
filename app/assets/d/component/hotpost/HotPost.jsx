@@ -117,7 +117,7 @@ class HotPost extends migi.Component {
           net.postJSON('/api/post/like', { postID }, function(res) {
             if(res.success) {
               let data = res.data;
-              if(data.ISLike) {
+              if(data.State === 'likeWordsUser') {
                 $li.addClass('has');
               }
               else {
