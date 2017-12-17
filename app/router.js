@@ -83,6 +83,7 @@ module.exports = app => {
   app.post('/api/my/favorPic', app.middlewares.needLoginJson(), 'api.my.favorPic');
   app.post('/api/my/favorPost', app.middlewares.needLoginJson(), 'api.my.favorPost');
   app.post('/api/my/sendPrize', app.middlewares.needLoginJson(), 'api.my.sendPrize');
+  app.post('/api/my/cancelPrize', app.middlewares.needLoginJson(), 'api.my.cancelPrize');
 
   app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');
@@ -169,6 +170,7 @@ module.exports = app => {
   app.post('/h5/my/private', app.middlewares.needLoginJson(), 'h5.my.private');
   app.post('/h5/my/updatePrivate', app.middlewares.needLoginJson(), 'h5.my.updatePrivate');
   app.post('/h5/my/sendPrize', app.middlewares.needLoginJson(), 'h5.my.sendPrize');
+  app.post('/h5/my/cancelPrize', app.middlewares.needLoginJson(), 'h5.my.cancelPrize');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');

@@ -7,6 +7,7 @@
 module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
+      // yield ctx.service.mt.analysis();
       let uid = ctx.session.uid;
       let hotWorkList = [];
       let hotAuthorList = [];
