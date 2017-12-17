@@ -75,7 +75,7 @@ module.exports = app => {
     * post(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let circleID = body.circleID;
+      let circleID = body.circleID || '2019000000000000';
       let ids = circleID.split(',');
       if(ids.length > 3) {
         return ctx.body = {
