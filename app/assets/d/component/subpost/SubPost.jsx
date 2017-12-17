@@ -178,7 +178,7 @@ class SubPost extends migi.Component {
       $(self.ref.label.element).find('.cur,.on').each(function(i, li) {
         circleID.push($(li).attr('rel'));
       });
-      net.postJSON('/api/circle/add', {
+      net.postJSON('/api/circle/post', {
         content: self.value,
         imgs,
         widths,

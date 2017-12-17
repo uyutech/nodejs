@@ -106,7 +106,7 @@ module.exports = app => {
   app.post('/api/author/maList', 'api.author.maList');
 
   app.post('/api/circle/join', app.middlewares.needLoginJson(), 'api.circle.join');
-  app.post('/api/circle/add', app.middlewares.needLoginJson(), 'api.circle.add');
+  app.post('/api/circle/post', app.middlewares.needLoginJson(), 'api.circle.post');
   app.post('/api/circle/list', 'api.circle.list');
 
   app.post('/api/post/commentList', 'api.post.commentList');

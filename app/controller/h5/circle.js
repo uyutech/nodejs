@@ -75,7 +75,7 @@ module.exports = app => {
     * post(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let circleID = body.circleID || '0';
+      let circleID = body.circleID;
       let ids = circleID.split(',');
       if(ids.length > 3) {
         return ctx.body = {
@@ -98,11 +98,11 @@ module.exports = app => {
           success: false,
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/tag/AddPost', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPost', {
         uid,
-        circlingID: circleID,
-        Content: content,
-        Title: '',
+        CirclingIDList: circleID,
+        SendContent: content,
+        RootID: -3,
         ImageList: imgs
           ? JSON.stringify(imgs.map(function(item, i) {
             return {
