@@ -8,7 +8,7 @@ module.exports = () => {
   return function* (next) {
     let uid = this.session.uid;
     if(uid) {
-      let message = yield this.helper.postServiceJSON('api/users/GetUserNotify', {
+      let message = yield this.helper.postServiceJSON2('api/users/GetUserNotify', {
         uid,
         Skip: 0,
         Take: 1,
