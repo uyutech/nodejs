@@ -171,6 +171,7 @@ module.exports = app => {
   app.post('/h5/my/private', app.middlewares.needLoginJson(), 'h5.my.private');
   app.post('/h5/my/updatePrivate', app.middlewares.needLoginJson(), 'h5.my.updatePrivate');
   app.post('/h5/my/sendPrize', app.middlewares.needLoginJson(), 'h5.my.sendPrize');
+  app.post('/h5/my/cancelPrize', app.middlewares.needLoginJson(), 'h5.my.cancelPrize');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');

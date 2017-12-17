@@ -550,6 +550,15 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * cancelPrize(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON('api/users/DelOrder', {
+        uid,
+        cartID: body.cartID,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };
