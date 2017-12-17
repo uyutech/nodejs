@@ -33,32 +33,35 @@ module.exports = app => {
       let res;
       switch(type) {
         case TYPE.POST:
-          res = yield ctx.helper.postServiceJSON('api/tag/AddComment', {
+          if(rid === -1) {
+            rid = cid = id;
+          }
+          res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddComment', {
             uid,
             ParentID: cid,
             RootID: rid,
-            Content: content,
+            SendContent: content,
             PostID: id,
           });
           ctx.body = res.data;
           break;
         case TYPE.AUTHOR:
-          res = yield ctx.helper.postServiceJSON('api/author/AddComment', {
+          res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddAuthorComment', {
             uid,
             ParentID: cid,
             RootID: rid,
-            Content: content,
-            AuthorCommentID: id,
+            SendContent: content,
+            AuthorID: id,
           });
           ctx.body = res.data;
           break;
         case TYPE.WORKS:
-          res = yield ctx.helper.postServiceJSON('api/works/AddComment', {
+          res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddWorksComment', {
             uid,
             ParentID: cid,
             RootID: rid,
-            Content: content,
-            WorkID: id,
+            SendContent: content,
+            WorksID: id,
             subWorkID: body.sid,
             BarrageTime: body.barrageTime,
           });

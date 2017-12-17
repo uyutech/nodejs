@@ -47,12 +47,12 @@ module.exports = app => {
           success: false,
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/author/AddComment', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddAuthorComment', {
         uid,
         ParentID: body.parentID,
         RootID: body.rootID,
-        Content: content,
-        AuthorCommentID: body.authorID,
+        SendContent: content,
+        AuthorID: body.authorID,
       });
       ctx.body = res.data;
     }

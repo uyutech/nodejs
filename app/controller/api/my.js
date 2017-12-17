@@ -335,7 +335,7 @@ module.exports = app => {
     * cancelPrize(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON('api/users/DelOrder', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/DelOrder', {
         uid,
         cartID: body.cartID,
       });

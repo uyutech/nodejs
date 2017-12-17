@@ -100,11 +100,11 @@ module.exports = app => {
           success: false,
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/tag/AddComment', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddComment', {
         uid,
         ParentID: body.parentID,
         RootID: body.rootID,
-        Content: content,
+        SendContent: content,
         PostID: body.postID,
       });
       ctx.body = res.data;

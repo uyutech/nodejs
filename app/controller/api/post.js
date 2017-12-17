@@ -29,11 +29,16 @@ module.exports = app => {
           success: false,
         };
       }
-      let res = yield ctx.helper.postServiceJSON('api/tag/AddComment', {
+      let rootID = body.rootID;
+      let parentID = body.parentID;
+      if(rootID === undefined || rootID === '' || rootID === '-1') {
+        parentID = rootID = body.postID;
+      }
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddComment', {
         uid,
-        ParentID: body.parentID,
-        RootID: body.rootID,
-        Content: content,
+        ParentID: parentID,
+        RootID: rootID,
+        SendContent: content,
         PostID: body.postID,
       });
       ctx.body = res.data;
