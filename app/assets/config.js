@@ -137,6 +137,10 @@ let activityLabel = {
         {
           key: 'Day 16',
           value: '#每日练字打卡# #31天画圈挑战# Day 16 #我喜欢的一篇古文#'
+        },
+        {
+          key: 'Day 17',
+          value: '#每日练字打卡# #31天画圈挑战# Day 17 #我的博物馆书画展之旅#'
         }
       ]
     },
@@ -222,6 +226,10 @@ let activityLabel = {
         {
           key: 'Day 16',
           value: '#每日荐歌# #31天画圈挑战# Day16 #如果去KTV，我想和TA一起唱#'
+        },
+        {
+          key: 'Day 17',
+          value: '#每日荐歌# #31天画圈挑战# Day17 #秒点红心的歌#'
         }
       ]
     },
