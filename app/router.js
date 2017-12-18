@@ -218,4 +218,6 @@ module.exports = app => {
   app.post('/h5/user/unFollow', app.middlewares.needLoginJson(), 'h5.user.unFollow');
 
   app.post('/h5/comment/sub', app.middlewares.needLoginJson(), 'h5.comment.sub');
+
+  app.post('/mns/mts/job', 'mns.mts.job');
 };

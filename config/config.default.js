@@ -98,7 +98,15 @@ module.exports = appInfo => {
 
   config.security = {
     csrf: {
-      ignore: '/h5',
+      ignore: function(ctx) {
+        if(ctx.request.path.startsWith('/h5')) {
+          return true;
+        }
+        if(ctx.request.path.startsWith('/mns')) {
+          return true;
+        }
+        return false;
+      },
     },
   };
 
