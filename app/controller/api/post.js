@@ -29,15 +29,15 @@ module.exports = app => {
           success: false,
         };
       }
-      let rootID = body.rootID;
-      let parentID = body.parentID;
-      if(rootID === undefined || rootID === '' || rootID === '-1') {
-        parentID = rootID = body.postID;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddComment', {
+      // let rootID = body.rootID;
+      // let parentID = body.parentID;
+      // if(rootID === undefined || rootID === '' || rootID === '-1') {
+      //   parentID = rootID = body.postID;
+      // }
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPostComment', {
         uid,
-        ParentID: parentID,
-        RootID: rootID,
+        ParentID: body.parentID,
+        RootID: body.rootID,
         SendContent: content,
         PostID: body.postID,
       });

@@ -33,10 +33,10 @@ module.exports = app => {
       let res;
       switch(type) {
         case TYPE.POST:
-          if(rid === -1) {
-            rid = cid = id;
-          }
-          res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddComment', {
+          // if(rid === -1) {
+          //   rid = cid = id;
+          // }
+          res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPostComment', {
             uid,
             ParentID: cid,
             RootID: rid,
