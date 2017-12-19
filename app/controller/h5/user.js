@@ -38,7 +38,7 @@ module.exports = app => {
         userPost = res.userPost.data.data;
       }
       if(uid && uid.toString() !== userID && res.followState.data.success) {
-        followState = res.followState.data.data;
+        followState = res.followState.data.data.FollowState;
       }
       ctx.body = ctx.helper.okJSON({
         userInfo,

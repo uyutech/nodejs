@@ -339,7 +339,7 @@ class Post extends migi.Component {
           }
           <ul class="btn">
             <li class="share" onClick={ this.clickShare }><b/><span>分享</span></li>
-            <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }><b/><span>{ this.favorCount || '分享' }</span></li>
+            <li class={ 'favor' + (this.isFavor ? ' has' : '') } onClick={ this.clickFavor }><b/><span>{ this.favorCount || '收藏' }</span></li>
             <li class={ 'like' + (this.isLike ? ' has' : '') } onClick={ this.clickLike }><b/><span>{ this.likeCount || '点赞' }</span></li>
             <li class="comment"><b/><span>{ postData.CommentCount || '评论' }</span></li>
           </ul>
