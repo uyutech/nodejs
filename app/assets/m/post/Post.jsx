@@ -201,7 +201,7 @@ class Post extends migi.Component {
     net.postJSON('/api/post/like', { postID }, function(res) {
       if(res.success) {
         let data = res.data;
-        self.isLike = self.ref.imageView.isLike = data.ISLike;
+        self.isLike = self.ref.imageView.isLike = data.State === 'likeWordsUser';
         self.likeCount = data.LikeCount || '点赞';
       }
       else {
