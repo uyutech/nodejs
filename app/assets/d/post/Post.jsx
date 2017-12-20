@@ -290,7 +290,7 @@ class Post extends migi.Component {
   render() {
     let postData = this.props.postData;
     let html = (postData.Content || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/#(\S.*?)#/g, `<strong>#$1#</strong>`)
+      .replace(/#([^#\n]+?)#/g, `<strong>#$1#</strong>`)
       .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
     return <div class="post fn-clear">
       <div class="main">
