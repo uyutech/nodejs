@@ -46,6 +46,10 @@ module.exports = app => {
   app.get('/m/circling', 'm.circling.index');
   app.get('/m/follow', app.middlewares.needLogin(), 'm.follow.index');
   app.get('/m/subComment', app.middlewares.needLogin(), 'm.subComment.index');
+  app.get('/m/mall', 'm.mall.index');
+  app.get('/m/mall/new', 'm.mall.new');
+  app.get('/m/mall/wait', 'm.mall.wait');
+  app.get('/m/mall/history', 'm.mall.history');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 
@@ -218,6 +222,10 @@ module.exports = app => {
   app.post('/h5/user/unFollow', app.middlewares.needLoginJson(), 'h5.user.unFollow');
 
   app.post('/h5/comment/sub', app.middlewares.needLoginJson(), 'h5.comment.sub');
+
+  app.post('/h5/mall', 'h5.mall.index');
+  app.post('/h5/mall/new', 'h5.mall.new');
+  app.post('/h5/mall/wait', 'h5.mall.wait');
 
   app.post('/mns/mts/job', 'mns.mts.job');
 };

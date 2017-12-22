@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?175';
+    return '/public' + url + '?176';
   },
   okJSON(data) {
     return {
@@ -189,16 +189,7 @@ let helper = {
     return `<div class="cp-botnav">All Rights Reserved 转圈circling 浙ICP备17029501号-2</div>`;
   },
   getStat() {
-    return '<div style="display:none">' +
-      '<script>var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id=\'cnzz_stat_icon_1265566429\'%3E%3C/span%3E%3Cscript src=\'" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1265566429\' type=\'text/javascript\'%3E%3C/script%3E"));\n' +
-      'var _hmt = _hmt || [];\n' +
-      '(function() {\n' +
-      '  var hm = document.createElement("script");\n' +
-      '  hm.src = "https://hm.baidu.com/hm.js?6078345f51179032abb21c56b72d9f5c";\n' +
-      '  var s = document.getElementsByTagName("script")[0]; \n' +
-      '  s.parentNode.insertBefore(hm, s);\n' +
-      '})();\n' +
-      '</script></div>';
+    return '<div style="display:none"><script defer="defer">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id=\'cnzz_stat_icon_1265566429\'%3E%3C/span%3E%3Cscript src=\'" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1265566429\' type=\'text/javascript\'%3E%3C/script%3E"))</script></div>';
   },
   stringify: function(data) {
     if(data === undefined) {

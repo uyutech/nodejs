@@ -8,7 +8,6 @@ import My from '../../assets/m/my/My.jsx';
 
 export default function(data) {
   let userInfo = data.userInfo;
-  let bonusPoint = data.bonusPoint;
   let now = Date.now();
   let lastUpdateNickNameTime = data.lastUpdateNickNameTime;
   if(lastUpdateNickNameTime) {
@@ -26,14 +25,12 @@ export default function(data) {
     lastUpdateHeadTime = 0;
   }
   let updateHeadTimeDiff = now - lastUpdateHeadTime;
-  let privateInfo = data.privateInfo;
-  let prize = data.prize;
+  let coins = data.coins;
 
-  let my = migi.preRender(<My userInfo={ userInfo } bonusPoint={ bonusPoint }
+  let my = migi.preRender(<My userInfo={ userInfo }
                               updateNickNameTimeDiff={ updateNickNameTimeDiff }
                               updateHeadTimeDiff={ updateHeadTimeDiff }
-                              privateInfo={ privateInfo }
-                              prize={ prize }/>);
+                              coins={ coins }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -49,12 +46,9 @@ ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.userInfo = ${data.helper.stringify(userInfo)};
-  $CONFIG.follows = ${data.helper.stringify(data.follows)};
-  $CONFIG.bonusPoint = ${data.helper.stringify(bonusPoint)};
   $CONFIG.updateNickNameTimeDiff = ${data.helper.stringify(updateNickNameTimeDiff)};
   $CONFIG.updateHeadTimeDiff = ${data.helper.stringify(updateHeadTimeDiff)};
-  $CONFIG.privateInfo = ${data.helper.stringify(privateInfo)};
-  $CONFIG.prize = ${data.helper.stringify(prize)};
+  $CONFIG.coins = ${data.helper.stringify(coins)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/mmy.js')}" defer="defer"></script>

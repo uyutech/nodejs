@@ -18,7 +18,7 @@ module.exports = app => {
       let res = yield {
         postData: ctx.helper.postServiceJSON2('api/circling/GetPostDetailes', {
           uid,
-          PostID: postID,
+          CommentID: postID,
         }),
         replyData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
           uid,
@@ -55,7 +55,7 @@ module.exports = app => {
       let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON2('api/circling/AddCollection', {
         uid,
-        PostID: body.postID,
+        CommentID: body.postID,
       });
       ctx.body = res.data;
     }
@@ -64,7 +64,7 @@ module.exports = app => {
       let body = ctx.request.body;
       let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveCollection', {
         uid,
-        PostID: body.postID,
+        CommentID: body.postID,
       });
       ctx.body = res.data;
     }
@@ -100,7 +100,7 @@ module.exports = app => {
           success: false,
         };
       }
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddComment', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPostComment', {
         uid,
         ParentID: body.parentID,
         RootID: body.rootID,

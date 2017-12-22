@@ -9,15 +9,11 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let userInfo = {};
-      let bonusPoint = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
-      let prize = [];
+      let coins = {};
       let res = yield {
         userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
-          uid,
-        }),
-        bonusPoint: ctx.helper.postServiceJSON2('api/users/GetUserRank', {
           uid,
         }),
         lastUpdateNickNameTime: ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
@@ -26,15 +22,12 @@ module.exports = app => {
         lastUpdateHeadTime: ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
           uid,
         }),
-        prize: ctx.helper.postServiceJSON2('api/users/GetMallCartList', {
+        coins: ctx.helper.postServiceJSON2('api/users/GetUserCirclingCoins', {
           uid,
         }),
       };
       if(res.userInfo.data.success) {
         userInfo = res.userInfo.data.data;
-      }
-      if(res.bonusPoint.data.success) {
-        bonusPoint = res.bonusPoint.data.data || {};
       }
       if(res.lastUpdateNickNameTime.data.success) {
         lastUpdateNickNameTime = res.lastUpdateNickNameTime.data.data;
@@ -42,8 +35,8 @@ module.exports = app => {
       if(res.lastUpdateHeadTime.data.success) {
         lastUpdateHeadTime = res.lastUpdateHeadTime.data.data;
       }
-      if(res.prize.data.success) {
-        prize = res.prize.data.data;
+      if(res.coins.data.success) {
+        coins = res.coins.data.data;
       }
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
@@ -54,10 +47,9 @@ module.exports = app => {
       }
       yield ctx.render('mmy', {
         userInfo,
-        bonusPoint,
         lastUpdateNickNameTime,
         lastUpdateHeadTime,
-        prize,
+        coins,
       });
     }
     * private(ctx) {

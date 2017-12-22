@@ -47,7 +47,7 @@ module.exports = app => {
         let bonusPoint = {};
         let lastUpdateNickNameTime;
         let lastUpdateHeadTime;
-        let prize = [];
+        let coins = {};
         let res = yield {
           userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
             uid,
@@ -61,7 +61,7 @@ module.exports = app => {
           lastUpdateHeadTime: ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
             uid,
           }),
-          prize: ctx.helper.postServiceJSON2('api/users/GetMallCartList', {
+          coins: ctx.helper.postServiceJSON2('api/users/GetUserCirclingCoins', {
             uid,
           }),
         };
@@ -77,8 +77,8 @@ module.exports = app => {
         if(res.lastUpdateHeadTime.data.success) {
           lastUpdateHeadTime = res.lastUpdateHeadTime.data.data;
         }
-        if(res.prize.data.success) {
-          prize = res.prize.data.data;
+        if(res.coins.data.success) {
+          coins = res.coins.data.data;
         }
         ctx.session.uname = userInfo.NickName;
         ctx.session.head = userInfo.Head_Url;
@@ -93,7 +93,7 @@ module.exports = app => {
           bonusPoint,
           lastUpdateNickNameTime,
           lastUpdateHeadTime,
-          prize,
+          coins,
         });
       }
       ctx.body = ctx.helper.errorJSON(data || {});

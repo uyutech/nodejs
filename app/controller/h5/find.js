@@ -67,7 +67,7 @@ module.exports = app => {
       }
       let banner = [
         {
-          url: '/post.html?postID=2020000000030405',
+          url: '/post.html?postID=40119',
           pic: '//zhuanquan.xyz/pic/f3e188709eaccc78f6737f9fcf6992e9.png-750_',
           title: '画圈正文',
         },

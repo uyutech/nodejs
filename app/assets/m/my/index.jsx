@@ -8,8 +8,7 @@ import './index.less';
 
 import My from './My.jsx';
 
-let my = migi.preExist(<My userInfo={ $CONFIG.userInfo } bonusPoint={ $CONFIG.bonusPoint }
+let my = migi.preExist(<My userInfo={ $CONFIG.userInfo }
                            updateNickNameTimeDiff={ $CONFIG.updateNickNameTimeDiff }
                            updateHeadTimeDiff={ $CONFIG.updateHeadTimeDiff }
-                           privateInfo={ $CONFIG.privateInfo }
-                           prize={ $CONFIG.prize }/>);
+                           coins={ $CONFIG.coins }/>);

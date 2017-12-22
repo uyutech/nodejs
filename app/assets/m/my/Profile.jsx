@@ -170,7 +170,6 @@ class Profile extends migi.Component {
           <input ref="input2" type="text" class="input2 fn-hide" value="" maxlength="16" placeholder="请输入签名"/>
           <b class="edit edit2" ref="edit2" onClick={ this.click2 }/>
           <button class="fn-hide" ref="ok2" onClick={ this.clickOk2 }>确定</button>
-          <div class="private"><a href="/my/private">编辑收货地址</a><small>(圈儿会为你保密哦)</small></div>
         </div>
       </div>
     </div>;

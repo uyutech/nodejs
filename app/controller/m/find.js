@@ -56,7 +56,7 @@ module.exports = app => {
       }
       let banner = [
         {
-          url: '/post/2020000000030405',
+          url: '/post/40119',
           pic: '//zhuanquan.xyz/pic/f3e188709eaccc78f6737f9fcf6992e9.png-750_'
         },
         {
