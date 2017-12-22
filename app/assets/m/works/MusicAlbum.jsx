@@ -101,7 +101,7 @@ class MusicAlbum extends migi.Component {
           self.audio.appendTo(self.ref.c.element);
         }
         else {
-          self.audio.element.src = self.url;
+          self.audio.element.src = self.url || '';
         }
         self.av = self.audio;
         break;
@@ -123,7 +123,7 @@ class MusicAlbum extends migi.Component {
           self.video.appendTo(self.ref.c.element);
         }
         else {
-          self.video.element.src = self.url;
+          self.video.element.src = self.url || '';
         }
         self.av = self.video;
         break;
