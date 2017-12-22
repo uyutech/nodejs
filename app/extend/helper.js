@@ -69,6 +69,16 @@ let helper = {
       temp = 2018000000000000 + temp;
       data.uid = temp.toString().slice(0, 16);
     }
+    if(data && data.currentuid && data.currentuid.toString().length !== 16) {
+      let temp = parseInt(data.currentuid);
+      temp = 2018000000000000 + temp;
+      data.currentuid = temp.toString().slice(0, 16);
+    }
+    if(data && data.CurrentUid && data.CurrentUid.toString().length !== 16) {
+      let temp = parseInt(data.CurrentUid);
+      temp = 2018000000000000 + temp;
+      data.CurrentUid = temp.toString().slice(0, 16);
+    }
     try {
       res = yield this.ctx.curl(url, {
         method: 'POST',

@@ -109,7 +109,7 @@ module.exports = app => {
     * likeComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddWorkCommentLike', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
         uid,
         CommentID: body.commentID,
       });
