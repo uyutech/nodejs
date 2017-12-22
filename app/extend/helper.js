@@ -37,6 +37,33 @@ let helper = {
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
     let res;
+    try {
+      res = yield this.ctx.curl(url, {
+        method: 'POST',
+        data,
+        dataType: 'json',
+        gzip: true,
+      });
+    }
+    catch(e) {
+      let end = Date.now();
+      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+      throw new Error(e);
+    }
+    let end = Date.now();
+    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+    return res;
+  },
+  * postServiceJSON2(url, data) {
+    if(url.indexOf('//') === -1) {
+      url = 'http://172.19.118.93/' + url.replace(/^\//, '');
+    }
+    url += url.indexOf('?') > -1 ? '&' : '?';
+    url += 'traceID=' + this.ctx.traceID || '';
+    let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
+    let ip = this.ctx.request.header['x-real-ip'];
+    let start = Date.now();
+    let res;
     if(data && data.uid && data.uid.length !== 16) {
       let temp = data.uid;
       temp = 2018000000000000 + temp;
