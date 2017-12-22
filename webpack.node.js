@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 module.exports = {
   entry: {
     mfind: './app/view/m/find.jsx',
@@ -57,4 +59,11 @@ module.exports = {
       }
     ]
   },
+  // plugins: [
+  //   new webpack.BannerPlugin({
+  //     banner: 'var migi=global.migi.clone();',
+  //     raw: true,
+  //     entryOnly: true,
+  //   })
+  // ],
 };
