@@ -181,6 +181,7 @@ class Audio extends migi.Component {
       this.audio.element.play();
       this.isPlaying = true;
       this.hasStart = true;
+      net.postJSON('/api/works/addPlayCount', { workID: this.datas[this.index || 0].ItemID });
     }
     return this;
   }

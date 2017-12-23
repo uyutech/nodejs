@@ -138,7 +138,7 @@ module.exports = app => {
     * subCommentList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2z('api/Users_Comment/GetTocomment_T_List', {
+      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetTocomment_T_List', {
         uid,
         RootID: body.rootID,
         Skip: body.skip,

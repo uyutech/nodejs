@@ -99,6 +99,7 @@ module.exports = app => {
   app.post('/api/works/subCommentList', 'api.works.subCommentList');
   app.post('/api/works/delComment', app.middlewares.needLoginJson(), 'api.works.delComment');
   app.post('/api/works/photoList', 'api.works.photoList');
+  app.post('/api/works/addPlayCount', 'api.works.addPlayCount');
 
   app.post('/api/author/commentList', 'api.author.commentList');
   app.post('/api/author/follow', app.middlewares.needLoginJson(), 'api.author.follow');
@@ -182,10 +183,11 @@ module.exports = app => {
   app.post('/h5/works/likeWork', 'h5.works.likeWork');
   app.post('/h5/works/favorWork', 'h5.works.favorWork');
   app.post('/h5/works/unFavorWork', 'h5.works.unFavorWork');
-  app.post('/h5/works/likeComment', app.middlewares.needLoginJson(), 'api.works.likeComment');
-  app.post('/h5/works/subCommentList', 'api.works.subCommentList');
-  app.post('/h5/works/delComment', app.middlewares.needLoginJson(), 'api.works.delComment');
-  app.post('/h5/works/photoList', 'api.works.photoList');
+  app.post('/h5/works/likeComment', app.middlewares.needLoginJson(), 'h5.works.likeComment');
+  app.post('/h5/works/subCommentList', 'h5.works.subCommentList');
+  app.post('/h5/works/delComment', app.middlewares.needLoginJson(), 'h5.works.delComment');
+  app.post('/h5/works/photoList', 'h5.works.photoList');
+  app.post('/h5/works/addPlayCount', 'h5.works.addPlayCount');
 
   app.post('/h5/circle/index', 'h5.circle.index');
   app.post('/h5/circle/postList', 'h5.circle.postList');
@@ -200,8 +202,8 @@ module.exports = app => {
   app.post('/h5/author/follow', app.middlewares.needLoginJson(), 'h5.author.follow');
   app.post('/h5/author/unFollow', app.middlewares.needLoginJson(), 'h5.author.unFollow');
   app.post('/h5/author/commentList', 'h5.author.commentList');
-  app.post('/h5/author/maList', 'api.author.maList');
-  app.post('/h5/author/picList', 'api.author.picList');
+  app.post('/h5/author/maList', 'h5.author.maList');
+  app.post('/h5/author/picList', 'h5.author.picList');
 
   app.post('/h5/works/addComment', app.middlewares.needLoginJson(), 'h5.works.addComment');
 

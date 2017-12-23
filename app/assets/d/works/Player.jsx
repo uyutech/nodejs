@@ -210,6 +210,7 @@ class Player extends migi.Component {
       this.isPlaying = true;
       this.hasStart = true;
       migi.eventBus.emit('play');
+      net.postJSON('/api/works/addPlayCount', { workID: this.workID });
     }
     return this;
   }

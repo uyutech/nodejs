@@ -146,6 +146,7 @@ class Video extends migi.Component {
     if(this.datas[this.index || 0].FileUrl) {
       this.video.element.play();
       this.isPlaying = true;
+      net.postJSON('/api/works/addPlayCount', { workID: this.datas[this.index || 0].ItemID });
     }
     return this;
   }

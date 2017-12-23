@@ -155,6 +155,15 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * addPlayCount(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/Works/AddPlayCount', {
+        uid,
+        WorkItemsID: body.workID,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };
