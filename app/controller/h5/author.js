@@ -18,6 +18,7 @@ module.exports = app => {
       let album = {};
       let commentData = {};
       let hotPlayList = {};
+      let hotPicList = {};
       let res = yield {
         authorDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorDetails', {
           uid,
@@ -46,6 +47,12 @@ module.exports = app => {
           Take: 30,
           AuthorID: authorID,
         }),
+        hotPicList: ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
+          uid,
+          Skip: 0,
+          Take: 10,
+          AuthorID: authorID,
+        }),
       };
       if(res.authorDetail.data.success) {
         authorDetail = res.authorDetail.data.data;
@@ -62,12 +69,16 @@ module.exports = app => {
       if(res.hotPlayList.data.success) {
         hotPlayList = res.hotPlayList.data.data;
       }
+      if(res.hotPicList.data.success) {
+        hotPicList = res.hotPicList.data.data;
+      }
       ctx.body = ctx.helper.okJSON({
         authorDetail,
         homeDetail,
         album,
         commentData,
         hotPlayList,
+        hotPicList,
       });
     }
     * follow(ctx) {
@@ -146,6 +157,28 @@ module.exports = app => {
         SortType: body.sortType,
         MyComment: body.myComment,
         CurrentCount: body.currentCount,
+      });
+      ctx.body = res.data;
+    }
+    * maList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
+        uid,
+        AuthorID: body.authorID,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * picList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
+        uid,
+        AuthorID: body.authorID,
+        Skip: body.skip,
+        Take: body.take,
       });
       ctx.body = res.data;
     }

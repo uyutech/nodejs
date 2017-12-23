@@ -22,6 +22,7 @@ module.exports = app => {
       let commentData = {};
       let hotCommentData = [];
       let hotPlayList = {};
+      let hotPicList = {};
       let res = yield {
         authorDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorDetails', {
           uid,
@@ -50,6 +51,12 @@ module.exports = app => {
           Take: 30,
           AuthorID: authorID,
         }),
+        hotPicList: ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
+          uid,
+          Skip: 0,
+          Take: 10,
+          AuthorID: authorID,
+        }),
       };
       if(res.authorDetail.data.success) {
         authorDetail = res.authorDetail.data.data;
@@ -66,6 +73,9 @@ module.exports = app => {
       if(res.hotPlayList.data.success) {
         hotPlayList = res.hotPlayList.data.data;
       }
+      if(res.hotPicList.data.success) {
+        hotPicList = res.hotPicList.data.data;
+      }
       yield ctx.render('mauthor', {
         authorID,
         tag,
@@ -78,6 +88,7 @@ module.exports = app => {
         commentData,
         hotCommentData,
         hotPlayList,
+        hotPicList,
       });
     }
   }

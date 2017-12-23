@@ -20,13 +20,15 @@ class MAList extends migi.Component {
     let self = this;
     hidden = this.props.hidden;
     self.on(migi.Event.DOM, function() {
-      let $window = $(window);
-      $window.on('scroll', function() {
-        self.checkMore($window);
-      });
       if(self.props.dataList.Size <= take) {
         loadEnd = true;
         self.ref.hotPlayList.message = '已经到底了';
+      }
+      else {
+        let $window = $(window);
+        $window.on('scroll', function() {
+          self.checkMore($window);
+        });
       }
     });
   }
@@ -53,7 +55,7 @@ class MAList extends migi.Component {
         let data = res.data;
         skip += take;
         if(data.data.length) {
-          hotPlayList.appendData(res.data.data);
+          hotPlayList.appendData(data.data);
         }
         if(skip >= data.Size) {
           hotPlayList.message = '已经到底了';

@@ -15,6 +15,7 @@ export default function(data) {
   let album = data.album;
   let commentData = data.commentData;
   let hotPlayList = data.hotPlayList;
+  let hotPicList = data.hotPicList;
 
   let author = migi.preRender(<Author
     isLogin={ isLogin }
@@ -24,7 +25,8 @@ export default function(data) {
     homeDetail={ homeDetail }
     album={ album }
     commentData={ commentData }
-    hotPlayList={ hotPlayList }/>);
+    hotPlayList={ hotPlayList }
+    hotPicList={ hotPicList }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -46,6 +48,7 @@ ${data.helper.getMBotNav()}
   $CONFIG.album = ${data.helper.stringify(album)};
   $CONFIG.commentData = ${data.helper.stringify(commentData)};
   $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
+  $CONFIG.hotPicList = ${data.helper.stringify(hotPicList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/mauthor.js')}" defer="defer"></script>

@@ -14,4 +14,5 @@ let author = migi.preExist(<Author
   homeDetail={ $CONFIG.homeDetail }
   album={ $CONFIG.album }
   commentData={ $CONFIG.commentData }
-  hotPlayList={ $CONFIG.hotPlayList }/>);
+  hotPlayList={ $CONFIG.hotPlayList }
+  hotPicList={ $CONFIG.hotPicList }/>);

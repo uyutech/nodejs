@@ -17,6 +17,9 @@ class HotPic extends migi.Component {
     let self = this;
     self.message = self.props.message;
     self.on(migi.Event.DOM, function() {
+      if(self.props.dataList) {
+        self.appendData(self.props.dataList);
+      }
       let $root = $(self.element);
       $root.on('click', '.like', function() {
         let $b = $(this);

@@ -108,6 +108,7 @@ module.exports = app => {
   app.post('/api/author/subCommentList', 'api.author.subCommentList');
   app.post('/api/author/delComment', app.middlewares.needLoginJson(), 'api.author.delComment');
   app.post('/api/author/maList', 'api.author.maList');
+  app.post('/api/author/picList', 'api.author.picList');
 
   app.post('/api/circle/join', app.middlewares.needLoginJson(), 'api.circle.join');
   app.post('/api/circle/post', app.middlewares.needLoginJson(), 'api.circle.post');
@@ -199,6 +200,8 @@ module.exports = app => {
   app.post('/h5/author/follow', app.middlewares.needLoginJson(), 'h5.author.follow');
   app.post('/h5/author/unFollow', app.middlewares.needLoginJson(), 'h5.author.unFollow');
   app.post('/h5/author/commentList', 'h5.author.commentList');
+  app.post('/h5/author/maList', 'api.author.maList');
+  app.post('/h5/author/picList', 'api.author.picList');
 
   app.post('/h5/works/addComment', app.middlewares.needLoginJson(), 'h5.works.addComment');
 
