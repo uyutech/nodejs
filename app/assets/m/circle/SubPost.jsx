@@ -153,10 +153,7 @@ class SubPost extends migi.Component {
           self.invalid = true;
           self.num = 0;
           self.list = [];
-          let key = self.getImgKey();
-          localStorage[key] = '';
-          let key2 = self.getContentKey();
-          localStorage[key2] = '';
+          self.clearCache();
           location.href = '/post/' + res.data.ID;
         }
         else {
@@ -326,6 +323,8 @@ class SubPost extends migi.Component {
     let self = this;
     let key = self.getImgKey();
     localStorage[key] = '';
+    let key2 = self.getContentKey();
+    localStorage[key2] = '';
   }
   clickImg(e, vd, tvd) {
     let self = this;
