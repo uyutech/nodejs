@@ -11,6 +11,7 @@ class Profile extends migi.Component {
     super(...data);
     let self = this;
     self.head = self.props.userInfo.Head_Url;
+    self.userId = self.props.userInfo.UID;
     self.sname = self.props.userInfo.NickName;
     self.sign = self.props.userInfo.User_Sign || '';
     self.address = self.props.userInfo.address;
@@ -21,6 +22,7 @@ class Profile extends migi.Component {
     self.address = self.props.privateInfo.Address;
   }
   @bind head
+  @bind userId
   @bind sname
   @bind sign
   @bind address
@@ -304,6 +306,9 @@ class Profile extends migi.Component {
           </div>
         </div>
         <div class="txt">
+          <label>uid：</label>
+          <span>{ this.userId }</span>
+          <br/>
           <label>昵称：</label>
           <strong ref="sname">{ this.sname }</strong>
           <input ref="input" type="text" class="fn-hide" value="" onBlur={ this.blur } maxlength="8" placeholder="请输入昵称"/>

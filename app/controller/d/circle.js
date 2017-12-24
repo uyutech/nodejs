@@ -21,10 +21,10 @@ module.exports = app => {
           uid,
           circlingID: circleID,
         }),
-        // stick: ctx.helper.postServiceJSON2('api/Circling/GetTopPostList', {
-        //   uid,
-        //   circlingID: circleID,
-        // }),
+        stick: ctx.helper.postServiceJSON2('api/Circling/GetTopPostList', {
+          uid,
+          circlingID: circleID,
+        }),
         postList: ctx.helper.postServiceJSON2('api/circling/GetPostList', {
           uid,
           circlingID: circleID,
@@ -40,9 +40,9 @@ module.exports = app => {
       if(res.circleDetail.data.success) {
         circleDetail = res.circleDetail.data.data;
       }
-      // if(res.stick.data.success) {
-      //   stick = res.stick.data.data.data;
-      // }
+      if(res.stick.data.success) {
+        stick = res.stick.data.data.data;
+      }
       if(res.postList.data.success) {
         postList = res.postList.data.data;
       }

@@ -12,12 +12,14 @@ class Profile extends migi.Component {
     super(...data);
     let self = this;
     self.head = self.props.userInfo.Head_Url;
+    self.userId = self.props.userInfo.UID;
     self.sname = self.props.userInfo.NickName;
     self.sign = self.props.userInfo.User_Sign || '';
     self.updateNickNameTimeDiff = self.props.updateNickNameTimeDiff || 0;
     self.updateHeadTimeDiff = self.props.updateHeadTimeDiff || 0;
   }
   @bind head
+  @bind userId
   @bind sname
   @bind sign
   @bind updateNickNameTimeDiff
@@ -159,6 +161,9 @@ class Profile extends migi.Component {
           </div>
         </div>
         <div class="txt">
+          <label>uid：</label>
+          <span>{ this.userId }</span>
+          <br/>
           <label>昵称：</label>
           <strong ref="sname">{ this.sname }</strong>
           <input ref="input" type="text" class="fn-hide" value="" maxlength="8" placeholder="请输入昵称"/>
