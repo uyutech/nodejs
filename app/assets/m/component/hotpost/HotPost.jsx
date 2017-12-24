@@ -36,9 +36,11 @@ class HotPost extends migi.Component {
           let index = $this.attr('rel');
           let urls = [];
           $this.parent().find('img').each(function(i, img) {
-            urls.push($(img).attr('src'));
+            urls.push({ FileUrl: $(img).attr('src') });
           });
-          migi.eventBus.emit('choosePic', urls, index);
+          let $like = $this.closest('li').find('li.like');
+          let id = $this.closest('div').attr('rel');
+          migi.eventBus.emit('choosePic', urls, index, $like.hasClass('has'), id);
         });
         $list.on('click', '.favor', function() {
           if(!$CONFIG.isLogin) {
@@ -130,9 +132,37 @@ class HotPost extends migi.Component {
     }
   }
   @bind message
+  like(postID, cb) {
+    let $li = $('#post_' + postID).find('.like');
+    net.postJSON('/api/post/like', { postID }, function(res) {
+      if(res.success) {
+        let data = res.data;
+        if(data.ISLike || data.State === 'likeWordsUser') {
+          $li.addClass('has');
+        }
+        else {
+          $li.removeClass('has');
+        }
+        $li.find('span').text(data.LikeCount || '点赞');
+        if(cb) {
+          cb(data);
+        }
+      }
+      else if(res.code === 1000) {
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      $li.removeClass('loading');
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      $li.removeClass('loading');
+    });
+  }
   encode(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/#([^#\n]+?)#/g, `<strong>#$1#</strong>`)
+      .replace(/#([^#\n]+?)#/g, `<a href="/tag/$1">#$1#</a>`)
       .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
   }
   genItem(item) {
@@ -148,7 +178,7 @@ class HotPost extends migi.Component {
       html = '<p class="snap">' + html + '</p><p class="full">' + full + '</p>';
     }
     if(item.IsAuthor) {
-      return <li class="author">
+      return <li class="author" id={ 'post_' + id}>
         <div class="profile fn-clear">
           <a class="pic" href={ '/author/' + item.AuthorID }>
             <img src={ util.autoSsl(util.img208_208_80(item.SendUserHead_Url
@@ -216,7 +246,7 @@ class HotPost extends migi.Component {
           }
           {
             item.Image_Post && imgLen
-              ? <div class="imgs2">
+              ? <div class="imgs2" rel={ id }>
                 {
                   item.Image_Post.map(function(item, i) {
                     return <img src={ util.autoSsl(util.img1200__80(item.FileUrl)) } rel={ i }/>;
@@ -244,7 +274,7 @@ class HotPost extends migi.Component {
         </ul>
       </li>;
     }
-    return <li>
+    return <li id={ 'post_' + id}>
       <div class="profile fn-clear">
         <a class="pic" href={ '/user/' + item.SendUserID }>
           <img src={ util.autoSsl(util.img208_208_80(item.SendUserHead_Url
@@ -312,7 +342,7 @@ class HotPost extends migi.Component {
         }
         {
           item.Image_Post && imgLen
-            ? <div class="imgs2">
+            ? <div class="imgs2" rel={ id }>
               {
                 item.Image_Post.map(function(item, i) {
                   return <img src={ util.autoSsl(util.img1200__80(item.FileUrl)) } rel={ i }/>;

@@ -28,6 +28,7 @@ module.exports = {
     mmall_new: './app/assets/m/mall/new/index.jsx',
     mmall_wait: './app/assets/m/mall/wait/index.jsx',
     mmall_history: './app/assets/m/mall/history/index.jsx',
+    mtag: './app/assets/m/tag/index.jsx',
     dcommon: './app/assets/d/common/index.js',
     dindex: './app/assets/d/index/index.jsx',
     dfind: './app/assets/d/find/index.jsx',

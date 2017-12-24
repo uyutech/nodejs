@@ -14,8 +14,11 @@ class ImageView extends migi.Component {
     self.isLike = self.props.isLike;
     self.on(migi.Event.DOM, function() {
       let $window = $(window);
-      migi.eventBus.on('choosePic', function(i) {
+      migi.eventBus.on('choosePic', function(dataList, i, isLike, sid) {
+        self.dataList = dataList;
         self.idx = i;
+        self.isLike = isLike;
+        self.sid = sid;
         self.show();
         self.tops = $window.scrollTop();
       });
@@ -55,7 +58,7 @@ class ImageView extends migi.Component {
     this.hide();
   }
   clickLike() {
-    this.emit('clickLike');
+    this.emit('clickLike', this.sid);
   }
   clickDownload(e) {
     if(!$CONFIG.isLogin) {

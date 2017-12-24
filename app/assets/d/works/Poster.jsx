@@ -4,6 +4,8 @@
 
 'use strict';
 
+import util from '../../d/common/util';
+
 class Poster extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -14,7 +16,11 @@ class Poster extends migi.Component {
       <ul class="c">
         {
           (this.props.datas.value || []).map(function(item) {
-            return <li><img src={ item.FileUrl || '//zhuanquan.xin/img/blank.png' }/></li>;
+            return <li>
+              <a href={ item.FileUrl || '//zhuanquan.xin/img/blank.png' } target="_blank">
+                <img src={ util.autoSsl(util.img720__80(item.FileUrl)) || '//zhuanquan.xin/img/blank.png' }/>
+              </a>
+            </li>;
           })
         }
       </ul>

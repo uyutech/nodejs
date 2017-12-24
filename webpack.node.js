@@ -26,6 +26,7 @@ module.exports = {
     mmall_new: './app/view/m/mall/new.jsx',
     mmall_wait: './app/view/m/mall/wait.jsx',
     mmall_history: './app/view/m/mall/history.jsx',
+    mtag: './app/view/m/tag.jsx',
     dindex: './app/view/d/index.jsx',
     dfind: './app/view/d/find.jsx',
     dworks: './app/view/d/works.jsx',

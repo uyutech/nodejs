@@ -50,6 +50,7 @@ module.exports = app => {
   app.get('/m/mall/new', 'm.mall.new');
   app.get('/m/mall/wait', 'm.mall.wait');
   app.get('/m/mall/history', 'm.mall.history');
+  app.get('/m/tag/:tag', 'm.tag.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 
@@ -132,6 +133,8 @@ module.exports = app => {
   app.post('/api/subComment', app.middlewares.needLogin(), 'api.subComment.index');
 
   app.post('/api/count/index', 'api.count.index');
+
+  app.post('/api/tag/list', 'api.tag.list');
 
   app.get('/h5/index', 'h5.index.index');
   app.get('/h5/version', 'h5.version.index');
@@ -231,6 +234,8 @@ module.exports = app => {
   app.post('/h5/mall', 'h5.mall.index');
   app.post('/h5/mall/new', 'h5.mall.new');
   app.post('/h5/mall/wait', 'h5.mall.wait');
+
+  app.post('/h5/tag/list', 'h5.tag.list');
 
   app.post('/mns/mts/job', 'mns.mts.job');
 };

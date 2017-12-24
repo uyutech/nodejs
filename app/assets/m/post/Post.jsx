@@ -56,7 +56,7 @@ class Post extends migi.Component {
 
       let $root = $(self.element);
       $root.on('click', '.imgs img', function() {
-        migi.eventBus.emit('choosePic', $(this).attr('rel'));
+        migi.eventBus.emit('choosePic', self.props.postData.Image_Post, $(this).attr('rel'), self.isLike);
       });
 
       let imageView = self.ref.imageView;
@@ -231,7 +231,7 @@ class Post extends migi.Component {
   render() {
     let postData = this.props.postData;
     let html = (postData.Content || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/#([^#\n]+?)#/g, `<strong>#$1#</strong>`)
+      .replace(/#([^#\n]+?)#/g, `<a href="/tag/$1">#$1#</a>`)
       .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
     let replyData = this.props.replyData;
     return <div class="post">

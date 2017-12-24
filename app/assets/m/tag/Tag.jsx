@@ -1,13 +1,11 @@
 /**
- * Created by army8735 on 2017/11/5.
+ * Created by army8735 on 2017/12/24.
  */
 
 'use strict';
 
 import net from '../../d/common/net';
 import util from '../../d/common/util';
-import Title from './Title.jsx';
-import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 import HotPost from '../component/hotpost/HotPost.jsx';
 import ImageView from '../post/ImageView.jsx';
 
@@ -16,15 +14,11 @@ let skip = take;
 let loading;
 let loadEnd;
 
-class Circle extends migi.Component {
+class Tag extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
     self.on(migi.Event.DOM, function() {
-      let subCmt = self.ref.subCmt;
-      subCmt.on('click', function() {
-        location.href = '/circle/post?circleID=' + $CONFIG.circleID;
-      });
       if(self.props.postList.Size > take) {
         let $window = $(window);
         $window.on('scroll', function() {
@@ -55,7 +49,7 @@ class Circle extends migi.Component {
     let hotPost = self.ref.hotPost;
     loading = true;
     hotPost.message = '正在加载...';
-    net.postJSON('/api/circle/list', { skip, take, circleID: $CONFIG.circleID }, function(res) {
+    net.postJSON('/api/tag/list', { skip, take, tag: $CONFIG.tag }, function(res) {
       if(res.success) {
         let data = res.data;
         skip += take;
@@ -78,17 +72,12 @@ class Circle extends migi.Component {
     });
   }
   render() {
-    return <div class="circle fn-clear">
-      <Title circleDetail={ this.props.circleDetail }/>
+    return <div class="tag">
+      <h3>#{ this.props.tag }#</h3>
       <HotPost ref="hotPost" data={ this.props.postList.data }/>
-      <SubCmt ref="subCmt"
-              tipText="-${n}"
-              subText="发送"
-              readOnly={ true }
-              placeholder={ '在' + this.props.circleDetail.TagName +'圈画个圈吧。小小的提示：现在可以把一个圈画在好几个圈子里哦！' }/>
       <ImageView ref="imageView"/>
     </div>;
   }
 }
 
-export default Circle;
+export default Tag;
