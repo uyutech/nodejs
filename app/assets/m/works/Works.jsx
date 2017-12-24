@@ -32,7 +32,7 @@ class Works extends migi.Component {
     self.worksID = self.props.worksID;
     self.workID = self.props.workID;
     self.worksType = self.props.worksDetail.WorkType;
-    self.setWorks(self.props.worksDetail.Works_Items);
+    self.setWorks(self.props.worksDetail.Works_Items || []);
     self.on(migi.Event.DOM, function() {
       let workComment = self.ref.workComment;
       let comment = workComment.ref.comment;
