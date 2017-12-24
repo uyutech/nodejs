@@ -162,7 +162,10 @@ class HotPost extends migi.Component {
             <ul>
               {
                 (item.Taglist || []).map(function(item) {
-                  return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
+                  if(item.CirclingList && item.CirclingList.length) {
+                    return <li><a href={ '/circle/' + item.CirclingList[0].CirclingID }>{ item.CirclingList[0].CirclingName }圈</a></li>;
+                  }
+                  return <li><span>{ item.TagName }</span></li>;
                 })
               }
             </ul>
@@ -255,7 +258,10 @@ class HotPost extends migi.Component {
           <ul>
             {
               (item.Taglist || []).map(function(item) {
-                return <li><a href={ '/circle/' + item.TagID }>{ item.TagName }圈</a></li>;
+                if(item.CirclingList && item.CirclingList.length) {
+                  return <li><a href={ '/circle/' + item.CirclingList[0].CirclingID }>{ item.CirclingList[0].CirclingName }圈</a></li>;
+                }
+                return <li><span>{ item.TagName }</span></li>;
               })
             }
           </ul>
