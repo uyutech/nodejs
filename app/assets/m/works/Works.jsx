@@ -433,6 +433,7 @@ class Works extends migi.Component {
               subText="发送"
               tipText="-${n}"
               placeholder="夸夸这个作品吧"/>
+      <a class="app" href="http://circling.net.cn/android/circling-0.2.9.apk" target="_blank"/>
     </div>;
   }
 }

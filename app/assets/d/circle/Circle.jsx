@@ -34,6 +34,7 @@ class Circle extends migi.Component {
         skip = (i - 1) * take;
         self.loadPage();
       });
+      let stick = self.ref.stick;
       let hotPost = self.ref.hotPost;
       let subPost = self.ref.subPost;
       subPost.on('add_post', function(data) {
@@ -41,6 +42,33 @@ class Circle extends migi.Component {
         util.scrollTop($(self.ref.main.element).offset().top);
       });
       let subCmt = self.ref.subCmt;
+      if(stick) {
+        stick.on('openComment', function(postID, name, comment) {
+          self.postID = postID;
+          self.comment = comment;
+          subPost.hidden = true;
+          subCmt.to = null;
+          subCmt.originTo = name;
+          subCmt.hidden = false;
+          self.rootID = -1;
+          self.parentID = -1;
+        });
+        stick.on('closeComment', function() {
+          subCmt.to = null;
+          subCmt.hidden = true;
+          subPost.hidden = false;
+        });
+        stick.on('chooseSubComment', function(rid, cid, name) {
+          self.rootID = rid;
+          self.parentID = cid;
+          subCmt.to = name;
+        });
+        stick.on('closeSubComment', function() {
+          self.rootID = -1;
+          self.parentID = -1;
+          subCmt.to = null;
+        });
+      }
       hotPost.on('openComment', function(postID, name, comment) {
         self.postID = postID;
         self.comment = comment;
@@ -112,6 +140,12 @@ class Circle extends migi.Component {
     let self = this;
     net.postJSON('/api/circle/list', { circleID: $CONFIG.circleID, skip, take }, function(res) {
       if(res.success) {
+        if(skip === 0) {
+          self.ref.stick && self.ref.stick.show();
+        }
+        else {
+          self.ref.stick && self.ref.stick.hide();
+        }
         let data = res.data;
         self.ref.hotPost.setData(data.data);
         util.scrollTop($(self.ref.main.element).offset().top);
@@ -130,6 +164,11 @@ class Circle extends migi.Component {
       <Title circleDetail={ this.props.circleDetail } ref="title"/>
       <div class="main" ref="main">
         <Page ref="page" total={ Math.ceil(this.props.postList.Size / take) }/>
+        {
+          this.props.stick && this.props.stick.length
+            ? <HotPost ref="stick" data={ this.props.stick }/>
+            : ''
+        }
         <HotPost ref="hotPost" data={ this.props.postList.data }/>
         <Page ref="page2" total={ Math.ceil(this.props.postList.Size / take) }/>
       </div>

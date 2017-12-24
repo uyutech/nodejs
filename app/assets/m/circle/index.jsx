@@ -8,4 +8,6 @@ import './index.less';
 
 import Circle from './Circle.jsx';
 
-let circle = migi.preExist(<Circle circleDetail={ $CONFIG.circleDetail } postList={ $CONFIG.postList }/>);
+let circle = migi.preExist(
+  <Circle circleDetail={ $CONFIG.circleDetail } stick={ $CONFIG.stick } postList={ $CONFIG.postList }/>
+);

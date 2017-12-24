@@ -136,6 +136,7 @@ module.exports = app => {
 
   app.post('/api/tag/list', 'api.tag.list');
 
+  app.get('/app', 'h5.index.index');
   app.get('/h5/index', 'h5.index.index');
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');

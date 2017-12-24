@@ -10,10 +10,13 @@ export default function(data) {
   let circleID = data.circleID;
   let circleDetail = data.circleDetail;
   let postList = data.postList;
+  let stick = data.stick;
   let hotCircleList = data.hotCircleList;
 
-  let circle = migi.preRender(<Circle circleDetail={ circleDetail } postList={ postList }
-                                      hotCircleList={ hotCircleList }/>);
+  let circle = migi.preRender(
+    <Circle circleDetail={ circleDetail } postList={ postList }
+            stick={ stick } hotCircleList={ hotCircleList }/>
+  );
 
   return `<!DOCTYPE html>
 <html>
@@ -31,6 +34,7 @@ ${data.helper.getDBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.circleID = ${data.helper.stringify(circleID)};
   $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
+  $CONFIG.stick = ${data.helper.stringify(stick)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
   $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
 </script>

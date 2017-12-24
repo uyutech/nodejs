@@ -12,6 +12,10 @@
 @import '../../d/component/hotplaylist/index';
 @import '../component/hotpic/index';
 
+.android body{
+  padding-bottom:1.6rem;
+}
+
 .author{
   > .nav{
     position:relative;
@@ -98,6 +102,7 @@
       border-top:1px solid #C2D8E4;
       ul{
         display:flex;
+        flex-wrap:wrap;
         li{
           flex:1;
           text-align:center;
@@ -112,24 +117,40 @@
             white-space:nowrap;
             color:@fourthTextColor;
             &.sing5{
-              background:url(../../icon/5sing.png) no-repeat center 0.05rem;
-              background-size:0.14rem auto;
+              background:url(../../icon/link-5sing.png) no-repeat center 0;
+              background-size:0.18rem auto;
             }
             &.bilibili{
-              background:url(../../icon/bilibili.png) no-repeat center 0.02rem;
-              background-size:0.17rem auto;
+              background:url(../../icon/link-bilibili.png) no-repeat center 0;
+              background-size:0.18rem auto;
             }
             &.wangyi{
-              background:url(../../icon/163.png) no-repeat center 0.02rem;
-              background-size:0.14rem auto;
+              background:url(../../icon/link-163.png) no-repeat center 0;
+              background-size:0.18rem auto;
             }
             &.baidu{
-              background:url(../../icon/baidu.png) no-repeat center 0.02rem;
-              background-size:0.16rem auto;
+              background:url(../../icon/link-baidu.png) no-repeat center 0;
+              background-size:0.18rem auto;
             }
             &.weibo{
-              background:url(../../icon/weibo.png) no-repeat center 0.02rem;
-              background-size:0.14rem auto;
+              background:url(../../icon/link-weibo.png) no-repeat center 0;
+              background-size:0.18rem auto;
+            }
+            &.huaban{
+              background:url(../../icon/link-huaban.png) no-repeat center 0;
+              background-size:0.18rem auto;
+            }
+            &.lofter{
+              background:url(../../icon/link-lofter.png) no-repeat center 0;
+              background-size:0.18rem auto;
+            }
+            &.poco{
+              background:url(../../icon/link-poco.png) no-repeat center 0;
+              background-size:0.18rem auto;
+            }
+            &.zcoo{
+              background:url(../../icon/link-zcoo.png) no-repeat center 0;
+              background-size:0.18rem auto;
             }
           }
         }
@@ -329,6 +350,24 @@
       .fans,.comment{
         display:none;
       }
+    }
+  }
+  .app{
+    position:fixed;
+    left:0;
+    bottom:0.4rem;
+    display:block;
+    padding:0.1rem;
+    width:100%;
+    height:1.2rem;
+    box-sizing:border-box;
+    background:url(//zhuanquan.xin/img/0be0c9dac969d611ca2f44184da5bc44.png) no-repeat center top;
+    background-size:cover;
+    z-index:100;
+    align-items:center;
+    font-size:0.16rem;
+    .ios &{
+      display:none;
     }
   }
 }

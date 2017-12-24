@@ -248,6 +248,12 @@ class HotPost extends migi.Component {
       });
     }
   }
+  show() {
+    $(this.element).removeClass('fn-hide');
+  }
+  hide() {
+    $(this.element).addClass('fn-hide');
+  }
   encode(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/#([^#\n]+?)#/g, `<strong>#$1#</strong>`)

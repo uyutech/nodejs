@@ -10,9 +10,12 @@ export default function(data) {
   let isLogin = !!data.ctx.session.uid;
   let circleID = data.circleID;
   let circleDetail = data.circleDetail;
+  let stick = data.stick;
   let postList = data.postList;
 
-  let circle = migi.preRender(<Circle circleDetail={ circleDetail } postList={ postList }/>);
+  let circle = migi.preRender(
+    <Circle circleDetail={ circleDetail } stick={ stick } postList={ postList }/>
+  );
 
   return `<!DOCTYPE html>
 <html>
@@ -29,6 +32,7 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.circleID = ${data.helper.stringify(circleID)};
   $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
+  $CONFIG.stick = ${data.helper.stringify(stick)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
