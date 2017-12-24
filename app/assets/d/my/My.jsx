@@ -150,17 +150,6 @@ class My extends migi.Component {
           <b class="arrow"/>
         </div>
       </div>
-      {
-        this.props.bonusPoint.ranking
-          ? <div class="bp">
-            <p>全站排名 { this.props.bonusPoint.ranking } 名</p>
-            <p><small>以上是截止到11月30日晚0点的积分排名哦。1-10名的小伙伴将获得异世谣随机签名手账一份~11-200名的小伙伴将获得异世谣空白手账一份~
-              <br/>福利详情页将和圈币系统一起尽快上线，请耐心等待哦！
-              <br/>另外本周末我们将在11-100名中随机抽取3名小伙伴升级为随机签名手账。
-              <br/>没进前200的小伙伴们也不用气馁，之前的所有努力都会积累圈币~很快就会上线圈币兑换福利的功能哦！</small></p>
-          </div>
-          : ''
-      }
       <div class="c">
         <h4>我画的圈</h4>
         <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>

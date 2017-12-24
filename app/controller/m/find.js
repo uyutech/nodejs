@@ -56,24 +56,16 @@ module.exports = app => {
       }
       let banner = [
         {
-          url: '/post/40119',
-          pic: '//zhuanquan.xyz/pic/f3e188709eaccc78f6737f9fcf6992e9.png-750_'
+          url: '/post/91193',
+          pic: '//zhuanquan.xyz/img/b43f3769b4ccc26289f653aa45bc880d.jpg'
+        },
+        {
+          url: '/works/2015000000001599',
+          pic: '//zhuanquan.xyz/img/ed65b65bb840e8b324c600d7b066e0cc.jpg'
         },
         {
           url: '/works/2015000000001582',
-          pic: '//zhuanquan.xyz/pic/3fc9dc8f4aa54ccfae45294dd689e820.jpg-750_'
-        },
-        {
-          url: '/works/2015000000001368',
-          pic: '//zhuanquan.xyz/pic/379af10b78315ded5948e813d2e64a69.jpg-750_'
-        },
-        {
-          url: '/works/2015000000000001',
-          pic: '//zhuanquan.xyz/pic/e34cc1fb3102e63b507293f6e5a20515.jpg-750_'
-        },
-        {
-          url: '/works/2015000000000002',
-          pic: '//zhuanquan.xyz/pic/b1284084f38e8cac0c35eddd60948af1.jpg-750_'
+          pic: '//zhuanquan.xyz/pic/3fc9dc8f4aa54ccfae45294dd689e820.jpg'
         }
       ];
       yield ctx.render('mfind', {
