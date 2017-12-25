@@ -7,4 +7,4 @@
 import './index.less';
 import Circling from './Circling.jsx';
 
-let circling = migi.preExist(<Circling hotCircle={ $CONFIG.hotCircle } postList={ $CONFIG.postList }/>);
+let circling = migi.preExist(<Circling myCircleList={ $CONFIG.myCircleList } postList={ $CONFIG.postList }/>);

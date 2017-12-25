@@ -199,8 +199,8 @@ class Circling extends migi.Component {
       <ul class="circles" ref="circles" onClick={ { li: this.clickTag } }>
         <li class="cur">全部</li>
         {
-          (this.props.hotCircle.data || []).map(function(item, i) {
-            return <li rel={ item.TagID }>{ item.TagName }</li>;
+          (this.props.myCircleList.data || []).map(function(item) {
+            return <li rel={ item.CirclingID }>{ item.CirclingName }</li>;
           }.bind(this))
         }
       </ul>
@@ -211,7 +211,7 @@ class Circling extends migi.Component {
         <Page ref="page2" total={ Math.ceil(this.props.postList.Size / take) }/>
       </div>
       <SubPost ref="subPost" placeholder={ '小小的提示：现在可以把一个圈画在好几个圈子里哦！' }
-               to={ this.props.hotCircle.data }/>
+               to={ this.props.myCircleList.data }/>
       <SubCmt ref="subCmt"
               hidden={ true }
               subText="回复"

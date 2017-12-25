@@ -212,6 +212,7 @@ module.exports = app => {
   app.post('/h5/works/addComment', app.middlewares.needLoginJson(), 'h5.works.addComment');
 
   app.post('/h5/subpost/index', 'h5.subpost.index');
+  app.post('/h5/subpost/list', 'h5.subpost.list');
 
   app.post('/h5/post/index', 'h5.post.index');
   app.post('/h5/post/like', app.middlewares.needLoginJson(), 'h5.post.like');

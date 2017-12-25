@@ -175,7 +175,7 @@ class Find extends migi.Component {
         <HotPlayList ref="hostPlayList" dataList={ this.props.hotPlayList.data }/>
       </div>
       <SubPost ref="subPost" placeholder={ '小小的提示：现在可以把一个圈画在好几个圈子里哦！' }
-               to={ this.props.hotCircleList }/>
+               to={ this.props.myCircleList.data }/>
       <SubCmt ref="subCmt"
               hidden={ true }
               subText="回复"

@@ -15,6 +15,7 @@ module.exports = app => {
       let hotCircleList = [];
       let hotPostList = [];
       let hotPlayList = [];
+      let myCircleList = {};
       let res = yield {
         hotWorkList: ctx.helper.postServiceJSON2('api/find/Hot_works_List', {
           uid,
@@ -46,6 +47,11 @@ module.exports = app => {
           Skip: 0,
           Take: 30,
         }),
+        myCircleList: ctx.helper.postServiceJSON2('api/Circling/GetAddPostCircling', {
+          uid,
+          Skip: 0,
+          Take: 6,
+        }),
       };
       if(res.hotWorkList.data.success) {
         hotWorkList = res.hotWorkList.data.data;
@@ -65,7 +71,14 @@ module.exports = app => {
       if(res.hotPlayList.data.success) {
         hotPlayList = res.hotPlayList.data.data;
       }
+      if(res.myCircleList.data.success) {
+        myCircleList = res.myCircleList.data.data;
+      }
       let banner = [
+        {
+          url: '/post/91200',
+          pic: '//zhuanquan.xyz/pic/e70cdd87affae05deace6ec77e18b96f.jpg'
+        },
         {
           url: '/#/post/91193',
           pic: '//zhuanquan.xyz/img/b43f3769b4ccc26289f653aa45bc880d.jpg'
@@ -88,6 +101,7 @@ module.exports = app => {
         hotPostList,
         hotPlayList,
         banner,
+        myCircleList,
       });
     }
   }

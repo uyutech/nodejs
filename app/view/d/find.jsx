@@ -17,6 +17,7 @@ export default function(data) {
   let hotPostList = data.hotPostList;
   let hotPlayList = data.hotPlayList;
   let banner = data.banner;
+  let myCircleList = data.myCircleList;
 
   let find = migi.preRender(<Find
     hotWorkList={ hotWorkList }
@@ -26,7 +27,8 @@ export default function(data) {
     hotCircleList={ hotCircleList }
     hotPostList={ hotPostList }
     hotPlayList={ hotPlayList }
-    banner={ banner }/>);
+    banner={ banner }
+    myCircleList={ myCircleList }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -48,6 +50,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.hotPostList = ${data.helper.stringify(hotPostList)};
   $CONFIG.hotPlayList = ${data.helper.stringify(hotPlayList)};
   $CONFIG.banner = ${data.helper.stringify(banner)};
+  $CONFIG.myCircleList = ${data.helper.stringify(myCircleList)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/dfind.js')}" defer="defer"></script>

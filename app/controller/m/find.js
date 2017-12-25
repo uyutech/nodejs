@@ -56,6 +56,10 @@ module.exports = app => {
       }
       let banner = [
         {
+          url: '/post/91200',
+          pic: '//zhuanquan.xyz/pic/e70cdd87affae05deace6ec77e18b96f.jpg'
+        },
+        {
           url: '/post/91193',
           pic: '//zhuanquan.xyz/img/b43f3769b4ccc26289f653aa45bc880d.jpg'
         },

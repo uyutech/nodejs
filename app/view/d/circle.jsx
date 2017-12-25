@@ -13,11 +13,11 @@ export default function(data) {
   let circleDetail = data.circleDetail;
   let postList = data.postList;
   let stick = data.stick;
-  let hotCircleList = data.hotCircleList;
+  let myCircleList = data.myCircleList;
 
   let circle = migi.preRender(
     <Circle circleDetail={ circleDetail } postList={ postList }
-            stick={ stick } hotCircleList={ hotCircleList }/>
+            stick={ stick } myCircleList={ myCircleList }/>
   );
 
   return `<!DOCTYPE html>
@@ -38,7 +38,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
   $CONFIG.stick = ${data.helper.stringify(stick)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
-  $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
+  $CONFIG.myCircleList = ${data.helper.stringify(myCircleList)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/dcircle.js')}" defer="defer"></script>

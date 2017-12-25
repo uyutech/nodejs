@@ -174,7 +174,7 @@ class Circle extends migi.Component {
       </div>
       <SubPost ref="subPost" placeholder={ '在' + this.props.circleDetail.TagName +'圈画个圈吧。小小的提示：现在可以把一个圈画在好几个圈子里哦！' }
                circleID={ this.props.circleDetail.TagID } circleName={ this.props.circleDetail.TagName }
-               to={ this.props.hotCircleList }/>
+               to={ this.props.myCircleList.data }/>
       <SubCmt ref="subCmt"
               hidden={ true }
               subText="回复"

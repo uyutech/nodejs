@@ -12,11 +12,11 @@ export default function(data) {
   let isPublic = data.ctx.session.isPublic;
   let circleID = data.circleID;
   let circleDetail = data.circleDetail;
-  let hotCircleList = data.hotCircleList;
+  let myCircleList = data.myCircleList;
 
   let subPost = migi.preRender(<SubPost circleID={ circleID } circleDetail={ circleDetail }
                                         placeholder={ '在' + (circleDetail.TagName || '转圈') +'圈画个圈吧' }
-                                        isPublic={ isPublic } to={ hotCircleList }/>);
+                                        isPublic={ isPublic } to={ myCircleList }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -33,7 +33,7 @@ ${data.helper.getMBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.circleID = ${data.helper.stringify(circleID)};
   $CONFIG.circleDetail = ${data.helper.stringify(circleDetail)};
-  $CONFIG.hotCircleList = ${data.helper.stringify(hotCircleList)};
+  $CONFIG.myCircleList = ${data.helper.stringify(myCircleList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/mcpost.js')}" defer="defer"></script>

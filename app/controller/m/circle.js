@@ -52,13 +52,13 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let circleID = ctx.query.circleID;
       let circleDetail = {};
-      let hotCircleList = [];
+      let myCircleList = [];
       let res = yield {
         circleDetail: circleID ? ctx.helper.postServiceJSON2('api/circling/GetCirclingDetails', {
           uid,
-          TagID: circleID,
+          circlingID: circleID,
         }) : null,
-        hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
+        myCircleList: ctx.helper.postServiceJSON2('api/Circling/GetAddPostCircling', {
           uid,
           Skip: 0,
           Take: 6,
@@ -67,14 +67,14 @@ module.exports = app => {
       if(res.circleDetail && res.circleDetail.data.success) {
         circleDetail = res.circleDetail.data.data;
       }
-      if(res.hotCircleList.data.success) {
-        hotCircleList = res.hotCircleList.data.data.data;
+      if(res.myCircleList.data.success) {
+        myCircleList = res.myCircleList.data.data.data;
       }
       yield ctx.render('mcpost', {
         uid,
         circleID,
         circleDetail,
-        hotCircleList,
+        myCircleList,
       });
     }
   }

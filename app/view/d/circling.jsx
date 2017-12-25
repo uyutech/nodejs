@@ -9,10 +9,10 @@ import Circling from '../../assets/d/circling/Circling.jsx';
 export default function(data) {
   migi.resetUid();
 
-  let hotCircle = data.hotCircle;
+  let myCircleList = data.myCircleList;
   let postList = data.postList;
 
-  let circling = migi.preRender(<Circling hotCircle={ hotCircle } postList={ postList }/>);
+  let circling = migi.preRender(<Circling myCircleList={ myCircleList } postList={ postList }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -28,7 +28,7 @@ export default function(data) {
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.hotCircle = ${data.helper.stringify(hotCircle)};
+  $CONFIG.myCircleList = ${data.helper.stringify(myCircleList)};
   $CONFIG.postList = ${data.helper.stringify(postList)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>

@@ -41,24 +41,24 @@ class SubPost extends migi.Component {
     if(self.to && self.to.length && self.props.circleID !== undefined) {
       let has = false;
       self.to.forEach(function(item) {
-        if(item.TagID === self.props.circleID) {
+        if(item.CirclingID === self.props.circleID) {
           has = true;
         }
       });
       if(has) {
         migi.sort(self.to, function(a, b) {
-          if(a.TagID === self.props.circleID) {
+          if(a.CirclingID === self.props.circleID) {
             return false;
           }
-          else if(b.TagID === self.props.circleID) {
+          else if(b.CirclingID === self.props.circleID) {
             return true;
           }
         });
       }
       else {
         self.to.unshift({
-          TagID: self.props.circleID,
-          TagName: self.props.circleName,
+          CirclingID: self.props.circleID,
+          CirclingName: self.props.circleName,
         });
       }
     }
@@ -405,8 +405,8 @@ class SubPost extends migi.Component {
               <dt>画个圈</dt>
               {
                 (this.to || []).map(function(item) {
-                  return <dd rel={ item.TagID }
-                             class={ item.TagID === this.props.circleID ? 'on' : '' }>{ item.TagName }圈</dd>;
+                  return <dd rel={ item.CirclingID }
+                             class={ item.CirclingID === this.props.circleID ? 'on' : '' }>{ item.CirclingName }圈</dd>;
                 }.bind(this))
               }
             </dl>
