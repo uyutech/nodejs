@@ -162,7 +162,9 @@ class HotPost extends migi.Component {
   }
   encode(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/#([^#\n]+?)#/g, `<a href="/tag/$1">#$1#</a>`)
+      .replace(/#([^#\n\s]+?)#/g, function($0, $1) {
+        return `<a href="/tag/${encodeURIComponent($1)}">#${$1}#</a>`;
+      })
       .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
   }
   genItem(item) {

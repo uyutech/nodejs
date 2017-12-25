@@ -231,7 +231,9 @@ class Post extends migi.Component {
   render() {
     let postData = this.props.postData;
     let html = (postData.Content || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/#([^#\n]+?)#/g, `<a href="/tag/$1">#$1#</a>`)
+      .replace(/#([^#\n\s]+?)#/g, function($0, $1) {
+        return `<a href="/tag/${encodeURIComponent($1)}">#${$1}#</a>`;
+      })
       .replace(/(http(?:s)?:\/\/[\w-]+\.[\w]+\S*)/gi, '<a href="$1" target="_blank">$1</a>');
     let replyData = this.props.replyData;
     return <div class="post">
