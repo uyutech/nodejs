@@ -7,6 +7,8 @@
 import Tag from '../../assets/m/tag/Tag.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let tag = data.tag;
   let postList = data.postList;
 

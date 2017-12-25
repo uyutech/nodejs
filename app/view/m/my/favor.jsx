@@ -7,6 +7,8 @@
 import Favor from '../../../assets/m/my/favor/Favor.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let dataList = data.dataList;
 
   let favor = migi.preRender(

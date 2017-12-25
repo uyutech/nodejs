@@ -7,6 +7,8 @@
 import Post from '../../assets/m/post/Post.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let isLogin = !!data.ctx.session.uid;
   let id = data.id;
   let postData = data.postData;

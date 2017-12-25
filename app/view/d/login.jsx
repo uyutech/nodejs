@@ -7,6 +7,8 @@
 import Login from '../../assets/d/login/Login.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let login = migi.preRender(<Login/>);
 
   return `<!DOCTYPE html>

@@ -7,6 +7,8 @@
 import Relation from '../../../assets/m/my/relation/Relation.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let tag = data.tag;
   let follows = data.follows;
   let userFriends = data.userFriends;

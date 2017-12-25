@@ -7,6 +7,8 @@
 import SubCmt from '../../assets/m/subcomment/SubCmt.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let id = data.id;
   let type = data.type;
   let cid = data.cid;

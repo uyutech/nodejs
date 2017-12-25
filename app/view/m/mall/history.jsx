@@ -7,6 +7,8 @@
 import History from '../../../assets/m/mall/history/History.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let productList = data.productList;
 
   let history = migi.preRender(

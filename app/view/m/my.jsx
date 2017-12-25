@@ -7,6 +7,8 @@
 import My from '../../assets/m/my/My.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let userInfo = data.userInfo;
   let now = Date.now();
   let lastUpdateNickNameTime = data.lastUpdateNickNameTime;

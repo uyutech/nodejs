@@ -7,6 +7,8 @@
 import FavorPic from '../../../../assets/m/my/favor/pic/FavorPic.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let dataList = data.dataList;
 
   let favorPic = migi.preRender(

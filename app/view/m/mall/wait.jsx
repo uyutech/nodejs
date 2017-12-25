@@ -7,6 +7,8 @@
 import Wait from '../../../assets/m/mall/wait/Wait.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let productList = data.productList;
 
   let wait = migi.preRender(

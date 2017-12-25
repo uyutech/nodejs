@@ -64,11 +64,11 @@ module.exports = {
       }
     ]
   },
-  // plugins: [
-  //   new webpack.BannerPlugin({
-  //     banner: 'var migi=global.migi.clone();',
-  //     raw: true,
-  //     entryOnly: true,
-  //   })
-  // ],
+  plugins: [
+    new webpack.BannerPlugin({
+      banner: 'var migi=global.migi.clone();',
+      raw: true,
+      entryOnly: true,
+    })
+  ],
 };

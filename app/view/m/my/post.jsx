@@ -7,6 +7,8 @@
 import Post from '../../../assets/m/my/post/Post.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let postList = data.postList;
 
   let post = migi.preRender(

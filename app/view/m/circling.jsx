@@ -7,6 +7,8 @@
 import Circling from '../../assets/m/circling/Circling.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let hotCircle = data.hotCircle;
   let postList = data.postList;
 

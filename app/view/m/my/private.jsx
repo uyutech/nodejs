@@ -7,6 +7,8 @@
 import Private from '../../../assets/m/my/private/Private.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let privateInfo = data.privateInfo;
 
   let pri = migi.preRender(

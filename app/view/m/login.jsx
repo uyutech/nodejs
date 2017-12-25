@@ -7,6 +7,8 @@
 import Login from '../../assets/m/login/Login.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let goto = data.goto;
 
   let login = migi.preRender(<Login goto={ goto }/>);

@@ -7,6 +7,8 @@
 import Message from '../../../assets/m/my/message/Message.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let messages = data.messages;
   (messages.data || []).forEach(function(item) {
     let content = item.Content || '';

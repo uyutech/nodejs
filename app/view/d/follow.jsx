@@ -7,6 +7,8 @@
 import Follow from '../../assets/d/follow/Follow.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let hotCircle = data.hotCircle;
   let follows = data.follows;
   let userFollows = data.userFollows;

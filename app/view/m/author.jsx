@@ -7,6 +7,8 @@
 import Author from '../../assets/m/author/Author.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let isLogin = !!data.ctx.session.uid;
   let authorID = data.authorID;
   let tag = data.tag;

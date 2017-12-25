@@ -9,6 +9,8 @@ import BotNav from '../../assets/m/component/botnav/BotNav.jsx';
 import Search from '../../assets/m/search/Search.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let kw = data.kw;
   let datas = data.datas;
 

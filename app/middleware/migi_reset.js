@@ -6,7 +6,7 @@
 
 module.exports = () => {
   return function* (next) {
-    this.app.migi.Element.resetUid();
+    this.app.migi.Element.resetUid && this.app.migi.Element.resetUid();
     yield next;
   };
 };

@@ -7,6 +7,8 @@
 import Guide from '../../assets/d/guide/Guide.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let guide = migi.preRender(<Guide/>);
 
   return `<!DOCTYPE html>

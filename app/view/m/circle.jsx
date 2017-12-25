@@ -7,6 +7,8 @@
 import Circle from '../../assets/m/circle/Circle.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let isLogin = !!data.ctx.session.uid;
   let circleID = data.circleID;
   let circleDetail = data.circleDetail;

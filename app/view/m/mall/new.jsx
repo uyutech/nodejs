@@ -7,6 +7,8 @@
 import New from '../../../assets/m/mall/new/New.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let productList = data.productList;
 
   let n = migi.preRender(

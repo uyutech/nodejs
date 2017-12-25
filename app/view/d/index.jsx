@@ -7,6 +7,8 @@
 import TopNav from '../../assets/d/component/topnav/TopNav.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let isLogin = !!data.ctx.session.uid;
   let isAuthor = !!data.ctx.session.authorID;
   let userInfo = data.userInfo;

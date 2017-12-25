@@ -7,6 +7,8 @@
 import FavorPost from '../../../../assets/m/my/favor/post/FavorPost.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let dataList = data.dataList;
 
   let favorPost = migi.preRender(

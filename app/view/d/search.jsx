@@ -7,6 +7,8 @@
 import Search from '../../assets/d/search/Search.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let kw = data.kw;
   let datas = data.datas;
 

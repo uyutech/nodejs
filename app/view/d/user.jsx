@@ -7,6 +7,8 @@
 import User from '../../assets/d/user/User.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let userInfo = data.userInfo;
   let userPost = data.userPost;
   let followState = data.followState;

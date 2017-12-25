@@ -7,6 +7,8 @@
 import Mall from '../../assets/m/mall/Mall.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let productList = data.productList;
 
   let mall = migi.preRender(

@@ -7,6 +7,8 @@
 import SubPost from '../../assets/m/circle/SubPost.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let isPublic = data.ctx.session.isPublic;
   let circleID = data.circleID;
   let circleDetail = data.circleDetail;
