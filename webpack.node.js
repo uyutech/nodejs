@@ -42,6 +42,9 @@ module.exports = {
     duser: './app/view/d/user.jsx',
     dcircling: './app/view/d/circling.jsx',
     dfollow: './app/view/d/follow.jsx',
+    dmall: './app/view/d/mall.jsx',
+    dmall_new: './app/view/d/mall/new.jsx',
+    dmall_wait: './app/view/d/mall/wait.jsx',
   },
   output: {
     path: __dirname + '/app/view',

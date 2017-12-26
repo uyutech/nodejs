@@ -44,6 +44,9 @@ module.exports = {
     duser: './app/assets/d/user/index.jsx',
     dcircling: './app/assets/d/circling/index.jsx',
     dfollow: './app/assets/d/follow/index.jsx',
+    dmall: './app/assets/d/mall/index.jsx',
+    dmall_new: './app/assets/d/mall/new/index.jsx',
+    dmall_wait: './app/assets/d/mall/wait/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

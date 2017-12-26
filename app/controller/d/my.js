@@ -14,6 +14,7 @@ module.exports = app => {
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
       let privateInfo = {};
+      let coins = {};
       let res = yield {
         userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
           uid,
@@ -36,6 +37,9 @@ module.exports = app => {
         privateInfo: ctx.helper.postServiceJSON2('api/users/GetUserAddressInfo', {
           uid,
         }),
+        coins: ctx.helper.postServiceJSON2('api/users/GetUserCirclingCoins', {
+          uid,
+        }),
       };
       if(res.userInfo.data.success) {
         userInfo = res.userInfo.data.data;
@@ -55,6 +59,9 @@ module.exports = app => {
       if(res.privateInfo.data.success) {
         privateInfo = res.privateInfo.data.data;
       }
+      if(res.coins.data.success) {
+        coins = res.coins.data.data;
+      }
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {
@@ -69,6 +76,7 @@ module.exports = app => {
         lastUpdateNickNameTime,
         lastUpdateHeadTime,
         privateInfo,
+        coins,
       });
     }
     * message(ctx) {

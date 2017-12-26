@@ -23,6 +23,9 @@ module.exports = app => {
   app.get('/d/user/:userID', 'd.user.index');
   app.get('/d/circling', 'd.circling.index');
   app.get('/d/follow', app.middlewares.needLogin(), 'd.follow.index');
+  app.get('/d/mall', 'd.mall.index');
+  app.get('/d/mall/new', 'd.mall.new');
+  app.get('/d/mall/wait', 'd.mall.wait');
 
   app.get('/m', 'm.find.index');
   app.get('/m/find', 'm.find.index');

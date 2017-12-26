@@ -10,4 +10,4 @@ let my = migi.preExist(<My userInfo={ $CONFIG.userInfo } follows={ $CONFIG.follo
                            myPost={ $CONFIG.myPost } updateNickNameTimeDiff={ $CONFIG.updateNickNameTimeDiff }
                            updateHeadTimeDiff={ $CONFIG.updateHeadTimeDiff } bonusPoint={ $CONFIG.bonusPoint }
                            userFollows={ $CONFIG.userFollows } userFans={ $CONFIG.userFans }
-                           privateInfo={ $CONFIG.privateInfo }/>);
+                           privateInfo={ $CONFIG.privateInfo } coins={ $CONFIG.coins }/>);

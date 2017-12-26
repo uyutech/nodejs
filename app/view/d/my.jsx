@@ -34,11 +34,12 @@ export default function(data) {
   }
   let updateHeadTimeDiff = now - lastUpdateHeadTime;
   let privateInfo = data.privateInfo;
+  let coins = data.coins;
 
   let my = migi.preRender(<My userInfo={ userInfo } follows={ follows } favors={ favors } myPost={ myPost }
                               bonusPoint={ bonusPoint } updateNickNameTimeDiff={ updateNickNameTimeDiff }
                               updateHeadTimeDiff={ updateHeadTimeDiff } userFollows={ userFollows }
-                              userFans={ userFans } privateInfo={ privateInfo }/>);
+                              userFans={ userFans } privateInfo={ privateInfo } coins={ coins }/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -62,6 +63,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.updateNickNameTimeDiff = ${data.helper.stringify(updateNickNameTimeDiff)};
   $CONFIG.updateHeadTimeDiff = ${data.helper.stringify(updateHeadTimeDiff)};
   $CONFIG.privateInfo = ${data.helper.stringify(privateInfo)};
+  $CONFIG.coins = ${data.helper.stringify(coins)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/dmy.js')}" defer="defer"></script>

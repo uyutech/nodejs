@@ -134,22 +134,14 @@ class My extends migi.Component {
                updateNickNameTimeDiff={ this.props.updateNickNameTimeDiff }
                updateHeadTimeDiff={ this.props.updateHeadTimeDiff }
                privateInfo={ this.props.privateInfo || {} }/>
-      <div class="warn">
-        <div class="t fn-clear">
-          <img class="pic" src="//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg"/>
-          <div class="txt">
-            <div>
-              <span class="name">圈儿</span>
-              <small class="time">刚刚</small>
-            </div>
-          </div>
-        </div>
-        <div class="c">
-          <pre>未来在这里还会解锁各种信息哒！然而需要实现的功能太多，程序员小哥哥们需要一点一点搭建转圈的世界哦！
-请耐心等待，我们会努力做得更好=3=</pre>
-          <b class="arrow"/>
-        </div>
-      </div>
+      <ul class="list fn-clear">
+        <li><a href="/mall" class="mall">圈商城<small>（我的圈币：{ this.props.coins.Coins || 0 }）</small></a></li>
+        <li><a href="/my/message" class="message">圈消息</a></li>
+      </ul>
+      <a href="http://circling.cc/#/post/91255" class="help">
+        <img class="pic" src={ util.autoSsl(util.img60_60_80('//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg')) }/>
+        <span>帮助中心</span>
+      </a>
       <div class="c">
         <h4>我画的圈</h4>
         <Page ref="page" total={ Math.ceil(this.props.myPost.Size / take) }/>
