@@ -49,6 +49,8 @@ module.exports = app => {
   app.get('/m/circling', 'm.circling.index');
   app.get('/m/follow', app.middlewares.needLogin(), 'm.follow.index');
   app.get('/m/subComment', app.middlewares.needLogin(), 'm.subComment.index');
+  app.get('/m/subPost/:circleID', app.middlewares.needLogin(), 'm.subPost.index');
+  app.get('/m/subPost', app.middlewares.needLogin(), 'm.subPost.index');
   app.get('/m/mall', 'm.mall.index');
   app.get('/m/mall/new', 'm.mall.new');
   app.get('/m/mall/wait', 'm.mall.wait');
@@ -137,7 +139,8 @@ module.exports = app => {
 
   app.post('/api/count/index', 'api.count.index');
 
-  app.post('/api/tag/list', 'api.tag.list');
+  app.post('/api/subPost/tag', 'api.subPost.tag');
+  app.post('/api/subPost/sub', app.middlewares.needLoginJson(), 'api.subPost.sub');
 
   app.get('/app', 'h5.index.index');
   app.get('/h5/index', 'h5.index.index');
@@ -215,6 +218,8 @@ module.exports = app => {
   app.post('/h5/works/addComment', app.middlewares.needLoginJson(), 'h5.works.addComment');
 
   app.post('/h5/subpost/index', 'h5.subpost.index');
+  app.post('/h5/subpost/tag', 'h5.subpost.tag');
+  app.post('/h5/subpost/moreTag', 'h5.subpost.moreTag');
   app.post('/h5/subpost/list', 'h5.subpost.list');
 
   app.post('/h5/post/index', 'h5.post.index');

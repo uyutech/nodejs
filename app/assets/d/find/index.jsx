@@ -16,4 +16,6 @@ let find = migi.preExist(<Find
   hotCircleList={ $CONFIG.hotCircleList }
   hotPlayList={ $CONFIG.hotPlayList }
   banner={ $CONFIG.banner }
-  myCircleList={ $CONFIG.myCircleList }/>);
+  myCircleList={ $CONFIG.myCircleList }
+  activityLabel={ $CONFIG.activityLabel }
+  tags={ $CONFIG.tags }/>);

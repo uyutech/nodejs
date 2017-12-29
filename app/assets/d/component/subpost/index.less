@@ -35,7 +35,7 @@ body{
         position:relative;
         transition:all 0.2s;
       }
-      .label{
+      .circle{
         position:absolute;
         left:0;
         top:0;
@@ -254,7 +254,7 @@ body{
         }
       }
       &.to{
-        .label{
+        .circle{
           display:block;
         }
         .text{
@@ -273,7 +273,7 @@ body{
         .wrap{
           padding:0.35rem 0.05rem 0;
         }
-        .label{
+        .circle{
           transform:translateX(0.05rem);
           dd{
             display:block;
@@ -324,22 +324,27 @@ body{
         font-weight:400;
         color:#2B2B2B;
       }
-      ul{
+      dl{
+        margin-right:-0.05rem;
         padding:0.1rem;
-        li{
-          display:inline-block;
+        dt{
+          font-size:0.16rem;
+          font-weight:700;
+        }
+        dd{
+          float:left;
           margin-right:0.05rem;
-          margin-bottom:0.05rem;
-          padding:0 0.05rem;
-          border:1px solid @mainColor;
+          margin-top:0.05rem;
+          padding:0 0.1rem;
+          max-width:0.9rem;
+          height:0.22rem;
           line-height:0.22rem;
           border-radius:0.22rem;
+          border:1px solid @mainColor;
+          white-space:nowrap;
+          text-align:center;
           color:@mainColor;
           cursor:pointer;
-          &:hover{
-            color:@mainTextColor;
-            border-color:@mainTextColor;
-          }
         }
       }
       .close{

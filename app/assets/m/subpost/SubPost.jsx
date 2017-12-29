@@ -1,12 +1,12 @@
 /**
- * Created by army8735 on 2017/11/9.
+ * Created by army8735 on 2017/12/26.
  */
 
 'use strict';
 
-import net from '../../common/net';
-import util from '../../common/util';
-import config from '../../../config';
+import net from '../../d/common/net';
+import util from '../../d/common/util';
+import config from '../../config';
 
 const STATE = {
   LOADING: 0,
@@ -24,35 +24,32 @@ const MAX_IMG_NUM = 10;
 const MAX_TEXT_LENGTH = 4096;
 
 let tagHash = {};
+let timeout;
 
 class SubPost extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.hidden = self.props.hidden;
-    self.value = self.props.value || '';
     self.to = self.props.to ? self.props.to.slice(0) : undefined;
-    self.invalid = self.value.trim().length < 3;
-    self.maxlength = self.props.maxlength;
-    self.subText = self.props.subText;
-    self.tipText = self.props.tipText;
     self.placeholder = self.props.placeholder;
     self.activityLabel = self.props.activityLabel;
     self.tagList = (self.props.tagList || []).concat(self.activityLabel || []);
-    if(self.to && self.to.length && self.props.circleID !== undefined) {
+    if(self.props.circleID && self.props.tagList) {
       tagHash[self.props.circleID] = self.props.tagList;
+    }
+    if(self.to && self.to.length && self.props.circleID !== undefined) {
       let has = false;
       self.to.forEach(function(item) {
-        if(item.CirclingID === self.props.circleID) {
+        if(item.CirclingID.toString() === (self.props.circleID || '').toString()) {
           has = true;
         }
       });
       if(has) {
         migi.sort(self.to, function(a, b) {
-          if(a.CirclingID === self.props.circleID) {
+          if(a.CirclingID.toString() === (self.props.circleID || '').toString()) {
             return false;
           }
-          else if(b.CirclingID === self.props.circleID) {
+          else if(b.CirclingID.toString() === (self.props.circleID || '').toString()) {
             return true;
           }
         });
@@ -60,54 +57,39 @@ class SubPost extends migi.Component {
       else {
         self.to.unshift({
           CirclingID: self.props.circleID,
-          CirclingName: self.props.circleName,
+          CirclingName: self.props.circleDetail.TagName,
         });
       }
     }
     self.on(migi.Event.DOM, function() {
-      if($CONFIG.isLogin) {
-        let key = self.getImgKey();
-        let cache = localStorage[key];
-        if(cache) {
-          cache = JSON.parse(cache);
-          let temp = [];
-          cache.forEach(function(item) {
-            temp.push({
-              state: STATE.LOADED,
-              url: item,
-            });
+      let key = self.getImgKey();
+      let cache = localStorage[key];
+      if(cache) {
+        cache = JSON.parse(cache);
+        let temp = [];
+        cache.forEach(function(item) {
+          temp.push({
+            state: STATE.LOADED,
+            url: item,
           });
-          self.list = temp;
-          self.imgNum = temp.length;
-        }
-        let key2 = self.getContentKey();
-        let cache2 = localStorage[key2];
-        if(cache2) {
-          self.value = cache2.trim();
-          self.input(null, self.ref.input);
-          let length = self.value.trim().length;
-          self.invalid = length < 3 || length > MAX_TEXT_LENGTH;
-        }
+        });
+        self.list = temp;
+        self.imgNum = temp.length;
       }
-      let $body = $(document.body);
-      $body.on('click', function(e) {
-        if(self.expand) {
-          let $target = $(e.target);
-          if(!$target.closest('.mod-sub')[0] && (!$target.hasClass('s1') || $target.hasClass('s2'))) {
-            self.expand = false;
-          }
-        }
-      });
+      let key2 = self.getContentKey();
+      let cache2 = localStorage[key2];
+      if(cache2) {
+        self.value = cache2.trim();
+        self.input(null, self.ref.input);
+        let length = self.value.trim().length;
+        self.invalid = length < 3 || length > MAX_TEXT_LENGTH;
+      }
     });
   }
-  @bind hidden
   @bind placeholder
-  @bind subText
-  @bind tipText
   @bind value = ''
   @bind to
   @bind invalid = true
-  @bind expand
   @bind num = 0
   @bind disableUpload
   @bind list = []
@@ -119,25 +101,15 @@ class SubPost extends migi.Component {
     let self = this;
     let $vd = $(vd.element);
     self.num = $vd.val().length;
-    if(!$CONFIG.isLogin) {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-    else {
-      self.num = $vd.val().trim().length;
-      let content = $vd.val().trim();
-      self.invalid = content.length < 3 || content.length > MAX_TEXT_LENGTH;
-      self.warnLength = content.length > MAX_TEXT_LENGTH;
-      let key2 = self.getContentKey();
-      localStorage[key2] = content;
-    }
+    self.num = $vd.val().trim().length;
+    let content = $vd.val().trim();
+    self.invalid = content.length < 3 || content.length > MAX_TEXT_LENGTH;
+    self.warnLength = content.length > MAX_TEXT_LENGTH;
+    let key2 = self.getContentKey();
+    localStorage[key2] = content;
   }
   focus() {
-    if(!window.$CONFIG.isLogin) {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-    else {
-      this.expand = true;
-    }
+    this.ref.form.element.scrollIntoView(true);
   }
   submit(e) {
     e.preventDefault();
@@ -163,24 +135,14 @@ class SubPost extends migi.Component {
       $(self.ref.circle.element).find('.on').each(function(i, li) {
         circleID.push($(li).attr('rel'));
       });
-      net.postJSON('/api/circle/post', {
-        content: self.value,
-        imgs,
-        widths,
-        heights,
-        circleID: circleID.join(',')
-      }, function(res) {
+      net.postJSON('/api/subPost/sub', { content: self.value, imgs, widths, heights, circleID: circleID.join(',') }, function(res) {
         if(res.success) {
           self.value = '';
           self.invalid = true;
           self.num = 0;
           self.list = [];
-          let key = self.getImgKey();
-          localStorage[key] = '';
-          let key2 = self.getContentKey();
-          localStorage[key2] = '';
-          self.expand = false;
-          self.emit('add_post', res.data);
+          self.clearCache();
+          location.href = '/post/' + res.data.ID;
         }
         else {
           alert(res.message || util.ERROR_MESSAGE);
@@ -192,9 +154,6 @@ class SubPost extends migi.Component {
       });
     }
   }
-  blur() {
-    // this.expand = false;
-  }
   change(e) {
     let self = this;
     if(window.FileReader) {
@@ -205,7 +164,7 @@ class SubPost extends migi.Component {
       for(let i = 0, len = files.length; i < len; i++) {
         let file = files[i];
         let size = file.size;
-        if(size && size !== 0 && size <= 1024 * 1024 * 15) {
+        if(size && size !== 0 && size < 1024 * 1024 * 15) {
           res.push(file);
         }
         else {
@@ -242,7 +201,7 @@ class SubPost extends migi.Component {
         let fileReader = new FileReader();
         fileReader.onload = function() {
           self.list[i + self.imgNum].state = STATE.SENDING;
-          self.list[i + self.imgNum].url = fileReader.result;
+          self.list[i + self.imgNum].url = /^data:image\/(\w+);base64,/.test(fileReader.result) ? fileReader.result : 'data:image/jpeg;base64,' + fileReader.result;
           self.list = self.list;
           let img = fileReader.result;
           let node = document.createElement('img');
@@ -271,11 +230,11 @@ class SubPost extends migi.Component {
                 self.addCache(url);
               }
               else {
-                self.list[i + self.imgNum] = null;
+                self.list[i + self.imgNum].state = STATE.ERROR;
               }
             }
             else {
-              self.list[i + self.imgNum].state = STATE.ERROR;
+              self.list[i + self.imgNum] = null;
             }
             self.list = self.list;
             count++;
@@ -352,14 +311,22 @@ class SubPost extends migi.Component {
     let self = this;
     let key = self.getImgKey();
     localStorage[key] = '';
+    let key2 = self.getContentKey();
+    localStorage[key2] = '';
   }
   clickImg(e, vd, tvd) {
+    let self = this;
     let i = tvd.props.idx;
-    if(this.list[i].state === STATE.LOADED || this.list[i].state === STATE.ERROR) {
-      this.delCache(tvd.props.rel);
-      this.list.splice(i, 1);
-      this.imgNum = this.list.length;
+    if(self.list[i].state === STATE.LOADED || self.list[i].state === STATE.ERROR) {
+      self.delCache(tvd.props.rel);
+      self.list.splice(i, 1);
+      self.imgNum = self.list.length;
     }
+  }
+  clickClose(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this.ref.pop.element).addClass('fn-hide');
   }
   clickCircle(e, vd, tvd) {
     let self = this;
@@ -405,9 +372,9 @@ class SubPost extends migi.Component {
             if(id === circleID) {
               return;
             }
-            let tags = tagHash[id];console.log(id);
+            let tags = tagHash[$o.attr('rel')];
             temp = temp.concat(tags);
-          });console.log(temp);
+          });
           self.tagList = tagHash[circleID].concat(temp);
         }
         else {
@@ -434,68 +401,77 @@ class SubPost extends migi.Component {
     $(self.ref.pop.element).addClass('fn-hide');
     self.input(null, self.ref.input);
   }
-  clickClose(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    $(this.ref.pop.element).addClass('fn-hide');
+  clickTip(e, vd) {
+    let $tip = $(vd.element);
+    if($tip.text()) {
+      $tip.removeClass('fn-hide');
+      if(timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(function() {
+        $tip.addClass('fn-hide');
+      }, 3000);
+    }
   }
   render() {
-    return <div class={ 'mod-sub' + (this.expand ? ' expand' : '') + (!this.hidden ? '' : ' fn-hide') }>
-      <div class="c">
-        <form class={ this.to ? ' to' : '' } ref="form" onSubmit={ this.submit }>
-          <div class="wrap">
-            <dl class="circle fn-clear" ref="circle" onClick={ { dd: this.clickCircle } }>
-              <dt>画个圈</dt>
-              {
-                (this.to || []).map(function(item) {
-                  return <dd rel={ item.CirclingID }
-                             class={ item.CirclingID === this.props.circleID ? 'on' : '' }>{ item.CirclingName }圈</dd>;
-                }.bind(this))
-              }
-            </dl>
-            <ul class={ 'ti3' + (this.tagList.length ? '' : ' fn-hide') } onClick={ { li: this.clickTag }}>
-              {
-                this.tagList.map(function(item, i) {
-                  return <li class={ item.more ? 'more' : '' }
-                             i={ i }
-                             rel={ item.value || ('#' + item.TagName + '#') }
-                             desc={ item.Describe || '' }>{ item.TagName }</li>;
-                }.bind(this))
-              }
-            </ul>
-            <textarea class={ 'text' + (this.sending ? ' dis' : '') } ref="input" disabled={ !!this.sending }
-                      placeholder={ this.placeholder } onInput={ this.input } onFocus={ this.focus }
-                      onBlur={ this.blur }>{ this.value }</textarea>
-            <span class={ 'limit' + (this.warnLength ? ' warn' : '') }>
-              <strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }</span>
-            <div class={ 'upload' + (this.disableUpload ? ' dis' : '') }>
-              添加图片
-              <input type="file" ref="file" class="file" onChange={ this.change }
-                     disabled={ !!this.disableUpload }
-                     multiple="multiple" accept="image/gif, image/jpeg, image/png"/>
-            </div>
-            <input type="submit"
-                   class={ 'submit' + (this.sending || this.invalid || this.disableUpload ? ' dis' : '') }
-                   value={ this.value.trim().length
-                     ? this.value.trim().length < 3
-                       ? this.tipText
-                         ? this.tipText.replace('${n}', (3 - this.value.trim().length))
-                         : '还少' + (3 - this.value.trim().length) + '个字哦'
-                       : this.subText || '发送'
-                     : this.subText || '发送' }/>
-          </div>
-          <ul class="list fn-clear" onClick={ { li: this.clickImg } }>
-            {
-              (this.list || []).map(function(item, i) {
-                return <li class={ 's' + item.state } idx={ i } rel={ item.url }
-                           style={ 'background-image:url(' + util.autoSsl(util.img120_120_80(item.url)) + ')' }>
-                  <span>{ TEXT[item.state] }</span>
-                </li>;
-              })
-            }
-          </ul>
-        </form>
+    return <form class="mod-sub" ref="form" onSubmit={ this.submit }>
+      <div class="circle">
+        <label>圈子</label>
+        <ul onClick={ { li: this.clickCircle } } ref="circle">
+          {
+            (this.to || []).map(function(item) {
+              return <li rel={ item.CirclingID } class={ item.CirclingID.toString() === (this.props.circleID || '').toString() ? 'on' : '' }>{ item.CirclingName }圈</li>;
+            }.bind(this))
+          }
+        </ul>
       </div>
+      <div class="tag">
+        <label>话题</label>
+        <ul onClick={ { li: this.clickTag } }>
+          {
+            (this.tagList || []).map(function(item, i) {
+              return <li class={ item.more ? 'more' : '' }
+                         i={ i }
+                         rel={ item.value || ('#' + item.TagName + '#') }
+                         desc={ item.Describe || '' }>{ item.TagName }</li>;
+            }.bind(this))
+          }
+        </ul>
+      </div>
+      <div class="c">
+        <textarea class="text" ref="input" placeholder={ this.placeholder || '夸夸这个圈子吧' }
+                  onInput={ this.input }>{ this.value }</textarea>
+        <div class={ 'limit' + (this.warnLength ? ' warn' : '') }><strong>{ this.num }</strong> / { MAX_TEXT_LENGTH }</div>
+      </div>
+      <ul class="list" onClick={ { li: this.clickImg } }>
+        {
+          (this.list || []).map(function(item, i) {
+            return <li class={ 's' + item.state } idx={ i } rel={ item.url }
+                       style={ 'background-image:url(' + util.autoSsl(util.img120_120_80(item.url)) + ')' }>
+              <span>{ TEXT[item.state] }</span>
+            </li>;
+          })
+        }
+      </ul>
+      <ul class="btn">
+        <li class="back" onClick={ this.clickClose }/>
+        <li class="sub">
+          <input type="submit"
+                 class={ 'submit' + (this.sending || this.invalid || this.disableUpload ? ' dis' : '') }
+                 value={ this.value.trim().length
+                   ? this.value.trim().length < 3
+                     ? '-${n}'.replace('${n}', (3 - this.value.trim().length))
+                     : '发送'
+                   : '发送' }/>
+        </li>
+        <li class="tip">
+          <div ref="tip" class="fn-hide" onClick={ this.clickTip }/>
+        </li>
+        <li class="pic">
+          <input type="file" ref="file" class="file" onChange={ this.change } disabled={ !!this.disableUpload }
+                 multiple="multiple" accept="image/gif, image/jpeg, image/png"/>
+        </li>
+      </ul>
       <div class="pop fn-hide" ref="pop">
         <div class="c" onClick={ { dd: this.clickTag2 } }>
           <h3>选择标签</h3>
@@ -514,7 +490,7 @@ class SubPost extends migi.Component {
           <span class="close" onClick={ this.clickClose }/>
         </div>
       </div>
-    </div>;
+    </form>;
   }
 }
 

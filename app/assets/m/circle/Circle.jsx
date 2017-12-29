@@ -23,7 +23,7 @@ class Circle extends migi.Component {
     self.on(migi.Event.DOM, function() {
       let subCmt = self.ref.subCmt;
       subCmt.on('click', function() {
-        location.href = '/circle/post?circleID=' + $CONFIG.circleID;
+        location.href = '/subPost/' + $CONFIG.circleID;
       });
       if(self.props.postList.Size > take) {
         let $window = $(window);

@@ -24,6 +24,7 @@ module.exports = {
     mcircling: './app/assets/m/circling/index.jsx',
     mfollow: './app/assets/m/follow/index.jsx',
     msubcomment: './app/assets/m/subcomment/index.jsx',
+    msubpost: './app/assets/m/subpost/index.jsx',
     mmall: './app/assets/m/mall/index.jsx',
     mmall_new: './app/assets/m/mall/new/index.jsx',
     mmall_wait: './app/assets/m/mall/wait/index.jsx',

@@ -22,6 +22,7 @@ module.exports = {
     mcircling: './app/view/m/circling.jsx',
     mfollow: './app/view/m/follow.jsx',
     msubcomment: './app/view/m/subcomment.jsx',
+    msubpost: './app/view/m/subpost.jsx',
     mmall: './app/view/m/mall.jsx',
     mmall_new: './app/view/m/mall/new.jsx',
     mmall_wait: './app/view/m/mall/wait.jsx',

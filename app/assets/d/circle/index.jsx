@@ -10,5 +10,7 @@ import Circle from './Circle.jsx';
 
 let circle = migi.preExist(
   <Circle circleDetail={ $CONFIG.circleDetail } postList={ $CONFIG.postList }
-          stick={ $CONFIG.stick } myCircleList={ $CONFIG.myCircleList }/>
+          stick={ $CONFIG.stick } myCircleList={ $CONFIG.myCircleList }
+          tagList={ $CONFIG.tagList }
+          activityLabel={ $CONFIG.activityLabel } tags={ $CONFIG.tags }/>
 );

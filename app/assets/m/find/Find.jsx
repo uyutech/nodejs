@@ -28,7 +28,7 @@ class Find extends migi.Component {
     self.on(migi.Event.DOM, function() {
       let subCmt = self.ref.subCmt;
       subCmt.on('click', function() {
-        location.href = '/circle/post';
+        location.href = '/subPost';
       });
       let $window = $(window);
       $window.on('scroll', function() {
