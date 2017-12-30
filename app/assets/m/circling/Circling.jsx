@@ -27,7 +27,7 @@ class Circling extends migi.Component {
       });
       let subCmt = self.ref.subCmt;
       subCmt.on('click', function() {
-        location.href = '/circle/post';
+        location.href = '/subPost';
       });
     });
   }

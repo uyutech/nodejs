@@ -142,6 +142,8 @@ module.exports = app => {
   app.post('/api/subPost/tag', 'api.subPost.tag');
   app.post('/api/subPost/sub', app.middlewares.needLoginJson(), 'api.subPost.sub');
 
+  app.post('/api/tag/list', 'api.tag.list');
+
   app.get('/app', 'h5.index.index');
   app.get('/h5/index', 'h5.index.index');
   app.get('/h5/version', 'h5.version.index');
@@ -246,6 +248,11 @@ module.exports = app => {
   app.post('/h5/mall/wait', 'h5.mall.wait');
 
   app.post('/h5/tag/list', 'h5.tag.list');
+
+  app.post('/h5/passport/code', 'h5.passport.code');
+  app.post('/h5/passport/login', 'h5.passport.login');
+  app.post('/h5/passport/register', 'h5.passport.register');
+  app.post('/h5/passport/reset', 'h5.passport.reset');
 
   app.post('/mns/mts/job', 'mns.mts.job');
 };

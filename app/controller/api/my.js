@@ -326,6 +326,10 @@ module.exports = app => {
     * sendPrize(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
+      return ctx.body = {
+        success: false,
+        message: '12.29日前选择发货的小伙伴的快递将在元旦之后寄出。在此之后直到下次发货之间，发货功能将被锁定。下次发货时间预定于一月下旬。请小伙伴们谅解。',
+      };
       let res = yield ctx.helper.postServiceJSON2('api/users/SendProduct', {
         uid,
         cartID: body.cartID,
