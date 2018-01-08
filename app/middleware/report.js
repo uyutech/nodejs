@@ -5,14 +5,14 @@
 'use strict';
 
 module.exports = () => {
-  return function* (next) {
+  return async function(ctx, next) {
     let start = Date.now();
-    yield next;
+    await next();
     let end = Date.now();
-    let ip = this.request.header['x-real-ip'];
-    let uid = this.session ? this.session.uid || '-' : '-';
-    let method = this.request.method;
-    let url = this.request.url;
-    this.app.logger.info('[%s/%s/%s/%sms %s %s]', uid, ip, this.traceID, end - start, method, url);
+    let ip = ctx.request.header['x-real-ip'];
+    let uid = ctx.session ? ctx.session.uid || '-' : '-';
+    let method = ctx.request.method;
+    let url = ctx.request.url;
+    ctx.app.logger.info('[%s/%s/%s/%sms %s %s]', uid, ip, ctx.traceID, end - start, method, url);
   };
 };

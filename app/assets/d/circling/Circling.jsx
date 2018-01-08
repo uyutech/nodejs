@@ -211,7 +211,8 @@ class Circling extends migi.Component {
         <Page ref="page2" total={ Math.ceil(this.props.postList.Size / take) }/>
       </div>
       <SubPost ref="subPost" placeholder={ '小小的提示：现在可以把一个圈画在好几个圈子里哦！' }
-               to={ this.props.myCircleList.data }/>
+               to={ this.props.myCircleList.data } activityLabel={ this.props.activityLabel }
+               tags={ this.props.tags }/>
       <SubCmt ref="subCmt"
               hidden={ true }
               subText="回复"

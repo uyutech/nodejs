@@ -12,12 +12,16 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let userInfo = {};
+      let oauthInfo = [];
       let bonusPoint = {};
       let lastUpdateNickNameTime;
       let lastUpdateHeadTime;
       let coins = {};
       let res = yield {
         userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
+          uid,
+        }),
+        oauthInfo: ctx.helper.postServiceJSON2('api/users/GetUserOauthInfo', {
           uid,
         }),
         bonusPoint: ctx.helper.postServiceJSON2('api/users/GetUserRank', {
@@ -35,6 +39,9 @@ module.exports = app => {
       };
       if(res.userInfo.data.success) {
         userInfo = res.userInfo.data.data;
+      }
+      if(res.oauthInfo.data.success) {
+        oauthInfo = res.oauthInfo.data.data;
       }
       if(res.bonusPoint.data.success) {
         bonusPoint = res.bonusPoint.data.data || {};
@@ -57,6 +64,7 @@ module.exports = app => {
       }
       ctx.body = ctx.helper.okJSON({
         userInfo,
+        oauthInfo,
         bonusPoint,
         lastUpdateNickNameTime,
         lastUpdateHeadTime,
@@ -443,7 +451,9 @@ module.exports = app => {
     * updateNickName(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let length = (body.nickName || '').length;
+      let nickName = body.nickName || '';
+      nickName = nickName.trim();
+      let length = nickName.length;
       if(length < 4 || length > 8) {
         return ctx.body = {
           success: false,
@@ -469,18 +479,37 @@ module.exports = app => {
             message: '昵称一天只能修改一次哦~',
           };
         }
-        if(body.nickName.indexOf('转圈') === 0) {
+        if(nickName.indexOf('转圈') === 0) {
           return ctx.body = {
             success: false,
             message: '昵称不能以"转圈"开头哦！',
           };
         }
-        let res = yield ctx.helper.postServiceJSON2('api/users/UpdateNickName', {
-          uid,
-          NickName: body.nickName,
-        });
-        ctx.session.uname = body.nickName;
-        return ctx.body = res.data;
+
+        let scan = yield ctx.service.green.textScan(nickName);
+        if(scan.data.code === 200 && scan.data.data[0].code === 200) {
+          let suggestion = scan.data.data[0].results[0].suggestion;
+          if(suggestion !== 'pass') {
+            return ctx.body = {
+              success: false,
+              message: '昵称中可能含有违规信息，请尝试换一个哦~',
+            };
+          }
+          let res = yield ctx.helper.postServiceJSON2('api/users/UpdateNickName', {
+            uid,
+            NickName: nickName,
+          });
+          if(res.data.success) {
+            ctx.session.uname = nickName;
+          }
+          else if(res.data.code === 1006) {
+            return ctx.body = {
+              success: false,
+              message: '昵称已被占用，换个名字试试吧~',
+            }
+          }
+          return ctx.body = res.data;
+        }
       }
       ctx.body = {
         success: false,

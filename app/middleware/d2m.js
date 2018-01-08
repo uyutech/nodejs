@@ -5,12 +5,12 @@
 'use strict';
 
 module.exports = () => {
-  return function* (next) {
-    let ua = this.get('user-agent');
+  return async function(ctx, next) {
+    let ua = ctx.get('user-agent');console.log(ua);
     if(/(iPhone|iPod|Android|ios)/i.test(ua)) {
-      this.body = `<!DOCTYPE html><html>
+      ctx.body = `<!DOCTYPE html><html>
         <head>
-        ${this.helper.getMHead()}
+        ${ctx.helper.getMHead()}
         <script>
           var pathname = location.pathname;
           if(pathname && pathname !== '/') {
@@ -27,6 +27,6 @@ module.exports = () => {
         <body></body></html>`;
       return;
     }
-    yield next;
+    await next();
   };
 };

@@ -10,7 +10,7 @@
     "anima-querystring": "~2.0.0",
     "anima-yocto-ajax": "~2.0.4",
     "bignumber.js": "~4.1.0",
-    "egg": "~1.11.0",
+    "egg": "~2.1.0",
     "egg-redis": "~1.0.2",
     "egg-scripts": "~2.1.0",
     "egg-view-migi": "~1.1.0",
@@ -61,7 +61,7 @@
     "ci": "npm run lint && npm run cov",
     "autod": "autod",
     "webpack": "webpack -p",
-    "pack": "npm install --production &&- tar -zcvf ../release.tgz ."
+    "pack": "npm install --production && tar -zcvf ../release.tgz ."
   },
   "ci": {
     "version": "8"

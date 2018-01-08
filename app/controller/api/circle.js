@@ -54,6 +54,7 @@ module.exports = app => {
           success: false,
         };
       }
+      ctx.logger.info('circleID %s', circleID);
       let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPost', {
         uid,
         CirclingIDList: circleID,

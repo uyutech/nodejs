@@ -5,8 +5,8 @@
 'use strict';
 
 module.exports = () => {
-  return function* (next) {
-    this.app.migi.Element.resetUid && this.app.migi.Element.resetUid();
-    yield next;
+  return async function(ctx, next) {
+    ctx.app.migi.Element.resetUid && ctx.app.migi.Element.resetUid();
+    await next();
   };
 };

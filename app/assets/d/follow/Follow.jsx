@@ -107,7 +107,7 @@ class Follow extends migi.Component {
       ajax.abort();
     }
     let hotPost = self.ref.hotPost;
-    ajax = net.postJSON(self.circleID ? '/api/circle/list' : '/api/circling/list', { skip, take, circleID: self.circleID }, function(res) {
+    ajax = net.postJSON('/api/follow/postList', { skip, take }, function(res) {
       if(res.success) {
         let data = res.data;
         hotPost.setData(data.data);

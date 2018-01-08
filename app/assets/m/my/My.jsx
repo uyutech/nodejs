@@ -32,7 +32,7 @@ class My extends migi.Component {
         <li><a href="/my/post" class="post">我画的圈</a></li>
         <li><a href="/my/favor" class="favor">我的收藏</a></li>
       </ul>
-      <a href="http://circling.cc/#/post/91255" class="help">
+      <a href="https://circling.cc/#/post/91255" class="help">
         <img class="pic" src={ util.autoSsl(util.img60_60_80('//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg')) }/>
         <span>帮助中心</span>
       </a>

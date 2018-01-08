@@ -33,6 +33,9 @@ module.exports = app => {
         },
         {
           TagName: '展望2018',
+        },
+        {
+          TagName: '陪转圈一起长大',
         }
       ];
       let uid = ctx.session.uid;

@@ -5,8 +5,7 @@
 'use strict';
 
 module.exports = () => {
-  return function* (next) {
-    let ctx = this;
+  return async function(ctx, next) {
     if(!ctx.session.uid) {
       return ctx.body = {
         success: false,
@@ -14,6 +13,6 @@ module.exports = () => {
         message: '请先登录',
       };
     }
-    yield next;
+    await next();
   };
 };

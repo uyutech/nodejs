@@ -13,7 +13,7 @@ module.exports = app => {
         Token: body.token,
       });
       let data = res.data;
-      ctx.logger.info('openid %s, token %s, res', body.openID, body.token, data.success);
+      ctx.logger.info('openid %s, token %s, res', body.openID, body.token, data && data.success);
       if(data && !data.success && data.code === 1002) {
         let userInfo = yield ctx.curl('https://api.weibo.com/2/users/show.json', {
           data: {
@@ -39,17 +39,21 @@ module.exports = app => {
           data.data = uid;
         }
       }
-      ctx.logger.info('openid %s, token %s, res', body.openID, body.token, data.success);
+      ctx.logger.info('openid %s, token %s, res', body.openID, body.token, data && data.success);
       if(data && data.success) {
         let uid = data.data;
         ctx.session.uid = uid;
         let userInfo = {};
+        let oauthInfo = [];
         let bonusPoint = {};
         let lastUpdateNickNameTime;
         let lastUpdateHeadTime;
         let coins = {};
         let res = yield {
           userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
+            uid,
+          }),
+          oauthInfo: ctx.helper.postServiceJSON2('api/users/GetUserOauthInfo', {
             uid,
           }),
           bonusPoint: ctx.helper.postServiceJSON2('api/users/GetUserRank', {
@@ -67,6 +71,9 @@ module.exports = app => {
         };
         if(res.userInfo.data.success) {
           userInfo = res.userInfo.data.data;
+        }
+        if(res.oauthInfo.data.success) {
+          oauthInfo = res.oauthInfo.data.data;
         }
         if(res.bonusPoint.data.success) {
           bonusPoint = res.bonusPoint.data.data || {};
@@ -90,6 +97,7 @@ module.exports = app => {
         }
         return ctx.body = ctx.helper.okJSON({
           userInfo,
+          oauthInfo,
           bonusPoint,
           lastUpdateNickNameTime,
           lastUpdateHeadTime,

@@ -29,11 +29,7 @@ module.exports = app => {
           success: false,
         };
       }
-      // let rootID = body.rootID;
-      // let parentID = body.parentID;
-      // if(rootID === undefined || rootID === '' || rootID === '-1') {
-      //   parentID = rootID = body.postID;
-      // }
+      ctx.logger.info('postID %s parentID %s rootID %s', body.postID, body.rootID, body.parentID);
       let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPostComment', {
         uid,
         ParentID: body.parentID,
@@ -55,6 +51,7 @@ module.exports = app => {
     * delComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
+      ctx.logger.info('commentID %s', body.commentID);
       let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,
@@ -102,6 +99,7 @@ module.exports = app => {
     * del(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
+      ctx.logger.info('postID %s', body.postID);
       let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
         CommentID: body.postID,

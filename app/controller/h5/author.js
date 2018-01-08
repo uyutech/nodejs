@@ -108,6 +108,7 @@ module.exports = app => {
           success: false,
         };
       }
+      ctx.logger.info('authorID %s parentID %s rootID %s', body.authorID, body.rootID, body.parentID);
       let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddAuthorComment', {
         uid,
         ParentID: body.parentID,
@@ -129,6 +130,7 @@ module.exports = app => {
     * delComment(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
+      ctx.logger.info('commentID %s', body.commentID);
       let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
         uid,
         CommentID: body.commentID,

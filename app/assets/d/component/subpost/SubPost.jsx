@@ -405,9 +405,9 @@ class SubPost extends migi.Component {
             if(id === circleID) {
               return;
             }
-            let tags = tagHash[id];console.log(id);
+            let tags = tagHash[id];
             temp = temp.concat(tags);
-          });console.log(temp);
+          });
           self.tagList = tagHash[circleID].concat(temp);
         }
         else {

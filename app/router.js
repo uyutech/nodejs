@@ -253,6 +253,15 @@ module.exports = app => {
   app.post('/h5/passport/login', 'h5.passport.login');
   app.post('/h5/passport/register', 'h5.passport.register');
   app.post('/h5/passport/reset', 'h5.passport.reset');
+  app.post('/h5/passport/bindPhone', app.middlewares.needLoginJson(), 'h5.passport.bindPhone');
+  app.post('/h5/passport/bindOauth', app.middlewares.needLoginJson(), 'h5.passport.bindOauth');
+  app.post('/h5/passport/guideNameAndSex', app.middlewares.needLoginJson(), 'h5.passport.guideNameAndSex');
+  app.post('/h5/passport/guideCircleList', app.middlewares.needLoginJson(), 'h5.passport.guideCircleList');
+  app.post('/h5/passport/guideCircle', app.middlewares.needLoginJson(), 'h5.passport.guideCircle');
+  app.post('/h5/passport/guideAuthorList', app.middlewares.needLoginJson(), 'h5.passport.guideAuthorList');
+  app.post('/h5/passport/guideAuthor', app.middlewares.needLoginJson(), 'h5.passport.guideAuthor');
+  app.post('/h5/passport/merge', app.middlewares.needLoginJson(), 'h5.passport.merge');
+  app.post('/h5/passport/mergeOauth', app.middlewares.needLoginJson(), 'h5.passport.mergeOauth');
 
   app.post('/mns/mts/job', 'mns.mts.job');
 };

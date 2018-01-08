@@ -5,8 +5,7 @@
 'use strict';
 
 module.exports = () => {
-  return function* (next) {
-    let ctx = this;
+  return async function(ctx, next) {
     let helper = ctx.helper;
     if(ctx.session.uid) {
       helper.$CONFIG += `
@@ -24,6 +23,6 @@ module.exports = () => {
   $CONFIG.isPublic = ${!!ctx.session.isPublic};`;
       }
     }
-    yield next;
+    await next();
   };
 };

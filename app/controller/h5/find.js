@@ -68,7 +68,8 @@ module.exports = app => {
       let banner = [
         {
           url: '/works.html?worksID=2015000000001591',
-          pic: '//zhuanquan.xyz/pic/0d5b2a466e0bee90047123d926d829b5.jpg'
+          pic: '//zhuanquan.xyz/pic/0d5b2a466e0bee90047123d926d829b5.jpg',
+          title: '惟我自在',
         },
         {
           url: '/post.html?postID=91200',

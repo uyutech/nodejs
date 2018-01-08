@@ -5,17 +5,17 @@
 'use strict';
 
 module.exports = () => {
-  return function* (next) {
-    let origin = this.request.header.origin;
+  return async function(ctx, next) {
+    let origin = ctx.request.header.origin;
     let allowOrigin;
     if(origin && origin.indexOf('circling.cc') > -1) {
       allowOrigin = origin;
     }
     if(allowOrigin) {
-      this.set('Access-Control-Allow-Origin', allowOrigin);
-      this.set('Access-Control-Allow-Credentials', 'true');
-      this.set('Access-Control-Allow-Methods', 'POST, GET, PUT, OPTIONS, DELETE');
+      ctx.set('Access-Control-Allow-Origin', allowOrigin);
+      ctx.set('Access-Control-Allow-Credentials', 'true');
+      ctx.set('Access-Control-Allow-Methods', 'POST, GET, PUT, OPTIONS, DELETE');
     }
-    yield next;
+    await next();
   }
 };

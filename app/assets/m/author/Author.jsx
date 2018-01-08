@@ -154,7 +154,7 @@ class Author extends migi.Component {
               subText="发送"
               tipText="-${n}"
               placeholder={ '给' + this.props.authorDetail.AuthorName + '留个言吧' }/>
-      <a class="app" href="http://circling.net.cn/android/circling-0.2.9.apk" target="_blank"/>
+      <a class="app" href="https://circling.net.cn/android/circling-0.4.1.apk" target="_blank"/>
     </div>;
   }
 }

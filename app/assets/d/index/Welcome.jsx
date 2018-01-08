@@ -7,6 +7,14 @@
 import net from '../common/net';
 import util from '../common/util';
 
+/**
+ * 状态0初始选是否公开
+ * 状态1点击披马甲去改名字
+ * 状态10点击公开后或者披马甲改完名字后去选关注
+ * 状态99完成
+ * 状态100作为作者完成
+ */
+
 class Welcome extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -226,7 +234,7 @@ class Welcome extends migi.Component {
                 })
               }
             </ul>
-            <label><input type="checkbox" checked="checked" onChange={ this.change }/>我已阅读并同意<a href="http://zhuanquan.xyz/temp/d3a4c4114dd2ded956b0d6876bd745eb.html" target="_blank">《转圈用户规约》</a></label>
+            <label><input type="checkbox" checked="checked" onChange={ this.change }/>我已阅读并同意<a href="//zhuanquan.xyz/schema.html" target="_blank">《转圈用户规约》</a></label>
             <button class={ 'center' + (this.dis ? ' dis' : '') } onClick={ this.clickOK }>好的~我要开始转圈啦！</button>
           </div>
         </div>
@@ -265,7 +273,7 @@ class Welcome extends migi.Component {
               })
             }
           </ul>
-          <label><input type="checkbox" checked="checked" onChange={ this.change }/>我已阅读并同意<a href="http://zhuanquan.xyz/temp/d3a4c4114dd2ded956b0d6876bd745eb.html" target="_blank">《转圈用户规约》</a></label>
+          <label><input type="checkbox" checked="checked" onChange={ this.change }/>我已阅读并同意<a href="//zhuanquan.xyz/schema.html" target="_blank">《转圈用户规约》</a></label>
           <button class={ 'center' + (this.dis ? ' dis' : '') } onClick={ this.clickOK }>好的~我要开始转圈啦！</button>
         </div>
       </div>

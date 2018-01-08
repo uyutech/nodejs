@@ -5,11 +5,10 @@
 'use strict';
 
 module.exports = () => {
-  return function* (next) {
-    let ctx = this;
+  return async function(ctx, next) {
     if(!ctx.session.uid) {
       return ctx.redirect('/login');
     }
-    yield next;
+    await next();
   };
 };

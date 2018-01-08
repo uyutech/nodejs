@@ -20,7 +20,7 @@ module.exports = app => {
         });
         return ctx.body = res.data;
       }
-      // 入驻，设置状态为1，走设置马甲昵称流程
+      // 入驻，设置状态为公开10马甲1，走设置马甲昵称流程
       else if(body.settle === 'true') {
         let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
           uid,
@@ -30,7 +30,7 @@ module.exports = app => {
         if(res.data.success) {
           let res2 = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
             uid,
-            User_Reg_Stat: 1,
+            User_Reg_Stat: body.public === 'true' ? 10 : 1,
           });
           return ctx.body = res2.data;
         }
@@ -42,20 +42,22 @@ module.exports = app => {
     * settleShadowName(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let length = (body.nickName || '').length;
+      let nickName = body.nickName || '';
+      nickName = nickName.trim();
+      let length = (nickName || '').length;
       if(length < 4 || length > 8) {
         return ctx.body = {
           success: false,
           message: '昵称长度需要在4~8个字之间哦！',
         };
       }
-      if(body.nickName.indexOf('转圈') === 0) {
+      if(nickName.indexOf('转圈') === 0) {
         return ctx.body = {
           success: false,
           message: '昵称不能以"转圈"开头哦！',
         };
       }
-      let scan = yield ctx.service.green.textScan(body.nickName);
+      let scan = yield ctx.service.green.textScan(nickName);
       if(scan.data.code === 200 && scan.data.data[0].code === 200) {
         let suggestion = scan.data.data[0].results[0].suggestion;
         if(suggestion !== 'pass') {
@@ -66,7 +68,7 @@ module.exports = app => {
         }
         let res = yield ctx.helper.postServiceJSON2('api/users/UpdateNickName', {
           uid,
-          NickName: body.nickName,
+          NickName: nickName,
         });
         if(res.data.success) {
           let res2 = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
@@ -81,9 +83,7 @@ module.exports = app => {
             message: '昵称已被占用，换个名字试试吧~',
           }
         }
-        else {
-          return ctx.body = res.data;
-        }
+        return ctx.body = res.data;
       }
       ctx.body = {
         success: false,
@@ -118,7 +118,7 @@ module.exports = app => {
         authors: ctx.helper.postServiceJSON2('api/users/GetAuthor', {
           uid,
           Skip: 0,
-          Take: 30,
+          Take: 32,
         }),
       };
       ctx.body = {
@@ -149,7 +149,7 @@ module.exports = app => {
       }
       let res = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
         uid,
-        User_Reg_Stat: body.isAuthor ? 100 : 99,
+        User_Reg_Stat: ctx.session.authorID ? 100 : 99,
       });
       return ctx.body = res.data;
     }

@@ -33,9 +33,7 @@ module.exports = app => {
       let res;
       switch(type) {
         case TYPE.POST:
-          // if(rid === -1) {
-          //   rid = cid = id;
-          // }
+          ctx.logger.info('postID %s cid %s rid %s', id, cid, rid);
           res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPostComment', {
             uid,
             ParentID: cid,
@@ -46,6 +44,7 @@ module.exports = app => {
           ctx.body = res.data;
           break;
         case TYPE.AUTHOR:
+          ctx.logger.info('authorID %s cid %s rid %s', id, cid, rid);
           res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddAuthorComment', {
             uid,
             ParentID: cid,
@@ -56,6 +55,7 @@ module.exports = app => {
           ctx.body = res.data;
           break;
         case TYPE.WORKS:
+          ctx.logger.info('worksID %s cid %s rid %s', id, cid, rid);
           res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddWorksComment', {
             uid,
             ParentID: cid,

@@ -138,7 +138,7 @@ class My extends migi.Component {
         <li><a href="/mall" class="mall">圈商城<small>（我的圈币：{ this.props.coins.Coins || 0 }）</small></a></li>
         <li><a href="/my/message" class="message">圈消息</a></li>
       </ul>
-      <a href="http://circling.cc/#/post/91255" class="help">
+      <a href="https://circling.cc/#/post/91255" class="help">
         <img class="pic" src={ util.autoSsl(util.img60_60_80('//zhuanquan.xyz/temp/f3bcae7e2f60d9729a0e205dfb39ca6e.jpg')) }/>
         <span>帮助中心</span>
       </a>
