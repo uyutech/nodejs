@@ -171,6 +171,129 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * newIndex(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let tagList = [];
+      let res = yield ctx.helper.postServiceJSON2('/api/RecommendHomes/GetFindTitle', {
+        uid,
+      });
+      if(!res.data || !res.data.success) {
+        return ctx.body = ctx.helper.errorJSON({});
+      }
+      tagList = res.data.data;
+      let bannerList = [];
+      let dataList = [];
+      if(tagList && tagList.length) {
+        let id = tagList[0].ID;
+        let res = yield {
+          bannerList: ctx.helper.postServiceJSON2('/api/RecommendHomes/GetFindBanner', {
+            uid,
+            findTypeID: id,
+          }),
+          dataList: ctx.helper.postServiceJSON2('/api/RecommendHomes/GetFindInformationList', {
+            uid,
+            findTypeID: id,
+            skip: body.skip || 0,
+            take: body.take || 10,
+          }),
+        };
+        if(res.bannerList.data && res.bannerList.data.success) {
+          bannerList = res.bannerList.data.data;
+        }
+        if(res.dataList.data && res.dataList.data.success) {
+          dataList = res.dataList.data.data;
+        }
+      }
+      ctx.body = ctx.helper.okJSON({
+        tagList,
+        bannerList,
+        dataList,
+      });
+    }
+    * recommendList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('/api/RecommendHomes/GetFindInformationList', {
+        uid,
+        findTypeID: body.id,
+        skip: body.skip || 0,
+        take: body.take || 10,
+      });
+      ctx.body = res.data;
+    }
+    * typeList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let id = body.id;
+      if(!id) {
+        return ctx.body = ctx.helper.errorJSON({});
+      }
+      let bannerList = [];
+      let dataList = [];
+      let typeList = [];
+      let itemList = {};
+      let res = yield {
+        bannerList: ctx.helper.postServiceJSON2('/api/RecommendHomes/GetFindBanner', {
+          uid,
+          FindTypeID: id,
+        }),
+        dataList: ctx.helper.postServiceJSON2('/api/RecommendHomes/GetFindInformationList', {
+          uid,
+          FindTypeID: id,
+          skip: body.skip || 0,
+          take: body.take || 10,
+        }),
+        typeList: ctx.helper.postServiceJSON2('/api/RecommendHomes/GetFindTypeGroup', {
+          uid,
+          FindTypeID: id,
+        }),
+      };
+      if(res.bannerList.data && res.bannerList.data.success) {
+        bannerList = res.bannerList.data.data;
+      }
+      if(res.dataList.data && res.dataList.data.success) {
+        dataList = res.dataList.data.data;
+      }
+      if(res.typeList.data.success) {
+        typeList = res.typeList.data.data;
+        if(typeList.length) {
+          let first = typeList[0];
+          let res2 = yield ctx.helper.postServiceJSON2('/api/RecommendHomes/GetItemsByGroupID', {
+            uid,
+            GroupID: first.GroupID,
+            skip: 0,
+            take: 10,
+          });
+          if(res2.data.success) {
+            itemList = res2.data.data;
+          }
+        }
+      }
+      ctx.body = ctx.helper.okJSON({
+        bannerList,
+        dataList,
+        typeList,
+        itemList,
+      });
+    }
+    * itemList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let typeID = body.typeID;
+      let groupID = body.groupID;
+      if(!groupID) {
+        return ctx.body = ctx.helper.errorJSON({});
+      }
+      let res = yield ctx.helper.postServiceJSON2('/api/RecommendHomes/GetItemsByGroupID', {
+        uid,
+        GroupID: groupID,
+        ItemsTypeID: typeID,
+        skip: body.skip || 0,
+        take: body.take || 10,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

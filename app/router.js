@@ -160,6 +160,10 @@ module.exports = app => {
   app.post('/h5/find/allAlbums', 'h5.find.allAlbums');
   app.post('/h5/find/allAuthors', 'h5.find.allAuthors');
   app.post('/h5/find/allCircles', 'h5.find.allCircles');
+  app.post('/h5/find/newIndex', 'h5.find.newIndex');
+  app.post('/h5/find/recommendList', 'h5.find.recommendList');
+  app.post('/h5/find/typeList', 'h5.find.typeList');
+  app.post('/h5/find/itemList', 'h5.find.itemList');
 
   app.post('/h5/circling/index', 'h5.circling.index');
   app.post('/h5/circling/postList', 'h5.circling.postList');
