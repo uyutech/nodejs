@@ -207,7 +207,7 @@ module.exports = app => {
 
   app.post('/h5/circle/index', 'h5.circle.index');
   app.post('/h5/circle/postList', 'h5.circle.postList');
-  app.post('/h5/circle/join', 'h5.circle.join');
+  app.post('/h5/circle/join', app.middlewares.needLoginJson(), 'h5.circle.join');
   app.post('/h5/circle/post', app.middlewares.needLoginJson(), 'h5.circle.post');
 
   app.post('/h5/author/index', 'h5.author.index');
