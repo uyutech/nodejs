@@ -196,9 +196,9 @@ module.exports = app => {
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');
-  app.post('/h5/works/likeWork', 'h5.works.likeWork');
-  app.post('/h5/works/favorWork', 'h5.works.favorWork');
-  app.post('/h5/works/unFavorWork', 'h5.works.unFavorWork');
+  app.post('/h5/works/likeWork', app.middlewares.needLoginJson(), 'h5.works.likeWork');
+  app.post('/h5/works/favorWork', app.middlewares.needLoginJson(), 'h5.works.favorWork');
+  app.post('/h5/works/unFavorWork', app.middlewares.needLoginJson(), 'h5.works.unFavorWork');
   app.post('/h5/works/likeComment', app.middlewares.needLoginJson(), 'h5.works.likeComment');
   app.post('/h5/works/subCommentList', 'h5.works.subCommentList');
   app.post('/h5/works/delComment', app.middlewares.needLoginJson(), 'h5.works.delComment');
@@ -266,6 +266,8 @@ module.exports = app => {
   app.post('/h5/passport/guideAuthor', app.middlewares.needLoginJson(), 'h5.passport.guideAuthor');
   app.post('/h5/passport/merge', app.middlewares.needLoginJson(), 'h5.passport.merge');
   app.post('/h5/passport/mergeOauth', app.middlewares.needLoginJson(), 'h5.passport.mergeOauth');
+
+  app.post('/h5/playlist/index', 'h5.playlist.index');
 
   app.post('/mns/mts/job', 'mns.mts.job');
 };

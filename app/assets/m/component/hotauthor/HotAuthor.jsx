@@ -22,31 +22,13 @@ class HotAuthor extends migi.Component {
           ? <ul>
               {
                 this.dataList.map(function(item) {
-                  let type = [];
-                  if(item.Authortype) {
-                    for(let i = 0, len = item.Authortype.length; i < len; i++) {
-                      let code = authorTemplate.code2Data[item.Authortype[i].AuthorTypeID].css;
-                      if(code && type.indexOf(code) === -1) {
-                        type.push(code);
-                      }
-                    }
-                  }
-                  migi.sort(type, function(a, b) {
-                    if(seq.indexOf(a) === -1) {
-                      return true;
-                    }
-                    if(seq.indexOf(b) === -1) {
-                      return false;
-                    }
-                    return seq.indexOf(a) > seq.indexOf(b);
-                  });
                   return <li>
                     <a href={ `/author/${item.AuthorID}` } class="pic">
                       <img src={ util.autoSsl(util.img120_120_80(item.Head_url
                         || '//zhuanquan.xin/img/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
                       {
-                        type.slice(0, 2).map(function(item) {
-                          return <b class={ 'cp-author-type-' + item }/>;
+                        (item.Authortype || []).slice(0, 2).map(function(item) {
+                          return <b class={ 'cp-author-type-' + item.NewAuthorTypeID }/>;
                         })
                       }
                     </a>

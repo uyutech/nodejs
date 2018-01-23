@@ -11,6 +11,7 @@ module.exports = app => {
         success: true,
         version: 47,
         url: 'https://circling.net.cn/h5/h5-0.4.3.zip',
+        minSdk: 12,
       };
     }
   }
