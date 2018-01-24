@@ -9,7 +9,6 @@ module.exports = appInfo => {
     hotDeploy: true,
     session: {
       key: 'sessionid',
-      maxAge: 24 * 3600 * 1000,
       domain: 'dev.circling.cc2',
     },
   };
