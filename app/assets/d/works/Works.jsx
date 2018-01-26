@@ -69,7 +69,8 @@ class Works extends migi.Component {
     let authorList = self.props.worksDetail.Works_Author || [];
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       works.forEach(function(item) {
-        if(item.ItemType === 1111 || item.ItemType === 1113) {
+        let type = itemTemplate.workType(item.ItemType);
+        if(type === 'audio') {
           let l = {};
           if(LyricsParser.isLyrics(item.lrc)) {
             l.is = true;
@@ -83,7 +84,7 @@ class Works extends migi.Component {
           item.formatLyrics = l;
           workList.push(item);
         }
-        else if(item.ItemType === 2110) {
+        else if(type === 'video') {
           workList.push(item);
         }
       });
@@ -183,32 +184,6 @@ class Works extends migi.Component {
       }
     });
     self.isManager = hash.hasOwnProperty(self.props.authorID);
-    // 按类型将作者整理排序
-    let authorList = [];
-    itemTemplate.authorType.forEach(function(typeList) {
-      let list = [];
-      typeList.forEach(function(type) {
-        if(typeHash.hasOwnProperty(type)) {
-          list = list.concat(typeHash[type].list);
-          delete typeHash[type];
-        }
-      });
-      if(list.length) {
-        authorList.push(list);
-      }
-    });
-    let unKnowList = [];
-    let unKnowHash = {};
-    Object.keys(typeHash).forEach(function(type) {
-      typeHash[type].list.forEach(function(item) {
-        if(!unKnowHash.hasOwnProperty(item.ID)) {
-          unKnowHash[item.ID] = true;
-          unKnowList.push(item);
-        }
-      });
-    });
-    authorList = authorList.concat([unKnowList]);
-    self.authorList = authorList;
   }
   clickType(e, vd, tvd) {
     let self = this;
@@ -230,29 +205,29 @@ class Works extends migi.Component {
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       return <div class={ 'works fn-clear t' + self.worksType }>
         <Title ref="title" worksType={ self.worksType }
-               detail={ this.props.worksDetail }/>
+               detail={ self.props.worksDetail }/>
         {
-          this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
-            ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+          self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
+            ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
             : ''
         }
         <div class="main">
-          <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
+          <ul class="type fn-clear" ref="type" onClick={ { li: self.clickType } }>
             <li class="cover cur" rel="cover">封面</li>
             <li class="player" rel="player">播放</li>
           </ul>
           <MusicAlbum ref="musicAlbum"
-                      worksID={ this.worksID }
-                      workID={ this.workID }
-                      cover={ this.props.worksDetail.cover_Pic }
-                      workList={ this.workList }/>
+                      worksID={ self.worksID }
+                      workID={ self.workID }
+                      cover={ self.props.worksDetail.cover_Pic }
+                      workList={ self.workList }/>
           <div class="box">
-            <Describe data={ this.props.worksDetail.Describe }/>
-            <Author authorList={ this.authorList }/>
+            <Describe data={ self.props.worksDetail.Describe }/>
+            <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
             {
-              this.props.worksDetail.WorksAuthorComment
+              self.props.worksDetail.WorksAuthorComment
                 ? <InspComment ref="inspComment"
-                               commentData={ this.props.worksDetail.WorksAuthorComment }/>
+                               commentData={ self.props.worksDetail.WorksAuthorComment }/>
                 : ''
             }
           </div>
@@ -262,122 +237,122 @@ class Works extends migi.Component {
             <li class="cur">曲目</li>
           </ul>
           <div class="box box-fn-top-left">
-            <PlayList ref="playList" cover={ this.props.worksDetail.cover_Pic }
-                      workList={ this.workList } worksID={ this.worksID } workID={ this.workID }/>
+            <PlayList ref="playList" cover={ self.props.worksDetail.cover_Pic }
+                      workList={ self.workList } worksID={ self.worksID } workID={ self.workID }/>
           </div>
           <WorkComment ref="workComment"
-                       isLogin={ this.props.isLogin }
-                       worksID={ this.worksID }
-                       workID={ this.workID }
-                       originTo={ this.props.worksDetail.Title }
-                       commentData={ this.props.commentData }/>
+                       isLogin={ self.props.isLogin }
+                       worksID={ self.worksID }
+                       workID={ self.workID }
+                       originTo={ self.props.worksDetail.Title }
+                       commentData={ self.props.commentData }/>
         </div>
       </div>;
     }
     if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
       return <div class={ 'works fn-clear t' + self.worksType }>
         <Title ref="title" worksType={ self.worksType }
-               detail={ this.props.worksDetail }/>
+               detail={ self.props.worksDetail }/>
         <div class="main">
-          <PhotoAlbum worksID={ this.worksID } labelList={ this.props.labelList }/>
+          <PhotoAlbum worksID={ self.worksID } labelList={ self.props.labelList }/>
         </div>
         <div class="side">
           <div class="box">
-            <Author authorList={ this.authorList }/>
+            <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
             {
-              this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
-                ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+              self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
+                ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
                 : ''
             }
             {
-              this.textData && this.textData.value && this.textData.value.length
-                ? <Text datas={ this.textData }/>
+              self.textData && self.textData.value && self.textData.value.length
+                ? <Text datas={ self.textData }/>
                 : ''
             }
             {
-              this.props.worksDetail.WorksAuthorComment
+              self.props.worksDetail.WorksAuthorComment
                 ? <InspComment ref="inspComment"
-                               commentData={ this.props.worksDetail.WorksAuthorComment }/>
+                               commentData={ self.props.worksDetail.WorksAuthorComment }/>
                 : ''
             }
           </div>
           <WorkComment ref="workComment"
-                       isLogin={ this.props.isLogin }
-                       worksID={ this.worksID }
-                       workID={ this.workID }
-                       originTo={ this.props.worksDetail.Title }
-                       commentData={ this.props.commentData }/>
+                       isLogin={ self.props.isLogin }
+                       worksID={ self.worksID }
+                       workID={ self.workID }
+                       originTo={ self.props.worksDetail.Title }
+                       commentData={ self.props.commentData }/>
         </div>
-        <AddLabelPanel ref="addLabelPanel" worksID={ this.worksID }/>
+        <AddLabelPanel ref="addLabelPanel" worksID={ self.worksID }/>
         <ImageView ref="imageView"/>
       </div>;
     }
     return <div class={ 'works fn-clear t' + self.worksType }>
       <Title ref="title" worksType={ self.worksType }
-             detail={ this.props.worksDetail }/>
+             detail={ self.props.worksDetail }/>
       <div class="main">
-        <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
+        <ul class="type fn-clear" ref="type" onClick={ { li: self.clickType } }>
           {
-            this.videoData
+            self.videoData
               ? <li class={ 'video' + (first ==='video' ? ' cur' : '') } rel="video">视频</li>
               : ''
           }
           {
-            this.audioData
+            self.audioData
               ? <li class={ 'audio' + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
               : ''
           }
           {/*<li class="link" rel="link">站外链接</li>*/}
         </ul>
         <Media ref="media"
-               worksID={ this.worksID }
-               workID={ this.workID }
-               cover={ this.props.worksDetail.cover_Pic }
-               audioData={ this.audioData }
-               videoData={ this.videoData }
+               worksID={ self.worksID }
+               workID={ self.workID }
+               cover={ self.props.worksDetail.cover_Pic }
+               audioData={ self.audioData }
+               videoData={ self.videoData }
                first={ first }/>
         <WorkComment ref="workComment"
-                     isLogin={ this.props.isLogin }
-                     worksID={ this.worksID }
-                     workID={ this.workID }
-                     originTo={ this.props.worksDetail.Title }
-                     commentData={ this.props.commentData }/>
+                     isLogin={ self.props.isLogin }
+                     worksID={ self.worksID }
+                     workID={ self.workID }
+                     originTo={ self.props.worksDetail.Title }
+                     commentData={ self.props.commentData }/>
       </div>
       <div class="side">
         <ul class="sel fn-clear" ref="sel">
           <li class="cur">简介</li>
         </ul>
         <div class="box box-fn-top-left">
-          <Author authorList={ this.authorList }/>
+          <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
           {
-            this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
-              ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+            self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
+              ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
               : ''
           }
           {
-            this.textData && this.textData.value && this.textData.value.length
-              ? <Text datas={ this.textData }/>
+            self.textData && self.textData.value && self.textData.value.length
+              ? <Text datas={ self.textData }/>
               : ''
           }
           {
-            this.lyricData && this.lyricData.value && this.lyricData.value.length
-              ? <Lyric datas={ this.lyricData }/>
+            self.lyricData && self.lyricData.value && self.lyricData.value.length
+              ? <Lyric datas={ self.lyricData }/>
               : ''
           }
           {
-            this.props.worksDetail.WorksAuthorComment
+            self.props.worksDetail.WorksAuthorComment
               ? <InspComment ref="inspComment"
-                             commentData={ this.props.worksDetail.WorksAuthorComment }/>
+                             commentData={ self.props.worksDetail.WorksAuthorComment }/>
               : ''
           }
           {
-            this.posterData
-              ? <Poster datas={ this.posterData }/>
+            self.posterData
+              ? <Poster datas={ self.posterData }/>
               : ''
           }
         </div>
       </div>
-      <AddLabelPanel ref="addLabelPanel" worksID={ this.worksID }/>
+      <AddLabelPanel ref="addLabelPanel" worksID={ self.worksID }/>
     </div>;
   }
 }
