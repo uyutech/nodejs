@@ -4,6 +4,8 @@
 
 'use strict';
 
+const Sequelize = require('sequelize');
+
 module.exports = app => {
   app.beforeStart(function* () {
     // app.logger.info('env: %s', app.config.env);
@@ -26,6 +28,9 @@ module.exports = app => {
       }, function(err, status) {
         // app.logger.info('webpack watch: %s', !!status);
       });
+    }
+    if(app.config.database) {
+
     }
   });
 };

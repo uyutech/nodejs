@@ -12,6 +12,7 @@ module.exports = appInfo => {
       domain: 'dev.circling.cc2',
     },
     database: {
+      db: 'circling',
       username: 'root',
       password: '87351984@',
     },

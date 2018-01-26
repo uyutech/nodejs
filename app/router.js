@@ -270,4 +270,6 @@ module.exports = app => {
   app.post('/h5/playlist/index', 'h5.playlist.index');
 
   app.post('/mns/mts/job', 'mns.mts.job');
+
+  app.get('/d/author2/:authorId', 'd2.author.index');
 };

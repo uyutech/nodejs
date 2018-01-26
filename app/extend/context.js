@@ -14,4 +14,13 @@ module.exports = {
     }
     return this[TRACE_ID];
   },
+  get Sequelize() {
+    return this.app.Sequelize;
+  },
+  get sequelize() {
+    return this.app.sequelize;
+  },
+  get model() {
+    return this.app.model;
+  },
 };
