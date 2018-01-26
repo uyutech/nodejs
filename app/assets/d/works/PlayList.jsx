@@ -94,7 +94,7 @@ class PlayList extends migi.Component {
       <ol class="list" ref="list" onClick={ { li: this.clickItem } }>
         {
           (this.list || []).map(function(item, i) {
-            let type = itemTemplate.workType(item.ItemType);
+            let type = itemTemplate.workType(item.ItemType).bigType;
             if(item.WorksState === 3) {
               return <li class="private">
                 <span class="name">待揭秘</span>

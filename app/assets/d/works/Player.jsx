@@ -101,7 +101,7 @@ class Player extends migi.Component {
     let self = this;
     let isPlaying = self.isPlaying;
     self.pause();
-    let type = itemTemplate.workType(self.type);
+    let type = itemTemplate.workType(self.type).bigType;
     switch(type) {
       case 'audio':
         if(!self.audio) {

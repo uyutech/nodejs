@@ -69,7 +69,7 @@ class Works extends migi.Component {
     let authorList = self.props.worksDetail.Works_Author || [];
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       works.forEach(function(item) {
-        let type = itemTemplate.workType(item.ItemType);
+        let type = itemTemplate.workType(item.ItemType).bigType;
         if(type === 'audio') {
           let l = {};
           if(LyricsParser.isLyrics(item.lrc)) {
