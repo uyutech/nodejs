@@ -67,14 +67,14 @@ module.exports = app => {
       }
       let banner = [
         {
+          url: '/works.html?worksID=2015000000002200',
+          pic: '//zhuanquan.xyz/pic/975b02f6c1c1d0fd6015ca560c7015f8.jpg',
+          title: '述岚记',
+        },
+        {
           url: '/works.html?worksID=2015000000001591',
           pic: '//zhuanquan.xyz/pic/0d5b2a466e0bee90047123d926d829b5.jpg',
           title: '惟我自在',
-        },
-        {
-          url: '/post.html?postID=91200',
-          pic: '//zhuanquan.xyz/pic/e70cdd87affae05deace6ec77e18b96f.jpg',
-          title: '岁末福利',
         },
         {
           url: '/post.html?postID=91193',
