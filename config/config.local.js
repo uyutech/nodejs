@@ -11,5 +11,9 @@ module.exports = appInfo => {
       key: 'sessionid',
       domain: 'dev.circling.cc2',
     },
+    database: {
+      username: 'root',
+      password: '87351984@',
+    },
   };
 };
