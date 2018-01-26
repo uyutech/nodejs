@@ -2,10 +2,12 @@
  * Created by army8735 on 2017/10/19.
  */
 
+
 'use strict';
 
 import net from '../common/net';
 import util from '../common/util';
+import itemTemplate from "./itemTemplate";
 
 let isVStart;
 let vOffsetX;
@@ -99,9 +101,9 @@ class Player extends migi.Component {
     let self = this;
     let isPlaying = self.isPlaying;
     self.pause();
-    switch(self.type) {
-      case 1111:
-      case 1113:
+    let type = itemTemplate.workType(self.type);
+    switch(type) {
+      case 'audio':
         if(!self.audio) {
           self.audio = <audio src={ self.url }
                               onTimeupdate={ self.onTimeupdate.bind(self) }
@@ -122,7 +124,7 @@ class Player extends migi.Component {
         }
         self.av = self.audio;
         break;
-      case 2110:
+      case 'video':
         if(!self.video) {
           self.video = <video ref="video"
                               src={ self.url }

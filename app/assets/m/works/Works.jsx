@@ -78,7 +78,8 @@ class Works extends migi.Component {
     let authorList = self.props.worksDetail.Works_Author || [];
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       works.forEach(function(item) {
-        if(item.ItemType === 1111 || item.ItemType === 1113) {
+        let type = itemTemplate.workType(item.ItemType);
+        if(type === 'audio') {
           let l = {};
           if(LyricsParser.isLyrics(item.lrc)) {
             l.is = true;
@@ -92,7 +93,7 @@ class Works extends migi.Component {
           item.formatLyrics = l;
           workList.push(item);
         }
-        else if(item.ItemType === 2110) {
+        else if(type === 'video') {
           workList.push(item);
         }
       });
@@ -192,32 +193,6 @@ class Works extends migi.Component {
       }
     });
     self.isManager = hash.hasOwnProperty(self.props.authorID);
-    // 按类型将作者整理排序
-    let authorList = [];
-    itemTemplate.authorType.forEach(function(typeList) {
-      let list = [];
-      typeList.forEach(function(type) {
-        if(typeHash.hasOwnProperty(type)) {
-          list = list.concat(typeHash[type].list);
-          delete typeHash[type];
-        }
-      });
-      if(list.length) {
-        authorList.push(list);
-      }
-    });
-    let unKnowList = [];
-    let unKnowHash = {};
-    Object.keys(typeHash).forEach(function(type) {
-      typeHash[type].list.forEach(function(item) {
-        if(!unKnowHash.hasOwnProperty(item.ID)) {
-          unKnowHash[item.ID] = true;
-          unKnowList.push(item);
-        }
-      });
-    });
-    authorList = authorList.concat([unKnowList]);
-    self.authorList = authorList;
   }
   clickSel(e, vd, tvd) {
     let self = this;
@@ -282,16 +257,16 @@ class Works extends migi.Component {
   }
   render() {
     let self = this;
-    let state = worksState.getStateStr(self.worksType, this.props.worksDetail.WorkState);
+    let state = worksState.getStateStr(self.worksType, self.props.worksDetail.WorkState);
     let tag = self.props.tag;
     if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
       return <div class={'works t' + self.worksType}>
         <MusicAlbum ref="musicAlbum"
-                    worksID={ this.worksID }
-                    workID={ this.workID }
-                    cover={ this.props.worksDetail.cover_Pic }
-                    workList={ this.workList }/>
-        <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
+                    worksID={ self.worksID }
+                    workID={ self.workID }
+                    cover={ self.props.worksDetail.cover_Pic }
+                    workList={ self.workList }/>
+        <ul class="sel fn-clear" ref="sel" onClick={ { li: self.clickSel } }>
           <li class={ tag !== 'intro' && tag !== 'comment' ? 'cur' : '' } rel="playList">曲目</li>
           <li class={ tag === 'intro' ? 'cur' : '' } rel="intro">简介</li>
           <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
@@ -299,33 +274,33 @@ class Works extends migi.Component {
             state ? <li class="state">{ state }</li> : ''
           }
         </ul>
-        <PlayList ref="playList" cover={ this.props.worksDetail.cover_Pic }
+        <PlayList ref="playList" cover={ self.props.worksDetail.cover_Pic }
                   hidden={ tag === 'intro' || tag === 'comment' }
-                  worksID={ this.worksID } workID={ this.workID } workList={ this.workList }/>
+                  worksID={ self.worksID } workID={ self.workID } workList={ self.workList }/>
         <div class={ 'intro' + (tag === 'intro' ? '' : ' fn-hide') } ref="intro">
-          <Describe data={ this.props.worksDetail.Describe }/>
-          <Author authorList={ this.authorList }/>
+          <Describe data={ self.props.worksDetail.Describe }/>
+          <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
           {
-            this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
-              ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+            self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
+              ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
               : ''
           }
           {
-            this.props.worksDetail.WorksAuthorComment
+            self.props.worksDetail.WorksAuthorComment
               ? <InspComment ref="inspComment"
-                             commentData={ this.props.worksDetail.WorksAuthorComment }/>
+                             commentData={ self.props.worksDetail.WorksAuthorComment }/>
               : ''
           }
         </div>
         <WorkComment ref="workComment"
-                     isLogin={ this.props.isLogin }
-                     worksID={ this.worksID }
-                     workID={ this.workID }
+                     isLogin={ self.props.isLogin }
+                     worksID={ self.worksID }
+                     workID={ self.workID }
                      hidden={ tag !== 'comment' }
-                     originTo={ this.props.worksDetail.Title }
-                     commentData={ this.props.commentData }/>
+                     originTo={ self.props.worksDetail.Title }
+                     commentData={ self.props.commentData }/>
         <SubCmt ref="subCmt"
-                originTo={ this.props.worksDetail.Title }
+                originTo={ self.props.worksDetail.Title }
                 subText="发送"
                 tipText="-${n}"
                 placeholder="夸夸这个作品吧"/>
@@ -333,7 +308,7 @@ class Works extends migi.Component {
     }
     if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
       return <div class={ 'works t' + self.worksType }>
-        <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
+        <ul class="sel fn-clear" ref="sel" onClick={ { li: self.clickSel } }>
           <li class={ tag !== 'intro' && tag !== 'comment' ? 'cur' : '' } rel="photoAlbum">相册</li>
           <li class={ tag === 'intro' ? 'cur' : '' } rel="intro">简介</li>
           <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
@@ -341,36 +316,36 @@ class Works extends migi.Component {
             state ? <li class="state">{ state }</li> : ''
           }
         </ul>
-        <PhotoAlbum ref="photoAlbum" worksID={ this.worksID } labelList={ this.props.labelList }
+        <PhotoAlbum ref="photoAlbum" worksID={ self.worksID } labelList={ self.props.labelList }
                     hidden={ tag === 'intro' || tag === 'comment' }/>
         <div class={ 'intro' + (tag === 'intro' ? '' : ' fn-hide') } ref="intro">
-          <Author authorList={ this.authorList }/>
+          <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
           {
-            this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
-              ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+            self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
+              ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
               : ''
           }
           {
-            this.textData && this.textData.value && this.textData.value.length
-              ? <Text datas={ this.textData }/>
+            self.textData && self.textData.value && self.textData.value.length
+              ? <Text datas={ self.textData }/>
               : ''
           }
           {
-            this.props.worksDetail.WorksAuthorComment
+            self.props.worksDetail.WorksAuthorComment
               ? <InspComment ref="inspComment"
-                             commentData={ this.props.worksDetail.WorksAuthorComment }/>
+                             commentData={ self.props.worksDetail.WorksAuthorComment }/>
               : ''
           }
         </div>
         <WorkComment ref="workComment"
-                     isLogin={ this.props.isLogin }
-                     worksID={ this.worksID }
-                     workID={ this.workID }
+                     isLogin={ self.props.isLogin }
+                     worksID={ self.worksID }
+                     workID={ self.workID }
                      hidden={ tag !== 'comment' }
-                     originTo={ this.props.worksDetail.Title }
-                     commentData={ this.props.commentData }/>
+                     originTo={ self.props.worksDetail.Title }
+                     commentData={ self.props.commentData }/>
         <SubCmt ref="subCmt"
-                originTo={ this.props.worksDetail.Title }
+                originTo={ self.props.worksDetail.Title }
                 subText="发送"
                 tipText="-${n}"
                 placeholder="夸夸这个作品吧"/>
@@ -379,13 +354,13 @@ class Works extends migi.Component {
     }
     return <div class={ 'works t' + self.worksType }>
       <Media ref="media"
-             worksID={ this.worksID }
-             workID={ this.workID }
-             cover={ this.props.worksDetail.cover_Pic }
-             audioData={ this.audioData }
-             videoData={ this.videoData }
+             worksID={ self.worksID }
+             workID={ self.workID }
+             cover={ self.props.worksDetail.cover_Pic }
+             audioData={ self.audioData }
+             videoData={ self.videoData }
              first={ first }/>
-      <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
+      <ul class="sel fn-clear" ref="sel" onClick={ { li: self.clickSel } }>
         <li class={ tag !== 'comment' ? 'cur' : '' } rel="intro">简介</li>
         <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
         {
@@ -393,43 +368,43 @@ class Works extends migi.Component {
         }
       </ul>
       <div class={ 'intro' + (tag === 'comment' ? ' fn-hide' : '') } ref="intro">
-        <Author authorList={ this.authorList }/>
+        <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
         {
-          this.props.worksDetail.WorkTimeLine && this.props.worksDetail.WorkTimeLine.length
-            ? <Timeline datas={ this.props.worksDetail.WorkTimeLine }/>
+          self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
+            ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
             : ''
         }
         {
-          this.textData && this.textData.value && this.textData.value.length
-            ? <Text datas={ this.textData }/>
+          self.textData && self.textData.value && self.textData.value.length
+            ? <Text datas={ self.textData }/>
             : ''
         }
         {
-          this.lyricData && this.lyricData.value && this.lyricData.value.length && this.lyricData.value[0].Text
-            ? <Lyric datas={ this.lyricData }/>
+          self.lyricData && self.lyricData.value && self.lyricData.value.length && self.lyricData.value[0].Text
+            ? <Lyric datas={ self.lyricData }/>
             : ''
         }
         {
-          this.props.worksDetail.WorksAuthorComment
+          self.props.worksDetail.WorksAuthorComment
             ? <InspComment ref="inspComment"
-                           commentData={ this.props.worksDetail.WorksAuthorComment }/>
+                           commentData={ self.props.worksDetail.WorksAuthorComment }/>
             : ''
         }
         {
-          this.posterData
-            ? <Poster datas={ this.posterData }/>
+          self.posterData
+            ? <Poster datas={ self.posterData }/>
             : ''
         }
       </div>
       <WorkComment ref="workComment"
-                   isLogin={ this.props.isLogin }
-                   worksID={ this.worksID }
-                   workID={ this.workID }
+                   isLogin={ self.props.isLogin }
+                   worksID={ self.worksID }
+                   workID={ self.workID }
                    hidden={ tag !== 'comment' }
-                   originTo={ this.props.worksDetail.Title }
-                   commentData={ this.props.commentData }/>
+                   originTo={ self.props.worksDetail.Title }
+                   commentData={ self.props.commentData }/>
       <SubCmt ref="subCmt"
-              originTo={ this.props.worksDetail.Title }
+              originTo={ self.props.worksDetail.Title }
               subText="发送"
               tipText="-${n}"
               placeholder="夸夸这个作品吧"/>

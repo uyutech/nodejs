@@ -8,7 +8,6 @@ const TYPE = {
   originMusic: 1,
   musicAlbum: 5,
   photoAlbum: 11,
-  recite: 19,
 };
 
 const NAME = {};
