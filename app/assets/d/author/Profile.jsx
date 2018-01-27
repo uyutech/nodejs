@@ -16,7 +16,7 @@ class Profile extends migi.Component {
     this.fansNumber = this.props.authorDetail.FansNumber;
     this.like = this.props.authorDetail.IsLike;
     this.settled = this.props.authorDetail.ISSettled;
-    this.type = this.props.authorDetail.Authortype;
+    this.authorType = this.props.authorDetail.Authortype;
   }
   @bind authorID
   @bind authorName
@@ -27,15 +27,6 @@ class Profile extends migi.Component {
   @bind like
   @bind loading
   @bind settled
-  set type(v) {
-    v = v || [];
-    let hash = {};
-    v.forEach(function(item) {
-      let css = (authorTemplate.code2Data[item.AuthorTypeID] || {}).css || '';
-      hash[css] = true;
-    });
-    this.authorType = Object.keys(hash);
-  }
   click(e) {
     e.preventDefault();
     if(!$CONFIG.isLogin) {
@@ -84,6 +75,7 @@ class Profile extends migi.Component {
     }
   }
   render() {
+    let hash = {};
     return <div class="profile fn-clear">
       <div class="pic">
         <img src={ util.autoSsl(util.img288_288_80(this.headUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
@@ -95,8 +87,13 @@ class Profile extends migi.Component {
         <div class="n">
           <h3>{ this.authorName }</h3>
           {
-            this.authorType.map(function(item) {
-              return <span class={ `cp-author-type-${item}` }/>;
+            (this.authorType || []).map(function(item) {
+              let css = authorTemplate.code2css[item.NewAuthorTypeID];
+              if(hash[css]) {
+                return;
+              }
+              hash[css] = true;
+              return <span class={ `cp-author-type-${css}` }/>;
             })
           }
         </div>

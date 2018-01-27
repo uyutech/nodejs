@@ -164,6 +164,7 @@ module.exports = app => {
   app.post('/h5/find/recommendList', 'h5.find.recommendList');
   app.post('/h5/find/typeList', 'h5.find.typeList');
   app.post('/h5/find/itemList', 'h5.find.itemList');
+  app.post('/h5/find/search', 'h5.find.search');
 
   app.post('/h5/circling/index', 'h5.circling.index');
   app.post('/h5/circling/postList', 'h5.circling.postList');

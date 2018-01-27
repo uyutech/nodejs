@@ -8,9 +8,15 @@ module.exports = app => {
   class Controller extends app.Controller {
     * index(ctx) {
       let uid = ctx.session.uid;
+      let hotCircleList = {};
       let hotCircle = {};
       let postList = {};
       let res = yield {
+        hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
+          uid,
+          Skip: 0,
+          Take: 6,
+        }),
         hotCircle: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
@@ -22,6 +28,9 @@ module.exports = app => {
           Take: 10,
         }),
       };
+      if(res.hotCircleList.data.success) {
+        hotCircleList = res.hotCircleList.data.data;
+      }
       if(res.hotCircle.data.success) {
         hotCircle = res.hotCircle.data.data;
       }
@@ -29,6 +38,7 @@ module.exports = app => {
         postList = res.postList.data.data;
       }
       ctx.body = ctx.helper.okJSON({
+        hotCircleList,
         hotCircle,
         postList,
       });
