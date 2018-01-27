@@ -16,7 +16,7 @@ class Profile extends migi.Component {
     this.fansNumber = this.props.authorDetail.FansNumber;
     this.like = this.props.authorDetail.IsLike;
     this.settled = this.props.authorDetail.ISSettled;
-    this.type = this.props.authorDetail.Authortype;
+    this.authorType = this.props.authorDetail.Authortype;
   }
   @bind authorID
   @bind authorName
@@ -27,15 +27,6 @@ class Profile extends migi.Component {
   @bind like
   @bind loading
   @bind settled
-  set type(v) {
-    v = v || [];
-    let hash = {};
-    v.forEach(function(item) {
-      let css = (authorTemplate.code2Data[item.AuthorTypeID] || {}).css || '';
-      hash[css] = true;
-    });
-    this.authorType = Object.keys(hash);
-  }
   click(e) {
     e.preventDefault();
     if(!$CONFIG.isLogin) {
@@ -96,7 +87,7 @@ class Profile extends migi.Component {
           <h3>{ this.authorName }</h3>
           {
             this.authorType.map(function(item) {
-              return <span class={ `cp-author-type-${item}` }/>;
+              return <span class={ `cp-author-type-${item.NewAuthorTypeID}` }/>;
             })
           }
         </div>
