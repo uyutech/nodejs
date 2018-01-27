@@ -75,6 +75,7 @@ class Profile extends migi.Component {
     }
   }
   render() {
+    let hash = {};
     return <div class="profile">
       <div class="pic">
         <img src={ util.autoSsl(util.img200_200_80(this.headUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
@@ -87,7 +88,12 @@ class Profile extends migi.Component {
           <h3>{ this.authorName }</h3>
           {
             this.authorType.map(function(item) {
-              return <span class={ `cp-author-type-${item.NewAuthorTypeID}` }/>;
+              let css = authorTemplate.code2css[item.NewAuthorTypeID];
+              if(hash[css]) {
+                return;
+              }
+              hash[css] = true;
+              return <span class={ `cp-author-type-${css}` }/>;
             })
           }
         </div>
