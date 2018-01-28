@@ -38,6 +38,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    template: {},
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,

@@ -5,13 +5,23 @@
 'use strict';
 
 const Sequelize = require('sequelize');
-const author = require('../model/author');
-const authorOutside = require('../model/authorOutside');
 
 const SEQUELIZE = Symbol('Application#Sequelize');
 const SEQUELIZE_CIRCLING = Symbol('Application#sequelizeCircling');
 const SEQUELIZE_STATS = Symbol('Application#sequelizeStats');
 const MODEL = Symbol('Application#Model');
+
+const author = require('../model/author');
+const authorNum = require('../model/authorNum');
+const authorOutside = require('../model/authorOutside');
+const comment = require('../model/authorOutside');
+const commentNum = require('../model/authorOutside');
+const profession = require('../model/authorOutside');
+const professionSkillRelation = require('../model/authorOutside');
+const skill = require('../model/authorOutside');
+const user = require('../model/authorOutside');
+const userPrivate = require('../model/authorOutside');
+// const authorOutside = require('../model/authorOutside');
 
 module.exports = {
   get Sequelize() {
