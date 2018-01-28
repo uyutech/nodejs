@@ -1,31 +1,40 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/1/28.
  */
 
 'use strict';
 
 module.exports = app => {
-  const { sequelizeStats, Sequelize } = app;
-  return sequelizeStats.define('author_num', {
+  const { sequelizeCircling, Sequelize } = app;
+  return sequelizeCircling.define('user_private', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    author_id: {
+    user_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0粉丝数，1评论数，2热度',
+      comment: '0手机号，1地址',
     },
-    num: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    content: {
+      type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: 0,
+    },
+    state: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    create_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
     },
     update_time: {
       type: Sequelize.DATE,
@@ -36,9 +45,9 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['author_id', 'type'],
+        fields: ['user_id', 'type'],
       }
     ],
-    comment: '作者相关数字汇总',
+    comment: '用户隐私信息',
   });
 };

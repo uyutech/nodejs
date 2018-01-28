@@ -10,7 +10,7 @@ module.exports = app => {
     id: {
       type: Sequelize.BIGINT,
       primaryKey: true,
-      unique: true,
+      allowNull: false,
     },
     state: Sequelize.BOOLEAN,
     type: Sequelize.TINYINT,

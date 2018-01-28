@@ -8,18 +8,17 @@ module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('author_outside', {
     id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
-      unique: true,
       autoIncrement: true,
     },
     author_id: {
-      type: Sequelize.BIGINT,
+      type: Sequelize.BIGINT.UNSIGNED,
       unique: 'authorOutSideUnique',
     },
     state: Sequelize.BOOLEAN,
     type: {
-      type: Sequelize.TINYINT,
+      type: Sequelize.TINYINT.UNSIGNED,
       unique: 'authorOutSideUnique',
     },
     url: Sequelize.STRING,
