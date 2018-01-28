@@ -266,7 +266,7 @@ class Works extends migi.Component {
                     workID={ self.workID }
                     cover={ self.props.worksDetail.cover_Pic }
                     workList={ self.workList }/>
-        <ul class="sel fn-clear" ref="sel" onClick={ { li: self.clickSel } }>
+        <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
           <li class={ tag !== 'intro' && tag !== 'comment' ? 'cur' : '' } rel="playList">曲目</li>
           <li class={ tag === 'intro' ? 'cur' : '' } rel="intro">简介</li>
           <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
@@ -308,7 +308,7 @@ class Works extends migi.Component {
     }
     if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
       return <div class={ 'works t' + self.worksType }>
-        <ul class="sel fn-clear" ref="sel" onClick={ { li: self.clickSel } }>
+        <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
           <li class={ tag !== 'intro' && tag !== 'comment' ? 'cur' : '' } rel="photoAlbum">相册</li>
           <li class={ tag === 'intro' ? 'cur' : '' } rel="intro">简介</li>
           <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
@@ -360,7 +360,7 @@ class Works extends migi.Component {
              audioData={ self.audioData }
              videoData={ self.videoData }
              first={ first }/>
-      <ul class="sel fn-clear" ref="sel" onClick={ { li: self.clickSel } }>
+      <ul class="sel fn-clear" ref="sel" onClick={ { li: this.clickSel } }>
         <li class={ tag !== 'comment' ? 'cur' : '' } rel="intro">简介</li>
         <li class={ tag === 'comment' ? 'cur' : '' } rel="comment">留言</li>
         {

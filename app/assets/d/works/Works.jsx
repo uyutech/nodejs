@@ -89,12 +89,9 @@ class Works extends migi.Component {
         }
       });
       self.workList = workList;
-
-      self.setAuthors(authorList);
       return;
     }
     else if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
-      self.setAuthors(self.props.worksDetail.Works_Author || []);
       return;
     }
     let workHash = {};
@@ -164,26 +161,6 @@ class Works extends migi.Component {
         self.workID = self.audioData[0].ItemID;
       }
     }
-
-    self.setAuthors(authorList);
-  }
-  setAuthors(authors) {
-    let self = this;
-    let hash = {};
-    let typeHash = {};
-    (authors || []).forEach(function(item) {
-      hash[item.ID] = item;
-      typeHash[item.WorksAuthorType] = typeHash[item.WorksAuthorType] || {
-        hash: {},
-        list: [],
-      };
-      let type = typeHash[item.WorksAuthorType];
-      if(!type.hash.hasOwnProperty(item.ID)) {
-        type.hash[item.ID] = true;
-        type.list.push(item);
-      }
-    });
-    self.isManager = hash.hasOwnProperty(self.props.authorID);
   }
   clickType(e, vd, tvd) {
     let self = this;
@@ -212,7 +189,7 @@ class Works extends migi.Component {
             : ''
         }
         <div class="main">
-          <ul class="type fn-clear" ref="type" onClick={ { li: self.clickType } }>
+          <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
             <li class="cover cur" rel="cover">封面</li>
             <li class="player" rel="player">播放</li>
           </ul>
@@ -291,7 +268,7 @@ class Works extends migi.Component {
       <Title ref="title" worksType={ self.worksType }
              detail={ self.props.worksDetail }/>
       <div class="main">
-        <ul class="type fn-clear" ref="type" onClick={ { li: self.clickType } }>
+        <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
           {
             self.videoData
               ? <li class={ 'video' + (first ==='video' ? ' cur' : '') } rel="video">视频</li>
