@@ -29,12 +29,6 @@ module.exports = app => {
           more: true,
         },
         {
-          TagName: '我的2017',
-        },
-        {
-          TagName: '展望2018',
-        },
-        {
           TagName: '陪转圈一起长大',
         }
       ];
@@ -103,14 +97,6 @@ module.exports = app => {
           {
             name: '岁慕天寒',
             value: '#岁慕天寒#'
-          },
-          {
-            name: '我的2017',
-            value: '#我的2017#'
-          },
-          {
-            name: '展望2018',
-            value: '#展望2018#'
           },
           {
             value: '陪转圈一起长大',
