@@ -45,10 +45,6 @@ module.exports = app => {
     },
   }, {
     indexes: [
-      {
-        unique: true,
-        fields: ['work_id'],
-      }
     ],
     comment: '媒体类小作品扩展信息',
   });

@@ -40,10 +40,6 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['id'],
-      },
-      {
-        unique: true,
         fields: ['profession_id', 'skill_id'],
       }
     ],

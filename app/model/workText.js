@@ -20,10 +20,6 @@ module.exports = app => {
     },
   }, {
     indexes: [
-      {
-        unique: true,
-        fields: ['work_id'],
-      }
     ],
     comment: '文本类小作品扩展信息',
   });

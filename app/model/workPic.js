@@ -25,10 +25,6 @@ module.exports = app => {
     },
   }, {
     indexes: [
-      {
-        unique: true,
-        fields: ['work_id'],
-      }
     ],
     comment: '图片类小作品扩展信息',
   });

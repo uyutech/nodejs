@@ -51,10 +51,6 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['id'],
-      },
-      {
-        unique: true,
         fields: ['works_id', 'work_id'],
       },
       {
