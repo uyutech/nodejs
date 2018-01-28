@@ -297,60 +297,51 @@ module.exports = app => {
     * search(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
+      let type = body.type;
       let keyword = body.keyword.trim();
-      if(!keyword) {
+      if(!keyword || !type) {
         return;
       }
       let skip = body.skip || 0;
       let take = body.take || 10;
-      let authorList = {};
-      let userList = {};
-      let worksList = {};
-      let tagList = {};
-      let res = yield {
-        authorList: ctx.helper.postServiceJSON2('/api/search/SearchAuthor', {
-          uid,
-          keyword,
-          skip,
-          take,
-        }),
-        userList: ctx.helper.postServiceJSON2('/api/search/SearchUsers', {
-          uid,
-          keyword,
-          skip,
-          take,
-        }),
-        worksList: ctx.helper.postServiceJSON2('/api/search/SearchWork', {
-          uid,
-          keyword,
-          skip,
-          take,
-        }),
-        tagList: ctx.helper.postServiceJSON2('/api/search/SearchTag', {
-          uid,
-          keyword,
-          skip,
-          take,
-        }),
-      };
-      if(res.authorList.data.success) {
-        authorList = res.authorList.data.data;
+      switch(type) {
+        case '0':
+          let author = yield ctx.helper.postServiceJSON2('/api/search/SearchAuthor', {
+            uid,
+            keyword,
+            skip,
+            take,
+          });
+          ctx.body = author.data;
+          break;
+        case '1':
+          let user = yield ctx.helper.postServiceJSON2('/api/search/SearchUsers', {
+            uid,
+            keyword,
+            skip,
+            take,
+          });
+          ctx.body = user.data;
+          break;
+        case '2':
+          let works = yield ctx.helper.postServiceJSON2('/api/search/SearchWork', {
+            uid,
+            keyword,
+            skip,
+            take,
+          });
+          ctx.body = works.data;
+          break;
+        case '3':
+          let tag = yield ctx.helper.postServiceJSON2('/api/search/SearchTag', {
+            uid,
+            keyword,
+            skip,
+            take,
+          });
+          ctx.body = tag.data;
+          break;
       }
-      if(res.userList.data.success) {
-        userList = res.userList.data.data;
-      }
-      if(res.worksList.data.success) {
-        worksList = res.worksList.data.data;
-      }
-      if(res.tagList.data.success) {
-        tagList = res.tagList.data.data;
-      }
-      ctx.body = ctx.helper.okJSON({
-        authorList,
-        userList,
-        worksList,
-        tagList,
-      });
     }
   }
   return Controller;
