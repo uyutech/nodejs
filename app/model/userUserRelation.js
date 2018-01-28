@@ -6,11 +6,10 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_associate_people', {
+  return sequelizeCircling.define('user_user_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
-      // unique: true,
       autoIncrement: true,
       allowNull: false,
     },
@@ -25,7 +24,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0关注用户，1关注作者',
+      comment: '0关注用户',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -47,6 +46,6 @@ module.exports = app => {
         fields: ['target_id', 'type'],
       }
     ],
-    comment: '用户对其他用户和作者的操作关联',
+    comment: '用户和用户关联信息',
   });
 };

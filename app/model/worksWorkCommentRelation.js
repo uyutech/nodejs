@@ -6,43 +6,28 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('comment', {
+  return sequelizeCircling.define('works_work_comment_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
-      autoIncrement: true,
       allowNull: false,
     },
-    user_id: {
+    works_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    author_id: {
+    work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    user_type: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    content: {
-      type: Sequelize.TEXT,
+    comment_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
     state: {
-      type: Sequelize.TINYINT.UNSIGNED,
+      type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: 0,
-      comment: '0删除，1正常，2待审，3仅自己可见',
-    },
-    parent_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false,
-    },
-    root_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false,
+      defaultValue: true,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -57,18 +42,13 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        fields: ['user_id'],
+        unique: true,
+        fields: ['works_id', 'work_id', 'comment_id'],
       },
       {
-        fields: ['author_id'],
-      },
-      {
-        fields: ['parent_id'],
-      },
-      {
-        fields: ['root_id'],
+        fields: ['work_id'],
       }
     ],
-    comment: '评论基本信息',
+    comment: '作品下留言关联信息',
   });
 };

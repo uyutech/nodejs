@@ -10,7 +10,6 @@ module.exports = app => {
     id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
-      // unique: true,
       allowNull: false,
     },
     state: {
@@ -28,7 +27,6 @@ module.exports = app => {
     name: {
       type: Sequelize.STRING(32),
       allowNull: false,
-      unique: true,
     },
     sex: {
       type: Sequelize.TINYINT.UNSIGNED,
@@ -47,7 +45,7 @@ module.exports = app => {
       defaultValue: '',
     },
     password: {
-      type: Sequelize.STRING,
+      type: Sequelize.CHAR(32),
       allowNull: false,
       defaultValue: '',
     },
@@ -64,6 +62,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        unique: true,
         fields: ['name'],
       }
     ],

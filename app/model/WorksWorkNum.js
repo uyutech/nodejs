@@ -10,7 +10,6 @@ module.exports = app => {
     id: {
       type: Sequelize.SMALLINT.UNSIGNED,
       primaryKey: true,
-      // unique: true,
       autoIncrement: true,
       allowNull: false,
     },

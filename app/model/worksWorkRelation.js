@@ -10,7 +10,6 @@ module.exports = app => {
     id: {
       type: Sequelize.SMALLINT.UNSIGNED,
       primaryKey: true,
-      // unique: true,
       autoIncrement: true,
       allowNull: false,
     },
@@ -32,7 +31,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    desc: {
+    describe: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',

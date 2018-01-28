@@ -10,7 +10,6 @@ module.exports = app => {
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
-      // unique: true,
       allowNull: false,
     },
     content: {

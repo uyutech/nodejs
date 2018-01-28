@@ -6,25 +6,19 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_author_relation', {
+  return sequelizeCircling.define('circle_comment_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
-      autoIncrement: true,
       allowNull: false,
     },
-    user_id: {
+    circle_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    author_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+    comment_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
-    },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '0关联作者，1关注作者',
     },
     state: {
       type: Sequelize.BOOLEAN,
@@ -45,12 +39,9 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['user_id', 'author_id'],
-      },
-      {
-        fields: ['author_id'],
+        fields: ['circle_id', 'comment_id'],
       }
     ],
-    comment: '用户对应作者关系',
+    comment: '圈子下留言关联信息',
   });
 };

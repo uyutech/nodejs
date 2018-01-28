@@ -5,36 +5,27 @@
 'use strict';
 
 module.exports = app => {
-  const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_author_relation', {
+  const { sequelizeStats, Sequelize } = app;
+  return sequelizeStats.define('circle_num', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    user_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      allowNull: false,
-    },
-    author_id: {
+    circle_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0关联作者，1关注作者',
+      comment: '0浏览数，1粉丝数，2热度',
     },
-    state: {
-      type: Sequelize.BOOLEAN,
+    num: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: true,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
+      defaultValue: 0,
     },
     update_time: {
       type: Sequelize.DATE,
@@ -45,12 +36,9 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['user_id', 'author_id'],
-      },
-      {
-        fields: ['author_id'],
+        fields: ['circle_id', 'type'],
       }
     ],
-    comment: '用户对应作者关系',
+    comment: '圈子相关数字汇总',
   });
 };

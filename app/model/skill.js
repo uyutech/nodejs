@@ -10,7 +10,6 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       autoIncrement: true,
-      // unique: true,
       allowNull: false,
     },
     type: {
@@ -18,7 +17,7 @@ module.exports = app => {
       allowNull: false,
     },
     name: {
-      type: Sequelize.STRING(16),
+      type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
     },

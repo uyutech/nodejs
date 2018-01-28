@@ -10,7 +10,6 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
-      // unique: true,
       autoIncrement: true,
       allowNull: false,
     },
@@ -19,7 +18,7 @@ module.exports = app => {
       allowNull: false,
     },
     name: {
-      type: Sequelize.STRING(16),
+      type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
     },
@@ -29,7 +28,7 @@ module.exports = app => {
       comment: '0图片，1音频，2视频，3文本',
     },
     category_name: {
-      type: Sequelize.STRING(16),
+      type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
     },

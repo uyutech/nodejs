@@ -1,47 +1,33 @@
 /**
- * Created by army8735 on 2018/1/26.
+ * Created by army8735 on 2018/1/28.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('author', {
+  return sequelizeCircling.define('circle', {
     id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '0个人，1组合，2团体，3虚拟',
-    },
     name: {
       type: Sequelize.STRING(32),
       allowNull: false,
+      unique: true,
     },
-    fans_name: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    fans_circle_name: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    head_url: {
+    describe: {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
     },
-    settled: {
-      type: Sequelize.BOOLEAN,
+    banner: {
+      type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: '',
     },
-    sign: {
+    cover: {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
@@ -64,9 +50,10 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        unique: true,
         fields: ['name'],
       }
     ],
-    comment: '作者基本信息',
+    comment: '圈子基本信息',
   });
 };
