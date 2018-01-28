@@ -22,6 +22,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    describe: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
+    },
     class: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,

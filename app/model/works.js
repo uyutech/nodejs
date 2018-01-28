@@ -22,6 +22,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    describe: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
+    },
     type: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
@@ -37,7 +42,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    template: {},
+    template: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,

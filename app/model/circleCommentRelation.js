@@ -25,6 +25,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: true,
     },
+    popular: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -40,6 +45,9 @@ module.exports = app => {
       {
         unique: true,
         fields: ['circle_id', 'comment_id'],
+      },
+      {
+        fields: ['circle_id', 'popular'],
       }
     ],
     comment: '圈子留言关联信息',

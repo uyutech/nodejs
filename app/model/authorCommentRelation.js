@@ -25,6 +25,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: true,
     },
+    popular: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -40,6 +45,9 @@ module.exports = app => {
       {
         unique: true,
         fields: ['author_id', 'comment_id'],
+      },
+      {
+        fields: ['author_id', 'popular'],
       }
     ],
     comment: '作品留言关联信息',

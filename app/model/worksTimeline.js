@@ -6,7 +6,7 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('works_work_comment_relation', {
+  return sequelizeCircling.define('works_timeline', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -20,19 +20,20 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    comment_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    date: {
+      type: Sequelize.DATE,
       allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    describe: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
     },
     state: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: true,
-    },
-    popular: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -47,13 +48,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        unique: true,
-        fields: ['works_id', 'work_id', 'comment_id'],
-      },
-      {
-        fields: ['works_id', 'work_id', 'popular'],
+        fields: ['works_id', 'date'],
       }
     ],
-    comment: '作品留言关联信息',
+    comment: '大作品时间线',
   });
 };
