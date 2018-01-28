@@ -42,6 +42,6 @@ module.exports = app => {
         fields: ['author_id', 'comment_id'],
       }
     ],
-    comment: '作品下留言关联信息',
+    comment: '作品留言关联信息',
   });
 };

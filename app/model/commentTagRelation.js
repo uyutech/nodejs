@@ -6,24 +6,18 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_private', {
+  return sequelizeCircling.define('comment_tag_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
-      autoIncrement: true,
       allowNull: false,
     },
-    user_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+    comment_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '0手机号，1地址',
-    },
-    content: {
-      type: Sequelize.STRING,
+    tag_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
     state: {
@@ -44,9 +38,10 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        fields: ['user_id', 'type'],
+        unique: true,
+        fields: ['comment_id', 'tag_id'],
       }
     ],
-    comment: '用户隐私信息',
+    comment: '留言标签关联信息',
   });
 };

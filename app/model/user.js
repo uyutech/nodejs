@@ -49,6 +49,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    coins: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,

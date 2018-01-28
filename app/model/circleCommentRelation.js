@@ -42,6 +42,6 @@ module.exports = app => {
         fields: ['circle_id', 'comment_id'],
       }
     ],
-    comment: '圈子下留言关联信息',
+    comment: '圈子留言关联信息',
   });
 };
