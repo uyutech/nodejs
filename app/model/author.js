@@ -5,8 +5,8 @@
 'use strict';
 
 module.exports = app => {
-  const { sequelize, Sequelize } = app;
-  return sequelize.define('author', {
+  const { sequelizeCircling, Sequelize } = app;
+  return sequelizeCircling.define('author', {
     id: {
       type: Sequelize.BIGINT,
       primaryKey: true,

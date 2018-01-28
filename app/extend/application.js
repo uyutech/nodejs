@@ -9,7 +9,8 @@ const author = require('../model/author');
 const authorOutside = require('../model/authorOutside');
 
 const SEQUELIZE = Symbol('Application#Sequelize');
-const SEQUELIZE_INSTANCE = Symbol('Application#sequelizeInstance');
+const SEQUELIZE_CIRCLING = Symbol('Application#sequelizeCircling');
+const SEQUELIZE_STATS = Symbol('Application#sequelizeStats');
 const MODEL = Symbol('Application#Model');
 
 module.exports = {
@@ -19,10 +20,10 @@ module.exports = {
     }
     return this[SEQUELIZE];
   },
-  get sequelize() {
-    if(!this[SEQUELIZE_INSTANCE]) {
+  get sequelizeCircling() {
+    if(!this[SEQUELIZE_CIRCLING]) {
       let database = this.config.database;
-      this[SEQUELIZE_INSTANCE] = new Sequelize(database.db, database.username, database.password, {
+      this[SEQUELIZE_CIRCLING] = new Sequelize(database.circling.name, database.circling.username, database.circling.password, {
         host: 'localhost',
         dialect: 'mysql',
         pool: {
@@ -32,7 +33,11 @@ module.exports = {
           idle: 10000
         },
         dialectOptions: {
-          charset: 'utf8',
+          charset: 'utf8mb4',
+          collate: 'utf8mb4_unicode_ci'
+        },
+        options: {
+          charset: 'utf8mb4',
         },
         define: {
           timestamps: false,
@@ -41,7 +46,35 @@ module.exports = {
         },
       });
     }
-    return this[SEQUELIZE_INSTANCE];
+    return this[SEQUELIZE_CIRCLING];
+  },
+  get sequelizeStats() {
+    if(!this[SEQUELIZE_STATS]) {
+      let database = this.config.database;
+      this[SEQUELIZE_STATS] = new Sequelize(database.stats.name, database.stats.username, database.stats.password, {
+        host: 'localhost',
+        dialect: 'mysql',
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        },
+        dialectOptions: {
+          charset: 'utf8mb4',
+          collate: 'utf8mb4_unicode_ci'
+        },
+        options: {
+          charset: 'utf8mb4',
+        },
+        define: {
+          timestamps: false,
+          underscored: true,
+          freezeTableName: true,
+        },
+      });
+    }
+    return this[SEQUELIZE_STATS];
   },
   get model() {
     if(!this[MODEL]) {
