@@ -9,6 +9,7 @@ module.exports = app => {
   return sequelizeCircling.define('profession_skill_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
+      primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },

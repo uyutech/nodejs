@@ -6,9 +6,10 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('profession', {
+  return sequelizeCircling.define('skill', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
+      primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },

@@ -6,7 +6,7 @@
 
 module.exports = app => {
   const { sequelizeStats, Sequelize } = app;
-  return sequelizeStats.define('author_num', {
+  return sequelizeStats.define('works_work_num', {
     id: {
       type: Sequelize.SMALLINT.UNSIGNED,
       primaryKey: true,

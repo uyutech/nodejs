@@ -5,8 +5,8 @@
 'use strict';
 
 module.exports = app => {
-  const { sequelizeStats, Sequelize } = app;
-  return sequelizeStats.define('work_media', {
+  const { sequelizeCircling, Sequelize } = app;
+  return sequelizeCircling.define('work_media', {
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
