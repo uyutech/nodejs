@@ -1,47 +1,49 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/1/28.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('work', {
+  return sequelizeCircling.define('comment', {
     id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       unique: true,
+      autoIncrement: true,
       allowNull: false,
     },
-    title: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    sub_title: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    class: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '0图片pic类扩展，1媒体media类扩展，2文本text类扩展',
-    },
-    type: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+    user_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    url: {
-      type: Sequelize.STRING,
+    author_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
+    },
+    user_type: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    content: {
+      type: Sequelize.TEXT,
+      allowNull: false,
     },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
       comment: '0删除，1正常，2待审，3仅自己可见',
+    },
+    parent_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+    },
+    root_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -60,9 +62,18 @@ module.exports = app => {
         fields: ['id'],
       },
       {
-        fields: ['title'],
+        fields: ['user_id'],
+      },
+      {
+        fields: ['author_id'],
+      },
+      {
+        fields: ['parent_id'],
+      },
+      {
+        fields: ['root_id'],
       }
     ],
-    comment: '小作品基本信息',
+    comment: '评论基本信息',
   });
 };

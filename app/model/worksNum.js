@@ -1,14 +1,14 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/1/28.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeStats, Sequelize } = app;
-  return sequelizeStats.define('author_num', {
+  return sequelizeStats.define('works_num', {
     id: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       // unique: true,
       autoIncrement: true,
@@ -23,9 +23,9 @@ module.exports = app => {
       allowNull: false,
     },
     type: {
-      type: Sequelize.TINYINT.UNSIGNED,
+      type: Sequelize.TINYINT,
       allowNull: false,
-      comment: '0粉丝数，1评论数，2热度',
+      comment: '0评论数，1浏览数，2播放数，3点赞数，4收藏数',
     },
     num: {
       type: Sequelize.INTEGER.UNSIGNED,
@@ -46,12 +46,6 @@ module.exports = app => {
       {
         unique: true,
         fields: ['works_id', 'work_id', 'type'],
-      },
-      {
-        fields: ['work_id']
-      },
-      {
-        fields: ['type', 'num']
       }
     ],
     comment: '作品相关数字汇总',

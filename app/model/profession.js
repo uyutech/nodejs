@@ -10,6 +10,7 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      // unique: true,
       autoIncrement: true,
       allowNull: false,
     },
@@ -58,6 +59,10 @@ module.exports = app => {
     },
   }, {
     indexes: [
+      {
+        unique: true,
+        fields: ['id'],
+      },
       {
         unique: true,
         fields: ['type', 'category'],

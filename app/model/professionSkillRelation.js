@@ -10,6 +10,7 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       autoIncrement: true,
+      // unique: true,
       allowNull: false,
     },
     profession_id: {
@@ -37,6 +38,10 @@ module.exports = app => {
     },
   }, {
     indexes: [
+      {
+        unique: true,
+        fields: ['id'],
+      },
       {
         unique: true,
         fields: ['profession_id', 'skill_id'],

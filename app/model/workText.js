@@ -10,7 +10,7 @@ module.exports = app => {
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
-      unique: true,
+      // unique: true,
       allowNull: false,
     },
     content: {
@@ -19,6 +19,12 @@ module.exports = app => {
       defaultValue: '',
     },
   }, {
+    indexes: [
+      {
+        unique: true,
+        fields: ['work_id'],
+      }
+    ],
     comment: '文本类小作品扩展信息',
   });
 };

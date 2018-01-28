@@ -10,6 +10,7 @@ module.exports = app => {
     id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
+      // unique: true,
       allowNull: false,
     },
     state: {
@@ -62,6 +63,10 @@ module.exports = app => {
     },
   }, {
     indexes: [
+      {
+        unique: true,
+        fields: ['id'],
+      },
       {
         fields: ['name'],
       }

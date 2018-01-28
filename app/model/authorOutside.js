@@ -10,19 +10,49 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      // unique: true,
       autoIncrement: true,
+      allowNull: false,
     },
     author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
-      unique: 'authorOutSideUnique',
+      allowNull: false,
     },
-    state: Sequelize.BOOLEAN,
+    state: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
-      unique: 'authorOutSideUnique',
+      allowNull: false,
     },
-    url: Sequelize.STRING,
-    create_time: Sequelize.DATE,
-    update_time: Sequelize.DATE,
+    url: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
+    },
+    create_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    update_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+  }, {
+    indexes: [
+      {
+        unique: true,
+        fields: ['id'],
+      },
+      {
+        unique: true,
+        fields: ['author_id', 'type'],
+      }
+    ],
+    comment: '作者站外链接',
   });
 };

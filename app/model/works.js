@@ -7,10 +7,10 @@
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('works', {
-    works_id: {
+    id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
-      unique: true,
+      // unique: true,
       allowNull: false,
     },
     title: {
@@ -28,9 +28,10 @@ module.exports = app => {
       allowNull: false,
     },
     state: {
-      type: Sequelize.BOOLEAN,
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: 0,
+      comment: '0删除，1正常，2待审，3仅自己可见',
     },
     cover: {
       type: Sequelize.STRING,
@@ -49,6 +50,10 @@ module.exports = app => {
     },
   }, {
     indexes: [
+      {
+        unique: true,
+        fields: ['id'],
+      },
       {
         fields: ['title'],
       }
