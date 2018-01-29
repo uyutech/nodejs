@@ -31,11 +31,21 @@ module.exports = app => {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
     },
+    is_deleted: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    is_authorize: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0删除，1正常，2待审，3仅自己可见',
+      comment: '0取消，1正常，2未完成公开，3未完成保密',
     },
     cover: {
       type: Sequelize.STRING,
@@ -46,6 +56,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
+      comment: '',
     },
     create_time: {
       type: Sequelize.DATE,

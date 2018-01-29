@@ -21,7 +21,7 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    user_type: {
+    is_author: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -30,11 +30,10 @@ module.exports = app => {
       type: Sequelize.TEXT,
       allowNull: false,
     },
-    state: {
-      type: Sequelize.TINYINT.UNSIGNED,
+    is_deleted: {
+      type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: 0,
-      comment: '0删除，1正常，2待审，3仅自己可见',
+      defaultValue: false,
     },
     parent_id: {
       type: Sequelize.INTEGER.UNSIGNED,
