@@ -27,7 +27,7 @@ const professionSkillRelation = require('../model/professionSkillRelation');
 const skill = require('../model/skill');
 const tag = require('../model/tag');
 const user = require('../model/user');
-const userPrivate = require('../model/userPrivate');
+const delivery = require('../model/delivery');
 const userAuthorRelation = require('../model/userAuthorRelation');
 const userCommentRelation = require('../model/userCommentRelation');
 const userIpRecord = require('../model/userIpRecord');
@@ -127,7 +127,7 @@ module.exports = {
         skill: skill(this),
         tag: tag(this),
         user: user(this),
-        userPrivate: userPrivate(this),
+        delivery: delivery(this),
         userAuthorRelation: userAuthorRelation(this),
         userCommentRelation: userCommentRelation(this),
         userIpRecord: userIpRecord(this),
