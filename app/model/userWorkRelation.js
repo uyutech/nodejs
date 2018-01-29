@@ -1,37 +1,29 @@
 /**
- * Created by army8735 on 2018/1/29.
+ * Created by army8735 on 2018/1/28.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_private', {
+  return sequelizeCircling.define('user_works_work_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
-      autoIncrement: true,
       allowNull: false,
     },
     user_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    name: {
-      type: Sequelize.STRING(32),
+    work_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    phone: {
-      type: Sequelize.STRING(32),
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-    },
-    address: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    post_code: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
+      comment: '0点赞作品，1收藏作品',
     },
     state: {
       type: Sequelize.BOOLEAN,
@@ -51,9 +43,10 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        fields: ['user_id'],
+        unique: true,
+        fields: ['user_id', 'work_id'],
       }
     ],
-    comment: '用户收货信息',
+    comment: '用户与小作品关联信息',
   });
 };

@@ -20,10 +20,10 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    state: {
+    is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -40,9 +40,6 @@ module.exports = app => {
       {
         unique: true,
         fields: ['circle_id', 'tag_id'],
-      },
-      {
-        fields: ['tag_id'],
       }
     ],
     comment: '圈子和标签关联信息',

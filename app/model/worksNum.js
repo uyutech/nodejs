@@ -1,40 +1,31 @@
 /**
- * Created by army8735 on 2018/1/26.
+ * Created by army8735 on 2018/1/27.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('author_outside', {
+  return sequelizeCircling.define('works_num', {
     id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+      type: Sequelize.SMALLINT.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    author_id: {
+    works_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-    },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
+      comment: '0评论数，1浏览数，2播放数，3点赞数，4收藏数',
     },
-    url: {
-      type: Sequelize.STRING,
+    num: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
+      defaultValue: 0,
     },
     update_time: {
       type: Sequelize.DATE,
@@ -45,9 +36,12 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['author_id', 'type'],
+        fields: ['works_id', 'type'],
+      },
+      {
+        fields: ['type', 'num']
       }
     ],
-    comment: '作者站外链接',
+    comment: '大作品相关数字汇总',
   });
 };

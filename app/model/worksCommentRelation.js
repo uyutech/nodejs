@@ -6,33 +6,24 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_works_work_relation', {
+  return sequelizeCircling.define('works_work_comment_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
-      allowNull: false,
-    },
-    user_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
     works_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    work_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+    comment_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '0点赞作品，1收藏作品',
-    },
-    state: {
+    is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -48,9 +39,9 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['user_id', 'works_id', 'work_id'],
+        fields: ['works_id', 'comment_id'],
       }
     ],
-    comment: '用户与作品关联信息',
+    comment: '大作品留言关联信息',
   });
 };

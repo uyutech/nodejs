@@ -5,8 +5,8 @@
 'use strict';
 
 module.exports = app => {
-  const { sequelizeStats, Sequelize } = app;
-  return sequelizeStats.define('comment_num', {
+  const { sequelizeCircling, Sequelize } = app;
+  return sequelizeCircling.define('comment_num', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,

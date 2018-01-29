@@ -27,12 +27,13 @@ const professionSkillRelation = require('../model/professionSkillRelation');
 const skill = require('../model/skill');
 const tag = require('../model/tag');
 const user = require('../model/user');
-const delivery = require('../model/delivery');
+const userDelivery = require('../model/userDelivery');
 const userAuthorRelation = require('../model/userAuthorRelation');
 const userCommentRelation = require('../model/userCommentRelation');
-const userIpRecord = require('../model/userIpRecord');
 const userUserRelation = require('../model/userUserRelation');
-const userWorksWorkRelation = require('../model/userWorksWorkRelation');
+const userWorkRelation = require('../model/userWorkRelation');
+const userIpRecord = require('../model/userIpRecord');
+const userProfileRecord = require('../model/userProfileRecord');
 const work = require('../model/work');
 const workMedia = require('../model/workMedia');
 const workImage = require('../model/WorkImage');
@@ -41,9 +42,10 @@ const workType = require('../model/workType');
 const works = require('../model/works');
 const worksType = require('../model/worksType');
 const worksTimeline = require('../model/worksTimeline');
-const worksWorkNum = require('../model/worksWorkNum');
+const worksNum = require('../model/worksNum');
+const workNum = require('../model/workNum');
 const worksWorkRelation = require('../model/worksWorkRelation');
-const worksWorkCommentRelation = require('../model/worksWorkCommentRelation');
+const worksCommentRelation = require('../model/worksCommentRelation');
 
 module.exports = {
   get Sequelize() {
@@ -127,12 +129,13 @@ module.exports = {
         skill: skill(this),
         tag: tag(this),
         user: user(this),
-        delivery: delivery(this),
+        userDelivery: userDelivery(this),
         userAuthorRelation: userAuthorRelation(this),
         userCommentRelation: userCommentRelation(this),
-        userIpRecord: userIpRecord(this),
         userUserRelation: userUserRelation(this),
-        userWorksWorkRelation: userWorksWorkRelation(this),
+        userWorkRelation: userWorkRelation(this),
+        userIpRecord: userIpRecord(this),
+        userProfileRecord: userProfileRecord(this),
         work: work(this),
         workMedia: workMedia(this),
         workImage: workImage(this),
@@ -141,9 +144,10 @@ module.exports = {
         works: works(this),
         worksType: worksType(this),
         worksTimeline: worksTimeline(this),
-        worksWorkNum: worksWorkNum(this),
+        worksNum: worksNum(this),
+        workNum: workNum(this),
         worksWorkRelation: worksWorkRelation(this),
-        worksWorkCommentRelation: worksWorkCommentRelation(this),
+        worksCommentRelation: worksCommentRelation(this),
       };
     }
     return this[MODEL];

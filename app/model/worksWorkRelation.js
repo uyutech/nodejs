@@ -21,10 +21,10 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    state: {
+    is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     },
     weight: {
       type: Sequelize.SMALLINT.UNSIGNED,

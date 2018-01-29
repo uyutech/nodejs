@@ -1,20 +1,16 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/1/29.
  */
 
 'use strict';
 
 module.exports = app => {
-  const { sequelizeStats, Sequelize } = app;
-  return sequelizeStats.define('works_work_num', {
+  const { sequelizeCircling, Sequelize } = app;
+  return sequelizeCircling.define('work_num', {
     id: {
       type: Sequelize.SMALLINT.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
-      allowNull: false,
-    },
-    works_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
     work_id: {
@@ -40,15 +36,12 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['works_id', 'work_id', 'type'],
-      },
-      {
-        fields: ['work_id']
+        fields: ['work_id', 'type'],
       },
       {
         fields: ['type', 'num']
       }
     ],
-    comment: '作品相关数字汇总',
+    comment: '小作品相关数字汇总',
   });
 };

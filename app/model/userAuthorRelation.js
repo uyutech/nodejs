@@ -26,10 +26,10 @@ module.exports = app => {
       allowNull: false,
       comment: '0关联作者，1关注作者',
     },
-    state: {
+    is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,

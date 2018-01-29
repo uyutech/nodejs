@@ -36,7 +36,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    settled: {
+    is_settled: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -46,10 +46,10 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    state: {
+    is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,

@@ -41,10 +41,10 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    state: {
+    is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,

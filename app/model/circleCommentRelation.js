@@ -20,15 +20,10 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    state: {
+    is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
-    },
-    popular: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -45,9 +40,6 @@ module.exports = app => {
       {
         unique: true,
         fields: ['circle_id', 'comment_id'],
-      },
-      {
-        fields: ['circle_id', 'popular'],
       }
     ],
     comment: '圈子留言关联信息',

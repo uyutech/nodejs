@@ -1,38 +1,47 @@
 /**
- * Created by army8735 on 2018/1/28.
+ * Created by army8735 on 2018/1/29.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('works_work_comment_relation', {
+  return sequelizeCircling.define('user_delivery', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
-    works_id: {
+    user_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    work_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+    name: {
+      type: Sequelize.STRING(32),
       allowNull: false,
     },
-    comment_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    phone: {
+      type: Sequelize.STRING(32),
       allowNull: false,
     },
-    state: {
+    address: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    post_code: {
+      type: Sequelize.STRING(32),
+      allowNull: false,
+    },
+    is_default: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     },
-    popular: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    is_deleted: {
+      type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: 0,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -47,13 +56,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        unique: true,
-        fields: ['works_id', 'work_id', 'comment_id'],
-      },
-      {
-        fields: ['works_id', 'work_id', 'popular'],
+        fields: ['user_id'],
       }
     ],
-    comment: '作品留言关联信息',
+    comment: '用户收货信息',
   });
 };
