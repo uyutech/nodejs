@@ -278,7 +278,7 @@ class Works extends migi.Component {
                   hidden={ tag === 'intro' || tag === 'comment' }
                   worksID={ self.worksID } workID={ self.workID } workList={ self.workList }/>
         <div class={ 'intro' + (tag === 'intro' ? '' : ' fn-hide') } ref="intro">
-          <Describe data={ self.props.worksDetail.Describe }/>
+          <Describe title="专辑简介" data={ self.props.worksDetail.Describe }/>
           <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
           {
             self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
@@ -368,6 +368,11 @@ class Works extends migi.Component {
         }
       </ul>
       <div class={ 'intro' + (tag === 'comment' ? ' fn-hide' : '') } ref="intro">
+        {
+          self.props.worksDetail.Describe
+            ? <Describe title="简介" data={ self.props.worksDetail.Describe }/>
+            : ''
+        }
         <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
         {
           self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length

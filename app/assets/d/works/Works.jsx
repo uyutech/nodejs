@@ -199,7 +199,7 @@ class Works extends migi.Component {
                       cover={ self.props.worksDetail.cover_Pic }
                       workList={ self.workList }/>
           <div class="box">
-            <Describe data={ self.props.worksDetail.Describe }/>
+            <Describe title="专辑简介" data={ self.props.worksDetail.Describe }/>
             <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
             {
               self.props.worksDetail.WorksAuthorComment
@@ -300,6 +300,11 @@ class Works extends migi.Component {
           <li class="cur">简介</li>
         </ul>
         <div class="box box-fn-top-left">
+          {
+            self.props.worksDetail.Describe
+              ? <Describe title="简介" data={ self.props.worksDetail.Describe }/>
+              : ''
+          }
           <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
           {
             self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
