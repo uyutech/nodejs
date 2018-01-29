@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2018/1/28.
+ * Created by army8735 on 2018/1/29.
  */
 
 'use strict';
@@ -17,13 +17,20 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
+    name: {
+      type: Sequelize.STRING(32),
       allowNull: false,
-      comment: '0手机号，1地址',
     },
-    content: {
+    phone: {
+      type: Sequelize.STRING(32),
+      allowNull: false,
+    },
+    address: {
       type: Sequelize.STRING,
+      allowNull: false,
+    },
+    post_code: {
+      type: Sequelize.STRING(32),
       allowNull: false,
     },
     state: {
@@ -44,9 +51,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        fields: ['user_id', 'type'],
+        fields: ['user_id'],
       }
     ],
-    comment: '用户隐私信息',
+    comment: '用户收货信息',
   });
 };
