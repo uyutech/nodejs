@@ -273,4 +273,8 @@ module.exports = app => {
   app.post('/mns/mts/job', 'mns.mts.job');
 
   app.get('/d/author2/:authorId', 'd2.author.index');
+  app.get('/d/works2/:worksId', 'd2.works.index');
+  app.get('/d/works2/:worksId/:workId', 'd2.works.index');
+
+  app.get('/d/api2/works/commentList', 'api2.works.commentList');
 };

@@ -27,11 +27,6 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    class: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '0图片pic类扩展，1媒体media类扩展，2文本text类扩展',
-    },
     type: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
@@ -41,11 +36,16 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    is_deleted: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 0,
-      comment: '0删除，1正常，2待审，3仅自己可见',
+      defaultValue: 1,
+      comment: '0取消，1正常，2正在转码',
     },
     create_time: {
       type: Sequelize.DATE,

@@ -44,7 +44,7 @@ module.exports = app => {
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 0,
+      defaultValue: 1,
       comment: '0取消，1正常，2未完成公开，3未完成保密',
     },
     cover: {

@@ -66,6 +66,9 @@ module.exports = app => {
       },
       {
         fields: ['root_id'],
+      },
+      {
+        fields: ['is_deleted'],
       }
     ],
     comment: '评论基本信息',

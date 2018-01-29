@@ -1,14 +1,14 @@
 /**
- * Created by army8735 on 2018/1/28.
+ * Created by army8735 on 2018/1/29.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('works_comment_relation', {
+  return sequelizeCircling.define('works_recommend', {
     id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+      type: Sequelize.SMALLINT.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
@@ -17,19 +17,16 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    comment_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
+      comment: '0普适场景',
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
+    weight: {
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: false,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
+      defaultValue: 0,
     },
     update_time: {
       type: Sequelize.DATE,
@@ -40,12 +37,12 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['works_id', 'comment_id'],
+        fields: ['type', 'works_id'],
       },
       {
-        fields: ['is_deleted'],
+        fields: ['type', 'weight'],
       }
     ],
-    comment: '大作品留言关联信息',
+    comment: '推荐作品展示',
   });
 };

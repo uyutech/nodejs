@@ -43,9 +43,11 @@ const works = require('../model/works');
 const worksType = require('../model/worksType');
 const worksTimeline = require('../model/worksTimeline');
 const worksNum = require('../model/worksNum');
+const worksState = require('../model/worksState');
 const workNum = require('../model/workNum');
 const worksWorkRelation = require('../model/worksWorkRelation');
 const worksCommentRelation = require('../model/worksCommentRelation');
+const worksRecommend = require('../model/worksRecommend');
 
 module.exports = {
   get Sequelize() {
@@ -146,8 +148,10 @@ module.exports = {
         worksTimeline: worksTimeline(this),
         worksNum: worksNum(this),
         workNum: workNum(this),
+        worksState: worksState(this),
         worksWorkRelation: worksWorkRelation(this),
         worksCommentRelation: worksCommentRelation(this),
+        worksRecommend: worksRecommend(this),
       };
     }
     return this[MODEL];

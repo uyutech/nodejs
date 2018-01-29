@@ -20,7 +20,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0评论数，1浏览数，2播放数，3点赞数，4收藏数',
+      comment: '0评论数，1浏览数，2播放数，3点赞数，4收藏数，5流行热度',
     },
     num: {
       type: Sequelize.INTEGER.UNSIGNED,
@@ -39,7 +39,7 @@ module.exports = app => {
         fields: ['works_id', 'type'],
       },
       {
-        fields: ['type', 'num']
+        fields: ['type', 'num'],
       }
     ],
     comment: '大作品相关数字汇总',

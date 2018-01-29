@@ -27,11 +27,6 @@ module.exports = app => {
       allowNull: false,
       comment: '0图片，1音频，2视频，3文本',
     },
-    category_name: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
     code: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,

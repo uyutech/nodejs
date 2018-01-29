@@ -1,25 +1,26 @@
 /**
- * Created by army8735 on 2018/1/28.
+ * Created by army8735 on 2018/1/29.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('works_comment_relation', {
+  return sequelizeCircling.define('works_state', {
     id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+      type: Sequelize.SMALLINT.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    works_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+    type: {
+      type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
     },
-    comment_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    name: {
+      type: Sequelize.STRING(32),
       allowNull: false,
+      defaultValue: '',
     },
     is_deleted: {
       type: Sequelize.BOOLEAN,
@@ -40,12 +41,9 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['works_id', 'comment_id'],
-      },
-      {
-        fields: ['is_deleted'],
+        fields: ['type'],
       }
     ],
-    comment: '大作品留言关联信息',
+    comment: '大作品状态',
   });
 };
