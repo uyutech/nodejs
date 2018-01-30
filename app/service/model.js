@@ -141,13 +141,20 @@ class Service extends egg.Service {
       works_comment_relation.comment_id as commentId
     FROM
       works,
-      works_comment_relation
+      works_comment_relation,
+      comment
     WHERE
       works.id=${worksId}
     AND
       works.id=works_comment_relation.works_id
-    ORDER BY commentId desc
-    LIMIT ${option.index}, ${option.length};`;
+    AND
+      works_comment_relation.comment_id=comment.id
+    AND
+      comment.is_deleted=false
+    ORDER BY
+      commentId desc
+    LIMIT
+      ${option.index}, ${option.length};`;
     let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       let hash = {};
@@ -182,6 +189,8 @@ class Service extends egg.Service {
     FROM
       comment
     WHERE
+      is_deleted=false
+    AND
       id in (${commentIdList.join(', ')});`;
     let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
@@ -206,14 +215,13 @@ class Service extends egg.Service {
         this.authorListInfo(authorIdList)
       ]);
       peopleInfoList[0].forEach(function(item) {
-        res[hash[item.userId]].forEach(function(o) {
-          Object.assign(o, item);
+        hash[item.userId].forEach(function(i) {
+          Object.assign(res[i], item);
         });
-        Object.assign(res[hash[item.userId]], item);
       });
       peopleInfoList[1].forEach(function(item) {
-        res[hash[item.authorId]].forEach(function(o) {
-          Object.assign(o, item);
+        hash[item.authorId].forEach(function(i) {
+          Object.assign(res[i], item);
         });
       });
     }
