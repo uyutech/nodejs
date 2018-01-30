@@ -291,6 +291,7 @@ module.exports = app => {
         ItemsTypeID: typeID,
         skip: body.skip || 0,
         take: body.take || 10,
+        sort: body.sort,
       });
       ctx.body = res.data;
     }
