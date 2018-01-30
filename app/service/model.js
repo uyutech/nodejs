@@ -79,6 +79,7 @@ class Service extends egg.Service {
         hash[item.workId] = i;
         return item.workId;
       });
+      // 每个id仅在一个扩展表中出现，防止重复出现在多个扩展表问题交由添加业务实现
       let workList = await Promise.all([
         this.app.sequelizeCircling.query(`SELECT work_id as workId, width, height
           FROM work_image WHERE work_id in (${ids.join(', ')})`, { type: Sequelize.QueryTypes.SELECT }),
@@ -183,7 +184,69 @@ class Service extends egg.Service {
     WHERE
       id in (${commentIdList.join(', ')});`;
     let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      let hash = {};
+      let userIdList = [];
+      let authorIdList = [];
+      for(let i = 0, len = res.length; i < len; i++) {
+        let item = res[i];
+        if(item.isAuthor) {
+          authorIdList.push(item.authorId);
+          hash[item.authorId] = i;
+        }
+        else {
+          userIdList.push(item.userId);
+          hash[item.userId] = i;
+        }
+      }
+      let peopleInfoList = await Promise.all([
+        this.userListInfo(userIdList),
+        this.authorListInfo(authorIdList)
+      ]);
+      peopleInfoList[0].forEach(function(item) {
+        Object.assign(res[hash[item.userId]], item);
+      });
+      peopleInfoList[1].forEach(function(item) {
+        Object.assign(res[hash[item.authorId]], item);
+      });
+    }
     return res;
+  }
+  async userListInfo(userIdList) {
+    if(!userIdList.length) {
+      return [];
+    }
+    let s = `SELECT
+      id as userId,
+      name as userName,
+      head_url as userHeadUrl,
+      sign as userSign
+    FROM
+      user
+    WHERE
+      state!=0
+    AND
+      id in (${userIdList.join(', ')});`;
+    let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });
+    return res || [];
+  }
+  async authorListInfo(authorIdList) {
+    if(!authorIdList.length) {
+      return [];
+    }
+    let s = `SELECT
+      id as authorId
+      name as authorName
+      head_url as authorHeadUrl
+      sign as authorSign
+    FROM
+      author
+    WHERE
+      is_deleted=false
+    AND
+      id in (${authorIdList.join(', ')});`;
+    let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });
+    return res || [];
   }
 }
 

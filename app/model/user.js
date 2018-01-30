@@ -67,7 +67,6 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        unique: true,
         fields: ['name'],
       }
     ],

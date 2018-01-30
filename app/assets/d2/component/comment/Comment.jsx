@@ -23,14 +23,14 @@ class Comment extends migi.Component {
                class={ 'item' + (item.isAuthor ? ' author' : '') }>
       <div class="t fn-clear">
         <div class="profile fn-clear">
-          <a class="pic" href={ '/author/' + item.AuthorID }>
+          <a class="pic" href={ '/author/' + item.authorId }>
             {
               item.isAuthor
                 ? <img class="pic"
-                       src={ util.autoSsl(util.img60_60_80(item.a
+                       src={ util.autoSsl(util.img60_60_80(item.authorHeadUrl
                          || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
                 : <img class="pic"
-                       src={ util.autoSsl(util.img60_60_80(item.b
+                       src={ util.autoSsl(util.img60_60_80(item.userHeadUrl
                          || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
             }
           </a>
@@ -38,7 +38,7 @@ class Comment extends migi.Component {
             <a class="name"
                href={ item.isAuthor
                  ? '/author/' + item.authorId
-                 : '/user/' + item.userId }>{ 'aaa' }</a>
+                 : '/user/' + item.userId }>{ item.isAuthor ? item.authorName : item.userNamE }</a>
             <small class="time" rel={ 1 }>{ util.formatDate(item.date) }</small>
           </div>
         </div>
