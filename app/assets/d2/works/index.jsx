@@ -9,8 +9,8 @@ import './index.less';
 import Works from './Works.jsx';
 
 let works = migi.preExist(
-  <Works worksID={ $CONFIG.worksID }
-         workID={ $CONFIG.workID }
+  <Works worksId={ $CONFIG.worksId }
+         workId={ $CONFIG.workId }
          worksInfo={ $CONFIG.worksInfo }
          worksWorkList={ $CONFIG.worksWorkList }
          worksCommentData={ $CONFIG.worksCommentData }/>

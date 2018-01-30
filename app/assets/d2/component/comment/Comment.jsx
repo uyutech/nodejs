@@ -18,6 +18,14 @@ class Comment extends migi.Component {
   }
   @bind empty
   @bind message
+  setData(data) {
+    let self = this;
+    let html = '';
+    (data || []).forEach(function(item) {
+      html += self.genComment(item);
+    });
+    $(self.ref.list.element).html(html);
+  }
   genComment(item) {
     return <li id={ 'comment_' + item.commentId }
                class={ 'item' + (item.isAuthor ? ' author' : '') }>
@@ -38,7 +46,7 @@ class Comment extends migi.Component {
             <a class="name"
                href={ item.isAuthor
                  ? '/author/' + item.authorId
-                 : '/user/' + item.userId }>{ item.isAuthor ? item.authorName : item.userNamE }</a>
+                 : '/user/' + item.userId }>{ item.isAuthor ? item.authorName : item.userName }</a>
             <small class="time" rel={ 1 }>{ util.formatDate(item.date) }</small>
           </div>
         </div>

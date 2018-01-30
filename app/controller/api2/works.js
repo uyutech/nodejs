@@ -10,7 +10,7 @@ class Controller extends egg.Controller {
   async commentList(ctx) {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = body.worksId;
+    let worksId = body.worksId;console.log(111,body);
     if(!worksId) {
       return;
     }
@@ -19,7 +19,7 @@ class Controller extends egg.Controller {
     let res = await ctx.service.model.worksCommentData(worksId, {
       index,
       length,
-    });
+    });console.log(222, res);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

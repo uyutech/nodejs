@@ -53,6 +53,7 @@ class Works extends migi.Component {
                videoList={ self.videoList }
                audioList={ self.audioList }/>
         <WorksComment ref="worksComment"
+                      worksId={ self.props.worksId }
                       worksCommentData={ self.props.worksCommentData }/>
       </div>
       <div class="side">

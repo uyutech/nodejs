@@ -276,5 +276,5 @@ module.exports = app => {
   app.get('/d/works2/:worksId', 'd2.works.index');
   app.get('/d/works2/:worksId/:workId', 'd2.works.index');
 
-  app.get('/d/api2/works/commentList', 'api2.works.commentList');
+  app.post('/d/api2/works/commentList', 'api2.works.commentList');
 };

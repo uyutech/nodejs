@@ -192,11 +192,13 @@ class Service extends egg.Service {
         let item = res[i];
         if(item.isAuthor) {
           authorIdList.push(item.authorId);
-          hash[item.authorId] = i;
+          hash[item.authorId] = hash[item.authorId] || [];
+          hash[item.authorId].push(i);
         }
         else {
           userIdList.push(item.userId);
-          hash[item.userId] = i;
+          hash[item.userId] = hash[item.userId] || [];
+          hash[item.userId].push(i);
         }
       }
       let peopleInfoList = await Promise.all([
@@ -204,10 +206,15 @@ class Service extends egg.Service {
         this.authorListInfo(authorIdList)
       ]);
       peopleInfoList[0].forEach(function(item) {
+        res[hash[item.userId]].forEach(function(o) {
+          Object.assign(o, item);
+        });
         Object.assign(res[hash[item.userId]], item);
       });
       peopleInfoList[1].forEach(function(item) {
-        Object.assign(res[hash[item.authorId]], item);
+        res[hash[item.authorId]].forEach(function(o) {
+          Object.assign(o, item);
+        });
       });
     }
     return res;

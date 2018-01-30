@@ -35,8 +35,8 @@ export default function(data) {
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.worksID = ${data.helper.stringify(worksId)};
-  $CONFIG.workID = ${data.helper.stringify(workId)};
+  $CONFIG.worksId = ${data.helper.stringify(worksId)};
+  $CONFIG.workId = ${data.helper.stringify(workId)};
   $CONFIG.worksInfo = ${data.helper.stringify(worksInfo)};
   $CONFIG.worksWorkList = ${data.helper.stringify(worksWorkList)};
   $CONFIG.worksCommentData = ${data.helper.stringify(worksCommentData)};
