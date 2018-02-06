@@ -575,7 +575,7 @@ module.exports = app => {
       let body = ctx.request.body;
       return ctx.body = {
         success: false,
-        message: '12.29日前选择发货的小伙伴的快递将在元旦之后寄出。在此之后直到下次发货之间，发货功能将被锁定。下次发货时间预定于一月下旬。请小伙伴们谅解。',
+        message: '考虑到小伙伴们寒假的地址和开学以后的地址不相同以及春节快递停止发货。所以发货将于3月份开始，在此之间，发货功能将被锁定。具体发货时间将会在转圈微博通知，请小伙伴谅解。',
       };
       let res = yield ctx.helper.postServiceJSON2('api/users/SendProduct', {
         uid,
