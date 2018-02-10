@@ -270,5 +270,7 @@ module.exports = app => {
 
   app.post('/h5/playlist/index', 'h5.playlist.index');
 
+  app.post('/h5/report/index', app.middlewares.needLoginJson(), 'h5.report.index');
+
   app.post('/mns/mts/job', 'mns.mts.job');
 };

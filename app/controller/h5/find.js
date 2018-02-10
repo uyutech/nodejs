@@ -262,8 +262,8 @@ module.exports = app => {
           let res2 = yield ctx.helper.postServiceJSON2('/api/RecommendHomes/GetItemsByGroupID', {
             uid,
             GroupID: first.GroupID,
-            skip: 0,
-            take: 10,
+            skip: body.skip || 0,
+            take: body.take || 10,
           });
           if(res2.data.success) {
             itemList = res2.data.data;

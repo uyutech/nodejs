@@ -101,6 +101,10 @@ module.exports = app => {
       }
       let banner = [
         {
+          url: '/#/post/171285',
+          pic: '//zhuanquan.xyz/pic/a11aaacdbceec199eb508cc75d078847.jpg'
+        },
+        {
           url: '/works/2015000000002200',
           pic: '//zhuanquan.xyz/pic/975b02f6c1c1d0fd6015ca560c7015f8.jpg'
         },
