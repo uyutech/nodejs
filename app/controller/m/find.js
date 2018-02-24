@@ -56,6 +56,22 @@ module.exports = app => {
       }
       let banner = [
         {
+          url: '/post/301290',
+          pic: '//zhuanquan.xyz/temp/6ed768fd574f508fe2a3bf1f85aa247a.jpg'
+        },
+        {
+          url: '/works/2015000000001598',
+          pic: '//zhuanquan.xyz/temp/cc16b8c021aa6c7632d2609076a8dd4b.jpg'
+        },
+        {
+          url: '/works/2015000000002480',
+          pic: '//zhuanquan.xyz/temp/fa17cdaaa28dcecd8cf64f23def326d7.jpg'
+        },
+        {
+          url: '/works/2015000000002473',
+          pic: '//zhuanquan.xyz/pic/b3c843b38a7c7865744b11e071c984aa.jpg'
+        },
+        {
           url: '/post/171285',
           pic: '//zhuanquan.xyz/pic/a11aaacdbceec199eb508cc75d078847.jpg'
         },
@@ -66,18 +82,6 @@ module.exports = app => {
         {
           url: '/works/2015000000001591',
           pic: '//zhuanquan.xyz/pic/0d5b2a466e0bee90047123d926d829b5.jpg'
-        },
-        {
-          url: '/post/91193',
-          pic: '//zhuanquan.xyz/img/b43f3769b4ccc26289f653aa45bc880d.jpg'
-        },
-        {
-          url: '/works/2015000000001599',
-          pic: '//zhuanquan.xyz/img/ed65b65bb840e8b324c600d7b066e0cc.jpg'
-        },
-        {
-          url: '/works/2015000000001582',
-          pic: '//zhuanquan.xyz/pic/3fc9dc8f4aa54ccfae45294dd689e820.jpg'
         }
       ];
       yield ctx.render('mfind', {
