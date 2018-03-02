@@ -236,7 +236,7 @@ module.exports = app => {
         phoneNumber: phone,
         CodeNumber: code,
         codeType: '3',
-      });console.log(checkCode);
+      });
       if(!checkCode.data.success) {
         return ctx.body = ctx.helper.errorJSON({
           message: checkCode.data.message,
@@ -246,7 +246,7 @@ module.exports = app => {
         uid,
         phoneNumber: phone,
         pwd: password,
-      });console.log(res);
+      });
       ctx.body = res.data;
     }
     * bindOauth(ctx) {

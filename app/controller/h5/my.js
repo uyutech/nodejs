@@ -190,8 +190,13 @@ module.exports = app => {
     }
     * favor(ctx) {
       let uid = ctx.session.uid;
-      let body = ctx.request.body;
       let res = yield {
+        favorVideo: ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
+          uid,
+          ItemsType: 4,
+          Skip: 0,
+          Take: 20,
+        }),
         favorMV: ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
           uid,
           ItemsType: 1,
@@ -211,9 +216,13 @@ module.exports = app => {
           Take: 10,
         }),
       };
+      let favorVideo = {};
       let favorMV = {};
       let favorPic = {};
       let favorPost = {};
+      if(res.favorVideo.data.success) {
+        favorVideo = res.favorVideo.data.data;
+      }
       if(res.favorMV.data.success) {
         favorMV = res.favorMV.data.data;
       }
@@ -224,11 +233,25 @@ module.exports = app => {
         favorPost = res.favorPost.data.data;
       }
       ctx.body = ctx.helper.okJSON({
+        favorVideo,
+        favorAudio: favorMV,
         favorMV,
         favorPic,
         favorPost,
       });
     }
+    * favorType(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
+        uid,
+        ItemsType: body.type,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    // TODO: del
     * favorMV(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
@@ -240,6 +263,7 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    // TODO: del
     * favorPic(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
@@ -251,6 +275,7 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    // TODO: del
     * favorPost(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;

@@ -183,6 +183,7 @@ module.exports = app => {
   app.post('/h5/my/followerList', app.middlewares.needLoginJson(), 'h5.my.followerList');
   app.post('/h5/my/followerAuthor', app.middlewares.needLoginJson(), 'h5.my.followerAuthor');
   app.post('/h5/my/favor', app.middlewares.needLoginJson(), 'h5.my.favor');
+  app.post('/h5/my/favorType', app.middlewares.needLoginJson(), 'h5.my.favorType');
   app.post('/h5/my/favorMV', app.middlewares.needLoginJson(), 'h5.my.favorMV');
   app.post('/h5/my/favorPic', app.middlewares.needLoginJson(), 'h5.my.favorPic');
   app.post('/h5/my/favorPost', app.middlewares.needLoginJson(), 'h5.my.favorPost');
