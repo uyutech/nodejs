@@ -212,6 +212,8 @@ module.exports = app => {
   app.post('/h5/circle/post', app.middlewares.needLoginJson(), 'h5.circle.post');
 
   app.post('/h5/author/index', 'h5.author.index');
+  app.post('/h5/author/newIndex', 'h5.author.newIndex');
+  app.post('/h5/author/itemList', 'h5.author.itemList');
   app.post('/h5/author/addComment', app.middlewares.needLoginJson(), 'h5.author.addComment');
   app.post('/h5/author/likeComment', app.middlewares.needLoginJson(), 'h5.author.likeComment');
   app.post('/h5/author/subCommentList', 'h5.author.subCommentList');
@@ -221,6 +223,7 @@ module.exports = app => {
   app.post('/h5/author/commentList', 'h5.author.commentList');
   app.post('/h5/author/maList', 'h5.author.maList');
   app.post('/h5/author/picList', 'h5.author.picList');
+  app.post('/h5/author/dynamic', 'h5.author.dynamic');
 
   app.post('/h5/works/addComment', app.middlewares.needLoginJson(), 'h5.works.addComment');
 
