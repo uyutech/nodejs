@@ -67,6 +67,12 @@ module.exports = app => {
         circleDetail,
         myCircleList,
         tagList,
+        isPublic: ctx.session.isPublic,
+        authorId: ctx.session.authorID,
+        authorName: ctx.session.authorName,
+        authorHead: ctx.session.authorHead,
+        uname: ctx.session.uname,
+        head: ctx.session.head,
       });
     }
     * tag(ctx) {

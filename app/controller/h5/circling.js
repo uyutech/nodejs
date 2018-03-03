@@ -9,15 +9,9 @@ module.exports = app => {
     * index(ctx) {
       let uid = ctx.session.uid;
       let hotCircleList = {};
-      let hotCircle = {};
       let postList = {};
       let res = yield {
         hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
-          uid,
-          Skip: 0,
-          Take: 10,
-        }),
-        hotCircle: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 10,
@@ -31,15 +25,11 @@ module.exports = app => {
       if(res.hotCircleList.data.success) {
         hotCircleList = res.hotCircleList.data.data;
       }
-      if(res.hotCircle.data.success) {
-        hotCircle = res.hotCircle.data.data;
-      }
       if(res.postList.data.success) {
         postList = res.postList.data.data;
       }
       ctx.body = ctx.helper.okJSON({
         hotCircleList,
-        hotCircle,
         postList,
       });
     }

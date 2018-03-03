@@ -166,7 +166,7 @@ module.exports = app => {
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {
-        ctx.session.authorID = userInfo.AuthorID;
+        ctx.session.authorId = ctx.session.authorID = userInfo.AuthorID;
         ctx.session.authorName = userInfo.AuthorName;
         ctx.session.isPublic = userInfo.ISOpen;
         ctx.session.authorHead = userInfo.AuthorHead_Url;

@@ -253,7 +253,7 @@ module.exports = app => {
       if(userInfo.data.success) {
         ctx.session.uname = userInfo.data.data.NickName;
         ctx.session.head = userInfo.data.data.Head_Url;
-        ctx.session.authorID = userInfo.data.data.AuthorID;
+        ctx.session.authorId = ctx.session.authorID = userInfo.data.data.AuthorID;
         ctx.session.authorName = userInfo.data.data.AuthorName;
         ctx.session.authorHead = userInfo.data.data.AuthorHead_Url;
       }
