@@ -9,8 +9,8 @@ module.exports = app => {
     * index(ctx) {
       ctx.body = {
         success: true,
-        version: 61,
-        url: 'https://circling.net.cn/h5/h5-0.5.13.zip',
+        version: 62,
+        url: 'https://circling.net.cn/h5/h5-0.5.14.zip',
         minSdk: 12,
       };
     }

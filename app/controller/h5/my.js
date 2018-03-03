@@ -295,6 +295,9 @@ module.exports = app => {
         AuthorID: ctx.session.authorID,
         SettledType: body.public === 'true' ? 0 : 1,
       });
+      if(!res.data.success) {
+        return ctx.body = res.data;
+      }
       if(ctx.session.authorID) {
         ctx.session.isPublic = body.public === 'true';
       }
