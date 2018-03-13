@@ -84,6 +84,30 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    * shield(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      if(!body.userId) {
+        return;
+      }
+      let res = yield ctx.helper.postServiceJSON2('api/users/AddShieldUser', {
+        uid,
+        toUid: body.userId,
+      });
+      ctx.body = res.data;
+    }
+    * unShield(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      if(!body.userId) {
+        return;
+      }
+      let res = yield ctx.helper.postServiceJSON2('api/users/RemoShieldUser', {
+        uid,
+        toUid: body.userId,
+      });
+      ctx.body = res.data;
+    }
   }
   return Controller;
 };

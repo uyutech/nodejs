@@ -2,8 +2,6 @@
  * Created by army8735 on 2017/9/18.
  */
 
-import util from '../../d/common/util';
-import net from '../../d/common/net';
 import Media from './Media.jsx';
 import itemTemplate from '../../d/works/itemTemplate';
 import PhotoAlbum from './PhotoAlbum.jsx';
@@ -14,7 +12,6 @@ import Lyric from '../../d/works/Lyric.jsx';
 import InspComment from '../../d/works/InspComment.jsx';
 import Poster from '../../d/works/Poster.jsx';
 import WorkComment from './WorkComment.jsx';
-import SubCmt from '../../d/component/subcmt/SubCmt.jsx';
 import WorksTypeEnum from '../../d/works/WorksTypeEnum';
 import LyricsParser from '../../d/works/LyricsParser.jsx';
 import MusicAlbum from './MusicAlbum.jsx';
@@ -35,33 +32,15 @@ class Works extends migi.Component {
     self.setWorks(self.props.worksDetail.Works_Items || []);
     self.on(migi.Event.DOM, function() {
       let workComment = self.ref.workComment;
-      let comment = workComment.ref.comment;
-      let subCmt = self.ref.subCmt;
       if(self.worksType === WorksTypeEnum.TYPE.originMusic) {
         let media = self.ref.media;
         media.on('switchTo', function(data) {
           workComment.workID = data.ItemID;
         });
       }
-      comment.on('chooseSubComment', function(rid, cid, name, n) {
-        subCmt.to = name;
-        self.rid = rid;
-        self.cid = cid;
-        if(!n || n === '0') {
-          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + (self.workID || '') + '&cid=' + cid + '&rid=' + rid;
-        }
-      });
-      comment.on('closeSubComment', function() {
-        subCmt.to = '';
-      });
-      subCmt.on('focus', function() {
-        if(subCmt.to) {
-          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + (self.workID || '') + '&cid=' + self.cid + '&rid=' + self.rid;
-        }
-        else {
-          location.href = '/subComment?type=3&id=' + self.worksID + '&sid=' + (self.workID || '');
-        }
-      });
+      self.url = /(iPhone|iPod|Android|ios)/i.test(navigator.userAgent)
+        ? 'https://itunes.apple.com/cn/app/id1331367220'
+        : 'https://circling.net.cn/android/circling-0.5.3.apk';
     });
   }
   @bind worksID
@@ -72,6 +51,7 @@ class Works extends migi.Component {
   @bind barrageTime = 0
   @bind rid
   @bind cid
+  @bind url
   setWorks(works) {
     let self = this;
     let workList = [];
@@ -299,11 +279,6 @@ class Works extends migi.Component {
                      hidden={ tag !== 'comment' }
                      originTo={ self.props.worksDetail.Title }
                      commentData={ self.props.commentData }/>
-        <SubCmt ref="subCmt"
-                originTo={ self.props.worksDetail.Title }
-                subText="发送"
-                tipText="-${n}"
-                placeholder="夸夸这个作品吧"/>
       </div>;
     }
     if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
@@ -344,11 +319,6 @@ class Works extends migi.Component {
                      hidden={ tag !== 'comment' }
                      originTo={ self.props.worksDetail.Title }
                      commentData={ self.props.commentData }/>
-        <SubCmt ref="subCmt"
-                originTo={ self.props.worksDetail.Title }
-                subText="发送"
-                tipText="-${n}"
-                placeholder="夸夸这个作品吧"/>
         <ImageView ref="imageView"/>
       </div>;
     }
@@ -408,12 +378,16 @@ class Works extends migi.Component {
                    hidden={ tag !== 'comment' }
                    originTo={ self.props.worksDetail.Title }
                    commentData={ self.props.commentData }/>
-      <SubCmt ref="subCmt"
-              originTo={ self.props.worksDetail.Title }
-              subText="发送"
-              tipText="-${n}"
-              placeholder="夸夸这个作品吧"/>
-      <a class="app" href="https://circling.net.cn/android/circling-0.4.1.apk" target="_blank"/>
+      <div class="app">
+        <div class="txt">
+          <div>
+            <h4>每天转个圈 玩转每个圈</h4>
+            <p>一个充满正能量的作品展示、创作平台~</p>
+          </div>
+          <a href={ this.url }
+             target="_blank">下载</a>
+        </div>
+      </div>
     </div>;
   }
 }

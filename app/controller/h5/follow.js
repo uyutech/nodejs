@@ -11,24 +11,24 @@ module.exports = app => {
       let body = ctx.request.body;
       let hotCircle = {};
       let follows = {};
-      let userFollows = {};
+      // let userFollows = {};
       let postList = {};
       let res = yield {
         hotCircle: ctx.helper.postServiceJSON2('api/users/User_Follow_Circling', {
           uid,
           Skip: 0,
-          Take: 6,
+          Take: 10,
         }),
         follows: ctx.helper.postServiceJSON2('api/users/GetFollowAuthorAndUser', {
           uid,
           Skip: 0,
           Take: 10,
         }),
-        userFollows: ctx.helper.postServiceJSON2('api/users/User_FollowList', {
-          uid,
-          Skip: 0,
-          Take: 10,
-        }),
+        // userFollows: ctx.helper.postServiceJSON2('api/users/User_FollowList', {
+        //   uid,
+        //   Skip: 0,
+        //   Take: 10,
+        // }),
         postList: ctx.helper.postServiceJSON2(body.type === '1'
           ? 'api/users/GetUserFriendCircling'
           : 'api/users/GetUserFollowUserCircling', {
@@ -43,16 +43,15 @@ module.exports = app => {
       if(res.follows.data.success) {
         follows = res.follows.data.data;
       }
-      if(res.userFollows.data.success) {
-        userFollows = res.userFollows.data.data;
-      }
+      // if(res.userFollows.data.success) {
+      //   userFollows = res.userFollows.data.data;
+      // }
       if(res.postList.data.success) {
         postList = res.postList.data.data;
       }
       ctx.body = ctx.helper.okJSON({
         hotCircle,
         follows,
-        userFollows,
         postList,
       });
     }

@@ -13,7 +13,7 @@ module.exports = () => {
         ${ctx.helper.getDHead()}
         <script>
           var pathname = location.pathname;
-          location.replace('//' + location.host.replace('m.', '') + '/#' + pathname);
+          location.replace('//' + location.host.replace('m.', '') + pathname);
         </script>
         </head>
         <body></body></html>`;

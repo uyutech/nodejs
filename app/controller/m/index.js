@@ -9,6 +9,10 @@ module.exports = app => {
     * index(ctx) {
       ctx.redirect('/find');
     }
+    * newIndex(ctx) {
+      yield ctx.render('mindex', {
+      });
+    }
   }
   return Controller;
 };

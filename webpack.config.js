@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     mcommon: './app/assets/m/common/index.js',
     mfind: './app/assets/m/find/index.jsx',
+    mindex: './app/assets/m/index/index.jsx',
     mworks: './app/assets/m/works/index.jsx',
     mauthor: './app/assets/m/author/index.jsx',
     mmy: './app/assets/m/my/index.jsx',
@@ -32,6 +33,7 @@ module.exports = {
     mtag: './app/assets/m/tag/index.jsx',
     dcommon: './app/assets/d/common/index.js',
     dindex: './app/assets/d/index/index.jsx',
+    dindex2: './app/assets/d/index2/index.jsx',
     dfind: './app/assets/d/find/index.jsx',
     dworks: './app/assets/d/works/index.jsx',
     dauthor: './app/assets/d/author/index.jsx',

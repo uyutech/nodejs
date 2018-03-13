@@ -251,66 +251,18 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
-    // TODO: del
-    * favorMV(ctx) {
+    * altIdentity(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
-        uid,
-        ItemsType: 1,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
-    // TODO: del
-    * favorPic(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
-        uid,
-        ItemsType: 2,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
-    // TODO: del
-    * favorPost(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
-        uid,
-        ItemsType: 3,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
-    * altSettle(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/UpdateAltIdentity', {
         uid,
         AuthorID: ctx.session.authorID,
-        SettledType: body.public === 'true' ? 0 : 1,
+        Type: body.public === 'true' ? 0 : 1,
       });
       if(!res.data.success) {
         return ctx.body = res.data;
       }
-      if(ctx.session.authorID) {
-        ctx.session.isPublic = body.public === 'true';
-      }
-      let userInfo = yield ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
-        uid,
-      });
-      if(userInfo.data.success) {
-        ctx.session.uname = userInfo.data.data.NickName;
-        ctx.session.head = userInfo.data.data.Head_Url;
-        ctx.session.authorId = ctx.session.authorID = userInfo.data.data.AuthorID;
-        ctx.session.authorName = userInfo.data.data.AuthorName;
-        ctx.session.authorHead = userInfo.data.data.AuthorHead_Url;
-      }
+      ctx.session.isPublic = body.public === 'true';
       ctx.body = res.data;
     }
     * uploadPic(ctx) {
@@ -617,6 +569,110 @@ module.exports = app => {
       let res = yield ctx.helper.postServiceJSON2('api/users/DelOrder', {
         uid,
         cartID: body.cartID,
+      });
+      ctx.body = res.data;
+    }
+    * settle(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      // 不入驻，设置状态为10走普通用户流程
+      if(body.settle === 'false') {
+        let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
+          uid,
+          User_Reg_Stat: 3,
+        });
+        if(!res.data.success) {
+          return ctx.body = res.data;
+        }
+        // 99以上状态为老用户，只走入住流程，引导已经走过了
+        if(body.step && body.step < 99) {
+          let res = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
+            uid,
+            User_Reg_Stat: 10,
+          });
+          return ctx.body = res.data;
+        }
+        return ctx.body = res.data;
+      }
+      // 入驻，设置状态为公开11马甲10，走设置马甲昵称流程
+      else if(body.settle === 'true') {
+        let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
+          uid,
+          AuthorID: ctx.session.authorID,
+          SettledType: body.public === 'true' ? 1 : 2,
+        });
+        if(!res.data.success) {
+          return ctx.body = res.data;
+        }
+        if(body.step && body.step < 99) {
+          let res = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
+            uid,
+            User_Reg_Stat: body.public === 'true' ? 11 : 10,
+          });
+          return ctx.body = res.data;
+        }
+        return ctx.body = res.data;
+      }
+      ctx.body = {
+        success: false,
+      };
+    }
+    * authorRelevant(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetAuthorRelevant', {
+        uid,
+        AuthorID: ctx.session.authorID,
+        HotWork_Skip: 0,
+        HotWork_Take: 2,
+        ToAuthorSkip: 0,
+        ToAuthorTake: 2,
+      });
+      ctx.body = res.data;
+    }
+    * shield(ctx) {
+      let uid = ctx.session.uid;
+      let user = {};
+      let circle = {};
+      let res = yield {
+        user: ctx.helper.postServiceJSON2('api/users/GetShieldUserList', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
+        circle: ctx.helper.postServiceJSON2('api/users/GetShieldCirclingList', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
+      };
+      if(res.user.data.success) {
+        user = res.user.data.data;
+      }
+      if(res.circle.data.success) {
+        circle = res.circle.data.data;
+      }
+      ctx.body = ctx.helper.okJSON({
+        user,
+        circle,
+      });
+    }
+    * shieldUser(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetShieldUserList', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * shieldCircle(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetShieldCirclingList', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
       });
       ctx.body = res.data;
     }

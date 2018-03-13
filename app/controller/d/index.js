@@ -60,6 +60,10 @@ module.exports = app => {
         messages: {},
       });
     }
+    * newIndex(ctx) {
+      yield ctx.render('dindex2', {
+      });
+    }
   }
 
   return Controller;

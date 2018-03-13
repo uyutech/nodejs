@@ -3,6 +3,7 @@ const webpack = require("webpack");
 module.exports = {
   entry: {
     mfind: './app/view/m/find.jsx',
+    mindex: './app/view/m/index.jsx',
     mworks: './app/view/m/works.jsx',
     mauthor: './app/view/m/author.jsx',
     msearch: './app/view/m/search.jsx',
@@ -29,6 +30,7 @@ module.exports = {
     mmall_history: './app/view/m/mall/history.jsx',
     mtag: './app/view/m/tag.jsx',
     dindex: './app/view/d/index.jsx',
+    dindex2: './app/view/d/index2.jsx',
     dfind: './app/view/d/find.jsx',
     dworks: './app/view/d/works.jsx',
     dauthor: './app/view/d/author.jsx',

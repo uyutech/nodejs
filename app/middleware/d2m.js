@@ -6,7 +6,7 @@
 
 module.exports = () => {
   return async function(ctx, next) {
-    let ua = ctx.get('user-agent');console.log(ua);
+    let ua = ctx.get('user-agent');
     if(/(iPhone|iPod|Android|ios)/i.test(ua)) {
       ctx.body = `<!DOCTYPE html><html>
         <head>

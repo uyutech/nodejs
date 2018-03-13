@@ -4,7 +4,8 @@
 
 'use strict';
 
-import './iframe';
+// import './iframe';
+import net from './net';
 import MLogin from '../component/mlogin/MLogin.jsx';
 import Share from '../component/share/Share.jsx';
 
@@ -42,4 +43,14 @@ migi.eventBus.on('COMMENT', function(type) {
   if(parent !== window) {
     parent.comment && parent.comment(type);
   }
+});
+
+let login = document.querySelector('#gTop .login');
+login && login.addEventListener('click', function(e) {
+  e.preventDefault();
+  migi.eventBus.emit('NEED_LOGIN');
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  net.postJSON('/api/count/index');
 });

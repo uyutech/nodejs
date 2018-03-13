@@ -56,6 +56,7 @@ ${data.helper.getStat()}
 </head>
 <body>
 <div id="page">${works}</div>
+${data.helper.getDTopNav({ pageId: 1 })}
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}

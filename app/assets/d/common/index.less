@@ -85,7 +85,7 @@ body{
   flex-direction:column;
   margin:0;
   padding:0;
-  padding-top:0.9rem;
+  //padding-top:0.9rem;
   //user-select:none;
   box-sizing:border-box;
   background:transparent;
@@ -173,49 +173,11 @@ a{
 
 @import '../component/mlogin/index';
 @import '../component/share/index';
+@import '../component/topnav2/index';
+@import '../component/botnav/index';
 
 #page{
   margin:0 auto;
   flex:1;
   width:10rem;
-}
-
-.cp-botnav{
-  margin-top:0.2rem;
-  height:1.2rem;
-  box-shadow:0 0 0.1rem rgba(0,0,0,0.1);
-  overflow:hidden;
-  .c{
-    position:relative;
-    margin:0 auto;
-    width:10rem;
-    height:100%;
-    background:url(../component/topnav/logo-beta.png) no-repeat 0 center;
-    background-size:1.43rem auto;
-    color:#919191;
-    text-align:center;
-    font-size:0.12rem;
-    p{
-      padding-top:0.4rem;
-      line-height:2;
-    }
-    .link{
-      position:absolute;
-      top:0.18rem;
-      right:0;
-      color:@mainLinkColor;
-      li{
-        float:left;
-        width:0.6rem;
-        &.weibo{
-          background:url(weibo.png) no-repeat center 0;
-          background-size:0.6rem auto;
-        }
-        a{
-          display:block;
-          padding-top:0.7rem;
-        }
-      }
-    }
-  }
 }

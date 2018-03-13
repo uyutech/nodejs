@@ -2,14 +2,30 @@
  * Created by army8735 on 2017/9/26.
  */
 
-.cp-botnav{
-  position:relative;
-  margin-top:0.1rem;
-  box-sizing:border-box;
-  height:0.36rem;
-  line-height:0.36rem;
-  background:#8BC4E7;
-  color:#fff;
+.g-bot{
+  height:0.5rem;
+  background:linear-gradient(90deg, #B9D9ED, #8BBDE1);
+  color:#FFF;
   text-align:center;
-  font-size:0.12rem;
+  overflow:hidden;
+  ul{
+    margin:0 auto;
+    padding-top:0.08rem;
+    li{
+      display:inline-block;
+      padding:0 0.1rem;
+      line-height:0.12rem;
+      border-right:0.01rem solid #FFF;
+      &:last-child{
+        border-right:none;
+      }
+    }
+  }
+  a{
+    color:#FFF;
+  }
+  p{
+    white-space:nowrap;
+    transform:scale(0.833);
+  }
 }
