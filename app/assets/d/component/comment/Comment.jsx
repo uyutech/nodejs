@@ -263,68 +263,41 @@ class Comment extends migi.Component {
     // }
   }
   genComment(item) {
-    if(item.IsAuthor) {
-      return <li class="author" id={ 'comment_' + item.Send_ID }>
-        <div class="t fn-clear">
-          <div class="profile fn-clear">
-            <a class="pic" href={ '/author/' + item.AuthorID }>
-              <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
-            </a>
-            <div class="txt">
-              <a class="name" href={ '/author/' + item.AuthorID }>{ item.Send_AuthorName }</a>
-              <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
-            </div>
-          </div>
-          <div class="fn fn-clear">
-            {
-              item.ISOwn ? <span cid={ item.Send_ID } class="remove">删除</span> : ''
-            }
-          </div>
-        </div>
-        <div class="c">
-          <pre>{ item.Send_Content }<span class="placeholder"/></pre>
-          <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_AuthorName }>
-            <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
-            <small class="sub">{ item.sub_Count }</small>
-            <span>收起</span>
-          </div>
-          <b class="arrow"/>
-        </div>
-        <div class="list2">
-          <ul class="fn-hide"/>
-          <p class="message" cid={ item.Send_ID } rid={ item.Send_ID }>读取中...</p>
-        </div>
-      </li>;
-    }
-    return <li id={ 'comment_' + item.Send_ID }>
+    let id = item.ID;
+    let url = item.IsAuthor ? '/author.html?authorId=' + item.SendUserID : '/user.html?userID=' + item.SendUserID;
+    return <li class="user" id={ 'comment_' + id }>
       <div class="t fn-clear">
         <div class="profile fn-clear">
-          <a class="pic" href={ '/user/' + item.Send_UserID }>
-            <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+          <a class="pic" href={ url } title={ item.SendUserNickName }>
+            <img class="pic" src={ util.autoSsl(util.img60_60_80(item.SendUserHead_Url || '/src/common/head.png')) }/>
           </a>
           <div class="txt">
-            <a class="name" href={ '/user/' + item.Send_UserID }>{ item.Send_UserName }</a>
-            <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
+            <a class="name" href={ url } title={ item.SendUserNickName }>{ item.SendUserNickName }</a>
+            <small class="time" rel={ item.CreateTime }>{ util.formatDate(item.CreateTime) }</small>
           </div>
         </div>
-        <div class="fn fn-clear">
-          {
-            item.ISOwn ? <span cid={ item.Send_ID } class="remove">删除</span> : ''
-          }
-        </div>
+        <b class="fn" own={ item.IsOwn } userId={ item.SendUserID }/>
       </div>
       <div class="c">
-        <pre>{ item.Send_Content }<span class="placeholder"/></pre>
-        <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_UserName }>
-          <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
-          <small class="sub">{ item.sub_Count }</small>
+        {
+          item.ParentContent
+            ? <p class="quote">
+              <label>回复@{ item.ParentSendUserNickName }：</label>
+              <span>{ item.ParentContent }</span>
+            </p>
+            : ''
+        }
+        <pre>{ item.LContent }<span class="placeholder"/></pre>
+        <div class="slide" cid={ id } rid={ item.RootID } name={ item.SendUserNickName }>
+          <small cid={ id } class={ 'like' + (item.ISLike ? ' liked' : '') }>{ item.ZanCount }</small>
+          <small class="sub">{ item.CommentCountRaw || '' }</small>
           <span>收起</span>
         </div>
         <b class="arrow"/>
       </div>
       <div class="list2">
         <ul class="fn-hide"/>
-        <p class="message" cid={ item.Send_ID } rid={ item.Send_ID }>读取中...</p>
+        <p class="message" cid={ id } rid={ item.RootID }>读取中...</p>
       </div>
     </li>;
   }
