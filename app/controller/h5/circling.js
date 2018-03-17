@@ -10,12 +10,28 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let hotCircleList = {};
       let postList = {};
+      let top1 = {};
+      let top2 = {};
       let res = yield {
         hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
           uid,
           Skip: 0,
           Take: 10,
         }),
+        top1: ctx.helper.postServiceJSON2('api/find/GetPostByRecommend', {
+          Min: 1,
+          Max: 99,
+          uid,
+          Skip: 0,
+          take: 3,
+        }),
+        // top2: ctx.helper.postServiceJSON2('api/find/GetPostByRecommend', {
+        //   Min: 0,
+        //   Max: 3,
+        //   uid,
+        //   Skip: 0,
+        //   take: 1,
+        // }),
         postList: ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
           uid,
           Skip: 0,
@@ -25,15 +41,28 @@ module.exports = app => {
       if(res.hotCircleList.data.success) {
         hotCircleList = res.hotCircleList.data.data;
       }
+      if(res.top1.data.success) {
+        top1 = res.top1.data.data;
+        top1.data.forEach(function(item) {
+          item.Createtime = new Date();
+        });
+      }
+      // if(res.top2.data.success) {
+      //   top2 = res.top2.data.data;
+      // }
       if(res.postList.data.success) {
         postList = res.postList.data.data;
       }
       let bannerList = [{
+        url: '/post.html?postID=426586',
+        title: '《御龙行》人物大竞猜',
+        cover: '//zhuanquan.xyz/temp/d0cbdfb5b30a949ca97081ebf6e2490f.jpg-750__80',
+      }, {
         url: '/post.html?postID=421617',
         title: '《御龙行》人物大竞猜',
         cover: '//zhuanquan.xyz/temp/e02d6be449b551fa850f9d1aba53e618.jpg-750__80',
       }, {
-        url: '/post.html?postID=420534',
+        url: '/post.html?postID=426951',
         title: '圈友你很皮',
         cover: '//zhuanquan.xyz/temp/b9637f5c3c56713a2d0d3e3aa838eba3.jpg-750__80',
       }, {
@@ -47,6 +76,8 @@ module.exports = app => {
         postList,
         circleTake: 10,
         take: 10,
+        top1,
+        top2,
       });
     }
     * circleList(ctx) {
@@ -65,15 +96,38 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       let circleId = body.circleId;
+      let postList = {};
       let skip = body.skip;
       let take = body.take;
-      let res = yield ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
-        uid,
-        Skip: skip,
-        Take: take,
-        CirclingID: circleId,
+      let top1 = {};
+      let res = yield {
+        top1: ctx.helper.postServiceJSON2('api/find/GetPostByRecommend', {
+          Min: 1,
+          Max: 99,
+          uid,
+          Skip: 0,
+          take: 3,
+        }),
+        postList: ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
+          uid,
+          Skip: skip,
+          Take: take,
+          CirclingID: circleId,
+        }),
+      };
+      if(res.top1.data.success) {
+        top1 = res.top1.data.data;
+        top1.data.forEach(function(item) {
+          item.Createtime = new Date();
+        });
+      }
+      if(res.postList.data.success) {
+        postList = res.postList.data.data;
+      }
+      ctx.body = ctx.helper.okJSON({
+        postList,
+        top1,
       });
-      ctx.body = res.data;
     }
   }
   return Controller;

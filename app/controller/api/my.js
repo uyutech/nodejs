@@ -128,10 +128,10 @@ module.exports = app => {
       let nickName = body.nickName || '';
       nickName = nickName.trim();
       let length = (nickName || '').length;
-      if(length < 4 || length > 8) {
+      if(length < 2 || length > 8) {
         return ctx.body = {
           success: false,
-          message: '昵称长度需要在4~8个字之间哦~',
+          message: '昵称长度需要在2~8个字之间哦~',
         };
       }
       let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {

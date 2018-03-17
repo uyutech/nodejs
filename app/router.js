@@ -183,6 +183,7 @@ module.exports = app => {
   app.post('/h5/my/followerAuthor', app.middlewares.needLoginJson(), 'h5.my.followerAuthor');
   app.post('/h5/my/favor', app.middlewares.needLoginJson(), 'h5.my.favor');
   app.post('/h5/my/favorType', app.middlewares.needLoginJson(), 'h5.my.favorType');
+  app.post('/h5/my/favorMV', app.middlewares.needLoginJson(), 'h5.my.favorMV');
   app.post('/h5/my/uploadPic', app.middlewares.needLoginJson(), 'h5.my.uploadPic');
   app.post('/h5/my/updateNickName', app.middlewares.needLoginJson(), 'h5.my.updateNickName');
   app.post('/h5/my/updateSign', app.middlewares.needLoginJson(), 'h5.my.updateSign');
@@ -196,6 +197,7 @@ module.exports = app => {
   app.post('/h5/my/shield', app.middlewares.needLoginJson(), 'h5.my.shield');
   app.post('/h5/my/shieldUser', app.middlewares.needLoginJson(), 'h5.my.shieldUser');
   app.post('/h5/my/shieldCircle', app.middlewares.needLoginJson(), 'h5.my.shieldCircle');
+  app.post('/h5/my/sts', 'h5.my.sts');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');

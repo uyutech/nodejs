@@ -5,7 +5,12 @@
 'use strict';
 
 const OSS = require('ali-oss');
+const STS = OSS.STS;
 const Spark = require('spark-md5');
+const moment = require('moment');
+const crypto = require('crypto');
+const accessKeyId = 'LTAIzEfyjluscyEu';
+const accessKeySecret = 'g33q7QDYf843NqwoqHblIqap9NmU3D';
 
 module.exports = app => {
   class Controller extends app.Controller {
@@ -251,6 +256,18 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    // TODO: del
+    * favorMV(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
+        uid,
+        ItemsType: 1,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
     * altIdentity(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
@@ -354,26 +371,26 @@ module.exports = app => {
         }
       }
 
-      let lastUpdateHeadTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
-        uid,
-      });
-      if(lastUpdateHeadTime.data && lastUpdateHeadTime.data.success) {
-        let now = Date.now();
-        lastUpdateHeadTime = lastUpdateHeadTime.data.data;
-        if(lastUpdateHeadTime) {
-          lastUpdateHeadTime = new Date(lastUpdateHeadTime);
-        }
-        else {
-          lastUpdateHeadTime = 0;
-        }
-        let updateHeadTimeDiff = now - lastUpdateHeadTime;
-        if(updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
-          return ctx.body = {
-            success: false,
-            message: '头像一天只能修改一次哦~',
-          };
-        }
-      }
+      // let lastUpdateHeadTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
+      //   uid,
+      // });
+      // if(lastUpdateHeadTime.data && lastUpdateHeadTime.data.success) {
+      //   let now = Date.now();
+      //   lastUpdateHeadTime = lastUpdateHeadTime.data.data;
+      //   if(lastUpdateHeadTime) {
+      //     lastUpdateHeadTime = new Date(lastUpdateHeadTime);
+      //   }
+      //   else {
+      //     lastUpdateHeadTime = 0;
+      //   }
+      //   let updateHeadTimeDiff = now - lastUpdateHeadTime;
+      //   if(updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+      //     return ctx.body = {
+      //       success: false,
+      //       message: '头像一天只能修改一次哦~',
+      //     };
+      //   }
+      // }
 
       // md5
       let spark = new Spark();
@@ -434,10 +451,10 @@ module.exports = app => {
       let nickName = body.nickName || '';
       nickName = nickName.trim();
       let length = nickName.length;
-      if(length < 4 || length > 8) {
+      if(length < 2 || length > 8) {
         return ctx.body = {
           success: false,
-          message: '昵称长度需要在4~8个字之间哦~',
+          message: '昵称长度需要在2~8个字之间哦~',
         };
       }
       let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
@@ -499,10 +516,10 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       let length = (body.sign || '').length;
-      if(length > 16) {
+      if(length > 45) {
         return ctx.body = {
           success: false,
-          message: '签名长度不能超过16个字哦~',
+          message: '签名长度不能超过45个字哦~',
         };
       }
       let res = yield ctx.helper.postServiceJSON2('api/users/UpdateUserSign', {
@@ -675,6 +692,31 @@ module.exports = app => {
         Take: body.take,
       });
       ctx.body = res.data;
+    }
+    * sts(ctx) {
+      let expire = Date.now() + 1000 * 60 * 5;
+      let expiration = moment(expire).local();
+      let host = 'http://circling-assets.oss-cn-shanghai.aliyuncs.com';
+      let condition = ['content-length-range', 0, 20971520];
+      let dir = '';
+      let start = ['starts-with', accessKeySecret, dir];
+      let conditions = [condition, start];
+      let policy = JSON.stringify({
+        expiration,
+        conditions,
+      });
+      let base64_policy = new Buffer(policy).toString('base64');
+      let hmac = crypto.createHmac('sha1', accessKeySecret);
+      let signature = hmac.update(base64_policy).digest('base64');
+      ctx.body = ctx.helper.okJSON({
+        accessKeyId,
+        host,
+        expire,
+        policy: base64_policy,
+        signature,
+        dir,
+        prefix: 'pic/',
+      });
     }
   }
   return Controller;

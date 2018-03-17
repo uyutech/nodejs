@@ -21,6 +21,14 @@ module.exports = app => {
     * index(ctx) {
       let activityLabel = [
         {
+          TagName: '圈访谈',
+          value: '#圈访谈#',
+        },
+        {
+          TagName: '异志杂谈',
+          value: '#异志杂谈#',
+        },
+        {
           TagName: '日记',
           value: '#日记# ' + (new Date().getMonth() + 1) + '月' + new Date().getDate() + '日 星期' + hash[new Date().getDay()] + '\n',
         },
