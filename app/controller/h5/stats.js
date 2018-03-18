@@ -16,9 +16,10 @@ class Controller extends egg.Controller {
     let platform = this.ctx.query.platform || 0;
     let url = this.ctx.query.url || '';
     let search = this.ctx.query.search || '';
+    let first = this.ctx.query.first === 'true' ? 1 : 0;
     let date = moment().format('YYYYMMDD');
-    let s = `INSERT INTO user_visit (uuid, uid, ip, platform, url, search, create_time, create_date)
-      VALUES ('${uuid}', ${uid}, '${ip}', ${platform}, '${url}', '${search}', NOW(), ${date});`;
+    let s = `INSERT INTO user_visit (uuid, uid, ip, platform, url, search, first, create_time, create_date)
+      VALUES ('${uuid}', ${uid}, '${ip}', ${platform}, '${url}', '${search}', ${first}, NOW(), ${date});`;
     await this.app.sequelizeStats.query(s, { type: Sequelize.QueryTypes.INSERT });
     this.ctx.body = {
       success: true,

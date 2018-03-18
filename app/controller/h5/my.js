@@ -570,10 +570,6 @@ module.exports = app => {
     * sendPrize(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      return ctx.body = {
-        success: false,
-        message: '考虑到小伙伴们寒假的地址和开学以后的地址不相同以及春节快递停止发货。所以发货将于3月份开始，在此之间，发货功能将被锁定。具体发货时间将会在转圈微博通知，请小伙伴谅解。',
-      };
       let res = yield ctx.helper.postServiceJSON2('api/users/SendProduct', {
         uid,
         cartID: body.cartID,
