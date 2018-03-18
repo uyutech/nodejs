@@ -82,7 +82,7 @@ module.exports = app => {
       let body = ctx.request.body;
       let skip = body.skip || 0;
       let take = body.take || 10;
-      let res = ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
+      let res = yield ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
         uid,
         Skip: skip,
         Take: take,

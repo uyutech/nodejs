@@ -4,7 +4,6 @@
 
 'use strict';
 
-// import './iframe';
 import net from './net';
 import MLogin from '../component/mlogin/MLogin.jsx';
 import Share from '../component/share/Share.jsx';
