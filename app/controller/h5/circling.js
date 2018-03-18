@@ -51,13 +51,13 @@ module.exports = app => {
         postList = res.postList.data.data;
       }
       let bannerList = [{
+        url: '/post.html?postID=430048',
+        title: '今时古梦',
+        cover: '//zhuanquan.xyz/temp/a88c2f9f35fc8b77fd93a5d3745dfe34.jpg-750__80',
+      }, {
         url: '/post.html?postID=426586',
         title: '圈访谈',
         cover: '//zhuanquan.xyz/temp/d0cbdfb5b30a949ca97081ebf6e2490f.jpg-750__80',
-      }, {
-        url: '/post.html?postID=421617',
-        title: '《御龙行》人物大竞猜',
-        cover: '//zhuanquan.xyz/temp/e02d6be449b551fa850f9d1aba53e618.jpg-750__80',
       }, {
         url: '/post.html?postID=428794',
         title: '圈友你很皮',

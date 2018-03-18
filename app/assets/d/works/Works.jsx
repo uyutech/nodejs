@@ -13,7 +13,6 @@ import Timeline from './Timeline.jsx';
 import InspComment from './InspComment.jsx';
 import WorkComment from './WorkComment.jsx';
 import PhotoAlbum from './PhotoAlbum.jsx';
-import AddLabelPanel from './AddLabelPanel.jsx';
 import ImageView from './ImageView.jsx';
 import WorksTypeEnum from './WorksTypeEnum';
 import LyricsParser from './LyricsParser.jsx';
@@ -53,10 +52,6 @@ class Works extends migi.Component {
           $type.find('.player').addClass('cur');
         });
       }
-      // let addLabel = self.ref.addLabelPanel;
-      // migi.eventBus.on('add-label', function() {
-      //   addLabel.show();
-      // });
     });
   }
   @bind worksID
@@ -224,6 +219,9 @@ class Works extends migi.Component {
                        originTo={ self.props.worksDetail.Title }
                        commentData={ self.props.commentData }/>
         </div>
+        <div class="qr">
+          <img src="//zhuanquan.xin/img/09447d7b0b2272a4a3a9cec86fc16ab0.png"/>
+        </div>
       </div>;
     }
     if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
@@ -260,8 +258,10 @@ class Works extends migi.Component {
                        originTo={ self.props.worksDetail.Title }
                        commentData={ self.props.commentData }/>
         </div>
-        <AddLabelPanel ref="addLabelPanel" worksID={ self.worksID }/>
         <ImageView ref="imageView"/>
+        <div class="qr">
+          <img src="//zhuanquan.xin/img/09447d7b0b2272a4a3a9cec86fc16ab0.png"/>
+        </div>
       </div>;
     }
     return <div class={ 'works fn-clear t' + self.worksType }>
@@ -334,7 +334,9 @@ class Works extends migi.Component {
           }
         </div>
       </div>
-      <AddLabelPanel ref="addLabelPanel" worksID={ self.worksID }/>
+      <div class="qr">
+        <img src="//zhuanquan.xin/img/09447d7b0b2272a4a3a9cec86fc16ab0.png"/>
+      </div>
     </div>;
   }
 }

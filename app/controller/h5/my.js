@@ -715,7 +715,7 @@ module.exports = app => {
       }
       let expire = Date.now() + 1000 * 60 * 5;
       let expiration = moment(expire).local();
-      let host = 'http://circling-assets.oss-cn-shanghai.aliyuncs.com';
+      let host = 'https://circling-assets.oss-cn-shanghai.aliyuncs.com';
       let condition = ['content-length-range', 0, 10485760];
       let dir = '';
       let start = ['starts-with', accessKeySecret, dir];

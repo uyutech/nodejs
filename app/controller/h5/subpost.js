@@ -21,6 +21,10 @@ module.exports = app => {
     * index(ctx) {
       let activityLabel = [
         {
+          TagName: '今时古梦',
+          value: '#今时古梦#',
+        },
+        {
           TagName: '圈访谈',
           value: '#圈访谈#',
         },
