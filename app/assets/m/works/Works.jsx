@@ -38,7 +38,7 @@ class Works extends migi.Component {
           workComment.workID = data.ItemID;
         });
       }
-      self.url = /(iPhone|iPod|Android|ios)/i.test(navigator.userAgent)
+      self.url = /(iPhone|iPod|ios)/i.test(navigator.userAgent)
         ? 'https://itunes.apple.com/cn/app/id1331367220'
         : 'https://circling.net.cn/android/circling-0.6.0.apk';
     });
@@ -235,6 +235,14 @@ class Works extends migi.Component {
       }
     }
   }
+  clickDownload() {
+    if(/(iPhone|iPod|ios)/i.test(navigator.userAgent)) {
+      this.ref.tip.element.classList.remove('fn-hide');
+    }
+  }
+  clickTip() {
+    this.ref.tip.element.classList.add('fn-hide');
+  }
   render() {
     let self = this;
     let state = worksState.getStateStr(self.worksType, self.props.worksDetail.WorkState);
@@ -385,8 +393,14 @@ class Works extends migi.Component {
             <p>一个充满正能量的作品展示、创作平台~</p>
           </div>
           <a href={ this.url }
-             target="_blank">下载</a>
+             target="_blank"
+             onClick={ this.clickDownload }>下载</a>
         </div>
+      </div>
+      <div class="tip fn-hide"
+           ref="tip"
+           onClick={ this.clickTip }>
+        <span>ios下载如果没有反应，请点击右上角，选择在safari浏览器中打开</span>
       </div>
     </div>;
   }

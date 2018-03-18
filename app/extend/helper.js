@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?212';
+    return '/public' + url + '?214';
   },
   okJSON(data) {
     return {
@@ -162,7 +162,7 @@ let helper = {
   getMTopNav: function() {
     let ua = this.ctx.request.header['user-agent'];
     let url = 'https://circling.net.cn/android/circling-0.6.0.apk';
-    if(/iP(hone|od|ad)/.test(ua)) {
+    if(/(iPhone|iPod|ios)/i.test(ua)) {
       url = 'https://itunes.apple.com/cn/app/id1331367220';
     }
     return `<div class="g-top" id="gTop">
@@ -170,7 +170,7 @@ let helper = {
       <b></b>
       <ul class="fn-hide">
         <li><a href="/" class="index">首页</a></li>
-        <li><a href="${url}">下载app</a></li>
+        <li><a href="${url}" class="download">下载app</a></li>
       </ul>
     </div>`;
   },

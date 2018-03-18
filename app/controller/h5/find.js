@@ -42,10 +42,6 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
-        count: ctx.helper.postServiceJSON2('api/users/PostRecordUserIP', {
-          uid,
-          ip: ctx.request.header['x-real-ip'],
-        }),
       };
       if(res.hotWorkList.data.success) {
         hotWorkList = res.hotWorkList.data.data;
