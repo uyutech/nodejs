@@ -40,7 +40,7 @@ class Works extends migi.Component {
       }
       self.url = /(iPhone|iPod|Android|ios)/i.test(navigator.userAgent)
         ? 'https://itunes.apple.com/cn/app/id1331367220'
-        : 'https://circling.net.cn/android/circling-0.5.3.apk';
+        : 'https://circling.net.cn/android/circling-0.6.0.apk';
     });
   }
   @bind worksID

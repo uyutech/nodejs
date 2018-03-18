@@ -59,6 +59,9 @@ class WorkComment extends migi.Component {
         subCmt.invalid = true;
         let rootID = self.rootID;
         let parentID = self.parentID;
+        if(rootID === '-1') {
+          rootID = parentID;
+        }
         net.postJSON('/api/works/addComment', {
           parentID: parentID,
           rootID: rootID,

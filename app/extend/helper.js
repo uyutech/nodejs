@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?209';
+    return '/public' + url + '?210';
   },
   okJSON(data) {
     return {
@@ -126,7 +126,6 @@ let helper = {
         <ul>
           <li><a href="/"
                  class="${pageId === 0 ? 'cur' : ''}">首页</a></li>
-          <li><a href="/">上传作品</a></li>
           <li>
           ${session.uid
               ? (session.authorId && session.isPublic ? session.authorName : session.uname)
@@ -139,9 +138,7 @@ let helper = {
   getDBotNav: function() {
     return `<div class="g-bot" id="gBot">
       <ul>
-        <li><a href="">转圈官博</a></li>
-        <li><a href="">关于转圈</a></li>
-        <li><a href="">联系我们</a></li>
+        <li><a href="https://weibo.com/u/6259241863">转圈官博</a></li>
       </ul>
       <p>© Uyutech all rights reserved © 杭州呦悠网络科技有限公司 保留所有权利</p>
     </div>`;
@@ -188,9 +185,7 @@ let helper = {
   getMBotNav: function() {
     return `<div class="g-bot" id="gBot">
       <ul>
-        <li><a href="">转圈官博</a></li>
-        <li><a href="">关于转圈</a></li>
-        <li><a href="">联系我们</a></li>
+        <li><a href="https://weibo.com/u/6259241863">转圈官博</a></li>
       </ul>
       <p>© Uyutech all rights reserved © 杭州呦悠网络科技有限公司 保留所有权利</p>
     </div>`;

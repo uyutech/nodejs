@@ -28,6 +28,7 @@ export default function(data) {
 </head>
 <body>
 <div id="page"><h1 class="private">此作品尚未完成公开</h1></div>
+${data.helper.getDTopNav({ pageId: 1 })}
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}

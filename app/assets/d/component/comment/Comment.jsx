@@ -78,13 +78,13 @@ class Comment extends migi.Component {
       });
       $root.on('click', '.more', function() {
         let $message = $(this);
-        let rid = $message.attr('rid');
+        let cid = $message.attr('cid');
         $message.removeClass('more').text('读取中...');
-        ajax = net.postJSON(self.props.subUrl, { rootID: rid, skip: subSkipHash[rid], take }, function(res) {
+        ajax = net.postJSON(self.props.subUrl, { rootID: cid, skip: subSkipHash[cid], take }, function(res) {
           if(res.success) {
             let data = res.data;
             if(data.data.length) {
-              subSkipHash[rid] += data.data.length;
+              subSkipHash[cid] += data.data.length;
               let s = '';
               data.data.forEach(function (item) {
                 s += self.genChildComment(item);
@@ -148,6 +148,7 @@ class Comment extends migi.Component {
     let $list2 = $li.find('.list2');
     let $ul = $list2.find('ul');
     let $message = $list2.find('.message');
+    let cid = $slide.attr('cid');
     let rid = $slide.attr('rid');
     if($last && $last[0] !== $li[0] && $last.hasClass('on')) {
       self.hideLast();
@@ -158,24 +159,24 @@ class Comment extends migi.Component {
       $list2.css('height', 0);
       self.emit('closeSubComment');
       $last = null;
-      if(subLoadHash[rid] === IS_LOADING) {
-        subLoadHash[rid] = NOT_LOADED;
+      if(subLoadHash[cid] === IS_LOADING) {
+        subLoadHash[cid] = NOT_LOADED;
       }
     }
     else {
       $last = $li;
       $li.addClass('on');
       self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'), $slide.find('.sub').text());
-      let state = subLoadHash[rid];
+      let state = subLoadHash[cid];
       if(state === HAS_LOADED || state === IS_LOADING) {
         $list2.css('height', 'auto');
       }
       else {
         $list2.css('height', 'auto');
-        subLoadHash[rid] = IS_LOADING;
-        ajax = net.postJSON(self.props.subUrl, { rootID: rid, skip: 0, take }, function(res) {
+        subLoadHash[cid] = IS_LOADING;
+        ajax = net.postJSON(self.props.subUrl, { rootID: cid, skip: 0, take }, function(res) {
           if(res.success) {
-            subLoadHash[rid] = HAS_LOADED;
+            subLoadHash[cid] = HAS_LOADED;
             let s = '';
             let data = res.data;
             data.data.forEach(function(item) {
@@ -187,17 +188,17 @@ class Comment extends migi.Component {
             }
             else {
               $message.addClass('more').text('点击加载更多');
-              subSkipHash[rid] = data.data.length;
+              subSkipHash[cid] = data.data.length;
             }
             $ul.removeClass('fn-hide');
             $list2.css('height', 'auto');
           }
           else {
-            subLoadHash[rid] = NOT_LOADED;
+            subLoadHash[cid] = NOT_LOADED;
             $message.text(res.message || util.ERROR_MESSAGE);
           }
         }, function(res) {
-          subLoadHash[rid] = NOT_LOADED;
+          subLoadHash[cid] = NOT_LOADED;
           $message.text(res.message || util.ERROR_MESSAGE);
         });
       }
@@ -244,6 +245,7 @@ class Comment extends migi.Component {
     this.empty = false;
   }
   prependChild(item, parentID) {
+    this.prependData(item);
     let $comment = $('#comment_' + item.RootID);
     let $list2 = $comment.find('.list2');
     let $ul = $list2.find('ul');
@@ -268,11 +270,11 @@ class Comment extends migi.Component {
     return <li class="user" id={ 'comment_' + id }>
       <div class="t fn-clear">
         <div class="profile fn-clear">
-          <a class="pic" href={ url } title={ item.SendUserNickName }>
+          <div class="pic" href={ url } title={ item.SendUserNickName }>
             <img class="pic" src={ util.autoSsl(util.img60_60_80(item.SendUserHead_Url || '/src/common/head.png')) }/>
-          </a>
+          </div>
           <div class="txt">
-            <a class="name" href={ url } title={ item.SendUserNickName }>{ item.SendUserNickName }</a>
+            <div class="name" href={ url } title={ item.SendUserNickName }>{ item.SendUserNickName }</div>
             <small class="time" rel={ item.CreateTime }>{ util.formatDate(item.CreateTime) }</small>
           </div>
         </div>

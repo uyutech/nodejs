@@ -52,7 +52,7 @@ module.exports = app => {
       }
       let bannerList = [{
         url: '/post.html?postID=426586',
-        title: '《御龙行》人物大竞猜',
+        title: '圈访谈',
         cover: '//zhuanquan.xyz/temp/d0cbdfb5b30a949ca97081ebf6e2490f.jpg-750__80',
       }, {
         url: '/post.html?postID=421617',

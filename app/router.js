@@ -6,7 +6,7 @@ module.exports = app => {
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
 
-  app.get('/d', 'd.index.index');
+  app.get('/d', 'd.index.newIndex');
   app.get('/d/find', 'd.find.index');
   app.get('/d/works/:worksID', 'd.works.index');
   app.get('/d/works/:worksID/:workID', 'd.works.index');
@@ -27,7 +27,7 @@ module.exports = app => {
   app.get('/d/mall/new', 'd.mall.new');
   app.get('/d/mall/wait', 'd.mall.wait');
 
-  app.get('/m', 'm.find.index');
+  app.get('/m', 'm.index.newIndex');
   app.get('/m/find', 'm.find.index');
   app.get('/m/works/:worksID', 'm.works.index');
   app.get('/m/works/:worksID/:workID', 'm.works.index');
