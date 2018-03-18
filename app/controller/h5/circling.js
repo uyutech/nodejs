@@ -43,9 +43,6 @@ module.exports = app => {
       }
       if(res.top1.data.success) {
         top1 = res.top1.data.data;
-        top1.data.forEach(function(item) {
-          item.Createtime = new Date();
-        });
       }
       // if(res.top2.data.success) {
       //   top2 = res.top2.data.data;
@@ -62,7 +59,7 @@ module.exports = app => {
         title: '《御龙行》人物大竞猜',
         cover: '//zhuanquan.xyz/temp/e02d6be449b551fa850f9d1aba53e618.jpg-750__80',
       }, {
-        url: '/post.html?postID=426951',
+        url: '/post.html?postID=428794',
         title: '圈友你很皮',
         cover: '//zhuanquan.xyz/temp/b9637f5c3c56713a2d0d3e3aa838eba3.jpg-750__80',
       }, {
@@ -100,29 +97,39 @@ module.exports = app => {
       let skip = body.skip;
       let take = body.take;
       let top1 = {};
-      let res = yield {
-        top1: ctx.helper.postServiceJSON2('api/find/GetPostByRecommend', {
-          Min: 1,
-          Max: 99,
-          uid,
-          Skip: 0,
-          take: 3,
-        }),
-        postList: ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
+      if(skip === '0') {
+        let res = yield {
+          top1: ctx.helper.postServiceJSON2('api/find/GetPostByRecommend', {
+            Min: 1,
+            Max: 99,
+            uid,
+            Skip: 0,
+            take: 3,
+          }),
+          postList: ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
+            uid,
+            Skip: skip,
+            Take: take,
+            CirclingID: circleId,
+          }),
+        };
+        if(!circleId && res.top1.data.success) {
+          top1 = res.top1.data.data;
+        }
+        if(res.postList.data.success) {
+          postList = res.postList.data.data;
+        }
+      }
+      else {
+        let res = yield ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
           uid,
           Skip: skip,
           Take: take,
           CirclingID: circleId,
-        }),
-      };
-      if(res.top1.data.success) {
-        top1 = res.top1.data.data;
-        top1.data.forEach(function(item) {
-          item.Createtime = new Date();
         });
-      }
-      if(res.postList.data.success) {
-        postList = res.postList.data.data;
+        if(res.data.success) {
+          postList = res.data.data;
+        }
       }
       ctx.body = ctx.helper.okJSON({
         postList,

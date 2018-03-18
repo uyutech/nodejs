@@ -87,6 +87,7 @@ module.exports = app => {
       let imgs = body.imgs;
       let widths = body.widths;
       let heights = body.heights;
+      let workId = body.workId;
       if(!Array.isArray(widths)) {
         widths = [];
       }
@@ -98,7 +99,6 @@ module.exports = app => {
           success: false,
         };
       }
-      ctx.logger.info('circleID %s', circleID);
       let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPost', {
         uid,
         CirclingIDList: circleID,
@@ -113,6 +113,7 @@ module.exports = app => {
             }
           }).slice(0, 10))
           : '',
+        ItemsID: workId,
       });
       let data = res.data;
       ctx.body = data;

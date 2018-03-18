@@ -15,5 +15,13 @@ module.exports = appInfo => {
     redis: {
       password: 'uyuTech123',
     },
+    database: {
+      stats: {
+        name: 'stats',
+        username: 'root',
+        password: '87351984@',
+        host: 'localhost',
+      },
+    },
   };
 };

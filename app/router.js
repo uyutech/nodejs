@@ -197,6 +197,7 @@ module.exports = app => {
   app.post('/h5/my/shield', app.middlewares.needLoginJson(), 'h5.my.shield');
   app.post('/h5/my/shieldUser', app.middlewares.needLoginJson(), 'h5.my.shieldUser');
   app.post('/h5/my/shieldCircle', app.middlewares.needLoginJson(), 'h5.my.shieldCircle');
+  app.post('/h5/my/identity', app.middlewares.needLoginJson(), 'h5.my.identity');
   app.post('/h5/my/sts', 'h5.my.sts');
 
   app.post('/h5/works/index', 'h5.works.index');
@@ -282,6 +283,8 @@ module.exports = app => {
   app.post('/h5/playlist/index', 'h5.playlist.index');
 
   app.post('/h5/report/index', app.middlewares.needLoginJson(), 'h5.report.index');
+
+  app.get('/h5/stats/visit', 'h5.stats.visit');
 
   app.post('/mns/mts/job', 'mns.mts.job');
 };

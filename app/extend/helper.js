@@ -163,8 +163,8 @@ let helper = {
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">`;
   },
   getMTopNav: function() {
-    let ua = this.ctx.request.header['user-agent'];console.log(ua);
-    let url = 'https://circling.net.cn/android/circling-0.5.3.apk';
+    let ua = this.ctx.request.header['user-agent'];
+    let url = 'https://circling.net.cn/android/circling-0.6.0.apk';
     if(/iP(hone|od|ad)/.test(ua)) {
       url = 'https://itunes.apple.com/cn/app/id1331367220';
     }

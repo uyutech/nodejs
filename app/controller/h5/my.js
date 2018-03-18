@@ -694,10 +694,33 @@ module.exports = app => {
       ctx.body = res.data;
     }
     * sts(ctx) {
+      let body = ctx.request.body;
+      let name = body.name;
+      if(!name) {
+        return;
+      }
+      // 检查是否已上传
+      let client = new OSS({
+        region: 'oss-cn-shanghai',
+        accessKeyId: 'LTAIbZSVA2e931EB',
+        accessKeySecret: '5v756TGc1Gv3gkg4rhzoe0OYyLe8Xc',
+        bucket: 'circling-assets',
+      });
+      let check = yield client.list({
+        prefix: 'pic/' + name,
+      });
+      if(check.res && check.res.status === 200) {
+        let objects = check.objects;
+        if(objects && objects.length) {
+          return ctx.body = ctx.helper.okJSON({
+            exist: true,
+          });
+        }
+      }
       let expire = Date.now() + 1000 * 60 * 5;
       let expiration = moment(expire).local();
       let host = 'http://circling-assets.oss-cn-shanghai.aliyuncs.com';
-      let condition = ['content-length-range', 0, 20971520];
+      let condition = ['content-length-range', 0, 10485760];
       let dir = '';
       let start = ['starts-with', accessKeySecret, dir];
       let conditions = [condition, start];
@@ -716,6 +739,16 @@ module.exports = app => {
         signature,
         dir,
         prefix: 'pic/',
+      });
+    }
+    * identity(ctx) {
+      ctx.body = ctx.helper.okJSON({
+        isPublic: ctx.session.isPublic,
+        authorId: ctx.session.authorID,
+        authorName: ctx.session.authorName,
+        authorHead: ctx.session.authorHead,
+        uname: ctx.session.uname,
+        head: ctx.session.head,
       });
     }
   }
