@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?216';
+    return '/public' + url + '?217';
   },
   okJSON(data) {
     return {
@@ -27,7 +27,7 @@ let helper = {
       data: data.data,
     };
   },
-  * postServiceJSON(url, data) {
+  async postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
     }
@@ -37,8 +37,23 @@ let helper = {
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
     let res;
+    if(data && data.uid && data.uid.toString().length !== 16) {
+      let temp = parseInt(data.uid);
+      temp = 2018000000000000 + temp;
+      data.uid = temp.toString().slice(0, 16);
+    }
+    if(data && data.currentuid && data.currentuid.toString().length !== 16) {
+      let temp = parseInt(data.currentuid);
+      temp = 2018000000000000 + temp;
+      data.currentuid = temp.toString().slice(0, 16);
+    }
+    if(data && data.CurrentUid && data.CurrentUid.toString().length !== 16) {
+      let temp = parseInt(data.CurrentUid);
+      temp = 2018000000000000 + temp;
+      data.CurrentUid = temp.toString().slice(0, 16);
+    }console.log(333,url);
     try {
-      res = yield this.ctx.curl(url, {
+      res = await this.ctx.curl(url, {
         method: 'POST',
         data,
         dataType: 'json',

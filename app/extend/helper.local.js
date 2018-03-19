@@ -5,9 +5,9 @@
 'use strict';
 
 let helper = {
-  * postServiceJSON(url, data) {
+  async postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {
-      url = 'http://192.168.0.6/' + url.replace(/^\//, '');
+      url = 'http://192.168.0.3/' + url.replace(/^\//, '');
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
     url += 'traceID=' + this.ctx.traceID || '';
@@ -15,8 +15,23 @@ let helper = {
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
     let res;
+    if(data && data.uid && data.uid.toString().length !== 16) {
+      let temp = parseInt(data.uid);
+      temp = 2018000000000000 + temp;
+      data.uid = temp.toString().slice(0, 16);
+    }
+    if(data && data.currentuid && data.currentuid.toString().length !== 16) {
+      let temp = parseInt(data.currentuid);
+      temp = 2018000000000000 + temp;
+      data.currentuid = temp.toString().slice(0, 16);
+    }
+    if(data && data.CurrentUid && data.CurrentUid.toString().length !== 16) {
+      let temp = parseInt(data.CurrentUid);
+      temp = 2018000000000000 + temp;
+      data.CurrentUid = temp.toString().slice(0, 16);
+    }
     try {
-      res = yield this.ctx.curl(url, {
+      res = await this.ctx.curl(url, {
         method: 'POST',
         data,
         dataType: 'json',

@@ -62,7 +62,7 @@ class Messages extends migi.Component {
           <label>{ item.Action }：</label>
           <span>{ this.props.ellipsis && item.Content.length > 50 ? (item.Content.slice(0, 50) + '...') : item.Content }</span>
         </a>
-        <pre class="con">{ this.props.ellipsis && item.Send_Content.length > 50 ? (item.Send_Content.slice(0, 50) + '...') : item.Send_Content }</pre>
+        <pre class="con">{ item.Send_Content }</pre>
         <ul class="btn fn-clear">
           <li class="comment"
               type={ type }

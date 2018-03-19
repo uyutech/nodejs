@@ -15,11 +15,10 @@ module.exports = app => {
       }
       let postData = {};
       let replyData = {};
+      let reference = [];
+
       let res = yield {
-        postData: ctx.helper.postServiceJSON2('api/circling/GetPostDetailes', {
-          uid,
-          CommentID: postID,
-        }),
+        postData: ctx.service.post.index(postID),
         replyData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
           uid,
           PostID: postID,
@@ -30,15 +29,45 @@ module.exports = app => {
           myComment: 0,
         }),
       };
-      if(res.postData.data.success) {
-        postData = res.postData.data.data;
+      if(res.postData) {
+        postData = res.postData;
       }
       if(res.replyData.data.success) {
         replyData = res.replyData.data.data;
       }
+      if(postData.Content) {
+        let matches = postData.Content.match(/@\/\w+\/\d+\/?(\d+)?(?:\s|$)/g);
+        if(matches) {
+          let query = [];
+          let len = matches.length;
+          for(let i = 0; i < len; i++) {
+            let item = matches[i];
+            let match = item.match(/@\/(\w+)\/(\d+)\/?(\d+)?(?:\s|$)/);
+            switch(match[1]) {
+              case 'works':
+                query.push(ctx.service.works.index(match[2], match[3]));
+                break;
+              case 'post':
+                query.push(ctx.service.post.index(match[2]));
+                break;
+              case 'author':
+                query.push(ctx.service.author.index(match[2]));
+                break;
+              case 'user':
+                query.push(ctx.service.user.index(match[2]));
+                break;
+              default:
+                query.push(null);
+                break;
+            }
+          }
+          reference = yield query;
+        }
+      }
       ctx.body = ctx.helper.okJSON({
         postData,
         replyData,
+        reference,
       });
     }
     * like(ctx) {
