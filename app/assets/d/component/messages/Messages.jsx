@@ -60,7 +60,7 @@ class Messages extends migi.Component {
         <a class="quote"
            href={ url }>
           <label>{ item.Action }：</label>
-          <span>{ this.props.ellipsis && item.Content.length > 50 ? (item.Content.slice(0, 50) + '...') : item.Content }</span>
+          <span>{ this.props.ellipsis && item.Content && item.Content.length > 50 ? (item.Content.slice(0, 50) + '...') : item.Content }</span>
         </a>
         <pre class="con">{ item.Send_Content }</pre>
         <ul class="btn fn-clear">
