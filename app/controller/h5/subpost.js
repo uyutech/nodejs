@@ -21,6 +21,10 @@ module.exports = app => {
     * index(ctx) {
       let activityLabel = [
         {
+          TagName: '古风歌词注',
+          value: '#古风歌词注#',
+        },
+        {
           TagName: '今时古梦',
           value: '#今时古梦#',
         },
@@ -35,10 +39,6 @@ module.exports = app => {
         {
           TagName: '日记',
           value: '#日记# ' + (new Date().getMonth() + 1) + '月' + new Date().getDate() + '日 星期' + hash[new Date().getDay()] + '\n',
-        },
-        {
-          TagName: '31天挑战',
-          more: true,
         },
         {
           TagName: '陪转圈一起长大',

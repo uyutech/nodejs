@@ -67,6 +67,10 @@ module.exports = app => {
         });
       }
       let bannerList = [{
+        url: '/post.html?postID=433837',
+        title: '古风歌评活动',
+        cover: '//zhuanquan.xyz/temp/8c8345d884b9d342a268baa833d1f42a.jpg-750__80',
+      }, {
         url: '/post.html?postID=430048',
         title: '今时古梦',
         cover: '//zhuanquan.xyz/temp/a88c2f9f35fc8b77fd93a5d3745dfe34.jpg-750__80',

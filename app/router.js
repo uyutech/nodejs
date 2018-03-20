@@ -134,7 +134,7 @@ module.exports = app => {
 
   app.post('/api/subComment', app.middlewares.needLogin(), 'api.subComment.index');
 
-  app.post('/api/count/index', 'api.count.index');
+  app.get('/api/count/index', 'api.count.index');
 
   app.post('/api/subPost/tag', 'api.subPost.tag');
   app.post('/api/subPost/sub', app.middlewares.needLoginJson(), 'api.subPost.sub');
