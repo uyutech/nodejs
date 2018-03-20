@@ -43,12 +43,28 @@ module.exports = app => {
       }
       if(res.top1.data.success) {
         top1 = res.top1.data.data;
+        let queries = [];
+        top1.data.forEach(function(postData) {
+          queries.push(ctx.service.post.reference(postData.Content));
+        });
+        let references = yield queries;
+        top1.data.forEach(function(postData, i) {
+          postData.reference = references[i];
+        });
       }
       // if(res.top2.data.success) {
       //   top2 = res.top2.data.data;
       // }
       if(res.postList.data.success) {
         postList = res.postList.data.data;
+        let queries = [];
+        postList.data.forEach(function(postData) {
+          queries.push(ctx.service.post.reference(postData.Content));
+        });
+        let references = yield queries;
+        postList.data.forEach(function(postData, i) {
+          postData.reference = references[i];
+        });
       }
       let bannerList = [{
         url: '/post.html?postID=430048',
@@ -115,9 +131,25 @@ module.exports = app => {
         };
         if(!circleId && res.top1.data.success) {
           top1 = res.top1.data.data;
+          let queries = [];
+          top1.data.forEach(function(postData) {
+            queries.push(ctx.service.post.reference(postData.Content));
+          });
+          let references = yield queries;
+          top1.data.forEach(function(postData, i) {
+            postData.reference = references[i];
+          });
         }
         if(res.postList.data.success) {
           postList = res.postList.data.data;
+          let queries = [];
+          postList.data.forEach(function(postData) {
+            queries.push(ctx.service.post.reference(postData.Content));
+          });
+          let references = yield queries;
+          postList.data.forEach(function(postData, i) {
+            postData.reference = references[i];
+          });
         }
       }
       else {
@@ -129,6 +161,14 @@ module.exports = app => {
         });
         if(res.data.success) {
           postList = res.data.data;
+          let queries = [];
+          postList.data.forEach(function(postData) {
+            queries.push(ctx.service.post.reference(postData.Content));
+          });
+          let references = yield queries;
+          postList.data.forEach(function(postData, i) {
+            postData.reference = references[i];
+          });
         }
       }
       ctx.body = ctx.helper.okJSON({

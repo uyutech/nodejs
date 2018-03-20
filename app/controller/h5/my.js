@@ -189,7 +189,18 @@ module.exports = app => {
         Take: body.take,
         currentUid: uid,
       });
-      ctx.body = res.data;
+      let data = res.data;
+      if(data.success) {
+        let queries = [];
+        data.data.data.forEach(function(postData) {
+          queries.push(ctx.service.post.reference(postData.Content));
+        });
+        let references = yield queries;
+        data.data.data.forEach(function(postData, i) {
+          postData.reference = references[i];
+        });
+      }
+      ctx.body = data;
     }
     * favor(ctx) {
       let uid = ctx.session.uid;

@@ -51,7 +51,7 @@ let helper = {
       let temp = parseInt(data.CurrentUid);
       temp = 2018000000000000 + temp;
       data.CurrentUid = temp.toString().slice(0, 16);
-    }console.log(333,url);
+    }
     try {
       res = await this.ctx.curl(url, {
         method: 'POST',
