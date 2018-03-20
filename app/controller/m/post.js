@@ -15,10 +15,7 @@ module.exports = app => {
       let postData = {};
       let replyData = {};
       let res = yield {
-        postData: ctx.helper.postServiceJSON2('api/circling/GetPostDetailes', {
-          uid,
-          CommentID: id,
-        }),
+        postData: ctx.service.post.index(id),
         replyData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
           uid,
           PostID: id,
@@ -29,8 +26,8 @@ module.exports = app => {
           myComment: 0,
         }),
       };
-      if(res.postData.data.success) {
-        postData = res.postData.data.data;
+      if(res.postData) {
+        postData = res.postData;
       }
       if(res.replyData.data.success) {
         replyData = res.replyData.data.data;

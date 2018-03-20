@@ -93,7 +93,6 @@ module.exports = app => {
   app.post('/api/my/sendPrize', app.middlewares.needLoginJson(), 'api.my.sendPrize');
   app.post('/api/my/cancelPrize', app.middlewares.needLoginJson(), 'api.my.cancelPrize');
 
-  app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');
   app.post('/api/works/likeWork', app.middlewares.needLoginJson(), 'api.works.likeWork');
   app.post('/api/works/favorWork', app.middlewares.needLoginJson(), 'api.works.favorWork');

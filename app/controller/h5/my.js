@@ -23,9 +23,7 @@ module.exports = app => {
       let lastUpdateHeadTime;
       let coins = {};
       let res = yield {
-        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
-          uid,
-        }),
+        userInfo: ctx.service.user.index(uid),
         oauthInfo: ctx.helper.postServiceJSON2('api/users/GetUserOauthInfo', {
           uid,
         }),
@@ -42,8 +40,8 @@ module.exports = app => {
           uid,
         }),
       };
-      if(res.userInfo.data.success) {
-        userInfo = res.userInfo.data.data;
+      if(res.userInfo) {
+        userInfo = res.userInfo;
       }
       if(res.oauthInfo.data.success) {
         oauthInfo = res.oauthInfo.data.data;
