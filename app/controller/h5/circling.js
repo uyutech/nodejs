@@ -79,7 +79,7 @@ module.exports = app => {
         title: '圈访谈',
         cover: '//zhuanquan.xyz/temp/d0cbdfb5b30a949ca97081ebf6e2490f.jpg-750__80',
       }, {
-        url: '/post.html?postID=432434',
+        url: '/post.html?postID=434275',
         title: '圈友你很皮',
         cover: '//zhuanquan.xyz/temp/b9637f5c3c56713a2d0d3e3aa838eba3.jpg-750__80',
       }, {
