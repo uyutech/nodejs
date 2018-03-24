@@ -35,7 +35,6 @@ const userWorkRelation = require('../model/userWorkRelation');
 const userIpRecord = require('../model/userIpRecord');
 const userProfileRecord = require('../model/userProfileRecord');
 const work = require('../model/work');
-const workMedia = require('../model/workMedia');
 const workImage = require('../model/workImage');
 const workText = require('../model/workText');
 const workType = require('../model/workType');
