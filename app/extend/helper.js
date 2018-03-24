@@ -141,11 +141,13 @@ let helper = {
         <ul>
           <li><a href="/"
                  class="${pageId === 0 ? 'cur' : ''}">首页</a></li>
-          <li><a href="http://ugc.circling.cc"/>上传作品</li></li>
+          ${session.uid && session.authorId
+            ? '<li><a href="http://ugc.circling.cc">上传作品</a></li>'
+            : ''}
           <li>
           ${session.uid
-              ? (session.authorId && session.isPublic ? session.authorName : session.uname)
-              : '<a href="/login" class="login">登录</a>'}
+            ? (session.authorId && session.isPublic ? session.authorName : session.uname)
+            : '<a href="/login" class="login">登录</a>'}
           </li>
         </ul>
       </div>
