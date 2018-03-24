@@ -13,11 +13,11 @@ module.exports = () => {
   $CONFIG.uid = '${ctx.session.uid}';
   $CONFIG.uname = '${ctx.session.uname}';
   $CONFIG.head = '${ctx.session.head}';
-  $CONFIG.messageNum = ${ctx.session.messageNum || 0}`;
-      if(ctx.session.authorID) {
+  // $CONFIG.messageNum = ${ctx.session.messageNum || 0}`;
+      if(ctx.session.authorId) {
         helper.$CONFIG += `
   $CONFIG.isAuthor = true;
-  $CONFIG.authorID = '${ctx.session.authorID}';
+  $CONFIG.authorId = '${ctx.session.authorId}';
   $CONFIG.authorName = '${ctx.session.authorName}';
   $CONFIG.authorHead = '${ctx.session.authorHead}';
   $CONFIG.isPublic = ${!!ctx.session.isPublic};`;

@@ -135,7 +135,7 @@ class Message extends migi.Component {
       return <div class="message fn-clear">
         <div class="main">
           <Page ref="page" total={ Math.ceil(this.props.messages.Size / take) }/>
-          <Messages ref="messages" data={ this.props.messages.data }/>
+          <Messages ref="messages" ellipsis={ true } data={ this.props.messages.data }/>
           <Page ref="page2" total={ Math.ceil(this.props.messages.Size / take) }/>
         </div>
         <SubCmt ref="subCmt" readOnly={ true } placeholder="请选择留言回复"/>
@@ -144,7 +144,7 @@ class Message extends migi.Component {
     return <div class="message fn-clear">
       <div class="main">
         <Page ref="page" total={ Math.ceil(this.props.messages.Size / take) }/>
-        <Messages ref="messages" data={ this.props.messages.data }/>
+        <Messages ref="messages" ellipsis={ true }  data={ this.props.messages.data }/>
       </div>
       <SubCmt ref="subCmt" readOnly={ true } placeholder="请选择留言回复"/>
     </div>;

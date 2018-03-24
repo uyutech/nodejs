@@ -24,6 +24,7 @@ export default function(data) {
 </head>
 <body>
 <div id="page">${user}</div>
+${data.helper.getDTopNav({ pageId: 8 })}
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}

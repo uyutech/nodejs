@@ -7,13 +7,13 @@
 module.exports = () => {
   return async function(ctx, next) {
     let ua = ctx.get('user-agent');
-    if(!/(iPhone|iPod|Android|ios)/i.test(ua)) {
+    if(!/(iPhone|iPod|Android|ios|MZBrowser)/i.test(ua)) {
       ctx.body = `<!DOCTYPE html><html>
         <head>
         ${ctx.helper.getDHead()}
         <script>
           var pathname = location.pathname;
-          location.replace('//' + location.host.replace('m.', '') + '/#' + pathname);
+          location.replace('//' + location.host.replace('m.', '') + pathname);
         </script>
         </head>
         <body></body></html>`;

@@ -60,6 +60,9 @@ class Post extends migi.Component {
         subCmt.invalid = true;
         let rootID = self.rootID;
         let parentID = self.parentID;
+        if(rootID === '-1') {
+          rootID = parentID;
+        }
         net.postJSON('/api/post/addComment', {
           parentID,
           rootID,

@@ -1,3 +1,4 @@
+
 /**
  * Created by army8735 on 2017/10/1.
  */
@@ -11,16 +12,15 @@ module.exports = appInfo => {
       key: 'sessionid',
       domain: 'dev.circling.cc2',
     },
+    redis: {
+      password: 'uyuTech123',
+    },
     database: {
-      circling: {
-        name: 'circling',
-        username: 'root',
-        password: '87351984@',
-      },
       stats: {
         name: 'stats',
         username: 'root',
         password: '87351984@',
+        host: 'localhost',
       },
     },
   };

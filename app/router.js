@@ -5,8 +5,9 @@ module.exports = app => {
   app.get('/home/qr', 'error.qr');
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
+  app.post('/oauth/session', 'oauth.session');
 
-  app.get('/d', 'd.index.index');
+  app.get('/d', 'd.index.newIndex');
   app.get('/d/find', 'd.find.index');
   app.get('/d/works/:worksID', 'd.works.index');
   app.get('/d/works/:worksID/:workID', 'd.works.index');
@@ -27,7 +28,7 @@ module.exports = app => {
   app.get('/d/mall/new', 'd.mall.new');
   app.get('/d/mall/wait', 'd.mall.wait');
 
-  app.get('/m', 'm.find.index');
+  app.get('/m', 'm.index.newIndex');
   app.get('/m/find', 'm.find.index');
   app.get('/m/works/:worksID', 'm.works.index');
   app.get('/m/works/:worksID/:workID', 'm.works.index');
@@ -74,8 +75,6 @@ module.exports = app => {
   app.post('/api/user/postList', 'api.user.postList');
   app.post('/api/user/follow', app.middlewares.needLoginJson(), 'api.user.follow');
   app.post('/api/user/unFollow', app.middlewares.needLoginJson(), 'api.user.unFollow');
-  // app.post('/api/user/labelList', app.middlewares.needLoginJson(), 'api.user.labelList');
-  // app.post('/api/user/addLabel', app.middlewares.needLoginJson(), 'api.user.addLabel');
 
   app.post('/api/my/updateNickName', app.middlewares.needLoginJson(), 'api.my.updateNickName');
   app.post('/api/my/uploadHead', app.middlewares.needLoginJson(), 'api.my.uploadHead');
@@ -95,7 +94,6 @@ module.exports = app => {
   app.post('/api/my/sendPrize', app.middlewares.needLoginJson(), 'api.my.sendPrize');
   app.post('/api/my/cancelPrize', app.middlewares.needLoginJson(), 'api.my.cancelPrize');
 
-  app.post('/api/works/detail', 'api.works.detail');
   app.post('/api/works/commentList', 'api.works.commentList');
   app.post('/api/works/likeWork', app.middlewares.needLoginJson(), 'api.works.likeWork');
   app.post('/api/works/favorWork', app.middlewares.needLoginJson(), 'api.works.favorWork');
@@ -137,7 +135,7 @@ module.exports = app => {
 
   app.post('/api/subComment', app.middlewares.needLogin(), 'api.subComment.index');
 
-  app.post('/api/count/index', 'api.count.index');
+  app.get('/api/count/index', 'api.count.index');
 
   app.post('/api/subPost/tag', 'api.subPost.tag');
   app.post('/api/subPost/sub', app.middlewares.needLoginJson(), 'api.subPost.sub');
@@ -167,6 +165,7 @@ module.exports = app => {
   app.post('/h5/find/search', 'h5.find.search');
 
   app.post('/h5/circling/index', 'h5.circling.index');
+  app.post('/h5/circling/circleList', 'h5.circling.circleList');
   app.post('/h5/circling/postList', 'h5.circling.postList');
 
   app.post('/h5/follow/index', app.middlewares.needLoginJson(), 'h5.follow.index');
@@ -177,15 +176,14 @@ module.exports = app => {
   app.post('/h5/my/relation', app.middlewares.needLoginJson(), 'h5.my.relation');
   app.post('/h5/my/readMessage', app.middlewares.needLoginJson(), 'h5.my.readMessage');
   app.post('/h5/my/postList', app.middlewares.needLoginJson(), 'h5.my.postList');
-  app.post('/h5/my/altSettle', app.middlewares.needLoginJson(), 'h5.my.altSettle');
+  app.post('/h5/my/altIdentity', app.middlewares.needLoginJson(), 'h5.my.altIdentity');
   app.post('/h5/my/friendList', app.middlewares.needLoginJson(), 'h5.my.friendList');
   app.post('/h5/my/followList', app.middlewares.needLoginJson(), 'h5.my.followList');
   app.post('/h5/my/followerList', app.middlewares.needLoginJson(), 'h5.my.followerList');
   app.post('/h5/my/followerAuthor', app.middlewares.needLoginJson(), 'h5.my.followerAuthor');
   app.post('/h5/my/favor', app.middlewares.needLoginJson(), 'h5.my.favor');
+  app.post('/h5/my/favorType', app.middlewares.needLoginJson(), 'h5.my.favorType');
   app.post('/h5/my/favorMV', app.middlewares.needLoginJson(), 'h5.my.favorMV');
-  app.post('/h5/my/favorPic', app.middlewares.needLoginJson(), 'h5.my.favorPic');
-  app.post('/h5/my/favorPost', app.middlewares.needLoginJson(), 'h5.my.favorPost');
   app.post('/h5/my/uploadPic', app.middlewares.needLoginJson(), 'h5.my.uploadPic');
   app.post('/h5/my/updateNickName', app.middlewares.needLoginJson(), 'h5.my.updateNickName');
   app.post('/h5/my/updateSign', app.middlewares.needLoginJson(), 'h5.my.updateSign');
@@ -194,6 +192,14 @@ module.exports = app => {
   app.post('/h5/my/updatePrivate', app.middlewares.needLoginJson(), 'h5.my.updatePrivate');
   app.post('/h5/my/sendPrize', app.middlewares.needLoginJson(), 'h5.my.sendPrize');
   app.post('/h5/my/cancelPrize', app.middlewares.needLoginJson(), 'h5.my.cancelPrize');
+  app.post('/h5/my/settle', app.middlewares.needLoginJson(), 'h5.my.settle');
+  app.post('/h5/my/authorRelevant', app.middlewares.needLoginJson(), 'h5.my.authorRelevant');
+  app.post('/h5/my/shield', app.middlewares.needLoginJson(), 'h5.my.shield');
+  app.post('/h5/my/shieldUser', app.middlewares.needLoginJson(), 'h5.my.shieldUser');
+  app.post('/h5/my/shieldCircle', app.middlewares.needLoginJson(), 'h5.my.shieldCircle');
+  app.post('/h5/my/identity', app.middlewares.needLoginJson(), 'h5.my.identity');
+  app.get('/h5/my/identity', app.middlewares.needLoginJson(), 'h5.my.identity');
+  app.post('/h5/my/sts', 'h5.my.sts');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');
@@ -210,8 +216,12 @@ module.exports = app => {
   app.post('/h5/circle/postList', 'h5.circle.postList');
   app.post('/h5/circle/join', app.middlewares.needLoginJson(), 'h5.circle.join');
   app.post('/h5/circle/post', app.middlewares.needLoginJson(), 'h5.circle.post');
+  app.post('/h5/circle/shield', app.middlewares.needLoginJson(), 'h5.circle.shield');
+  app.post('/h5/circle/unShield', app.middlewares.needLoginJson(), 'h5.circle.unShield');
 
   app.post('/h5/author/index', 'h5.author.index');
+  app.post('/h5/author/newIndex', 'h5.author.newIndex');
+  app.post('/h5/author/itemList', 'h5.author.itemList');
   app.post('/h5/author/addComment', app.middlewares.needLoginJson(), 'h5.author.addComment');
   app.post('/h5/author/likeComment', app.middlewares.needLoginJson(), 'h5.author.likeComment');
   app.post('/h5/author/subCommentList', 'h5.author.subCommentList');
@@ -221,6 +231,7 @@ module.exports = app => {
   app.post('/h5/author/commentList', 'h5.author.commentList');
   app.post('/h5/author/maList', 'h5.author.maList');
   app.post('/h5/author/picList', 'h5.author.picList');
+  app.post('/h5/author/dynamic', 'h5.author.dynamic');
 
   app.post('/h5/works/addComment', app.middlewares.needLoginJson(), 'h5.works.addComment');
 
@@ -239,12 +250,17 @@ module.exports = app => {
   app.post('/h5/post/addComment', app.middlewares.needLoginJson(), 'h5.post.addComment');
   app.post('/h5/post/likeComment', app.middlewares.needLoginJson(), 'h5.post.likeComment');
   app.post('/h5/post/delComment', app.middlewares.needLoginJson(), 'h5.post.delComment');
+  app.post('/h5/post/recommend', app.middlewares.needLoginJson(), 'h5.post.recommend');
+  app.post('/h5/post/unRecommend', app.middlewares.needLoginJson(), 'h5.post.unRecommend');
+  app.post('/h5/post/clean', app.middlewares.needLoginJson(), 'h5.post.clean');
 
   app.post('/h5/user/index', 'h5.user.index');
 
   app.post('/h5/user/postList', 'h5.user.postList');
   app.post('/h5/user/follow', app.middlewares.needLoginJson(), 'h5.user.follow');
   app.post('/h5/user/unFollow', app.middlewares.needLoginJson(), 'h5.user.unFollow');
+  app.post('/h5/user/shield', app.middlewares.needLoginJson(), 'h5.user.shield');
+  app.post('/h5/user/unShield', app.middlewares.needLoginJson(), 'h5.user.unShield');
 
   app.post('/h5/comment/sub', app.middlewares.needLoginJson(), 'h5.comment.sub');
 
@@ -269,6 +285,10 @@ module.exports = app => {
   app.post('/h5/passport/mergeOauth', app.middlewares.needLoginJson(), 'h5.passport.mergeOauth');
 
   app.post('/h5/playlist/index', 'h5.playlist.index');
+
+  app.post('/h5/report/index', app.middlewares.needLoginJson(), 'h5.report.index');
+
+  app.get('/h5/stats/visit', 'h5.stats.visit');
 
   app.post('/mns/mts/job', 'mns.mts.job');
 

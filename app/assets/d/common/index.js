@@ -12,7 +12,6 @@ import cookie from './cookie';
 import './global.jsx';
 
 import './index.less';
-import net from "./net";
 
 cookie($);
 
@@ -26,8 +25,6 @@ window.requestAnimationFrame = function() {
 }();
 
 window.$ = $;
-
-net.postJSON('/api/count/index');
 
 if(!window.location.origin) {
   window.location.origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port: '');

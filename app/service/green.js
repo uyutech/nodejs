@@ -5,9 +5,9 @@
 'use strict';
 
 const crypto = require('crypto');
-const Service = require('egg').Service;
+const egg = require('egg');
 
-class GreenService extends Service {
+class Service extends egg.Service {
   async textScan(text) {
     const md5 = crypto.createHash('md5');
     const hmac = crypto.createHmac('sha1', 'vXKFU7M5ajYsNOD0FcXhE1uNLsLlE2');
@@ -67,4 +67,4 @@ class GreenService extends Service {
   }
 }
 
-module.exports = GreenService;
+module.exports = Service;

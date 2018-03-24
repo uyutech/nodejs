@@ -16,9 +16,7 @@ module.exports = app => {
       let privateInfo = {};
       let coins = {};
       let res = yield {
-        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
-          uid,
-        }),
+        userInfo: ctx.service.user.index(uid),
         myPost: ctx.helper.postServiceJSON2('api/users/User_Post_List', {
           uid,
           currentuid: uid,
@@ -41,8 +39,8 @@ module.exports = app => {
           uid,
         }),
       };
-      if(res.userInfo.data.success) {
-        userInfo = res.userInfo.data.data;
+      if(res.userInfo) {
+        userInfo = res.userInfo;
       }
       if(res.myPost.data.success) {
         myPost = res.myPost.data.data;
@@ -65,7 +63,7 @@ module.exports = app => {
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {
-        ctx.session.authorID = userInfo.AuthorID;
+        ctx.session.authorId = ctx.session.authorID = userInfo.AuthorID;
         ctx.session.authorName = userInfo.AuthorName;
         ctx.session.authorHead = userInfo.AuthorHead_Url;
       }

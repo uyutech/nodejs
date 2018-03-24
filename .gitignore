@@ -8,3 +8,4 @@ run/
 *.swp
 app/public/
 app/view/*.js
+config.local.js

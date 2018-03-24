@@ -5,7 +5,12 @@
 'use strict';
 
 const OSS = require('ali-oss');
+const STS = OSS.STS;
 const Spark = require('spark-md5');
+const moment = require('moment');
+const crypto = require('crypto');
+const accessKeyId = 'LTAIzEfyjluscyEu';
+const accessKeySecret = 'g33q7QDYf843NqwoqHblIqap9NmU3D';
 
 module.exports = app => {
   class Controller extends app.Controller {
@@ -58,7 +63,7 @@ module.exports = app => {
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {
-        ctx.session.authorID = userInfo.AuthorID;
+        ctx.session.authorId = ctx.session.authorID = userInfo.AuthorID;
         ctx.session.authorName = userInfo.AuthorName;
         ctx.session.authorHead = userInfo.AuthorHead_Url;
       }
@@ -186,12 +191,28 @@ module.exports = app => {
         Take: body.take,
         currentUid: uid,
       });
-      ctx.body = res.data;
+      let data = res.data;
+      if(data.success) {
+        let queries = [];
+        data.data.data.forEach(function(postData) {
+          queries.push(ctx.service.post.reference(postData.Content));
+        });
+        let references = yield queries;
+        data.data.data.forEach(function(postData, i) {
+          postData.reference = references[i];
+        });
+      }
+      ctx.body = data;
     }
     * favor(ctx) {
       let uid = ctx.session.uid;
-      let body = ctx.request.body;
       let res = yield {
+        favorVideo: ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
+          uid,
+          ItemsType: 4,
+          Skip: 0,
+          Take: 20,
+        }),
         favorMV: ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
           uid,
           ItemsType: 1,
@@ -211,9 +232,13 @@ module.exports = app => {
           Take: 10,
         }),
       };
+      let favorVideo = {};
       let favorMV = {};
       let favorPic = {};
       let favorPost = {};
+      if(res.favorVideo.data.success) {
+        favorVideo = res.favorVideo.data.data;
+      }
       if(res.favorMV.data.success) {
         favorMV = res.favorMV.data.data;
       }
@@ -224,11 +249,25 @@ module.exports = app => {
         favorPost = res.favorPost.data.data;
       }
       ctx.body = ctx.helper.okJSON({
+        favorVideo,
+        favorAudio: favorMV,
         favorMV,
         favorPic,
         favorPost,
       });
     }
+    * favorType(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
+        uid,
+        ItemsType: body.type,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    // TODO: del
     * favorMV(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
@@ -240,49 +279,18 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
-    * favorPic(ctx) {
+    * altIdentity(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
-        uid,
-        ItemsType: 2,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
-    * favorPost(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/users/GetUserFavor', {
-        uid,
-        ItemsType: 3,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
-    * altSettle(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
+      let res = yield ctx.helper.postServiceJSON2('api/users/UpdateAltIdentity', {
         uid,
         AuthorID: ctx.session.authorID,
-        SettledType: body.public === 'true' ? 0 : 1,
+        Type: body.public === 'true' ? 0 : 1,
       });
-      if(ctx.session.authorID) {
-        ctx.session.isPublic = body.public === 'true';
+      if(!res.data.success) {
+        return ctx.body = res.data;
       }
-      let userInfo = yield ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
-        uid,
-      });
-      if(userInfo.data.success) {
-        ctx.session.uname = userInfo.data.data.NickName;
-        ctx.session.head = userInfo.data.data.Head_Url;
-        ctx.session.authorID = userInfo.data.data.AuthorID;
-        ctx.session.authorName = userInfo.data.data.AuthorName;
-        ctx.session.authorHead = userInfo.data.data.AuthorHead_Url;
-      }
+      ctx.session.isPublic = body.public === 'true';
       ctx.body = res.data;
     }
     * uploadPic(ctx) {
@@ -374,26 +382,26 @@ module.exports = app => {
         }
       }
 
-      let lastUpdateHeadTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
-        uid,
-      });
-      if(lastUpdateHeadTime.data && lastUpdateHeadTime.data.success) {
-        let now = Date.now();
-        lastUpdateHeadTime = lastUpdateHeadTime.data.data;
-        if(lastUpdateHeadTime) {
-          lastUpdateHeadTime = new Date(lastUpdateHeadTime);
-        }
-        else {
-          lastUpdateHeadTime = 0;
-        }
-        let updateHeadTimeDiff = now - lastUpdateHeadTime;
-        if(updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
-          return ctx.body = {
-            success: false,
-            message: '头像一天只能修改一次哦~',
-          };
-        }
-      }
+      // let lastUpdateHeadTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateHead_UrlLastTime', {
+      //   uid,
+      // });
+      // if(lastUpdateHeadTime.data && lastUpdateHeadTime.data.success) {
+      //   let now = Date.now();
+      //   lastUpdateHeadTime = lastUpdateHeadTime.data.data;
+      //   if(lastUpdateHeadTime) {
+      //     lastUpdateHeadTime = new Date(lastUpdateHeadTime);
+      //   }
+      //   else {
+      //     lastUpdateHeadTime = 0;
+      //   }
+      //   let updateHeadTimeDiff = now - lastUpdateHeadTime;
+      //   if(updateHeadTimeDiff < 24 * 60 * 60 * 1000) {
+      //     return ctx.body = {
+      //       success: false,
+      //       message: '头像一天只能修改一次哦~',
+      //     };
+      //   }
+      // }
 
       // md5
       let spark = new Spark();
@@ -454,10 +462,10 @@ module.exports = app => {
       let nickName = body.nickName || '';
       nickName = nickName.trim();
       let length = nickName.length;
-      if(length < 4 || length > 8) {
+      if(length < 2 || length > 8) {
         return ctx.body = {
           success: false,
-          message: '昵称长度需要在4~8个字之间哦~',
+          message: '昵称长度需要在2~8个字之间哦~',
         };
       }
       let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
@@ -472,13 +480,13 @@ module.exports = app => {
         else {
           lastUpdateNickNameTime = 0;
         }
-        let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
-        if(updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
-          return ctx.body = {
-            success: false,
-            message: '昵称一天只能修改一次哦~',
-          };
-        }
+        // let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
+        // if(updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
+        //   return ctx.body = {
+        //     success: false,
+        //     message: '昵称一天只能修改一次哦~',
+        //   };
+        // }
         if(nickName.indexOf('转圈') === 0) {
           return ctx.body = {
             success: false,
@@ -519,10 +527,10 @@ module.exports = app => {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
       let length = (body.sign || '').length;
-      if(length > 16) {
+      if(length > 45) {
         return ctx.body = {
           success: false,
-          message: '签名长度不能超过16个字哦~',
+          message: '签名长度不能超过45个字哦~',
         };
       }
       let res = yield ctx.helper.postServiceJSON2('api/users/UpdateUserSign', {
@@ -573,10 +581,6 @@ module.exports = app => {
     * sendPrize(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
-      return ctx.body = {
-        success: false,
-        message: '12.29日前选择发货的小伙伴的快递将在元旦之后寄出。在此之后直到下次发货之间，发货功能将被锁定。下次发货时间预定于一月下旬。请小伙伴们谅解。',
-      };
       let res = yield ctx.helper.postServiceJSON2('api/users/SendProduct', {
         uid,
         cartID: body.cartID,
@@ -591,6 +595,168 @@ module.exports = app => {
         cartID: body.cartID,
       });
       ctx.body = res.data;
+    }
+    * settle(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      // 不入驻，设置状态为10走普通用户流程
+      if(body.settle === 'false') {
+        let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
+          uid,
+          User_Reg_Stat: 3,
+        });
+        if(!res.data.success) {
+          return ctx.body = res.data;
+        }
+        // 99以上状态为老用户，只走入住流程，引导已经走过了
+        if(body.step && body.step < 99) {
+          let res = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
+            uid,
+            User_Reg_Stat: 10,
+          });
+          return ctx.body = res.data;
+        }
+        return ctx.body = res.data;
+      }
+      // 入驻，设置状态为公开11马甲10，走设置马甲昵称流程
+      else if(body.settle === 'true') {
+        let res = yield ctx.helper.postServiceJSON2('api/users/SaveAuthorSettled', {
+          uid,
+          AuthorID: ctx.session.authorID,
+          SettledType: body.public === 'true' ? 1 : 2,
+        });
+        if(!res.data.success) {
+          return ctx.body = res.data;
+        }
+        if(body.step && body.step < 99) {
+          let res = yield ctx.helper.postServiceJSON2('api/users/SaveUser_Reg_Stat', {
+            uid,
+            User_Reg_Stat: body.public === 'true' ? 11 : 10,
+          });
+          return ctx.body = res.data;
+        }
+        return ctx.body = res.data;
+      }
+      ctx.body = {
+        success: false,
+      };
+    }
+    * authorRelevant(ctx) {
+      let uid = ctx.session.uid;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetAuthorRelevant', {
+        uid,
+        AuthorID: ctx.session.authorID,
+        HotWork_Skip: 0,
+        HotWork_Take: 2,
+        ToAuthorSkip: 0,
+        ToAuthorTake: 2,
+      });
+      ctx.body = res.data;
+    }
+    * shield(ctx) {
+      let uid = ctx.session.uid;
+      let user = {};
+      let circle = {};
+      let res = yield {
+        user: ctx.helper.postServiceJSON2('api/users/GetShieldUserList', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
+        circle: ctx.helper.postServiceJSON2('api/users/GetShieldCirclingList', {
+          uid,
+          Skip: 0,
+          Take: 30,
+        }),
+      };
+      if(res.user.data.success) {
+        user = res.user.data.data;
+      }
+      if(res.circle.data.success) {
+        circle = res.circle.data.data;
+      }
+      ctx.body = ctx.helper.okJSON({
+        user,
+        circle,
+      });
+    }
+    * shieldUser(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetShieldUserList', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * shieldCircle(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/users/GetShieldCirclingList', {
+        uid,
+        Skip: body.skip,
+        Take: body.take,
+      });
+      ctx.body = res.data;
+    }
+    * sts(ctx) {
+      let body = ctx.request.body;
+      let name = body.name;
+      if(!name) {
+        return;
+      }
+      // 检查是否已上传
+      let client = new OSS({
+        region: 'oss-cn-shanghai',
+        accessKeyId: 'LTAIbZSVA2e931EB',
+        accessKeySecret: '5v756TGc1Gv3gkg4rhzoe0OYyLe8Xc',
+        bucket: 'circling-assets',
+      });
+      let check = yield client.list({
+        prefix: 'pic/' + name,
+      });
+      if(check.res && check.res.status === 200) {
+        let objects = check.objects;
+        if(objects && objects.length) {
+          return ctx.body = ctx.helper.okJSON({
+            exist: true,
+          });
+        }
+      }
+      let expire = Date.now() + 1000 * 60 * 5;
+      let expiration = moment(expire).local();
+      let host = 'https://circling-assets.oss-cn-shanghai.aliyuncs.com';
+      let condition = ['content-length-range', 0, 10485760];
+      let dir = '';
+      let start = ['starts-with', accessKeySecret, dir];
+      let conditions = [condition, start];
+      let policy = JSON.stringify({
+        expiration,
+        conditions,
+      });
+      let base64_policy = new Buffer(policy).toString('base64');
+      let hmac = crypto.createHmac('sha1', accessKeySecret);
+      let signature = hmac.update(base64_policy).digest('base64');
+      ctx.body = ctx.helper.okJSON({
+        accessKeyId,
+        host,
+        expire,
+        policy: base64_policy,
+        signature,
+        dir,
+        prefix: 'pic/',
+      });
+    }
+    * identity(ctx) {
+      ctx.body = ctx.helper.okJSON({
+        isPublic: ctx.session.isPublic,
+        authorId: ctx.session.authorID,
+        authorName: ctx.session.authorName,
+        authorHead: ctx.session.authorHead,
+        uname: ctx.session.uname,
+        head: ctx.session.head,
+      });
     }
   }
   return Controller;

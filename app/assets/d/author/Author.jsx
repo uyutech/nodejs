@@ -23,6 +23,9 @@ class Author extends migi.Component {
         subCmt.invalid = true;
         let rootID = authorComment.rootID;
         let parentID = authorComment.parentID;
+        if(rootID === '-1') {
+          rootID = parentID;
+        }
         net.postJSON('/api/author/addComment', {
           parentID: parentID,
           rootID: rootID,

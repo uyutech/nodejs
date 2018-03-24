@@ -3,9 +3,9 @@
  */
 
 import net from '../../d/common/net';
-import util from '../../d/common/util';
 import MLogin from '../component/mlogin/MLogin.jsx';
 import Share from '../../d/component/share/Share.jsx';
+import uuidv4 from 'uuid/v4';
 
 let mlogin;
 migi.eventBus.on('NEED_LOGIN', function() {
@@ -30,64 +30,34 @@ migi.eventBus.on('SHARE', function(url) {
   share.show();
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  let $name = $('#topNav .name');
-  $name.on('click', function() {
-    if(!$CONFIG.isLogin) {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-  });
-  let $head = $('#topNav img');
-  $head.on('click', function() {
-    if(!$CONFIG.isLogin) {
-      migi.eventBus.emit('NEED_LOGIN');
-    }
-  });
-  let loading;
-  let $public = $('#topNav .public').eq(0);
-  $public.on('click', function() {
-    if(loading) {
-      return;
-    }
-    loading = true;
-    let isPublic = $CONFIG.isPublic;
-    net.postJSON('/api/my/altSettle', { public: !isPublic }, function(res) {
-      if(res.success) {
-        $CONFIG.isPublic = !isPublic;
-        if(!isPublic) {
-          $name.addClass('public');
-          $name.text($CONFIG.authorName);
-          $public.text('[切换到马甲]');
-          $head.attr('src', $CONFIG.authorHead);
-        }
-        else {
-          $name.removeClass('public');
-          $name.text($CONFIG.uname);
-          $public.text('[切换到作者]');
-          $head.attr('src', $CONFIG.head);
-        }
-      }
-      else {
-        alert(res.message || util.ERROR_MESSAGE);
-      }
-      loading = false;
-    }, function(res) {
-      alert(res.message || util.ERROR_MESSAGE);
-      loading = false;
-    });
-  });
-  let $message = $('#topNav .message');
-  migi.eventBus.on('READ_MESSAGE_NUM', function(i) {
-    let n = $CONFIG.messageNum;
-    if(n) {
-      n = Math.max(0, n - i);
-      $CONFIG.messageNum = n;
-      $message.find('span').text(n > 99 ? '99+' : n);
-      if(n === 0) {
-        $message.find('span').addClass('fn-hide');
-      }
-    }
-  });
+let b = document.querySelector('#gTop b');
+let ul = document.querySelector('#gTop ul');
+b.addEventListener('click', function(e) {
+  e.stopPropagation();
+  ul.classList.remove('fn-hide');
+});
+document.body.addEventListener('click', function() {
+  ul.classList.add('fn-hide');
+});
 
-  net.postJSON('/api/count/index');
+document.addEventListener('DOMContentLoaded', function() {
+  let UUID = localStorage['UUID'];
+  let first = !UUID;
+  if(first) {
+    UUID = uuidv4().replace(/-/g, '');
+    localStorage['UUID'] = UUID;
+  }
+  let img = new Image();
+  img.style.position = 'absolute';
+  img.style.display = 'none';
+  img.src = '/api/count/index?platform=2'
+    + '&url=' + encodeURIComponent(location.pathname.replace(/^\//, ''))
+    + '&search=' + encodeURIComponent(location.search.replace(/^\?/, ''))
+    + '&uuid=' + UUID
+    + '&first=' + first
+    + '&_=' + Date.now() + Math.random();
+  img.onload = function() {
+    document.removeChild(img);
+  };
+  document.body.appendChild(img);
 });

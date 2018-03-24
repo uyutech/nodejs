@@ -128,10 +128,10 @@ module.exports = app => {
       let nickName = body.nickName || '';
       nickName = nickName.trim();
       let length = (nickName || '').length;
-      if(length < 4 || length > 8) {
+      if(length < 2 || length > 8) {
         return ctx.body = {
           success: false,
-          message: '昵称长度需要在4~8个字之间哦~',
+          message: '昵称长度需要在2~8个字之间哦~',
         };
       }
       let lastUpdateNickNameTime = yield ctx.helper.postServiceJSON2('api/users/GetUpdateNickNameLastTime', {
@@ -244,6 +244,9 @@ module.exports = app => {
         AuthorID: ctx.session.authorID,
         SettledType: body.public === 'true' ? 0 : 1,
       });
+      if(!res.data.success) {
+        return ctx.body = res.data;
+      }
       if(ctx.session.authorID) {
         ctx.session.isPublic = body.public === 'true';
       }
@@ -253,7 +256,7 @@ module.exports = app => {
       if(userInfo.data.success) {
         ctx.session.uname = userInfo.data.data.NickName;
         ctx.session.head = userInfo.data.data.Head_Url;
-        ctx.session.authorID = userInfo.data.data.AuthorID;
+        ctx.session.authorId = ctx.session.authorID = userInfo.data.data.AuthorID;
         ctx.session.authorName = userInfo.data.data.AuthorName;
         ctx.session.authorHead = userInfo.data.data.AuthorHead_Url;
       }

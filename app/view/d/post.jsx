@@ -31,6 +31,7 @@ export default function(data) {
 </head>
 <body>
 <div id="page">${post}</div>
+${data.helper.getDTopNav({ pageId: 7 })}
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}

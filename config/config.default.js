@@ -78,7 +78,7 @@ module.exports = appInfo => {
     client: {
       port: 6379,
       host: '127.0.0.1',
-      password: 'army8735',
+      password: 'uyuTech123',
       db: 0,
     },
   };
@@ -105,8 +105,20 @@ module.exports = appInfo => {
         if(ctx.request.path.startsWith('/mns')) {
           return true;
         }
+        if(ctx.request.path.startsWith('/oauth/session')) {
+          return true;
+        }
         return false;
       },
+    },
+  };
+
+  config.database = {
+    stats: {
+      name: 'stats',
+      username: 'uyutech',
+      password: 'uyuTech2017',
+      host: 'rm-uf6s915okm3a004l5.mysql.rds.aliyuncs.com',
     },
   };
 

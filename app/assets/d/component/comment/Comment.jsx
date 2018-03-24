@@ -78,13 +78,13 @@ class Comment extends migi.Component {
       });
       $root.on('click', '.more', function() {
         let $message = $(this);
-        let rid = $message.attr('rid');
+        let cid = $message.attr('cid');
         $message.removeClass('more').text('读取中...');
-        ajax = net.postJSON(self.props.subUrl, { rootID: rid, skip: subSkipHash[rid], take }, function(res) {
+        ajax = net.postJSON(self.props.subUrl, { rootID: cid, skip: subSkipHash[cid], take }, function(res) {
           if(res.success) {
             let data = res.data;
             if(data.data.length) {
-              subSkipHash[rid] += data.data.length;
+              subSkipHash[cid] += data.data.length;
               let s = '';
               data.data.forEach(function (item) {
                 s += self.genChildComment(item);
@@ -148,6 +148,7 @@ class Comment extends migi.Component {
     let $list2 = $li.find('.list2');
     let $ul = $list2.find('ul');
     let $message = $list2.find('.message');
+    let cid = $slide.attr('cid');
     let rid = $slide.attr('rid');
     if($last && $last[0] !== $li[0] && $last.hasClass('on')) {
       self.hideLast();
@@ -158,24 +159,24 @@ class Comment extends migi.Component {
       $list2.css('height', 0);
       self.emit('closeSubComment');
       $last = null;
-      if(subLoadHash[rid] === IS_LOADING) {
-        subLoadHash[rid] = NOT_LOADED;
+      if(subLoadHash[cid] === IS_LOADING) {
+        subLoadHash[cid] = NOT_LOADED;
       }
     }
     else {
       $last = $li;
       $li.addClass('on');
       self.emit('chooseSubComment', $slide.attr('rid'), $slide.attr('cid'), $slide.attr('name'), $slide.find('.sub').text());
-      let state = subLoadHash[rid];
+      let state = subLoadHash[cid];
       if(state === HAS_LOADED || state === IS_LOADING) {
         $list2.css('height', 'auto');
       }
       else {
         $list2.css('height', 'auto');
-        subLoadHash[rid] = IS_LOADING;
-        ajax = net.postJSON(self.props.subUrl, { rootID: rid, skip: 0, take }, function(res) {
+        subLoadHash[cid] = IS_LOADING;
+        ajax = net.postJSON(self.props.subUrl, { rootID: cid, skip: 0, take }, function(res) {
           if(res.success) {
-            subLoadHash[rid] = HAS_LOADED;
+            subLoadHash[cid] = HAS_LOADED;
             let s = '';
             let data = res.data;
             data.data.forEach(function(item) {
@@ -187,17 +188,17 @@ class Comment extends migi.Component {
             }
             else {
               $message.addClass('more').text('点击加载更多');
-              subSkipHash[rid] = data.data.length;
+              subSkipHash[cid] = data.data.length;
             }
             $ul.removeClass('fn-hide');
             $list2.css('height', 'auto');
           }
           else {
-            subLoadHash[rid] = NOT_LOADED;
+            subLoadHash[cid] = NOT_LOADED;
             $message.text(res.message || util.ERROR_MESSAGE);
           }
         }, function(res) {
-          subLoadHash[rid] = NOT_LOADED;
+          subLoadHash[cid] = NOT_LOADED;
           $message.text(res.message || util.ERROR_MESSAGE);
         });
       }
@@ -244,6 +245,7 @@ class Comment extends migi.Component {
     this.empty = false;
   }
   prependChild(item, parentID) {
+    this.prependData(item);
     let $comment = $('#comment_' + item.RootID);
     let $list2 = $comment.find('.list2');
     let $ul = $list2.find('ul');
@@ -263,68 +265,41 @@ class Comment extends migi.Component {
     // }
   }
   genComment(item) {
-    if(item.IsAuthor) {
-      return <li class="author" id={ 'comment_' + item.Send_ID }>
-        <div class="t fn-clear">
-          <div class="profile fn-clear">
-            <a class="pic" href={ '/author/' + item.AuthorID }>
-              <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_AuthorHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
-            </a>
-            <div class="txt">
-              <a class="name" href={ '/author/' + item.AuthorID }>{ item.Send_AuthorName }</a>
-              <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
-            </div>
-          </div>
-          <div class="fn fn-clear">
-            {
-              item.ISOwn ? <span cid={ item.Send_ID } class="remove">删除</span> : ''
-            }
-          </div>
-        </div>
-        <div class="c">
-          <pre>{ item.Send_Content }<span class="placeholder"/></pre>
-          <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_AuthorName }>
-            <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
-            <small class="sub">{ item.sub_Count }</small>
-            <span>收起</span>
-          </div>
-          <b class="arrow"/>
-        </div>
-        <div class="list2">
-          <ul class="fn-hide"/>
-          <p class="message" cid={ item.Send_ID } rid={ item.Send_ID }>读取中...</p>
-        </div>
-      </li>;
-    }
-    return <li id={ 'comment_' + item.Send_ID }>
+    let id = item.ID;
+    let url = item.IsAuthor ? '/author.html?authorId=' + item.SendUserID : '/user.html?userID=' + item.SendUserID;
+    return <li class="user" id={ 'comment_' + id }>
       <div class="t fn-clear">
         <div class="profile fn-clear">
-          <a class="pic" href={ '/user/' + item.Send_UserID }>
-            <img class="pic" src={ util.autoSsl(util.img60_60_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
-          </a>
+          <div class="pic" href={ url } title={ item.SendUserNickName }>
+            <img class="pic" src={ util.autoSsl(util.img60_60_80(item.SendUserHead_Url || '/src/common/head.png')) }/>
+          </div>
           <div class="txt">
-            <a class="name" href={ '/user/' + item.Send_UserID }>{ item.Send_UserName }</a>
-            <small class="time" rel={ item.Send_Time }>{ util.formatDate(item.Send_Time) }</small>
+            <div class="name" href={ url } title={ item.SendUserNickName }>{ item.SendUserNickName }</div>
+            <small class="time" rel={ item.CreateTime }>{ util.formatDate(item.CreateTime) }</small>
           </div>
         </div>
-        <div class="fn fn-clear">
-          {
-            item.ISOwn ? <span cid={ item.Send_ID } class="remove">删除</span> : ''
-          }
-        </div>
+        <b class="fn" own={ item.IsOwn } userId={ item.SendUserID }/>
       </div>
       <div class="c">
-        <pre>{ item.Send_Content }<span class="placeholder"/></pre>
-        <div class="slide" cid={ item.Send_ID } rid={ item.Send_ID } name={ item.Send_UserName }>
-          <small cid={ item.Send_ID } class={ 'like' + (item.IsLike ? ' liked' : '') }>{ item.LikeCount }</small>
-          <small class="sub">{ item.sub_Count }</small>
+        {
+          item.ParentContent
+            ? <p class="quote">
+              <label>回复@{ item.ParentSendUserNickName }：</label>
+              <span>{ item.ParentContent }</span>
+            </p>
+            : ''
+        }
+        <pre>{ item.LContent }<span class="placeholder"/></pre>
+        <div class="slide" cid={ id } rid={ item.RootID } name={ item.SendUserNickName }>
+          <small cid={ id } class={ 'like' + (item.ISLike ? ' liked' : '') }></small>
+          <small class="sub">{ item.CommentCountRaw || '' }</small>
           <span>收起</span>
         </div>
         <b class="arrow"/>
       </div>
       <div class="list2">
         <ul class="fn-hide"/>
-        <p class="message" cid={ item.Send_ID } rid={ item.Send_ID }>读取中...</p>
+        <p class="message" cid={ id } rid={ item.RootID }>读取中...</p>
       </div>
     </li>;
   }

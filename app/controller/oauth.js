@@ -4,6 +4,8 @@
 
 'use strict';
 
+const utility = require('utility');
+
 module.exports = app => {
   class Controller extends app.Controller {
     * weibo(ctx) {
@@ -54,7 +56,7 @@ module.exports = app => {
             ctx.session.uname = userInfo.NickName;
             ctx.session.head = userInfo.Head_Url;
             if(userInfo.ISAuthor) {
-              ctx.session.authorID = userInfo.AuthorID;
+              ctx.session.authorId = ctx.session.authorID = userInfo.AuthorID;
               ctx.session.authorName = userInfo.AuthorName;
               ctx.session.isPublic = userInfo.ISOpen;
               ctx.session.authorHead = userInfo.AuthorHead_Url;
@@ -94,7 +96,7 @@ module.exports = app => {
               ctx.session.uname = userInfo.NickName;
               ctx.session.head = userInfo.Head_Url;
               if(userInfo.ISAuthor) {
-                ctx.session.authorID = userInfo.AuthorID;
+                ctx.session.authorId = ctx.session.authorID = userInfo.AuthorID;
                 ctx.session.authorName = userInfo.AuthorName;
                 ctx.session.isPublic = userInfo.ISOpen;
                 ctx.session.authorHead = userInfo.AuthorHead_Url;
@@ -106,6 +108,27 @@ module.exports = app => {
       let goto = ctx.session.goto || '/my';
       delete ctx.session.goto;
       ctx.redirect(goto);
+    }
+    * session(ctx) {
+      let sessionid = ctx.request.body.sessionid;
+      if(!sessionid) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+      sessionid = utility.base64decode(sessionid, true, 'buffer');
+      if(!sessionid) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+      sessionid = ctx.cookies.keys.decrypt(sessionid).value.toString();
+      if(!sessionid) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+      sessionid = new Buffer(sessionid, 'base64').toString();
+      if(!sessionid) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+      ctx.body = ctx.helper.okJSON({
+        sessionid,
+      });
     }
   }
   return Controller;

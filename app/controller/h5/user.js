@@ -17,9 +17,7 @@ module.exports = app => {
       let userPost = {};
       let followState = uid ? 0 : 2;
       let res = yield {
-        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
-          uid: userID,
-        }),
+        userInfo: ctx.service.user.index(userID),
         userPost: ctx.helper.postServiceJSON2('api/users/User_Post_List', {
           uid: userID,
           currentUid: uid,
@@ -31,8 +29,8 @@ module.exports = app => {
           toUid: userID,
         }),
       };
-      if(res.userInfo.data.success) {
-        userInfo = res.userInfo.data.data;
+      if(res.userInfo) {
+        userInfo = res.userInfo;
       }
       if(res.userPost.data.success) {
         userPost = res.userPost.data.data;
@@ -81,6 +79,30 @@ module.exports = app => {
       let res = yield ctx.helper.postServiceJSON2('api/users/RemoveFollowUser', {
         uid,
         toUid: body.userID,
+      });
+      ctx.body = res.data;
+    }
+    * shield(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      if(!body.userId) {
+        return;
+      }
+      let res = yield ctx.helper.postServiceJSON2('api/users/AddShieldUser', {
+        uid,
+        toUid: body.userId,
+      });
+      ctx.body = res.data;
+    }
+    * unShield(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      if(!body.userId) {
+        return;
+      }
+      let res = yield ctx.helper.postServiceJSON2('api/users/RemoShieldUser', {
+        uid,
+        toUid: body.userId,
       });
       ctx.body = res.data;
     }

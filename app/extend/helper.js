@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?207';
+    return '/public' + url + '?221';
   },
   okJSON(data) {
     return {
@@ -27,7 +27,7 @@ let helper = {
       data: data.data,
     };
   },
-  * postServiceJSON(url, data) {
+  async postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
     }
@@ -37,8 +37,23 @@ let helper = {
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
     let res;
+    if(data && data.uid && data.uid.toString().length !== 16) {
+      let temp = parseInt(data.uid);
+      temp = 2018000000000000 + temp;
+      data.uid = temp.toString().slice(0, 16);
+    }
+    if(data && data.currentuid && data.currentuid.toString().length !== 16) {
+      let temp = parseInt(data.currentuid);
+      temp = 2018000000000000 + temp;
+      data.currentuid = temp.toString().slice(0, 16);
+    }
+    if(data && data.CurrentUid && data.CurrentUid.toString().length !== 16) {
+      let temp = parseInt(data.CurrentUid);
+      temp = 2018000000000000 + temp;
+      data.CurrentUid = temp.toString().slice(0, 16);
+    }
     try {
-      res = yield this.ctx.curl(url, {
+      res = await this.ctx.curl(url, {
         method: 'POST',
         data,
         dataType: 'json',
@@ -116,14 +131,34 @@ let helper = {
       <meta name="wap-font-scale" content="no"/>
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">`;
   },
-  getDBotNav: function() {
-    return `<div class="cp-botnav">
+  getDTopNav: function(data) {
+    data = data || {};
+    let pageId = data.pageId;
+    let session = this.ctx.session || {};
+    return `<div class="g-top" id="gTop">
       <div class="c">
-        <p>Copyright © 2017 Uyutech. All Rights Reserved.<br/>呦悠科技 版权所有 浙ICP备17029501号-2</p>
-        <ul class="link fn-clear">
-          <li class="weibo"><a href="http://weibo.com/u/6259241863" target="_blank">新浪微博</a></li>
+        <span class="logo">转圈，一个有爱的智能社区~</span>
+        <ul>
+          <li><a href="/"
+                 class="${pageId === 0 ? 'cur' : ''}">首页</a></li>
+          ${session.uid
+            ? '<li><a href="http://ugc.circling.cc">上传作品</a></li>'
+            : ''}
+          <li>
+          ${session.uid
+            ? (session.authorId && session.isPublic ? session.authorName : session.uname)
+            : '<a href="/login" class="login">登录</a>'}
+          </li>
         </ul>
       </div>
+    </div>`;
+  },
+  getDBotNav: function() {
+    return `<div class="g-bot" id="gBot">
+      <ul>
+        <li><a href="https://weibo.com/u/6259241863">转圈官博</a></li>
+      </ul>
+      <p>© Uyutech all rights reserved © 杭州呦悠网络科技有限公司 保留所有权利</p>
     </div>`;
   },
   getMHead: function(data) {
@@ -142,49 +177,19 @@ let helper = {
       <meta name="wap-font-scale" content="no"/>
       <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">`;
   },
-  getMTopNav: function(data) {
-    data = data || {}
-    let session = this.ctx.session || {};
-    let head = session.head || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png';
-    if(head && /\/\/zhuanquan\./i.test(head)) {
-      head += '-64_64_80';
+  getMTopNav: function() {
+    let ua = this.ctx.request.header['user-agent'];
+    let url = 'https://circling.net.cn/android/circling-0.6.2.apk';
+    if(/(iPhone|iPod|ios)/i.test(ua)) {
+      url = 'https://itunes.apple.com/cn/app/id1331367220';
     }
-    if(session.uid) {
-      let num = session.messageNum || 0;
-      if(num > 99) {
-        num = '99+';
-      }
-      if(session.authorID) {
-        let isPublic = session.isPublic;
-        return `<div class="top-nav" id="topNav">
-          <a href="/" class="logo"></a>
-          <a class="message" href="/my/message">
-            <span>${ num || '' }</span>
-          </a>
-          <span class="public">[${ isPublic ? '切换到马甲' : '切换到作者身份' }]</span>
-          <a href="/my" class="user">
-            <span class="${'name' + (isPublic ? ' public' : '')}">${helper.encode(isPublic ? session.authorName : session.uname)}</span>
-            <img src=${head}>
-          </a>
-        </div>`;
-      }
-      return `<div class="top-nav" id="topNav">
-      <a href="/" class="logo"></a>
-      <a class="message" href="/my/message">
-        <span>${ num || '' }</span>
-      </a>
-      <a href="/my" class="user">
-        <span class="name">${helper.encode(session.uname)}</span>
-        <img src=${head}>
-      </a>
-    </div>`;
-    }
-    return `<div class="top-nav" id="topNav">
-      <a href="/" class="logo"></a>
-      <span class="user">
-        <span class="name">登录/注册</span>
-        <img src="//zhuanquan.xin/head/35e21cf59874d33e48c1bee7678d4d95.png">
-      </a>
+    return `<div class="g-top" id="gTop">
+      <span class="logo">一个有爱的智能社区~</span>
+      <b></b>
+      <ul class="fn-hide">
+        <li><a href="/" class="index">首页</a></li>
+        <li><a href="${url}" class="download">下载app</a></li>
+      </ul>
     </div>`;
   },
   getMTopMenu: function(index) {
@@ -196,7 +201,12 @@ let helper = {
     </ul>`;
   },
   getMBotNav: function() {
-    return `<div class="cp-botnav">All Rights Reserved 转圈circling 浙ICP备17029501号-2</div>`;
+    return `<div class="g-bot" id="gBot">
+      <ul>
+        <li><a href="https://weibo.com/u/6259241863">转圈官博</a></li>
+      </ul>
+      <p>© Uyutech all rights reserved © 杭州呦悠网络科技有限公司 保留所有权利</p>
+    </div>`;
   },
   getStat() {
     return '<div style="display:none"><script defer="defer">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id=\'cnzz_stat_icon_1265566429\'%3E%3C/span%3E%3Cscript src=\'" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1265566429\' type=\'text/javascript\'%3E%3C/script%3E"))</script></div>';

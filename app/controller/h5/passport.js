@@ -166,7 +166,7 @@ module.exports = app => {
       ctx.session.uname = userInfo.NickName;
       ctx.session.head = userInfo.Head_Url;
       if(userInfo.ISAuthor) {
-        ctx.session.authorID = userInfo.AuthorID;
+        ctx.session.authorId = ctx.session.authorID = userInfo.AuthorID;
         ctx.session.authorName = userInfo.AuthorName;
         ctx.session.isPublic = userInfo.ISOpen;
         ctx.session.authorHead = userInfo.AuthorHead_Url;
@@ -236,7 +236,7 @@ module.exports = app => {
         phoneNumber: phone,
         CodeNumber: code,
         codeType: '3',
-      });console.log(checkCode);
+      });
       if(!checkCode.data.success) {
         return ctx.body = ctx.helper.errorJSON({
           message: checkCode.data.message,
@@ -246,7 +246,7 @@ module.exports = app => {
         uid,
         phoneNumber: phone,
         pwd: password,
-      });console.log(res);
+      });
       ctx.body = res.data;
     }
     * bindOauth(ctx) {
@@ -318,10 +318,10 @@ module.exports = app => {
       }
       if(changeName) {
         let length = nickName.length;
-        if(length < 4 || length > 8) {
+        if(length < 2 || length > 8) {
           return ctx.body = {
             success: false,
-            message: '昵称长度需要在4~8个字之间哦~',
+            message: '昵称长度需要在2~8个字之间哦~',
           };
         }
         if(nickName.indexOf('转圈') === 0) {

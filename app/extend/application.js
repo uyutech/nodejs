@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2018/1/26.
+ * Created by army8735 on 2018/3/17.
  */
 
 'use strict';
@@ -36,7 +36,7 @@ const userIpRecord = require('../model/userIpRecord');
 const userProfileRecord = require('../model/userProfileRecord');
 const work = require('../model/work');
 const workMedia = require('../model/workMedia');
-const workImage = require('../model/WorkImage');
+const workImage = require('../model/workImage');
 const workText = require('../model/workText');
 const workType = require('../model/workType');
 const works = require('../model/works');
@@ -60,7 +60,7 @@ module.exports = {
     if(!this[SEQUELIZE_CIRCLING]) {
       let database = this.config.database;
       this[SEQUELIZE_CIRCLING] = new Sequelize(database.circling.name, database.circling.username, database.circling.password, {
-        host: 'localhost',
+        host: database.stats.host,
         dialect: 'mysql',
         pool: {
           max: 5,
@@ -88,13 +88,13 @@ module.exports = {
     if(!this[SEQUELIZE_STATS]) {
       let database = this.config.database;
       this[SEQUELIZE_STATS] = new Sequelize(database.stats.name, database.stats.username, database.stats.password, {
-        host: 'localhost',
+        host: database.stats.host,
         dialect: 'mysql',
         pool: {
           max: 5,
           min: 0,
           acquire: 30000,
-          idle: 10000
+          idle: 10000,
         },
         dialectOptions: {
           charset: 'utf8mb4',
@@ -112,48 +112,4 @@ module.exports = {
     }
     return this[SEQUELIZE_STATS];
   },
-  get model() {
-    if(!this[MODEL]) {
-      this[MODEL] = {
-        author: author(this),
-        authorCommentRelation: authorCommentRelation(this),
-        authorNum: authorNum(this),
-        authorOutside: authorOutside(this),
-        circle: circle(this),
-        circleCommentRelation: circleCommentRelation(this),
-        circleNum: circleNum(this),
-        circleTagRelation: circleTagRelation(this),
-        comment: comment(this),
-        commentImage: commentImage(this),
-        commentNum: commentNum(this),
-        profession: profession(this),
-        professionSkillRelation: professionSkillRelation(this),
-        skill: skill(this),
-        tag: tag(this),
-        user: user(this),
-        userDelivery: userDelivery(this),
-        userAuthorRelation: userAuthorRelation(this),
-        userCommentRelation: userCommentRelation(this),
-        userUserRelation: userUserRelation(this),
-        userWorkRelation: userWorkRelation(this),
-        userIpRecord: userIpRecord(this),
-        userProfileRecord: userProfileRecord(this),
-        work: work(this),
-        workMedia: workMedia(this),
-        workImage: workImage(this),
-        workText: workText(this),
-        workType: workType(this),
-        works: works(this),
-        worksType: worksType(this),
-        worksTimeline: worksTimeline(this),
-        worksNum: worksNum(this),
-        workNum: workNum(this),
-        worksState: worksState(this),
-        worksWorkRelation: worksWorkRelation(this),
-        worksCommentRelation: worksCommentRelation(this),
-        worksRecommend: worksRecommend(this),
-      };
-    }
-    return this[MODEL];
-  }
 };

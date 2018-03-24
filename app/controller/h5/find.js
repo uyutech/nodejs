@@ -42,10 +42,6 @@ module.exports = app => {
           Skip: 0,
           Take: 10,
         }),
-        count: ctx.helper.postServiceJSON2('api/users/PostRecordUserIP', {
-          uid,
-          ip: ctx.request.header['x-real-ip'],
-        }),
       };
       if(res.hotWorkList.data.success) {
         hotWorkList = res.hotWorkList.data.data;
@@ -262,8 +258,8 @@ module.exports = app => {
           let res2 = yield ctx.helper.postServiceJSON2('/api/RecommendHomes/GetItemsByGroupID', {
             uid,
             GroupID: first.GroupID,
-            skip: 0,
-            take: 10,
+            skip: body.skip || 0,
+            take: body.take || 10,
           });
           if(res2.data.success) {
             itemList = res2.data.data;

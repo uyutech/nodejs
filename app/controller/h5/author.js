@@ -20,10 +20,7 @@ module.exports = app => {
       let hotPlayList = {};
       let hotPicList = {};
       let res = yield {
-        authorDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorDetails', {
-          uid,
-          AuthorID: authorID,
-        }),
+        authorDetail: ctx.service.author.index(authorID),
         homeDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorHomePage', {
           AuthorID: authorID,
         }),
@@ -54,8 +51,8 @@ module.exports = app => {
           AuthorID: authorID,
         }),
       };
-      if(res.authorDetail.data.success) {
-        authorDetail = res.authorDetail.data.data;
+      if(res.authorDetail) {
+        authorDetail = res.authorDetail;
       }
       if(res.homeDetail.data.success) {
         homeDetail = res.homeDetail.data.data;
@@ -80,6 +77,117 @@ module.exports = app => {
         hotPlayList,
         hotPicList,
       });
+    }
+    * newIndex(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let authorID = body.authorID;
+      if(!authorID) {
+        return;
+      }
+      let authorDetail = {};
+      let homeDetail = {};
+      let album = {};
+      let commentData = {};
+      let dynamic = {};
+      let type = [];
+      let res = yield {
+        authorDetail: ctx.service.author.index(authorID),
+        homeDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorHomePage', {
+          AuthorID: authorID,
+        }),
+        album: ctx.helper.postServiceJSON2('api/author/GetAuthoralbum_List', {
+          AuthorID: authorID,
+          Skip: 0,
+          Take: 10,
+        }),
+        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
+          uid,
+          AuthorID: authorID,
+          Skip: 0,
+          Take: 30,
+          SortType: 0,
+          MyComment: 0,
+          CurrentCount: 0,
+        }),
+        dynamic: ctx.helper.postServiceJSON2('api/author/GetAuthorDynamic', {
+          uid,
+          Skip: 0,
+          Take: 10,
+          AuthorID: authorID,
+        }),
+        type: ctx.helper.postServiceJSON2('api/author/GetItemsTypeByAuthorID', {
+          uid,
+          AuthorID: authorID,
+        }),
+      };
+      if(res.authorDetail) {
+        authorDetail = res.authorDetail;
+      }
+      if(res.homeDetail.data.success) {
+        homeDetail = res.homeDetail.data.data;
+      }
+      if(res.album.data.success) {
+        album = res.album.data.data;
+      }
+      if(res.commentData.data.success) {
+        commentData = res.commentData.data.data;
+      }
+      if(res.dynamic.data.success) {
+        dynamic = res.dynamic.data.data;
+      }
+      if(res.type.data.success) {
+        type = res.type.data.data;
+      }
+      let itemList = {};
+      if(type.length) {
+        let first = type[0];
+        let res = yield ctx.helper.postServiceJSON2('api/author/GetItemsByGroupID', {
+          uid,
+          AuthorID: authorID,
+          GroupID: first.GroupID,
+          skip: 0,
+          take: 10,
+        });
+        if(res.data.success) {
+          itemList = res.data.data;
+        }
+      }
+      ctx.body = ctx.helper.okJSON({
+        authorDetail,
+        homeDetail,
+        album,
+        commentData,
+        dynamic,
+        type,
+        itemList,
+      });
+    }
+    * itemList(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let res = yield ctx.helper.postServiceJSON2('api/author/GetItemsByGroupID', {
+        uid,
+        AuthorID: body.authorId,
+        GroupID: body.groupId,
+        skip: body.skip || 0,
+        take: body.take || 10,
+        sort: body.sort,
+        ItemsTypeID: body.typeId,
+      });
+      ctx.body = res.data;
+    }
+    * dynamic(ctx) {
+      let uid = ctx.session.uid;
+      let body = ctx.request.body;
+      let authorId = body.authorId;
+      let res = yield ctx.helper.postServiceJSON2('api/author/GetAuthorDynamic', {
+        uid,
+        AuthorID: authorId,
+        Skip: body.skip || 0,
+        Take: body.take || 10,
+      });
+      ctx.body = res.data;
     }
     * follow(ctx) {
       let uid = ctx.session.uid;
@@ -162,6 +270,7 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    // TODO: delete
     * maList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;
@@ -173,6 +282,7 @@ module.exports = app => {
       });
       ctx.body = res.data;
     }
+    // TODO: delete
     * picList(ctx) {
       let uid = ctx.session.uid;
       let body = ctx.request.body;

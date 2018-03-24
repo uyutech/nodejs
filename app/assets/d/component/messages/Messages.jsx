@@ -41,49 +41,36 @@ class Messages extends migi.Component {
     else if(type === 3 || type === 4) {
       url = '/post/' + item.urlID;
     }
-    if(item.Send_UserISAuthor) {
-      return <li class="author" id={ 'message_' + item.NotifyID }>
-        <div class="profile fn-clear">
-          <img class="pic" src={ util.autoSsl(util.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
-          <div class="txt">
-            <a href={ '/author/' + item.Send_UserID } class="name">{ item.Send_UserName }</a>
-            <a class="time" href={ url }>{ util.formatDate(item.Send_Time) }</a>
-          </div>
-        </div>
-        <div class="wrap">
-          <a class="quote" href={ url }>
-            <label>{ item.Action }：</label>
-            <span>{ item.Content }</span>
-          </a>
-          <pre class="con">{ item.Send_Content }</pre>
-          <ul class="btn fn-clear">
-            <li class="comment" type={ type } cid={ item.ParentID } rid={ item.RootID } name={ item.Send_UserName } tid={ item.urlID }>回复</li>
-          </ul>
-          <b class="arrow"/>
-        </div>
-      </li>;
-    }
-    return <li id={ 'message_' + item.NotifyID }>
+    let link = item.Send_UserISAuthor
+      ? ('/author.html?authorId=' + item.Send_UserID)
+      : ('/user.html?userID=' + item.Send_UserID);
+    return <li class={ item.Send_UserISAuthor ? 'author' : '' }
+               id={ 'message_' + item.NotifyID }>
       <div class="profile fn-clear">
-        <img class="pic" src={ util.autoSsl(util.img96_96_80(item.Send_UserHeadUrl || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
+        <img class="pic"
+             src={ util.autoSsl(util.img96_96_80(item.Send_UserHeadUrl || '/src/common/head.png')) }/>
         <div class="txt">
-          <a href={ '/user/' + item.Send_UserID } class="name">{ item.Send_UserName }</a>
-          <a class="time" href={ url }>{ util.formatDate(item.Send_Time) }</a>
+          <a href={ link }
+             class="name">{ item.Send_UserName }</a>
+          <a class="time"
+             href={ url }>{ util.formatDate(item.Send_Time) }</a>
         </div>
       </div>
       <div class="wrap">
-        <a class="quote" href={ url }>
+        <a class="quote"
+           href={ url }>
           <label>{ item.Action }：</label>
-          <span>{ item.Content }</span>
+          <span>{ this.props.ellipsis && item.Content && item.Content.length > 50 ? (item.Content.slice(0, 50) + '...') : item.Content }</span>
         </a>
         <pre class="con">{ item.Send_Content }</pre>
-        {
-          type === 0
-            ? ''
-            : <ul class="btn fn-clear">
-                <li class="comment" type={ type } cid={ item.ParentID } rid={ item.RootID } name={ item.Send_UserName } tid={ item.urlID }>回复</li>
-              </ul>
-        }
+        <ul class="btn fn-clear">
+          <li class="comment"
+              type={ type }
+              cid={ item.ParentID }
+              rid={ item.RootID }
+              name={ item.Send_UserName }
+              tid={ item.urlID }>回复</li>
+        </ul>
         <b class="arrow"/>
       </div>
     </li>;
