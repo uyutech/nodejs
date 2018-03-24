@@ -1,49 +1,42 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/3/24.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('works', {
+  return sequelizeCircling.define('image_album_work_relation', {
     id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      primaryKey: true,
-      allowNull: false,
-    },
-    title: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    sub_title: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    describe: {
-      type: Sequelize.TEXT,
-      allowNull: false,
-      defaultValue: '',
-    },
-    type: {
       type: Sequelize.SMALLINT.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
-    is_authorize: {
+    album_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+    },
+    works_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+    },
+    work_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+    },
+    is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
-    state: {
-      type: Sequelize.TINYINT.UNSIGNED,
+    weight: {
+      type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 1,
-      comment: '0删除，1已完成，2未完成公开，3未完成保密',
+      defaultValue: 0,
     },
-    cover: {
-      type: Sequelize.STRING,
+    describe: {
+      type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
     },
@@ -60,9 +53,10 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        fields: ['title'],
+        unique: true,
+        fields: ['album_id', 'work_id'],
       }
     ],
-    comment: '大作品基本信息',
+    comment: '大作品小作品关系',
   });
 };

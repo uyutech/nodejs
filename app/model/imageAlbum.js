@@ -6,7 +6,7 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('works', {
+  return sequelizeCircling.define('image_album', {
     id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
@@ -23,7 +23,7 @@ module.exports = app => {
       defaultValue: '',
     },
     describe: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
       defaultValue: '',
     },
@@ -35,7 +35,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,
-      comment: '0删除，1正常且完成，2未完成公开，3未完成保密',
+      comment: '0删除，1正常，2不公开',
     },
     cover: {
       type: Sequelize.STRING,

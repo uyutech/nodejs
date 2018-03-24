@@ -18,7 +18,7 @@ module.exports = app => {
       unique: true,
     },
     describe: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
       defaultValue: '',
     },

@@ -1,12 +1,12 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/3/24.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('works', {
+  return sequelizeCircling.define('music_album', {
     id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,

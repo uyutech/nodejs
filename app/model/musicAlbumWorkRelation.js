@@ -6,39 +6,37 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('works', {
+  return sequelizeCircling.define('music_album_work_relation', {
     id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+      type: Sequelize.SMALLINT.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
-    title: {
-      type: Sequelize.STRING(32),
+    album_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
     },
-    sub_title: {
-      type: Sequelize.STRING(32),
+    works_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
     },
-    describe: {
-      type: Sequelize.STRING,
+    work_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
     },
-    type: {
+    is_deleted: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    weight: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
     },
-    state: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 1,
-      comment: '0删除，1正常',
-    },
-    cover: {
-      type: Sequelize.STRING,
+    describe: {
+      type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
     },
@@ -55,9 +53,10 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        fields: ['title'],
+        unique: true,
+        fields: ['album_id', 'work_id'],
       }
     ],
-    comment: '大作品基本信息',
+    comment: '大作品小作品关系',
   });
 };

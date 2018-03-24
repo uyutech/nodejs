@@ -51,9 +51,6 @@ module.exports = app => {
       {
         unique: true,
         fields: ['works_id', 'work_id'],
-      },
-      {
-        fields: ['work_id'],
       }
     ],
     comment: '大作品小作品关系',
