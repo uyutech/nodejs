@@ -5,6 +5,7 @@ module.exports = app => {
   app.get('/home/qr', 'error.qr');
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
+  app.post('/oauth/session', 'oauth.session');
 
   app.get('/d', 'd.index.newIndex');
   app.get('/d/find', 'd.find.index');
@@ -249,6 +250,9 @@ module.exports = app => {
   app.post('/h5/post/addComment', app.middlewares.needLoginJson(), 'h5.post.addComment');
   app.post('/h5/post/likeComment', app.middlewares.needLoginJson(), 'h5.post.likeComment');
   app.post('/h5/post/delComment', app.middlewares.needLoginJson(), 'h5.post.delComment');
+  app.post('/h5/post/recommend', app.middlewares.needLoginJson(), 'h5.post.recommend');
+  app.post('/h5/post/unRecommend', app.middlewares.needLoginJson(), 'h5.post.unRecommend');
+  app.post('/h5/post/clean', app.middlewares.needLoginJson(), 'h5.post.clean');
 
   app.post('/h5/user/index', 'h5.user.index');
 

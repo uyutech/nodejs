@@ -142,6 +142,34 @@ class Controller extends egg.Controller {
     });
     ctx.body = res.data;
   }
+  * recommend(ctx) {
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddRecommend', {
+      uid,
+      CommentID: body.postId,
+      recommend: body.value,
+    });
+    ctx.body = res.data;
+  }
+  * unRecommend(ctx) {
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DecreaseRecommend', {
+      uid,
+      CommentID: body.postId,
+    });
+    ctx.body = res.data;
+  }
+  * clean(ctx) {
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/ClearComment', {
+      uid,
+      CommentID: body.postId,
+    });
+    ctx.body = res.data;
+  }
 }
 
 module.exports = Controller;

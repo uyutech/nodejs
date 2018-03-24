@@ -141,6 +141,7 @@ let helper = {
         <ul>
           <li><a href="/"
                  class="${pageId === 0 ? 'cur' : ''}">首页</a></li>
+          <li><a href="http://ugc.circling.cc"/>上传作品</li></li>
           <li>
           ${session.uid
               ? (session.authorId && session.isPublic ? session.authorName : session.uname)

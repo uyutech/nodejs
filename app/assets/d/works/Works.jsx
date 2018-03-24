@@ -62,7 +62,7 @@ class Works extends migi.Component {
     let self = this;
     let workList = [];
     let authorList = self.props.worksDetail.Works_Author || [];
-    if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+    if([5, 6, 18].indexOf(self.worksType) > -1) {
       works.forEach(function(item) {
         let type = itemTemplate.workType(item.ItemType).bigType;
         if(type === 'audio') {
@@ -86,7 +86,7 @@ class Works extends migi.Component {
       self.workList = workList;
       return;
     }
-    else if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
+    else if([11, 12].indexOf(self.worksType) > -1) {
       return;
     }
     let workHash = {};
@@ -174,7 +174,7 @@ class Works extends migi.Component {
   }
   render() {
     let self = this;
-    if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
+    if([5, 6, 18].indexOf(self.worksType) > -1) {
       return <div class={ 'works fn-clear t' + self.worksType }>
         <Title ref="title" worksType={ self.worksType }
                detail={ self.props.worksDetail }/>
@@ -224,7 +224,7 @@ class Works extends migi.Component {
         </div>
       </div>;
     }
-    if(self.worksType === WorksTypeEnum.TYPE.photoAlbum) {
+    if([11, 12].indexOf(self.worksType) > -1) {
       return <div class={ 'works fn-clear t' + self.worksType }>
         <Title ref="title" worksType={ self.worksType }
                detail={ self.props.worksDetail }/>

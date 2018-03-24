@@ -23,7 +23,9 @@ module.exports = app => {
       let lastUpdateHeadTime;
       let coins = {};
       let res = yield {
-        userInfo: ctx.service.user.index(uid),
+        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
+          uid,
+        }),
         oauthInfo: ctx.helper.postServiceJSON2('api/users/GetUserOauthInfo', {
           uid,
         }),
@@ -40,8 +42,8 @@ module.exports = app => {
           uid,
         }),
       };
-      if(res.userInfo) {
-        userInfo = res.userInfo;
+      if(res.userInfo.data.success) {
+        userInfo = res.userInfo.data.data;
       }
       if(res.oauthInfo.data.success) {
         oauthInfo = res.oauthInfo.data.data;
@@ -478,13 +480,13 @@ module.exports = app => {
         else {
           lastUpdateNickNameTime = 0;
         }
-        let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
-        if(updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
-          return ctx.body = {
-            success: false,
-            message: '昵称一天只能修改一次哦~',
-          };
-        }
+        // let updateNickNameTimeDiff = now - lastUpdateNickNameTime;
+        // if(updateNickNameTimeDiff < 24 * 60 * 60 * 1000) {
+        //   return ctx.body = {
+        //     success: false,
+        //     message: '昵称一天只能修改一次哦~',
+        //   };
+        // }
         if(nickName.indexOf('转圈') === 0) {
           return ctx.body = {
             success: false,

@@ -105,6 +105,9 @@ module.exports = appInfo => {
         if(ctx.request.path.startsWith('/mns')) {
           return true;
         }
+        if(ctx.request.path.startsWith('/oauth/session')) {
+          return true;
+        }
         return false;
       },
     },

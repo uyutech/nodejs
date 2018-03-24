@@ -21,6 +21,7 @@
     "mysql2": "^1.5.2",
     "sequelize": "^4.37.1",
     "spark-md5": "~3.0.0",
+    "utility": "^1.13.1",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
