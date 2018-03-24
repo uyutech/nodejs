@@ -13,10 +13,6 @@ module.exports = app => {
       autoIncrement: true,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-    },
     name: {
       type: Sequelize.STRING(32),
       allowNull: false,
@@ -27,11 +23,6 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
     update_time: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -41,7 +32,7 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['type'],
+        fields: ['name'],
       }
     ],
     comment: '大作品状态',

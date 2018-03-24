@@ -1,27 +1,30 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/3/24.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('work_type', {
+  return sequelizeCircling.define('circle_top', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    name: {
-      type: Sequelize.STRING(32),
+    circle_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
+    comment_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: false,
+    },
+    weight: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
     },
     update_time: {
       type: Sequelize.DATE,
@@ -32,9 +35,9 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['name'],
+        fields: ['circle_id', 'comment_id'],
       }
     ],
-    comment: '小作品类型',
+    comment: '圈子置顶帖子',
   });
 };

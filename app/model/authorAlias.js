@@ -1,27 +1,30 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/3/24.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('work_type', {
+  return sequelizeCircling.define('author_alias', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    name: {
+    author_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+    },
+    alias: {
       type: Sequelize.STRING(32),
       allowNull: false,
-      defaultValue: '',
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
+    create_time: {
+      type: Sequelize.DATE,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: Sequelize.NOW,
     },
     update_time: {
       type: Sequelize.DATE,
@@ -32,9 +35,9 @@ module.exports = app => {
     indexes: [
       {
         unique: true,
-        fields: ['name'],
+        fields: ['author_id', 'alias'],
       }
     ],
-    comment: '小作品类型',
+    comment: '作者别名信息',
   });
 };

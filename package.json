@@ -19,7 +19,7 @@
     "migi-es6-shim": "~0.34.1",
     "moment": "~2.19.4",
     "mysql2": "^1.5.2",
-    "sequelize": "^4.37.1",
+    "sequelize": "^4.37.4",
     "spark-md5": "~3.0.0",
     "utility": "^1.13.1",
     "uuid": "^3.2.1"
@@ -44,6 +44,7 @@
     "less": "^2.7.2",
     "less-loader": "^3.0.0",
     "migi-loader": "^4.0.0",
+    "mssql": "^4.1.0",
     "url-loader": "^0.5.9",
     "webpack": "^3.7.1",
     "webstorm-disable-index": "^1.2.0"

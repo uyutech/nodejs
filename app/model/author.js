@@ -46,10 +46,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
+    state: {
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: 0,
+      comment: '0正常，1删除',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -64,6 +65,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        unique: true,
         fields: ['name'],
       }
     ],

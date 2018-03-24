@@ -20,7 +20,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0浏览数，1粉丝数，2热度',
+      comment: '0浏览数，1成员数，2热度，3画圈数',
     },
     num: {
       type: Sequelize.INTEGER.UNSIGNED,

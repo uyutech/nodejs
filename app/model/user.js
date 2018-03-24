@@ -12,6 +12,11 @@ module.exports = app => {
       primaryKey: true,
       allowNull: false,
     },
+    current_author: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
@@ -22,9 +27,9 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0初始化，1披马甲改名字，2-9填名字，10作者公开或选关注，11选关注作者，99普通完成，100作者完成',
+      comment: '0初始化选是否公开，1点击披马甲去改名字，10改用户名字，11点击公开后或者披马甲改完名字后去选关注，99普通完成，100作者完成',
     },
-    name: {
+    nickname: {
       type: Sequelize.STRING(32),
       allowNull: false,
     },
@@ -67,7 +72,8 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        fields: ['name'],
+        unique: true,
+        fields: ['nickname'],
       }
     ],
     comment: '用户基本信息',

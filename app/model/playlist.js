@@ -1,12 +1,12 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/3/24.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('work', {
+  return sequelizeCircling.define('works', {
     id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
@@ -17,22 +17,30 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    class: {
-      type: Sequelize.TINYINT.UNSIGNED,
+    sub_title: {
+      type: Sequelize.STRING(32),
       allowNull: false,
-      defaultValue: 0,
-      comment: '0未知，1视频，2音频，3图片，4文字',
+      defaultValue: '',
+    },
+    describe: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
     },
     type: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 0,
     },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,
-      comment: '0删除，1正常',
+      comment: '0删除，1正常且完成，2未完成公开，3未完成保密',
+    },
+    cover: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -50,6 +58,6 @@ module.exports = app => {
         fields: ['title'],
       }
     ],
-    comment: '小作品基本信息',
+    comment: '大作品基本信息',
   });
 };

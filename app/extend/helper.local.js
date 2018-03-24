@@ -7,7 +7,7 @@
 let helper = {
   async postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {
-      url = 'http://192.168.0.3/' + url.replace(/^\//, '');
+      url = 'http://192.168.0.103/' + url.replace(/^\//, '');
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
     url += 'traceID=' + this.ctx.traceID || '';
@@ -49,7 +49,7 @@ let helper = {
   },
   * postServiceJSON2(url, data) {
     if(url.indexOf('//') === -1) {
-      url = 'http://192.168.0.3/' + url.replace(/^\//, '');
+      url = 'http://192.168.0.103/' + url.replace(/^\//, '');
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
     url += 'traceID=' + this.ctx.traceID || '';

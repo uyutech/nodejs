@@ -27,14 +27,15 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    class: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0作品集，1音乐列表，2相册',
+    },
     type: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
-    },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
     },
     is_authorize: {
       type: Sequelize.BOOLEAN,
@@ -45,18 +46,12 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,
-      comment: '0取消，1正常，2未完成公开，3未完成保密',
+      comment: '0删除，1正常且完成，2未完成公开，3未完成保密',
     },
     cover: {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
-    },
-    template: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-      comment: '',
     },
     create_time: {
       type: Sequelize.DATE,

@@ -30,6 +30,7 @@ module.exports = app => {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
+      comment: '0百度，1bili，25sing，3huaban，4lofter，5poco，6网易，7微博，8zcool',
     },
     create_time: {
       type: Sequelize.DATE,

@@ -24,12 +24,18 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0关联作者，1关注作者',
+      comment: '0主账号，1成员，2编辑',
     },
     is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    settle: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0默认，1公开入住，2马甲入住，3放弃入住',
     },
     create_time: {
       type: Sequelize.DATE,

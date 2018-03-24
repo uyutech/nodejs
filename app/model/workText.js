@@ -7,7 +7,7 @@
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('work_text', {
-    work_id: {
+    id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
       allowNull: false,
