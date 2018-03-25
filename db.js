@@ -40,6 +40,7 @@ const Circle = require('./app/model/circle')({ sequelizeCircling: sequelize, Seq
 const CircleTop = require('./app/model/circleTop')({ sequelizeCircling: sequelize, Sequelize });
 const CircleNum = require('./app/model/circleNum')({ sequelizeCircling: sequelize, Sequelize });
 const Tag = require('./app/model/tag')({ sequelizeCircling: sequelize, Sequelize });
+const TagCommentRelation = require('./app/model/tagCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTagRelation = require('./app/model/circleTagRelation')({ sequelizeCircling: sequelize, Sequelize });
 const User = require('./app/model/user')({ sequelizeCircling: sequelize, Sequelize });
 const UserAuthorRelation = require('./app/model/userAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
@@ -60,6 +61,10 @@ const WorksWorkRelation = require('./app/model/worksWorkRelation')({ sequelizeCi
 const MusicAlbumWorkRelation = require('./app/model/musicAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbumWorkRelation = require('./app/model/imageAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Comment = require('./app/model/comment')({ sequelizeCircling: sequelize, Sequelize });
+const CommentNum = require('./app/model/commentNum')({ sequelizeCircling: sequelize, Sequelize });
+const AuthorCommentRelation = require('./app/model/authorCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
+const WorksCommentRelation = require('./app/model/worksCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
+const CircleCommentRelation = require('./app/model/circleCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -90,7 +95,7 @@ async function dealAuthor(pool) {
   await AuthorAlias.sync();
   await AuthorNum.sync();
   await AuthorOutside.sync();
-  let last = 2017000000005764;
+  let last = 2017000000005795;
   let result = await pool.request().query(`SELECT * FROM dbo.Authors_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -115,24 +120,18 @@ async function dealAuthor(pool) {
         update_time: item.CreateTime,
       });
     }
-    await AuthorNum.create({
-      author_id: item.ID,
-      type: 0,
-      num: item.FansNumber,
-      update_time: item.CreateTime,
-    });
-    await AuthorNum.create({
-      author_id: item.ID,
-      type: 1,
-      num: item.CommentCountRaw,
-      update_time: item.CreateTime,
-    });
-    await AuthorNum.create({
-      author_id: item.ID,
-      type: 2,
-      num: item.Popular,
-      update_time: item.CreateTime,
-    });
+    // await AuthorNum.create({
+    //   author_id: item.ID,
+    //   type: 0,
+    //   num: item.FansNumber,
+    //   update_time: item.CreateTime,
+    // });
+    // await AuthorNum.create({
+    //   author_id: item.ID,
+    //   type: 1,
+    //   num: item.CommentCountRaw,
+    //   update_time: item.CreateTime,
+    // });
     if(item.BaiduUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
@@ -233,6 +232,7 @@ async function dealCircle(pool) {
   await CircleNum.sync();
   await Tag.sync();
   await CircleTagRelation.sync();
+  await TagCommentRelation.sync();
   let last = 2019000000003990;
   let result = await pool.request().query(`SELECT * FROM dbo.Circling_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -291,6 +291,7 @@ async function dealCircle(pool) {
     let item = result.recordset[i];
     let res = await Tag.create({
       name: item.TagName,
+      temp_id: item.ID,
       is_deleted: false,
       create_time: item.CreateTime,
     });
@@ -304,8 +305,21 @@ async function dealCircle(pool) {
       circle_id: item.CirclingID,
       tag_id: tagOldIdHash[item.TagID],
       is_deleted: !!item.ISDel,
-      create_time: item.CreateTime,
       type: item.State || 0,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+  }
+  last = 291033;
+  result = await pool.request().query(`SELECT * FROM dbo.Concern_Tag_Comment WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await TagCommentRelation.create({
+      tag_id: tagOldIdHash[item.TagID],
+      comment_id: item.CommentID,
+      is_deleted: !!item.ISDel,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
     });
   }
 }
@@ -673,29 +687,173 @@ async function dealWorksWork(pool) {
 }
 
 async function dealComment(pool) {
-  console.log('------- dealComment --------');return;
-  let authorCommentHash = {};
-  let worksCommentHash = {};
+  console.log('------- dealComment --------');
+  await AuthorCommentRelation.sync();
+  await WorksCommentRelation.sync();
+  await CircleCommentRelation.sync();
   await Comment.sync();
+  await CommentNum.sync();
+  let authorTempHash = {};
+  let worksTempHash = {};
   let last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    // 根留言
+    // 作者根留言
     if(item.RootID === -1) {
-      authorCommentHash[item.ID] = item.CurrentAuthorID;
-      break;
+      await Comment.create({
+        id: item.ID,
+        user_id: item.UID,
+        author_id: item.CurrentAuthorID || 0,
+        is_author: !!item.CurrentAuthorID,
+        content: item.Content,
+        is_deleted: !!item.ISDel,
+        state: item.suggestion === 'pass' ? 3 : 0,
+        parent_id: 0,
+        root_id: 0,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 0,
+        num: item.CommentCountRaw,
+        update_time: item.CreateTime,
+      });
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 1,
+        num: item.ZanCount,
+        update_time: item.CreateTime,
+      });
+      if(authorTempHash[item.ParentID]) {
+        await AuthorCommentRelation.create({
+          author_id: authorTempHash[item.ParentID],
+          comment_id: item.ID,
+          is_deleted: !!item.ISDel,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
+      }
+      else {
+        console.error(item);
+        break;
+      }
     }
     // 作者主页虚拟留言
     else if(item.RootID === -2) {
-      authorCommentHash[item.ID] = item.CurrentAuthorID;
-      break;
+      authorTempHash[item.ID] = item.CurrentAuthorID;
+      await Comment.create({
+        id: item.ID,
+        user_id: 0,
+        author_id: 0,
+        is_author: false,
+        content: item.CurrentAuthorID,
+        state: 0,
+        parent_id: 0,
+        root_id: 0,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
     }
     // 画圈贴
-    else if(item.RootID === -3) {}
+    else if(item.RootID === -3) {
+
+    }
     // 作品主页虚拟留言
     else if(item.RootID === -4) {
-      worksCommentHash[item.ID] = item.Content;
+      worksTempHash[item.ID] = parseInt(item.Content);
+      await Comment.create({
+        id: item.ID,
+        user_id: 0,
+        author_id: 0,
+        is_author: false,
+        content: item.Content,
+        state: 0,
+        parent_id: 0,
+        root_id: 0,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+    // 普通回复和作品根留言
+    else {
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 0,
+        num: item.CommentCountRaw,
+        update_time: item.CreateTime,
+      });
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 1,
+        num: item.ZanCount,
+        update_time: item.CreateTime,
+      });
+      if(worksTempHash[item.ParentID]) {
+        await Comment.create({
+          id: item.ID,
+          user_id: item.UID,
+          author_id: item.CurrentAuthorID || 0,
+          is_author: !!item.CurrentAuthorID,
+          content: item.Content,
+          is_deleted: !!item.ISDel,
+          state: item.suggestion === 'pass' ? 3 : 0,
+          parent_id: 0,
+          root_id: 0,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
+        let works = await Works.findOne({
+          attributes: ['type'],
+          where: {
+            id: worksTempHash[item.ParentID],
+          },
+        });
+        let type = works.type;
+        if([5, 6, 18].indexOf(type) > -1) {
+          await WorksCommentRelation.create({
+            works_id: worksTempHash[item.ParentID].replace(/^2015/, '2014'),
+            comment_id: item.ID,
+            is_deleted: !!item.ISDel,
+            create_time: item.CreateTime,
+            update_time: item.CreateTime,
+          });
+        }
+        else if([11, 12].indexOf(type) > -1) {
+          await WorksCommentRelation.create({
+            works_id: worksTempHash[item.ParentID].replace(/^2015/, '2013'),
+            comment_id: item.ID,
+            is_deleted: !!item.ISDel,
+            create_time: item.CreateTime,
+            update_time: item.CreateTime,
+          });
+        }
+        else {
+          await WorksCommentRelation.create({
+            works_id: worksTempHash[item.ParentID],
+            comment_id: item.ID,
+            is_deleted: !!item.ISDel,
+            create_time: item.CreateTime,
+            update_time: item.CreateTime,
+          });
+        }
+      }
+      else {
+        await Comment.create({
+          id: item.ID,
+          user_id: item.UID,
+          author_id: item.CurrentAuthorID || 0,
+          is_author: !!item.CurrentAuthorID,
+          content: item.Content,
+          is_deleted: !!item.ISDel,
+          state: item.suggestion === 'pass' ? 3 : 0,
+          parent_id: item.ParentID,
+          root_id: item.RootID,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
+      }
     }
   }
 }

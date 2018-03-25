@@ -18,6 +18,10 @@ module.exports = app => {
       allowNull: false,
       unique: true,
     },
+    temp_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+    },
     is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,

@@ -30,11 +30,16 @@ module.exports = app => {
       type: Sequelize.TEXT,
       allowNull: false,
     },
+    is_deleted: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0未知，1删除，2通过，3违规，4审核中',
+      comment: '0未知，1审核中，2违规，3通过',
     },
     parent_id: {
       type: Sequelize.INTEGER.UNSIGNED,
@@ -67,9 +72,6 @@ module.exports = app => {
       },
       {
         fields: ['root_id'],
-      },
-      {
-        fields: ['is_deleted'],
       }
     ],
     comment: '评论基本信息',

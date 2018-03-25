@@ -10,6 +10,7 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
     author_id: {
