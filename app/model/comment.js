@@ -30,10 +30,11 @@ module.exports = app => {
       type: Sequelize.TEXT,
       allowNull: false,
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
+    state: {
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: 0,
+      comment: '0未知，1删除，2通过，3违规，4审核中',
     },
     parent_id: {
       type: Sequelize.INTEGER.UNSIGNED,

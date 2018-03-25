@@ -10,10 +10,11 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
     name: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING,
       allowNull: false,
       unique: true,
     },
@@ -23,11 +24,6 @@ module.exports = app => {
       defaultValue: false,
     },
     create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,

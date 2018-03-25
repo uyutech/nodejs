@@ -39,6 +39,8 @@ const AuthorOutside = require('./app/model/authorOutside')({ sequelizeCircling: 
 const Circle = require('./app/model/circle')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTop = require('./app/model/circleTop')({ sequelizeCircling: sequelize, Sequelize });
 const CircleNum = require('./app/model/circleNum')({ sequelizeCircling: sequelize, Sequelize });
+const Tag = require('./app/model/tag')({ sequelizeCircling: sequelize, Sequelize });
+const CircleTagRelation = require('./app/model/circleTagRelation')({ sequelizeCircling: sequelize, Sequelize });
 const User = require('./app/model/user')({ sequelizeCircling: sequelize, Sequelize });
 const UserAuthorRelation = require('./app/model/userAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Work = require('./app/model/work')({ sequelizeCircling: sequelize, Sequelize });
@@ -57,6 +59,7 @@ const WorksTimeline = require('./app/model/worksTimeline')({ sequelizeCircling: 
 const WorksWorkRelation = require('./app/model/worksWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const MusicAlbumWorkRelation = require('./app/model/musicAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbumWorkRelation = require('./app/model/imageAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
+const Comment = require('./app/model/comment')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -74,6 +77,7 @@ const ImageAlbumWorkRelation = require('./app/model/imageAlbumWorkRelation')({ s
     await dealWork(pool);
     await dealWorks(pool);
     await dealWorksWork(pool);
+    await dealComment(pool);
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -227,6 +231,8 @@ async function dealCircle(pool) {
   await Circle.sync();
   await CircleTop.sync();
   await CircleNum.sync();
+  await Tag.sync();
+  await CircleTagRelation.sync();
   let last = 2019000000003990;
   let result = await pool.request().query(`SELECT * FROM dbo.Circling_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -276,6 +282,30 @@ async function dealCircle(pool) {
       type: 3,
       num: item.CommentCountRaw,
       update_time: item.CreateTime,
+    });
+  }
+  let tagOldIdHash = {};
+  last = 2021000000008340;
+  result = await pool.request().query(`SELECT * FROM dbo.Tag_Info WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let res = await Tag.create({
+      name: item.TagName,
+      is_deleted: false,
+      create_time: item.CreateTime,
+    });
+    tagOldIdHash[item.ID] = res.dataValues.id;
+  }
+  last = 977;
+  result = await pool.request().query(`SELECT * FROM dbo.Concern_Cirling_tag WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await CircleTagRelation.create({
+      circle_id: item.CirclingID,
+      tag_id: tagOldIdHash[item.TagID],
+      is_deleted: !!item.ISDel,
+      create_time: item.CreateTime,
+      type: item.State || 0,
     });
   }
 }
@@ -593,7 +623,7 @@ async function dealWorksWork(pool) {
   await WorksWorkRelation.sync();
   await MusicAlbumWorkRelation.sync();
   await ImageAlbumWorkRelation.sync();
-  let last = 0;
+  let last = 1685;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_WorksItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -638,6 +668,34 @@ async function dealWorksWork(pool) {
           update_time: item.CreateTime,
         });
       }
+    }
+  }
+}
+
+async function dealComment(pool) {
+  console.log('------- dealComment --------');return;
+  let authorCommentHash = {};
+  let worksCommentHash = {};
+  await Comment.sync();
+  let last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    // 根留言
+    if(item.RootID === -1) {
+      authorCommentHash[item.ID] = item.CurrentAuthorID;
+      break;
+    }
+    // 作者主页虚拟留言
+    else if(item.RootID === -2) {
+      authorCommentHash[item.ID] = item.CurrentAuthorID;
+      break;
+    }
+    // 画圈贴
+    else if(item.RootID === -3) {}
+    // 作品主页虚拟留言
+    else if(item.RootID === -4) {
+      worksCommentHash[item.ID] = item.Content;
     }
   }
 }
