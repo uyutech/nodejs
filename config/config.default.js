@@ -15,7 +15,7 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['report', 'd2m', 'm2d', 'message', 'jsConfig', 'crossDomain'];
+  config.middleware = ['report', 'd2m', 'm2d', 'jsConfig', 'crossDomain'];
   config.d2m = {
     match: '/d',
   };
