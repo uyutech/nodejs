@@ -34,7 +34,7 @@ class Service extends egg.Service {
     AND works.state>0
     AND works.type=works_type.id`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res && res.length) {
+    if(res.length) {
       res = res[0];
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
@@ -52,9 +52,10 @@ class Service extends egg.Service {
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
+      res = JSON.parse(res);
     }
-    let sql = `SELECT
+    else {
+      let sql = `SELECT
       works_work_relation.work_id AS workId,
       works_work_relation.describe,
       work.title AS workTitle,
@@ -67,14 +68,15 @@ class Service extends egg.Service {
     AND works_work_relation.work_id=work.id
     AND work.state>0
     AND work.type=work_type.id`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res && res.length) {
+      res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    if(res.length) {
       let workList = await service.work.infoList(res);
       res.forEach(function(item, i) {
         Object.assign(item, workList[i]);
       });
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 }
