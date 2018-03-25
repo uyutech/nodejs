@@ -22,6 +22,12 @@ module.exports = appInfo => {
         password: '87351984@',
         host: 'localhost',
       },
+      circling: {
+        name: 'circling',
+        username: 'root',
+        password: '87351984@',
+        host: 'localhost',
+      },
     },
   };
 };

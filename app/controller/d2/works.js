@@ -7,26 +7,34 @@
 const egg = require('egg');
 
 class Controller extends egg.Controller {
-  async index(ctx) {
-    const model = ctx.model;
+  async index() {
+    const { ctx, service } = this;
     let uid = ctx.session.uid;
     let worksId = ctx.params.worksId;
     let workId = ctx.params.workId;
     if(!worksId) {
       return;
     }
-    let [worksInfo, worksWorkList, worksCommentData] = await Promise.all([
-      ctx.service.model.worksInfo(worksId),
-      ctx.service.model.worksWorkList(worksId),
-      ctx.service.model.worksCommentData(worksId)
+    let [worksInfo, worksChildren] = await Promise.all([
+      service.works.info(worksId),
+      service.works.children(worksId)
     ]);
-    await ctx.render('dworks2', {
-      worksId,
-      workId,
+    ctx.body = {
       worksInfo,
-      worksWorkList,
-      worksCommentData,
-    });
+      worksChildren,
+    };
+    // let [worksInfo, worksWorkList, worksCommentData] = await Promise.all([
+    //   ctx.service.model.worksInfo(worksId),
+    //   ctx.service.model.worksWorkList(worksId),
+    //   ctx.service.model.worksCommentData(worksId)
+    // ]);
+    // await ctx.render('dworks2', {
+    //   worksId,
+    //   workId,
+    //   worksInfo,
+    //   worksWorkList,
+    //   worksCommentData,
+    // });
   }
 }
 

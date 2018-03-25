@@ -5,29 +5,69 @@
 'use strict';
 
 const egg = require('egg');
+const Sequelize = require('sequelize');
 
 class Service extends egg.Service {
-  async index(id, sid) {
+  async info(id) {
     if(!id) {
       return;
     }
-    let cacheKey = 'worksData_' + id + (sid ? ('_' + sid) : '');
-    let res = await this.app.redis.get(cacheKey);
+    const { app } = this;
+    let cacheKey = 'worksInfo_' + id;
+    let res = await app.redis.get(cacheKey);
     if(res) {
+      app.redis.expire(cacheKey, 120);
       return JSON.parse(res);
     }
-    res = await this.ctx.helper.postServiceJSON('api/works/GetWorkDetails', {
-      uid: this.ctx.session.uid,
-      WorksID: id,
-      ItemsID: sid,
-    });
-    if(res.data && res.data.success) {
-      res = res.data.data;
+    let sql = `SELECT
+      works.id AS worksId,
+      works.title AS worksTitle,
+      works.sub_title AS worksSubTitle,
+      works.state AS worksState,
+      works.cover AS worksCover,
+      works.type AS worksType,
+      works_type.name AS worksTypeName
+    FROM works, works_type
+    WHERE works.id=${id}
+    AND works.is_authorize=true
+    AND works.state>0
+    AND works.type=works_type.id`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res && res.length) {
+      res = res[0];
+      app.redis.setex(cacheKey, 120, JSON.stringify(res));
     }
-    else {
-      res = null;
+    return res;
+  }
+  async children(id) {
+    if(!id) {
+      return;
     }
-    await this.ctx.app.redis.setex(cacheKey, 180, JSON.stringify(res));
+    const { app } = this;
+    let cacheKey = 'worksList_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, 120);
+      return JSON.parse(res);
+    }
+    let sql = `SELECT
+      works.id AS worksId,
+      works.title AS worksTitle,
+      works.sub_title AS worksSubTitle,
+      works.state AS worksState,
+      works.cover AS worksCover,
+      works.type AS worksType,
+      works_type.name AS worksTypeName
+    FROM works, works_type
+    WHERE works.id=${id}
+    AND works.is_authorize=true
+    AND works.state>0
+    AND works.type=works_type.id`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res && res.length) {
+      res = res[0];
+      app.redis.setex(cacheKey, 120, JSON.stringify(res));
+    }
     return res;
   }
 }

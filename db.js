@@ -579,18 +579,20 @@ async function dealWorks(pool) {
         update_time: item.CreateTime,
       });
     }
-    await Works.create({
-      id: item.ID,
-      title: item.Title || '',
-      sub_title: item.sub_Title || '',
-      describe: item.Describe || '',
-      type: item.WorksType,
-      is_authorize: true,
-      state: item.WorkState || 1,
-      cover: item.cover_Pic || '',
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
-    });
+    else {
+      await Works.create({
+        id: item.ID,
+        title: item.Title || '',
+        sub_title: item.sub_Title || '',
+        describe: item.Describe || '',
+        type: item.WorksType,
+        is_authorize: true,
+        state: item.WorkState || 1,
+        cover: item.cover_Pic || '',
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
     await WorksNum.create({
       works_id: item.ID,
       type: 0,

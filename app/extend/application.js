@@ -111,4 +111,12 @@ module.exports = {
     }
     return this[SEQUELIZE_STATS];
   },
+  get model() {
+    if(!this[MODEL]) {
+      this[MODEL] = {
+        works: works(this),
+      };
+    }
+    return this[MODEL];
+  }
 };
