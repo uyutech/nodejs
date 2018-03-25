@@ -47,6 +47,9 @@ module.exports = app => {
       {
         unique: true,
         fields: ['circle_id', 'tag_id'],
+      },
+      {
+        fields: ['tag_id'],
       }
     ],
     comment: '圈子和标签关联信息',

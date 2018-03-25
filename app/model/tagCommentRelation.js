@@ -41,6 +41,9 @@ module.exports = app => {
       {
         unique: true,
         fields: ['tag_id', 'comment_id'],
+      },
+      {
+        fields: ['comment_id'],
       }
     ],
     comment: '标签留言关联信息',

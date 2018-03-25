@@ -695,7 +695,7 @@ async function dealComment(pool) {
   await CommentNum.sync();
   let authorTempHash = {};
   let worksTempHash = {};
-  let last = 0;
+  let last = 440041;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -758,7 +758,97 @@ async function dealComment(pool) {
     }
     // 画圈贴
     else if(item.RootID === -3) {
-
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 0,
+        num: item.CommentCountRaw,
+        update_time: item.CreateTime,
+      });
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 1,
+        num: item.ZanCount,
+        update_time: item.CreateTime,
+      });
+      await Comment.create({
+        id: item.ID,
+        user_id: item.UID,
+        author_id: item.CurrentAuthorID || 0,
+        is_author: !!item.CurrentAuthorID,
+        content: item.Content,
+        is_deleted: !!item.ISDel,
+        state: item.suggestion === 'pass' ? 3 : 0,
+        parent_id: 0,
+        root_id: 0,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+      let tagComment = await TagCommentRelation.findAll({
+        attributes: ['tag_id'],
+        where: {
+          comment_id: item.ID,
+        },
+      });
+      let circleIdHash = {};
+      if(tagComment && tagComment.length) {
+        let ids = tagComment.map(function(item) {
+          return item.dataValues.tag_id;
+        });
+        let circleTag = await CircleTagRelation.findAll({
+          attributes: ['circle_id'],
+          where: {
+            tag_id: ids,
+          },
+        });
+        if(circleTag && circleTag.length) {
+          ids = [];
+          let hash = {};
+          circleTag.forEach(function(item) {
+            let id = item.dataValues.circle_id;
+            if(!hash[id]) {
+              hash[id] = true;
+              ids.push(id);
+            }
+          });
+          for(let j = 0; j < ids.length; j++) {
+            let id = ids[j];
+            circleIdHash[id] = true;
+            await CircleCommentRelation.create({
+              circle_id: id,
+              comment_id: item.ID,
+              type: 1,
+              is_deleted: !!item.ISDel,
+              create_time: item.CreateTime,
+              update_time: item.CreateTime,
+            });
+          }
+        }
+      }
+      if(item.CirclingIDList) {
+        let list = item.CirclingIDList.split(',');
+        for(let j = 0; j < list.length; j++) {
+          if(circleIdHash[list[j]]) {
+            await CircleCommentRelation.update({
+              type: 0,
+            }, {
+              where: {
+                circle_id: circleIdHash[list[j]],
+                comment_id: item.ID,
+              },
+            });
+          }
+          else {
+            await CircleCommentRelation.create({
+              circle_id: list[j],
+              comment_id: item.ID,
+              type: 0,
+              is_deleted: !!item.ISDel,
+              create_time: item.CreateTime,
+              update_time: item.CreateTime,
+            });
+          }
+        }
+      }
     }
     // 作品主页虚拟留言
     else if(item.RootID === -4) {
@@ -810,10 +900,13 @@ async function dealComment(pool) {
             id: worksTempHash[item.ParentID],
           },
         });
+        if(!works) {
+          continue;
+        }
         let type = works.type;
         if([5, 6, 18].indexOf(type) > -1) {
           await WorksCommentRelation.create({
-            works_id: worksTempHash[item.ParentID].replace(/^2015/, '2014'),
+            works_id: (worksTempHash[item.ParentID] + '').replace(/^2015/, '2014'),
             comment_id: item.ID,
             is_deleted: !!item.ISDel,
             create_time: item.CreateTime,
@@ -822,7 +915,7 @@ async function dealComment(pool) {
         }
         else if([11, 12].indexOf(type) > -1) {
           await WorksCommentRelation.create({
-            works_id: worksTempHash[item.ParentID].replace(/^2015/, '2013'),
+            works_id: (worksTempHash[item.ParentID] + '').replace(/^2015/, '2013'),
             comment_id: item.ID,
             is_deleted: !!item.ISDel,
             create_time: item.CreateTime,

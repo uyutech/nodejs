@@ -21,6 +21,12 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0直接关联，1间接（比如通过标签）关联',
+    },
     is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
@@ -41,6 +47,9 @@ module.exports = app => {
       {
         unique: true,
         fields: ['circle_id', 'comment_id'],
+      },
+      {
+        fields: ['comment_id', 'type'],
       }
     ],
     comment: '圈子留言关联信息',
