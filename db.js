@@ -83,6 +83,7 @@ const CircleCommentRelation = require('./app/model/circleCommentRelation')({ seq
     await dealWorks(pool);
     await dealWorksWork(pool);
     await dealComment(pool);
+    await dealWorksComment();
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -120,12 +121,6 @@ async function dealAuthor(pool) {
         update_time: item.CreateTime,
       });
     }
-    await AuthorNum.create({
-      author_id: item.ID,
-      type: 0,
-      num: item.FansNumber,
-      update_time: item.CreateTime,
-    });
     if(item.BaiduUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
@@ -600,18 +595,6 @@ async function dealWorks(pool) {
       num: item.CommentCountRaw,
       update_time: item.CreateTime,
     });
-    await WorksNum.create({
-      works_id: item.ID,
-      type: 2,
-      num: item.Popular,
-      update_time: item.CreateTime,
-    });
-    await WorksNum.create({
-      works_id: item.ID,
-      type: 3,
-      num: 0,
-      update_time: item.CreateTime,
-    });
   }
   last = 71;
   result = await pool.request().query(`SELECT * FROM dbo.Works_TimeLine WHERE ID>${last};`);
@@ -710,18 +693,6 @@ async function dealComment(pool) {
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 0,
-        num: item.CommentCountRaw,
-        update_time: item.CreateTime,
-      });
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 1,
-        num: item.ZanCount,
-        update_time: item.CreateTime,
-      });
     }
     // 作者主页虚拟留言
     else if(item.RootID === -2) {
@@ -742,33 +713,9 @@ async function dealComment(pool) {
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 0,
-        num: item.CommentCountRaw,
-        update_time: item.CreateTime,
-      });
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 1,
-        num: item.ZanCount,
-        update_time: item.CreateTime,
-      });
     }
     // 画圈贴
     else if(item.RootID === -3) {
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 0,
-        num: item.CommentCountRaw,
-        update_time: item.CreateTime,
-      });
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 1,
-        num: item.ZanCount,
-        update_time: item.CreateTime,
-      });
       await Comment.create({
         id: item.ID,
         user_id: item.UID,
@@ -869,33 +816,9 @@ async function dealComment(pool) {
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 0,
-        num: item.CommentCountRaw,
-        update_time: item.CreateTime,
-      });
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 1,
-        num: item.ZanCount,
-        update_time: item.CreateTime,
-      });
     }
     // 普通回复
     else {
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 0,
-        num: item.CommentCountRaw,
-        update_time: item.CreateTime,
-      });
-      await CommentNum.create({
-        comment_id: item.ID,
-        type: 1,
-        num: item.ZanCount,
-        update_time: item.CreateTime,
-      });
       await Comment.create({
         id: item.ID,
         user_id: item.UID,
@@ -910,6 +833,30 @@ async function dealComment(pool) {
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
+    }
+  }
+}
+
+async function dealWorksComment() {
+  let last = 631;
+  let sql = `SELECT
+    works_id,
+    comment_id
+    FROM works_comment_relation
+    WHERE id>${last}`;
+  let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+  for(let i = 0, len = res.length; i < len; i++) {
+    let item = res[i];
+    let sql2 = `SELECT id, parent_id, root_id FROM comment
+      WHERE root_id=${item.comment_id}`;
+    let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
+    if(res2.length) {
+      for(let j = 0; j < res2.length; j++) {
+        let item2 = res2[j];
+        let sql3 = `UPDATE comment SET root_id=${item2.root_id}
+        WHERE root_id=${item2.id} AND root_id=parent_id`;
+        await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
+      }
     }
   }
 }

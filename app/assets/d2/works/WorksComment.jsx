@@ -27,14 +27,12 @@ class WorksComment extends migi.Component {
         }
         index = (i - 1) * length;
         self.loadPage();
-        // subCmt.to = '';
       });
       if(page2) {
         page2.on('page', function(i) {
           page.index = i;
           index = (i - 1) * length;
           self.loadPage();
-          // subCmt.to = '';
         });
       }
     });
@@ -73,11 +71,6 @@ class WorksComment extends migi.Component {
               ? <li rel="1">我的</li>
               : ''
           }
-        </ul>
-        <ul class="type2 fn-clear"
-            onClick={ { li: this.switchType } }>
-          <li class="cur" rel="0">最新</li>
-          <li rel="1">最热</li>
         </ul>
       </div>
       <Page ref="page"

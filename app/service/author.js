@@ -28,9 +28,9 @@ class Service extends egg.Service {
       author.fans_name AS fansName,
       author.fans_circle_name AS fansCircleName
       author.is_settled AS isSettled
-    FROM author
-    WHERE id=${id}
-    AND is_deleted=false;`;
+      FROM author
+      WHERE id=${id}
+      AND is_deleted=false;`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0];
@@ -68,19 +68,19 @@ class Service extends egg.Service {
     });
     if(qs.length) {
       let sql = `SELECT
-      author.id AS authorId,
-      author.name AS authorName,
-      author.head_url AS authorHead,
-      author.sign,
-      author.fans_name AS fansName,
-      author.fans_circle_name AS fansCircleName,
-      author.is_settled AS isSettled
-    FROM author
-    WHERE id IN(${qs.join(', ')})
-    AND is_deleted=false;`;
+        author.id AS authorId,
+        author.name AS authorName,
+        author.head_url AS authorHead,
+        author.sign,
+        author.fans_name AS fansName,
+        author.fans_circle_name AS fansCircleName,
+        author.is_settled AS isSettled
+        FROM author
+        WHERE id IN(${qs.join(', ')})
+        AND is_deleted=false;`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       res.forEach(function(item, i) {
-        let id = item.userId;
+        let id = item.authorId;
         cache[hash[i]] = item;
         app.redis.setex('authorInfo_' + id, CACHE_TIME, JSON.stringify(item));
       });

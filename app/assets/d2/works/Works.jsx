@@ -7,6 +7,7 @@
 import Title from './Title.jsx';
 import Media from './Media.jsx';
 import WorksComment from './WorksComment.jsx';
+import Text from './Text.jsx';
 
 class Works extends migi.Component {
   constructor(...data) {
@@ -22,13 +23,17 @@ class Works extends migi.Component {
     let self = this;
     self.audioList = [];
     self.videoList = [];
-    worksChildren.forEach(function(work) {
-      switch(work.class) {
+    self.textList = [];
+    worksChildren.forEach(function(item) {
+      switch(item.workClass) {
         case 1:
-          self.videoList.push(work);
+          self.videoList.push(item);
           break;
         case 2:
-          self.audioList.push(work);
+          self.audioList.push(item);
+          break;
+        case 4:
+          self.textList.push(item);
           break;
       }
     });
@@ -64,6 +69,9 @@ class Works extends migi.Component {
         <ul class="sel fn-clear" ref="sel">
           <li class="cur">简介</li>
         </ul>
+        <div class="box box-fn-top-left">
+          <Text ref="text" list={ self.textList }/>
+        </div>
       </div>
     </div>;
   }

@@ -26,8 +26,8 @@ class Service extends egg.Service {
       user.head_url AS userHead,
       user.sign,
       user.coins
-    FROM user
-    WHERE id=${id};`;
+      FROM user
+      WHERE id=${id};`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0];
@@ -65,13 +65,13 @@ class Service extends egg.Service {
     });
     if(qs.length) {
       let sql = `SELECT
-      user.id AS userId,
-      user.nickname,
-      user.head_url AS userHead,
-      user.sign,
-      user.coins
-    FROM user
-    WHERE id IN(${qs.join(', ')});`;
+        user.id AS userId,
+        user.nickname,
+        user.head_url AS userHead,
+        user.sign,
+        user.coins
+        FROM user
+        WHERE id IN(${qs.join(', ')});`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       res.forEach(function(item, i) {
         let id = item.userId;

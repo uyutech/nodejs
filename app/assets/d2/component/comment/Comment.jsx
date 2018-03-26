@@ -55,7 +55,19 @@ class Comment extends migi.Component {
         </div>
       </div>
       <div class="c">
+        {
+          item.quote
+            ? <div class="quote">
+                <span>回复@{ item.quote.nickname }：</span>
+                <p>{ item.quote.content }</p>
+              </div>
+            : ''
+        }
         <pre>{ item.content }<span class="placeholder"/></pre>
+        <div class="slide">
+          <small class="like"></small>
+          <small class="sub"></small>
+        </div>
       </div>
     </li>;
   }

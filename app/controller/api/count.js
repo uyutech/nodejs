@@ -11,7 +11,7 @@ const Sequelize = require('sequelize');
 class Controller extends egg.Controller {
   async index() {
     let uid = this.ctx.session.uid || 0;
-    let ip = this.ctx.request.header['x-real-ip'];console.log(this.ctx.query);
+    let ip = this.ctx.request.header['x-real-ip'];
     let uuid = this.ctx.query.uuid || '';
     let platform = this.ctx.query.platform || 0;
     let url = this.ctx.query.url || '';
