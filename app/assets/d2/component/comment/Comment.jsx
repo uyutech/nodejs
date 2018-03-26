@@ -27,18 +27,21 @@ class Comment extends migi.Component {
     $(self.ref.list.element).html(html);
   }
   genComment(item) {
-    return <li id={ 'comment_' + item.commentId }
+    return <li id={ 'comment_' + item.id }
                class={ 'item' + (item.isAuthor ? ' author' : '') }>
       <div class="t fn-clear">
         <div class="profile fn-clear">
-          <a class="pic" href={ '/author/' + item.authorId }>
+          <a class="pic"
+             href={ item.isAuthor
+               ? '/author/' + item.authorId
+               : '/user/' + item.userId }>
             {
               item.isAuthor
                 ? <img class="pic"
-                       src={ util.autoSsl(util.img60_60_80(item.authorHeadUrl
+                       src={ util.autoSsl(util.img60_60_80(item.authorHead
                          || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
                 : <img class="pic"
-                       src={ util.autoSsl(util.img60_60_80(item.userHeadUrl
+                       src={ util.autoSsl(util.img60_60_80(item.userHead
                          || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
             }
           </a>
@@ -46,8 +49,8 @@ class Comment extends migi.Component {
             <a class="name"
                href={ item.isAuthor
                  ? '/author/' + item.authorId
-                 : '/user/' + item.userId }>{ item.isAuthor ? item.authorName : item.userName }</a>
-            <small class="time" rel={ 1 }>{ util.formatDate(item.date) }</small>
+                 : '/user/' + item.userId }>{ item.isAuthor ? item.authorName : item.nickname }</a>
+            <small class="time" rel={ 1 }>{ util.formatDate(item.updateTime) }</small>
           </div>
         </div>
       </div>

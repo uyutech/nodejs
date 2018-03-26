@@ -12,19 +12,23 @@ class Works extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.setData(self.props.worksWorkList);
+    self.worksId = self.props.worksId;
+    self.workId = self.props.workId;
+    self.setData(self.props.worksChildren);
   }
-  setData(worksWorkList) {
+  @bind worksId
+  @bind workId
+  setData(worksChildren) {
     let self = this;
     self.audioList = [];
     self.videoList = [];
-    worksWorkList.forEach(function(work) {
-      switch(work.workCategory) {
+    worksChildren.forEach(function(work) {
+      switch(work.class) {
         case 1:
-          self.audioList.push(work);
+          self.videoList.push(work);
           break;
         case 2:
-          self.videoList.push(work);
+          self.audioList.push(work);
           break;
       }
     });
@@ -54,7 +58,7 @@ class Works extends migi.Component {
                audioList={ self.audioList }/>
         <WorksComment ref="worksComment"
                       worksId={ self.props.worksId }
-                      worksCommentData={ self.props.worksCommentData }/>
+                      worksComment={ self.props.worksComment }/>
       </div>
       <div class="side">
         <ul class="sel fn-clear" ref="sel">

@@ -21,29 +21,11 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
   }, {
     indexes: [
       {
         unique: true,
-        fields: ['works_id', 'comment_id'],
-      },
-      {
-        fields: ['is_deleted'],
+        fields: ['works_id'],
       }
     ],
     comment: '大作品留言关联信息',

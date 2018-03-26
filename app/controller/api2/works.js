@@ -7,19 +7,17 @@
 const egg = require('egg');
 
 class Controller extends egg.Controller {
-  async commentList(ctx) {
+  async comment() {
+    const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = body.worksId;console.log(111,body);
+    let worksId = body.worksId;
     if(!worksId) {
       return;
     }
     let index = body.index || 0;
     let length = body.length || 10;
-    let res = await ctx.service.model.worksCommentData(worksId, {
-      index,
-      length,
-    });console.log(222, res);
+    let res = await service.works.comment(worksId, index, length);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

@@ -45,7 +45,7 @@ class WorksComment extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    ajax = net.postJSON('/api2/works/commentList', { worksId: self.props.worksId , index, length }, function(res) {
+    ajax = net.postJSON('/api2/works/comment', { worksId: self.props.worksId , index, length }, function(res) {
       if(res.success) {
         let data = res.data;
         index += length;
@@ -67,7 +67,7 @@ class WorksComment extends migi.Component {
       <div class="fn">
         <ul class="type fn-clear"
             onClick={ { li: this.switchType2 } }>
-          <li class="cur" rel="0">全部<small>{ this.props.worksCommentData.size }</small></li>
+          <li class="cur" rel="0">全部<small>{ this.props.worksComment.size }</small></li>
           {
             this.props.isLogin
               ? <li rel="1">我的</li>
@@ -81,12 +81,12 @@ class WorksComment extends migi.Component {
         </ul>
       </div>
       <Page ref="page"
-            total={ Math.ceil(this.props.worksCommentData.size / length) }/>
+            total={ Math.ceil(this.props.worksComment.size / length) }/>
       <Comment ref="comment"
-               data={ this.props.worksCommentData.data }/>
+               data={ this.props.worksComment.data }/>
       {
-        this.props.worksCommentData.size > length
-          ? <Page ref="page2" total={ Math.ceil(this.props.worksCommentData.size / length) }/>
+        this.props.worksComment.size > length
+          ? <Page ref="page2" total={ Math.ceil(this.props.worksComment.size / length) }/>
           : ''
       }
     </div>;

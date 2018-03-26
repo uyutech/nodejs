@@ -15,26 +15,18 @@ class Controller extends egg.Controller {
     if(!worksId) {
       return;
     }
-    let [worksInfo, worksChildren] = await Promise.all([
+    let [worksInfo, worksChildren, worksComment] = await Promise.all([
       service.works.info(worksId),
-      service.works.children(worksId)
+      service.works.children(worksId),
+      service.works.comment(worksId, 0, 10)
     ]);
-    ctx.body = {
+    await ctx.render('dworks2', {
+      worksId,
+      workId,
       worksInfo,
       worksChildren,
-    };
-    // let [worksInfo, worksWorkList, worksCommentData] = await Promise.all([
-    //   ctx.service.model.worksInfo(worksId),
-    //   ctx.service.model.worksWorkList(worksId),
-    //   ctx.service.model.worksCommentData(worksId)
-    // ]);
-    // await ctx.render('dworks2', {
-    //   worksId,
-    //   workId,
-    //   worksInfo,
-    //   worksWorkList,
-    //   worksCommentData,
-    // });
+      worksComment,
+    });
   }
 }
 

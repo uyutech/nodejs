@@ -120,18 +120,12 @@ async function dealAuthor(pool) {
         update_time: item.CreateTime,
       });
     }
-    // await AuthorNum.create({
-    //   author_id: item.ID,
-    //   type: 0,
-    //   num: item.FansNumber,
-    //   update_time: item.CreateTime,
-    // });
-    // await AuthorNum.create({
-    //   author_id: item.ID,
-    //   type: 1,
-    //   num: item.CommentCountRaw,
-    //   update_time: item.CreateTime,
-    // });
+    await AuthorNum.create({
+      author_id: item.ID,
+      type: 0,
+      num: item.FansNumber,
+      update_time: item.CreateTime,
+    });
     if(item.BaiduUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
@@ -337,8 +331,9 @@ async function dealUser(pool) {
     }
     await User.create({
       id: item.ID,
-      current_author: item.CurrentAuthorID || 0,
-      state: item.ISDel ? 0 : 1,
+      author_id: item.CurrentAuthorID || 0,
+      is_deleted : item.ISDel ? 0 : 1,
+      state: 0,
       reg_state: item.User_Reg_Stat || 0,
       nickname: item.User_NickName || '',
       sex: item.User_Sex || 0,
@@ -695,13 +690,11 @@ async function dealComment(pool) {
   await CircleCommentRelation.sync();
   await Comment.sync();
   await CommentNum.sync();
-  let authorTempHash = {};
-  let worksTempHash = {};
   let last = 440041;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    // 作者根留言
+    // 作者根留言，老数据parent_id有误，重新处理
     if(item.RootID === -1) {
       await Comment.create({
         id: item.ID,
@@ -710,9 +703,10 @@ async function dealComment(pool) {
         is_author: !!item.CurrentAuthorID,
         content: item.Content,
         is_deleted: !!item.ISDel,
-        state: item.suggestion === 'pass' ? 3 : 0,
-        parent_id: 0,
-        root_id: 0,
+        review: item.suggestion === 'pass' ? 3 : 0,
+        state: 0,
+        parent_id: item.ParentID,
+        root_id: item.ParentID,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -728,33 +722,36 @@ async function dealComment(pool) {
         num: item.ZanCount,
         update_time: item.CreateTime,
       });
-      if(authorTempHash[item.ParentID]) {
-        await AuthorCommentRelation.create({
-          author_id: authorTempHash[item.ParentID],
-          comment_id: item.ID,
-          is_deleted: !!item.ISDel,
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-      }
-      else {
-        console.error(item);
-        break;
-      }
     }
     // 作者主页虚拟留言
     else if(item.RootID === -2) {
-      authorTempHash[item.ID] = item.CurrentAuthorID;
+      await AuthorCommentRelation.create({
+        author_id: item.CurrentAuthorID,
+        comment_id: item.ID,
+      });
       await Comment.create({
         id: item.ID,
         user_id: 0,
         author_id: 0,
         is_author: false,
         content: item.CurrentAuthorID,
+        review: 3,
         state: 0,
         parent_id: 0,
         root_id: 0,
         create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 0,
+        num: item.CommentCountRaw,
+        update_time: item.CreateTime,
+      });
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 1,
+        num: item.ZanCount,
         update_time: item.CreateTime,
       });
     }
@@ -779,7 +776,8 @@ async function dealComment(pool) {
         is_author: !!item.CurrentAuthorID,
         content: item.Content,
         is_deleted: !!item.ISDel,
-        state: item.suggestion === 'pass' ? 3 : 0,
+        review: item.suggestion === 'pass' ? 3 : 0,
+        state: 0,
         parent_id: 0,
         root_id: 0,
         create_time: item.CreateTime,
@@ -854,21 +852,37 @@ async function dealComment(pool) {
     }
     // 作品主页虚拟留言
     else if(item.RootID === -4) {
-      worksTempHash[item.ID] = parseInt(item.Content);
+      await WorksCommentRelation.create({
+        works_id: item.Content,
+        comment_id: item.ID,
+      });
       await Comment.create({
         id: item.ID,
         user_id: 0,
         author_id: 0,
         is_author: false,
         content: item.Content,
+        review: 3,
         state: 0,
         parent_id: 0,
         root_id: 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 0,
+        num: item.CommentCountRaw,
+        update_time: item.CreateTime,
+      });
+      await CommentNum.create({
+        comment_id: item.ID,
+        type: 1,
+        num: item.ZanCount,
+        update_time: item.CreateTime,
+      });
     }
-    // 普通回复和作品根留言
+    // 普通回复
     else {
       await CommentNum.create({
         comment_id: item.ID,
@@ -882,73 +896,20 @@ async function dealComment(pool) {
         num: item.ZanCount,
         update_time: item.CreateTime,
       });
-      if(worksTempHash[item.ParentID]) {
-        await Comment.create({
-          id: item.ID,
-          user_id: item.UID,
-          author_id: item.CurrentAuthorID || 0,
-          is_author: !!item.CurrentAuthorID,
-          content: item.Content,
-          is_deleted: !!item.ISDel,
-          state: item.suggestion === 'pass' ? 3 : 0,
-          parent_id: 0,
-          root_id: 0,
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-        let works = await Works.findOne({
-          attributes: ['type'],
-          where: {
-            id: worksTempHash[item.ParentID],
-          },
-        });
-        if(!works) {
-          continue;
-        }
-        let type = works.type;
-        if([5, 6, 18].indexOf(type) > -1) {
-          await WorksCommentRelation.create({
-            works_id: (worksTempHash[item.ParentID] + '').replace(/^2015/, '2014'),
-            comment_id: item.ID,
-            is_deleted: !!item.ISDel,
-            create_time: item.CreateTime,
-            update_time: item.CreateTime,
-          });
-        }
-        else if([11, 12].indexOf(type) > -1) {
-          await WorksCommentRelation.create({
-            works_id: (worksTempHash[item.ParentID] + '').replace(/^2015/, '2013'),
-            comment_id: item.ID,
-            is_deleted: !!item.ISDel,
-            create_time: item.CreateTime,
-            update_time: item.CreateTime,
-          });
-        }
-        else {
-          await WorksCommentRelation.create({
-            works_id: worksTempHash[item.ParentID],
-            comment_id: item.ID,
-            is_deleted: !!item.ISDel,
-            create_time: item.CreateTime,
-            update_time: item.CreateTime,
-          });
-        }
-      }
-      else {
-        await Comment.create({
-          id: item.ID,
-          user_id: item.UID,
-          author_id: item.CurrentAuthorID || 0,
-          is_author: !!item.CurrentAuthorID,
-          content: item.Content,
-          is_deleted: !!item.ISDel,
-          state: item.suggestion === 'pass' ? 3 : 0,
-          parent_id: item.ParentID,
-          root_id: item.RootID,
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-      }
+      await Comment.create({
+        id: item.ID,
+        user_id: item.UID,
+        author_id: item.CurrentAuthorID || 0,
+        is_author: !!item.CurrentAuthorID,
+        content: item.Content,
+        is_deleted: !!item.ISDel,
+        review: item.suggestion === 'pass' ? 3 : 0,
+        state: 0,
+        parent_id: item.ParentID,
+        root_id: item.RootID,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
     }
   }
 }

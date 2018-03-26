@@ -46,11 +46,10 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    state: {
+    is_deleted: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 0,
-      comment: '0正常，1删除',
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,

@@ -27,21 +27,6 @@ module.exports = app => {
       defaultValue: 0,
       comment: '0直接关联，1间接（比如通过标签）关联',
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
   }, {
     indexes: [
       {

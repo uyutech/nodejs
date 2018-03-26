@@ -8,6 +8,13 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const CACHE_TIME = 10;
 
+const WORKS_STATE_NAME = {
+  0: '已删除',
+  1: '已完成',
+  2: '未完成', // 公开
+  3: '未完成', // 保密
+};
+
 class Service extends egg.Service {
   async info(id) {
     if(!id) {
@@ -36,11 +43,12 @@ class Service extends egg.Service {
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0];
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      res.worksStateName = WORKS_STATE_NAME[res.worksState];
     }
     else {
-      app.redis.setex(cacheKey, CACHE_TIME, null);
+      res = null;
     }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
   async children(id) {
@@ -78,6 +86,91 @@ class Service extends egg.Service {
       });
     }
     return res;
+  }
+  async comment(id, index, length) {
+    let [data, size] = await Promise.all([
+      this.commentData(id, index, length),
+      this.commentSize(id)
+    ]);
+    return { data, size };
+  }
+  async commentData(id, index = 0, length = 1) {
+    if(!id) {
+      return;
+    }
+    index = parseInt(index) || 0;
+    length = parseInt(length) || 1;
+    const { app, service } = this;
+    let sql = `SELECT
+      comment.id,
+      comment.user_id AS userId,
+      comment.author_id AS authorId,
+      comment.content,
+      comment.parent_id AS parentId,
+      comment.root_id AS rootId,
+      comment.update_time AS updateTime
+    FROM comment, works_comment_relation
+    WHERE works_comment_relation.works_id=${id}
+    AND works_comment_relation.comment_id=comment.root_id
+    AND comment.is_deleted=false
+    ORDER BY comment.id DESC
+    LIMIT ${index},${length}`;
+    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      let userIdHash = {};
+      let userInfoPos = {};
+      let userIdList = [];
+      let authorIdHash = {};
+      let authorInfoPos = {};
+      let authorIdList = [];
+      res.forEach(function(item) {
+        if(item.authorId) {
+          if(!authorIdHash[item.authorId]) {
+            authorIdHash[item.authorId] = true;
+            authorIdList.push(item.authorId);
+          }
+          item.userId = undefined;
+          item.isAuthor = true;
+        }
+        else {
+          if(!userIdHash[item.userId]) {
+            userIdHash[item.userId] = true;
+            userIdList.push(item.userId);
+          }
+          item.authorId = undefined;
+        }
+      });
+      let [userList, authorList] = await Promise.all([
+        service.user.infoList(userIdList),
+        service.author.infoList(authorIdList)
+      ]);
+      userIdHash = {};
+      userList.forEach(function(item) {
+        userIdHash[item.userId] = item;
+      });
+      authorIdHash = {};
+      authorList.forEach(function(item) {
+        authorIdHash[item.authorId] = item;
+      });
+      res.forEach(function(item) {
+        if(item.isAuthor) {
+          item.authorName = authorIdHash[item.authorId].authorName;
+          item.authorHead = authorIdHash[item.authorId].authorHead;
+        }
+        else {
+          item.nickname = userIdHash[item.userId].nickname;
+          item.userHead = userIdHash[item.userId].userHead;
+        }
+      });
+    }
+    return res;
+  }
+  async commentSize(id) {
+    const { app } = this;
+    let sql = `SELECT num FROM works_num WHERE works_id=${id} AND type=1`;
+    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    res = res[0];
+    return res.num || 0;
   }
 }
 

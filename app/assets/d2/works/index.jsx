@@ -12,6 +12,6 @@ let works = migi.preExist(
   <Works worksId={ $CONFIG.worksId }
          workId={ $CONFIG.workId }
          worksInfo={ $CONFIG.worksInfo }
-         worksWorkList={ $CONFIG.worksWorkList }
-         worksCommentData={ $CONFIG.worksCommentData }/>
+         worksChildren={ $CONFIG.worksChildren }
+         worksComment={ $CONFIG.worksComment }/>
 );

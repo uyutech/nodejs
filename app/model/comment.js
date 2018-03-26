@@ -35,11 +35,17 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
-    state: {
+    review: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
       comment: '0未知，1审核中，2违规，3通过',
+    },
+    state: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0正常，1黑名单，2红名单',
     },
     parent_id: {
       type: Sequelize.INTEGER.UNSIGNED,
@@ -63,9 +69,6 @@ module.exports = app => {
     indexes: [
       {
         fields: ['user_id'],
-      },
-      {
-        fields: ['author_id'],
       },
       {
         fields: ['parent_id'],

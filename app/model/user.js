@@ -12,16 +12,21 @@ module.exports = app => {
       primaryKey: true,
       allowNull: false,
     },
-    current_author: {
+    author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
+    },
+    is_settled: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,
-      comment: '0删除，1正常，2红名单，3黑名单',
+      comment: '0正常，1红名单，2黑名单',
     },
     reg_state: {
       type: Sequelize.TINYINT.UNSIGNED,

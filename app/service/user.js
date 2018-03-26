@@ -5,28 +5,81 @@
 'use strict';
 
 const egg = require('egg');
+const Sequelize = require('sequelize');
+const CACHE_TIME = 10;
 
 class Service extends egg.Service {
-  async index(id) {
+  async info(id) {
     if(!id) {
       return;
     }
-    let cacheKey = 'userData_' + id;
-    let res = await this.app.redis.get(cacheKey);
+    const { app } = this;
+    let cacheKey = 'userInfo_' + id;
+    let res = await app.redis.get(cacheKey);
     if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await this.ctx.helper.postServiceJSON('api/users/GetUserInfo', {
-      uid: id,
-    });
-    if(res.data && res.data.success) {
-      res = res.data.data;
+    let sql = `SELECT
+      user.id AS userId,
+      user.nickname,
+      user.head_url AS userHead,
+      user.sign,
+      user.coins
+    FROM user
+    WHERE id=${id};`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0];
     }
     else {
       res = null;
     }
-    await this.ctx.app.redis.setex(cacheKey, 180, JSON.stringify(res));
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
+  }
+  async infoList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        return app.redis.get('userInfo_' + id);
+      })
+    );
+    let qs = [];
+    let hash = {};
+    cache.forEach(function(item, i) {
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('userInfo_' + idList[i], CACHE_TIME);
+      }
+      else {
+        hash[qs.length] = i;
+        qs.push(idList[i]);
+      }
+    });
+    if(qs.length) {
+      let sql = `SELECT
+      user.id AS userId,
+      user.nickname,
+      user.head_url AS userHead,
+      user.sign,
+      user.coins
+    FROM user
+    WHERE id IN(${qs.join(', ')});`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      res.forEach(function(item, i) {
+        let id = item.userId;
+        cache[hash[i]] = item;
+        app.redis.setex('userInfo_' + id, CACHE_TIME, JSON.stringify(item));
+      });
+    }
+    return cache;
   }
 }
 
