@@ -21,9 +21,9 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     let sql = `SELECT
-      user.id AS userId,
+      user.id,
       user.nickname,
-      user.head_url AS userHead,
+      user.head_url AS headUrl,
       user.sign,
       user.coins
       FROM user
@@ -65,9 +65,9 @@ class Service extends egg.Service {
     });
     if(qs.length) {
       let sql = `SELECT
-        user.id AS userId,
+        user.id,
         user.nickname,
-        user.head_url AS userHead,
+        user.head_url AS headUrl,
         user.sign,
         user.coins
         FROM user

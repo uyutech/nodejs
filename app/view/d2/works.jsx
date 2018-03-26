@@ -12,21 +12,21 @@ export default function(data) {
   let isLogin = !!data.ctx.session.uid;
   let worksId = parseInt(data.worksId);
   let workId = data.workId;
-  let worksInfo = data.worksInfo;
-  let worksChildren = data.worksChildren;
-  let worksComment = data.worksComment;
+  let info = data.info;
+  let collection = data.collection;
+  let comment = data.comment;
 
   let works = migi.preRender(
     <Works worksId={ worksId }
            workId={ workId }
-           worksInfo={ worksInfo }
-           worksChildren={ worksChildren }
-           worksComment={ worksComment }/>);
+           info={ info }
+           collection={ collection }
+           comment={ comment }/>);
 
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead({ title: worksInfo.worksTitle })}
+  ${data.helper.getDHead({ title: info.worksTitle })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dworks.css')}"/>
 </head>
@@ -38,9 +38,9 @@ ${data.helper.getDBotNav()}
   ${data.helper.$CONFIG}
   $CONFIG.worksId = ${data.helper.stringify(worksId)};
   $CONFIG.workId = ${data.helper.stringify(workId)};
-  $CONFIG.worksInfo = ${data.helper.stringify(worksInfo)};
-  $CONFIG.worksChildren = ${data.helper.stringify(worksChildren)};
-  $CONFIG.worksComment = ${data.helper.stringify(worksComment)};
+  $CONFIG.info = ${data.helper.stringify(info)};
+  $CONFIG.collection = ${data.helper.stringify(collection)};
+  $CONFIG.comment = ${data.helper.stringify(comment)};
 </script>
 ${data.helper.getStat()}
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>

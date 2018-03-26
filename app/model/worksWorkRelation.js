@@ -31,7 +31,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    describe: {
+    tip: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',

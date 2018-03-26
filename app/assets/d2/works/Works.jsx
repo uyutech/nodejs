@@ -2,12 +2,14 @@
  * Created by army8735 on 2018/1/29.
  */
 
+
 'use strict';
 
 import Title from './Title.jsx';
 import Media from './Media.jsx';
 import WorksComment from './WorksComment.jsx';
 import Text from './Text.jsx';
+import Image from './Image.jsx';
 
 class Works extends migi.Component {
   constructor(...data) {
@@ -15,22 +17,26 @@ class Works extends migi.Component {
     let self = this;
     self.worksId = self.props.worksId;
     self.workId = self.props.workId;
-    self.setData(self.props.worksChildren);
+    self.setData(self.props.collection);
   }
   @bind worksId
   @bind workId
-  setData(worksChildren) {
+  setData(collection) {
     let self = this;
-    self.audioList = [];
     self.videoList = [];
+    self.audioList = [];
+    self.imgList = [];
     self.textList = [];
-    worksChildren.forEach(function(item) {
-      switch(item.workClass) {
+    collection.forEach(function(item) {
+      switch(item.class) {
         case 1:
           self.videoList.push(item);
           break;
         case 2:
           self.audioList.push(item);
+          break;
+        case 3:
+          self.imgList.push(item);
           break;
         case 4:
           self.textList.push(item);
@@ -42,7 +48,7 @@ class Works extends migi.Component {
     let self = this;
     return <div class="works fn-clear">
       <Title ref="title"
-             worksInfo={ self.props.worksInfo }/>
+             info={ self.props.info }/>
       <div class="main">
         <ul class="type fn-clear"
             ref="type"
@@ -63,7 +69,7 @@ class Works extends migi.Component {
                audioList={ self.audioList }/>
         <WorksComment ref="worksComment"
                       worksId={ self.props.worksId }
-                      worksComment={ self.props.worksComment }/>
+                      data={ self.props.comment }/>
       </div>
       <div class="side">
         <ul class="sel fn-clear" ref="sel">
@@ -71,6 +77,7 @@ class Works extends migi.Component {
         </ul>
         <div class="box box-fn-top-left">
           <Text ref="text" list={ self.textList }/>
+          <Image ref="image" list={ self.imgList }/>
         </div>
       </div>
     </div>;

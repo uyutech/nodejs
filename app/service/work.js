@@ -22,14 +22,14 @@ class Service extends egg.Service {
     }
     if(klass === 1) {
       let sql = `SELECT
-        work_video.id as workId,
+        work_video.id,
         work_video.width,
         work_video.height,
         work_video.time,
-        work_video.cover AS workCover,
+        work_video.cover,
         work_video.url
-      FROM work_video
-      WHERE work_video.id=${id}`;
+        FROM work_video
+        WHERE work_video.id=${id}`;
       res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res && res.length) {
         res = res[0];
@@ -41,12 +41,13 @@ class Service extends egg.Service {
     }
     else if(klass === 2) {
       let sql = `SELECT
-        work_audio.id as workId,
+        work_audio.id,
         work_audio.time,
-        work_audio.cover AS workCover,
-        work_audio.url
-      FROM work_audio
-      WHERE work_audio.id=${id}`;
+        work_audio.cover,
+        work_audio.url,
+        work_audio.lrc
+        FROM work_audio
+        WHERE work_audio.id=${id}`;
       res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res && res.length) {
         res = res[0];
@@ -58,12 +59,12 @@ class Service extends egg.Service {
     }
     else if(klass === 3) {
       let sql = `SELECT
-        work_image.id as workId,
+        work_image.id,
         work_image.width,
         work_image.height,
         work_image.url
-      FROM work_image
-      WHERE work_image.id=${id}`;
+        FROM work_image
+        WHERE work_image.id=${id}`;
       res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res && res.length) {
         res = res[0];
@@ -75,10 +76,10 @@ class Service extends egg.Service {
     }
     else if(klass === 4) {
       let sql = `SELECT
-        work_text.id as workId,
+        work_text.id,
         work_text.content
-      FROM work_text
-      WHERE work_text.id=${id}`;
+        FROM work_text
+        WHERE work_text.id=${id}`;
       res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res && res.length) {
         res = res[0];
@@ -102,7 +103,7 @@ class Service extends egg.Service {
     }
     const self = this;
     let res = await Promise.all(dataList.map(function(data) {
-      return self.info(data.workId, data.workClass);
+      return self.info(data.id, data.class);
     }));
     return res;
   }

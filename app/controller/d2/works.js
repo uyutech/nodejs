@@ -15,17 +15,17 @@ class Controller extends egg.Controller {
     if(!worksId) {
       return;
     }
-    let [worksInfo, worksChildren, worksComment] = await Promise.all([
+    let [info, collection, comment] = await Promise.all([
       service.works.info(worksId),
-      service.works.children(worksId),
+      service.works.collection(worksId),
       service.works.comment(worksId, 0, 10)
     ]);
     await ctx.render('dworks2', {
       worksId,
       workId,
-      worksInfo,
-      worksChildren,
-      worksComment,
+      info,
+      collection,
+      comment,
     });
   }
 }

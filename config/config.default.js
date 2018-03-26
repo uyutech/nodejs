@@ -15,7 +15,7 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['report', 'd2m', 'm2d', 'jsConfig', 'crossDomain'];
+  config.middleware = ['d2m', 'm2d', 'crossDomain', 'jsConfig', 'report'];
   config.d2m = {
     match: '/d',
   };
@@ -56,7 +56,15 @@ module.exports = appInfo => {
     },
   };
   config.crossDomain = {
-    match: '/h5',
+    match: function(ctx) {
+      if(ctx.request.path.startsWith('/h5/')) {
+        return true;
+      }
+      if(ctx.request.path.startsWith('/h52/')) {
+        return true;
+      }
+      return false;
+    },
   };
 
   config.view = {
@@ -100,6 +108,9 @@ module.exports = appInfo => {
     csrf: {
       ignore: function(ctx) {
         if(ctx.request.path.startsWith('/h5')) {
+          return true;
+        }
+        if(ctx.request.path.startsWith('/h52')) {
           return true;
         }
         if(ctx.request.path.startsWith('/mns')) {

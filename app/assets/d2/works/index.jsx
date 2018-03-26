@@ -11,7 +11,7 @@ import Works from './Works.jsx';
 let works = migi.preExist(
   <Works worksId={ $CONFIG.worksId }
          workId={ $CONFIG.workId }
-         worksInfo={ $CONFIG.worksInfo }
-         worksChildren={ $CONFIG.worksChildren }
-         worksComment={ $CONFIG.worksComment }/>
+         info={ $CONFIG.info }
+         collection={ $CONFIG.collection }
+         comment={ $CONFIG.comment }/>
 );

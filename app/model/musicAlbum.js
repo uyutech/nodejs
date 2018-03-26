@@ -36,11 +36,16 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
+    is_deleted: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,
-      comment: '0删除，1已完成，2未完成公开，3未完成保密',
+      comment: '0已完成，1未完成公开，2未完成保密',
     },
     cover: {
       type: Sequelize.STRING,

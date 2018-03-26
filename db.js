@@ -384,7 +384,7 @@ async function dealWork(pool) {
       title: item.ItemsName || '',
       class: item.BigType,
       type: item.ItemType,
-      state: item.ISDel ? 0 : 1,
+      is_deleted: !!item.ISDel,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -392,42 +392,6 @@ async function dealWork(pool) {
       work_id: item.ID,
       type: 0,
       num: 0,
-      update_time: item.CreateTime,
-    });
-    await WorkNum.create({
-      work_id: item.ID,
-      type: 1,
-      num: 0,
-      update_time: item.CreateTime,
-    });
-    await WorkNum.create({
-      work_id: item.ID,
-      type: 2,
-      num: item.PlayCountRaw,
-      update_time: item.CreateTime,
-    });
-    await WorkNum.create({
-      work_id: item.ID,
-      type: 3,
-      num: item.LikeCountRaw,
-      update_time: item.CreateTime,
-    });
-    await WorkNum.create({
-      work_id: item.ID,
-      type: 4,
-      num: item.FavorCount,
-      update_time: item.CreateTime,
-    });
-    await WorkNum.create({
-      work_id: item.ID,
-      type: 5,
-      num: 0,
-      update_time: item.CreateTime,
-    });
-    await WorkNum.create({
-      work_id: item.ID,
-      type: 6,
-      num: item.DownloadCountRaw,
       update_time: item.CreateTime,
     });
     if(item.BigType === 2) {
@@ -550,7 +514,8 @@ async function dealWorks(pool) {
         describe: item.Describe || '',
         type: item.WorksType,
         is_authorize: true,
-        state: item.WorkState || 1,
+        is_deleted: !!item.ISDel,
+        state: Math.max(item.WorkState - 1, 0),
         cover: item.cover_Pic || '',
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -563,7 +528,9 @@ async function dealWorks(pool) {
         sub_title: item.sub_Title || '',
         describe: item.Describe || '',
         type: item.WorksType,
-        state: item.WorkState || 1,
+        is_authorize: true,
+        is_deleted: !!item.ISDel,
+        state: Math.max(item.WorkState - 1, 0),
         cover: item.cover_Pic || '',
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -577,7 +544,8 @@ async function dealWorks(pool) {
         describe: item.Describe || '',
         type: item.WorksType,
         is_authorize: true,
-        state: item.WorkState || 1,
+        is_deleted: !!item.ISDel,
+        state: Math.max(item.WorkState - 1, 0),
         cover: item.cover_Pic || '',
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -592,7 +560,7 @@ async function dealWorks(pool) {
     await WorksNum.create({
       works_id: item.ID,
       type: 1,
-      num: item.CommentCountRaw,
+      num: item.Popular,
       update_time: item.CreateTime,
     });
   }
@@ -626,7 +594,7 @@ async function dealWorksWork(pool) {
       work_id: item.WorkItemsID,
       is_deleted: item.ISDel,
       weight: item.sort || 0,
-      describe: item.Describe || '',
+      tips: item.Describe || '',
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });

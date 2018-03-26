@@ -9,10 +9,9 @@ const Sequelize = require('sequelize');
 const CACHE_TIME = 10;
 
 const WORKS_STATE_NAME = {
-  0: '已删除',
-  1: '已完成',
-  2: '未完成', // 公开
-  3: '未完成', // 保密
+  0: '已完成',
+  1: '未完成', // 公开
+  2: '未完成', // 保密
 };
 
 class Service extends egg.Service {
@@ -28,17 +27,16 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     let sql = `SELECT
-      works.id AS worksId,
-      works.title AS worksTitle,
-      works.sub_title AS worksSubTitle,
-      works.state AS worksState,
-      works.cover AS worksCover,
-      works.type AS worksType,
-      works_type.name AS worksTypeName
+      works.id,
+      works.title,
+      works.sub_title AS subTitle,
+      works.state,
+      works.cover,
+      works.type,
+      works_type.name AS typeName
       FROM works, works_type
       WHERE works.id=${id}
       AND works.is_authorize=true
-      AND works.state>0
       AND works.type=works_type.id;`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
@@ -51,12 +49,12 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
-  async children(id) {
+  async collection(id) {
     if(!id) {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'worksChildren_' + id;
+    let cacheKey = 'worksCollection_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -64,18 +62,18 @@ class Service extends egg.Service {
     }
     else {
       let sql = `SELECT
-      works_work_relation.work_id AS workId,
-      works_work_relation.describe,
-      work.title AS workTitle,
-      work.class AS workClass,
-      work.type AS workType,
-      work_type.name AS workTypeName
+      work.id,
+      work.title,
+      work.class,
+      work.type,
+      work_type.name AS typeName,
+      works_work_relation.tips
       FROM works_work_relation, work, work_type
       WHERE works_work_relation.works_id=${id}
       AND works_work_relation.is_deleted=false
       AND works_work_relation.work_id=work.id
-      AND work.state>0
-      AND work.type=work_type.id`;
+      AND work.type=work_type.id
+      ORDER BY works_work_relation.weight DESC`;
       res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
@@ -173,30 +171,30 @@ class Service extends egg.Service {
       ]);
       userIdHash = {};
       userList.forEach(function(item) {
-        userIdHash[item.userId] = item;
+        userIdHash[item.id] = item;
       });
       authorIdHash = {};
       authorList.forEach(function(item) {
-        authorIdHash[item.authorId] = item;
+        authorIdHash[item.id] = item;
       });
       quotes.forEach(function(item) {
         if(item.isAuthor) {
-          item.authorName = authorIdHash[item.authorId].authorName;
-          item.authorHead = authorIdHash[item.authorId].authorHead;
+          item.name = authorIdHash[item.authorId].name;
+          item.headUrl = authorIdHash[item.authorId].headUrl;
         }
         else {
           item.nickname = userIdHash[item.userId].nickname;
-          item.userHead = userIdHash[item.userId].userHead;
+          item.headUrl = userIdHash[item.userId].headUrl;
         }
       });
       res.forEach(function(item) {
         if(item.isAuthor) {
-          item.authorName = authorIdHash[item.authorId].authorName;
-          item.authorHead = authorIdHash[item.authorId].authorHead;
+          item.name = authorIdHash[item.authorId].name;
+          item.headUrl = authorIdHash[item.authorId].headUrl;
         }
         else {
           item.nickname = userIdHash[item.userId].nickname;
-          item.userHead = userIdHash[item.userId].userHead;
+          item.headUrl = userIdHash[item.userId].headUrl;
         }
         if(item.rootId !== item.parentId && item.rootId !== 0) {
           item.quote = quoteHash[item.parentId];

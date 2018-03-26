@@ -28,7 +28,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    state: {
+    is_deleted: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,

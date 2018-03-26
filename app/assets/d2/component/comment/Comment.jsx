@@ -35,21 +35,15 @@ class Comment extends migi.Component {
              href={ item.isAuthor
                ? '/author/' + item.authorId
                : '/user/' + item.userId }>
-            {
-              item.isAuthor
-                ? <img class="pic"
-                       src={ util.autoSsl(util.img60_60_80(item.authorHead
-                         || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
-                : <img class="pic"
-                       src={ util.autoSsl(util.img60_60_80(item.userHead
-                         || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
-            }
+            <img class="pic"
+                 src={ util.autoSsl(util.img60_60_80(item.headUrl
+                   || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
           </a>
           <div class="txt">
             <a class="name"
                href={ item.isAuthor
                  ? '/author/' + item.authorId
-                 : '/user/' + item.userId }>{ item.isAuthor ? item.authorName : item.nickname }</a>
+                 : '/user/' + item.userId }>{ item.isAuthor ? item.name : item.nickname }</a>
             <small class="time" rel={ 1 }>{ util.formatDate(item.updateTime) }</small>
           </div>
         </div>
@@ -58,7 +52,7 @@ class Comment extends migi.Component {
         {
           item.quote
             ? <div class="quote">
-                <span>回复@{ item.quote.nickname }：</span>
+                <span>回复@{ item.quote.isAuthor ? item.quote.name : item.quote.nickname }：</span>
                 <p>{ item.quote.content }</p>
               </div>
             : ''

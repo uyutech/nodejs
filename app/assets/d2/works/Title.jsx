@@ -20,22 +20,22 @@ class Title extends migi.Component {
   }
   render() {
     let self = this;
-    let worksInfo = self.props.worksInfo;
+    let info = self.props.info;
     return <div class="mod mod-title">
       <img
         class="pic"
-        src={ util.autoSsl(util.img200_200_80(worksInfo.worksCover || '//zhuanquan.xin/img/blank.png')) }/>
+        src={ util.autoSsl(util.img200_200_80(info.cover || '//zhuanquan.xin/img/blank.png')) }/>
       <div class="txt">
-        <h3>{ worksInfo.worksTypeName }</h3>
-        <h1 class={ worksInfo.worksTitle ? '' : 'empty' }>{ worksInfo.worksTitle || '待揭秘' }</h1>
-        <h2 class={ worksInfo.worksSubTitle ? '' : 'fn-hide' }>{ worksInfo.worksSubTitle }</h2>
+        <h3>{ info.typeName }</h3>
+        <h1 class={ info.title ? '' : 'empty' }>{ info.title || '待揭秘' }</h1>
+        <h2 class={ info.subTitle ? '' : 'fn-hide' }>{ info.subTitle }</h2>
       </div>
       <div class="plus">
-        {
-          worksInfo.worksState === 1
-            ? ''
-            : <span class="state">{ worksInfo.worksStateName }</span>
-        }
+      {
+        info.state === 1
+          ? ''
+          : <span class="state">{ info.stateName }</span>
+      }
       </div>
     </div>;
   }

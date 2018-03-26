@@ -21,9 +21,9 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     let sql = `SELECT
-      author.id AS authorId,
-      author.name AS authorName,
-      author.head_url AS authorHead,
+      author.id,
+      author.name,
+      author.head_url AS headUrl,
       author.sign,
       author.fans_name AS fansName,
       author.fans_circle_name AS fansCircleName
@@ -68,9 +68,9 @@ class Service extends egg.Service {
     });
     if(qs.length) {
       let sql = `SELECT
-        author.id AS authorId,
-        author.name AS authorName,
-        author.head_url AS authorHead,
+        author.id,
+        author.name,
+        author.head_url AS headUrl,
         author.sign,
         author.fans_name AS fansName,
         author.fans_circle_name AS fansCircleName,

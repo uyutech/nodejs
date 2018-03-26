@@ -298,4 +298,7 @@ module.exports = app => {
 
   app.post('/d/api2/works/comment', 'api2.works.comment');
   app.get('/d/api2/works/_commentNum', 'api2.works._commentNum');
+
+  app.post('/h5/works2/index', 'h52.works.index');
+  app.post('/h5/works2/comment', 'h52.works.comment');
 };
