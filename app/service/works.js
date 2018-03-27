@@ -80,7 +80,7 @@ class Service extends egg.Service {
       AND works_work_relation.is_deleted=false
       AND works_work_relation.work_id=work.id
       AND work.type=work_type.id
-      ORDER BY works_work_relation.weight DESC`;
+      ORDER BY works_work_relation.weight DESC, work.class`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
@@ -321,7 +321,8 @@ class Service extends egg.Service {
       weight,
       profession_id AS professionId
       FROM works_type_profession_sort
-      WHERE works_type=${type}`;
+      WHERE works_type=${type}
+      ORDER BY \`group\`, weight DESC`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
@@ -356,7 +357,7 @@ class Service extends egg.Service {
     });
     // 将规则按group、weight排序
     migi.sort(rule, function(a, b) {
-      if(a.gruop === b.group) {
+      if(a.group === b.group) {
         return a.weight > b.weight;
       }
       return a.group > b.group;
@@ -409,8 +410,6 @@ class Service extends egg.Service {
       });
     });
     res.push(temp);
-    // 重构结构，原本二维数组先按group分，再按weight排序（同时相同职业的作者们互相紧邻）
-    // 变为先按group分，再按weight排序，同时相同职业的作者们
     return res;
   }
 }

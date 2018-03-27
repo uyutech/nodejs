@@ -16,23 +16,23 @@ class Author extends migi.Component {
       <h5>作者</h5>
       <ul>
       {
-        this.list.map(function(arr) {
+        (this.list || []).map(function(arr) {
           return <li>
-          {
-            arr.map(function(item) {
-              return <dl>
-                <dt>{ item.kindName }</dt>
-                {
-                  item.list.map(function(author) {
-                    return <dd>
-                      <img src={ author.headUrl }/>
-                      <span>{ author.name }</span>
-                    </dd>;
-                  })
-                }
-              </dl>;
-            })
-          }
+            {
+              (arr || []).map(function(item) {
+                return <dl>
+                  <dt>{ item.kindName }</dt>
+                  {
+                    item.list.map(function(author) {
+                      return <dd>
+                        <img src={ author.headUrl }/>
+                        <span>{ author.name }</span>
+                      </dd>;
+                    })
+                  }
+                </dl>;
+              })
+            }
           </li>;
         })
       }

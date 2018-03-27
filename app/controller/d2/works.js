@@ -11,7 +11,6 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let worksId = ctx.params.worksId;
-    let workId = ctx.params.workId;
     if(!worksId) {
       return;
     }
@@ -25,7 +24,6 @@ class Controller extends egg.Controller {
     let authors = service.works.reorder(author, collectionAuthor, authorSort);
     await ctx.render('dworks2', {
       worksId,
-      workId,
       info,
       collection,
       authors,

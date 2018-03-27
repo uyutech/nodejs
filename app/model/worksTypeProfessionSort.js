@@ -39,7 +39,7 @@ module.exports = app => {
         fields: ['works_type', 'group', 'profession_id'],
       },
       {
-        name: 'works_type_weight_group_profession_id',
+        name: 'works_type_weight_group_weight_profession_id',
         fields: ['works_type', 'group', 'weight', 'profession_id'],
       }
     ],

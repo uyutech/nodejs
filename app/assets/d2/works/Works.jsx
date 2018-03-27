@@ -22,18 +22,28 @@ class Works extends migi.Component {
   }
   @bind worksId
   @bind workId
+  @bind workClass
   setData(collection) {
     let self = this;
     self.videoList = [];
     self.audioList = [];
     self.imgList = [];
     self.textList = [];
+    let first;
     collection.forEach(function(item) {
       switch(item.class) {
         case 1:
+          if(!first) {
+            first = true;
+            self.workClass = 1;
+          }
           self.videoList.push(item);
           break;
         case 2:
+          if(!first) {
+            first = true;
+            self.workClass = 2;
+          }
           self.audioList.push(item);
           break;
         case 3:
@@ -45,6 +55,14 @@ class Works extends migi.Component {
       }
     });
   }
+  clickType(e, vd, tvd) {
+    let self = this;
+    if(tvd.props.rel === self.workClass) {
+      return;
+    }
+    self.workClass = tvd.props.rel;
+    self.ref.media.switchType(self.workClass);
+  }
   render() {
     let self = this;
     return <div class="works fn-clear">
@@ -53,19 +71,24 @@ class Works extends migi.Component {
       <div class="main">
         <ul class="type fn-clear"
             ref="type"
-            onClick={ { li: this.clickType } }>
+            onClick={ { li: self.clickType } }>
           {
             self.videoList.length
-              ? <li class="video cur" rel="video">视频</li>
+              ? <li class={ 'video' + (self.workClass === 1 ? ' cur' : '') }
+                    rel={ 1 }>视频</li>
               : ''
           }
           {
             self.audioList.length
-              ? <li class="audio" rel="audio">音频</li>
+              ? <li class={ 'audio' + (self.workClass === 2 ? ' cur' : '') }
+                    rel={ 2 }>音频</li>
               : ''
           }
         </ul>
         <Media ref="media"
+               worksId={ self.worksId }
+               cover={ self.props.info.cover }
+               workClass={ self.workClass }
                videoList={ self.videoList }
                audioList={ self.audioList }/>
         <WorksComment ref="worksComment"
