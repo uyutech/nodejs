@@ -31,7 +31,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    tip: {
+    tips: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
@@ -49,6 +49,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'works_id_work_id',
         unique: true,
         fields: ['works_id', 'work_id'],
       }

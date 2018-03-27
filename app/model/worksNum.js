@@ -35,6 +35,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'works_id_type',
         unique: true,
         fields: ['works_id', 'type'],
       }

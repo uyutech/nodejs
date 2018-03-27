@@ -68,13 +68,12 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'user_id',
         fields: ['user_id'],
       },
       {
-        fields: ['parent_id'],
-      },
-      {
-        fields: ['root_id'],
+        name: 'root_id_parent_id',
+        fields: ['root_id', 'parent_id'],
       }
     ],
     comment: '评论基本信息',

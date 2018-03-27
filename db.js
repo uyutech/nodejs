@@ -36,6 +36,9 @@ const Author = require('./app/model/author')({ sequelizeCircling: sequelize, Seq
 const AuthorAlias = require('./app/model/authorAlias')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorNum = require('./app/model/authorNum')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorOutside = require('./app/model/authorOutside')({ sequelizeCircling: sequelize, Sequelize });
+const Profession = require('./app/model/profession')({ sequelizeCircling: sequelize, Sequelize });
+const WorkAuthorProfessionRelation = require('./app/model/workAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
+const WorksAuthorProfessionRelation = require('./app/model/worksAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Circle = require('./app/model/circle')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTop = require('./app/model/circleTop')({ sequelizeCircling: sequelize, Sequelize });
 const CircleNum = require('./app/model/circleNum')({ sequelizeCircling: sequelize, Sequelize });
@@ -53,6 +56,7 @@ const WorkType = require('./app/model/workType')({ sequelizeCircling: sequelize,
 const WorkNum = require('./app/model/workNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksType = require('./app/model/worksType')({ sequelizeCircling: sequelize, Sequelize });
 const Works = require('./app/model/works')({ sequelizeCircling: sequelize, Sequelize });
+const WorksTypeProfessionWeight = require('./app/model/worksTypeProfessionWeight')({ sequelizeCircling: sequelize, Sequelize });
 const MusicAlbum = require('./app/model/musicAlbum')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbum = require('./app/model/imageAlbum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksNum = require('./app/model/worksNum')({ sequelizeCircling: sequelize, Sequelize });
@@ -77,13 +81,14 @@ const CircleCommentRelation = require('./app/model/circleCommentRelation')({ seq
       database: 'CirclingDB',
     });
     await dealAuthor(pool);
+    await dealWorkAuthorProfession(pool);
     await dealCircle(pool);
     await dealUser(pool);
     await dealWork(pool);
     await dealWorks(pool);
     await dealWorksWork(pool);
     await dealComment(pool);
-    await dealWorksComment();
+    // await dealWorksComment();
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -211,6 +216,69 @@ async function dealAuthor(pool) {
         update_time: item.CreateTime,
       });
     }
+  }
+}
+
+async function dealWorkAuthorProfession(pool) {
+  console.log('------- dealWorkAuthorProfession --------');
+  await Profession.sync();
+  await WorkAuthorProfessionRelation.sync();
+  await WorksAuthorProfessionRelation.sync();
+  let last = 61;
+  let result = await pool.request().query(`SELECT * FROM dbo.Enum_AuthorType WHERE ID>${last};`);
+  let hash = {};
+  let type = -1;
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    if(!hash[item.AuthorTypeName]) {
+      type++;
+      hash[item.AuthorTypeName] = true;
+    }
+    await Profession.create({
+      id: item.ID,
+      type,
+      type_name: item.AuthorTypeName,
+      kind: type,
+      kind_name: item.AuthorTypeName,
+    });
+  }
+  hash = {};
+  last = 5463;
+  result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let key = item.WorksItemID+','+item.AuthorID+','+item.Enum_AuthorTypeID;
+    if(hash[key]) {
+      continue;
+    }
+    hash[key] = true;
+    await WorkAuthorProfessionRelation.create({
+      work_id: item.WorksItemID,
+      author_id: item.AuthorID,
+      profession_id: item.Enum_AuthorTypeID,
+      is_deleted: false,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+  }
+  hash = {};
+  last = 4131;
+  result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Author WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let key = item.WorksID+','+item.AuthorID+','+item.Enum_AuthorTypeID;
+    if(hash[key]) {
+      continue;
+    }
+    hash[key] = true;
+    await WorksAuthorProfessionRelation.create({
+      works_id: item.WorksID,
+      author_id: item.AuthorID,
+      profession_id: item.Enum_AuthorTypeID,
+      is_deleted: false,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
   }
 }
 
@@ -370,12 +438,11 @@ async function dealWork(pool) {
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     await WorkType.create({
+      id: item.ID,
       name: item.ItemTypeName,
-      is_deleted: item.ISDel,
-      update_time: item.CreateTime,
     });
   }
-  last = 2016000000008375;
+  last = 2016000000008413;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -497,12 +564,10 @@ async function dealWorks(pool) {
     let item = result.recordset[i];
     await WorksType.create({
       id: item.ID,
-      is_deleted: false,
       name: item.TypeName,
-      update_time: item.CreateTime,
     });
   }
-  last = 2015000000003582;
+  last = 2015000000003592;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -585,7 +650,8 @@ async function dealWorksWork(pool) {
   await WorksWorkRelation.sync();
   await MusicAlbumWorkRelation.sync();
   await ImageAlbumWorkRelation.sync();
-  let last = 1685;
+  await WorksTypeProfessionWeight.sync();
+  let last = 1692;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_WorksItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -641,7 +707,7 @@ async function dealComment(pool) {
   await CircleCommentRelation.sync();
   await Comment.sync();
   await CommentNum.sync();
-  let last = 440041;
+  let last = 440043;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];

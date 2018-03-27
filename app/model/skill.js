@@ -40,6 +40,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'type',
         unique: true,
         fields: ['type'],
       }

@@ -14,53 +14,31 @@ module.exports = app => {
       allowNull: false,
     },
     type: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    name: {
+    type_name: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
+      comment: '职业如演奏、作曲等',
     },
-    category: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+    kind: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    category_name: {
+    kind_name: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
-    },
-    describe: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    code: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-    },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
+      comment: '工种如笛、箫等',
     },
   }, {
     indexes: [
       {
+        name: 'type_kind',
         unique: true,
-        fields: ['type', 'category'],
+        fields: ['type', 'kind'],
       }
     ],
     comment: '职种信息',

@@ -1,45 +1,39 @@
 /**
- * Created by army8735 on 2018/1/28.
+ * Created by army8735 on 2018/3/27.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('comment_num', {
+  return sequelizeCircling.define('works_type_profession_weight', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    comment_id: {
+    works_type: {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '0全部子评论数，1点赞数',
-    },
-    num: {
+    profession_id: {
       type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+    },
+    weight: {
+      type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
     },
   }, {
     indexes: [
       {
-        name: 'comment_id_type',
+        name: 'works_type_profession_id_weight',
         unique: true,
-        fields: ['comment_id', 'type'],
+        fields: ['works_type', 'profession_id', 'weight'],
       }
     ],
-    comment: '评论相关数字汇总',
+    comment: '大作品职种排序',
   });
 };

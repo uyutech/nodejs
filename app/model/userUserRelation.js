@@ -44,10 +44,12 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'user_id_type_target_id',
         unique: true,
         fields: ['user_id', 'type', 'target_id'],
       },
       {
+        name: 'target_id_type',
         fields: ['target_id', 'type'],
       }
     ],

@@ -32,8 +32,6 @@ const userAuthorRelation = require('../model/userAuthorRelation');
 const userCommentRelation = require('../model/userCommentRelation');
 const userUserRelation = require('../model/userUserRelation');
 const userWorkRelation = require('../model/userWorkRelation');
-const userIpRecord = require('../model/userIpRecord');
-const userProfileRecord = require('../model/userProfileRecord');
 const work = require('../model/work');
 const workImage = require('../model/workImage');
 const workText = require('../model/workText');
@@ -135,8 +133,6 @@ module.exports = {
         userCommentRelation: userCommentRelation(this),
         userUserRelation: userUserRelation(this),
         userWorkRelation: userWorkRelation(this),
-        userIpRecord: userIpRecord(this),
-        userProfileRecord: userProfileRecord(this),
         work: work(this),
         workImage: workImage(this),
         workText: workText(this),

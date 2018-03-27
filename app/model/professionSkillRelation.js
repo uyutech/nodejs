@@ -39,6 +39,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'profession_id_skill_id',
         unique: true,
         fields: ['profession_id', 'skill_id'],
       }

@@ -43,6 +43,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'user_id_comment_id',
         unique: true,
         fields: ['user_id', 'comment_id'],
       }

@@ -45,10 +45,12 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'circle_id_tag_id',
         unique: true,
         fields: ['circle_id', 'tag_id'],
       },
       {
+        name: 'tag_id',
         fields: ['tag_id'],
       }
     ],

@@ -47,6 +47,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'title',
         fields: ['title'],
       }
     ],

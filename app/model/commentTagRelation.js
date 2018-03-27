@@ -38,6 +38,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'comment_id_tag_id',
         unique: true,
         fields: ['comment_id', 'tag_id'],
       }

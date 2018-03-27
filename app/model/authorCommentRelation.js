@@ -24,6 +24,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'author_id',
         unique: true,
         fields: ['author_id'],
       }

@@ -30,10 +30,12 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'circle_id_comment_id',
         unique: true,
         fields: ['circle_id', 'comment_id'],
       },
       {
+        name: 'comment_id_type',
         fields: ['comment_id', 'type'],
       }
     ],
