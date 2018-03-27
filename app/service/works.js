@@ -53,15 +53,22 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    const { app, service } = this;
+    let res = await this.collectionBase(id);
+    res = await this.collectionByBase(res);
+    return res;
+  }
+  async collectionBase(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
     let cacheKey = 'worksCollection_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
-      res = JSON.parse(res);
+      return JSON.parse(res);
     }
-    else {
-      let sql = `SELECT
+    let sql = `SELECT
       work.id,
       work.title,
       work.class,
@@ -74,16 +81,25 @@ class Service extends egg.Service {
       AND works_work_relation.work_id=work.id
       AND work.type=work_type.id
       ORDER BY works_work_relation.weight DESC`;
-      res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    }
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    if(res.length) {
-      let workList = await service.work.infoList(res);
-      res.forEach(function(item, i) {
+    return res;
+  }
+  async collectionByBase(list) {
+    if(!list) {
+      return;
+    }
+    if(!list.length) {
+      return [];
+    }
+    const { service } = this;
+    if(list.length) {
+      let workList = await service.work.infoList(list);
+      list.forEach(function(item, i) {
         Object.assign(item, workList[i]);
       });
     }
-    return res;
+    return list;
   }
   async comment(id, index, length) {
     let [data, size] = await Promise.all([
@@ -225,6 +241,176 @@ class Service extends egg.Service {
       res = 0;
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+  async author(id) {
+    if(!id) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'worksAuthor_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+      app.redis.expire(cacheKey, CACHE_TIME);
+    }
+    else {
+      let sql = `SELECT
+      works_author_profession_relation.author_id AS authorId,
+      works_author_profession_relation.profession_id AS professionId,
+      profession.type,
+      profession.type_name AS typeName,
+      profession.kind,
+      profession.kind_name AS kindName
+      FROM works_author_profession_relation, profession
+      WHERE works_author_profession_relation.works_id=${id}
+      AND works_author_profession_relation.is_deleted=false
+      AND works_author_profession_relation.profession_id=profession.id;`;
+      res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    let authorIdList = [];
+    res.forEach(function(item) {
+      authorIdList.push(item.authorId);
+    });
+    if(authorIdList.length) {
+      let list = await service.author.infoList(authorIdList);
+      let hash = {};
+      list.forEach(function(item) {
+        hash[item.id] = item;
+      });
+      res.forEach(function(item) {
+        let authorInfo = hash[item.authorId];
+        if(authorInfo) {
+          item.headUrl = authorInfo.headUrl;
+          item.name = authorInfo.name;
+          item.isSettled = authorInfo.isSettled;
+        }
+      });
+    }
+    return res;
+  }
+  async collectionAndAuthor(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let collectionBase = await this.collectionBase(id);
+    let collectionIdList = collectionBase.map(function(item) {
+      return item.id;
+    });
+    let [collection, collectionAuthor] = await Promise.all([
+      this.collectionByBase(collectionBase),
+      service.work.authorList(collectionIdList),
+    ]);
+    return [collection, collectionAuthor];
+  }
+  async authorSort(type) {
+    if(!type) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'authorSort_' + type;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = `SELECT
+      \`group\`,
+      weight,
+      profession_id AS professionId
+      FROM works_type_profession_sort
+      WHERE works_type=${type}`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+  async infoAndAuthorSort(id) {
+    if(!id) {
+      return;
+    }
+    let info = await this.info(id);
+    let authorSort = await this.authorSort(info.type);
+    return [info, authorSort];
+  }
+  reorder(author, collectionAuthor, rule) {
+    rule = rule || [];
+    let res = [];
+    let all = author.concat(collectionAuthor);
+    // 先去重
+    let exist = {};
+    for(let i = all.length - 1; i >= 0; i--) {
+      let item = all[i];
+      let key = item.authorId + '_' + item.professionId;
+      if(exist[key]) {
+        all.splice(i, 1);
+      }
+      exist[key] = true;
+    }
+    // 相同职业合并，并存成hash
+    let hash = {};
+    all.forEach(function(item) {
+      hash[item.professionId] = hash[item.professionId] || [];
+      hash[item.professionId].push(item);
+    });
+    // 将规则按group、weight排序
+    migi.sort(rule, function(a, b) {
+      if(a.gruop === b.group) {
+        return a.weight > b.weight;
+      }
+      return a.group > b.group;
+    });
+    // 遍历规则，如遇到则将对应职业的作者们存入
+    let lastGroup = -1;
+    let last;
+    rule.forEach(function(item) {
+      let authors = hash[item.professionId];
+      if(authors) {
+        if(lastGroup !== item.group) {
+          lastGroup = item.group;
+          last = [];
+          res.push(last);
+        }
+        let first = authors[0];
+        last.push({
+          type: first.type,
+          typeName: first.typeName,
+          kind: first.kind,
+          kindName: first.kindName,
+          list: authors.map(function(author) {
+            return {
+              id: author.authorId,
+              name: author.name,
+              headUrl: author.headUrl,
+            };
+          }),
+        });
+        delete hash[item.professionId];
+      }
+    });
+    // 没有对应规则的剩余的存入末尾
+    let temp = [];
+    Object.keys(hash).forEach(function(key) {
+      let authors = hash[key];
+      let first = authors[0];
+      temp.push({
+        type: first.type,
+        typeName: first.typeName,
+        kind: first.kind,
+        kindName: first.kindName,
+        list: authors.map(function(author) {
+          return {
+            id: author.authorId,
+            name: author.name,
+            headUrl: author.headUrl,
+          };
+        }),
+      });
+    });
+    res.push(temp);
+    // 重构结构，原本二维数组先按group分，再按weight排序（同时相同职业的作者们互相紧邻）
+    // 变为先按group分，再按weight排序，同时相同职业的作者们
     return res;
   }
 }

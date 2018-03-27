@@ -8,6 +8,7 @@
 import Title from './Title.jsx';
 import Media from './Media.jsx';
 import WorksComment from './WorksComment.jsx';
+import Author from './Author.jsx';
 import Text from './Text.jsx';
 import Image from './Image.jsx';
 
@@ -76,6 +77,7 @@ class Works extends migi.Component {
           <li class="cur">简介</li>
         </ul>
         <div class="box box-fn-top-left">
+          <Author ref="author" list={ self.props.authors }/>
           <Text ref="text" list={ self.textList }/>
           <Image ref="image" list={ self.imgList }/>
         </div>

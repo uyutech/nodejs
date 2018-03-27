@@ -56,7 +56,7 @@ const WorkType = require('./app/model/workType')({ sequelizeCircling: sequelize,
 const WorkNum = require('./app/model/workNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksType = require('./app/model/worksType')({ sequelizeCircling: sequelize, Sequelize });
 const Works = require('./app/model/works')({ sequelizeCircling: sequelize, Sequelize });
-const WorksTypeProfessionWeight = require('./app/model/worksTypeProfessionWeight')({ sequelizeCircling: sequelize, Sequelize });
+const WorksTypeProfessionSort = require('./app/model/worksTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
 const MusicAlbum = require('./app/model/musicAlbum')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbum = require('./app/model/imageAlbum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksNum = require('./app/model/worksNum')({ sequelizeCircling: sequelize, Sequelize });
@@ -263,6 +263,14 @@ async function dealWorkAuthorProfession(pool) {
   }
   hash = {};
   last = 4131;
+  let right = {
+    51: true,
+    52: true,
+    53: true,
+    54: true,
+    57: true,
+    59: true,
+  };
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -271,14 +279,16 @@ async function dealWorkAuthorProfession(pool) {
       continue;
     }
     hash[key] = true;
-    await WorksAuthorProfessionRelation.create({
-      works_id: item.WorksID,
-      author_id: item.AuthorID,
-      profession_id: item.Enum_AuthorTypeID,
-      is_deleted: false,
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
-    });
+    if(right[item.Enum_AuthorTypeID]) {
+      await WorksAuthorProfessionRelation.create({
+        works_id: item.WorksID,
+        author_id: item.AuthorID,
+        profession_id: item.Enum_AuthorTypeID,
+        is_deleted: false,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
   }
 }
 
@@ -650,7 +660,7 @@ async function dealWorksWork(pool) {
   await WorksWorkRelation.sync();
   await MusicAlbumWorkRelation.sync();
   await ImageAlbumWorkRelation.sync();
-  await WorksTypeProfessionWeight.sync();
+  await WorksTypeProfessionSort.sync();
   let last = 1692;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_WorksItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {

@@ -14,6 +14,7 @@ export default function(data) {
   let workId = data.workId;
   let info = data.info;
   let collection = data.collection;
+  let authors = data.authors;
   let comment = data.comment;
 
   let works = migi.preRender(
@@ -21,6 +22,7 @@ export default function(data) {
            workId={ workId }
            info={ info }
            collection={ collection }
+           authors={ authors }
            comment={ comment }/>);
 
   return `<!DOCTYPE html>
@@ -40,6 +42,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.workId = ${data.helper.stringify(workId)};
   $CONFIG.info = ${data.helper.stringify(info)};
   $CONFIG.collection = ${data.helper.stringify(collection)};
+  $CONFIG.authors = ${data.helper.stringify(authors)};
   $CONFIG.comment = ${data.helper.stringify(comment)};
 </script>
 ${data.helper.getStat()}

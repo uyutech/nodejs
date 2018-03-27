@@ -54,19 +54,17 @@ class Service extends egg.Service {
         return app.redis.get('authorInfo_' + id);
       })
     );
-    let qs = [];
-    let hash = {};
+    let noCacheIdList = [];
     cache.forEach(function(item, i) {
       if(item) {
         cache[i] = JSON.parse(item);
         app.redis.expire('authorInfo_' + idList[i], CACHE_TIME);
       }
-      else {
-        hash[qs.length] = i;
-        qs.push(idList[i]);
+      else if(idList[i] !== null && idList[i] !== undefined) {
+        noCacheIdList.push(idList[i]);
       }
     });
-    if(qs.length) {
+    if(noCacheIdList.length) {
       let sql = `SELECT
         author.id,
         author.name,
@@ -76,13 +74,20 @@ class Service extends egg.Service {
         author.fans_circle_name AS fansCircleName,
         author.is_settled AS isSettled
         FROM author
-        WHERE id IN(${qs.join(', ')})
+        WHERE id IN(${noCacheIdList.join(', ')})
         AND is_deleted=false;`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-      res.forEach(function(item, i) {
-        let id = item.authorId;
-        cache[hash[i]] = item;
+      let hash = {};
+      res.forEach(function(item) {
+        let id = item.id;
+        hash[id] = item;
         app.redis.setex('authorInfo_' + id, CACHE_TIME, JSON.stringify(item));
+      });
+      cache.forEach(function(item, i) {
+        let id = idList[i];
+        if(!item && hash[id]) {
+          cache[i] = hash[id];
+        }
       });
     }
     return cache;

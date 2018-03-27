@@ -107,6 +107,95 @@ class Service extends egg.Service {
     }));
     return res;
   }
+  async author(id) {}
+  async authorList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app, service } = this;
+    let cache = await Promise.all(idList.map(function(id) {
+      return app.redis.get('workAuthor_' + id);
+    }));
+    let exist = {};
+    let authorList = [];
+    let noCacheIdList = [];
+    cache.forEach(function(workAuthorList, i) {
+      if(workAuthorList) {
+        workAuthorList = JSON.parse(workAuthorList);
+        workAuthorList.forEach(function(item) {
+          let key = item.authorId + '_' + item.professionId;
+          if(!exist[key]) {
+            exist[key] = true;
+            authorList.push(item);
+          }
+        });
+        app.redis.expire('workAuthor_' + idList[i], CACHE_TIME);
+      }
+      else {
+        noCacheIdList.push(idList[i]);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        work_author_profession_relation.work_id AS workId,
+        work_author_profession_relation.author_id AS authorId,
+        work_author_profession_relation.profession_id AS professionId,
+        profession.type,
+        profession.type_name AS typeName,
+        profession.kind,
+        profession.kind_name AS kindName
+        FROM work_author_profession_relation, profession
+        WHERE work_author_profession_relation.work_id IN (${noCacheIdList.join(', ')})
+        AND work_author_profession_relation.is_deleted=false
+        AND work_author_profession_relation.profession_id=profession.id;`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let key = item.authorId + '_' + item.professionId;
+          if(!exist[key]) {
+            exist[key] = true;
+            authorList.push(item);
+          }
+          hash[item.workId] = hash[item.workId] || [];
+          hash[item.workId].push(item);
+        });
+        noCacheIdList.forEach(function(id) {
+          if(hash[id]) {
+            app.redis.setex('workAuthor_' + id, CACHE_TIME, JSON.stringify(hash[id]));
+          }
+        });
+      }
+    }
+    let authorIdList = [];
+    authorList.forEach(function(item) {
+      if(item.authorId !== null && item.authorId !== undefined) {
+        authorIdList.push(item.authorId);
+      }
+    });
+    if(authorIdList.length) {
+      let res = await service.author.infoList(authorIdList);
+      let authorIdHash = {};
+      res.forEach(function(item) {
+        let id = item.id;
+        if(item && id !== undefined && id !== null) {
+          authorIdHash[id] = item;
+        }
+      });
+      authorList.forEach(function(item) {
+        let authorInfo = authorIdHash[item.authorId];
+        if(authorInfo) {
+          item.headUrl = authorInfo.headUrl;
+          item.name = authorInfo.name;
+          item.isSettled = authorInfo.isSettled;
+        }
+      });
+    }
+    return authorList;
+  }
 }
 
 module.exports = Service;

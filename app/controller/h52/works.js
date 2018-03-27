@@ -15,15 +15,18 @@ class Controller extends egg.Controller {
     if(!worksId) {
       return;
     }
-    let [info, collection, comment] = await Promise.all([
+    let [info, author, [collection, collectionAuthor], comment] = await Promise.all([
       service.works.info(worksId),
-      service.works.collection(worksId),
+      service.works.author(worksId),
+      service.works.collectionAndAuthor(worksId),
       service.works.comment(worksId, 0, 10)
     ]);
     comment.take = 10;
     ctx.body = ctx.helper.okJSON({
       info,
+      author,
       collection,
+      collectionAuthor,
       comment,
     });
   }
@@ -37,7 +40,6 @@ class Controller extends egg.Controller {
     }
     let res = await service.works.comment(worksId, body.skip || 0, body.take || 10);
     ctx.body = ctx.helper.okJSON(res);
-    let end = Date.now();
   }
 }
 
