@@ -88,7 +88,8 @@ const CircleCommentRelation = require('./app/model/circleCommentRelation')({ seq
     await dealWorks(pool);
     await dealWorksWork(pool);
     await dealComment(pool);
-    // await dealWorksComment();
+    await modifyWorksWork();
+    // await modifyWorksComment();
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -611,21 +612,19 @@ async function dealWorks(pool) {
         update_time: item.CreateTime,
       });
     }
-    else {
-      await Works.create({
-        id: item.ID,
-        title: item.Title || '',
-        sub_title: item.sub_Title || '',
-        describe: item.Describe || '',
-        type: item.WorksType,
-        is_authorize: true,
-        is_deleted: !!item.ISDel,
-        state: Math.max(item.WorkState - 1, 0),
-        cover: item.cover_Pic || '',
-        create_time: item.CreateTime,
-        update_time: item.CreateTime,
-      });
-    }
+    await Works.create({
+      id: item.ID,
+      title: item.Title || '',
+      sub_title: item.sub_Title || '',
+      describe: item.Describe || '',
+      type: item.WorksType,
+      is_authorize: true,
+      is_deleted: !!item.ISDel,
+      state: Math.max(item.WorkState - 1, 0),
+      cover: item.cover_Pic || '',
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
     await WorksNum.create({
       works_id: item.ID,
       type: 0,
@@ -881,7 +880,47 @@ async function dealComment(pool) {
   }
 }
 
-async function dealWorksComment() {
+async function modifyWorksWork() {
+  let last = 134;
+  let sql = `SELECT
+    album_id, work_id
+    FROM music_album_work_relation WHERE id>${last}`;
+  let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+  for(let i = 0, len = res.length; i < len; i++) {
+    let item = res[i];
+    let sql2 = `SELECT
+      works_id
+      FROM works_work_relation
+      WHERE work_id=${item.work_id} LIMIT 0,1`;
+    let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
+    if(res2.length) {
+      let worksId = res2[0].works_id;
+      let sql3 = `UPDATE music_album_work_relation SET works_id=${worksId}
+        WHERE album_id=${item.album_id}`;
+      await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
+    }
+  }
+  last = 151;
+  sql = `SELECT
+    album_id, work_id
+    FROM image_album_work_relation WHERE id>${last}`;
+  res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+  for(let i = 0, len = res.length; i < len; i++) {
+    let item = res[i];
+    let sql2 = `SELECT
+      works_id
+      FROM works_work_relation
+      WHERE work_id=${item.work_id} LIMIT 0,1`;
+    let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
+    if(res2.length) {
+      let worksId = res2[0].works_id;
+      let sql3 = `UPDATE image_album_work_relation SET works_id=${worksId}
+        WHERE album_id=${item.album_id}`;
+      await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
+    }
+  }
+}
+async function modifyWorksComment() {
   let last = 631;
   let sql = `SELECT
     works_id,

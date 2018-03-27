@@ -37,10 +37,6 @@ module.exports = app => {
         name: 'works_type_weight_profession_id',
         unique: true,
         fields: ['works_type', 'group', 'profession_id'],
-      },
-      {
-        name: 'works_type_weight_group_weight_profession_id',
-        fields: ['works_type', 'group', 'weight', 'profession_id'],
       }
     ],
     comment: '大作品职种排序',
