@@ -17,7 +17,7 @@ class Controller extends egg.Controller {
     let [[info, authorSort], author, [collection, collectionAuthor], comment] = await Promise.all([
       service.works.infoAndAuthorSort(worksId),
       service.works.author(worksId),
-      service.works.collectionAndAuthor(worksId),
+      service.works.collectionAndAuthor(worksId, uid),
       service.works.comment(worksId, 0, 10)
     ]);
     comment.take = 10;

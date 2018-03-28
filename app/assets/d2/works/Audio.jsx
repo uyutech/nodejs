@@ -438,8 +438,8 @@ class Audio extends migi.Component {
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.list[this.index || 0].ISLike || this.fnLike ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.list[this.index || 0].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class={ 'like' + ((this.list[this.index || 0] || {}).isLiked || this.fnLike ? ' liked' : '') } onClick={ this.clickLike }/>
+          <li class={ 'favor' + ((this.list[this.index || 0] || {}).isFavored || this.fnFavor ? ' favored' : '') } onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ (this.list[this.index || 0] || {}).url || '#' }
                download={ ((this.list[this.index || 0] || {}).name || '')

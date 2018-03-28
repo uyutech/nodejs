@@ -1,12 +1,12 @@
 /**
- * Created by army8735 on 2018/1/28.
+ * Created by army8735 on 2018/3/28.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_work_relation', {
+  return sequelizeCircling.define('user_image_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -17,23 +17,14 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    works_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      allowNull: false,
-    },
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    class: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '1视频，2音频',
-    },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0点赞作品，1收藏作品',
+      comment: '0点赞图片，1收藏图片',
     },
     is_deleted: {
       type: Sequelize.BOOLEAN,
@@ -53,15 +44,10 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'user_id_type_work_id',
         unique: true,
         fields: ['user_id', 'type', 'work_id'],
-      },
-      {
-        name: 'user_id_type_class',
-        fields: ['user_id', 'type', 'class'],
       }
     ],
-    comment: '用户与作品关联信息',
+    comment: '用户与图片关联信息',
   });
 };

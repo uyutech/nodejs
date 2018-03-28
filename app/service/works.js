@@ -85,7 +85,7 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
-  async collectionByBase(list) {
+  async collectionByBase(list, uid) {
     if(!list) {
       return;
     }
@@ -94,9 +94,15 @@ class Service extends egg.Service {
     }
     const { service } = this;
     if(list.length) {
-      let workList = await service.work.infoList(list);
+      let [workList, userRelationList] = await Promise.all([
+        service.work.infoPlusList(list),
+        service.work.userRelationList(list, uid),
+      ]);
       list.forEach(function(item, i) {
         Object.assign(item, workList[i]);
+        if(userRelationList && userRelationList[i]) {
+          Object.assign(item, userRelationList[i]);
+        }
       });
     }
     return list;
@@ -290,7 +296,7 @@ class Service extends egg.Service {
     }
     return res;
   }
-  async collectionAndAuthor(id) {
+  async collectionAndAuthor(id, uid) {
     if(!id) {
       return;
     }
@@ -300,7 +306,7 @@ class Service extends egg.Service {
       return item.id;
     });
     let [collection, collectionAuthor] = await Promise.all([
-      this.collectionByBase(collectionBase),
+      this.collectionByBase(collectionBase, uid),
       service.work.authorList(collectionIdList),
     ]);
     return [collection, collectionAuthor];

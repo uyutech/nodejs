@@ -69,6 +69,8 @@ const CommentNum = require('./app/model/commentNum')({ sequelizeCircling: sequel
 const AuthorCommentRelation = require('./app/model/authorCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const WorksCommentRelation = require('./app/model/worksCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleCommentRelation = require('./app/model/circleCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
+const UserWorkRelation = require('./app/model/userWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
+const UserImageRelation = require('./app/model/userImageRelation')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -88,7 +90,8 @@ const CircleCommentRelation = require('./app/model/circleCommentRelation')({ seq
     await dealWorks(pool);
     await dealWorksWork(pool);
     await dealComment(pool);
-    await modifyWorksWork();
+    await dealUserWork(pool);
+    // await modifyWorksWork();
     // await modifyWorksComment();
     console.log('======== END ========');
   } catch (err) {
@@ -880,6 +883,213 @@ async function dealComment(pool) {
   }
 }
 
+async function dealUserWork(pool) {
+  console.log('------- dealUserWork --------');
+  await UserWorkRelation.sync();
+  await UserImageRelation.sync();
+  let hash = {};
+  let worksIdHash = {};
+  let workClassHash = {};
+  let exist = {};
+  let last = 19019;
+  let result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_WorkItems WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let worksId = worksIdHash[item.ItemsID];
+    if(!worksId) {
+      let rel = await WorksWorkRelation.findOne({
+        attributes: ['works_id'],
+        where: {
+          work_id: item.ItemsID,
+        },
+      });
+      if(!rel) {
+        continue;
+      }
+      worksId = worksIdHash[item.ItemsID] = rel.works_id;
+    }
+    let workClass = workClassHash[item.ItemsID];
+    if(!workClass) {
+      let work = await Work.findOne({
+        attributes: ['class'],
+        where: {
+          id: item.ItemsID,
+        },
+      });
+      if(!work) {
+        continue;
+      }
+      workClass = workClassHash[item.ItemsID] = work.class;
+    }
+    if(item.UID && item.UID !== '0') {
+      let key = item.UID + ',' + item.ItemsID;
+      if(exist[key]) {
+        continue;
+      }
+      exist[key] = true;
+      if(workClass === 4 || worksId === 1) {
+        continue;
+      }
+      if(workClass === 3) {
+        await UserImageRelation.create({
+          user_id: item.UID,
+          work_id: item.ItemsID,
+          type: 1,
+          is_deleted: false,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
+      }
+      else {
+        await UserWorkRelation.create({
+          user_id: item.UID,
+          work_id: item.ItemsID,
+          works_id: worksId,
+          class: workClass,
+          type: 1,
+          is_deleted: false,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
+      }
+    }
+    else {
+      if(hash[item.CollectionID]) {
+        let key = hash[item.CollectionID] + ',' + item.ItemsID;
+        if(exist[key]) {
+          continue;
+        }
+        exist[key] = true;
+        if(workClass === 3) {
+          await UserImageRelation.create({
+            user_id: hash[item.CollectionID],
+            work_id: item.ItemsID,
+            type: 1,
+            is_deleted: false,
+            create_time: item.CreateTime,
+            update_time: item.CreateTime,
+          });
+        }
+        else {
+          await UserWorkRelation.create({
+            user_id: hash[item.CollectionID],
+            work_id: item.ItemsID,
+            works_id: worksId,
+            class: workClass,
+            type: 1,
+            is_deleted: false,
+            create_time: item.CreateTime,
+            update_time: item.CreateTime,
+          });
+        }
+      }
+      else {
+        let res2 = await pool.request().query(`SELECT UID FROM dbo.Users_CollectionList WHERE ID=${item.CollectionID};`);
+        if(res2.recordset.length) {
+          hash[item.CollectionID] = res2.recordset[0].UID;
+          let key = hash[item.CollectionID] + ',' + item.ItemsID;
+          if(exist[key]) {
+            continue;
+          }
+          exist[key] = true;
+          if(workClass === 3) {
+            await UserImageRelation.create({
+              user_id: res2.recordset[0].UID,
+              work_id: item.ItemsID,
+              type: 1,
+              is_deleted: false,
+              create_time: item.CreateTime,
+              update_time: item.CreateTime,
+            });
+          }
+          else {
+            await UserWorkRelation.create({
+              user_id: res2.recordset[0].UID,
+              work_id: item.ItemsID,
+              works_id: worksId,
+              class: workClass,
+              type: 1,
+              is_deleted: false,
+              create_time: item.CreateTime,
+              update_time: item.CreateTime,
+            });
+          }
+        }
+      }
+    }
+  }
+  hash = {};
+  last = 46852;
+  result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${last} AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let key = item.UID + ',' + item.WorkitemsID;
+    hash[key] = item.BehaviorNumber === 131;
+    if(item.BehaviorNumber === 131) {
+      hash[key] = [item.UID, item.WorkitemsID, item.CreateTime];
+    }
+    else {
+      hash[key] = false;
+    }
+  }
+  for(let i = 0, keys = Object.keys(hash), len = keys.length; i < len; i++) {
+    let item = hash[keys[i]];
+    if(item) {
+      let workClass = workClassHash[item[1]];
+      if(!workClass) {
+        let work = await Work.findOne({
+          attributes: ['class'],
+          where: {
+            id: item.ItemsID,
+          },
+        });
+        if(!work) {
+          continue;
+        }
+        workClass = workClassHash[item[1]] = work.class;
+      }
+      if(workClass === 4 || item[1] === 1) {
+        continue;
+      }
+      if(workClass === 3) {
+        await UserImageRelation.create({
+          user_id: item[0],
+          work_id: item[1],
+          type: 0,
+          is_deleted: false,
+          create_time: item[2],
+          update_time: item[2],
+        })
+      }
+      else {
+        let worksId = worksIdHash[item[1]];
+        if(!worksId) {
+          let rel = await WorksWorkRelation.findOne({
+            attributes: ['works_id'],
+            where: {
+              work_id: item.ItemsID,
+            },
+          });
+          if(!rel) {
+            continue;
+          }
+          worksId = worksIdHash[item[1]] = rel.works_id;
+        }
+        await UserWorkRelation.create({
+          user_id: item[0],
+          work_id: item[1],
+          works_id: worksId,
+          class: workClass,
+          type: 0,
+          is_deleted: false,
+          create_time: item[2],
+          update_time: item[2],
+        });
+      }
+    }
+  }
+}
+
 async function modifyWorksWork() {
   let last = 134;
   let sql = `SELECT
@@ -896,25 +1106,6 @@ async function modifyWorksWork() {
     if(res2.length) {
       let worksId = res2[0].works_id;
       let sql3 = `UPDATE music_album_work_relation SET works_id=${worksId}
-        WHERE album_id=${item.album_id}`;
-      await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
-    }
-  }
-  last = 151;
-  sql = `SELECT
-    album_id, work_id
-    FROM image_album_work_relation WHERE id>${last}`;
-  res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
-  for(let i = 0, len = res.length; i < len; i++) {
-    let item = res[i];
-    let sql2 = `SELECT
-      works_id
-      FROM works_work_relation
-      WHERE work_id=${item.work_id} LIMIT 0,1`;
-    let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
-    if(res2.length) {
-      let worksId = res2[0].works_id;
-      let sql3 = `UPDATE image_album_work_relation SET works_id=${worksId}
         WHERE album_id=${item.album_id}`;
       await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
     }

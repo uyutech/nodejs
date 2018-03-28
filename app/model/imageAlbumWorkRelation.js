@@ -17,10 +17,6 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    works_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      allowNull: false,
-    },
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,

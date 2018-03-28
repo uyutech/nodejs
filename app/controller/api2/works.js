@@ -21,6 +21,23 @@ class Controller extends egg.Controller {
     let res = await service.works.comment(worksId, index, length);
     ctx.body = ctx.helper.okJSON(res);
   }
+  async like() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let worksId = body.worksId;
+    let workId = body.workId;
+    if(!worksId || !workId) {
+      return;
+    }
+    let res = await service.work.like(worksId, workId, uid, body.like === 'true');
+    if(res) {
+      ctx.body = ctx.helper.okJSON(res.is);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON();
+    }
+  }
   async _commentNum() {
     const { ctx, app } = this;
     let uid = ctx.session.uid;

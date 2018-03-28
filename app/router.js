@@ -297,6 +297,7 @@ module.exports = app => {
   app.get('/d/works2/:worksId/:workId', 'd2.works.index');
 
   app.post('/d/api2/works/comment', 'api2.works.comment');
+  app.post('/d/api2/works/like', app.middlewares.needLoginJson(), 'api2.works.like');
   app.get('/d/api2/works/_commentNum', 'api2.works._commentNum');
 
   app.post('/h5/works2/index', 'h52.works.index');

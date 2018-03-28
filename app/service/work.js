@@ -9,12 +9,12 @@ const Sequelize = require('sequelize');
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
-  async info(id, klass) {
+  async infoPlus(id, klass) {
     if(!id || !klass) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'workInfo_' + id;
+    let cacheKey = 'workInfoPlus_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -90,24 +90,87 @@ class Service extends egg.Service {
       }
     }
     else {
-      return;
+      return null;
     }
     return res;
   }
-  async infoList(dataList) {
-    if(!dataList) {
+  async info(id) {
+    if(!id) {
       return;
     }
-    if(!dataList.length) {
+    const { app } = this;
+    let cacheKey = 'workInfo_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let query = await app.model.work.findOne({
+      attributes: [
+        'id',
+        'title',
+        'class',
+        'type',
+      ],
+      where: {
+        id,
+        is_deleted: false,
+      },
+    });
+    if(query) {
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(query));
+    }
+    else {
+      app.redis.setex(cacheKey, CACHE_TIME, null);
+    }
+    return query;
+  }
+  async infoPlusList(list) {
+    if(!list) {
+      return;
+    }
+    if(!list.length) {
       return [];
     }
     const self = this;
-    let res = await Promise.all(dataList.map(function(data) {
-      return self.info(data.id, data.class);
+    let res = await Promise.all(list.map(function(item) {
+      return self.infoPlus(item.id, item.class);
     }));
     return res;
   }
-  async author(id) {}
+  async author(id) {
+    if(!id) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'workAuthor_' + id;
+    let res = await app.reids.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = `SELECT
+      work_author_profession_relation.work_id AS workId,
+      work_author_profession_relation.author_id AS authorId,
+      work_author_profession_relation.profession_id AS professionId,
+      profession.type,
+      profession.type_name AS typeName,
+      profession.kind,
+      profession.kind_name AS kindName
+      FROM work_author_profession_relation, profession
+      WHERE work_author_profession_relation.work_id=${id}
+      AND work_author_profession_relation.is_deleted=false
+      AND work_author_profession_relation.profession_id=profession.id;`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0];
+    }
+    else {
+      res = null;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
   async authorList(idList) {
     if(!idList) {
       return;
@@ -195,6 +258,115 @@ class Service extends egg.Service {
       });
     }
     return authorList;
+  }
+  async userRelationList(list, uid) {
+    if(!list || !uid) {
+      return;
+    }
+    if(!list.length) {
+      return [];
+    }
+    const { app, service } = this;
+    let cache = await Promise.all(list.map(function(item) {
+      return app.redis.get('userWorkRelation_' + uid + '_' + item.id);
+    }));
+    let res = [];
+    let noCacheIdList = [];
+    cache.forEach(function(userWorkRelation, i) {
+      let id = list[i].id;
+      if(userWorkRelation) {
+        userWorkRelation = JSON.parse(userWorkRelation);
+        res[i] = userWorkRelation;
+        app.redis.expire('userWorkRelation_' + uid + '_' + id, CACHE_TIME);
+      }
+      else {
+        noCacheIdList.push(id);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        type,
+        work_id AS workId
+        FROM user_work_relation
+        WHERE user_id=${uid}
+        AND work_id IN (${noCacheIdList.join(', ')})
+        AND is_deleted=false`;
+      let query = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(query.length) {
+        let hash = {};
+        query.forEach(function(item) {
+          let temp = hash[item.workId] = hash[item.workId] || {};
+          if(item.type === 1) {
+            temp.isFavored = true;
+          }
+          else {
+            temp.isLiked = true;
+          }
+        });
+        for(let i = 0, len = list.length; i < len; i++) {
+          let id = list[i].id;
+          let item = hash[id];
+          if(!res[i] && item) {
+            res[i] = item;
+            app.redis.setex('userWorkRelation_' + uid + '_' + id, CACHE_TIME, JSON.stringify(item));
+          }
+        }
+      }
+    }
+    return res;
+  }
+  async like(worksId, workId, uid, is) {
+    if(!worksId || !worksId || !uid) {
+      return;
+    }
+    const { app } = this;
+    let query = await app.model.userWorkRelation.findOne({
+      where: {
+        user_id: uid,
+        type: 0,
+        work_id: workId,
+      },
+    });
+    if(query) {
+      let res = await query.update({
+        is_deleted: !is,
+        update_time: new Date(),
+      }, {
+        where: {
+          user_id: uid,
+          type: 0,
+          work_id: workId,
+        },
+      });
+      if(!res) {
+        return;
+      }
+    }
+    else {
+      let temp = await this.info(workId);
+      if(!temp) {
+        return;
+      }
+      let klass = temp.class;
+      let now = new Date();
+      let res = await app.model.userWorkRelation.create({
+        user_id: uid,
+        type: 0,
+        work_id: workId,
+        works_id: worksId,
+        class: klass,
+        is_deleted: false,
+        create_time: now,
+        update_time: now,
+      });
+      if(!res) {
+        return;
+      }
+    }
+    app.redis.del('userWorkRelation_' + uid + '_' + workId);
+    return {
+      is,
+    };
   }
 }
 

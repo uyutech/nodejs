@@ -269,27 +269,32 @@ class Video extends migi.Component {
       return;
     }
     let self = this;
-    let $vd = $(vd.element);
-    if(!$vd.hasClass('loading')) {
-      $vd.addClass('loading');
-      let data = self.list[self.index || 0];
-      net.postJSON('/api/works/likeWork', { workId: data.id }, function(res) {
-        if(res.success) {
-          data.ISLike = res.data.State === 'likeWordsUser';
-          self.fnLike = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function() {
-        alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
+    if(vd.element.classList.contains('loading')) {
+      return;
     }
+    vd.element.classList.add('loading');
+    let item = self.list[self.index || 0];
+    net.postJSON('/api2/works/like', {
+      worksId: self.props.worksId,
+      workId: item.id,
+      like: !vd.element.classList.contains('liked')
+    }, function(res) {
+      if(res.success) {
+        let data = res.data;console.log(data);
+        item.isLiked = data;
+        self.fnLike = null;
+      }
+      else if(res.code === 1000) {
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+      vd.element.classList.remove('loading');
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      vd.element.classList.remove('loading');
+    });
   }
   clickFavor(e, vd) {
     if(!$CONFIG.isLogin) {
@@ -399,8 +404,10 @@ class Video extends migi.Component {
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.list[this.index || 0].ISLike || this.fnLike ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.list[this.index || 0].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class={ 'like' + ((this.list[this.index || 0] || {}).isLiked || this.fnLike ? ' liked' : '') }
+              onClick={ this.clickLike }/>
+          <li class={ 'favor' + ((this.list[this.index || 0] || {}).isFavored || this.fnFavor ? ' favored' : '') }
+              onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ (this.list[this.index || 0] || {}).url || '#' }
                download={ ((this.list[this.index || 0] || {}).name || '')
