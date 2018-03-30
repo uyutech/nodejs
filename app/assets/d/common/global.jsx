@@ -38,17 +38,17 @@ migi.eventBus.on('SET_VOLUME', function(v) {
   localStorage[key] = v;
 });
 
-migi.eventBus.on('COMMENT', function(type) {
-  let parent = window.parent;
-  if(parent !== window) {
-    parent.comment && parent.comment(type);
-  }
-});
-
 let login = document.querySelector('#gTop .login');
 login && login.addEventListener('click', function(e) {
   e.preventDefault();
   migi.eventBus.emit('NEED_LOGIN');
+});
+let loginOut = document.querySelector('#gTop .out');
+loginOut && loginOut.addEventListener('click', function(e) {
+  e.preventDefault();
+  net.postJSON('/api/login/loginOut', function() {
+    location.reload(true);
+  });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
