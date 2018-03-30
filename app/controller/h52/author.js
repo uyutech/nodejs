@@ -19,7 +19,7 @@ class Controller extends egg.Controller {
       service.author.info(authorId),
       service.author.aliases(authorId),
       service.author.outsides(authorId),
-      service.author.worksList(authorId, 0, 10),
+      service.author.mainWorksList(authorId, 0, 10),
       service.author.comment(authorId, 0, 10)
     ]);
     worksList.take = 10;

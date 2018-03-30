@@ -12,6 +12,7 @@ const SEQUELIZE_STATS = Symbol('Application#sequelizeStats');
 const MODEL = Symbol('Application#Model');
 
 const author = require('../model/author');
+const authorMainWorks = require('../model/authorMainWorks');
 const authorCommentRelation = require('../model/authorCommentRelation');
 const authorNum = require('../model/authorNum');
 const authorOutside = require('../model/authorOutside');
@@ -114,6 +115,7 @@ module.exports = {
     if(!this[MODEL]) {
       this[MODEL] = {
         author: author(this),
+        authorMainWorks: authorMainWorks(this),
         authorCommentRelation: authorCommentRelation(this),
         authorNum: authorNum(this),
         authorOutside: authorOutside(this),

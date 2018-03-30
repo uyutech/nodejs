@@ -55,8 +55,7 @@ class Service extends egg.Service {
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {
-          hash[item.id] = hash[item.id] || [];
-          hash[item.id].push(item.id);
+          hash[item.id] = item;
         });
         noCacheIndexList.forEach(function(i) {
           let id = idList[i];

@@ -33,6 +33,7 @@ const sequelize = new Sequelize('circling', 'root', '87351984@', {
 });
 
 const Author = require('./app/model/author')({ sequelizeCircling: sequelize, Sequelize });
+const AuthorMainWorks = require('./app/model/authorMainWorks')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorAlias = require('./app/model/authorAlias')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorNum = require('./app/model/authorNum')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorOutside = require('./app/model/authorOutside')({ sequelizeCircling: sequelize, Sequelize });
@@ -83,6 +84,7 @@ const UserImageRelation = require('./app/model/userImageRelation')({ sequelizeCi
       database: 'CirclingDB',
     });
     await dealAuthor(pool);
+    await dealAuthorMainWorks(pool);
     await dealWorkAuthorProfession(pool);
     await dealCircle(pool);
     await dealUser(pool);
@@ -222,6 +224,24 @@ async function dealAuthor(pool) {
         update_time: item.CreateTime,
       });
     }
+  }
+}
+
+async function dealAuthorMainWorks(pool) {
+  console.log('------- dealAuthorMainWorks --------');
+  await AuthorMainWorks.sync();
+  let last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Concern_Authors_WorksList WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await AuthorMainWorks.create({
+      author_id: item.AuthorID,
+      works_id: item.WorksID,
+      weight: item.sort,
+      is_deleted: false,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
   }
 }
 
@@ -1137,7 +1157,7 @@ async function modifyWorksComment() {
   }
 }
 async function modifyAuthorComment() {
-  let last = 0;
+  let last = 1082;
   let sql = `SELECT
     author_id,
     comment_id

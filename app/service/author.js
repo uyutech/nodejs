@@ -261,6 +261,12 @@ class Service extends egg.Service {
     }
     return res;
   }
+
+  /**
+   * 获取作者下留言数量
+   * @param id:int 作者id
+   * @returns int 留言数量
+   */
   async commentSize(id) {
     const { app } = this;
     let cacheKey = 'authorCommentSize_' + id;
@@ -285,10 +291,75 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取作者主打大作品id列表
+   * @param id:int 作者id
+   * @param skip:int 分页开始
+   * @param take:int 分页数量
+   * @returns Array<Object> 主打大作品id列表
+   */
+  async mainWorksIdList(id, skip, take) {
+    if(!id) {
+      return;
+    }
+    skip = parseInt(skip) || 0;
+    take = parseInt(take) || 1;
+    const { app } = this;
+    let cacheKey = 'authorMainWorksIdList_' + id + '_' + skip + '_' + take;
+    let res;
+    if(skip === 0) {
+      res = await app.redis.get(cacheKey);
+      if(res) {
+        app.redis.expire(cacheKey, CACHE_TIME);
+        return JSON.parse(res);
+      }
+    }
+    let sql = `SELECT
+      works_id AS worksId
+      FROM author_main_works
+      WHERE author_id=${id}
+      AND is_deleted=false
+      ORDER BY weight DESC
+      LIMIT ${skip},${take};`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    res = res.map(function(item) {
+      return item.worksId;
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取作者参与大作品信息列表
+   * @param id:int 作者id
+   * @param skip:int 分页开始
+   * @param take:int 分页数量
+   * @returns Array<Object> 大作品信息列表
+   */
+  async mainWorksList(id, skip, take) {
+    if(!id) {
+      return;
+    }
+    // 先取得作者所有主打大作品列表id
+    let worksIdList = await this.mainWorksIdList(id, skip, take);
+    let res = await this.worksListByWorksIdList(id, worksIdList);
+    return res;
+  }
+
+  /**
+   * 获取作者参与大作品id列表
+   * @param id:int 作者id
+   * @param skip:int 分页开始
+   * @param take:int 分页数量
+   * @returns Array<Object> 大作品id列表
+   */
   async worksIdList(id, skip, take) {
     if(!id) {
       return;
     }
+    skip = parseInt(skip) || 0;
+    take = parseInt(take) || 1;
     const { app } = this;
     let cacheKey = 'authorWorksIdList_' + id + '_' + skip + '_' + take;
     let res;
@@ -313,14 +384,34 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取作者参与大作品信息列表
+   * @param id:int 作者id
+   * @param skip:int 分页开始
+   * @param take:int 分页数量
+   * @returns Array<Object> 大作品信息列表
+   */
   async worksList(id, skip, take) {
     if(!id) {
       return;
     }
-    const { service } = this;
     // 先取得作者所有大作品列表id
     let worksIdList = await this.worksIdList(id, skip, take);
-    // 获取大作品信息、作者在此大作品中的职种、在大作品下小作品集合中的职种
+    let res = await this.worksListByWorksIdList(id, worksIdList);
+    return res;
+  }
+
+
+  async worksListByWorksIdList(id, worksIdList) {
+    if(!id || !worksIdList) {
+      return;
+    }
+    if(!worksIdList.length) {
+      return [];
+    }
+    const { service } = this;
+    // 获取大作品信息、作者在此大作品中的职种id、在大作品下小作品集合中的职种id
     let [infoList, worksListProfessionIdList, collectionListProfessionIdList] = await Promise.all([
       service.works.infoList(worksIdList),
       this.worksListProfessionIdList(worksIdList, id),
@@ -335,30 +426,40 @@ class Service extends egg.Service {
         worksTypeList.push(item.type);
       }
     });
-    // 汇集全部职种id
+    // 汇集全部职种id，大作品
     let professionIdList = [];
     hash = {};
     worksListProfessionIdList.forEach(function(item) {
-      if(!hash[item]) {
-        hash[item] = true;
-        professionIdList.push(item);
+      if(item) {
+        item.forEach(function(id) {
+          if(id !== null && id !== undefined && !hash[id]) {
+            hash[id] = true;
+            professionIdList.push(id);
+          }
+        });
       }
     });
+    // 小作品集合列表
     collectionListProfessionIdList.forEach(function(item) {
-      if(!hash[item]) {
-        hash[item] = true;
-        professionIdList.push(item);
+      if(item) {
+        item.forEach(function(id) {
+          if(id !== null && id !== undefined && !hash[id]) {
+            hash[id] = true;
+            professionIdList.push(id);
+          }
+        });
       }
     });
     // 查询大作品类型对应的排序规则，和职种名称
     let [typeListProfessionSort, professionInfoList] = await Promise.all([
       service.works.typeListProfessionSort(worksTypeList),
-      service.works.infoList(professionIdList),
+      service.profession.infoList(professionIdList),
     ]);
-    let typeListProfessionSortHash = {};
-    typeListProfessionSort.forEach(function(item) {
-      if(item) {
-        typeListProfessionSortHash[item.worksType] = item;
+    let typeProfessionSortHash = {};
+    worksTypeList.forEach(function(worksType, i) {
+      let sort = typeListProfessionSort[i];
+      if(sort) {
+        typeProfessionSortHash[worksType] = sort;
       }
     });
     let professionInfoHash = {};
@@ -367,14 +468,39 @@ class Service extends egg.Service {
         professionInfoHash[item.id] = item;
       }
     });
+    // 遍历大作品，根据对应的排序信息将最优先展示的职种放入；如果没有排序，默认第一个
     infoList.forEach(function(item, i) {
-      item.pid = worksListProfessionIdList[i];
-      item.cid = collectionListProfessionIdList[i];
-      item.typeSort = typeListProfessionSortHash[item.type];
-      // item.ps = professionInfoHash
+      let type = item.type;
+      let sort = typeProfessionSortHash[type];
+      let professionIdList = (worksListProfessionIdList[i] || []).concat(collectionListProfessionIdList[i] || []);
+      if(sort) {
+        if(professionIdList.length) {
+          let has = {};
+          professionIdList.forEach(function(item) {
+            has[item] = true;
+          });
+          for(let j = 0, len = sort.length; j < len; j++) {
+            let professionId = sort[j].professionId;
+            if(has[professionId]) {
+              item.profession = professionInfoHash[professionId];
+              break;
+            }
+          }
+        }
+      }
+      else if(professionIdList.length) {
+        item.profession = professionInfoHash[professionIdList[0]];
+      }
     });
     return infoList;
   }
+
+  /**
+   * 获取大作品id列表中，作者id参与的职种id列表
+   * @param idList<int> 大作品id列表
+   * @param id 作者id
+   * @returns Array<Array<int>> 对应idList索引序，每项为此大作品中作者id参与的职种id列表
+   */
   async worksListProfessionIdList(idList, id) {
     if(!idList) {
       return;
@@ -436,6 +562,13 @@ class Service extends egg.Service {
     }
     return cache;
   }
+
+  /**
+   * 获取大作品id列表中，每个大作品下小作品集合中作者id参与的职种id列表
+   * @param idList<int> 大作品id列表
+   * @param id 作者id
+   * @returns Array<Array<int>> 对应idList索引序，每项为此大作品下小作品集合中作者id参与的职种id列表
+   */
   async collectionListProfessionIdList(idList, id) {
     if(!idList) {
       return;
