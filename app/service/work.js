@@ -368,6 +368,59 @@ class Service extends egg.Service {
       is,
     };
   }
+  async favor(worksId, workId, uid, is) {
+    if(!worksId || !worksId || !uid) {
+      return;
+    }
+    const { app } = this;
+    let query = await app.model.userWorkRelation.findOne({
+      where: {
+        user_id: uid,
+        type: 1,
+        work_id: workId,
+      },
+    });
+    if(query) {
+      let res = await query.update({
+        is_deleted: !is,
+        update_time: new Date(),
+      }, {
+        where: {
+          user_id: uid,
+          type: 1,
+          work_id: workId,
+        },
+      });
+      if(!res) {
+        return;
+      }
+    }
+    else {
+      let temp = await this.info(workId);
+      if(!temp) {
+        return;
+      }
+      let klass = temp.class;
+      let now = new Date();
+      let res = await app.model.userWorkRelation.create({
+        user_id: uid,
+        type: 1,
+        work_id: workId,
+        works_id: worksId,
+        class: klass,
+        is_deleted: false,
+        create_time: now,
+        update_time: now,
+      });
+      if(!res) {
+        return;
+      }
+    }
+    app.redis.del('userWorkRelation_' + uid + '_' + workId);
+    return {
+      is,
+    };
+  }
 }
 
 module.exports = Service;

@@ -6,32 +6,32 @@
 
 import Page from '../component/page/Page.jsx';
 import Comment from '../component/comment/Comment.jsx';
-import net from "../../d/common/net";
-import util from "../../d/common/util";
+import net from '../common/net';
+import util from '../common/util';
 
-let length = 10;
-let index = 0;
+let take;
+let skip = 0;
 let ajax;
 
 class WorksComment extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
+    take = self.props.data.take;
     self.on(migi.Event.DOM, function() {
       let page = self.ref.page;
       let page2 = self.ref.page2;
-      let comment = self.ref.comment;
       page.on('page', function(i) {
         if(page2) {
           page2.index = i;
         }
-        index = (i - 1) * length;
+        skip = (i - 1) * take;
         self.loadPage();
       });
       if(page2) {
         page2.on('page', function(i) {
           page.index = i;
-          index = (i - 1) * length;
+          skip = (i - 1) * take;
           self.loadPage();
         });
       }
@@ -43,10 +43,10 @@ class WorksComment extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    ajax = net.postJSON('/api2/works/comment', { worksId: self.props.worksId , index, length }, function(res) {
+    ajax = net.postJSON('/api2/works/comment', { worksId: self.props.worksId , skip, take }, function(res) {
       if(res.success) {
         let data = res.data;
-        index += length;
+        skip += take;
         comment.setData(data.data);
       }
       else {
@@ -74,7 +74,7 @@ class WorksComment extends migi.Component {
         </ul>
       </div>
       <Page ref="page"
-            total={ Math.ceil(this.props.data.size / length) }/>
+            total={ Math.ceil(this.props.data.size / take) }/>
       <Comment ref="comment"
                data={ this.props.data.data }/>
     </div>;

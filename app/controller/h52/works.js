@@ -15,14 +15,14 @@ class Controller extends egg.Controller {
     if(!worksId) {
       return;
     }
-    let [[info, authorSort], author, [collection, collectionAuthor], comment] = await Promise.all([
-      service.works.infoAndAuthorSort(worksId),
+    let [[info, professionSort], author, [collection, collectionAuthors], comment] = await Promise.all([
+      service.works.infoAndTypeProfessionSort(worksId),
       service.works.author(worksId),
-      service.works.collectionAndAuthor(worksId, uid),
+      service.works.collectionAndAuthors(worksId, uid),
       service.works.comment(worksId, 0, 10)
     ]);
     comment.take = 10;
-    let authors = service.works.reorder(author, collectionAuthor, authorSort);
+    let authors = service.works.reorder(author, collectionAuthors, professionSort);
     ctx.body = ctx.helper.okJSON({
       info,
       collection,

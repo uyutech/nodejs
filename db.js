@@ -93,6 +93,7 @@ const UserImageRelation = require('./app/model/userImageRelation')({ sequelizeCi
     await dealUserWork(pool);
     // await modifyWorksWork();
     // await modifyWorksComment();
+    await modifyAuthorComment();
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -126,6 +127,7 @@ async function dealAuthor(pool) {
       await AuthorAlias.create({
         author_id: item.ID,
         alias: item.AuthorAliasName,
+        is_settled: false,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -723,7 +725,7 @@ async function dealComment(pool) {
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    // 作者根留言，老数据parent_id有误，重新处理
+    // 作者根留言，老数据root_id有误，重新处理
     if(item.RootID === -1) {
       await Comment.create({
         id: item.ID,
@@ -1130,6 +1132,35 @@ async function modifyWorksComment() {
         let sql3 = `UPDATE comment SET root_id=${item2.root_id}
         WHERE root_id=${item2.id} AND root_id=parent_id`;
         await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
+      }
+    }
+  }
+}
+async function modifyAuthorComment() {
+  let last = 0;
+  let sql = `SELECT
+    author_id,
+    comment_id
+    FROM author_comment_relation
+    WHERE id>${last}`;
+  let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+  for(let i = 0, len = res.length; i < len; i++) {
+    let item = res[i];
+    let sql2 = `SELECT id, parent_id, root_id FROM comment
+      WHERE root_id=${item.comment_id}`;
+    let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
+    if(res2.length) {
+      for(let j = 0; j < res2.length; j++) {
+        let item2 = res2[j];
+        let sql3 = `UPDATE comment SET root_id=${item2.root_id}
+        WHERE root_id=${item2.id} AND root_id=parent_id`;
+        await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
+        // let sql4 = `UPDATE comment SET root_id=${item2.root_id}
+        // WHERE parent_id=${item2.id} AND root_id=-1`;
+        // await sequelize.query(sql4, { type: Sequelize.QueryTypes.UPDATE });
+        let sql5 = `UPDATE comment SET root_id=${item2.root_id}
+        WHERE root_id=${item2.id}`;
+        await sequelize.query(sql5, { type: Sequelize.QueryTypes.UPDATE });
       }
     }
   }

@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2018/3/19.
+ * Created by army8735 on 2018/3/30.
  */
 
 'use strict';
@@ -9,35 +9,7 @@ const Sequelize = require('sequelize');
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
-  async info(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'userInfo_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    let sql = `SELECT
-      user.id,
-      user.nickname,
-      user.head_url AS headUrl,
-      user.sign,
-      user.coins
-      FROM user
-      WHERE id=${id};`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0];
-    }
-    else {
-      res = null;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
+  async info(id) {}
   async infoList(idList) {
     if(!idList) {
       return;
@@ -48,7 +20,9 @@ class Service extends egg.Service {
     const { app } = this;
     let cache = await Promise.all(
       idList.map(function(id) {
-        return app.redis.get('userInfo_' + id);
+        if(id !== null && id !== undefined) {
+          return app.redis.get('professionInfo_' + id);
+        }
       })
     );
     let noCacheIdList = [];
@@ -58,7 +32,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('userInfo_' + id, CACHE_TIME);
+        app.redis.expire('professionInfo_' + id, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -70,29 +44,29 @@ class Service extends egg.Service {
     });
     if(noCacheIdList.length) {
       let sql = `SELECT
-        user.id,
-        user.nickname,
-        user.head_url AS headUrl,
-        user.sign,
-        user.coins
-        FROM user
-        WHERE id IN(${noCacheIdList.join(', ')});`;
+        id,
+        type,
+        type_name AS typeName,
+        kind,
+        kind_name AS kindName
+        FROM profession
+        WHERE id IN (${noCacheIdList.join(', ')});`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item, i) {
-          let id = item.id;
-          hash[id] = item;
+        res.forEach(function(item) {
+          hash[item.id] = hash[item.id] || [];
+          hash[item.id].push(item.id);
         });
         noCacheIndexList.forEach(function(i) {
           let id = idList[i];
           let temp = hash[id];
           if(temp) {
             cache[i] = temp;
-            app.redis.setex('userInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+            app.redis.setex('authorWorksCollectionListProfessionList_' + id, CACHE_TIME, JSON.stringify(temp));
           }
           else {
-            app.redis.setex('userInfo_' + id, CACHE_TIME, 'null');
+            app.redis.setex('authorWorksCollectionListProfessionList_' + id, CACHE_TIME, 'null');
           }
         });
       }

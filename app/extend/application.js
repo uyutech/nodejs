@@ -15,6 +15,7 @@ const author = require('../model/author');
 const authorCommentRelation = require('../model/authorCommentRelation');
 const authorNum = require('../model/authorNum');
 const authorOutside = require('../model/authorOutside');
+const authorAlias = require('../model/authorAlias');
 const circle = require('../model/circle');
 const circleCommentRelation = require('../model/circleCommentRelation');
 const circleNum = require('../model/circleNum');
@@ -116,6 +117,7 @@ module.exports = {
         authorCommentRelation: authorCommentRelation(this),
         authorNum: authorNum(this),
         authorOutside: authorOutside(this),
+        authorAlias: authorAlias(this),
         circle: circle(this),
         circleCommentRelation: circleCommentRelation(this),
         circleNum: circleNum(this),

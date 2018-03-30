@@ -277,10 +277,10 @@ class Video extends migi.Component {
     net.postJSON('/api2/works/like', {
       worksId: self.props.worksId,
       workId: item.id,
-      like: !vd.element.classList.contains('liked')
+      is: !vd.element.classList.contains('liked')
     }, function(res) {
       if(res.success) {
-        let data = res.data;console.log(data);
+        let data = res.data;
         item.isLiked = data;
         self.fnLike = null;
       }
@@ -302,47 +302,32 @@ class Video extends migi.Component {
       return;
     }
     let self = this;
-    let $vd = $(vd.element);
-    let data = self.list[self.index || 0];
-    if($vd.hasClass('loading')) {
-      //
+    if(vd.element.classList.contains('loading')) {
+      return;
     }
-    else if($vd.hasClass('has')) {
-      net.postJSON('/api/works/unFavorWork', { workId: data.id }, function(res) {
-        if(res.success) {
-          data.ISFavor = false;
-          self.fnFavor = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function() {
+    vd.element.classList.add('loading');
+    let item = self.list[self.index || 0];
+    net.postJSON('/api2/works/favor', {
+      worksId: self.props.worksId,
+      workId: item.id,
+      is: !vd.element.classList.contains('favored')
+    }, function(res) {
+      if(res.success) {
+        let data = res.data;
+        item.isFavored = data;
+        self.fnFavor = null;
+      }
+      else if(res.code === 1000) {
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+      else {
         alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
-    }
-    else {
-      net.postJSON('/api/works/favorWork', { workId: data.id }, function(res) {
-        if(res.success) {
-          data.ISFavor = true;
-          self.fnFavor = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function() {
-        alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
-    }
+      }
+      $vd.removeClass('loading');
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+      $vd.removeClass('loading');
+    });
   }
   clickDownload(e) {
     if(!$CONFIG.isLogin) {

@@ -292,14 +292,22 @@ module.exports = app => {
 
   app.post('/mns/mts/job', 'mns.mts.job');
 
-  app.get('/d/author2/:authorId', 'd2.author.index');
   app.get('/d/works2/:worksId', 'd2.works.index');
   app.get('/d/works2/:worksId/:workId', 'd2.works.index');
 
+  app.get('/d/author2/:authorId', 'd2.author.index');
+
   app.post('/d/api2/works/comment', 'api2.works.comment');
   app.post('/d/api2/works/like', app.middlewares.needLoginJson(), 'api2.works.like');
-  app.get('/d/api2/works/_commentNum', 'api2.works._commentNum');
+  app.post('/d/api2/works/favor', app.middlewares.needLoginJson(), 'api2.works.favor');
+  app.post('/d/api2/author/comment', 'api2.author.comment');
+
+  app.get('/count/worksCommentNum', app.middlewares.needLoginJson(), 'count.worksCommentNum');
+  app.get('/count/authorCommentNum', app.middlewares.needLoginJson(), 'count.authorCommentNum');
 
   app.post('/h5/works2/index', 'h52.works.index');
   app.post('/h5/works2/comment', 'h52.works.comment');
+
+  app.post('/h5/author2/index', 'h52.author.index');
+  app.post('/h5/author2/comment', 'h52.author.comment');
 };

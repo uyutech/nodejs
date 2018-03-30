@@ -22,7 +22,10 @@ module.exports = app => {
       let hotCommentData = [];
       let hotPlayList = {};
       let res = yield {
-        authorDetail: ctx.service.author.index(authorID),
+        authorDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorDetails', {
+          uid,
+          AuthorID: authorID,
+        }),
         homeDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorHomePage', {
           AuthorID: authorID,
         }),
@@ -47,8 +50,8 @@ module.exports = app => {
           AuthorID: authorID,
         }),
       };
-      if(res.authorDetail) {
-        authorDetail = res.authorDetail;
+      if(res.authorDetail.data.success) {
+        authorDetail = res.authorDetail.data.data;
       }
       if(res.homeDetail.data.success) {
         homeDetail = res.homeDetail.data.data;

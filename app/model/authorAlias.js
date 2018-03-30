@@ -21,6 +21,11 @@ module.exports = app => {
       type: Sequelize.STRING(32),
       allowNull: false,
     },
+    is_settled: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,

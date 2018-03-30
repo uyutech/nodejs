@@ -49,6 +49,61 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+  async infoList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('worksInfo_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('worksInfo_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        noCacheIdList.push(id);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        works.id,
+        works.title,
+        works.sub_title AS subTitle,
+        works.state,
+        works.cover,
+        works.type,
+        works_type.name AS typeName
+        FROM works, works_type
+        WHERE works.id IN (${noCacheIdList.join(', ')})
+        AND works.is_authorize=true
+        AND works.type=works_type.id;`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let hash = {};
+      res.forEach(function(item) {
+        let id = item.id;
+        hash[id] = item;
+        app.redis.setex('worksInfo_' + id, CACHE_TIME, JSON.stringify(item));
+      });
+      cache.forEach(function(item, i) {
+        let id = idList[i];
+        if(!item && hash[id]) {
+          cache[i] = hash[id];
+        }
+      });
+    }
+    return cache;
+  }
   async collection(id) {
     if(!id) {
       return;
@@ -249,12 +304,12 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
-  async author(id) {
+  async authors(id) {
     if(!id) {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'worksAuthor_' + id;
+    let cacheKey = 'worksAuthors_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
@@ -262,22 +317,28 @@ class Service extends egg.Service {
     }
     else {
       let sql = `SELECT
-      works_author_profession_relation.author_id AS authorId,
-      works_author_profession_relation.profession_id AS professionId,
-      profession.type,
-      profession.type_name AS typeName,
-      profession.kind,
-      profession.kind_name AS kindName
-      FROM works_author_profession_relation, profession
-      WHERE works_author_profession_relation.works_id=${id}
-      AND works_author_profession_relation.is_deleted=false
-      AND works_author_profession_relation.profession_id=profession.id;`;
+        works_author_profession_relation.works_id AS worksId,
+        works_author_profession_relation.author_id AS authorId,
+        works_author_profession_relation.profession_id AS professionId,
+        profession.type,
+        profession.type_name AS typeName,
+        profession.kind,
+        profession.kind_name AS kindName
+        FROM works_author_profession_relation, profession
+        WHERE works_author_profession_relation.works_id=${id}
+        AND works_author_profession_relation.is_deleted=false
+        AND works_author_profession_relation.profession_id=profession.id;`;
       res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
     let authorIdList = [];
+    let hash = {};
     res.forEach(function(item) {
-      authorIdList.push(item.authorId);
+      let authorId = item.authorId;
+      if(!hash[authorId]) {
+        hash[authorId] = true;
+        authorIdList.push(authorId);
+      }
     });
     if(authorIdList.length) {
       let list = await service.author.infoList(authorIdList);
@@ -296,7 +357,7 @@ class Service extends egg.Service {
     }
     return res;
   }
-  async collectionAndAuthor(id, uid) {
+  async collectionAndAuthors(id, uid) {
     if(!id) {
       return;
     }
@@ -305,24 +366,25 @@ class Service extends egg.Service {
     let collectionIdList = collectionBase.map(function(item) {
       return item.id;
     });
-    let [collection, collectionAuthor] = await Promise.all([
+    let [collection, collectionAuthors] = await Promise.all([
       this.collectionByBase(collectionBase, uid),
       service.work.authorList(collectionIdList),
     ]);
-    return [collection, collectionAuthor];
+    return [collection, collectionAuthors];
   }
-  async authorSort(type) {
+  async typeProfessionSort(type) {
     if(!type) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorSort_' + type;
+    let cacheKey = 'typeProfessionSort_' + type;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     let sql = `SELECT
+      works_type AS worksType,
       \`group\`,
       weight,
       profession_id AS professionId
@@ -333,18 +395,79 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
-  async infoAndAuthorSort(id) {
+  async typeListProfessionSort(typeList) {
+    if(!typeList) {
+      return;
+    }
+    if(!typeList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      typeList.map(function(type) {
+        return app.redis.get('typeProfessionSort_' + type);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let type = typeList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('typeProfessionSort_' + type, CACHE_TIME);
+      }
+      else if(type !== null && type !== undefined) {
+        if(!noCacheIdHash[type]) {
+          noCacheIdHash[type] = true;
+          noCacheIdList.push(type);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        works_type AS worksType,
+        \`group\`,
+        weight,
+        profession_id AS professionId
+        FROM works_type_profession_sort
+        WHERE works_type IN (${noCacheIdList.join(', ')})
+        ORDER BY \`group\`, weight DESC`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          hash[item.worksType] = hash[item.worksType] || [];
+          hash[item.worksType].push(item);
+        });
+        noCacheIndexList.forEach(function(i) {
+          let worksType = typeList[i];
+          let temp = hash[worksType];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, JSON.stringify(res));
+          }
+          else {
+            app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
+  }
+  async infoAndTypeProfessionSort(id) {
     if(!id) {
       return;
     }
     let info = await this.info(id);
-    let authorSort = await this.authorSort(info.type);
-    return [info, authorSort];
+    let professionSort = await this.typeProfessionSort(info.type);
+    return [info, professionSort];
   }
-  reorder(author, collectionAuthor, rule) {
+  reorder(author, collectionAuthors, rule) {
     rule = rule || [];
     let res = [];
-    let all = author.concat(collectionAuthor);
+    let all = author.concat(collectionAuthors);
     // 先去重
     let exist = {};
     for(let i = all.length - 1; i >= 0; i--) {

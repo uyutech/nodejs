@@ -7,37 +7,27 @@
 const egg = require('egg');
 
 class Controller extends egg.Controller {
-  async index(ctx) {
-    const model = ctx.model;
+  async index() {
+    const { ctx, service } = this;
     let uid = ctx.session.uid;
     let authorId = ctx.params.authorId;
     if(!authorId) {
       return;
     }
-    let [author, authorOutside] = await Promise.all([
-      model.author.findOne({
-        attributes: {
-          exclude: ['state', 'type', 'create_time', 'update_time'],
-        },
-        where: {
-          id: authorId,
-          state: 1,
-        },
-      }),
-      model.authorOutside.findAll({
-        attributes: {
-          exclude: ['id', 'author_id', 'state', 'create_time', 'update_time'],
-        },
-        where: {
-          author_id: authorId,
-          state: 1,
-        },
-      })
+    let [info, aliases, outsides, comment] = await Promise.all([
+      service.author.info(authorId),
+      service.author.aliases(authorId),
+      service.author.outsides(authorId),
+      service.author.comment(authorId, 0, 10)
     ]);
-    ctx.body = {
-      author,
-      authorOutside,
-    };
+    comment.take = 10;
+    await ctx.render('dauthor2', {
+      authorId,
+      info,
+      aliases,
+      outsides,
+      comment,
+    });
   }
 }
 

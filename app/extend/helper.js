@@ -27,6 +27,13 @@ let helper = {
       data: data.data,
     };
   },
+  loginJSON() {
+    return {
+      success: false,
+      code: 1000,
+      message: '请先登录',
+    };
+  },
   async postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
