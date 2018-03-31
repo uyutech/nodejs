@@ -52,7 +52,6 @@ const WorkAudio = require('./app/model/workAudio')({ sequelizeCircling: sequeliz
 const WorkVideo = require('./app/model/workVideo')({ sequelizeCircling: sequelize, Sequelize });
 const WorkImage = require('./app/model/workImage')({ sequelizeCircling: sequelize, Sequelize });
 const WorkText = require('./app/model/workText')({ sequelizeCircling: sequelize, Sequelize });
-const WorkType = require('./app/model/workType')({ sequelizeCircling: sequelize, Sequelize });
 const WorkNum = require('./app/model/workNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksType = require('./app/model/worksType')({ sequelizeCircling: sequelize, Sequelize });
 const Works = require('./app/model/works')({ sequelizeCircling: sequelize, Sequelize });
@@ -254,20 +253,10 @@ async function dealWork(pool) {
   await WorkVideo.sync();
   await WorkImage.sync();
   await WorkText.sync();
-  await WorkType.sync();
   await WorkNum.sync();
-  let last = 46;
-  let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkItemType WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorkType.create({
-      id: item.ID,
-      name: item.ItemTypeName,
-    });
-  }
-  last = 2016000000008449;
+  let last = 2016000000008449;
   // last = 0;
-  result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
+  let result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     let work = await Work.create({

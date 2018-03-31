@@ -9,6 +9,12 @@ const Sequelize = require('sequelize');
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
+  /**
+   * 根据小作品id和klass获取完整信息
+   * @param id:int 小作品id
+   * @param klass:int 小作品分类（视频、音频等）
+   * @returns Object
+   */
   async infoPlus(id, klass) {
     if(!id || !klass) {
       return;
@@ -94,6 +100,12 @@ class Service extends egg.Service {
     }
     return res;
   }
+
+  /**
+   * 根据小作品id获取基本信息
+   * @param id:int 小作品id
+   * @returns Object
+   */
   async info(id) {
     if(!id) {
       return;
@@ -125,6 +137,77 @@ class Service extends egg.Service {
     }
     return query;
   }
+
+  /**
+   * 根据小作品id列表获取基本信息
+   * @param idList:Array<int> 小作品id列表
+   * @returns Array<Object>
+   */
+  async infoList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        return app.redis.get('workInfo_' + id);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('workInfo_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        id,
+        title,
+        class,
+        type
+        FROM work
+        WHERE id IN (${noCacheIdList.join(', ')});`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          hash[item.id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('workInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('workInfo_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
+  }
+
+  /**
+   * 根据小作品id和klass列表获取完整信息
+   * @param list:Array<{id:int, klass:int}> 小作品id
+   * @returns Array<Object>
+   */
   async infoPlusList(list) {
     if(!list) {
       return;

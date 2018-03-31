@@ -62,10 +62,10 @@ class Service extends egg.Service {
           let temp = hash[id];
           if(temp) {
             cache[i] = temp;
-            app.redis.setex('authorWorksCollectionListProfessionList_' + id, CACHE_TIME, JSON.stringify(temp));
+            app.redis.setex('professionInfo_' + id, CACHE_TIME, JSON.stringify(temp));
           }
           else {
-            app.redis.setex('authorWorksCollectionListProfessionList_' + id, CACHE_TIME, 'null');
+            app.redis.setex('professionInfo_' + id, CACHE_TIME, 'null');
           }
         });
       }

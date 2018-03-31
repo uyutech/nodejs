@@ -25,10 +25,10 @@ class Controller extends egg.Controller {
       service.author.comment(authorId, 0, 10)
     ]);
     mainWorksList.take = 10;
-    workClassList = service.work.classList2InfoList(workClassList);
-    let classWorksList;
+    let classWorkList;
     if(workClassList.length) {
-      classWorksList = await service.author.classWorksList(authorId, workClassList[0], 0, 10);
+      classWorkList = await service.author.classWork(authorId, workClassList[0].klass, 0, 10);
+      classWorkList.take = 10;
     }
     comment.take = 10;
     ctx.body = ctx.helper.okJSON({
@@ -38,7 +38,7 @@ class Controller extends egg.Controller {
       mainWorksList,
       musicAlbumList,
       workClassList,
-      classWorksList,
+      classWorkList,
       comment,
     });
   }
@@ -52,6 +52,26 @@ class Controller extends egg.Controller {
     }
     let res = await service.comment.comment(authorId, body.skip || 0, body.take || 10);
     ctx.body = ctx.helper.okJSON(res);
+  }
+  async classWork() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let authorId = body.authorId;
+    let klass = body.klass;
+    let skip = body.skip;
+    let take = body.take;
+    if(!authorId || klass === null || klass === undefined) {
+      return;
+    }
+    skip = parseInt(skip) || 0;
+    take = parseInt(take) || 10;
+    if(skip < 0 || take < 1) {
+      return;
+    }
+    let classWorks = await service.author.classWork(authorId, klass, skip, take);
+    classWorks.take = 10;
+    ctx.body = ctx.helper.okJSON(classWorks);
   }
 }
 
