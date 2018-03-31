@@ -13,6 +13,11 @@ module.exports = app => {
       autoIncrement: true,
       allowNull: false,
     },
+    work_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      primaryKey: true,
+      allowNull: false,
+    },
     name: {
       type: Sequelize.STRING(32),
       allowNull: false,

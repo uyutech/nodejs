@@ -17,6 +17,10 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    work_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+    },
     author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
@@ -43,11 +47,15 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'works_id_author_id_profession_id',
+        name: 'works_id_work_id_author_id_profession_id',
         unique: true,
-        fields: ['works_id', 'author_id', 'profession_id'],
+        fields: ['works_id', 'work_id', 'author_id', 'profession_id'],
+      },
+      {
+        name: 'author_id',
+        fields: ['author_id'],
       }
     ],
-    comment: '大作品作者职种关联信息',
+    comment: '作品作者职种关联信息',
   });
 };

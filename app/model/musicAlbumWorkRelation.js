@@ -35,11 +35,6 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    tips: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,

@@ -8,6 +8,11 @@ module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('work_text', {
     id: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      primaryKey: true,
+      allowNull: false,
+    },
+    work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       primaryKey: true,
       allowNull: false,

@@ -421,6 +421,18 @@ class Service extends egg.Service {
       is,
     };
   }
+  classList2InfoList(classList) {
+    return classList.map(function(klass) {
+      return {
+        klass,
+        name: {
+          1: '视频',
+          2: '音频',
+          3: '图片',
+        }[klass],
+      };
+    });
+  }
 }
 
 module.exports = Service;

@@ -25,11 +25,6 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    class: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '1视频，2音频',
-    },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
@@ -56,10 +51,6 @@ module.exports = app => {
         name: 'user_id_type_work_id',
         unique: true,
         fields: ['user_id', 'type', 'work_id'],
-      },
-      {
-        name: 'user_id_type_class',
-        fields: ['user_id', 'type', 'class'],
       }
     ],
     comment: '用户与作品关联信息',

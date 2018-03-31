@@ -49,6 +49,12 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 根据作品id列表获取作品信息列表
+   * @param idList:Array<int> 作品id列表
+   * @returns Array<Object>
+   */
   async infoList(idList) {
     if(!idList) {
       return;
@@ -65,6 +71,8 @@ class Service extends egg.Service {
       })
     );
     let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
     cache.forEach(function(item, i) {
       let id = idList[i];
       if(item) {
@@ -72,7 +80,11 @@ class Service extends egg.Service {
         app.redis.expire('worksInfo_' + id, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
-        noCacheIdList.push(id);
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
       }
     });
     if(noCacheIdList.length) {
@@ -89,21 +101,33 @@ class Service extends egg.Service {
         AND works.is_authorize=true
         AND works.type=works_type.id;`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-      let hash = {};
-      res.forEach(function(item) {
-        let id = item.id;
-        hash[id] = item;
-        app.redis.setex('worksInfo_' + id, CACHE_TIME, JSON.stringify(item));
-      });
-      cache.forEach(function(item, i) {
-        let id = idList[i];
-        if(!item && hash[id]) {
-          cache[i] = hash[id];
-        }
-      });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.id;
+          hash[id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('worksInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('worksInfo_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
     }
     return cache;
   }
+
+  /**
+   * 根据大作品id获取小作品集合信息
+   * @param id:int 大作品id
+   * @returns Array<Object>
+   */
   async collection(id) {
     if(!id) {
       return;
@@ -112,6 +136,12 @@ class Service extends egg.Service {
     res = await this.collectionByBase(res);
     return res;
   }
+
+  /**
+   * 根据大作品id获取小作品集合基本信息
+   * @param id:int 大作品id
+   * @returns Array<Object>
+   */
   async collectionBase(id) {
     if(!id) {
       return;
@@ -140,6 +170,13 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 根据小作品基本信息列表获取小作品全部信息
+   * @param list:Array<Object> 小作品基本信息列表
+   * @param uid:int 用户id
+   * @returns Array<Object>
+   */
   async collectionByBase(list, uid) {
     if(!list) {
       return;
@@ -162,19 +199,22 @@ class Service extends egg.Service {
     }
     return list;
   }
-  async comment(id, index, length) {
+  async comment(id, skip, take) {
     let [data, size] = await Promise.all([
-      this.commentData(id, index, length),
+      this.commentData(id, skip, take),
       this.commentSize(id)
     ]);
     return { data, size };
   }
-  async commentData(id, index = 0, length = 1) {
+  async commentData(id, skip = 0, take = 1) {
     if(!id) {
       return;
     }
-    index = parseInt(index) || 0;
-    length = parseInt(length) || 1;
+    skip = parseInt(skip) || 0;
+    take = parseInt(take) || 1;
+    if(skip < 0 || take < 1) {
+      return;
+    }
     const { app, service } = this;
     let sql = `SELECT
       comment.id,
@@ -190,7 +230,7 @@ class Service extends egg.Service {
       AND works_comment_relation.comment_id=comment.root_id
       AND comment.is_deleted=false
       ORDER BY comment.id DESC
-      LIMIT ${index},${length};`;
+      LIMIT ${skip},${take};`;
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       let userIdHash = {};
@@ -304,7 +344,7 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
-  async authors(id) {
+  async authorList(id) {
     if(!id) {
       return;
     }
@@ -318,6 +358,7 @@ class Service extends egg.Service {
     else {
       let sql = `SELECT
         works_author_profession_relation.works_id AS worksId,
+        works_author_profession_relation.work_id AS workId,
         works_author_profession_relation.author_id AS authorId,
         works_author_profession_relation.profession_id AS professionId,
         profession.type,
@@ -356,21 +397,6 @@ class Service extends egg.Service {
       });
     }
     return res;
-  }
-  async collectionAndAuthors(id, uid) {
-    if(!id) {
-      return;
-    }
-    const { service } = this;
-    let collectionBase = await this.collectionBase(id);
-    let collectionIdList = collectionBase.map(function(item) {
-      return item.id;
-    });
-    let [collection, collectionAuthors] = await Promise.all([
-      this.collectionByBase(collectionBase, uid),
-      service.work.authorList(collectionIdList),
-    ]);
-    return [collection, collectionAuthors];
   }
   async typeProfessionSort(type) {
     if(!type) {
@@ -464,32 +490,24 @@ class Service extends egg.Service {
     let professionSort = await this.typeProfessionSort(info.type);
     return [info, professionSort];
   }
-  reorder(author, collectionAuthors, rule) {
+  reorder(authorList, rule) {
     rule = rule || [];
     let res = [];
-    let all = author.concat(collectionAuthors);
     // 先去重
     let exist = {};
-    for(let i = all.length - 1; i >= 0; i--) {
-      let item = all[i];
+    for(let i = authorList.length - 1; i >= 0; i--) {
+      let item = authorList[i];
       let key = item.authorId + '_' + item.professionId;
       if(exist[key]) {
-        all.splice(i, 1);
+        authorList.splice(i, 1);
       }
       exist[key] = true;
     }
     // 相同职业合并，并存成hash
     let hash = {};
-    all.forEach(function(item) {
+    authorList.forEach(function(item) {
       hash[item.professionId] = hash[item.professionId] || [];
       hash[item.professionId].push(item);
-    });
-    // 将规则按group、weight排序
-    migi.sort(rule, function(a, b) {
-      if(a.group === b.group) {
-        return a.weight > b.weight;
-      }
-      return a.group > b.group;
     });
     // 遍历规则，如遇到则将对应职业的作者们存入
     let lastGroup = -1;

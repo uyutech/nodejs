@@ -38,7 +38,6 @@ const AuthorAlias = require('./app/model/authorAlias')({ sequelizeCircling: sequ
 const AuthorNum = require('./app/model/authorNum')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorOutside = require('./app/model/authorOutside')({ sequelizeCircling: sequelize, Sequelize });
 const Profession = require('./app/model/profession')({ sequelizeCircling: sequelize, Sequelize });
-const WorkAuthorProfessionRelation = require('./app/model/workAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
 const WorksAuthorProfessionRelation = require('./app/model/worksAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Circle = require('./app/model/circle')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTop = require('./app/model/circleTop')({ sequelizeCircling: sequelize, Sequelize });
@@ -59,6 +58,8 @@ const WorksType = require('./app/model/worksType')({ sequelizeCircling: sequeliz
 const Works = require('./app/model/works')({ sequelizeCircling: sequelize, Sequelize });
 const WorksTypeProfessionSort = require('./app/model/worksTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
 const MusicAlbum = require('./app/model/musicAlbum')({ sequelizeCircling: sequelize, Sequelize });
+const MusicAlbumAuthorProfessionRelation = require('./app/model/musicAlbumAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
+const ImageAlbumAuthorProfessionRelation = require('./app/model/imageAlbumAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbum = require('./app/model/imageAlbum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksNum = require('./app/model/worksNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksTimeline = require('./app/model/worksTimeline')({ sequelizeCircling: sequelize, Sequelize });
@@ -85,17 +86,18 @@ const UserImageRelation = require('./app/model/userImageRelation')({ sequelizeCi
     });
     await dealAuthor(pool);
     await dealAuthorMainWorks(pool);
-    await dealWorkAuthorProfession(pool);
-    await dealCircle(pool);
-    await dealUser(pool);
     await dealWork(pool);
     await dealWorks(pool);
     await dealWorksWork(pool);
+    await dealWorkAuthorProfession(pool);
+    await dealCircle(pool);
+    await dealUser(pool);
     await dealComment(pool);
     await dealUserWork(pool);
-    // await modifyWorksWork();
+    // await modifyMusicAlubmWork();
     // await modifyWorksComment();
-    await modifyAuthorComment();
+    // await modifyAuthorComment();
+    // await modifyWorksRelation();
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -230,7 +232,7 @@ async function dealAuthor(pool) {
 async function dealAuthorMainWorks(pool) {
   console.log('------- dealAuthorMainWorks --------');
   await AuthorMainWorks.sync();
-  let last = 0;
+  let last = 295;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Authors_WorksList WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -245,11 +247,319 @@ async function dealAuthorMainWorks(pool) {
   }
 }
 
+async function dealWork(pool) {
+  console.log('------- dealWork --------');
+  await Work.sync();
+  await WorkAudio.sync();
+  await WorkVideo.sync();
+  await WorkImage.sync();
+  await WorkText.sync();
+  await WorkType.sync();
+  await WorkNum.sync();
+  let last = 46;
+  let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkItemType WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await WorkType.create({
+      id: item.ID,
+      name: item.ItemTypeName,
+    });
+  }
+  last = 2016000000008449;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let work = await Work.create({
+      work_id: item.ID,
+      title: item.ItemsName || '',
+      class: item.BigType,
+      type: item.ItemType,
+      is_deleted: !!item.ISDel,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+    // await WorkNum.create({
+    //   work_id: item.ID,
+    //   type: 0,
+    //   num: 0,
+    //   update_time: item.CreateTime,
+    // });
+    if(item.BigType === 2) {
+      await WorkAudio.create({
+        id: work.id,
+        work_id: item.ID,
+        time: 0,
+        cover: '',
+        url: item.FileUrl || '',
+        lrc: '',
+      });
+    }
+    else if(item.BigType === 1) {
+      await WorkVideo.create({
+        id: work.id,
+        work_id: item.ID,
+        width: 0,
+        height: 0,
+        time: 0,
+        cover: '',
+        url: item.FileUrl || '',
+      });
+    }
+    else if(item.BigType === 3) {
+      await WorkImage.create({
+        id: work.id,
+        work_id: item.ID,
+        width: 0,
+        height: 0,
+        time: 0,
+        url: item.FileUrl || '',
+      });
+    }
+    else if(item.BigType === 4) {
+      await WorkText.create({
+        id: work.id,
+        work_id: item.ID,
+        content: '',
+      });
+    }
+  }
+  last = 2016000000008375;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Audio WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await WorkAudio.update({
+      cover: item.AudioPic || '',
+      lrc: item.lrc || '',
+    }, {
+      where: {
+        work_id: item.ItemsID,
+      },
+    });
+  }
+  last = 2016000000008355;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Video WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await WorkVideo.update({
+      cover: item.CoverPic || '',
+      width: item.Width || 0,
+      height: item.Height || 0,
+    }, {
+      where: {
+        work_id: item.ItemsID,
+      },
+    });
+  }
+  last = 2016000000008310;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Pic WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await WorkImage.update({
+      width: item.Width || 0,
+      height: item.Height || 0,
+    }, {
+      where: {
+        work_id: item.ItemsID,
+      },
+    });
+  }
+  last = 2016000000008366;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Text WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await WorkText.update({
+      content: item.textContent,
+    }, {
+      where: {
+        work_id: item.ItemsID,
+      },
+    });
+  }
+}
+
+async function dealWorks(pool) {
+  console.log('------- dealWorks --------');
+  await WorksType.sync();
+  await Works.sync();
+  await WorksNum.sync();
+  await MusicAlbum.sync();
+  await ImageAlbum.sync();
+  await WorksTimeline.sync();
+  let last = 36;
+  let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkType WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await WorksType.create({
+      id: item.ID,
+      name: item.TypeName,
+    });
+  }
+  last = 2015000000003600;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Works_Info WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    if(['5', '6', '18'].indexOf(item.WorksType) > -1) {
+      await MusicAlbum.create({
+        id: item.ID.replace(/^2015/, '2014'),
+        title: item.Title || '',
+        sub_title: item.sub_Title || '',
+        describe: item.Describe || '',
+        type: item.WorksType,
+        is_authorize: true,
+        is_deleted: !!item.ISDel,
+        state: Math.max(item.WorkState - 1, 0),
+        cover: item.cover_Pic || '',
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+    else if(['11', '12'].indexOf(item.WorksType) > -1) {
+      await ImageAlbum.create({
+        id: item.ID.replace(/^2015/, '2013'),
+        title: item.Title || '',
+        sub_title: item.sub_Title || '',
+        describe: item.Describe || '',
+        type: item.WorksType,
+        is_authorize: true,
+        is_deleted: !!item.ISDel,
+        state: Math.max(item.WorkState - 1, 0),
+        cover: item.cover_Pic || '',
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+    else {
+      await Works.create({
+        id: item.ID,
+        title: item.Title || '',
+        sub_title: item.sub_Title || '',
+        describe: item.Describe || '',
+        type: item.WorksType,
+        is_authorize: true,
+        is_deleted: !!item.ISDel,
+        state: Math.max(item.WorkState - 1, 0),
+        cover: item.cover_Pic || '',
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+    await WorksNum.create({
+      works_id: item.ID,
+      type: 0,
+      num: item.Popular,
+      update_time: item.CreateTime,
+    });
+  }
+  last = 71;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Works_TimeLine WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let work = await Work.findOne({
+      attributes: ['id'],
+      where: {
+        work_id: item.WorkItemsID,
+      },
+    });
+    if(work) {
+      await WorksTimeline.create({
+        works_id: item.WorksID,
+        work_id: work.id,
+        date: item.LinDate,
+        describe: item.Describe || '',
+        is_deleted: item.ISDel,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+  }
+}
+
+async function dealWorksWork(pool) {
+  console.log('------- dealWorksWork --------');
+  await WorksWorkRelation.sync();
+  await MusicAlbumWorkRelation.sync();
+  await ImageAlbumWorkRelation.sync();
+  await WorksTypeProfessionSort.sync();
+  let last = 1699;
+  // last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_WorksItems WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let [works, musicAlbum, imageAlbum, work] = await Promise.all([
+      Works.findOne({
+        attributes: ['type'],
+        where: {
+          id: item.WorksID,
+        },
+      }),
+      MusicAlbum.findOne({
+        attributes: ['id', 'type'],
+        where: {
+          id: (item.WorksID + '').replace(/^2015/, '2014'),
+        },
+      }),
+      ImageAlbum.findOne({
+        attributes: ['id', 'type'],
+        where: {
+          id: (item.WorksID + '').replace(/^2015/, '2013'),
+        },
+      }),
+      Work.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: item.WorkItemsID,
+        },
+      })
+    ]);
+    if(musicAlbum) {
+      await MusicAlbumWorkRelation.create({
+        album_id: musicAlbum.id,
+        works_id: item.WorksID,
+        work_id: work.id,
+        is_deleted: item.ISDel,
+        weight: item.sort || 0,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+    else if(imageAlbum) {
+      await ImageAlbumWorkRelation.create({
+        album_id: imageAlbum.id,
+        work_id: work.id,
+        is_deleted: item.ISDel,
+        weight: item.sort || 0,
+        tag: item.Describe || '',
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+    else if(works) {
+      await WorksWorkRelation.create({
+        works_id: item.WorksID,
+        work_id: work.id,
+        is_deleted: item.ISDel,
+        weight: item.sort || 0,
+        tag: item.Describe || '',
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+  }
+}
+
 async function dealWorkAuthorProfession(pool) {
   console.log('------- dealWorkAuthorProfession --------');
   await Profession.sync();
-  await WorkAuthorProfessionRelation.sync();
   await WorksAuthorProfessionRelation.sync();
+  await MusicAlbumAuthorProfessionRelation.sync();
+  await ImageAlbumAuthorProfessionRelation.sync();
   let last = 61;
   let result = await pool.request().query(`SELECT * FROM dbo.Enum_AuthorType WHERE ID>${last};`);
   let hash = {};
@@ -269,7 +579,8 @@ async function dealWorkAuthorProfession(pool) {
     });
   }
   hash = {};
-  last = 5463;
+  last = 5464;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -278,8 +589,45 @@ async function dealWorkAuthorProfession(pool) {
       continue;
     }
     hash[key] = true;
-    await WorkAuthorProfessionRelation.create({
-      work_id: item.WorksItemID,
+    let work = await Work.findOne({
+      attributes: ['id'],
+      where: {
+        work_id: item.WorksItemID,
+      },
+    });
+    if(!work) {
+      continue;
+    }
+    let worksWork = await WorksWorkRelation.findOne({
+      attributes: ['works_id'],
+      where: {
+        work_id: work.id,
+      },
+    });
+    if(!worksWork) {
+      let imageWork = await ImageAlbumWorkRelation.findOne({
+        attributes: ['album_id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      if(!imageWork) {
+        continue;
+      }
+      await ImageAlbumAuthorProfessionRelation.create({
+        album_id: imageWork.album_id,
+        work_id: work.id,
+        author_id: item.AuthorID,
+        profession_id: item.Enum_AuthorTypeID,
+        is_deleted: false,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+      continue;
+    }
+    await WorksAuthorProfessionRelation.create({
+      works_id: worksWork.works_id,
+      work_id: work.id,
       author_id: item.AuthorID,
       profession_id: item.Enum_AuthorTypeID,
       is_deleted: false,
@@ -289,7 +637,8 @@ async function dealWorkAuthorProfession(pool) {
   }
   hash = {};
   last = 4131;
-  let right = {
+  // last = 0;
+  let special = {
     51: true,
     52: true,
     53: true,
@@ -305,9 +654,46 @@ async function dealWorkAuthorProfession(pool) {
       continue;
     }
     hash[key] = true;
-    if(right[item.Enum_AuthorTypeID]) {
+    if(special[item.Enum_AuthorTypeID]) {
+      let music = await MusicAlbum.findOne({
+        attributes: ['id'],
+        where: {
+          id: (item.WorksID+'').replace(/^2015/, 2014),
+        },
+      });
+      if(music) {
+        await MusicAlbumAuthorProfessionRelation.create({
+          album_id: music.id,
+          work_id: 0,
+          author_id: item.AuthorID,
+          profession_id: item.Enum_AuthorTypeID,
+          is_deleted: false,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
+        continue;
+      }
+      let image = await ImageAlbum.findOne({
+        attributes: ['id'],
+        where: {
+          id: (item.WorksID+'').replace(/^2015/, 2013),
+        },
+      });
+      if(image) {
+        await ImageAlbumAuthorProfessionRelation.create({
+          album_id: image.id,
+          work_id: 0,
+          author_id: item.AuthorID,
+          profession_id: item.Enum_AuthorTypeID,
+          is_deleted: false,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
+        continue;
+      }
       await WorksAuthorProfessionRelation.create({
         works_id: item.WorksID,
+        work_id: 0,
         author_id: item.AuthorID,
         profession_id: item.Enum_AuthorTypeID,
         is_deleted: false,
@@ -460,280 +846,6 @@ async function dealUser(pool) {
   }
 }
 
-async function dealWork(pool) {
-  console.log('------- dealWork --------');
-  await Work.sync();
-  await WorkAudio.sync();
-  await WorkVideo.sync();
-  await WorkImage.sync();
-  await WorkText.sync();
-  await WorkType.sync();
-  await WorkNum.sync();
-  let last = 46;
-  let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkItemType WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorkType.create({
-      id: item.ID,
-      name: item.ItemTypeName,
-    });
-  }
-  last = 2016000000008413;
-  result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await Work.create({
-      id: item.ID,
-      title: item.ItemsName || '',
-      class: item.BigType,
-      type: item.ItemType,
-      is_deleted: !!item.ISDel,
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
-    });
-    await WorkNum.create({
-      work_id: item.ID,
-      type: 0,
-      num: 0,
-      update_time: item.CreateTime,
-    });
-    if(item.BigType === 2) {
-      await WorkAudio.create({
-        id: item.ID,
-        time: 0,
-        cover: '',
-        url: item.FileUrl || '',
-        lrc: '',
-      });
-    }
-    else if(item.BigType === 1) {
-      await WorkVideo.create({
-        id: item.ID,
-        width: 0,
-        height: 0,
-        time: 0,
-        cover: '',
-        url: item.FileUrl || '',
-      });
-    }
-    else if(item.BigType === 3) {
-      await WorkImage.create({
-        id: item.ID,
-        width: 0,
-        height: 0,
-        time: 0,
-        url: item.FileUrl || '',
-      });
-    }
-    else if(item.BigType === 4) {
-      await WorkText.create({
-        id: item.ID,
-        content: '',
-      });
-    }
-  }
-  last = 2016000000008375;
-  result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Audio WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorkAudio.update({
-      cover: item.AudioPic || '',
-      lrc: item.lrc || '',
-    }, {
-      where: {
-        id: item.ItemsID,
-      },
-    });
-  }
-  last = 2016000000008355;
-  result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Video WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorkVideo.update({
-      cover: item.CoverPic || '',
-      width: item.Width || 0,
-      height: item.Height || 0,
-    }, {
-      where: {
-        id: item.ItemsID,
-      },
-    });
-  }
-  last = 2016000000008310;
-  result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Pic WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorkImage.update({
-      width: item.Width || 0,
-      height: item.Height || 0,
-    }, {
-      where: {
-        id: item.ItemsID,
-      },
-    });
-  }
-  last = 2016000000008366;
-  result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Text WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorkText.update({
-      content: item.textContent,
-    }, {
-      where: {
-        id: item.ItemsID,
-      },
-    });
-  }
-}
-
-async function dealWorks(pool) {
-  console.log('------- dealWorks --------');
-  await WorksType.sync();
-  await Works.sync();
-  await WorksNum.sync();
-  await MusicAlbum.sync();
-  await ImageAlbum.sync();
-  await WorksTimeline.sync();
-  let last = 36;
-  let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkType WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorksType.create({
-      id: item.ID,
-      name: item.TypeName,
-    });
-  }
-  last = 2015000000003592;
-  result = await pool.request().query(`SELECT * FROM dbo.Works_Info WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    if(['5', '6', '18'].indexOf(item.WorksType) > -1) {
-      await MusicAlbum.create({
-        id: item.ID.replace(/^2015/, '2014'),
-        title: item.Title || '',
-        sub_title: item.sub_Title || '',
-        describe: item.Describe || '',
-        type: item.WorksType,
-        is_authorize: true,
-        is_deleted: !!item.ISDel,
-        state: Math.max(item.WorkState - 1, 0),
-        cover: item.cover_Pic || '',
-        create_time: item.CreateTime,
-        update_time: item.CreateTime,
-      });
-    }
-    else if(['11', '12'].indexOf(item.WorksType) > -1) {
-      await ImageAlbum.create({
-        id: item.ID.replace(/^2015/, '2013'),
-        title: item.Title || '',
-        sub_title: item.sub_Title || '',
-        describe: item.Describe || '',
-        type: item.WorksType,
-        is_authorize: true,
-        is_deleted: !!item.ISDel,
-        state: Math.max(item.WorkState - 1, 0),
-        cover: item.cover_Pic || '',
-        create_time: item.CreateTime,
-        update_time: item.CreateTime,
-      });
-    }
-    await Works.create({
-      id: item.ID,
-      title: item.Title || '',
-      sub_title: item.sub_Title || '',
-      describe: item.Describe || '',
-      type: item.WorksType,
-      is_authorize: true,
-      is_deleted: !!item.ISDel,
-      state: Math.max(item.WorkState - 1, 0),
-      cover: item.cover_Pic || '',
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
-    });
-    await WorksNum.create({
-      works_id: item.ID,
-      type: 0,
-      num: 0,
-      update_time: item.CreateTime,
-    });
-    await WorksNum.create({
-      works_id: item.ID,
-      type: 1,
-      num: item.Popular,
-      update_time: item.CreateTime,
-    });
-  }
-  last = 71;
-  result = await pool.request().query(`SELECT * FROM dbo.Works_TimeLine WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorksTimeline.create({
-      works_id: item.WorksID,
-      work_id: item.WorkItemsID || 0,
-      date: item.LinDate,
-      describe: item.Describe || '',
-      is_deleted: item.ISDel,
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
-    });
-  }
-}
-
-async function dealWorksWork(pool) {
-  console.log('------- dealWorksWork --------');
-  await WorksWorkRelation.sync();
-  await MusicAlbumWorkRelation.sync();
-  await ImageAlbumWorkRelation.sync();
-  await WorksTypeProfessionSort.sync();
-  let last = 1692;
-  let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_WorksItems WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    await WorksWorkRelation.create({
-      works_id: item.WorksID,
-      work_id: item.WorkItemsID,
-      is_deleted: item.ISDel,
-      weight: item.sort || 0,
-      tips: item.Describe || '',
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
-    });
-    let works = await Works.findOne({
-      attributes: ['type'],
-      where: {
-        id: item.WorksID,
-      },
-    });
-    if(works) {
-      let type = works.type;
-      if([5, 6, 18].indexOf(type) > -1) {
-        await MusicAlbumWorkRelation.create({
-          album_id: item.WorksID.replace(/^2015/, '2014'),
-          works_id: 0,
-          work_id: item.WorkItemsID,
-          is_deleted: item.ISDel,
-          weight: item.sort || 0,
-          describe: item.Describe || '',
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-      }
-      else if([11, 12].indexOf(type) > -1) {
-        await ImageAlbumWorkRelation.create({
-          album_id: item.WorksID.replace(/^2015/, '2013'),
-          works_id: 0,
-          work_id: item.WorkItemsID,
-          is_deleted: item.ISDel,
-          weight: item.sort || 0,
-          describe: item.Describe || '',
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-      }
-    }
-  }
-}
-
 async function dealComment(pool) {
   console.log('------- dealComment --------');
   await AuthorCommentRelation.sync();
@@ -741,7 +853,7 @@ async function dealComment(pool) {
   await CircleCommentRelation.sync();
   await Comment.sync();
   await CommentNum.sync();
-  let last = 440043;
+  let last = 440044;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -912,6 +1024,7 @@ async function dealUserWork(pool) {
   let hash = {};
   let worksIdHash = {};
   let workClassHash = {};
+  let workOldIdHash = {};
   let exist = {};
   let last = 19019;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_WorkItems WHERE ID>${last};`);
@@ -933,15 +1046,16 @@ async function dealUserWork(pool) {
     let workClass = workClassHash[item.ItemsID];
     if(!workClass) {
       let work = await Work.findOne({
-        attributes: ['class'],
+        attributes: ['id', 'class'],
         where: {
-          id: item.ItemsID,
+          work_id: item.ItemsID,
         },
       });
       if(!work) {
         continue;
       }
       workClass = workClassHash[item.ItemsID] = work.class;
+      workOldIdHash[item.ItemsID] = work.id;
     }
     if(item.UID && item.UID !== '0') {
       let key = item.UID + ',' + item.ItemsID;
@@ -955,7 +1069,7 @@ async function dealUserWork(pool) {
       if(workClass === 3) {
         await UserImageRelation.create({
           user_id: item.UID,
-          work_id: item.ItemsID,
+          work_id: workOldIdHash[item.ItemsID],
           type: 1,
           is_deleted: false,
           create_time: item.CreateTime,
@@ -965,7 +1079,7 @@ async function dealUserWork(pool) {
       else {
         await UserWorkRelation.create({
           user_id: item.UID,
-          work_id: item.ItemsID,
+          work_id: workOldIdHash[item.ItemsID],
           works_id: worksId,
           class: workClass,
           type: 1,
@@ -985,7 +1099,7 @@ async function dealUserWork(pool) {
         if(workClass === 3) {
           await UserImageRelation.create({
             user_id: hash[item.CollectionID],
-            work_id: item.ItemsID,
+            work_id: workOldIdHash[item.ItemsID],
             type: 1,
             is_deleted: false,
             create_time: item.CreateTime,
@@ -995,9 +1109,8 @@ async function dealUserWork(pool) {
         else {
           await UserWorkRelation.create({
             user_id: hash[item.CollectionID],
-            work_id: item.ItemsID,
+            work_id: workOldIdHash[item.ItemsID],
             works_id: worksId,
-            class: workClass,
             type: 1,
             is_deleted: false,
             create_time: item.CreateTime,
@@ -1017,7 +1130,7 @@ async function dealUserWork(pool) {
           if(workClass === 3) {
             await UserImageRelation.create({
               user_id: res2.recordset[0].UID,
-              work_id: item.ItemsID,
+              work_id: workOldIdHash[item.ItemsID],
               type: 1,
               is_deleted: false,
               create_time: item.CreateTime,
@@ -1027,9 +1140,8 @@ async function dealUserWork(pool) {
           else {
             await UserWorkRelation.create({
               user_id: res2.recordset[0].UID,
-              work_id: item.ItemsID,
+              work_id: workOldIdHash[item.ItemsID],
               works_id: worksId,
-              class: workClass,
               type: 1,
               is_deleted: false,
               create_time: item.CreateTime,
@@ -1060,7 +1172,7 @@ async function dealUserWork(pool) {
       let workClass = workClassHash[item[1]];
       if(!workClass) {
         let work = await Work.findOne({
-          attributes: ['class'],
+          attributes: ['id', 'class'],
           where: {
             id: item.ItemsID,
           },
@@ -1069,6 +1181,7 @@ async function dealUserWork(pool) {
           continue;
         }
         workClass = workClassHash[item[1]] = work.class;
+        workOldIdHash[item.ItemsID] = work.id;
       }
       if(workClass === 4 || item[1] === 1) {
         continue;
@@ -1076,7 +1189,7 @@ async function dealUserWork(pool) {
       if(workClass === 3) {
         await UserImageRelation.create({
           user_id: item[0],
-          work_id: item[1],
+          work_id: workOldIdHash[item[1]],
           type: 0,
           is_deleted: false,
           create_time: item[2],
@@ -1099,9 +1212,8 @@ async function dealUserWork(pool) {
         }
         await UserWorkRelation.create({
           user_id: item[0],
-          work_id: item[1],
+          work_id: workOldIdHash[item[1]],
           works_id: worksId,
-          class: workClass,
           type: 0,
           is_deleted: false,
           create_time: item[2],
@@ -1112,8 +1224,9 @@ async function dealUserWork(pool) {
   }
 }
 
-async function modifyWorksWork() {
+async function modifyMusicAlubmWork() {
   let last = 134;
+  // last = 0;
   let sql = `SELECT
     album_id, work_id
     FROM music_album_work_relation WHERE id>${last}`;
@@ -1185,3 +1298,31 @@ async function modifyAuthorComment() {
     }
   }
 }
+// async function modifyWorksRelation() {
+//   let last = 0;
+//   let sql = `SELECT
+//     id
+//     FROM music_album
+//     WHERE id>${last}`;
+//   let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+//   for(let i = 0, len = res.length; i < len; i++) {
+//     let item = res[i];
+//     let sql2 = `UPDATE works_author_profession_relation
+//       SET works_id=${item.id}
+//       WHERE works_id=${(item.id+'').replace(/^2014/, 2015)}`;
+//     await sequelize.query(sql2, { type: Sequelize.QueryTypes.UPDATE });
+//   }
+//   last = 0;
+//   sql = `SELECT
+//     id
+//     FROM image_album
+//     WHERE id>${last}`;
+//   res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+//   for(let i = 0, len = res.length; i < len; i++) {
+//     let item = res[i];
+//     let sql2 = `UPDATE works_author_profession_relation
+//       SET works_id=${item.id}
+//       WHERE works_id=${(item.id+'').replace(/^2013/, 2015)}`;
+//     await sequelize.query(sql2, { type: Sequelize.QueryTypes.UPDATE });
+//   }
+// }
