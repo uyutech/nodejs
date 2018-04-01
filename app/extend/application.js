@@ -35,8 +35,10 @@ const userCommentRelation = require('../model/userCommentRelation');
 const userUserRelation = require('../model/userUserRelation');
 const userWorkRelation = require('../model/userWorkRelation');
 const work = require('../model/work');
-const workImage = require('../model/workImage');
-const workText = require('../model/workText');
+const image = require('../model/image');
+const text = require('../model/text');
+const video = require('../model/video');
+const audio = require('../model/audio');
 const workType = require('../model/workType');
 const works = require('../model/works');
 const worksType = require('../model/worksType');
@@ -138,8 +140,10 @@ module.exports = {
         userUserRelation: userUserRelation(this),
         userWorkRelation: userWorkRelation(this),
         work: work(this),
-        workImage: workImage(this),
-        workText: workText(this),
+        image: image(this),
+        text: text(this),
+        video: video(this),
+        audio: audio(this),
         workType: workType(this),
         works: works(this),
         worksType: worksType(this),

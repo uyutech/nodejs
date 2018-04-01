@@ -143,11 +143,11 @@ class Service extends egg.Service {
    * @param idList:Array<int> 小作品id列表
    * @returns Array<Object>
    */
-  async infoList(idList) {
-    if(!idList) {
+  async infoList(list) {
+    if(!list) {
       return;
     }
-    if(!idList.length) {
+    if(!list.length) {
       return [];
     }
     const { app } = this;
@@ -515,6 +515,294 @@ class Service extends egg.Service {
         }[klass],
       };
     });
+  }
+
+  /**
+   * 根据id列表获取视频信息
+   * @param idList
+   * @returns Array<Object>
+   */
+  async videoList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('video_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('video_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        video.id,
+        video.title,
+        video.width,
+        video.height,
+        video.duration,
+        video.cover,
+        video.url,
+        video.type,
+        work_type.name AS typeName
+        FROM video, work_type
+        WHERE video.id IN (${noCacheIdList.join(', ')})
+        AND video.type=work_type.id`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.id;
+          hash[id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('video_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('video_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
+  }
+
+  /**
+   * 根据id列表获取音频信息
+   * @param idList
+   * @returns Array<Object>
+   */
+  async audioList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('audio_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('video_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        audio.id,
+        audio.title,
+        audio.duration,
+        audio.cover,
+        audio.url,
+        audio.type,
+        work_type.name AS typeName
+        FROM audio, work_type
+        WHERE audio.id IN (${noCacheIdList.join(', ')})
+        AND audio.type=work_type.id`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.id;
+          hash[id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('audio_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('audio_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
+  }
+
+  /**
+   * 根据id列表获取图片信息
+   * @param idList
+   * @returns Array<Object>
+   */
+  async imageList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('image_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('image_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        image.id,
+        image.title,
+        image.width,
+        image.height,
+        image.url,
+        image.type,
+        work_type.name AS typeName
+        FROM image, work_type
+        WHERE image.id IN (${noCacheIdList.join(', ')})
+        AND image.type=work_type.id`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.id;
+          hash[id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('image_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('image_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
+  }
+
+  /**
+   * 根据id列表获取文本信息
+   * @param idList
+   * @returns Array<Object>
+   */
+  async textList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('text_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('text_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        text.id,
+        text.title,
+        text.content,
+        text.type,
+        work_type.name AS typeName
+        FROM text, work_type
+        WHERE text.id IN (${noCacheIdList.join(', ')})
+        AND text.type=work_type.id`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.id;
+          hash[id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('text_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('text_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
   }
 }
 

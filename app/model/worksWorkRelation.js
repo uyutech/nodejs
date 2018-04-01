@@ -21,6 +21,12 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    kind: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0未知，1视频，2音频，3图片，4文字',
+    },
     is_deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
@@ -49,9 +55,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'works_id_work_id',
+        name: 'works_id_kind_work_id',
         unique: true,
-        fields: ['works_id', 'work_id'],
+        fields: ['works_id', 'kind', 'work_id'],
       }
     ],
     comment: '大作品小作品关系',

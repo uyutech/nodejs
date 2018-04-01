@@ -48,10 +48,11 @@ const CircleTagRelation = require('./app/model/circleTagRelation')({ sequelizeCi
 const User = require('./app/model/user')({ sequelizeCircling: sequelize, Sequelize });
 const UserAuthorRelation = require('./app/model/userAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Work = require('./app/model/work')({ sequelizeCircling: sequelize, Sequelize });
-const WorkAudio = require('./app/model/workAudio')({ sequelizeCircling: sequelize, Sequelize });
-const WorkVideo = require('./app/model/workVideo')({ sequelizeCircling: sequelize, Sequelize });
-const WorkImage = require('./app/model/workImage')({ sequelizeCircling: sequelize, Sequelize });
-const WorkText = require('./app/model/workText')({ sequelizeCircling: sequelize, Sequelize });
+const Audio = require('./app/model/Audio')({ sequelizeCircling: sequelize, Sequelize });
+const Video = require('./app/model/Video')({ sequelizeCircling: sequelize, Sequelize });
+const Image = require('./app/model/Image')({ sequelizeCircling: sequelize, Sequelize });
+const Text = require('./app/model/Text')({ sequelizeCircling: sequelize, Sequelize });
+const WorkType = require('./app/model/workType')({ sequelizeCircling: sequelize, Sequelize });
 const WorkNum = require('./app/model/workNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksType = require('./app/model/worksType')({ sequelizeCircling: sequelize, Sequelize });
 const Works = require('./app/model/works')({ sequelizeCircling: sequelize, Sequelize });
@@ -249,24 +250,37 @@ async function dealAuthorMainWorks(pool) {
 async function dealWork(pool) {
   console.log('------- dealWork --------');
   await Work.sync();
-  await WorkAudio.sync();
-  await WorkVideo.sync();
-  await WorkImage.sync();
-  await WorkText.sync();
+  await WorkType.sync();
+  await Audio.sync();
+  await Video.sync();
+  await Image.sync();
+  await Text.sync();
   await WorkNum.sync();
-  let last = 2016000000008449;
+  let last = 46;
   // last = 0;
-  let result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
+  let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkItemType WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await WorkType.create({
+      id: item.ID,
+      name: item.ItemTypeName,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+  }
+  last = 2016000000008449;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     let work = await Work.create({
-      work_id: item.ID,
-      title: item.ItemsName || '',
-      class: item.BigType,
-      type: item.ItemType,
-      is_deleted: !!item.ISDel,
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
+      id: item.ID,
+      // title: item.ItemsName || '',
+      kind: item.BigType,
+      // type: item.ItemType,
+      // is_deleted: !!item.ISDel,
+      // create_time: item.CreateTime,
+      // update_time: item.CreateTime,
     });
     // await WorkNum.create({
     //   work_id: item.ID,
@@ -275,30 +289,42 @@ async function dealWork(pool) {
     //   update_time: item.CreateTime,
     // });
     if(item.BigType === 2) {
-      await WorkAudio.create({
-        id: work.id,
+      await Audio.create({
         work_id: item.ID,
-        time: 0,
+        type: item.ItemType,
+        title: item.ItemsName || '',
+        is_deleted: !!item.ISDel,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+        duration: 0,
         cover: '',
         url: item.FileUrl || '',
         lrc: '',
       });
     }
     else if(item.BigType === 1) {
-      await WorkVideo.create({
-        id: work.id,
+      await Video.create({
         work_id: item.ID,
+        type: item.ItemType,
+        title: item.ItemsName || '',
+        is_deleted: !!item.ISDel,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
         width: 0,
         height: 0,
-        time: 0,
+        duration: 0,
         cover: '',
         url: item.FileUrl || '',
       });
     }
     else if(item.BigType === 3) {
-      await WorkImage.create({
-        id: work.id,
+      await Image.create({
         work_id: item.ID,
+        type: item.ItemType,
+        title: item.ItemsName || '',
+        is_deleted: !!item.ISDel,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
         width: 0,
         height: 0,
         time: 0,
@@ -306,9 +332,13 @@ async function dealWork(pool) {
       });
     }
     else if(item.BigType === 4) {
-      await WorkText.create({
-        id: work.id,
+      await Text.create({
         work_id: item.ID,
+        type: item.ItemType,
+        title: item.ItemsName || '',
+        is_deleted: !!item.ISDel,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
         content: '',
       });
     }
@@ -318,7 +348,7 @@ async function dealWork(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Audio WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await WorkAudio.update({
+    await Audio.update({
       cover: item.AudioPic || '',
       lrc: item.lrc || '',
     }, {
@@ -332,7 +362,7 @@ async function dealWork(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Video WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await WorkVideo.update({
+    await Video.update({
       cover: item.CoverPic || '',
       width: item.Width || 0,
       height: item.Height || 0,
@@ -347,7 +377,7 @@ async function dealWork(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Pic WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await WorkImage.update({
+    await Image.update({
       width: item.Width || 0,
       height: item.Height || 0,
     }, {
@@ -361,7 +391,7 @@ async function dealWork(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Text WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await WorkText.update({
+    await Text.update({
       content: item.textContent,
     }, {
       where: {
@@ -501,18 +531,56 @@ async function dealWorksWork(pool) {
         },
       }),
       Work.findOne({
-        attributes: ['id'],
+        attributes: ['id', 'kind'],
         where: {
-          work_id: item.WorkItemsID,
+          id: item.WorkItemsID,
         },
       })
     ]);
+    let work_id;
+    if(work.kind === 1) {
+      let video = await Video.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      work_id = video.id;
+    }
+    else if(work.kind === 2) {
+      let audio = await Audio.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      work_id = audio.id;
+    }
+    else if(work.kind === 3) {
+      let image = await Image.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      work_id = image.id;
+    }
+    else if(work.kind === 4) {
+      let text = await Text.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      work_id = text.id;
+    }
     if(musicAlbum) {
       await MusicAlbumWorkRelation.create({
         album_id: musicAlbum.id,
+        work_id,
         works_id: item.WorksID,
-        work_id: work.id,
-        is_deleted: item.ISDel,
+        kind: work.kind,
+        is_deleted: !!item.ISDel,
         weight: item.sort || 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -521,8 +589,10 @@ async function dealWorksWork(pool) {
     else if(imageAlbum) {
       await ImageAlbumWorkRelation.create({
         album_id: imageAlbum.id,
-        work_id: work.id,
-        is_deleted: item.ISDel,
+        work_id,
+        works_id: 0,
+        kind: work.kind,
+        is_deleted: !!item.ISDel,
         weight: item.sort || 0,
         tag: item.Describe || '',
         create_time: item.CreateTime,
@@ -532,12 +602,54 @@ async function dealWorksWork(pool) {
     else if(works) {
       await WorksWorkRelation.create({
         works_id: item.WorksID,
-        work_id: work.id,
-        is_deleted: item.ISDel,
+        work_id,
+        kind: work.kind,
+        is_deleted: !!item.ISDel,
         weight: item.sort || 0,
         tag: item.Describe || '',
         create_time: item.CreateTime,
         update_time: item.CreateTime,
+      });
+    }
+  }
+  return;
+  // result = await ImageAlbumWorkRelation.findAll({});
+  // for(let i = 0; i < result.length; i++) {
+  //   let item = result[i];
+  //   let temp = await WorksWorkRelation.findOne({
+  //     attributes: ['works_id'],
+  //     where: {
+  //       work_id: item.work_id,
+  //       kind: item.kind,
+  //     },
+  //   });
+  //   if(temp) {
+  //     await ImageAlbumWorkRelation.update({
+  //       works_id: temp.works_id,
+  //     }, {
+  //       where: {
+  //         id: item.id,
+  //       },
+  //     });
+  //   }
+  // }
+  result = await MusicAlbumWorkRelation.findAll({});
+  for(let i = 0; i < result.length; i++) {
+    let item = result[i];
+    let temp = await WorksWorkRelation.findOne({
+      attributes: ['works_id'],
+      where: {
+        work_id: item.work_id,
+        kind: item.kind,
+      },
+    });
+    if(temp) {
+      await MusicAlbumWorkRelation.update({
+        works_id: temp.works_id,
+      }, {
+        where: {
+          id: item.id,
+        },
       });
     }
   }
@@ -550,24 +662,17 @@ async function dealWorkAuthorProfession(pool) {
   await MusicAlbumAuthorProfessionRelation.sync();
   await ImageAlbumAuthorProfessionRelation.sync();
   let last = 61;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Enum_AuthorType WHERE ID>${last};`);
   let hash = {};
-  let type = -1;
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    if(!hash[item.AuthorTypeName]) {
-      type++;
-      hash[item.AuthorTypeName] = true;
-    }
     await Profession.create({
       id: item.ID,
-      type,
-      type_name: item.AuthorTypeName,
-      kind: type,
-      kind_name: item.AuthorTypeName,
+      name: item.AuthorTypeName,
+      create_time: item.CreateTime,
     });
   }
-  hash = {};
   last = 5464;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE ID>${last};`);
@@ -579,25 +684,64 @@ async function dealWorkAuthorProfession(pool) {
     }
     hash[key] = true;
     let work = await Work.findOne({
-      attributes: ['id'],
+      attributes: ['id', 'kind'],
       where: {
-        work_id: item.WorksItemID,
+        id: item.WorksItemID,
       },
     });
     if(!work) {
       continue;
     }
+    let work_id;
+    if(work.kind === 1) {
+      let video = await Video.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      work_id = video.id;
+    }
+    else if(work.kind === 2) {
+      let audio = await Audio.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      work_id = audio.id;
+    }
+    else if(work.kind === 3) {
+      let image = await Image.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      work_id = image.id;
+    }
+    else if(work.kind === 4) {
+      let text = await Text.findOne({
+        attributes: ['id'],
+        where: {
+          work_id: work.id,
+        },
+      });
+      work_id = text.id;
+    }
     let worksWork = await WorksWorkRelation.findOne({
       attributes: ['works_id'],
       where: {
-        work_id: work.id,
+        work_id,
+        kind: work.kind,
       },
     });
     if(!worksWork) {
       let imageWork = await ImageAlbumWorkRelation.findOne({
         attributes: ['album_id'],
         where: {
-          work_id: work.id,
+          work_id,
+          kind: work.kind,
         },
       });
       if(!imageWork) {
@@ -605,7 +749,8 @@ async function dealWorkAuthorProfession(pool) {
       }
       await ImageAlbumAuthorProfessionRelation.create({
         album_id: imageWork.album_id,
-        work_id: work.id,
+        work_id,
+        kind: work.kind,
         author_id: item.AuthorID,
         profession_id: item.Enum_AuthorTypeID,
         is_deleted: false,
@@ -616,7 +761,8 @@ async function dealWorkAuthorProfession(pool) {
     }
     await WorksAuthorProfessionRelation.create({
       works_id: worksWork.works_id,
-      work_id: work.id,
+      work_id,
+      kind: work.kind,
       author_id: item.AuthorID,
       profession_id: item.Enum_AuthorTypeID,
       is_deleted: false,
@@ -654,6 +800,7 @@ async function dealWorkAuthorProfession(pool) {
         await MusicAlbumAuthorProfessionRelation.create({
           album_id: music.id,
           work_id: 0,
+          kind: 0,
           author_id: item.AuthorID,
           profession_id: item.Enum_AuthorTypeID,
           is_deleted: false,
@@ -672,6 +819,7 @@ async function dealWorkAuthorProfession(pool) {
         await ImageAlbumAuthorProfessionRelation.create({
           album_id: image.id,
           work_id: 0,
+          kind: 0,
           author_id: item.AuthorID,
           profession_id: item.Enum_AuthorTypeID,
           is_deleted: false,
@@ -683,6 +831,7 @@ async function dealWorkAuthorProfession(pool) {
       await WorksAuthorProfessionRelation.create({
         works_id: item.WorksID,
         work_id: 0,
+        kind: 0,
         author_id: item.AuthorID,
         profession_id: item.Enum_AuthorTypeID,
         is_deleted: false,

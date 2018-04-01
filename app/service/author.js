@@ -861,7 +861,7 @@ class Service extends egg.Service {
         }
         noCacheIndexList.push(i);
       }
-    });console.log(cache);
+    });
     if(noCacheIdList.length) {
       let sql = `SELECT
         work_id AS workId,
@@ -905,7 +905,7 @@ class Service extends egg.Service {
       return;
     }
     const { service } = this;
-    let idList = await this.classWorkIdList(id, klass, skip, take);
+    let idList = await this.classWorkIdList(id, klass, skip, take);console.log(idList);
     let list = await this.classWorkBaseList(id, idList);
     let worksIdList = [];
     let worksIdHash = {};

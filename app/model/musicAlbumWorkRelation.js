@@ -17,13 +17,20 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    works_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      allowNull: false,
-    },
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
+    },
+    works_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+      comment: '引用大作品id',
+    },
+    kind: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '1视频，2音频',
     },
     is_deleted: {
       type: Sequelize.BOOLEAN,
@@ -48,9 +55,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'album_id_work_id',
+        name: 'album_id_kind_work_id',
         unique: true,
-        fields: ['album_id', 'work_id'],
+        fields: ['album_id', 'kind', 'work_id'],
       }
     ],
     comment: '大作品小作品关系',

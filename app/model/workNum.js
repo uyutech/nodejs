@@ -14,13 +14,19 @@ module.exports = app => {
       allowNull: false,
     },
     work_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
+    },
+    kind: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0未知，1视频，2音频，3图片，4文字',
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0浏览数，1播放数，3点赞数，4收藏数',
+      comment: '0点赞数，1收藏数',
     },
     num: {
       type: Sequelize.INTEGER.UNSIGNED,
@@ -35,9 +41,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'work_id_type',
+        name: 'work_id_kind_type',
         unique: true,
-        fields: ['work_id', 'type'],
+        fields: ['work_id', 'kind', 'type'],
       },
     ],
     comment: '小作品相关数字汇总',

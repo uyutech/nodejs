@@ -1,32 +1,40 @@
 /**
- * Created by army8735 on 2018/3/27.
+ * Created by army8735 on 2018/1/27.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('work_author_profession_relation', {
+  return sequelizeCircling.define('text', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
-      primaryKey: true,
       autoIncrement: true,
+      primaryKey: true,
       allowNull: false,
     },
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
+      unique: true,
       allowNull: false,
     },
-    author_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+    title: {
+      type: Sequelize.STRING(32),
       allowNull: false,
+      defaultValue: '',
     },
-    profession_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    content: {
+      type: Sequelize.TEXT,
       allowNull: false,
+      defaultValue: '',
+    },
+    type: {
+      type: Sequelize.SMALLINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
     },
     is_deleted: {
-      type: Sequelize.BOOLEAN,
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: false,
     },
@@ -42,12 +50,7 @@ module.exports = app => {
     },
   }, {
     indexes: [
-      {
-        name: 'work_id_author_id_profession_id',
-        unique: true,
-        fields: ['work_id', 'author_id', 'profession_id'],
-      }
     ],
-    comment: '小作品作者职种关联信息',
+    comment: '文本类小作品信息',
   });
 };

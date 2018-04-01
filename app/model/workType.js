@@ -13,23 +13,24 @@ module.exports = app => {
       autoIncrement: true,
       allowNull: false,
     },
-    work_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      primaryKey: true,
-      allowNull: false,
-    },
     name: {
       type: Sequelize.STRING(32),
+      unique: true,
       allowNull: false,
       defaultValue: '',
     },
+    create_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    update_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
   }, {
     indexes: [
-      {
-        name: 'name',
-        unique: true,
-        fields: ['name'],
-      }
     ],
     comment: '小作品类型',
   });

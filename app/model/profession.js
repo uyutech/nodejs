@@ -13,32 +13,23 @@ module.exports = app => {
       autoIncrement: true,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false,
-    },
-    type_name: {
+    name: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
       comment: '职业如演奏、作曲等',
     },
-    kind: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    create_time: {
+      type: Sequelize.DATE,
       allowNull: false,
-    },
-    kind_name: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-      comment: '工种如笛、箫等',
+      defaultValue: Sequelize.NOW,
     },
   }, {
     indexes: [
       {
-        name: 'type_kind',
+        name: 'name',
         unique: true,
-        fields: ['type', 'kind'],
+        fields: ['name'],
       }
     ],
     comment: '职种信息',

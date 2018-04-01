@@ -15,6 +15,11 @@ const WORKS_STATE_NAME = {
 };
 
 class Service extends egg.Service {
+  /**
+   * 根据作品id获取作品信息
+   * @param id:int 作品id
+   * @returns Object
+   */
   async info(id) {
     if(!id) {
       return;
@@ -132,73 +137,122 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    let res = await this.collectionBase(id);
-    res = await this.collectionByBase(res);
-    return res;
-  }
-
-  /**
-   * 根据大作品id获取小作品集合基本信息
-   * @param id:int 大作品id
-   * @returns Array<Object>
-   */
-  async collectionBase(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
+    const { app, service } = this;
     let cacheKey = 'worksCollection_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
+      res = JSON.parse(res);
     }
-    let sql = `SELECT
-      work.id,
-      work.title,
-      work.class,
-      work.type,
-      work_type.name AS typeName,
-      works_work_relation.tips
-      FROM works_work_relation, work, work_type
-      WHERE works_work_relation.works_id=${id}
-      AND works_work_relation.is_deleted=false
-      AND works_work_relation.work_id=work.id
-      AND work.type=work_type.id
-      ORDER BY works_work_relation.weight DESC, work.class`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
+    else {
+      res = await app.model.worksWorkRelation.findAll({
+        attributes: [
+          'work_id',
+          'kind',
+          'tag'
+        ],
+        where: {
+          works_id: id,
+          is_deleted: false,
+        },
+        order: [
+          ['weight', 'DESC'],
+          'kind'
+        ],
+      });
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    let videoIdList = [];
+    let audioIdList = [];
+    let imageIdList = [];
+    let textIdList = [];
+    res.forEach(function(item) {
+      switch(item.kind) {
+        case 1:
+          videoIdList.push(item.work_id);
+          break;
+        case 2:
+          audioIdList.push(item.work_id);
+          break;
+        case 3:
+          imageIdList.push(item.work_id);
+          break;
+        case 4:
+          textIdList.push(item.work_id);
+          break;
+      }
+    });
+    let [videoList, audioList, imageList, textList] = await Promise.all([
+      service.work.videoList(videoIdList),
+      service.work.audioList(audioIdList),
+      service.work.imageList(imageIdList),
+      service.work.textList(textIdList),
+    ]);
+    let videoHash = {};
+    let audioHash = {};
+    let imageHash = {};
+    let textHash = {};
+    videoList.forEach(function(item) {
+      if(item) {
+        videoHash[item.id] = item;
+      }
+    });
+    audioList.forEach(function(item) {
+      if(item) {
+        audioHash[item.id] = item;
+      }
+    });
+    imageList.forEach(function(item) {
+      if(item) {
+        imageHash[item.id] = item;
+      }
+    });
+    textList.forEach(function(item) {
+      if(item) {
+        textHash[item.id] = item;
+      }
+    });
+    return res.map(function(item) {
+      let temp = {
+        id: item.work_id,
+        kind: item.kind,
+      };
+      if(item.tag) {
+        temp.tag = item.tag;
+      }
+      switch(temp.kind) {
+        case 1:
+          if(videoHash[temp.id]) {
+            Object.assign(temp, videoHash[temp.id]);
+          }
+          break;
+        case 2:
+          if(audioList[temp.id]) {
+            Object.assign(temp, audioList[temp.id]);
+          }
+          break;
+        case 3:
+          if(imageList[temp.id]) {
+            Object.assign(temp, imageList[temp.id]);
+          }
+          break;
+        case 4:
+          if(textHash[temp.id]) {
+            Object.assign(temp, textHash[temp.id]);
+          }
+          break;
+      }
+      return temp;
+    });
   }
 
   /**
-   * 根据小作品基本信息列表获取小作品全部信息
-   * @param list:Array<Object> 小作品基本信息列表
-   * @param uid:int 用户id
-   * @returns Array<Object>
+   * 获取评论全部信息
+   * @param id:int 作品id
+   * @param skip:int
+   * @param take:int
+   * @returns Object<{ data:Array<Object>, size }>
    */
-  async collectionByBase(list, uid) {
-    if(!list) {
-      return;
-    }
-    if(!list.length) {
-      return [];
-    }
-    const { service } = this;
-    if(list.length) {
-      let [workList, userRelationList] = await Promise.all([
-        service.work.infoPlusList(list),
-        service.work.userRelationList(list, uid),
-      ]);
-      list.forEach(function(item, i) {
-        Object.assign(item, workList[i]);
-        if(userRelationList && userRelationList[i]) {
-          Object.assign(item, userRelationList[i]);
-        }
-      });
-    }
-    return list;
-  }
   async comment(id, skip, take) {
     let [data, size] = await Promise.all([
       this.commentData(id, skip, take),
@@ -206,6 +260,14 @@ class Service extends egg.Service {
     ]);
     return { data, size };
   }
+
+  /**
+   * 获取评论数据
+   * @param id:int 作品id
+   * @param skip
+   * @param take
+   * @returns Array<Object>
+   */
   async commentData(id, skip = 0, take = 1) {
     if(!id) {
       return;
@@ -320,6 +382,12 @@ class Service extends egg.Service {
     }
     return res;
   }
+
+  /**
+   * 获取评论size
+   * @param id:int 作品id
+   * @returns int
+   */
   async commentSize(id) {
     const { app } = this;
     let cacheKey = 'worksCommentSize_' + id;
@@ -361,10 +429,7 @@ class Service extends egg.Service {
         works_author_profession_relation.work_id AS workId,
         works_author_profession_relation.author_id AS authorId,
         works_author_profession_relation.profession_id AS professionId,
-        profession.type,
-        profession.type_name AS typeName,
-        profession.kind,
-        profession.kind_name AS kindName
+        profession.name AS professionName
         FROM works_author_profession_relation, profession
         WHERE works_author_profession_relation.works_id=${id}
         AND works_author_profession_relation.is_deleted=false

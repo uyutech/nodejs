@@ -6,16 +6,22 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('work_video', {
+  return sequelizeCircling.define('video', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
+      autoIncrement: true,
       primaryKey: true,
       allowNull: false,
     },
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
-      primaryKey: true,
+      unique: true,
       allowNull: false,
+    },
+    title: {
+      type: Sequelize.STRING(32),
+      allowNull: false,
+      defaultValue: '',
     },
     width: {
       type: Sequelize.INTEGER.UNSIGNED,
@@ -27,7 +33,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    time: {
+    duration: {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
@@ -42,9 +48,29 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    type: {
+      type: Sequelize.SMALLINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    is_deleted: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: false,
+    },
+    create_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    update_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
   }, {
     indexes: [
     ],
-    comment: '视频类小作品扩展信息',
+    comment: '视频类小作品信息',
   });
 };
