@@ -21,7 +21,7 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map(function(id) {
         if(id !== null && id !== undefined) {
-          return app.redis.get('professionInfo_' + id);
+          return app.redis.get('profession_' + id);
         }
       })
     );
@@ -32,7 +32,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('professionInfo_' + id, CACHE_TIME);
+        app.redis.expire('profession_' + id, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -43,18 +43,19 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        id,
-        type,
-        type_name AS typeName,
-        kind,
-        kind_name AS kindName
-        FROM profession
-        WHERE id IN (${noCacheIdList.join(', ')});`;
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.profession.findAll({
+        attributes: [
+          'id',
+          'name'
+        ],
+        where: {
+          id: noCacheIdList,
+        },
+      });
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {
+          item = item.toJSON();
           hash[item.id] = item;
         });
         noCacheIndexList.forEach(function(i) {
@@ -62,10 +63,10 @@ class Service extends egg.Service {
           let temp = hash[id];
           if(temp) {
             cache[i] = temp;
-            app.redis.setex('professionInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+            app.redis.setex('profession_' + id, CACHE_TIME, JSON.stringify(temp));
           }
           else {
-            app.redis.setex('professionInfo_' + id, CACHE_TIME, 'null');
+            app.redis.setex('profession_' + id, CACHE_TIME, 'null');
           }
         });
       }

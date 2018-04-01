@@ -35,14 +35,14 @@ class Media extends migi.Component {
           ? <Video ref="video"
                    worksId={ self.props.worksId }
                    list={ self.props.videoList }
-                   show={ self.props.workClass === 1 }/>
+                   show={ self.props.kind === 1 }/>
           : ''
       }
       {
         self.props.audioList
           ? <Audio ref="audio"
                    list={ self.props.audioList }
-                   show={ self.props.workClass === 2 } />
+                   show={ self.props.kind === 2 } />
           : ''
       }
     </div>;

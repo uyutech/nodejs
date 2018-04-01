@@ -115,22 +115,43 @@ class Service extends egg.Service {
       is,
     };
   }
-  classList2InfoList(classList) {
-    return classList.map(function(klass) {
-      return {
-        klass,
-        name: {
-          1: '视频',
-          2: '音频',
-          3: '图片',
-        }[klass],
-      };
-    });
+
+  /**
+   * 根据kind返回类型名
+   * @param kind:int 类型
+   * @returns string
+   */
+  getKindName(kind) {
+    return {
+      1: '视频',
+      2: '音频',
+      3: '图片',
+      4: '文字',
+    }[kind] || '其它';
   }
 
   /**
+   * 根据id列表返回小作品信息
+   * @param idList:Array<int>
+   * @param kind:int
+   * @returns Array<Object>
+   */
+  async infoList(idList, kind) {
+    switch(kind) {
+      case 1:
+        return await this.videoList(idList);
+      case 2:
+        return await this.audioList(idList);
+      case 3:
+        return await this.imageList(idList);
+      case 4:
+        return await this.textList(idList);
+    }
+    return [];
+  }
+  /**
    * 根据id列表获取视频信息
-   * @param idList
+   * @param idList:Array<int>
    * @returns Array<Object>
    */
   async videoList(idList) {
@@ -204,7 +225,7 @@ class Service extends egg.Service {
 
   /**
    * 根据id列表获取音频信息
-   * @param idList
+   * @param idList:Array<int>
    * @returns Array<Object>
    */
   async audioList(idList) {
@@ -276,7 +297,7 @@ class Service extends egg.Service {
 
   /**
    * 根据id列表获取图片信息
-   * @param idList
+   * @param idList:Array<int>
    * @returns Array<Object>
    */
   async imageList(idList) {
@@ -348,7 +369,7 @@ class Service extends egg.Service {
 
   /**
    * 根据id列表获取文本信息
-   * @param idList
+   * @param idList:Array<int>
    * @returns Array<Object>
    */
   async textList(idList) {

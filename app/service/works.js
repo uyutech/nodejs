@@ -259,10 +259,10 @@ class Service extends egg.Service {
             let userVideoRelation = userVideoRelationHash[temp.id];
             if(userVideoRelation) {
               if(userVideoRelation[0]) {
-                temp.isLike = userVideoRelation[0];
+                temp.isLiked = userVideoRelation[0];
               }
               if(userVideoRelation[1]) {
-                temp.isFavor = userVideoRelation[1];
+                temp.isFavored = userVideoRelation[1];
               }
             }
           }
@@ -273,10 +273,10 @@ class Service extends egg.Service {
             let userAudioRelation = userAudioRelationHash[temp.id];
             if(userAudioRelation) {
               if(userAudioRelation[0]) {
-                temp.isLike = userAudioRelation[0];
+                temp.isLiked = userAudioRelation[0];
               }
               if(userAudioRelation[1]) {
-                temp.isFavor = userAudioRelation[1];
+                temp.isFavored = userAudioRelation[1];
               }
             }
           }
@@ -287,10 +287,10 @@ class Service extends egg.Service {
             let userImageRelation = userImageRelationHash[temp.id];
             if(userImageRelation) {
               if(userImageRelation[0]) {
-                temp.isLike = userImageRelation[0];
+                temp.isLiked = userImageRelation[0];
               }
               if(userImageRelation[1]) {
-                temp.isFavor = userImageRelation[1];
+                temp.isFavored = userImageRelation[1];
               }
             }
           }
@@ -648,7 +648,7 @@ class Service extends egg.Service {
         last.push({
           id: first.professionId,
           name: first.professionName,
-          authorList: authors.map(function(author) {
+          list: authors.map(function(author) {
             return {
               id: author.authorId,
               name: author.name,
@@ -669,7 +669,7 @@ class Service extends egg.Service {
         name: first.professionName,
         kind: first.kind,
         kindName: first.kindName,
-        authorList: authors.map(function(author) {
+        list: authors.map(function(author) {
           return {
             id: author.authorId,
             name: author.name,

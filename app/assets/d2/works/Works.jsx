@@ -20,9 +20,9 @@ class Works extends migi.Component {
     self.workId = self.props.workId;
     self.setData(self.props.collection);
   }
-  @bind worksId
-  @bind workId
-  @bind workClass
+  // @bind worksId
+  // @bind workId
+  @bind kind
   setData(collection) {
     let self = this;
     self.videoList = [];
@@ -31,18 +31,18 @@ class Works extends migi.Component {
     self.textList = [];
     let first;
     collection.forEach(function(item) {
-      switch(item.class) {
+      switch(item.kind) {
         case 1:
           if(!first) {
             first = true;
-            self.workClass = 1;
+            self.kind = 1;
           }
           self.videoList.push(item);
           break;
         case 2:
           if(!first) {
             first = true;
-            self.workClass = 2;
+            self.kind = 2;
           }
           self.audioList.push(item);
           break;
@@ -57,11 +57,11 @@ class Works extends migi.Component {
   }
   clickType(e, vd, tvd) {
     let self = this;
-    if(tvd.props.rel === self.workClass) {
+    if(tvd.props.rel === self.kind) {
       return;
     }
-    self.workClass = tvd.props.rel;
-    self.ref.media.switchType(self.workClass);
+    self.kind = tvd.props.rel;
+    self.ref.media.switchType(self.kind);
   }
   render() {
     let self = this;
@@ -74,13 +74,13 @@ class Works extends migi.Component {
             onClick={ { li: self.clickType } }>
           {
             self.videoList.length
-              ? <li class={ 'video' + (self.workClass === 1 ? ' cur' : '') }
+              ? <li class={ 'video' + (self.kind === 1 ? ' cur' : '') }
                     rel={ 1 }>视频</li>
               : ''
           }
           {
             self.audioList.length
-              ? <li class={ 'audio' + (self.workClass === 2 ? ' cur' : '') }
+              ? <li class={ 'audio' + (self.kind === 2 ? ' cur' : '') }
                     rel={ 2 }>音频</li>
               : ''
           }
@@ -88,7 +88,7 @@ class Works extends migi.Component {
         <Media ref="media"
                worksId={ self.worksId }
                cover={ self.props.info.cover }
-               workClass={ self.workClass }
+               kind={ self.kind }
                videoList={ self.videoList }
                audioList={ self.audioList }/>
         <WorksComment ref="worksComment"

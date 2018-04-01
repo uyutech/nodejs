@@ -15,20 +15,20 @@ class Controller extends egg.Controller {
     if(!authorId) {
       return;
     }
-    let [info, aliases, outsides, mainWorksList, musicAlbumList, workClassList, comment] = await Promise.all([
+    let [info, aliases, outsides, mainWorksList, musicAlbumList, workKindList, comment] = await Promise.all([
       service.author.info(authorId),
       service.author.aliases(authorId),
       service.author.outsides(authorId),
       service.author.mainWorksList(authorId, 0, 10),
       service.author.musicAlbumList(authorId, 0, 10),
-      service.author.workClassList(authorId),
+      service.author.workKindList(authorId),
       service.author.comment(authorId, 0, 10)
     ]);
     mainWorksList.take = 10;
-    let classWorkList;
-    if(workClassList.length) {
-      classWorkList = await service.author.classWork(authorId, workClassList[0].klass, 0, 10);
-      classWorkList.take = 10;
+    let kindWorkList;
+    if(workKindList.length) {
+      kindWorkList = await service.author.kindWork(authorId, workKindList[0].kind, 0, 10);
+      kindWorkList.take = 10;
     }
     comment.take = 10;
     ctx.body = ctx.helper.okJSON({
@@ -37,8 +37,8 @@ class Controller extends egg.Controller {
       outsides,
       mainWorksList,
       musicAlbumList,
-      workClassList,
-      classWorkList,
+      workKindList,
+      kindWorkList,
       comment,
     });
   }

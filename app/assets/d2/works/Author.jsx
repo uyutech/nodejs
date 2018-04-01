@@ -4,6 +4,8 @@
 
 'use strict';
 
+import util from '../common/util';
+
 class Author extends migi.Component {
   constructor(...data) {
     super(...data);
@@ -21,11 +23,12 @@ class Author extends migi.Component {
             {
               (arr || []).map(function(item) {
                 return <dl>
-                  <dt>{ item.kindName }</dt>
+                  <dt>{ item.name }</dt>
                   {
-                    item.list.map(function(author) {
+                    (item.list || []).map(function(author) {
                       return <dd>
-                        <img src={ author.headUrl }/>
+                        <img src={ util.autoSsl(util.img48_48_80(author.headUrl))
+                          || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
                         <span>{ author.name }</span>
                       </dd>;
                     })
