@@ -9,6 +9,11 @@ const Sequelize = require('sequelize');
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
+  /**
+   * 获取用户信息
+   * @param id:int 用户id
+   * @returns Object
+   */
   async info(id) {
     if(!id) {
       return;
@@ -38,6 +43,12 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取用户信息列表
+   * @param idList:Array<int> 用户id列表
+   * @returns Object
+   */
   async infoList(idList) {
     if(!idList) {
       return;

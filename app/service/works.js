@@ -133,7 +133,7 @@ class Service extends egg.Service {
    * @param id:int 大作品id
    * @returns Array<Object>
    */
-  async collection(id) {
+  async collection(id, uid) {
     if(!id) {
       return;
     }
@@ -182,12 +182,23 @@ class Service extends egg.Service {
           break;
       }
     });
-    let [videoList, audioList, imageList, textList] = await Promise.all([
+    let [
+      videoList,
+      audioList,
+      imageList,
+      textList,
+      userVideoRelationList,
+      userAudioRelationList,
+      userImageRelationList
+    ] = await Promise.all([
       service.work.videoList(videoIdList),
       service.work.audioList(audioIdList),
       service.work.imageList(imageIdList),
       service.work.textList(textIdList),
-    ]);
+      service.work.userVideoRelationList(uid, videoIdList),
+      service.work.userAudioRelationList(uid, videoIdList),
+      service.work.userImageRelationList(uid, videoIdList)
+    ]);console.log(userVideoRelationList, userAudioRelationList, userImageRelationList);
     let videoHash = {};
     let audioHash = {};
     let imageHash = {};
@@ -212,6 +223,27 @@ class Service extends egg.Service {
         textHash[item.id] = item;
       }
     });
+    let userVideoRelationHash = {};
+    let userAudioRelationHash = {};
+    let userImageRelationHash = {};
+    userVideoRelationList.forEach(function(item, i) {
+      if(item) {
+        let id = videoIdList[i];
+        userVideoRelationHash[id] = item;
+      }
+    });
+    userAudioRelationList.forEach(function(item, i) {
+      if(item) {
+        let id = audioIdList[i];
+        userAudioRelationHash[id] = item;
+      }
+    });
+    userImageRelationList.forEach(function(item, i) {
+      if(item) {
+        let id = imageIdList[i];
+        userImageRelationHash[id] = item;
+      }
+    });
     return res.map(function(item) {
       let temp = {
         id: item.work_id,
@@ -224,16 +256,43 @@ class Service extends egg.Service {
         case 1:
           if(videoHash[temp.id]) {
             Object.assign(temp, videoHash[temp.id]);
+            let userVideoRelation = userVideoRelationHash[temp.id];
+            if(userVideoRelation) {
+              if(userVideoRelation[0]) {
+                temp.isLike = userVideoRelation[0];
+              }
+              if(userVideoRelation[1]) {
+                temp.isFavor = userVideoRelation[1];
+              }
+            }
           }
           break;
         case 2:
-          if(audioList[temp.id]) {
-            Object.assign(temp, audioList[temp.id]);
+          if(audioHash[temp.id]) {
+            Object.assign(temp, audioHash[temp.id]);
+            let userAudioRelation = userAudioRelationHash[temp.id];
+            if(userAudioRelation) {
+              if(userAudioRelation[0]) {
+                temp.isLike = userAudioRelation[0];
+              }
+              if(userAudioRelation[1]) {
+                temp.isFavor = userAudioRelation[1];
+              }
+            }
           }
           break;
         case 3:
-          if(imageList[temp.id]) {
-            Object.assign(temp, imageList[temp.id]);
+          if(imageHash[temp.id]) {
+            Object.assign(temp, imageHash[temp.id]);
+            let userImageRelation = userImageRelationHash[temp.id];
+            if(userImageRelation) {
+              if(userImageRelation[0]) {
+                temp.isLike = userImageRelation[0];
+              }
+              if(userImageRelation[1]) {
+                temp.isFavor = userImageRelation[1];
+              }
+            }
           }
           break;
         case 4:
@@ -555,7 +614,7 @@ class Service extends egg.Service {
     let professionSort = await this.typeProfessionSort(info.type);
     return [info, professionSort];
   }
-  reorder(authorList, rule) {
+  reorderAuthor(authorList, rule) {
     rule = rule || [];
     let res = [];
     // 先去重
@@ -587,11 +646,9 @@ class Service extends egg.Service {
         }
         let first = authors[0];
         last.push({
-          type: first.type,
-          typeName: first.typeName,
-          kind: first.kind,
-          kindName: first.kindName,
-          list: authors.map(function(author) {
+          id: first.professionId,
+          name: first.professionName,
+          authorList: authors.map(function(author) {
             return {
               id: author.authorId,
               name: author.name,
@@ -608,11 +665,11 @@ class Service extends egg.Service {
       let authors = hash[key];
       let first = authors[0];
       temp.push({
-        type: first.type,
-        typeName: first.typeName,
+        id: first.professionId,
+        name: first.professionName,
         kind: first.kind,
         kindName: first.kindName,
-        list: authors.map(function(author) {
+        authorList: authors.map(function(author) {
           return {
             id: author.authorId,
             name: author.name,

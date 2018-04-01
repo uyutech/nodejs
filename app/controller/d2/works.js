@@ -21,7 +21,7 @@ class Controller extends egg.Controller {
       service.works.comment(worksId, 0, 10)
     ]);
     comment.take = 10;
-    authorList = service.works.reorder(authorList, professionSort);
+    authorList = service.works.reorderAuthor(authorList, professionSort);
     await ctx.render('dworks2', {
       worksId,
       info,

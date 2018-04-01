@@ -25,6 +25,12 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    kind: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0未知，1视频，2音频，3图片，4文字',
+    },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
@@ -48,9 +54,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'user_id_type_work_id',
+        name: 'user_id_type_kind_work_id',
         unique: true,
-        fields: ['user_id', 'type', 'work_id'],
+        fields: ['user_id', 'type', 'kind', 'work_id'],
       }
     ],
     comment: '用户与作品关联信息',

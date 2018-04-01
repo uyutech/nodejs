@@ -72,7 +72,6 @@ const AuthorCommentRelation = require('./app/model/authorCommentRelation')({ seq
 const WorksCommentRelation = require('./app/model/worksCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleCommentRelation = require('./app/model/circleCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserWorkRelation = require('./app/model/userWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
-const UserImageRelation = require('./app/model/userImageRelation')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -1158,42 +1157,95 @@ async function dealComment(pool) {
 async function dealUserWork(pool) {
   console.log('------- dealUserWork --------');
   await UserWorkRelation.sync();
-  await UserImageRelation.sync();
+  // await UserImageRelation.sync();
   let hash = {};
   let worksIdHash = {};
   let workClassHash = {};
   let workOldIdHash = {};
   let exist = {};
+  let workHash = {};
   let last = 19019;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_WorkItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
+    let work = workHash[item.ItemsID];
+    if(!work) {
+      work = await Work.findOne({
+        attributes: ['kind'],
+        where: {
+          id: item.ItemsID,
+        },
+      });
+      work = work.toJSON();
+      workHash[item.ItemsID] = work;
+      switch(work.kind) {
+        case 1:
+          let video = await Video.findOne({
+            attributes: ['id'],
+            where: {
+              work_id: item.ItemsID,
+            }
+          });
+          workHash[item.ItemsID].id = video.id;
+          break;
+        case 2:
+          let audio = await Audio.findOne({
+            attributes: ['id'],
+            where: {
+              work_id: item.ItemsID,
+            }
+          });
+          workHash[item.ItemsID].id = audio.id;
+          break;
+        case 3:
+          let image = await Image.findOne({
+            attributes: ['id'],
+            where: {
+              work_id: item.ItemsID,
+            }
+          });
+          workHash[item.ItemsID].id = image.id;
+          break;
+      }
+    }
+    if(work.kind === 4) {
+      continue;
+    }
     let worksId = worksIdHash[item.ItemsID];
     if(!worksId) {
-      let rel = await WorksWorkRelation.findOne({
-        attributes: ['works_id'],
-        where: {
-          work_id: item.ItemsID,
-        },
-      });
-      if(!rel) {
-        continue;
+      if(work.kind === 3) {
+        let rel = await ImageAlbumWorkRelation.findOne({
+          attributes: ['album_id'],
+          where: {
+            work_id: work.id,
+            kind: work.kind,
+          },
+        });
+        if(rel) {
+          worksId = worksIdHash[item.ItemsID] = rel.album_id;
+        }
+        else {
+          worksId = worksIdHash[item.ItemsID] = 0;
+          continue;
+        }
       }
-      worksId = worksIdHash[item.ItemsID] = rel.works_id;
-    }
-    let workClass = workClassHash[item.ItemsID];
-    if(!workClass) {
-      let work = await Work.findOne({
-        attributes: ['id', 'class'],
-        where: {
-          work_id: item.ItemsID,
-        },
-      });
-      if(!work) {
-        continue;
+      else {
+        let rel = await WorksWorkRelation.findOne({
+          attributes: ['works_id'],
+          where: {
+            work_id: work.id,
+            kind: work.kind,
+          },
+        });
+        if(rel) {
+          worksId = worksIdHash[item.ItemsID] = rel.works_id;
+        }
+        else {
+          worksId = worksIdHash[item.ItemsID] = 0;
+          continue;
+        }
       }
-      workClass = workClassHash[item.ItemsID] = work.class;
-      workOldIdHash[item.ItemsID] = work.id;
     }
     if(item.UID && item.UID !== '0') {
       let key = item.UID + ',' + item.ItemsID;
@@ -1201,31 +1253,19 @@ async function dealUserWork(pool) {
         continue;
       }
       exist[key] = true;
-      if(workClass === 4 || worksId === 1) {
+      if(worksId === 1) {
         continue;
       }
-      if(workClass === 3) {
-        await UserImageRelation.create({
-          user_id: item.UID,
-          work_id: workOldIdHash[item.ItemsID],
-          type: 1,
-          is_deleted: false,
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-      }
-      else {
-        await UserWorkRelation.create({
-          user_id: item.UID,
-          work_id: workOldIdHash[item.ItemsID],
-          works_id: worksId,
-          class: workClass,
-          type: 1,
-          is_deleted: false,
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-      }
+      await UserWorkRelation.create({
+        user_id: item.UID,
+        work_id: work.id,
+        works_id: worksId,
+        kind: work.kind,
+        type: 1,
+        is_deleted: false,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
     }
     else {
       if(hash[item.CollectionID]) {
@@ -1234,27 +1274,16 @@ async function dealUserWork(pool) {
           continue;
         }
         exist[key] = true;
-        if(workClass === 3) {
-          await UserImageRelation.create({
-            user_id: hash[item.CollectionID],
-            work_id: workOldIdHash[item.ItemsID],
-            type: 1,
-            is_deleted: false,
-            create_time: item.CreateTime,
-            update_time: item.CreateTime,
-          });
-        }
-        else {
-          await UserWorkRelation.create({
-            user_id: hash[item.CollectionID],
-            work_id: workOldIdHash[item.ItemsID],
-            works_id: worksId,
-            type: 1,
-            is_deleted: false,
-            create_time: item.CreateTime,
-            update_time: item.CreateTime,
-          });
-        }
+        await UserWorkRelation.create({
+          user_id: hash[item.CollectionID],
+          work_id: work.id,
+          works_id: worksId,
+          kind: work.kind,
+          type: 1,
+          is_deleted: false,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
       }
       else {
         let res2 = await pool.request().query(`SELECT UID FROM dbo.Users_CollectionList WHERE ID=${item.CollectionID};`);
@@ -1265,33 +1294,23 @@ async function dealUserWork(pool) {
             continue;
           }
           exist[key] = true;
-          if(workClass === 3) {
-            await UserImageRelation.create({
-              user_id: res2.recordset[0].UID,
-              work_id: workOldIdHash[item.ItemsID],
-              type: 1,
-              is_deleted: false,
-              create_time: item.CreateTime,
-              update_time: item.CreateTime,
-            });
-          }
-          else {
-            await UserWorkRelation.create({
-              user_id: res2.recordset[0].UID,
-              work_id: workOldIdHash[item.ItemsID],
-              works_id: worksId,
-              type: 1,
-              is_deleted: false,
-              create_time: item.CreateTime,
-              update_time: item.CreateTime,
-            });
-          }
+          await UserWorkRelation.create({
+            user_id: hash[item.CollectionID],
+            work_id: work.id,
+            works_id: worksId,
+            kind: work.kind,
+            type: 1,
+            is_deleted: false,
+            create_time: item.CreateTime,
+            update_time: item.CreateTime,
+          });
         }
       }
     }
   }
   hash = {};
   last = 46852;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${last} AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1305,59 +1324,100 @@ async function dealUserWork(pool) {
     }
   }
   for(let i = 0, keys = Object.keys(hash), len = keys.length; i < len; i++) {
-    let item = hash[keys[i]];
+    let key = keys[i];
+    let item = hash[key];
     if(item) {
-      let workClass = workClassHash[item[1]];
-      if(!workClass) {
-        let work = await Work.findOne({
-          attributes: ['id', 'class'],
+      let uid = item[0];
+      let ItemsID = item[1];
+      let createTime = item[2];
+      let work = workHash[ItemsID];
+      if(!work) {
+        work = await Work.findOne({
+          attributes: ['kind'],
           where: {
-            id: item.ItemsID,
+            id: ItemsID,
           },
         });
-        if(!work) {
-          continue;
+        work = work.toJSON();
+        workHash[ItemsID] = work;
+        switch(work.kind) {
+          case 1:
+            let video = await Video.findOne({
+              attributes: ['id'],
+              where: {
+                work_id: ItemsID,
+              }
+            });
+            workHash[ItemsID].id = video.id;
+            break;
+          case 2:
+            let audio = await Audio.findOne({
+              attributes: ['id'],
+              where: {
+                work_id: ItemsID,
+              }
+            });
+            workHash[ItemsID].id = audio.id;
+            break;
+          case 3:
+            let image = await Image.findOne({
+              attributes: ['id'],
+              where: {
+                work_id: ItemsID,
+              }
+            });
+            workHash[ItemsID].id = image.id;
+            break;
         }
-        workClass = workClassHash[item[1]] = work.class;
-        workOldIdHash[item.ItemsID] = work.id;
       }
-      if(workClass === 4 || item[1] === 1) {
+      if(work.kind === 4) {
         continue;
       }
-      if(workClass === 3) {
-        await UserImageRelation.create({
-          user_id: item[0],
-          work_id: workOldIdHash[item[1]],
-          type: 0,
-          is_deleted: false,
-          create_time: item[2],
-          update_time: item[2],
-        })
-      }
-      else {
-        let worksId = worksIdHash[item[1]];
-        if(!worksId) {
+      let worksId = worksIdHash[ItemsID];
+      if(!worksId) {
+        if(work.kind === 3) {
+          let rel = await ImageAlbumWorkRelation.findOne({
+            attributes: ['album_id'],
+            where: {
+              work_id: work.id,
+              kind: work.kind,
+            },
+          });
+          if(rel) {
+            worksId = worksIdHash[item.ItemsID] = rel.album_id;
+          }
+          else {
+            worksId = worksIdHash[item.ItemsID] = 0;
+            continue;
+          }
+        }
+        else {
           let rel = await WorksWorkRelation.findOne({
             attributes: ['works_id'],
             where: {
-              work_id: item.ItemsID,
+              work_id: work.id,
+              kind: work.kind,
             },
           });
-          if(!rel) {
+          if(rel) {
+            worksId = worksIdHash[item.ItemsID] = rel.works_id;
+          }
+          else {
+            worksId = worksIdHash[item.ItemsID] = 0;
             continue;
           }
-          worksId = worksIdHash[item[1]] = rel.works_id;
         }
-        await UserWorkRelation.create({
-          user_id: item[0],
-          work_id: workOldIdHash[item[1]],
-          works_id: worksId,
-          type: 0,
-          is_deleted: false,
-          create_time: item[2],
-          update_time: item[2],
-        });
       }
+      await UserWorkRelation.create({
+        user_id: uid,
+        work_id: work.id,
+        works_id: worksId,
+        kind: work.kind,
+        type: 0,
+        is_deleted: false,
+        create_time: createTime,
+        update_time: createTime,
+      });
     }
   }
 }
