@@ -310,5 +310,5 @@ module.exports = app => {
 
   app.post('/h5/author2/index', 'h52.author.index');
   app.post('/h5/author2/comment', 'h52.author.comment');
-  app.post('/h5/author2/classWork', 'h52.author.classWork');
+  app.post('/h5/author2/kindWork', 'h52.author.kindWork');
 };

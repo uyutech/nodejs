@@ -364,6 +364,32 @@ class Service extends egg.Service {
     }
     return res;
   }
+  async mainWorksSize(aid) {
+    if(!aid) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'authorMainWorksSize_' + aid;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = `SELECT
+      COUNT(*) AS num
+      FROM author_main_works
+      WHERE author_id=${aid}
+      AND is_deleted=false`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0].num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
 
   /**
    * 获取作者参与大作品信息列表
@@ -372,15 +398,21 @@ class Service extends egg.Service {
    * @param take:int 分页数量
    * @returns Array<Object> 大作品信息列表
    */
-  async mainWorksList(aid, skip, take) {
+  async mainWorks(aid, skip, take) {
     if(!aid) {
       return;
     }
     // 先取得作者所有主打大作品列表id
-    let worksIdList = await this.mainWorksIdList(aid, skip, take);
+    let [idList, size] = await Promise.all([
+      this.mainWorksIdList(aid, skip, take),
+      this.mainWorksSize(aid)
+    ]);
     // 根据id获取信息
-    let res = await this.worksListByIdList(aid, worksIdList);
-    return res;
+    let data = await this.worksListByIdList(aid, idList);
+    return {
+      size,
+      data,
+    };
   }
 
   /**
@@ -599,14 +631,46 @@ class Service extends egg.Service {
    * @param take:int 分页数量
    * @returns Array<Object> 专辑信息列表
    */
-  async musicAlbumList(aid, skip, take) {
+  async musicAlbum(aid, skip, take) {
     if(!aid) {
       return;
     }
     const { service } = this;
     // 先取得作者所有参与专辑列表id
-    let idList = await this.musicAlbumIdList(aid, skip, take);
-    let res = await service.musicAlbum.infoList(idList);
+    let [idList, size] = await Promise.all([
+      this.musicAlbumIdList(aid, skip, take),
+      this.musicAlbumSize(aid)
+    ]);
+    let data = await service.musicAlbum.infoList(idList);
+    return {
+      size,
+      data,
+    };
+  }
+  async musicAlbumSize(aid) {
+    if(!aid) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'authorMusicAlbumSize_' + aid;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = `SELECT
+      COUNT(*) AS num
+      FROM music_album_author_profession_relation
+      WHERE author_id=${aid}
+      AND is_deleted=false`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0].num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 
@@ -775,7 +839,7 @@ class Service extends egg.Service {
       AND works_author_profession_relation.kind=${kind}
       AND works_author_profession_relation.is_deleted=false
       AND works_author_profession_relation.works_id=works.id
-      AND works.state<2
+      AND works.state=0
       ORDER BY workId DESC
       LIMIT ${skip},${take};`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
@@ -789,7 +853,7 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取作者参与小作品种类的小大作品基本xinxi 列表
+   * 获取作者参与小作品种类的小大作品基本信息列表
    * @param aid:int 作者id
    * @param idList:Array<int> 小作品id列表
    * @returns Array<Object>
@@ -836,7 +900,14 @@ class Service extends egg.Service {
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {
-          hash[item.workId] = item;
+          let temp = hash[item.workId] = hash[item.workId] || {
+            worksId: item.worksId,
+            workId: item.workId,
+            professionIdList: [],
+          };
+          if(item.worksId === temp.worksId) {
+            temp.professionIdList.push(item.professionId);
+          }
         });
         noCacheIndexList.forEach(function(i) {
           let workId = idList[i];
@@ -868,7 +939,7 @@ class Service extends egg.Service {
     }
     const { service } = this;
     let idList = await this.kindWorkIdList(aid, kind, skip, take);
-    let list = await this.kindWorkBaseList(aid, idList);console.log(222,list);
+    let list = await this.kindWorkBaseList(aid, idList);
     let worksIdList = [];
     let worksIdHash = {};
     let workIdList = [];
@@ -886,11 +957,13 @@ class Service extends egg.Service {
         workIdHash[workId] = true;
         workIdList.push(workId);
       }
-      let professionId = item.professionId;
-      if(!professionIdHash[professionId]) {
-        professionIdHash[professionId] = true;
-        professionIdList.push(professionId);
-      }
+      let pIdList = item.professionIdList;
+      pIdList.forEach(function(professionId) {
+        if(!professionIdHash[professionId]) {
+          professionIdHash[professionId] = true;
+          professionIdList.push(professionId);
+        }
+      });
     });
     let [worksInfoList, professionInfoList, workInfoList] = await Promise.all([
       service.works.infoList(worksIdList),
@@ -919,9 +992,13 @@ class Service extends egg.Service {
       if(workInfoHash[item.workId]) {
         temp.work = workInfoHash[item.workId];
       }
-      if(professionInfoHash[item.professionId]) {
-        temp.profession = professionInfoHash[item.professionId];
-      }
+      temp.professionList = [];
+      let pIdList = item.professionIdList;
+      pIdList.forEach(function(professionId) {
+        if(professionInfoHash[professionId]) {
+          temp.professionList.push(professionInfoHash[professionId]);
+        }
+      });
       return temp;
     });
   }
@@ -969,7 +1046,7 @@ class Service extends egg.Service {
       AND works_author_profession_relation.kind=${kind}
       AND works_author_profession_relation.is_deleted=false
       AND works_author_profession_relation.works_id=works.id
-      AND works.state<2;`;
+      AND works.state=0;`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;

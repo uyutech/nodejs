@@ -15,30 +15,30 @@ class Controller extends egg.Controller {
     if(!authorId) {
       return;
     }
-    let [info, aliases, outsides, mainWorksList, musicAlbumList, workKindList, comment] = await Promise.all([
+    let [info, aliases, outsides, mainWorks, musicAlbum, workKindList, comment] = await Promise.all([
       service.author.info(authorId),
       service.author.aliases(authorId),
       service.author.outsides(authorId),
-      service.author.mainWorksList(authorId, 0, 10),
-      service.author.musicAlbumList(authorId, 0, 10),
+      service.author.mainWorks(authorId, 0, 10),
+      service.author.musicAlbum(authorId, 0, 10),
       service.author.workKindList(authorId),
       service.author.comment(authorId, 0, 10)
     ]);
-    mainWorksList.take = 10;
-    let kindWorkList;
+    mainWorks.take = 10;
+    let kindWork;
     if(workKindList.length) {
-      kindWorkList = await service.author.kindWork(authorId, workKindList[0].kind, 0, 10);
-      kindWorkList.take = 10;
+      kindWork = await service.author.kindWork(authorId, workKindList[0].kind, 0, 10);
+      kindWork.take = 10;
     }
     comment.take = 10;
     ctx.body = ctx.helper.okJSON({
       info,
       aliases,
       outsides,
-      mainWorksList,
-      musicAlbumList,
+      mainWorks,
+      musicAlbum,
       workKindList,
-      kindWorkList,
+      kindWork,
       comment,
     });
   }
@@ -53,15 +53,19 @@ class Controller extends egg.Controller {
     let res = await service.comment.comment(authorId, body.skip || 0, body.take || 10);
     ctx.body = ctx.helper.okJSON(res);
   }
-  async classWork() {
+  async kindWork() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let authorId = body.authorId;
-    let klass = body.klass;
+    let kind = body.kind;
     let skip = body.skip;
     let take = body.take;
-    if(!authorId || klass === null || klass === undefined) {
+    if(!authorId || kind === undefined) {
+      return;
+    }
+    kind = parseInt(kind);
+    if(isNaN(kind)) {
       return;
     }
     skip = parseInt(skip) || 0;
@@ -69,9 +73,9 @@ class Controller extends egg.Controller {
     if(skip < 0 || take < 1) {
       return;
     }
-    let classWorks = await service.author.classWork(authorId, klass, skip, take);
-    classWorks.take = 10;
-    ctx.body = ctx.helper.okJSON(classWorks);
+    let kindWork = await service.author.kindWork(authorId, kind, skip, take);
+    kindWork.take = 10;
+    ctx.body = ctx.helper.okJSON(kindWork);
   }
 }
 
