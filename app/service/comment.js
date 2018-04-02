@@ -9,11 +9,11 @@ const Sequelize = require('sequelize');
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
-  async info(id) {
-    if(!id) {
-      return;
-    }
-  }
+  /**
+   * 根据评论id列表获取评论详情
+   * @param idList:Array<int> 评论id列表
+   * @returns Array<Object>
+   */
   async infoList(idList) {
     if(!idList) {
       return;
@@ -40,8 +40,33 @@ class Service extends egg.Service {
 
   /**
    * 包装评论数据，补上用户信息
+   * @param data:Object 评论基本信息
+   * @returns Array<Object>
+   */
+  async plus(data) {
+    if(!data) {
+      return;
+    }
+    const { service } = this;
+    if(data.isAuthor) {
+      delete data.userId;
+      let author = await service.author.info(data.authorId);
+      data.name = author.name;
+      data.headUrl = author.headUrl;
+    }
+    else {
+      delete data.authorId;
+      let user = await service.user.info(data.userId);
+      data.nickname = user.nickname;
+      data.headUrl = user.headUrl;
+    }
+    return data;
+  }
+
+  /**
+   * 包装评论数据，补上用户信息
    * @param dataList:Array<Object> 评论基本信息
-   * @returns {Promise<void>}
+   * @returns Array<Object>
    */
   async plusList(dataList) {
     if(!dataList) {

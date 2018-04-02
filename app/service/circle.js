@@ -12,7 +12,7 @@ class Service extends egg.Service {
   /**
    * 根据id获取圈子信息
    * @param id
-   * @returns {Promise<*>}
+   * @returns Object
    */
   async info(id) {
     if(!id) {
