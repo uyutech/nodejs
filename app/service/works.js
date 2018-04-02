@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 const Sequelize = require('sequelize');
+const squel = require('squel');
+
 const CACHE_TIME = 10;
 
 const WORKS_STATE_NAME = {
@@ -31,18 +33,20 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      works.id,
-      works.title,
-      works.sub_title AS subTitle,
-      works.state,
-      works.cover,
-      works.type,
-      works_type.name AS typeName
-      FROM works, works_type
-      WHERE works.id=${id}
-      AND works.is_authorize=true
-      AND works.type=works_type.id;`;
+    let sql = squel.select()
+      .from('works')
+      .from('works_type')
+      .field('works.id')
+      .field('works.title')
+      .field('works.sub_title', 'subTitle')
+      .field('works.state')
+      .field('works.cover')
+      .field('works.type')
+      .field('works_type.name', 'typeName')
+      .where('works.id=?', id)
+      .where('works.is_authorize=true')
+      .where('works.type=works_type.id')
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0];
@@ -93,18 +97,20 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        works.id,
-        works.title,
-        works.sub_title AS subTitle,
-        works.state,
-        works.cover,
-        works.type,
-        works_type.name AS typeName
-        FROM works, works_type
-        WHERE works.id IN (${noCacheIdList.join(', ')})
-        AND works.is_authorize=true
-        AND works.type=works_type.id;`;
+      let sql = squel.select()
+        .from('works')
+        .from('works_type')
+        .field('works.id')
+        .field('works.title')
+        .field('works.sub_title', 'subTitle')
+        .field('works.state')
+        .field('works.cover')
+        .field('works.type')
+        .field('works_type.name', 'typeName')
+        .where('works.id IN ?', noCacheIdList)
+        .where('works.is_authorize=true')
+        .where('works.type=works_type.id')
+        .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
@@ -121,6 +127,105 @@ class Service extends egg.Service {
           }
           else {
             app.redis.setex('worksInfo_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
+  }
+
+  /**
+   * 根据作品id获取作品热度
+   * @param id:int 作品id
+   * @returns int
+   */
+  async popular(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'worksPopular_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = `SELECT
+      works.num
+      FROM works_num
+      WHERE works_num.works_id=${id}
+      AND type=0;`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0].num;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 根据作品id列表获取作品热度列表
+   * @param idList:Array<int> 作品id列表
+   * @returns Array<int>
+   */
+  async popularList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('worksPopular_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('worksPopular_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = `SELECT
+        works.works_id AS worksId
+        works.num
+        FROM works_num
+        WHERE works_num.works_id IN (${noCacheIdList.join(', ')})
+        AND type=0;`;
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.worksId;
+          hash[id] = item.num;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('worksPopular_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('worksPopular_' + id, CACHE_TIME, 'null');
           }
         });
       }
@@ -147,18 +252,18 @@ class Service extends egg.Service {
     else {
       res = await app.model.worksWorkRelation.findAll({
         attributes: [
-          'work_id',
+          ['work_id', 'workId'],
           'kind',
-          'tag'
+          'tag',
         ],
         where: {
           works_id: id,
-          is_delete: false,
         },
         order: [
           ['weight', 'DESC'],
           'kind'
         ],
+        raw: true,
       });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
@@ -169,16 +274,16 @@ class Service extends egg.Service {
     res.forEach(function(item) {
       switch(item.kind) {
         case 1:
-          videoIdList.push(item.work_id);
+          videoIdList.push(item.workId);
           break;
         case 2:
-          audioIdList.push(item.work_id);
+          audioIdList.push(item.workId);
           break;
         case 3:
-          imageIdList.push(item.work_id);
+          imageIdList.push(item.workId);
           break;
         case 4:
-          textIdList.push(item.work_id);
+          textIdList.push(item.workId);
           break;
       }
     });
@@ -189,7 +294,10 @@ class Service extends egg.Service {
       textList,
       userVideoRelationList,
       userAudioRelationList,
-      userImageRelationList
+      videoListLikeCount,
+      audioListLikeCount,
+      videoListFavorCount,
+      audioListFavorCount
     ] = await Promise.all([
       service.work.videoList(videoIdList),
       service.work.audioList(audioIdList),
@@ -197,8 +305,11 @@ class Service extends egg.Service {
       service.work.textList(textIdList),
       service.work.userVideoRelationList(uid, videoIdList),
       service.work.userAudioRelationList(uid, videoIdList),
-      service.work.userImageRelationList(uid, videoIdList)
-    ]);console.log(userVideoRelationList, userAudioRelationList, userImageRelationList);
+      service.work.videoListLikeCount(videoIdList),
+      service.work.audioListLikeCount(audioIdList),
+      service.work.videoListFavorCount(videoIdList),
+      service.work.audioListFavorCount(audioIdList)
+    ]);
     let videoHash = {};
     let audioHash = {};
     let imageHash = {};
@@ -225,7 +336,6 @@ class Service extends egg.Service {
     });
     let userVideoRelationHash = {};
     let userAudioRelationHash = {};
-    let userImageRelationHash = {};
     userVideoRelationList.forEach(function(item, i) {
       if(item) {
         let id = videoIdList[i];
@@ -238,15 +348,37 @@ class Service extends egg.Service {
         userAudioRelationHash[id] = item;
       }
     });
-    userImageRelationList.forEach(function(item, i) {
-      if(item) {
-        let id = imageIdList[i];
-        userImageRelationHash[id] = item;
+    let videoLikeCountHash = {};
+    let audioLikeCountHash = {};
+    let videoFavorCountHash = {};
+    let audioFavorCountHash = {};
+    videoListLikeCount.forEach(function(item, i) {
+      if(item !== null && item !== undefined) {
+        let id = videoIdList[i];
+        videoLikeCountHash[id] = item;
+      }
+    });
+    audioListLikeCount.forEach(function(item, i) {
+      if(item !== null && item !== undefined) {
+        let id = audioIdList[i];
+        audioLikeCountHash[id] = item;
+      }
+    });
+    videoListFavorCount.forEach(function(item, i) {
+      if(item !== null && item !== undefined) {
+        let id = videoIdList[i];
+        videoFavorCountHash[id] = item;
+      }
+    });
+    audioListFavorCount.forEach(function(item, i) {
+      if(item !== null && item !== undefined) {
+        let id = audioIdList[i];
+        audioFavorCountHash[id] = item;
       }
     });
     return res.map(function(item) {
       let temp = {
-        id: item.work_id,
+        id: item.workId,
         kind: item.kind,
       };
       if(item.tag) {
@@ -258,12 +390,20 @@ class Service extends egg.Service {
             Object.assign(temp, videoHash[temp.id]);
             let userVideoRelation = userVideoRelationHash[temp.id];
             if(userVideoRelation) {
-              if(userVideoRelation[0]) {
-                temp.isLiked = userVideoRelation[0];
-              }
               if(userVideoRelation[1]) {
-                temp.isFavored = userVideoRelation[1];
+                temp.isLike = userVideoRelation[1];
               }
+              if(userVideoRelation[2]) {
+                temp.isFavor = userVideoRelation[2];
+              }
+            }
+            let videoLikeCount = videoLikeCountHash[temp.id];
+            if(videoLikeCount !== undefined && videoLikeCount !== null) {
+              temp.likeCount = videoLikeCount;
+            }
+            let videoFavorCount = videoFavorCountHash[temp.id];
+            if(videoFavorCount !== undefined && videoFavorCount !== null) {
+              temp.favorCount = videoFavorCount;
             }
           }
           break;
@@ -272,11 +412,19 @@ class Service extends egg.Service {
             Object.assign(temp, audioHash[temp.id]);
             let userAudioRelation = userAudioRelationHash[temp.id];
             if(userAudioRelation) {
-              if(userAudioRelation[0]) {
-                temp.isLiked = userAudioRelation[0];
-              }
               if(userAudioRelation[1]) {
-                temp.isFavored = userAudioRelation[1];
+                temp.isLike = userAudioRelation[1];
+              }
+              if(userAudioRelation[2]) {
+                temp.isFavor = userAudioRelation[2];
+              }
+              let audioLikeCount = audioLikeCountHash[temp.id];
+              if(audioLikeCount !== undefined && audioLikeCount !== null) {
+                temp.likeCount = audioLikeCount;
+              }
+              let audioFavorCount = audioFavorCountHash[temp.id];
+              if(audioFavorCount !== undefined && audioFavorCount !== null) {
+                temp.favorCount = audioFavorCount;
               }
             }
           }
@@ -284,15 +432,6 @@ class Service extends egg.Service {
         case 3:
           if(imageHash[temp.id]) {
             Object.assign(temp, imageHash[temp.id]);
-            let userImageRelation = userImageRelationHash[temp.id];
-            if(userImageRelation) {
-              if(userImageRelation[0]) {
-                temp.isLiked = userImageRelation[0];
-              }
-              if(userImageRelation[1]) {
-                temp.isFavored = userImageRelation[1];
-              }
-            }
           }
           break;
         case 4:
@@ -308,13 +447,13 @@ class Service extends egg.Service {
   /**
    * 获取评论全部信息
    * @param id:int 作品id
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Object{ data:Array<Object>, size:int }
    */
-  async comment(id, skip, take) {
+  async comment(id, offset, limit) {
     let [data, size] = await Promise.all([
-      this.commentData(id, skip, take),
+      this.commentData(id, offset, limit),
       this.commentSize(id)
     ]);
     return { data, size };
@@ -323,35 +462,37 @@ class Service extends egg.Service {
   /**
    * 获取评论数据
    * @param id:int 作品id
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async commentData(id, skip, take) {
+  async commentData(id, offset, limit) {
     if(!id) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 1;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
       return;
     }
     const { app, service } = this;
-    let sql = `SELECT
-      comment.id,
-      comment.user_id AS userId,
-      comment.author_id AS authorId,
-      comment.content,
-      comment.parent_id AS parentId,
-      comment.root_id AS rootId,
-      comment.create_time AS createTime,
-      comment.update_time AS updateTime
-      FROM comment, works_comment_relation
-      WHERE works_comment_relation.works_id=${id}
-      AND works_comment_relation.comment_id=comment.root_id
-      AND comment.is_delete=false
-      ORDER BY comment.id DESC
-      LIMIT ${skip},${take};`;
+    let sql = squel.select()
+      .from('works_comment_relation')
+      .from('comment')
+      .field('comment.id')
+      .field('comment.user_id', 'userId')
+      .field('comment.author_id', 'authorId')
+      .field('comment.content')
+      .field('comment.parent_id', 'parentId')
+      .field('comment.root_id', 'rootId')
+      .field('comment.create_time', 'createTime')
+      .where('works_comment_relation.works_id=?', id)
+      .where('works_comment_relation.comment_id=comment.root_id')
+      .where('comment.is_delete=false')
+      .order('comment.id', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     res = await service.comment.plusList(res);
     return res;
@@ -370,12 +511,14 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      COUNT(*) AS num
-      FROM works_comment_relation, comment
-      WHERE works_comment_relation.works_id=${id}
-      AND works_comment_relation.comment_id=comment.root_id
-      AND comment.is_delete=false;`;
+    let sql = squel.select()
+      .from('works_comment_relation')
+      .from('comment')
+      .field('COUNT(*)', 'num')
+      .where('works_comment_relation.works_id=?', id)
+      .where('works_comment_relation.comment_id=comment.root_id')
+      .where('comment.is_delete=false')
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;
@@ -398,16 +541,18 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
     }
     else {
-      let sql = `SELECT
-        works_author_profession_relation.works_id AS worksId,
-        works_author_profession_relation.work_id AS workId,
-        works_author_profession_relation.author_id AS authorId,
-        works_author_profession_relation.profession_id AS professionId,
-        profession.name AS professionName
-        FROM works_author_profession_relation, profession
-        WHERE works_author_profession_relation.works_id=${id}
-        AND works_author_profession_relation.is_delete=false
-        AND works_author_profession_relation.profession_id=profession.id;`;
+      let sql = squel.select()
+        .from('works_author_profession_relation')
+        .from('profession')
+        .field('works_author_profession_relation.works_id', 'worksId')
+        .field('works_author_profession_relation.work_id', 'workId')
+        .field('works_author_profession_relation.author_id', 'authorId')
+        .field('works_author_profession_relation.profession_id', 'professionId')
+        .field('profession.name', 'professionName')
+        .where('works_author_profession_relation.works_id=?', id)
+        .where('works_author_profession_relation.is_delete=false')
+        .where('works_author_profession_relation.profession_id=profession.id')
+        .toString();
       res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
@@ -437,6 +582,12 @@ class Service extends egg.Service {
     }
     return res;
   }
+
+  /**
+   * 根据作品类型获取职种排序规则
+   * @param type:int 作品类型
+   * @returns Array<Object>
+   */
   async typeProfessionSort(type) {
     if(!type) {
       return;
@@ -448,18 +599,30 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      works_type AS worksType,
-      \`group\`,
-      weight,
-      profession_id AS professionId
-      FROM works_type_profession_sort
-      WHERE works_type=${type}
-      ORDER BY \`group\`, weight DESC`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    res = await app.model.worksTypeProfessionSort.findAll({
+      attributes: [
+        ['works_type', 'worksType'],
+        'group',
+        'weight'
+      ],
+      where: {
+        works_type: type,
+      },
+      order: [
+        'group',
+        ['weight', 'DESC']
+      ],
+      raw: true,
+    });
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 根据作品类型列表获取职种排序规则列表
+   * @param typeList:int 作品类型列表
+   * @returns Array<Array<Object>>
+   */
   async typeListProfessionSort(typeList) {
     if(!typeList) {
       return;
@@ -521,6 +684,12 @@ class Service extends egg.Service {
     }
     return cache;
   }
+
+  /**
+   * 根据作品id获取作品信息以及职种排序规则
+   * @param id:int 作品id
+   * @returns Object{ info:Object, professionSort:Array<Object> }
+   */
   async infoAndTypeProfessionSort(id) {
     if(!id) {
       return;

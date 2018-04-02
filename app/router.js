@@ -307,6 +307,8 @@ module.exports = app => {
 
   app.post('/h5/works2/index', 'h52.works.index');
   app.post('/h5/works2/comment', 'h52.works.comment');
+  app.post('/h5/works2/like', 'h52.works.like');
+  app.post('/h5/works2/favor', 'h52.works.favor');
 
   app.post('/h5/author2/index', 'h52.author.index');
   app.post('/h5/author2/comment', 'h52.author.comment');

@@ -5,114 +5,89 @@
 'use strict';
 
 const egg = require('egg');
-const Sequelize = require('sequelize');
+const Sequelize = require('Sequelize');
+const squel = require('squel');
+
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
-  async like(worksId, workId, uid, is) {
-    if(!worksId || !worksId || !uid) {
-      return;
-    }
-    const { app } = this;
-    let query = await app.model.userWorkRelation.findOne({
-      where: {
-        user_id: uid,
-        type: 0,
-        work_id: workId,
-      },
-    });
-    if(query) {
-      let res = await query.update({
-        is_delete: !is,
-        update_time: new Date(),
-      }, {
-        where: {
-          user_id: uid,
-          type: 0,
-          work_id: workId,
-        },
-      });
-      if(!res) {
-        return;
-      }
-    }
-    else {
-      let temp = await this.info(workId);
-      if(!temp) {
-        return;
-      }
-      let klass = temp.class;
-      let now = new Date();
-      let res = await app.model.userWorkRelation.create({
-        user_id: uid,
-        type: 0,
-        work_id: workId,
-        works_id: worksId,
-        class: klass,
-        is_delete: false,
-        create_time: now,
-        update_time: now,
-      });
-      if(!res) {
-        return;
-      }
-    }
-    app.redis.del('userWorkRelation_' + uid + '_' + workId);
-    return {
-      is,
-    };
+  /**
+   * 点赞作品
+   * @param uid:int 用户id
+   * @param worksId:int 大作品id
+   * @param workId:int 小作品id
+   * @param kind:int 小作品类型
+   * @param state:bool 状态
+   * @returns Object{ state:bool, count:int }
+   */
+  async like(uid, worksId, workId, kind, state) {
+    return await this.operate(uid, worksId, workId, kind, 1, state);
   }
-  async favor(worksId, workId, uid, is) {
-    if(!worksId || !worksId || !uid) {
+
+  /**
+   * 收藏作品
+   * @param uid:int 用户id
+   * @param worksId:int 大作品id
+   * @param workId:int 小作品id
+   * @param kind:int 小作品类型
+   * @param state:bool 状态
+   * @returns Object{ state:bool, count:int }
+   */
+  async favor(uid, worksId, workId, kind, state) {
+    return await this.operate(uid, worksId, workId, kind, 2, state);
+  }
+
+  /**
+   * 操作作品
+   * @param uid:int 用户id
+   * @param worksId:int 大作品id
+   * @param workId:int 小作品id
+   * @param kind:int 小作品类型
+   * @param type:int 操作类型
+   * @param state:bool 状态
+   * @returns Object{ state:bool, count:int }
+   */
+  async operate(uid, worksId, workId, kind, type, state) {
+    if(!uid || !worksId || !workId || !kind || !type) {
       return;
     }
+    type = parseInt(type);
+    if(type !== 1 && type !== 2) {
+      return;
+    }
+    state = !!state;
     const { app } = this;
-    let query = await app.model.userWorkRelation.findOne({
+    await app.model.userWorkRelation.upsert({
+      user_id: uid,
+      works_id: worksId,
+      work_id: workId,
+      kind,
+      type,
+      is_delete: !state,
+      update_time: new Date(),
+    }, {
       where: {
         user_id: uid,
-        type: 1,
+        type,
         work_id: workId,
+        kind,
       },
     });
-    if(query) {
-      let res = await query.update({
-        is_delete: !is,
-        update_time: new Date(),
-      }, {
-        where: {
-          user_id: uid,
-          type: 1,
-          work_id: workId,
-        },
-      });
-      if(!res) {
-        return;
-      }
-    }
-    else {
-      let temp = await this.info(workId);
-      if(!temp) {
-        return;
-      }
-      let klass = temp.class;
-      let now = new Date();
-      let res = await app.model.userWorkRelation.create({
-        user_id: uid,
-        type: 1,
+    let res = await app.model.userWorkRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'count']
+      ],
+      where: {
         work_id: workId,
-        works_id: worksId,
-        class: klass,
+        kind,
+        type,
         is_delete: false,
-        create_time: now,
-        update_time: now,
-      });
-      if(!res) {
-        return;
-      }
-    }
-    app.redis.del('userWorkRelation_' + uid + '_' + workId);
+      },
+    });
+    res = res.toJSON();
     return {
-      is,
+      state,
+      count: res.count,
     };
   }
 
@@ -187,19 +162,21 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        video.id,
-        video.title,
-        video.width,
-        video.height,
-        video.duration,
-        video.cover,
-        video.url,
-        video.type,
-        work_type.name AS typeName
-        FROM video, work_type
-        WHERE video.id IN (${noCacheIdList.join(', ')})
-        AND video.type=work_type.id`;
+      let sql = squel.select()
+        .from('video')
+        .from('work_type')
+        .field('video.id')
+        .field('video.title')
+        .field('video.width')
+        .field('video.height')
+        .field('video.duration')
+        .field('video.cover')
+        .field('video.url')
+        .field('video.type')
+        .field('work_type.name', 'typeName')
+        .where('video.id IN ?', noCacheIdList)
+        .where('video.type=work_type.id')
+        .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
@@ -261,17 +238,19 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        audio.id,
-        audio.title,
-        audio.duration,
-        audio.cover,
-        audio.url,
-        audio.type,
-        work_type.name AS typeName
-        FROM audio, work_type
-        WHERE audio.id IN (${noCacheIdList.join(', ')})
-        AND audio.type=work_type.id`;
+      let sql = squel.select()
+        .from('audio')
+        .from('work_type')
+        .field('audio.id')
+        .field('audio.title')
+        .field('audio.duration')
+        .field('audio.cover')
+        .field('audio.url')
+        .field('audio.type')
+        .field('work_type.name', 'typeName')
+        .where('audio.id IN ?', noCacheIdList)
+        .where('audio.type=work_type.id')
+        .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
@@ -333,17 +312,19 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        image.id,
-        image.title,
-        image.width,
-        image.height,
-        image.url,
-        image.type,
-        work_type.name AS typeName
-        FROM image, work_type
-        WHERE image.id IN (${noCacheIdList.join(', ')})
-        AND image.type=work_type.id`;
+      let sql = squel.select()
+        .from('image')
+        .from('work_type')
+        .field('image.id')
+        .field('image.title')
+        .field('image.width')
+        .field('image.height')
+        .field('image.url')
+        .field('image.type')
+        .field('work_type.name', 'typeName')
+        .where('image.id IN ?', noCacheIdList)
+        .where('image.type=work_type.id')
+        .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
@@ -405,15 +386,17 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        text.id,
-        text.title,
-        text.content,
-        text.type,
-        work_type.name AS typeName
-        FROM text, work_type
-        WHERE text.id IN (${noCacheIdList.join(', ')})
-        AND text.type=work_type.id`;
+      let sql = squel.select()
+        .from('text')
+        .from('work_type')
+        .field('text.id')
+        .field('text.title')
+        .field('text.content')
+        .field('text.type')
+        .field('work_type.name', 'typeName')
+        .where('text.id IN ?', noCacheIdList)
+        .where('text.type=work_type.id')
+        .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
@@ -438,162 +421,44 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取用户对作品的点赞、收藏关系
+   * 获取用户对视频的点赞、收藏关系
+   * @param uid:int 用户id
    * @param idList:Array<int> 作品id
-   * @returns {Promise<void>}
+   * @returns Array<Object>
    */
   async userVideoRelationList(uid, idList) {
-    if(!uid || !idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    const { app } = this;
-    let cache = await Promise.all(
-      idList.map(function(id) {
-        if(id !== null && id !== undefined) {
-          return app.redis.get('userVideoRelation_' + uid + '_' + id);
-        }
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
-      let id = idList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        app.redis.expire('userVideoRelation_' + uid + '_' + id, CACHE_TIME);
-      }
-      else if(id !== null && id !== undefined) {
-        if(!noCacheIdHash[id]) {
-          noCacheIdHash[id] = true;
-          noCacheIdList.push(id);
-        }
-        noCacheIndexList.push(i);
-      }
-    });
-    if(noCacheIdList.length) {
-      let res = await app.model.userWorkRelation.findAll({
-        attributes: [
-          ['work_id', 'workId'],
-          'type'
-        ],
-        where: {
-          user_id: uid,
-          work_id: noCacheIdList,
-          is_delete: false,
-          kind: 1,
-        },
-      });
-      if(res.length) {
-        let hash = {};
-        res.forEach(function(item) {
-          item = item.toJSON();
-          let id = item.workId;
-          let type = item.type;
-          hash[id] = hash[id] || {};
-          hash[id][type] = true;
-        });
-        noCacheIndexList.forEach(function(i) {
-          let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('userVideoRelation_' + uid + '_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('userVideoRelation_' + uid + '_' + id, CACHE_TIME, 'null');
-          }
-        });
-      }
-    }
-    return cache;
+    return await this.userRelationList(uid, idList, 1);
   }
 
   /**
-   * 获取用户对作品的点赞、收藏关系
+   * 获取用户对音频的点赞、收藏关系
+   * @param uid:int 用户id
    * @param idList:Array<int> 作品id
-   * @returns {Promise<void>}
+   * @returns Array<Object>
    */
   async userAudioRelationList(uid, idList) {
-    if(!uid || !idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    const { app } = this;
-    let cache = await Promise.all(
-      idList.map(function(id) {
-        if(id !== null && id !== undefined) {
-          return app.redis.get('userAudioRelation_' + uid + '_' + id);
-        }
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
-      let id = idList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        app.redis.expire('userAudioRelation_' + uid + '_' + id, CACHE_TIME);
-      }
-      else if(id !== null && id !== undefined) {
-        if(!noCacheIdHash[id]) {
-          noCacheIdHash[id] = true;
-          noCacheIdList.push(id);
-        }
-        noCacheIndexList.push(i);
-      }
-    });
-    if(noCacheIdList.length) {
-      let res = await app.model.userWorkRelation.findAll({
-        attributes: [
-          ['work_id', 'workId'],
-          'type'
-        ],
-        where: {
-          user_id: uid,
-          work_id: noCacheIdList,
-          is_delete: false,
-          kind: 2,
-        },
-      });
-      if(res.length) {
-        let hash = {};
-        res.forEach(function(item) {
-          item = item.toJSON();
-          let id = item.workId;
-          let type = item.type;
-          hash[id] = hash[id] || {};
-          hash[id][type] = true;
-        });
-        noCacheIndexList.forEach(function(i) {
-          let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('userAudioRelation_' + uid + '_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('userAudioRelation_' + uid + '_' + id, CACHE_TIME, 'null');
-          }
-        });
-      }
-    }
-    return cache;
+    return await this.userRelationList(uid, idList, 2);
   }
 
   /**
-   * 获取用户对作品的点赞、收藏关系
+   * 获取用户对图片的点赞、收藏关系
+   * @param uid:int 用户id
    * @param idList:Array<int> 作品id
-   * @returns {Promise<void>}
+   * @returns Array<Object>
    */
   async userImageRelationList(uid, idList) {
-    if(!uid || !idList) {
+    return await this.userRelationList(uid, idList, 3);
+  }
+  /**
+   *
+   * 获取用户对作品的点赞、收藏关系
+   * @param uid:int 用户id
+   * @param idList:Array<int> 作品id
+   * @param kind:int 作品类型
+   * @returns Array<Object>
+   */
+  async userRelationList(uid, idList, kind) {
+    if(!uid || !idList || !kind) {
       return;
     }
     if(!idList.length) {
@@ -603,7 +468,7 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map(function(id) {
         if(id !== null && id !== undefined) {
-          return app.redis.get('userImageRelation_' + uid + '_' + id);
+          return app.redis.get('userWorkRelation_' + uid + '_' + id + '_' + kind);
         }
       })
     );
@@ -614,7 +479,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('userImageRelation_' + uid + '_' + id, CACHE_TIME);
+        app.redis.expire('userWorkRelation_' + uid + '_' + id + '_' + kind, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -633,14 +498,14 @@ class Service extends egg.Service {
         where: {
           user_id: uid,
           work_id: noCacheIdList,
+          kind,
           is_delete: false,
-          kind: 3,
         },
+        raw: true,
       });
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {
-          item = item.toJSON();
           let id = item.workId;
           let type = item.type;
           hash[id] = hash[id] || {};
@@ -651,10 +516,10 @@ class Service extends egg.Service {
           let temp = hash[id];
           if(temp) {
             cache[i] = temp;
-            app.redis.setex('userImageRelation_' + uid + '_' + id, CACHE_TIME, JSON.stringify(temp));
+            app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + kind, CACHE_TIME, JSON.stringify(temp));
           }
           else {
-            app.redis.setex('userImageRelation_' + uid + '_' + id, CACHE_TIME, 'null');
+            app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + kind, CACHE_TIME, 'null');
           }
         });
       }
@@ -663,12 +528,50 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取用户对作品的点赞、收藏关系
-   * @param idList:Array<int> 作品id
-   * @returns {Promise<void>}
+   * 获取视频点赞数据
+   * @param idList:Array<int>
+   * @returns Array<int>
    */
-  async userTextRelationList(uid, idList) {
-    if(!uid || !idList) {
+  async videoListLikeCount(idList) {
+    return await this.countList(idList, 1, 1);
+  }
+
+  /**
+   * 获取音频点赞数据
+   * @param idList:Array<int>
+   * @returns Array<int>
+   */
+  async audioListLikeCount(idList) {
+    return await this.countList(idList, 2, 1);
+  }
+
+  /**
+   * 获取视频收藏数据
+   * @param idList:Array<int>
+   * @returns Array<int>
+   */
+  async videoListFavorCount(idList) {
+    return await this.countList(idList, 1, 2);
+  }
+
+  /**
+   * 获取音频收藏数据
+   * @param idList:Array<int>
+   * @returns Array<int>
+   */
+  async audioListFavorCount(idList) {
+    return await this.countList(idList, 2, 2);
+  }
+
+  /**
+   * 根据id列表和kind和type获取对应数据
+   * @param idList:Array<int> 作品id列表
+   * @param kind:int 作品类型
+   * @param type:int 数据类型
+   * @returns Array<int>
+   */
+  async countList(idList, kind, type) {
+    if(!idList) {
       return;
     }
     if(!idList.length) {
@@ -678,7 +581,7 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map(function(id) {
         if(id !== null && id !== undefined) {
-          return app.redis.get('userTextRelation_' + uid + '_' + id);
+          return app.redis.get('workCount_' + id + '_' + kind + '_' + type);
         }
       })
     );
@@ -689,7 +592,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('userTextRelation_' + uid + '_' + id, CACHE_TIME);
+        app.redis.expire('workCount_' + id + '_' + kind + '_' + type, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -703,33 +606,33 @@ class Service extends egg.Service {
       let res = await app.model.userWorkRelation.findAll({
         attributes: [
           ['work_id', 'workId'],
-          'type'
+          [Sequelize.fn('COUNT', '*'), 'num']
         ],
         where: {
-          user_id: uid,
           work_id: noCacheIdList,
+          kind,
+          type,
           is_delete: false,
-          kind: 4,
         },
+        group: 'work_id',
+        raw: true,
       });
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {
-          item = item.toJSON();
           let id = item.workId;
-          let type = item.type;
-          hash[id] = hash[id] || {};
-          hash[id][type] = true;
+          hash[id] = item.num;
         });
         noCacheIndexList.forEach(function(i) {
           let id = idList[i];
           let temp = hash[id];
           if(temp) {
             cache[i] = temp;
-            app.redis.setex('userTextRelation_' + uid + '_' + id, CACHE_TIME, JSON.stringify(temp));
+            app.redis.setex('workCount_' + id + '_' + kind + '_' + type, CACHE_TIME, JSON.stringify(temp));
           }
           else {
-            app.redis.setex('userTextRelation_' + uid + '_' + id, CACHE_TIME, 'null');
+            cache[i] = 0;
+            app.redis.setex('workCount_' + id + '_' + kind + '_' + type, CACHE_TIME, 0);
           }
         });
       }

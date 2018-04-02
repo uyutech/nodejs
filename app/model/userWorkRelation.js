@@ -29,22 +29,17 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0未知，1视频，2音频，3图片，4文字',
+      comment: '1视频，2音频，3图片，4文字',
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0点赞作品，1收藏作品',
+      comment: '1点赞作品，2收藏作品',
     },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
     },
     update_time: {
       type: Sequelize.DATE,
@@ -57,6 +52,10 @@ module.exports = app => {
         name: 'user_id_type_kind_work_id',
         unique: true,
         fields: ['user_id', 'type', 'kind', 'work_id'],
+      },
+      {
+        name: 'work_id_kind_type',
+        fields: ['work_id', 'kind', 'type'],
       }
     ],
     comment: '用户与作品关联信息',

@@ -24,13 +24,13 @@ class Controller extends egg.Controller {
       service.author.workKindList(authorId),
       service.author.comment(authorId, 0, 10)
     ]);
-    mainWorks.take = 10;
+    mainWorks.limit = 10;
     let kindWork;
     if(workKindList.length) {
       kindWork = await service.author.kindWork(authorId, workKindList[0].kind, 0, 10);
-      kindWork.take = 10;
+      kindWork.limit = 10;
     }
-    comment.take = 10;
+    comment.limit = 10;
     ctx.body = ctx.helper.okJSON({
       info,
       aliases,
@@ -50,8 +50,8 @@ class Controller extends egg.Controller {
     if(!authorId) {
       return;
     }
-    let res = await service.author.comment(authorId, body.skip || 0, body.take || 10);
-    res.take = 10;
+    let res = await service.author.comment(authorId, body.offset || 0, body.limit || 10);
+    res.limit = 10;
     ctx.body = ctx.helper.okJSON(res);
   }
   async kindWork() {
@@ -60,8 +60,8 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let authorId = body.authorId;
     let kind = body.kind;
-    let skip = body.skip;
-    let take = body.take;
+    let offset = body.offset;
+    let limit = body.limit;
     if(!authorId || kind === undefined) {
       return;
     }
@@ -69,13 +69,13 @@ class Controller extends egg.Controller {
     if(isNaN(kind)) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 10;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 10;
+    if(offset < 0 || limit < 1) {
       return;
     }
-    let kindWork = await service.author.kindWork(authorId, kind, skip, take);
-    kindWork.take = 10;
+    let kindWork = await service.author.kindWork(authorId, kind, offset, limit);
+    kindWork.limit = 10;
     ctx.body = ctx.helper.okJSON(kindWork);
   }
 }

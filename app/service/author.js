@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 const Sequelize = require('sequelize');
+const squel = require('squel');
+
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
@@ -20,24 +22,22 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      author.id,
-      author.name,
-      author.head_url AS headUrl,
-      author.sign,
-      author.fans_name AS fansName,
-      author.fans_circle_name AS fansCircleName,
-      author.is_settle AS isSettle
-      FROM author
-      WHERE author.id=${id}
-      AND author.is_delete=false;`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0];
-    }
-    else {
-      res = null;
-    }
+    res = await app.model.author.findOne({
+      attributes: [
+        'id',
+        'name',
+        ['head_url', 'headUrl'],
+        'sign',
+        ['fans_name', 'fansName'],
+        ['fans_circle_name', 'fansCircleName'],
+        ['is_settle', 'isSettle']
+      ],
+      where: {
+        id,
+        is_delete: false,
+      },
+      raw: true,
+    });
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -78,18 +78,22 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        author.id,
-        author.name,
-        author.head_url AS headUrl,
-        author.sign,
-        author.fans_name AS fansName,
-        author.fans_circle_name AS fansCircleName,
-        author.is_settle AS isSettle
-        FROM author
-        WHERE author.id IN(${noCacheIdList.join(', ')})
-        AND author.is_delete=false;`;
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.author.findAll({
+        attributes: [
+          'id',
+          'name',
+          ['head_url', 'headUrl'],
+          'sign',
+          ['fans_name', 'fansName'],
+          ['fans_circle_name', 'fansCircleName'],
+          ['is_settle', 'isSettle']
+        ],
+        where: {
+          id: noCacheIdList,
+          is_delete: false,
+        },
+        raw: true,
+      });
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {
@@ -164,46 +168,48 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
-  async comment(id, skip, take) {
+  async comment(id, offset, limit) {
     if(!id) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 1;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
       return;
     }
     let [data, size] = await Promise.all([
-      this.commentData(id, skip, take),
+      this.commentData(id, offset, limit),
       this.commentSize(id)
     ]);
     return { data, size };
   }
-  async commentData(id, skip, take) {
+  async commentData(id, offset, limit) {
     if(!id) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 1;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
       return;
     }
     const { app, service } = this;
-    let sql = `SELECT
-      comment.id,
-      comment.user_id AS userId,
-      comment.author_id AS authorId,
-      comment.content,
-      comment.parent_id AS parentId,
-      comment.root_id AS rootId,
-      comment.create_time AS createTime,
-      comment.update_time AS updateTime
-      FROM comment, author_comment_relation
-      WHERE author_comment_relation.author_id=${id}
-      AND author_comment_relation.comment_id=comment.root_id
-      AND comment.is_delete=false
-      ORDER BY comment.id DESC
-      LIMIT ${skip},${take};`;
+    let sql = squel.select()
+      .from('author_comment_relation')
+      .from('comment')
+      .field('comment.id')
+      .field('comment.user_id', 'userId')
+      .field('comment.author_id', 'authorId')
+      .field('comment.content')
+      .field('comment.parent_id', 'parentId')
+      .field('comment.root_id', 'rootId')
+      .field('comment.create_time', 'createTime')
+      .where('author_comment_relation.author_id=?', id)
+      .where('author_comment_relation.comment_id=comment.root_id')
+      .where('comment.is_delete=false')
+      .order('comment.id', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     res = await service.comment.plusList(res);
     return res;
@@ -242,23 +248,23 @@ class Service extends egg.Service {
   /**
    * 获取作者主打大作品id列表
    * @param id:int 作者id
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Array<Object> 主打大作品id列表
    */
-  async mainWorksIdList(id, skip, take) {
+  async mainWorksIdList(id, offset, limit) {
     if(!id) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 1;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMainWorksIdList_' + id + '_' + skip + '_' + take;
+    let cacheKey = 'authorMainWorksIdList_' + id + '_' + offset + '_' + limit;
     let res;
-    if(skip === 0) {
+    if(offset === 0) {
       res = await app.redis.get(cacheKey);
       if(res) {
         app.redis.expire(cacheKey, CACHE_TIME);
@@ -273,8 +279,8 @@ class Service extends egg.Service {
         author_id: id,
         is_delete: false,
       },
-      offset: skip,
-      limit: take,
+      offset: offset,
+      limit: limit,
       order: [
         ['weight', 'DESC'],
       ],
@@ -284,7 +290,7 @@ class Service extends egg.Service {
         item = item.toJSON();
         return item.worksId;
       });
-      if(skip === 0) {
+      if(offset === 0) {
         app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
       }
     }
@@ -320,17 +326,17 @@ class Service extends egg.Service {
   /**
    * 获取作者参与大作品信息列表
    * @param id:int 作者id
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Array<Object> 大作品信息列表
    */
-  async mainWorks(id, skip, take) {
+  async mainWorks(id, offset, limit) {
     if(!id) {
       return;
     }
     // 先取得作者所有主打大作品列表id
     let [idList, size] = await Promise.all([
-      this.mainWorksIdList(id, skip, take),
+      this.mainWorksIdList(id, offset, limit),
       this.mainWorksSize(id)
     ]);
     // 根据id获取信息
@@ -502,23 +508,23 @@ class Service extends egg.Service {
   /**
    * 获取作者的专辑信息id列表
    * @param id:int 作者id
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Array<int> 专辑信息id列表
    */
-  async musicAlbumIdList(id, skip, take) {
+  async musicAlbumIdList(id, offset, limit) {
     if(!id) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 1;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMusicAlbumIdList_' + id + '_' + skip + '_' + take;
+    let cacheKey = 'authorMusicAlbumIdList_' + id + '_' + offset + '_' + limit;
     let res;
-    if(skip === 0) {
+    if(offset === 0) {
       res = await app.redis.get(cacheKey);
       if(res) {
         app.redis.expire(cacheKey, CACHE_TIME);
@@ -531,7 +537,7 @@ class Service extends egg.Service {
       WHERE author_id=${id}
       AND is_delete=false
       ORDER BY id
-      LIMIT ${skip},${take};`;
+      LIMIT ${offset},${limit};`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     let idList = res.map(function(item) {
       return item.id;
@@ -544,7 +550,7 @@ class Service extends egg.Service {
     res = res.map(function(item) {
       return item.albumId;
     });
-    if(skip === 0) {
+    if(offset === 0) {
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
     return res;
@@ -553,18 +559,18 @@ class Service extends egg.Service {
   /**
    * 获取作者的专辑信息列表
    * @param id:int 作者id
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Array<Object> 专辑信息列表
    */
-  async musicAlbum(id, skip, take) {
+  async musicAlbum(id, offset, limit) {
     if(!id) {
       return;
     }
     const { service } = this;
     // 先取得作者所有参与专辑列表id
     let [idList, size] = await Promise.all([
-      this.musicAlbumIdList(id, skip, take),
+      this.musicAlbumIdList(id, offset, limit),
       this.musicAlbumSize(id)
     ]);
     let data = await service.musicAlbum.infoList(idList);
@@ -735,23 +741,23 @@ class Service extends egg.Service {
    * 获取作者参与小作品种类的小作品id列表
    * @param id:int 作者id
    * @param kind:int 种类
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async kindWorkIdList(id, kind, skip, take) {
+  async kindWorkIdList(id, kind, offset, limit) {
     if(!id || kind === null || kind === undefined) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 1;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorKindWorkIdList_' + id + '_' + kind + '_' + skip + '_' + take;
+    let cacheKey = 'authorKindWorkIdList_' + id + '_' + kind + '_' + offset + '_' + limit;
     let res;
-    if(skip === 0) {
+    if(offset === 0) {
       res = await app.redis.get(cacheKey);
       if(res) {
         app.redis.expire(cacheKey, CACHE_TIME);
@@ -767,12 +773,12 @@ class Service extends egg.Service {
       AND works_author_profession_relation.works_id=works.id
       AND works.state=0
       ORDER BY workId DESC
-      LIMIT ${skip},${take};`;
+      LIMIT ${offset},${limit};`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     res = res.map(function(item) {
       return item.workId;
     });
-    if(skip === 0) {
+    if(offset === 0) {
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
     return res;
@@ -855,16 +861,16 @@ class Service extends egg.Service {
    * 获取作者参与小作品种类的大作品列表
    * @param id:int 作者id
    * @param kind:int 种类
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async kindWorkData(id, kind, skip, take) {
+  async kindWorkData(id, kind, offset, limit) {
     if(!id || kind === null || kind === undefined) {
       return;
     }
     const { service } = this;
-    let idList = await this.kindWorkIdList(id, kind, skip, take);
+    let idList = await this.kindWorkIdList(id, kind, offset, limit);
     let list = await this.kindWorkBaseList(id, idList);
     let worksIdList = [];
     let worksIdHash = {};
@@ -933,16 +939,16 @@ class Service extends egg.Service {
    * 获取作者参与小作品种类的大作品列表和分页数据
    * @param id:int 作者id
    * @param kind:int 种类
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns { data: Array<Object>, size: int }
    */
-  async kindWork(id, kind, skip, take) {
+  async kindWork(id, kind, offset, limit) {
     if(!id) {
       return;
     }
     let [data, size] = await Promise.all([
-      this.kindWorkData(id, kind, skip, take),
+      this.kindWorkData(id, kind, offset, limit),
       this.kindWorkSize(id, kind)
     ]);
     return { data, size };

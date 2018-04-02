@@ -16,9 +16,9 @@ class Controller extends egg.Controller {
     if(!worksId) {
       return;
     }
-    let skip = body.skip || 0;
-    let take = body.take || 10;
-    let res = await service.works.comment(worksId, skip, take);
+    let offset = body.offset || 0;
+    let limit = body.limit || 10;
+    let res = await service.works.comment(worksId, offset, limit);
     ctx.body = ctx.helper.okJSON(res);
   }
   async like() {

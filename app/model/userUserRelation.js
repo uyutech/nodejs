@@ -29,12 +29,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0关注用户',
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
+      comment: '1关注用户',
     },
     update_time: {
       type: Sequelize.DATE,

@@ -21,7 +21,7 @@ class Controller extends egg.Controller {
       service.works.collection(worksId, uid),
       service.works.comment(worksId, 0, 10)
     ]);
-    comment.take = 10;
+    comment.limit = 10;
     authorList = service.works.reorderAuthor(authorList, professionSort);
     ctx.body = ctx.helper.okJSON({
       info,
@@ -38,8 +38,36 @@ class Controller extends egg.Controller {
     if(!worksId) {
       return;
     }
-    let res = await service.works.comment(worksId, body.skip || 0, body.take || 10);
-    res.take = 10;
+    let res = await service.works.comment(worksId, body.offset || 0, body.limit || 10);
+    res.limit = 10;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+  async like() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let worksId = body.worksId;
+    let workId = body.workId;
+    let kind = body.kind;
+    let state = body.state === 'true';
+    if(!worksId || !workId || !kind) {
+      return;
+    }
+    let res = await service.work.like(uid, worksId, workId, kind, state);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+  async favor() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let worksId = body.worksId;
+    let workId = body.workId;
+    let kind = body.kind;
+    let state = body.state === 'true';
+    if(!worksId || !workId || !kind) {
+      return;
+    }
+    let res = await service.work.favor(uid, worksId, workId, kind, state);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

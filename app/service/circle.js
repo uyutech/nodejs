@@ -52,21 +52,21 @@ class Service extends egg.Service {
   /**
    * 获取圈子下的言论
    * @param id:int 圈子id
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Object{ size:int, data:Array<Object> }
    */
-  async comment(id, skip, take) {
+  async comment(id, offset, limit) {
     if(!id) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 1;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
       return;
     }
     let [data, size] = await Promise.all([
-      this.commentData(id, skip, take),
+      this.commentData(id, offset, limit),
       this.commentSize(id)
     ]);
     return { data, size };
@@ -75,17 +75,17 @@ class Service extends egg.Service {
   /**
    * 获取圈子下留言
    * @param id:int 圈子的id
-   * @param skip:int 分页开始
-   * @param take:int 分页数量
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns int 留言数量
    */
-  async commentData(id, skip, take) {
+  async commentData(id, offset, limit) {
     if(!id) {
       return;
     }
-    skip = parseInt(skip) || 0;
-    take = parseInt(take) || 1;
-    if(skip < 0 || take < 1) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
       return;
     }
     const { app, service } = this;
@@ -103,7 +103,7 @@ class Service extends egg.Service {
       AND circle_comment_relation.comment_id=comment.id
       AND comment.is_delete=false
       ORDER BY circle_comment_relation.id DESC
-      LIMIT ${skip},${take};`;
+      LIMIT ${offset},${limit};`;
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     res = await service.comment.plusList(res);
     return res;

@@ -25,21 +25,20 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      user.id,
-      user.nickname,
-      user.head_url AS headUrl,
-      user.sign,
-      user.coins
-      FROM user
-      WHERE id=${id};`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0];
-    }
-    else {
-      res = null;
-    }
+    res = await app.model.user.findOne({
+      attributes: [
+        'id',
+        'nickname',
+        ['head_url', 'headUrl'],
+        'sign',
+        'coins'
+      ],
+      where: {
+        id,
+        is_delete: false,
+      },
+      raw: true,
+    });
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -47,7 +46,7 @@ class Service extends egg.Service {
   /**
    * 获取用户信息列表
    * @param idList:Array<int> 用户id列表
-   * @returns Object
+   * @returns Array<Object>
    */
   async infoList(idList) {
     if(!idList) {
@@ -80,18 +79,23 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        user.id,
-        user.nickname,
-        user.head_url AS headUrl,
-        user.sign,
-        user.coins
-        FROM user
-        WHERE id IN(${noCacheIdList.join(', ')});`;
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.user.findAll({
+        attributes: [
+          'id',
+          'nickname',
+          ['head_url', 'headUrl'],
+          'sign',
+          'coins'
+        ],
+        where: {
+          id: noCacheIdList,
+          is_delete: false,
+        },
+        raw: true,
+      });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item, i) {
+        res.forEach(function(item) {
           let id = item.id;
           hash[id] = item;
         });

@@ -19,7 +19,7 @@ class Controller extends egg.Controller {
       service.post.info(postId),
       service.post.comment(postId, 0, 10)
     ]);
-    comment.take = 10;
+    comment.limit = 10;
     ctx.body = ctx.helper.okJSON({
       info,
       comment,
@@ -33,8 +33,8 @@ class Controller extends egg.Controller {
     if(!postId) {
       return;
     }
-    let res = await service.post.comment(postId, body.skip || 0, body.take || 10);
-    res.take = 10;
+    let res = await service.post.comment(postId, body.offset || 0, body.limit || 10);
+    res.limit = 10;
     ctx.body = ctx.helper.okJSON(res);
   }
 }

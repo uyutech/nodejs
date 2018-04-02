@@ -19,7 +19,7 @@ class Controller extends egg.Controller {
       service.circle.info(circleId),
       service.circle.comment(circleId, 0, 10)
     ]);
-    comment.take = 10;
+    comment.limit = 10;
     ctx.body = ctx.helper.okJSON({
       info,
       comment,
@@ -33,8 +33,8 @@ class Controller extends egg.Controller {
     if(!circleId) {
       return;
     }
-    let res = await service.circle.comment(circleId, body.skip || 0, body.take || 10);
-    res.take = 10;
+    let res = await service.circle.comment(circleId, body.offset || 0, body.limit || 10);
+    res.limit = 10;
     ctx.body = ctx.helper.okJSON(res);
   }
 }
