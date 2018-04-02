@@ -50,7 +50,8 @@ class Controller extends egg.Controller {
     if(!authorId) {
       return;
     }
-    let res = await service.comment.comment(authorId, body.skip || 0, body.take || 10);
+    let res = await service.author.comment(authorId, body.skip || 0, body.take || 10);
+    res.take = 10;
     ctx.body = ctx.helper.okJSON(res);
   }
   async kindWork() {

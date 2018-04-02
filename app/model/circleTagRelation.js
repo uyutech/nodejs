@@ -27,7 +27,7 @@ module.exports = app => {
       defaultValue: 0,
       comment: '0直属，1活动引导',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

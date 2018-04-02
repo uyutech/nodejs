@@ -26,7 +26,7 @@ module.exports = app => {
       allowNull: false,
       comment: '0主账号，1成员，2编辑',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

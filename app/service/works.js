@@ -153,7 +153,7 @@ class Service extends egg.Service {
         ],
         where: {
           works_id: id,
-          is_deleted: false,
+          is_delete: false,
         },
         order: [
           ['weight', 'DESC'],
@@ -308,9 +308,9 @@ class Service extends egg.Service {
   /**
    * 获取评论全部信息
    * @param id:int 作品id
-   * @param skip:int
-   * @param take:int
-   * @returns Object<{ data:Array<Object>, size }>
+   * @param skip:int 分页开始
+   * @param take:int 分页数量
+   * @returns Object{ data:Array<Object>, size:int }
    */
   async comment(id, skip, take) {
     let [data, size] = await Promise.all([
@@ -323,11 +323,11 @@ class Service extends egg.Service {
   /**
    * 获取评论数据
    * @param id:int 作品id
-   * @param skip
-   * @param take
+   * @param skip:int 分页开始
+   * @param take:int 分页数量
    * @returns Array<Object>
    */
-  async commentData(id, skip = 0, take = 1) {
+  async commentData(id, skip, take) {
     if(!id) {
       return;
     }
@@ -349,96 +349,11 @@ class Service extends egg.Service {
       FROM comment, works_comment_relation
       WHERE works_comment_relation.works_id=${id}
       AND works_comment_relation.comment_id=comment.root_id
-      AND comment.is_deleted=false
+      AND comment.is_delete=false
       ORDER BY comment.id DESC
       LIMIT ${skip},${take};`;
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      let userIdHash = {};
-      let userIdList = [];
-      let authorIdHash = {};
-      let authorIdList = [];
-      let quoteIdList = [];
-      res.forEach(function(item) {
-        if(item.authorId) {
-          if(!authorIdHash[item.authorId]) {
-            authorIdHash[item.authorId] = true;
-            authorIdList.push(item.authorId);
-          }
-          delete item.userId;
-          item.isAuthor = true;
-        }
-        else {
-          if(!userIdHash[item.userId]) {
-            userIdHash[item.userId] = true;
-            userIdList.push(item.userId);
-          }
-          delete item.authorId;
-        }
-        if(item.rootId !== item.parentId && item.rootId !== 0) {
-          quoteIdList.push(item.parentId);
-        }
-      });
-      let quotes = await service.comment.infoList(quoteIdList);
-      let quoteHash = {};
-      quotes.forEach(function(item) {
-        if(item.authorId) {
-          if(!authorIdHash[item.authorId]) {
-            authorIdHash[item.authorId] = true;
-            authorIdList.push(item.authorId);
-          }
-          delete item.userId;
-          item.isAuthor = true;
-        }
-        else {
-          if(!userIdHash[item.userId]) {
-            userIdHash[item.userId] = true;
-            userIdList.push(item.userId);
-          }
-          delete item.authorId;
-        }
-        quoteHash[item.id] = item;
-        if(item.content.length > 60) {
-          item.slice = true;
-          item.content = item.content.slice(0, 60) + '...';
-        }
-      });
-      let [userList, authorList] = await Promise.all([
-        service.user.infoList(userIdList),
-        service.author.infoList(authorIdList)
-      ]);
-      userIdHash = {};
-      userList.forEach(function(item) {
-        userIdHash[item.id] = item;
-      });
-      authorIdHash = {};
-      authorList.forEach(function(item) {
-        authorIdHash[item.id] = item;
-      });
-      quotes.forEach(function(item) {
-        if(item.isAuthor) {
-          item.name = authorIdHash[item.authorId].name;
-          item.headUrl = authorIdHash[item.authorId].headUrl;
-        }
-        else {
-          item.nickname = userIdHash[item.userId].nickname;
-          item.headUrl = userIdHash[item.userId].headUrl;
-        }
-      });
-      res.forEach(function(item) {
-        if(item.isAuthor) {
-          item.name = authorIdHash[item.authorId].name;
-          item.headUrl = authorIdHash[item.authorId].headUrl;
-        }
-        else {
-          item.nickname = userIdHash[item.userId].nickname;
-          item.headUrl = userIdHash[item.userId].headUrl;
-        }
-        if(item.rootId !== item.parentId && item.rootId !== 0) {
-          item.quote = quoteHash[item.parentId];
-        }
-      });
-    }
+    res = await service.comment.plusList(res);
     return res;
   }
 
@@ -456,11 +371,11 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     let sql = `SELECT
-      num
-      FROM works_comment_relation, comment_num
+      COUNT(*) AS num
+      FROM works_comment_relation, comment
       WHERE works_comment_relation.works_id=${id}
-      AND works_comment_relation.comment_id=comment_num.comment_id
-      AND type=0;`;
+      AND works_comment_relation.comment_id=comment.root_id
+      AND comment.is_delete=false;`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;
@@ -491,7 +406,7 @@ class Service extends egg.Service {
         profession.name AS professionName
         FROM works_author_profession_relation, profession
         WHERE works_author_profession_relation.works_id=${id}
-        AND works_author_profession_relation.is_deleted=false
+        AND works_author_profession_relation.is_delete=false
         AND works_author_profession_relation.profession_id=profession.id;`;
       res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));

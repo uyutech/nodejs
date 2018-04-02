@@ -21,7 +21,7 @@ module.exports = app => {
       type: Sequelize.STRING(32),
       allowNull: false,
     },
-    is_settled: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

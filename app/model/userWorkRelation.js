@@ -36,7 +36,7 @@ module.exports = app => {
       allowNull: false,
       comment: '0点赞作品，1收藏作品',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

@@ -35,7 +35,7 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

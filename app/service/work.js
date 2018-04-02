@@ -23,7 +23,7 @@ class Service extends egg.Service {
     });
     if(query) {
       let res = await query.update({
-        is_deleted: !is,
+        is_delete: !is,
         update_time: new Date(),
       }, {
         where: {
@@ -49,7 +49,7 @@ class Service extends egg.Service {
         work_id: workId,
         works_id: worksId,
         class: klass,
-        is_deleted: false,
+        is_delete: false,
         create_time: now,
         update_time: now,
       });
@@ -76,7 +76,7 @@ class Service extends egg.Service {
     });
     if(query) {
       let res = await query.update({
-        is_deleted: !is,
+        is_delete: !is,
         update_time: new Date(),
       }, {
         where: {
@@ -102,7 +102,7 @@ class Service extends egg.Service {
         work_id: workId,
         works_id: worksId,
         class: klass,
-        is_deleted: false,
+        is_delete: false,
         create_time: now,
         update_time: now,
       });
@@ -483,7 +483,7 @@ class Service extends egg.Service {
         where: {
           user_id: uid,
           work_id: noCacheIdList,
-          is_deleted: false,
+          is_delete: false,
           kind: 1,
         },
       });
@@ -558,7 +558,7 @@ class Service extends egg.Service {
         where: {
           user_id: uid,
           work_id: noCacheIdList,
-          is_deleted: false,
+          is_delete: false,
           kind: 2,
         },
       });
@@ -633,7 +633,7 @@ class Service extends egg.Service {
         where: {
           user_id: uid,
           work_id: noCacheIdList,
-          is_deleted: false,
+          is_delete: false,
           kind: 3,
         },
       });
@@ -708,7 +708,7 @@ class Service extends egg.Service {
         where: {
           user_id: uid,
           work_id: noCacheIdList,
-          is_deleted: false,
+          is_delete: false,
           kind: 4,
         },
       });

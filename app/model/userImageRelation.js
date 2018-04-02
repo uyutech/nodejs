@@ -26,7 +26,7 @@ module.exports = app => {
       allowNull: false,
       comment: '0点赞图片，1收藏图片',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

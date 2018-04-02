@@ -39,6 +39,7 @@ const AuthorNum = require('./app/model/authorNum')({ sequelizeCircling: sequeliz
 const AuthorOutside = require('./app/model/authorOutside')({ sequelizeCircling: sequelize, Sequelize });
 const Profession = require('./app/model/profession')({ sequelizeCircling: sequelize, Sequelize });
 const WorksAuthorProfessionRelation = require('./app/model/worksAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
+const CircleType = require('./app/model/circleType')({ sequelizeCircling: sequelize, Sequelize });
 const Circle = require('./app/model/circle')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTop = require('./app/model/circleTop')({ sequelizeCircling: sequelize, Sequelize });
 const CircleNum = require('./app/model/circleNum')({ sequelizeCircling: sequelize, Sequelize });
@@ -139,7 +140,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 0,
-        is_deleted: false,
+        is_delete: false,
         url: item.BaiduUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -149,7 +150,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 1,
-        is_deleted: false,
+        is_delete: false,
         url: item.BilibiliUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -159,7 +160,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 2,
-        is_deleted: false,
+        is_delete: false,
         url: item.FiveSingUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -169,7 +170,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 3,
-        is_deleted: false,
+        is_delete: false,
         url: item.HuabanUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -179,7 +180,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 4,
-        is_deleted: false,
+        is_delete: false,
         url: item.LofterUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -189,7 +190,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 5,
-        is_deleted: false,
+        is_delete: false,
         url: item.PCOUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -199,7 +200,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 6,
-        is_deleted: false,
+        is_delete: false,
         url: item.WangyiUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -209,7 +210,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 7,
-        is_deleted: false,
+        is_delete: false,
         url: item.WeiboUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -219,7 +220,7 @@ async function dealAuthor(pool) {
       await AuthorOutside.create({
         author_id: item.ID,
         type: 8,
-        is_deleted: false,
+        is_delete: false,
         url: item.ZcoolUrl,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -239,7 +240,7 @@ async function dealAuthorMainWorks(pool) {
       author_id: item.AuthorID,
       works_id: item.WorksID,
       weight: item.sort,
-      is_deleted: false,
+      is_delete: false,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -277,7 +278,7 @@ async function dealWork(pool) {
       // title: item.ItemsName || '',
       kind: item.BigType,
       // type: item.ItemType,
-      // is_deleted: !!item.ISDel,
+      // is_delete: !!item.ISDel,
       // create_time: item.CreateTime,
       // update_time: item.CreateTime,
     });
@@ -292,7 +293,7 @@ async function dealWork(pool) {
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
         duration: 0,
@@ -306,7 +307,7 @@ async function dealWork(pool) {
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
         width: 0,
@@ -321,7 +322,7 @@ async function dealWork(pool) {
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
         width: 0,
@@ -335,7 +336,7 @@ async function dealWork(pool) {
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
         content: '',
@@ -430,7 +431,7 @@ async function dealWorks(pool) {
         describe: item.Describe || '',
         type: item.WorksType,
         is_authorize: true,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         state: Math.max(item.WorkState - 1, 0),
         cover: item.cover_Pic || '',
         create_time: item.CreateTime,
@@ -445,7 +446,7 @@ async function dealWorks(pool) {
         describe: item.Describe || '',
         type: item.WorksType,
         is_authorize: true,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         state: Math.max(item.WorkState - 1, 0),
         cover: item.cover_Pic || '',
         create_time: item.CreateTime,
@@ -460,7 +461,7 @@ async function dealWorks(pool) {
         describe: item.Describe || '',
         type: item.WorksType,
         is_authorize: true,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         state: Math.max(item.WorkState - 1, 0),
         cover: item.cover_Pic || '',
         create_time: item.CreateTime,
@@ -491,7 +492,7 @@ async function dealWorks(pool) {
         work_id: work.id,
         date: item.LinDate,
         describe: item.Describe || '',
-        is_deleted: item.ISDel,
+        is_delete: item.ISDel,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -579,7 +580,7 @@ async function dealWorksWork(pool) {
         work_id,
         works_id: item.WorksID,
         kind: work.kind,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         weight: item.sort || 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
@@ -591,7 +592,7 @@ async function dealWorksWork(pool) {
         work_id,
         works_id: 0,
         kind: work.kind,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         weight: item.sort || 0,
         tag: item.Describe || '',
         create_time: item.CreateTime,
@@ -603,7 +604,7 @@ async function dealWorksWork(pool) {
         works_id: item.WorksID,
         work_id,
         kind: work.kind,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         weight: item.sort || 0,
         tag: item.Describe || '',
         create_time: item.CreateTime,
@@ -752,7 +753,7 @@ async function dealWorkAuthorProfession(pool) {
         kind: work.kind,
         author_id: item.AuthorID,
         profession_id: item.Enum_AuthorTypeID,
-        is_deleted: false,
+        is_delete: false,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -764,7 +765,7 @@ async function dealWorkAuthorProfession(pool) {
       kind: work.kind,
       author_id: item.AuthorID,
       profession_id: item.Enum_AuthorTypeID,
-      is_deleted: false,
+      is_delete: false,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -802,7 +803,7 @@ async function dealWorkAuthorProfession(pool) {
           kind: 0,
           author_id: item.AuthorID,
           profession_id: item.Enum_AuthorTypeID,
-          is_deleted: false,
+          is_delete: false,
           create_time: item.CreateTime,
           update_time: item.CreateTime,
         });
@@ -821,7 +822,7 @@ async function dealWorkAuthorProfession(pool) {
           kind: 0,
           author_id: item.AuthorID,
           profession_id: item.Enum_AuthorTypeID,
-          is_deleted: false,
+          is_delete: false,
           create_time: item.CreateTime,
           update_time: item.CreateTime,
         });
@@ -833,7 +834,7 @@ async function dealWorkAuthorProfession(pool) {
         kind: 0,
         author_id: item.AuthorID,
         profession_id: item.Enum_AuthorTypeID,
-        is_deleted: false,
+        is_delete: false,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -843,6 +844,25 @@ async function dealWorkAuthorProfession(pool) {
 
 async function dealCircle(pool) {
   console.log('------- dealCircle --------');
+  await CircleType.sync();
+  if(true) {
+    CircleType.create({
+      name: '普通',
+      tag: '普通',
+    });
+    CircleType.create({
+      name: '作者粉丝',
+    });
+    CircleType.create({
+      name: 'IP',
+    });
+    CircleType.create({
+      name: '作品类型',
+    });
+    CircleType.create({
+      name: '职种',
+    });
+  }
   await Circle.sync();
   await CircleTop.sync();
   await CircleNum.sync();
@@ -850,6 +870,7 @@ async function dealCircle(pool) {
   await CircleTagRelation.sync();
   await TagCommentRelation.sync();
   let last = 2019000000003990;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Circling_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -858,9 +879,10 @@ async function dealCircle(pool) {
       name: item.TagName,
       describe: item.Describe || '',
       banner: item.Banner || '',
-      cover: item.CoverPic || '',
-      type: item.CirclingType,
-      state: item.IsOpen ? 2 : (item.ISDel ? 0 : 1),
+      cover: (item.CoverPic || '').replace(/^https?:/, ''),
+      type: parseInt(item.CirclingType || 0) + 1,
+      is_delete: !!item.ISDel,
+      is_public: !!item.IsOpen,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -875,30 +897,6 @@ async function dealCircle(pool) {
         });
       }
     }
-    await CircleNum.create({
-      circle_id: item.ID,
-      type: 0,
-      num: 0,
-      update_time: item.CreateTime,
-    });
-    await CircleNum.create({
-      circle_id: item.ID,
-      type: 1,
-      num: item.FansNumber,
-      update_time: item.CreateTime,
-    });
-    await CircleNum.create({
-      circle_id: item.ID,
-      type: 2,
-      num: item.Popular,
-      update_time: item.CreateTime,
-    });
-    await CircleNum.create({
-      circle_id: item.ID,
-      type: 3,
-      num: item.CommentCountRaw,
-      update_time: item.CreateTime,
-    });
   }
   let tagOldIdHash = {};
   last = 2021000000008340;
@@ -908,7 +906,7 @@ async function dealCircle(pool) {
     let res = await Tag.create({
       name: item.TagName,
       temp_id: item.ID,
-      is_deleted: false,
+      is_delete: false,
       create_time: item.CreateTime,
     });
     tagOldIdHash[item.ID] = res.dataValues.id;
@@ -920,7 +918,7 @@ async function dealCircle(pool) {
     await CircleTagRelation.create({
       circle_id: item.CirclingID,
       tag_id: tagOldIdHash[item.TagID],
-      is_deleted: !!item.ISDel,
+      is_delete: !!item.ISDel,
       type: item.State || 0,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
@@ -933,7 +931,7 @@ async function dealCircle(pool) {
     await TagCommentRelation.create({
       tag_id: tagOldIdHash[item.TagID],
       comment_id: item.CommentID,
-      is_deleted: !!item.ISDel,
+      is_delete: !!item.ISDel,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -954,7 +952,7 @@ async function dealUser(pool) {
     await User.create({
       id: item.ID,
       author_id: item.CurrentAuthorID || 0,
-      is_deleted : item.ISDel ? 0 : 1,
+      is_delete : item.ISDel ? 0 : 1,
       state: 0,
       reg_state: item.User_Reg_Stat || 0,
       nickname: item.User_NickName || '',
@@ -975,7 +973,7 @@ async function dealUser(pool) {
       user_id: item.UID,
       author_id: item.AuthroID,
       type: item.UserAuthorType,
-      is_deleted: !!item.ISDel,
+      is_delete: !!item.ISDel,
       settle: item.UserAuthorState,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
@@ -1002,7 +1000,7 @@ async function dealComment(pool) {
         author_id: item.CurrentAuthorID || 0,
         is_author: !!item.CurrentAuthorID,
         content: item.Content,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         review: item.suggestion === 'pass' ? 3 : 0,
         state: 0,
         parent_id: item.ParentID,
@@ -1039,7 +1037,7 @@ async function dealComment(pool) {
         author_id: item.CurrentAuthorID || 0,
         is_author: !!item.CurrentAuthorID,
         content: item.Content,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         review: item.suggestion === 'pass' ? 3 : 0,
         state: 0,
         parent_id: 0,
@@ -1081,7 +1079,7 @@ async function dealComment(pool) {
               circle_id: id,
               comment_id: item.ID,
               type: 1,
-              is_deleted: !!item.ISDel,
+              is_delete: !!item.ISDel,
               create_time: item.CreateTime,
               update_time: item.CreateTime,
             });
@@ -1106,7 +1104,7 @@ async function dealComment(pool) {
               circle_id: list[j],
               comment_id: item.ID,
               type: 0,
-              is_deleted: !!item.ISDel,
+              is_delete: !!item.ISDel,
               create_time: item.CreateTime,
               update_time: item.CreateTime,
             });
@@ -1142,7 +1140,7 @@ async function dealComment(pool) {
         author_id: item.CurrentAuthorID || 0,
         is_author: !!item.CurrentAuthorID,
         content: item.Content,
-        is_deleted: !!item.ISDel,
+        is_delete: !!item.ISDel,
         review: item.suggestion === 'pass' ? 3 : 0,
         state: 0,
         parent_id: item.ParentID,
@@ -1262,7 +1260,7 @@ async function dealUserWork(pool) {
         works_id: worksId,
         kind: work.kind,
         type: 1,
-        is_deleted: false,
+        is_delete: false,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -1280,7 +1278,7 @@ async function dealUserWork(pool) {
           works_id: worksId,
           kind: work.kind,
           type: 1,
-          is_deleted: false,
+          is_delete: false,
           create_time: item.CreateTime,
           update_time: item.CreateTime,
         });
@@ -1300,7 +1298,7 @@ async function dealUserWork(pool) {
             works_id: worksId,
             kind: work.kind,
             type: 1,
-            is_deleted: false,
+            is_delete: false,
             create_time: item.CreateTime,
             update_time: item.CreateTime,
           });
@@ -1414,7 +1412,7 @@ async function dealUserWork(pool) {
         works_id: worksId,
         kind: work.kind,
         type: 0,
-        is_deleted: false,
+        is_delete: false,
         create_time: createTime,
         update_time: createTime,
       });

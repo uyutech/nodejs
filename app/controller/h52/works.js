@@ -39,6 +39,7 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.works.comment(worksId, body.skip || 0, body.take || 10);
+    res.take = 10;
     ctx.body = ctx.helper.okJSON(res);
   }
 }

@@ -26,7 +26,7 @@ module.exports = app => {
       allowNull: false,
       comment: '引用大作品id',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

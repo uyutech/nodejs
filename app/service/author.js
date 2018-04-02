@@ -20,21 +20,24 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.author.findOne({
-      attributes: [
-        'id',
-        'name',
-        ['head_url', 'headUrl'],
-        'sign',
-        ['fans_name', 'fansName'],
-        ['fans_circle_name', 'fansCircleName'],
-        ['is_settled', 'isSettled']
-      ],
-      where: {
-        id,
-        is_deleted: false,
-      },
-    });
+    let sql = `SELECT
+      author.id,
+      author.name,
+      author.head_url AS headUrl,
+      author.sign,
+      author.fans_name AS fansName,
+      author.fans_circle_name AS fansCircleName,
+      author.is_settle AS isSettle
+      FROM author
+      WHERE author.id=${id}
+      AND author.is_delete=false;`;
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0];
+    }
+    else {
+      res = null;
+    }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -82,10 +85,10 @@ class Service extends egg.Service {
         author.sign,
         author.fans_name AS fansName,
         author.fans_circle_name AS fansCircleName,
-        author.is_settled AS isSettled
+        author.is_settle AS isSettle
         FROM author
-        WHERE id IN(${noCacheIdList.join(', ')})
-        AND is_deleted=false;`;
+        WHERE author.id IN(${noCacheIdList.join(', ')})
+        AND author.is_delete=false;`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
@@ -125,7 +128,7 @@ class Service extends egg.Service {
       ],
       where: {
         author_id: id,
-        is_deleted: false,
+        is_delete: false,
       },
     });
     if(!res.length) {
@@ -152,7 +155,7 @@ class Service extends egg.Service {
       ],
       where: {
         author_id: id,
-        is_deleted: false,
+        is_delete: false,
       },
     });
     if(!res.length) {
@@ -162,13 +165,21 @@ class Service extends egg.Service {
     return res;
   }
   async comment(id, skip, take) {
+    if(!id) {
+      return;
+    }
+    skip = parseInt(skip) || 0;
+    take = parseInt(take) || 1;
+    if(skip < 0 || take < 1) {
+      return;
+    }
     let [data, size] = await Promise.all([
       this.commentData(id, skip, take),
       this.commentSize(id)
     ]);
     return { data, size };
   }
-  async commentData(id, skip = 0, take = 1) {
+  async commentData(id, skip, take) {
     if(!id) {
       return;
     }
@@ -190,96 +201,11 @@ class Service extends egg.Service {
       FROM comment, author_comment_relation
       WHERE author_comment_relation.author_id=${id}
       AND author_comment_relation.comment_id=comment.root_id
-      AND comment.is_deleted=false
+      AND comment.is_delete=false
       ORDER BY comment.id DESC
       LIMIT ${skip},${take};`;
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      let userIdHash = {};
-      let userIdList = [];
-      let authorIdHash = {};
-      let authorIdList = [];
-      let quoteIdList = [];
-      res.forEach(function(item) {
-        if(item.authorId) {
-          if(!authorIdHash[item.authorId]) {
-            authorIdHash[item.authorId] = true;
-            authorIdList.push(item.authorId);
-          }
-          delete item.userId;
-          item.isAuthor = true;
-        }
-        else {
-          if(!userIdHash[item.userId]) {
-            userIdHash[item.userId] = true;
-            userIdList.push(item.userId);
-          }
-          delete item.authorId;
-        }
-        if(item.rootId !== item.parentId && item.rootId !== 0) {
-          quoteIdList.push(item.parentId);
-        }
-      });
-      let quotes = await service.comment.infoList(quoteIdList);
-      let quoteHash = {};
-      quotes.forEach(function(item) {
-        if(item.authorId) {
-          if(!authorIdHash[item.authorId]) {
-            authorIdHash[item.authorId] = true;
-            authorIdList.push(item.authorId);
-          }
-          delete item.userId;
-          item.isAuthor = true;
-        }
-        else {
-          if(!userIdHash[item.userId]) {
-            userIdHash[item.userId] = true;
-            userIdList.push(item.userId);
-          }
-          delete item.authorId;
-        }
-        quoteHash[item.id] = item;
-        if(item.content.length > 60) {
-          item.slice = true;
-          item.content = item.content.slice(0, 60) + '...';
-        }
-      });
-      let [userList, authorList] = await Promise.all([
-        service.user.infoList(userIdList),
-        service.author.infoList(authorIdList)
-      ]);
-      userIdHash = {};
-      userList.forEach(function(item) {
-        userIdHash[item.id] = item;
-      });
-      authorIdHash = {};
-      authorList.forEach(function(item) {
-        authorIdHash[item.id] = item;
-      });
-      quotes.forEach(function(item) {
-        if(item.isAuthor) {
-          item.name = authorIdHash[item.authorId].name;
-          item.headUrl = authorIdHash[item.authorId].headUrl;
-        }
-        else {
-          item.nickname = userIdHash[item.userId].nickname;
-          item.headUrl = userIdHash[item.userId].headUrl;
-        }
-      });
-      res.forEach(function(item) {
-        if(item.isAuthor) {
-          item.name = authorIdHash[item.authorId].name;
-          item.headUrl = authorIdHash[item.authorId].headUrl;
-        }
-        else {
-          item.nickname = userIdHash[item.userId].nickname;
-          item.headUrl = userIdHash[item.userId].headUrl;
-        }
-        if(item.rootId !== item.parentId && item.rootId !== 0) {
-          item.quote = quoteHash[item.parentId];
-        }
-      });
-    }
+    res = await service.comment.plusList(res);
     return res;
   }
 
@@ -315,13 +241,13 @@ class Service extends egg.Service {
 
   /**
    * 获取作者主打大作品id列表
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param skip:int 分页开始
    * @param take:int 分页数量
    * @returns Array<Object> 主打大作品id列表
    */
-  async mainWorksIdList(aid, skip, take) {
-    if(!aid) {
+  async mainWorksIdList(id, skip, take) {
+    if(!id) {
       return;
     }
     skip = parseInt(skip) || 0;
@@ -330,7 +256,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMainWorksIdList_' + aid + '_' + skip + '_' + take;
+    let cacheKey = 'authorMainWorksIdList_' + id + '_' + skip + '_' + take;
     let res;
     if(skip === 0) {
       res = await app.redis.get(cacheKey);
@@ -344,8 +270,8 @@ class Service extends egg.Service {
         ['works_id', 'worksId']
       ],
       where: {
-        author_id: aid,
-        is_deleted: false,
+        author_id: id,
+        is_delete: false,
       },
       offset: skip,
       limit: take,
@@ -364,12 +290,12 @@ class Service extends egg.Service {
     }
     return res;
   }
-  async mainWorksSize(aid) {
-    if(!aid) {
+  async mainWorksSize(id) {
+    if(!id) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMainWorksSize_' + aid;
+    let cacheKey = 'authorMainWorksSize_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -378,8 +304,8 @@ class Service extends egg.Service {
     let sql = `SELECT
       COUNT(*) AS num
       FROM author_main_works
-      WHERE author_id=${aid}
-      AND is_deleted=false`;
+      WHERE author_id=${id}
+      AND is_delete=false`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;
@@ -393,22 +319,22 @@ class Service extends egg.Service {
 
   /**
    * 获取作者参与大作品信息列表
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param skip:int 分页开始
    * @param take:int 分页数量
    * @returns Array<Object> 大作品信息列表
    */
-  async mainWorks(aid, skip, take) {
-    if(!aid) {
+  async mainWorks(id, skip, take) {
+    if(!id) {
       return;
     }
     // 先取得作者所有主打大作品列表id
     let [idList, size] = await Promise.all([
-      this.mainWorksIdList(aid, skip, take),
-      this.mainWorksSize(aid)
+      this.mainWorksIdList(id, skip, take),
+      this.mainWorksSize(id)
     ]);
     // 根据id获取信息
-    let data = await this.worksListByIdList(aid, idList);
+    let data = await this.worksListByIdList(id, idList);
     return {
       size,
       data,
@@ -417,12 +343,12 @@ class Service extends egg.Service {
 
   /**
    * 根据作者id和大作品id列表获取大作品信息及作者在此大作品中的优先显示职种
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param worksIdList:Array<int> 大作品id列表
    * @returns Array<Object>
    */
-  async worksListByIdList(aid, worksIdList) {
-    if(!aid || !worksIdList) {
+  async worksListByIdList(id, worksIdList) {
+    if(!id || !worksIdList) {
       return;
     }
     if(!worksIdList.length) {
@@ -432,7 +358,7 @@ class Service extends egg.Service {
     // 获取大作品信息、作者在此大作品中的职种id
     let [worksList, worksListProfessionIdList] = await Promise.all([
       service.works.infoList(worksIdList),
-      this.worksListProfessionIdList(worksIdList, aid)
+      this.worksListProfessionIdList(worksIdList, id)
     ]);
     // 汇集所有大作品类型
     let worksTypeList = [];
@@ -504,10 +430,10 @@ class Service extends egg.Service {
   /**
    * 获取大作品id列表中，作者id参与的职种id列表
    * @param idList<int> 大作品id列表
-   * @param aid 作者id
+   * @param id:int 作者id
    * @returns Array<Array<int>> 对应idList索引序，每项为此大作品中作者id参与的职种id列表
    */
-  async worksListProfessionIdList(idList, aid) {
+  async worksListProfessionIdList(idList, id) {
     if(!idList) {
       return;
     }
@@ -518,7 +444,7 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map(function(worksId) {
         if(worksId !== null && worksId !== undefined) {
-          return app.redis.get('authorWorksProfessionIdList_' + aid + '_' + worksId);
+          return app.redis.get('authorWorksProfessionIdList_' + id + '_' + worksId);
         }
       })
     );
@@ -529,7 +455,7 @@ class Service extends egg.Service {
       let worksId = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('authorWorksProfessionIdList_' + aid + '_' + worksId, CACHE_TIME);
+        app.redis.expire('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME);
       }
       else if(worksId !== null && worksId !== undefined) {
         if(!noCacheIdHash[worksId]) {
@@ -547,7 +473,7 @@ class Service extends egg.Service {
         ],
         where: {
           works_id: noCacheIdList,
-          author_id: aid,
+          author_id: id,
         },
       });
       if(res.length) {
@@ -562,10 +488,10 @@ class Service extends egg.Service {
           let temp = hash[worksId];
           if(temp) {
             cache[i] = temp;
-            app.redis.setex('authorWorksProfessionIdList_' + aid + '_' + worksId, CACHE_TIME, JSON.stringify(temp));
+            app.redis.setex('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME, JSON.stringify(temp));
           }
           else {
-            app.redis.setex('authorWorksProfessionIdList_' + aid + '_' + worksId, CACHE_TIME, 'null');
+            app.redis.setex('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME, 'null');
           }
         });
       }
@@ -575,13 +501,13 @@ class Service extends egg.Service {
 
   /**
    * 获取作者的专辑信息id列表
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param skip:int 分页开始
    * @param take:int 分页数量
    * @returns Array<int> 专辑信息id列表
    */
-  async musicAlbumIdList(aid, skip, take) {
-    if(!aid) {
+  async musicAlbumIdList(id, skip, take) {
+    if(!id) {
       return;
     }
     skip = parseInt(skip) || 0;
@@ -590,7 +516,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMusicAlbumIdList_' + aid + '_' + skip + '_' + take;
+    let cacheKey = 'authorMusicAlbumIdList_' + id + '_' + skip + '_' + take;
     let res;
     if(skip === 0) {
       res = await app.redis.get(cacheKey);
@@ -602,8 +528,8 @@ class Service extends egg.Service {
     let sql = `SELECT
       DISTINCT id
       FROM music_album_author_profession_relation
-      WHERE author_id=${aid}
-      AND is_deleted=false
+      WHERE author_id=${id}
+      AND is_delete=false
       ORDER BY id
       LIMIT ${skip},${take};`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
@@ -626,20 +552,20 @@ class Service extends egg.Service {
 
   /**
    * 获取作者的专辑信息列表
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param skip:int 分页开始
    * @param take:int 分页数量
    * @returns Array<Object> 专辑信息列表
    */
-  async musicAlbum(aid, skip, take) {
-    if(!aid) {
+  async musicAlbum(id, skip, take) {
+    if(!id) {
       return;
     }
     const { service } = this;
     // 先取得作者所有参与专辑列表id
     let [idList, size] = await Promise.all([
-      this.musicAlbumIdList(aid, skip, take),
-      this.musicAlbumSize(aid)
+      this.musicAlbumIdList(id, skip, take),
+      this.musicAlbumSize(id)
     ]);
     let data = await service.musicAlbum.infoList(idList);
     return {
@@ -647,12 +573,12 @@ class Service extends egg.Service {
       data,
     };
   }
-  async musicAlbumSize(aid) {
-    if(!aid) {
+  async musicAlbumSize(id) {
+    if(!id) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMusicAlbumSize_' + aid;
+    let cacheKey = 'authorMusicAlbumSize_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -661,8 +587,8 @@ class Service extends egg.Service {
     let sql = `SELECT
       COUNT(*) AS num
       FROM music_album_author_profession_relation
-      WHERE author_id=${aid}
-      AND is_deleted=false`;
+      WHERE author_id=${id}
+      AND is_delete=false`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;
@@ -676,15 +602,15 @@ class Service extends egg.Service {
 
   /**
    * 获取作者参与小作品的种类列表
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @returns Array<int>
    */
-  async workKindList(aid) {
-    if(!aid) {
+  async workKindList(id) {
+    if(!id) {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'authorWorkKindList_' + aid;
+    let cacheKey = 'authorWorkKindList_' + id;
     let kindList = await app.redis.get(cacheKey);
     if(kindList) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -694,7 +620,7 @@ class Service extends egg.Service {
       let sql = `SELECT
         DISTINCT kind
         FROM works_author_profession_relation
-        WHERE works_author_profession_relation.author_id=${aid}
+        WHERE works_author_profession_relation.author_id=${id}
         ORDER BY kind`;
       kindList = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       kindList = kindList.map(function(item) {
@@ -703,7 +629,7 @@ class Service extends egg.Service {
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(kindList));
     }
     // 取得种类列表下对应的职种id列表
-    let professionIdList = await this.workKindListProfessionIdList(aid, kindList);
+    let professionIdList = await this.workKindListProfessionIdList(id, kindList);
     let professionIdHash = {};
     let pid = [];
     professionIdList.forEach(function(list) {
@@ -739,12 +665,12 @@ class Service extends egg.Service {
 
   /**
    * 获取作者小作品种类的职种信息
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param kindList:Array<int> 种类列表
    * @returns {Promise<void>}
    */
-  async workKindListProfessionIdList(aid, kindList) {
-    if(!aid || !kindList) {
+  async workKindListProfessionIdList(id, kindList) {
+    if(!id || !kindList) {
       return;
     }
     if(!kindList.length) {
@@ -753,7 +679,7 @@ class Service extends egg.Service {
     const { app } = this;
     let cache = await Promise.all(
       kindList.map(function(kind) {
-        return app.redis.get('authorWorkKindListProfessionIdList_' + aid + '_' + kind);
+        return app.redis.get('authorWorkKindListProfessionIdList_' + id + '_' + kind);
       })
     );
     let noCacheIdList = [];
@@ -763,7 +689,7 @@ class Service extends egg.Service {
       let kind = kindList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('authorWorkKindListProfessionIdList_' + aid + '_' + kind, CACHE_TIME);
+        app.redis.expire('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME);
       }
       else if(kind !== null && kind !== undefined) {
         if(!noCacheIdHash[kind]) {
@@ -778,7 +704,7 @@ class Service extends egg.Service {
         DISTINCT profession_id AS professionId,
         kind
         FROM works_author_profession_relation
-        WHERE author_id=${aid}
+        WHERE author_id=${id}
         AND kind IN (${noCacheIdList.join(', ')})
         ORDER BY kind`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
@@ -793,10 +719,10 @@ class Service extends egg.Service {
           let temp = hash[kind];
           if(temp) {
             cache[i] = temp;
-            app.redis.setex('authorWorkKindListProfessionIdList_' + aid + '_' + kind, CACHE_TIME, JSON.stringify(temp));
+            app.redis.setex('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME, JSON.stringify(temp));
           }
           else {
-            app.redis.setex('authorWorkKindListProfessionIdList_' + aid + '_' + kind, CACHE_TIME, 'null');
+            app.redis.setex('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME, 'null');
           }
         });
       }
@@ -807,14 +733,14 @@ class Service extends egg.Service {
 
   /**
    * 获取作者参与小作品种类的小作品id列表
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param kind:int 种类
    * @param skip:int 分页开始
    * @param take:int 分页数量
    * @returns Array<Object>
    */
-  async kindWorkIdList(aid, kind, skip, take) {
-    if(!aid || kind === null || kind === undefined) {
+  async kindWorkIdList(id, kind, skip, take) {
+    if(!id || kind === null || kind === undefined) {
       return;
     }
     skip = parseInt(skip) || 0;
@@ -823,7 +749,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorKindWorkIdList_' + aid + '_' + kind + '_' + skip + '_' + take;
+    let cacheKey = 'authorKindWorkIdList_' + id + '_' + kind + '_' + skip + '_' + take;
     let res;
     if(skip === 0) {
       res = await app.redis.get(cacheKey);
@@ -835,9 +761,9 @@ class Service extends egg.Service {
     let sql = `SELECT
       DISTINCT works_author_profession_relation.work_id AS workId
       FROM works_author_profession_relation, works
-      WHERE works_author_profession_relation.author_id=${aid}
+      WHERE works_author_profession_relation.author_id=${id}
       AND works_author_profession_relation.kind=${kind}
-      AND works_author_profession_relation.is_deleted=false
+      AND works_author_profession_relation.is_delete=false
       AND works_author_profession_relation.works_id=works.id
       AND works.state=0
       ORDER BY workId DESC
@@ -854,12 +780,12 @@ class Service extends egg.Service {
 
   /**
    * 获取作者参与小作品种类的小大作品基本信息列表
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param idList:Array<int> 小作品id列表
    * @returns Array<Object>
    */
-  async kindWorkBaseList(aid, idList) {
-    if(!aid || !idList) {
+  async kindWorkBaseList(id, idList) {
+    if(!id || !idList) {
       return;
     }
     if(!idList.length) {
@@ -894,7 +820,7 @@ class Service extends egg.Service {
         works_id AS worksId,
         profession_id AS professionId
         FROM works_author_profession_relation
-        WHERE works_author_profession_relation.author_id=${aid}
+        WHERE works_author_profession_relation.author_id=${id}
         AND work_id IN (${noCacheIdList.join(', ')})`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
@@ -927,19 +853,19 @@ class Service extends egg.Service {
 
   /**
    * 获取作者参与小作品种类的大作品列表
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param kind:int 种类
    * @param skip:int 分页开始
    * @param take:int 分页数量
    * @returns Array<Object>
    */
-  async kindWorkData(aid, kind, skip, take) {
-    if(!aid || kind === null || kind === undefined) {
+  async kindWorkData(id, kind, skip, take) {
+    if(!id || kind === null || kind === undefined) {
       return;
     }
     const { service } = this;
-    let idList = await this.kindWorkIdList(aid, kind, skip, take);
-    let list = await this.kindWorkBaseList(aid, idList);
+    let idList = await this.kindWorkIdList(id, kind, skip, take);
+    let list = await this.kindWorkBaseList(id, idList);
     let worksIdList = [];
     let worksIdHash = {};
     let workIdList = [];
@@ -1005,35 +931,35 @@ class Service extends egg.Service {
 
   /**
    * 获取作者参与小作品种类的大作品列表和分页数据
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param kind:int 种类
    * @param skip:int 分页开始
    * @param take:int 分页数量
    * @returns { data: Array<Object>, size: int }
    */
-  async kindWork(aid, kind, skip, take) {
-    if(!aid) {
+  async kindWork(id, kind, skip, take) {
+    if(!id) {
       return;
     }
     let [data, size] = await Promise.all([
-      this.kindWorkData(aid, kind, skip, take),
-      this.kindWorkSize(aid, kind)
+      this.kindWorkData(id, kind, skip, take),
+      this.kindWorkSize(id, kind)
     ]);
     return { data, size };
   }
 
   /**
    * 获取作者参与小作品种类的小作品列表size
-   * @param aid:int 作者id
+   * @param id:int 作者id
    * @param kind:int 种类
    * @returns int
    */
-  async kindWorkSize(aid, kind) {
-    if(!aid || kind === null || kind === undefined) {
+  async kindWorkSize(id, kind) {
+    if(!id || kind === null || kind === undefined) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'kindWorkSize_' + aid + '_' + kind;
+    let cacheKey = 'kindWorkSize_' + id + '_' + kind;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -1042,9 +968,9 @@ class Service extends egg.Service {
     let sql = `SELECT
       COUNT(DISTINCT works_author_profession_relation.work_id) as num
       FROM works_author_profession_relation, works
-      WHERE works_author_profession_relation.author_id=${aid}
+      WHERE works_author_profession_relation.author_id=${id}
       AND works_author_profession_relation.kind=${kind}
-      AND works_author_profession_relation.is_deleted=false
+      AND works_author_profession_relation.is_delete=false
       AND works_author_profession_relation.works_id=works.id
       AND works.state=0;`;
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });

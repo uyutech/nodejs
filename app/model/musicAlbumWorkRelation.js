@@ -32,7 +32,7 @@ module.exports = app => {
       defaultValue: 0,
       comment: '1视频，2音频',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

@@ -32,11 +32,15 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    state: {
-      type: Sequelize.TINYINT.UNSIGNED,
+    is_delete: {
+      type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: 0,
-      comment: '0删除，1隐藏，2公开',
+      defaultValue: false,
+    },
+    is_public: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,

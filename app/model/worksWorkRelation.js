@@ -27,7 +27,7 @@ module.exports = app => {
       defaultValue: 0,
       comment: '0未知，1视频，2音频，3图片，4文字',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

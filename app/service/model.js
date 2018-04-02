@@ -35,11 +35,11 @@ class Service extends egg.Service {
     AND
       works.state=works_state.id
     AND
-      works.is_deleted=false
+      works.is_delete=false
     AND
-      works_type.is_deleted=false
+      works_type.is_delete=false
     AND
-      works_state.is_deleted=false
+      works_state.is_delete=false
     LIMIT 1;`;
     let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });
     return res[0];
@@ -69,7 +69,7 @@ class Service extends egg.Service {
     AND
       work.type=work_type.type
     AND
-      work_type.is_deleted=false
+      work_type.is_delete=false
     LIMIT 100;`;
     let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });
     // 搜索image，media，text扩展表
@@ -150,7 +150,7 @@ class Service extends egg.Service {
     AND
       works_comment_relation.comment_id=comment.id
     AND
-      comment.is_deleted=false
+      comment.is_delete=false
     ORDER BY
       commentId desc
     LIMIT
@@ -189,7 +189,7 @@ class Service extends egg.Service {
     FROM
       comment
     WHERE
-      is_deleted=false
+      is_delete=false
     AND
       id in (${commentIdList.join(', ')});`;
     let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });
@@ -257,7 +257,7 @@ class Service extends egg.Service {
     FROM
       author
     WHERE
-      is_deleted=false
+      is_delete=false
     AND
       id in (${authorIdList.join(', ')});`;
     let res = await this.app.sequelizeCircling.query(s, { type: Sequelize.QueryTypes.SELECT });

@@ -1,12 +1,12 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/4/2.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('work_type', {
+  return sequelizeCircling.define('circle_type', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -22,6 +22,6 @@ module.exports = app => {
   }, {
     indexes: [
     ],
-    comment: '小作品类型',
+    comment: '圈子类型',
   });
 };

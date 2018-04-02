@@ -22,7 +22,7 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,

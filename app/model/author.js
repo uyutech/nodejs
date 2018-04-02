@@ -36,7 +36,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_settled: {
+    is_settle: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -46,7 +46,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: false,
