@@ -271,6 +271,7 @@ class Service extends egg.Service {
     let audioIdList = [];
     let imageIdList = [];
     let textIdList = [];
+    let workIdList = [];
     res.forEach(function(item) {
       switch(item.kind) {
         case 1:
@@ -286,29 +287,26 @@ class Service extends egg.Service {
           textIdList.push(item.workId);
           break;
       }
+      workIdList.push(item.workId);
     });
     let [
       videoList,
       audioList,
       imageList,
       textList,
-      userVideoRelationList,
-      userAudioRelationList,
-      videoListLikeCount,
-      audioListLikeCount,
-      videoListFavorCount,
-      audioListFavorCount
+      userLikeList,
+      userFavorList,
+      likeCountList,
+      favorCountList
     ] = await Promise.all([
       service.work.videoList(videoIdList),
       service.work.audioList(audioIdList),
       service.work.imageList(imageIdList),
       service.work.textList(textIdList),
-      service.work.userVideoRelationList(uid, videoIdList),
-      service.work.userAudioRelationList(uid, videoIdList),
-      service.work.videoListLikeCount(videoIdList),
-      service.work.audioListLikeCount(audioIdList),
-      service.work.videoListFavorCount(videoIdList),
-      service.work.audioListFavorCount(audioIdList)
+      service.work.userLikeList(uid, workIdList),
+      service.work.userFavorList(uid, workIdList),
+      service.work.likeCount(workIdList),
+      service.work.favorCount(workIdList)
     ]);
     let videoHash = {};
     let audioHash = {};
@@ -334,48 +332,34 @@ class Service extends egg.Service {
         textHash[item.id] = item;
       }
     });
-    let userVideoRelationHash = {};
-    let userAudioRelationHash = {};
-    userVideoRelationList.forEach(function(item, i) {
+    let userLikeHash = {};
+    let userFavorHash = {};
+    userLikeList.forEach(function(item, i) {
       if(item) {
-        let id = videoIdList[i];
-        userVideoRelationHash[id] = item;
+        let id = workIdList[i];
+        userLikeHash[id] = item;
       }
     });
-    userAudioRelationList.forEach(function(item, i) {
+    userFavorList.forEach(function(item, i) {
       if(item) {
-        let id = audioIdList[i];
-        userAudioRelationHash[id] = item;
+        let id = workIdList[i];
+        userFavorHash[id] = item;
       }
     });
-    let videoLikeCountHash = {};
-    let audioLikeCountHash = {};
-    let videoFavorCountHash = {};
-    let audioFavorCountHash = {};
-    videoListLikeCount.forEach(function(item, i) {
+    let likeCountHash = {};
+    let favorCountHash = {};
+    likeCountList.forEach(function(item, i) {
       if(item !== null && item !== undefined) {
-        let id = videoIdList[i];
-        videoLikeCountHash[id] = item;
+        let id = workIdList[i];
+        likeCountHash[id] = item;
       }
     });
-    audioListLikeCount.forEach(function(item, i) {
+    favorCountList.forEach(function(item, i) {
       if(item !== null && item !== undefined) {
-        let id = audioIdList[i];
-        audioLikeCountHash[id] = item;
+        let id = workIdList[i];
+        favorCountHash[id] = item;
       }
-    });
-    videoListFavorCount.forEach(function(item, i) {
-      if(item !== null && item !== undefined) {
-        let id = videoIdList[i];
-        videoFavorCountHash[id] = item;
-      }
-    });
-    audioListFavorCount.forEach(function(item, i) {
-      if(item !== null && item !== undefined) {
-        let id = audioIdList[i];
-        audioFavorCountHash[id] = item;
-      }
-    });
+    })
     return res.map(function(item) {
       let temp = {
         id: item.workId,
@@ -384,49 +368,19 @@ class Service extends egg.Service {
       if(item.tag) {
         temp.tag = item.tag;
       }
+      temp.isLike = userLikeHash[temp.id];
+      temp.isFavor = userFavorHash[temp.id];
+      temp.likeCount = likeCountHash[temp.id];
+      temp.favorCount = favorCountHash[temp.id];
       switch(temp.kind) {
         case 1:
           if(videoHash[temp.id]) {
             Object.assign(temp, videoHash[temp.id]);
-            let userVideoRelation = userVideoRelationHash[temp.id];
-            if(userVideoRelation) {
-              if(userVideoRelation[1]) {
-                temp.isLike = userVideoRelation[1];
-              }
-              if(userVideoRelation[2]) {
-                temp.isFavor = userVideoRelation[2];
-              }
-            }
-            let videoLikeCount = videoLikeCountHash[temp.id];
-            if(videoLikeCount !== undefined && videoLikeCount !== null) {
-              temp.likeCount = videoLikeCount;
-            }
-            let videoFavorCount = videoFavorCountHash[temp.id];
-            if(videoFavorCount !== undefined && videoFavorCount !== null) {
-              temp.favorCount = videoFavorCount;
-            }
           }
           break;
         case 2:
           if(audioHash[temp.id]) {
             Object.assign(temp, audioHash[temp.id]);
-            let userAudioRelation = userAudioRelationHash[temp.id];
-            if(userAudioRelation) {
-              if(userAudioRelation[1]) {
-                temp.isLike = userAudioRelation[1];
-              }
-              if(userAudioRelation[2]) {
-                temp.isFavor = userAudioRelation[2];
-              }
-              let audioLikeCount = audioLikeCountHash[temp.id];
-              if(audioLikeCount !== undefined && audioLikeCount !== null) {
-                temp.likeCount = audioLikeCount;
-              }
-              let audioFavorCount = audioFavorCountHash[temp.id];
-              if(audioFavorCount !== undefined && audioFavorCount !== null) {
-                temp.favorCount = audioFavorCount;
-              }
-            }
           }
           break;
         case 3:

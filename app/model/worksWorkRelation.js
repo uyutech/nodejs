@@ -25,7 +25,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0未知，1视频，2音频，3图片，4文字',
+      comment: '1视频，2音频，3图片，4文字',
     },
     is_delete: {
       type: Sequelize.BOOLEAN,

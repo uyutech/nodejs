@@ -8,14 +8,8 @@ module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('audio', {
     id: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false,
-    },
-    work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
-      unique: true,
+      primaryKey: true,
       allowNull: false,
     },
     title: {

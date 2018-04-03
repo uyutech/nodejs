@@ -48,12 +48,11 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let worksId = body.worksId;
     let workId = body.workId;
-    let kind = body.kind;
     let state = body.state === 'true';
-    if(!worksId || !workId || !kind) {
+    if(!worksId || !workId) {
       return;
     }
-    let res = await service.work.like(uid, worksId, workId, kind, state);
+    let res = await service.work.like(uid, worksId, workId, state);
     ctx.body = ctx.helper.okJSON(res);
   }
   async favor() {
@@ -62,12 +61,11 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let worksId = body.worksId;
     let workId = body.workId;
-    let kind = body.kind;
     let state = body.state === 'true';
-    if(!worksId || !workId || !kind) {
+    if(!worksId || !workId) {
       return;
     }
-    let res = await service.work.favor(uid, worksId, workId, kind, state);
+    let res = await service.work.favor(uid, worksId, workId, state);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

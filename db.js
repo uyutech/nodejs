@@ -290,6 +290,7 @@ async function dealWork(pool) {
     // });
     if(item.BigType === 2) {
       await Audio.create({
+        id: item.ID,
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
@@ -304,6 +305,7 @@ async function dealWork(pool) {
     }
     else if(item.BigType === 1) {
       await Video.create({
+        id: item.ID.toString().replace(/^2016/, 2020),
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
@@ -319,6 +321,7 @@ async function dealWork(pool) {
     }
     else if(item.BigType === 3) {
       await Image.create({
+        id: item.ID.toString().replace(/^2016/, 2021),
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
@@ -333,6 +336,7 @@ async function dealWork(pool) {
     }
     else if(item.BigType === 4) {
       await Text.create({
+        id: item.ID.toString().replace(/^2016/, 2022),
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
@@ -353,7 +357,7 @@ async function dealWork(pool) {
       lrc: item.lrc || '',
     }, {
       where: {
-        work_id: item.ItemsID,
+        id: item.ItemsID,
       },
     });
   }
@@ -551,7 +555,7 @@ async function dealWorksWork(pool) {
       let audio = await Audio.findOne({
         attributes: ['id'],
         where: {
-          work_id: work.id,
+          id: work.id,
         },
       });
       work_id = audio.id;
@@ -613,26 +617,6 @@ async function dealWorksWork(pool) {
     }
   }
   return;
-  // result = await ImageAlbumWorkRelation.findAll({});
-  // for(let i = 0; i < result.length; i++) {
-  //   let item = result[i];
-  //   let temp = await WorksWorkRelation.findOne({
-  //     attributes: ['works_id'],
-  //     where: {
-  //       work_id: item.work_id,
-  //       kind: item.kind,
-  //     },
-  //   });
-  //   if(temp) {
-  //     await ImageAlbumWorkRelation.update({
-  //       works_id: temp.works_id,
-  //     }, {
-  //       where: {
-  //         id: item.id,
-  //       },
-  //     });
-  //   }
-  // }
   result = await MusicAlbumWorkRelation.findAll({});
   for(let i = 0; i < result.length; i++) {
     let item = result[i];
@@ -988,7 +972,7 @@ async function dealComment(pool) {
   await CircleCommentRelation.sync();
   await Comment.sync();
   await CommentNum.sync();
-  let last = 440044;
+  let last = 440045;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1155,11 +1139,8 @@ async function dealComment(pool) {
 async function dealUserWork(pool) {
   console.log('------- dealUserWork --------');
   await UserWorkRelation.sync();
-  // await UserImageRelation.sync();
   let hash = {};
   let worksIdHash = {};
-  let workClassHash = {};
-  let workOldIdHash = {};
   let exist = {};
   let workHash = {};
   let last = 19019;
@@ -1191,7 +1172,7 @@ async function dealUserWork(pool) {
           let audio = await Audio.findOne({
             attributes: ['id'],
             where: {
-              work_id: item.ItemsID,
+              id: item.ItemsID,
             }
           });
           workHash[item.ItemsID].id = audio.id;
@@ -1352,7 +1333,7 @@ async function dealUserWork(pool) {
             let audio = await Audio.findOne({
               attributes: ['id'],
               where: {
-                work_id: ItemsID,
+                id: ItemsID,
               }
             });
             workHash[ItemsID].id = audio.id;

@@ -49,13 +49,13 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'user_id_type_kind_work_id',
+        name: 'work_id_type_user_id',
         unique: true,
-        fields: ['user_id', 'type', 'kind', 'work_id'],
+        fields: ['work_id', 'type', 'user_id'],
       },
       {
-        name: 'work_id_kind_type',
-        fields: ['work_id', 'kind', 'type'],
+        name: 'user_id_type_kind',
+        fields: ['user_id', 'type', 'kind']
       }
     ],
     comment: '用户与作品关联信息',
