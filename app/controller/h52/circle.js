@@ -15,14 +15,14 @@ class Controller extends egg.Controller {
     if(!circleId) {
       return;
     }
-    let [info, comment] = await Promise.all([
+    let [info, post] = await Promise.all([
       service.circle.info(circleId),
       service.circle.post(circleId, 0, 10)
     ]);
     comment.limit = 10;
     ctx.body = ctx.helper.okJSON({
       info,
-      comment,
+      post,
     });
   }
   async post() {
