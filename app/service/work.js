@@ -16,8 +16,8 @@ class Service extends egg.Service {
    * @param uid:int 用户id
    * @param worksId:int 大作品id
    * @param workId:int 小作品id
-   * @param state:bool 状态
-   * @returns Object{ state:bool, count:int }
+   * @param state:boolean 状态
+   * @returns Object{ state:boolean, count:int }
    */
   async like(uid, worksId, workId, state) {
     return await this.operate(uid, worksId, workId, 1, state);
@@ -28,8 +28,8 @@ class Service extends egg.Service {
    * @param uid:int 用户id
    * @param worksId:int 大作品id
    * @param workId:int 小作品id
-   * @param state:bool 状态
-   * @returns Object{ state:bool, count:int }
+   * @param state:boolean 状态
+   * @returns Object{ state:boolean, count:int }
    */
   async favor(uid, worksId, workId, state) {
     return await this.operate(uid, worksId, workId, 2, state);
@@ -41,8 +41,8 @@ class Service extends egg.Service {
    * @param worksId:int 大作品id
    * @param workId:int 小作品id
    * @param type:int 操作类型
-   * @param state:bool 状态
-   * @returns Object{ state:bool, count:int }
+   * @param state:boolean 状态
+   * @returns Object{ state:boolean, count:int }
    */
   async operate(uid, worksId, workId, type, state) {
     if(!uid || !worksId || !workId || !type) {

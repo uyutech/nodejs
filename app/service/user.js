@@ -120,6 +120,223 @@ class Service extends egg.Service {
   }
 
   /**
+   * 关注数
+   * @param id:int 用户id
+   * @returns int
+   */
+  async followCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userFollowCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: [1, 3],
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 粉丝数
+   * @param id:int 用户id
+   * @returns int
+   */
+  async fansCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userFansCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        target_id: id,
+        type: 1,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 是否关注了用户
+   * @param id:int 用户id
+   * @param uid:int 当前登录用户id
+   * @returns boolean
+   */
+  async isFollow(id, uid) {
+    if(!id || id === uid) {
+      return;
+    }
+    if(!uid) {
+      return false;
+    }
+    const { app } = this;
+    let cacheKey = 'userUserRelation_' + uid + '_' + id + '_' + 1;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findOne({
+      where: {
+        user_id: uid,
+        type: 1,
+        target_id: id,
+        is_delete: false,
+      },
+    });
+    if(res) {
+      res = true;
+    }
+    else {
+      res = false;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 是否是粉丝
+   * @param id:int 用户id
+   * @param uid:int 当前登录用户id
+   * @returns boolean
+   */
+  async isFans(id, uid) {
+    if(!id || id === uid) {
+      return;
+    }
+    if(!uid) {
+      return false;
+    }
+    return await this.isFollow(uid, id);
+  }
+
+  /**
+   * 关注/取关用户
+   * @param id:int 用户id
+   * @param uid:int 当前登录用户id
+   * @param state
+   * @returns Object{ count:int, state:boolean }
+   */
+  async follow(id, uid, state) {
+    if(!id || !uid || id === uid) {
+      return;
+    }
+    state = !!state;
+    const { app, ctx } = this;
+    // 更新内存中用户对作者关系的状态
+    let userRelationCache;
+    if(state) {
+      userRelationCache = app.redis.setex('userUserRelation_' + uid + '_' + id + '_' + 1, CACHE_TIME, 'true');
+    }
+    else {
+      userRelationCache = app.redis.setex('userUserRelation_' + uid + '_' + id + '_' + 1, CACHE_TIME, 'false');
+    }
+    // 入库
+    await Promise.all([
+      userRelationCache,
+      app.model.userUserRelation.upsert({
+        user_id: uid,
+        target_id: id,
+        type: 1,
+        is_delete: !state,
+        update_time: new Date(),
+      }, {
+        where: {
+          user_id: uid,
+          type: 1,
+          target_id: id,
+        },
+        raw: true,
+      })
+    ]);
+    // 更新计数，优先内存缓存
+    let cacheKey = 'userFansCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    let count;
+    if(res) {
+      count = JSON.parse(res);
+      if(state) {
+        count++;
+      }
+      else {
+        count--;
+      }
+      count = Math.max(count, 0);
+      // 可能因为2次操作之间的延迟导致key过期设置超时失败，此时放弃操作内存防止数据不一致
+      let expire = await app.redis.expire(cacheKey, CACHE_TIME);
+      if(expire) {
+        if(state) {
+          app.redis.incr(cacheKey);
+        }
+        else {
+          app.redis.decr(cacheKey);
+        }
+      }
+    }
+    else {
+      res = await app.model.userUserRelation.findOne({
+        attributes: [
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          target_id: id,
+          type: 3,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      if(res) {
+        count = res.num;
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
+      }
+      else {
+        ctx.logger.error('userFansCount_%s find null', id);
+      }
+    }
+    return {
+      state,
+      count,
+    };
+  }
+
+  /**
    * 获取用户的画圈
    * @param id:int 用户id
    * @param offset:int 分页开始

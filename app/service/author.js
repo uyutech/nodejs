@@ -251,6 +251,13 @@ class Service extends egg.Service {
     return res;
   }
 
+  /**
+   * 关注/取关作者
+   * @param id:int 作者id
+   * @param uid:int 用户id
+   * @param state
+   * @returns Object{ count:int, state:boolean }
+   */
   async follow(id, uid, state) {
     if(!id || !uid) {
       return;
@@ -263,7 +270,7 @@ class Service extends egg.Service {
       userRelationCache = app.redis.setex('userUserRelation_' + uid + '_' + id + '_' + 3, CACHE_TIME, 'true');
     }
     else {
-      userRelationCache = app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + 3, CACHE_TIME, 'false');
+      userRelationCache = app.redis.setex('userUserRelation_' + uid + '_' + id + '_' + 3, CACHE_TIME, 'false');
     }
     // 入库
     await Promise.all([

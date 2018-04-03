@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 
+const limit = 10;
+
 class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
@@ -15,13 +17,21 @@ class Controller extends egg.Controller {
     if(!userId) {
       return;
     }
-    let [info, post] = await Promise.all([
+    let [info, followCount, fansCount, isFollow, isFans, post] = await Promise.all([
       service.user.info(userId),
-      service.user.post(userId, 0, 10)
+      service.user.followCount(userId),
+      service.user.fansCount(userId),
+      service.user.isFollow(userId, uid),
+      service.user.isFans(userId, uid),
+      service.user.post(userId, 0, limit)
     ]);
-    post.limit = 10;
+    post.limit = limit;
     ctx.body = ctx.helper.okJSON({
       info,
+      followCount,
+      fansCount,
+      isFollow,
+      isFans,
       post,
     });
   }
@@ -33,8 +43,30 @@ class Controller extends egg.Controller {
     if(!userId) {
       return;
     }
-    let res = await service.user.post(userId, body.offset || 0, body.limit || 10);
-    res.limit = 10;
+    let res = await service.user.post(userId, body.offset || 0, body.limit || limit);
+    res.limit = limit;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+  async follow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let userId = body.userId;
+    if(!userId) {
+      return;
+    }
+    let res = await service.user.follow(userId, uid, true);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+  async unFollow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let userId = body.userId;
+    if(!userId) {
+      return;
+    }
+    let res = await service.user.follow(userId, uid, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 }
