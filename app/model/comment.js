@@ -68,8 +68,8 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'user_id',
-        fields: ['user_id'],
+        name: 'user_id_root_id',
+        fields: ['user_id', 'root_id'],
       },
       {
         name: 'root_id_parent_id',

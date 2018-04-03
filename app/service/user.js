@@ -29,9 +29,11 @@ class Service extends egg.Service {
       attributes: [
         'id',
         'nickname',
+        'sex',
         ['head_url', 'headUrl'],
         'sign',
-        'coins'
+        'coins',
+        'sign'
       ],
       where: {
         id,
@@ -83,9 +85,11 @@ class Service extends egg.Service {
         attributes: [
           'id',
           'nickname',
+          'sex',
           ['head_url', 'headUrl'],
           'sign',
-          'coins'
+          'coins',
+          'sign'
         ],
         where: {
           id: noCacheIdList,
@@ -113,6 +117,102 @@ class Service extends egg.Service {
       }
     }
     return cache;
+  }
+
+  /**
+   * 获取用户的画圈
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ size:int, data:Array<Object> }
+   */
+  async post(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, size] = await Promise.all([
+      this.postData(id, offset, limit),
+      this.postSize(id)
+    ]);
+    return { data, size };
+  }
+
+  /**
+   * 获取画圈详情
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async postData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.comment.findAll({
+      attributes: [
+        'id',
+        ['user_id', 'uid'],
+        ['author_id', 'aid'],
+        'content',
+        ['parent_id', 'pid'],
+        ['root_id', 'rid'],
+        ['create_time', 'createTime']
+      ],
+      where: {
+        user_id: id,
+        root_id: 0,
+        is_delete: false,
+      },
+      offset,
+      limit,
+      raw: true,
+    });
+    res = await service.comment.plusList(res);
+    return res;
+  }
+  /**
+   * 获取画圈数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async postSize(id) {
+    const { app } = this;
+    let cacheKey = 'userPostSize_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.comment.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        root_id: 0,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, res);
+    return res;
   }
 }
 

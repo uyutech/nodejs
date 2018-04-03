@@ -141,6 +141,12 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取作者的站外链接
+   * @param id:int 作者id
+   * @returns Array<Object>
+   */
   async outsides(id) {
     if(!id) {
       return;
@@ -169,6 +175,14 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取作者的留言数据
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ size:int, data:Array<Object> }
+   */
   async comment(id, offset, limit) {
     if(!id) {
       return;
@@ -184,6 +198,14 @@ class Service extends egg.Service {
     ]);
     return { data, size };
   }
+
+  /**
+   * 获取留言详情
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
   async commentData(id, offset, limit) {
     if(!id) {
       return;
@@ -219,7 +241,7 @@ class Service extends egg.Service {
   /**
    * 获取作者下留言数量
    * @param id:int 作者id
-   * @returns int 留言数量
+   * @returns int
    */
   async commentSize(id) {
     const { app } = this;

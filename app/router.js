@@ -315,8 +315,11 @@ module.exports = app => {
   app.post('/h5/author2/kindWork', 'h52.author.kindWork');
 
   app.post('/h5/circle2/index', 'h52.circle.index');
-  app.post('/h5/circle2/comment', 'h52.circle.comment');
+  app.post('/h5/circle2/post', 'h52.circle.post');
 
   app.post('/h5/post2/index', 'h52.post.index');
   app.post('/h5/post2/comment', 'h52.post.comment');
+
+  app.post('/h5/user2/index', 'h52.user.index');
+  app.post('/h5/user2/post', 'h52.user.post');
 };

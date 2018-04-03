@@ -53,13 +53,13 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取圈子下的言论
+   * 获取圈子下的画圈
    * @param id:int 圈子id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Object{ size:int, data:Array<Object> }
    */
-  async comment(id, offset, limit) {
+  async post(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -69,20 +69,20 @@ class Service extends egg.Service {
       return;
     }
     let [data, size] = await Promise.all([
-      this.commentData(id, offset, limit),
-      this.commentSize(id)
+      this.postData(id, offset, limit),
+      this.postSize(id)
     ]);
     return { data, size };
   }
 
   /**
-   * 获取圈子下留言
+   * 获取圈子下画圈数据
    * @param id:int 圈子的id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
-   * @returns int 留言数量
+   * @returns Array<Object>
    */
-  async commentData(id, offset, limit) {
+  async postData(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -115,11 +115,11 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取圈子下留言数量
+   * 获取圈子下画圈数量
    * @param id:int 圈子的id
-   * @returns int 留言数量
+   * @returns int
    */
-  async commentSize(id) {
+  async postSize(id) {
     if(!id) {
       return;
     }
