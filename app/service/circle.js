@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 const Sequelize = require('sequelize');
+const squel = require('squel');
+
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
@@ -25,19 +27,20 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      circle.id,
-      circle.name,
-      circle.describe,
-      circle.banner,
-      circle.cover,
-      circle.is_public AS isPublic,
-      circle.type AS type,
-      circle_type.name AS typeName
-      FROM circle, circle_type
-      WHERE circle.id=${id}
-      AND is_delete=false
-      AND circle.type=circle_type.id;`;
+    let sql = squel.select()
+      .from('circle')
+      .from('circle_type')
+      .field('circle.id')
+      .field('circle.name')
+      .field('circle.describe')
+      .field('circle.banner')
+      .field('circle.is_public', 'isPublic')
+      .field('circle.type')
+      .field('circle_type.name', 'typeName')
+      .where('circle.id=?', id)
+      .where('is_delete=false')
+      .where('circle.type=circle_type.id')
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0];
@@ -89,21 +92,23 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let sql = `SELECT
-      comment.id,
-      comment.user_id AS userId,
-      comment.author_id AS authorId,
-      comment.content,
-      comment.parent_id AS parentId,
-      comment.root_id AS rootId,
-      comment.create_time AS createTime,
-      comment.update_time AS updateTime
-      FROM circle_comment_relation, comment
-      WHERE circle_comment_relation.circle_id=${id}
-      AND circle_comment_relation.comment_id=comment.id
-      AND comment.is_delete=false
-      ORDER BY circle_comment_relation.id DESC
-      LIMIT ${offset},${limit};`;
+    let sql = squel.select()
+      .from('circle_comment_relation')
+      .from('comment')
+      .field('comment.id')
+      .field('comment.user_id', 'uid')
+      .field('comment.author_id', 'aid')
+      .field('comment.content')
+      .field('comment.parent_id', 'pid')
+      .field('comment.root_id', 'rid')
+      .field('comment.create_time', 'createTime')
+      .where('circle_comment_relation.circle_id=?', id)
+      .where('circle_comment_relation.comment_id=comment.id')
+      .where('comment.is_delete=false')
+      .order('circle_comment_relation.id', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     res = await service.comment.plusList(res);
     return res;
@@ -125,12 +130,14 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      COUNT(*) AS num
-      FROM circle_comment_relation, comment
-      WHERE circle_comment_relation.circle_id=${id}
-      AND circle_comment_relation.comment_id=comment.id
-      AND comment.is_delete=false;`;
+    let sql = squel.select()
+      .from('circle_comment_relation')
+      .from('comment')
+      .field('COUNT(*)', 'num')
+      .where('circle_comment_relation.circle_id=?', id)
+      .where('circle_comment_relation.comment_id=comment.id')
+      .where('comment.is_delete=false')
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;
