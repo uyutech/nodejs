@@ -57,7 +57,7 @@ class Service extends egg.Service {
    * @param id:int 圈子id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
-   * @returns Object{ size:int, data:Array<Object> }
+   * @returns Object{ count:int, data:Array<Object> }
    */
   async post(id, offset, limit) {
     if(!id) {
@@ -68,11 +68,11 @@ class Service extends egg.Service {
     if(offset < 0 || limit < 1) {
       return;
     }
-    let [data, size] = await Promise.all([
+    let [data, count] = await Promise.all([
       this.postData(id, offset, limit),
-      this.postSize(id)
+      this.postCount(id)
     ]);
-    return { data, size };
+    return { data, count };
   }
 
   /**
@@ -119,12 +119,12 @@ class Service extends egg.Service {
    * @param id:int 圈子的id
    * @returns int
    */
-  async postSize(id) {
+  async postCount(id) {
     if(!id) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'circleCommentSize_' + id;
+    let cacheKey = 'circleCommentCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);

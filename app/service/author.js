@@ -11,6 +11,11 @@ const squel = require('squel');
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
+  /**
+   * 根据作者id获取作者信息
+   * @param id:int 作者id
+   * @returns Object
+   */
   async info(id) {
     if(!id) {
       return;
@@ -345,7 +350,7 @@ class Service extends egg.Service {
    * @param id:int 作者id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
-   * @returns Object{ size:int, data:Array<Object> }
+   * @returns Object{ count:int, data:Array<Object> }
    */
   async comment(id, offset, limit) {
     if(!id) {
@@ -356,11 +361,11 @@ class Service extends egg.Service {
     if(offset < 0 || limit < 1) {
       return;
     }
-    let [data, size] = await Promise.all([
+    let [data, count] = await Promise.all([
       this.commentData(id, offset, limit),
-      this.commentSize(id)
+      this.commentCount(id)
     ]);
-    return { data, size };
+    return { data, count };
   }
 
   /**
@@ -407,9 +412,9 @@ class Service extends egg.Service {
    * @param id:int 作者id
    * @returns int
    */
-  async commentSize(id) {
+  async commentCount(id) {
     const { app } = this;
-    let cacheKey = 'authorCommentSize_' + id;
+    let cacheKey = 'authorCommentCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);

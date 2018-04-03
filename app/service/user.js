@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 const Sequelize = require('sequelize');
+const squel = require('squel');
+
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
@@ -88,8 +90,7 @@ class Service extends egg.Service {
           'sex',
           ['head_url', 'headUrl'],
           'sign',
-          'coins',
-          'sign'
+          'coins'
         ],
         where: {
           id: noCacheIdList,
@@ -337,6 +338,425 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取关注的圈友信息
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async followUser(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.followUserData(id, offset, limit),
+      this.followUserCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取关注的圈友信息
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async followUserData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let sql = squel.select()
+      .from('user_user_relation')
+      .field('target_id', 'userId')
+      .where('user_id=?', id)
+      .where('type=1')
+      .where('is_delete=false')
+      .order('update_time', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
+    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(!res.length) {
+      return [];
+    }
+    let idList = res.map(function(item) {
+      return item.userId;
+    });
+    res = await this.infoList(idList);
+    res.forEach(function(item) {
+      delete item.sign;
+      delete item.coins;
+    });
+    return res;
+  }
+
+  /**
+   * 获得关注的圈友数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async followUserCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userFollowUserCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: 1,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取粉丝信息
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async fans(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.fansData(id, offset, limit),
+      this.fansCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取粉丝信息
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async fansData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let sql = squel.select()
+      .from('user_user_relation')
+      .field('user_id', 'userId')
+      .where('target_id=?', id)
+      .where('type=1')
+      .where('is_delete=false')
+      .order('update_time', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
+    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(!res.length) {
+      return [];
+    }
+    let idList = res.map(function(item) {
+      return item.userId;
+    });
+    res = await this.infoList(idList);
+    res.forEach(function(item) {
+      delete item.sign;
+      delete item.coins;
+    });
+    return res;
+  }
+
+  /**
+   * 获得粉丝数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async fansCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userFansCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        target_id: id,
+        type: 1,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取互相关注的圈友信息
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async friend(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.friendData(id, offset, limit),
+      this.friendCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获得互相关注的圈友信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async friendData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let sql = squel.select()
+      .from('user_user_relation')
+      .field('user_id', 'userId')
+      .where('target_id=?', id)
+      .where('type=1')
+      .where('user_id IN ?', squel.select()
+        .from('user_user_relation')
+        .field('target_id')
+        .where('user_id=?', id)
+        .where('type=1')
+        .where('is_delete=false'))
+      .where('is_delete=false')
+      .order('update_time', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
+    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(!res.length) {
+      return [];
+    }
+    let idList = res.map(function(item) {
+      return item.userId;
+    });
+    res = await this.infoList(idList);
+    res.forEach(function(item) {
+      delete item.sign;
+      delete item.coins;
+    });
+    return res;
+  }
+
+  /**
+   * 获得互相关注的圈友数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async friendCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userFriendCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = squel.select()
+      .from('user_user_relation')
+      .field('COUNT(*)', 'num')
+      .where('target_id=?', id)
+      .where('type=1')
+      .where('user_id IN ?', squel.select()
+        .from('user_user_relation')
+        .field('target_id')
+        .where('user_id=?', id)
+        .where('type=1')
+        .where('is_delete=false'))
+      .where('is_delete=false')
+      .toString();
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0].num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取关注的作者信息
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async followAuthor(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.followAuthorData(id, offset, limit),
+      this.followAuthorCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取关注的作者信息
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async followAuthorData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let sql = squel.select()
+      .from('user_user_relation')
+      .field('target_id', 'authorId')
+      .where('user_id=?', id)
+      .where('type=3')
+      .where('is_delete=false')
+      .order('update_time', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
+    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(!res.length) {
+      return [];
+    }
+    let idList = res.map(function(item) {
+      return item.authorId;
+    });
+    res = await service.author.infoList(idList);
+    res.forEach(function(item) {
+      delete item.sign;
+      delete item.fansName;
+      delete item.fansCircleName;
+      delete item.isSettle;
+    });
+    return res;
+  }
+
+  /**
+   * 获得关注的作者数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async followAuthorCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userFollowAuthorCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: 3,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
    * 获取用户的画圈
    * @param id:int 用户id
    * @param offset:int 分页开始
@@ -352,11 +772,11 @@ class Service extends egg.Service {
     if(offset < 0 || limit < 1) {
       return;
     }
-    let [data, size] = await Promise.all([
+    let [data, count] = await Promise.all([
       this.postData(id, offset, limit),
-      this.postSize(id)
+      this.postCount(id)
     ]);
-    return { data, size };
+    return { data, count };
   }
 
   /**
@@ -406,9 +826,9 @@ class Service extends egg.Service {
    * @param id:int 用户id
    * @returns int
    */
-  async postSize(id) {
+  async postCount(id) {
     const { app } = this;
-    let cacheKey = 'userPostSize_' + id;
+    let cacheKey = 'userPostCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);

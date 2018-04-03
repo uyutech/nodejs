@@ -328,4 +328,7 @@ module.exports = app => {
   app.post('/h5/user2/post', 'h52.user.post');
   app.post('/h5/user2/follow', app.middlewares.needLoginJson(), 'h52.user.follow');
   app.post('/h5/user2/unFollow', app.middlewares.needLoginJson(), 'h52.user.unFollow');
+
+
+  app.post('/h5/relation2/index', app.middlewares.needLoginJson(), 'h52.relation.index');
 };

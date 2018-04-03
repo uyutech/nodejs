@@ -403,14 +403,14 @@ class Service extends egg.Service {
    * @param id:int 作品id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
-   * @returns Object{ data:Array<Object>, size:int }
+   * @returns Object{ data:Array<Object>, count:int }
    */
   async comment(id, offset, limit) {
-    let [data, size] = await Promise.all([
+    let [data, count] = await Promise.all([
       this.commentData(id, offset, limit),
-      this.commentSize(id)
+      this.commentCount(id)
     ]);
-    return { data, size };
+    return { data, count };
   }
 
   /**
@@ -457,9 +457,9 @@ class Service extends egg.Service {
    * @param id:int 作品id
    * @returns int
    */
-  async commentSize(id) {
+  async commentCount(id) {
     const { app } = this;
-    let cacheKey = 'worksCommentSize_' + id;
+    let cacheKey = 'worksCommentCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);

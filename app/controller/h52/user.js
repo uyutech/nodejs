@@ -25,6 +25,7 @@ class Controller extends egg.Controller {
       service.user.isFans(userId, uid),
       service.user.post(userId, 0, limit)
     ]);
+    delete info.coins;
     post.limit = limit;
     ctx.body = ctx.helper.okJSON({
       info,
