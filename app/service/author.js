@@ -177,6 +177,163 @@ class Service extends egg.Service {
   }
 
   /**
+   * 粉丝数
+   * @param id:int 作者id
+   * @returns int
+   */
+  async fansCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'authorFansCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        target_id: id,
+        type: 3,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 是否关注了作者
+   * @param id:int 作者id
+   * @param uid:int 用户id
+   * @returns boolean
+   */
+  async isFollow(id, uid) {
+    if(!id) {
+      return;
+    }
+    if(!uid) {
+      return false;
+    }
+    const { app } = this;
+    let cacheKey = 'userUserRelation_' + uid + '_' + id + '_' + 3;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findOne({
+      where: {
+        user_id: uid,
+        type: 3,
+        target_id: id,
+        is_delete: false,
+      },
+    });
+    if(res) {
+      res = true;
+    }
+    else {
+      res = false;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  async follow(id, uid, state) {
+    if(!id || !uid) {
+      return;
+    }
+    state = !!state;
+    const { app, ctx } = this;
+    // 更新内存中用户对作者关系的状态
+    let userRelationCache;
+    if(state) {
+      userRelationCache = app.redis.setex('userUserRelation_' + uid + '_' + id + '_' + 3, CACHE_TIME, 'true');
+    }
+    else {
+      userRelationCache = app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + 3, CACHE_TIME, 'false');
+    }
+    // 入库
+    await Promise.all([
+      userRelationCache,
+      app.model.userUserRelation.upsert({
+        user_id: uid,
+        target_id: id,
+        type: 3,
+        is_delete: !state,
+        update_time: new Date(),
+      }, {
+        where: {
+          user_id: uid,
+          type: 3,
+          target_id: id,
+        },
+        raw: true,
+      })
+    ]);
+    // 更新计数，优先内存缓存
+    let cacheKey = 'authorFansCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    let count;
+    if(res) {
+      count = JSON.parse(res);
+      if(state) {
+        count++;
+      }
+      else {
+        count--;
+      }
+      count = Math.max(count, 0);
+      // 可能因为2次操作之间的延迟导致key过期设置超时失败，此时放弃操作内存防止数据不一致
+      let expire = await app.redis.expire(cacheKey, CACHE_TIME);
+      if(expire) {
+        if(state) {
+          app.redis.incr(cacheKey);
+        }
+        else {
+          app.redis.decr(cacheKey);
+        }
+      }
+    }
+    else {
+      res = await app.model.userUserRelation.findOne({
+        attributes: [
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          target_id: id,
+          type: 3,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      if(res) {
+        count = res.num;
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
+      }
+      else {
+        ctx.logger.error('authorFansCount_%s find null', id);
+      }
+    }
+    return {
+      state,
+      count,
+    };
+  }
+
+  /**
    * 获取作者的留言数据
    * @param id:int 作者id
    * @param offset:int 分页开始

@@ -174,6 +174,9 @@ class Service extends egg.Service {
         root_id: 0,
         is_delete: false,
       },
+      order: [
+        ['id', 'DESC']
+      ],
       offset,
       limit,
       raw: true,
@@ -211,7 +214,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, res);
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 }

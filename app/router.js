@@ -307,12 +307,16 @@ module.exports = app => {
 
   app.post('/h5/works2/index', 'h52.works.index');
   app.post('/h5/works2/comment', 'h52.works.comment');
-  app.post('/h5/works2/like', 'h52.works.like');
-  app.post('/h5/works2/favor', 'h52.works.favor');
+  app.post('/h5/works2/like', app.middlewares.needLoginJson(), 'h52.works.like');
+  app.post('/h5/works2/favor', app.middlewares.needLoginJson(), 'h52.works.favor');
+  app.post('/h5/works2/unLike', app.middlewares.needLoginJson(), 'h52.works.unLike');
+  app.post('/h5/works2/unFavor', app.middlewares.needLoginJson(), 'h52.works.unFavor');
 
   app.post('/h5/author2/index', 'h52.author.index');
   app.post('/h5/author2/comment', 'h52.author.comment');
   app.post('/h5/author2/kindWork', 'h52.author.kindWork');
+  app.post('/h5/author2/follow', app.middlewares.needLoginJson(), 'h52.author.follow');
+  app.post('/h5/author2/unFollow', app.middlewares.needLoginJson(), 'h52.author.unFollow');
 
   app.post('/h5/circle2/index', 'h52.circle.index');
   app.post('/h5/circle2/post', 'h52.circle.post');

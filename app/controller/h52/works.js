@@ -48,11 +48,22 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let worksId = body.worksId;
     let workId = body.workId;
-    let state = body.state === 'true';
     if(!worksId || !workId) {
       return;
     }
-    let res = await service.work.like(uid, worksId, workId, state);
+    let res = await service.work.like(uid, worksId, workId, true);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+  async unLike() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let worksId = body.worksId;
+    let workId = body.workId;
+    if(!worksId || !workId) {
+      return;
+    }
+    let res = await service.work.like(uid, worksId, workId, false);
     ctx.body = ctx.helper.okJSON(res);
   }
   async favor() {
@@ -61,11 +72,22 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let worksId = body.worksId;
     let workId = body.workId;
-    let state = body.state === 'true';
     if(!worksId || !workId) {
       return;
     }
-    let res = await service.work.favor(uid, worksId, workId, state);
+    let res = await service.work.favor(uid, worksId, workId, true);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+  async unFavor() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let worksId = body.worksId;
+    let workId = body.workId;
+    if(!worksId || !workId) {
+      return;
+    }
+    let res = await service.work.favor(uid, worksId, workId, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

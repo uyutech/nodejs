@@ -61,10 +61,10 @@ class Service extends egg.Service {
     // 更新内存中用户对作品关系的状态
     let userRelationCache;
     if(state) {
-      userRelationCache = app.redis.setex('userWorkRelation_' + uid + '_' + workId + '_' + type, CACHE_TIME, true);
+      userRelationCache = app.redis.setex('userWorkRelation_' + uid + '_' + workId + '_' + type, CACHE_TIME, 'true');
     }
     else {
-      userRelationCache = app.redis.setex('userWorkRelation_' + uid + '_' + workId + '_' + type, CACHE_TIME, false);
+      userRelationCache = app.redis.setex('userWorkRelation_' + uid + '_' + workId + '_' + type, CACHE_TIME, 'false');
     }
     // 入库
     await Promise.all([
@@ -83,6 +83,7 @@ class Service extends egg.Service {
           type,
           user_id: uid,
         },
+        raw: true,
       })
     ]);
     // 更新计数，优先内存缓存
@@ -123,7 +124,7 @@ class Service extends egg.Service {
       });
       if(res) {
         count = res.num;
-        app.redis.setex(cacheKey, CACHE_TIME, count);
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
       }
       else {
         ctx.logger.error('workCount_%s_%s find null', workId, type);
@@ -557,10 +558,10 @@ class Service extends egg.Service {
           let temp = hash[id];
           if(temp) {
             cache[i] = true;
-            app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, true);
+            app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, 'true');
           }
           else {
-            app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, false);
+            app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, 'false');
           }
         });
       }
@@ -649,11 +650,11 @@ class Service extends egg.Service {
           let temp = hash[id];
           if(temp) {
             cache[i] = temp;
-            app.redis.setex('workCount_' + id + '_' + type, CACHE_TIME, temp);
+            app.redis.setex('workCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
           }
           else {
             cache[i] = 0;
-            app.redis.setex('workCount_' + id + '_' + type, CACHE_TIME, 0);
+            app.redis.setex('workCount_' + id + '_' + type, CACHE_TIME, '0');
           }
         });
       }

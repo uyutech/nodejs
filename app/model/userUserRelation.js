@@ -21,15 +21,20 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      comment: '1关注用户，2拉黑用户，3关注作者，4拉黑作者',
+    },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
+    create_time: {
+      type: Sequelize.DATE,
       allowNull: false,
-      comment: '1关注用户',
+      defaultValue: Sequelize.NOW,
     },
     update_time: {
       type: Sequelize.DATE,
@@ -45,7 +50,7 @@ module.exports = app => {
       },
       {
         name: 'target_id_type',
-        fields: ['target_id', 'type'],
+        fields: ['target_id', 'type']
       }
     ],
     comment: '用户和用户关联信息',

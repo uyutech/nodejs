@@ -105,7 +105,7 @@ class Service extends egg.Service {
       .where('circle_comment_relation.circle_id=?', id)
       .where('circle_comment_relation.comment_id=comment.id')
       .where('comment.is_delete=false')
-      .order('circle_comment_relation.id', false)
+      .order('comment.id', false)
       .offset(offset)
       .limit(limit)
       .toString();

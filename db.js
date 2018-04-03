@@ -48,6 +48,7 @@ const TagCommentRelation = require('./app/model/tagCommentRelation')({ sequelize
 const CircleTagRelation = require('./app/model/circleTagRelation')({ sequelizeCircling: sequelize, Sequelize });
 const User = require('./app/model/user')({ sequelizeCircling: sequelize, Sequelize });
 const UserAuthorRelation = require('./app/model/userAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
+const UserUserRelation = require('./app/model/userUserRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Work = require('./app/model/work')({ sequelizeCircling: sequelize, Sequelize });
 const Audio = require('./app/model/Audio')({ sequelizeCircling: sequelize, Sequelize });
 const Video = require('./app/model/Video')({ sequelizeCircling: sequelize, Sequelize });
@@ -633,7 +634,7 @@ async function dealWorkAuthorProfession(pool) {
     });
   }
   last = 5464;
-  last = 0;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -707,7 +708,7 @@ async function dealWorkAuthorProfession(pool) {
   }
   hash = {};
   last = 4131;
-  last = 0;
+  // last = 0;
   let special = {
     51: true,
     52: true,
@@ -877,6 +878,7 @@ async function dealUser(pool) {
   console.log('------- dealUser --------');
   await User.sync();
   await UserAuthorRelation.sync();
+  await UserUserRelation.sync();
   let last = 2018000000043080;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -910,6 +912,34 @@ async function dealUser(pool) {
       type: item.UserAuthorType,
       is_delete: !!item.ISDel,
       settle: item.UserAuthorState,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+  }
+  last = 5698;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_User WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await UserUserRelation.create({
+      user_id: item.UID,
+      target_id: item.ToUID,
+      type: 1,
+      is_delete: false,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+  }
+  last = 31853;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_Author WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await UserUserRelation.create({
+      user_id: item.UID,
+      target_id: item.AuthorID,
+      type: 3,
+      is_delete: false,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
