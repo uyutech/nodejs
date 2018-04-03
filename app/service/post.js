@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 const Sequelize = require('sequelize');
+const squel = require('squel');
+
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
@@ -24,26 +26,26 @@ class Service extends egg.Service {
     if(res) {
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      comment.id,
-      comment.user_id AS userId,
-      comment.author_id AS authorId,
-      comment.content,
-      comment.parent_id AS parentId,
-      comment.root_id AS rootId,
-      comment.create_time AS createTime,
-      comment.update_time AS updateTime
-      FROM comment
-      WHERE comment.id=${id}`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0];
+    res = await app.model.comment.findOne({
+      attributes: [
+        'id',
+        ['user_id', 'uid'],
+        ['author_id', 'aid'],
+        'content',
+        ['parent_id', 'pid'],
+        ['root_id', 'rid'],
+        ['create_time', 'createTime']
+      ],
+      where: {
+        id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    if(res) {
       res = await service.comment.plus(res);
     }
-    else {
-      res = null;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 
@@ -87,21 +89,27 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let sql = `SELECT
-      comment.id,
-      comment.user_id AS userId,
-      comment.author_id AS authorId,
-      comment.content,
-      comment.parent_id AS parentId,
-      comment.root_id AS rootId,
-      comment.create_time AS createTime,
-      comment.update_time AS updateTime
-      FROM comment
-      WHERE comment.root_id=${id}
-      AND comment.is_delete=false
-      ORDER BY comment.id DESC
-      LIMIT ${offset},${limit};`;
-    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    let res = await app.model.comment.findAll({
+      attributes: [
+        'id',
+        ['user_id', 'uid'],
+        ['author_id', 'aid'],
+        'content',
+        ['parent_id', 'pid'],
+        ['root_id', 'rid'],
+        ['create_time', 'createTime']
+      ],
+      where: {
+        root_id: id,
+        is_delete: false,
+      },
+      order: [
+        ['id', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
     res = await service.comment.plusList(res);
     return res;
   }
@@ -122,19 +130,23 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      COUNT(*) AS num
-      FROM comment
-      WHERE comment.root_id=${id}
-      AND comment.is_delete=false;`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0].num || 0;
+    res = await app.model.comment.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        root_id: id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
     }
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, CACHE_TIME, res);
     return res;
   }
 }

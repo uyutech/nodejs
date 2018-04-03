@@ -25,7 +25,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0未知，1视频，2音频，3图片，4文字',
+      comment: '0总体，1视频，2音频，3图片，4文字',
     },
     author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
@@ -55,7 +55,7 @@ module.exports = app => {
       {
         name: 'works_id_work_id_author_id_profession_id',
         unique: true,
-        fields: ['works_id', 'kind', 'work_id', 'author_id', 'profession_id'],
+        fields: ['works_id', 'work_id', 'author_id', 'profession_id'],
       },
       {
         name: 'author_id_kind_work_id',

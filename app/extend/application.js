@@ -53,6 +53,8 @@ const worksRecommend = require('../model/worksRecommend');
 const worksAuthorProfessionRelation = require('../model/worksAuthorProfessionRelation');
 const worksTypeProfessionSort = require('../model/worksTypeProfessionSort');
 const musicAlbum = require('../model/musicAlbum');
+const musicAlbumWorkRelation = require('../model/musicAlbumWorkRelation');
+const musicAlbumAuthorProfessionRelation = require('../model/musicAlbumAuthorProfessionRelation');
 
 module.exports = {
   get Sequelize() {
@@ -162,6 +164,8 @@ module.exports = {
         worksAuthorProfessionRelation: worksAuthorProfessionRelation(this),
         worksTypeProfessionSort: worksTypeProfessionSort(this),
         musicAlbum: musicAlbum(this),
+        musicAlbumWorkRelation: musicAlbumWorkRelation(this),
+        musicAlbumAuthorProfessionRelation: musicAlbumAuthorProfessionRelation(this),
       };
     }
     return this[MODEL];

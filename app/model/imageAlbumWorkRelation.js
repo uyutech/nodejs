@@ -60,9 +60,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'album_id_kind_work_id',
+        name: 'album_id_work_id',
         unique: true,
-        fields: ['album_id', 'kind', 'work_id'],
+        fields: ['album_id', 'work_id'],
       }
     ],
     comment: '大作品小作品关系',

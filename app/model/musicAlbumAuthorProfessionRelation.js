@@ -25,7 +25,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0未知，1视频，2音频，3图片，4文字',
+      comment: '0总体，1视频，2音频',
     },
     author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
@@ -53,13 +53,13 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'album_id_kind_work_id_author_id_profession_id',
+        name: 'album_id_work_id_author_id_profession_id',
         unique: true,
-        fields: ['album_id', 'kind', 'work_id', 'author_id', 'profession_id'],
+        fields: ['album_id', 'work_id', 'author_id', 'profession_id'],
       },
       {
-        name: 'author_id_kind',
-        fields: ['author_id', 'kind'],
+        name: 'author_id',
+        fields: ['author_id'],
       }
     ],
     comment: '音乐专辑作者职种关联信息',

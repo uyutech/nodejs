@@ -434,11 +434,11 @@ class Service extends egg.Service {
       .from('works_comment_relation')
       .from('comment')
       .field('comment.id')
-      .field('comment.user_id', 'userId')
-      .field('comment.author_id', 'authorId')
+      .field('comment.user_id', 'uid')
+      .field('comment.author_id', 'aid')
       .field('comment.content')
-      .field('comment.parent_id', 'parentId')
-      .field('comment.root_id', 'rootId')
+      .field('comment.parent_id', 'pid')
+      .field('comment.root_id', 'rid')
       .field('comment.create_time', 'createTime')
       .where('works_comment_relation.works_id=?', id)
       .where('works_comment_relation.comment_id=comment.root_id')
@@ -608,15 +608,18 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        works_type AS worksType,
-        \`group\`,
-        weight,
-        profession_id AS professionId
-        FROM works_type_profession_sort
-        WHERE works_type IN (${noCacheIdList.join(', ')})
-        ORDER BY \`group\`, weight DESC`;
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.worksTypeProfessionSort.findAll({
+        attributes: [
+          ['works_type', 'worksType'],
+          'group',
+          'weight',
+          ['profession_id', 'professionId']
+        ],
+        where: {
+          works_type: noCacheIdList,
+        },
+        raw: true,
+      });
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {

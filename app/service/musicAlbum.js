@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 const Sequelize = require('sequelize');
+const squel = require('squel');
+
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
@@ -46,18 +48,20 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        music_album.id,
-        music_album.title,
-        music_album.sub_title AS subTitle,
-        music_album.state,
-        music_album.cover,
-        music_album.type,
-        works_type.name AS typeName
-        FROM music_album, works_type
-        WHERE music_album.id IN (${noCacheIdList.join(', ')})
-        AND music_album.is_authorize=true
-        AND music_album.type=works_type.id;`;
+      let sql = squel.select()
+        .from('music_album')
+        .from('works_type')
+        .field('music_album.id')
+        .field('music_album.title')
+        .field('music_album.sub_title', 'subTitle')
+        .field('music_album.state')
+        .field('music_album.cover')
+        .field('music_album.type')
+        .field('works_type.name', 'typeName')
+        .where('music_album.id IN ?', noCacheIdList)
+        .where('music_album.is_authorize=true')
+        .where('music_album.type=works_type.id')
+        .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};

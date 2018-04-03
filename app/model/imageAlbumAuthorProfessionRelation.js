@@ -25,7 +25,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0未知，1视频，2音频，3图片，4文字',
+      comment: '0总体，3图片',
     },
     author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
@@ -58,8 +58,8 @@ module.exports = app => {
         fields: ['album_id', 'work_id', 'author_id', 'profession_id'],
       },
       {
-        name: 'author_id_kind',
-        fields: ['author_id', 'kind'],
+        name: 'author_id',
+        fields: ['author_id'],
       }
     ],
     comment: '图片专辑作者职种关联信息',

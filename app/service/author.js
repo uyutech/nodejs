@@ -161,6 +161,7 @@ class Service extends egg.Service {
         author_id: id,
         is_delete: false,
       },
+      raw: true,
     });
     if(!res.length) {
       res = null;
@@ -197,11 +198,11 @@ class Service extends egg.Service {
       .from('author_comment_relation')
       .from('comment')
       .field('comment.id')
-      .field('comment.user_id', 'userId')
-      .field('comment.author_id', 'authorId')
+      .field('comment.user_id', 'uid')
+      .field('comment.author_id', 'aid')
       .field('comment.content')
-      .field('comment.parent_id', 'parentId')
-      .field('comment.root_id', 'rootId')
+      .field('comment.parent_id', 'pid')
+      .field('comment.root_id', 'rid')
       .field('comment.create_time', 'createTime')
       .where('author_comment_relation.author_id=?', id)
       .where('author_comment_relation.comment_id=comment.root_id')
@@ -228,12 +229,14 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      num
-      FROM author_comment_relation, comment_num
-      WHERE author_comment_relation.author_id=${id}
-      AND author_comment_relation.comment_id=comment_num.comment_id
-      AND type=0;`;
+    let sql = squel.select()
+      .from('author_comment_relation')
+      .from('comment')
+      .field('COUNT(*)', 'num')
+      .where('author_comment_relation.author_id=?', id)
+      .where('author_comment_relation.comment_id=comment.root_id')
+      .where('comment.is_delete=false')
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;
@@ -284,10 +287,10 @@ class Service extends egg.Service {
       order: [
         ['weight', 'DESC'],
       ],
+      raw: true,
     });
     if(res.length) {
       res = res.map(function(item) {
-        item = item.toJSON();
         return item.worksId;
       });
       if(offset === 0) {
@@ -307,11 +310,12 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      COUNT(*) AS num
-      FROM author_main_works
-      WHERE author_id=${id}
-      AND is_delete=false`;
+    let sql = squel.select()
+      .from('author_main_works')
+      .field('COUNT(*)', 'num')
+      .where('author_id', id)
+      .where('is_delete=false')
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;
@@ -481,11 +485,11 @@ class Service extends egg.Service {
           works_id: noCacheIdList,
           author_id: id,
         },
+        raw: true,
       });
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {
-          item = item.toJSON();
           let temp = hash[item.worksId] = hash[item.worksId] || [];
           temp.push(item.professionId);
         });
@@ -531,29 +535,23 @@ class Service extends egg.Service {
         return JSON.parse(res);
       }
     }
-    let sql = `SELECT
-      DISTINCT id
-      FROM music_album_author_profession_relation
-      WHERE author_id=${id}
-      AND is_delete=false
-      ORDER BY id
-      LIMIT ${offset},${limit};`;
+    let sql = squel.select()
+      .from('music_album_author_profession_relation')
+      .field('album_id', 'albumId')
+      .distinct()
+      .where('author_id=?', id)
+      .where('is_delete=false')
+      .offset(offset)
+      .limit(limit)
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     let idList = res.map(function(item) {
-      return item.id;
-    });
-    sql = `SELECT
-      album_id AS albumId
-      FROM music_album_author_profession_relation
-      WHERE id IN (${idList.join(', ')})`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = res.map(function(item) {
       return item.albumId;
     });
     if(offset === 0) {
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(idList));
     }
-    return res;
+    return idList;
   }
 
   /**
@@ -590,14 +588,18 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      COUNT(*) AS num
-      FROM music_album_author_profession_relation
-      WHERE author_id=${id}
-      AND is_delete=false`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0].num || 0;
+    res = await app.model.musicAlbumAuthorProfessionRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        author_id: id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
     }
     else {
       res = 0;
@@ -623,11 +625,13 @@ class Service extends egg.Service {
       kindList = JSON.parse(kindList);
     }
     else {
-      let sql = `SELECT
-        DISTINCT kind
-        FROM works_author_profession_relation
-        WHERE works_author_profession_relation.author_id=${id}
-        ORDER BY kind`;
+      let sql = squel.select()
+        .from('works_author_profession_relation')
+        .field('kind')
+        .distinct()
+        .where('author_id=?', id)
+        .order('kind')
+        .toString();
       kindList = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       kindList = kindList.map(function(item) {
         return item.kind;
@@ -706,13 +710,14 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        DISTINCT profession_id AS professionId,
-        kind
-        FROM works_author_profession_relation
-        WHERE author_id=${id}
-        AND kind IN (${noCacheIdList.join(', ')})
-        ORDER BY kind`;
+      let sql = squel.select()
+        .from('works_author_profession_relation')
+        .field('profession_id', 'professionId')
+        .field('kind')
+        .distinct()
+        .where('author_id=?', id)
+        .where('kind IN ?', noCacheIdList)
+        .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
@@ -764,16 +769,20 @@ class Service extends egg.Service {
         return JSON.parse(res);
       }
     }
-    let sql = `SELECT
-      DISTINCT works_author_profession_relation.work_id AS workId
-      FROM works_author_profession_relation, works
-      WHERE works_author_profession_relation.author_id=${id}
-      AND works_author_profession_relation.kind=${kind}
-      AND works_author_profession_relation.is_delete=false
-      AND works_author_profession_relation.works_id=works.id
-      AND works.state=0
-      ORDER BY workId DESC
-      LIMIT ${offset},${limit};`;
+    let sql = squel.select()
+      .from('works_author_profession_relation')
+      .from('works')
+      .field('works_author_profession_relation.work_id', 'workId')
+      .distinct()
+      .where('works_author_profession_relation.author_id=?', id)
+      .where('works_author_profession_relation.kind=?', kind)
+      .where('works_author_profession_relation.is_delete=false')
+      .where('works_author_profession_relation.works_id=works.id')
+      .where('works.state=0')
+      .order('workId', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     res = res.map(function(item) {
       return item.workId;
@@ -821,14 +830,18 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = `SELECT
-        work_id AS workId,
-        works_id AS worksId,
-        profession_id AS professionId
-        FROM works_author_profession_relation
-        WHERE works_author_profession_relation.author_id=${id}
-        AND work_id IN (${noCacheIdList.join(', ')})`;
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.worksAuthorProfessionRelation.findAll({
+        attributes: [
+          ['work_id', 'workId'],
+          ['works_id', 'worksId'],
+          ['profession_id', 'professionId']
+        ],
+        where: {
+          author_id: id,
+          work_id: noCacheIdList,
+        },
+        raw: true,
+      });
       if(res.length) {
         let hash = {};
         res.forEach(function(item) {
@@ -971,14 +984,16 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = `SELECT
-      COUNT(DISTINCT works_author_profession_relation.work_id) as num
-      FROM works_author_profession_relation, works
-      WHERE works_author_profession_relation.author_id=${id}
-      AND works_author_profession_relation.kind=${kind}
-      AND works_author_profession_relation.is_delete=false
-      AND works_author_profession_relation.works_id=works.id
-      AND works.state=0;`;
+    let sql = squel.select()
+      .from('works_author_profession_relation')
+      .from('works')
+      .field('COUNT(DISTINCT works_author_profession_relation.work_id)', 'num')
+      .where('works_author_profession_relation.author_id=?', id)
+      .where('works_author_profession_relation.kind=?', kind)
+      .where('works_author_profession_relation.is_delete=false')
+      .where('works_author_profession_relation.works_id=works.id')
+      .where('works.state=0')
+      .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
       res = res[0].num || 0;

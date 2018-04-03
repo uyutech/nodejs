@@ -94,7 +94,6 @@ const UserWorkRelation = require('./app/model/userWorkRelation')({ sequelizeCirc
     await dealUser(pool);
     await dealComment(pool);
     await dealUserWork(pool);
-    // await modifyMusicAlubmWork();
     // await modifyWorksComment();
     // await modifyAuthorComment();
     // await modifyWorksRelation();
@@ -543,40 +542,16 @@ async function dealWorksWork(pool) {
     ]);
     let work_id;
     if(work.kind === 1) {
-      let video = await Video.findOne({
-        attributes: ['id'],
-        where: {
-          work_id: work.id,
-        },
-      });
-      work_id = video.id;
+      work_id = work.id.toString().replace(/^2016/, 2020);
     }
     else if(work.kind === 2) {
-      let audio = await Audio.findOne({
-        attributes: ['id'],
-        where: {
-          id: work.id,
-        },
-      });
-      work_id = audio.id;
+      work_id = work.id;
     }
     else if(work.kind === 3) {
-      let image = await Image.findOne({
-        attributes: ['id'],
-        where: {
-          work_id: work.id,
-        },
-      });
-      work_id = image.id;
+      work_id = work.id.toString().replace(/^2016/, 2021);
     }
     else if(work.kind === 4) {
-      let text = await Text.findOne({
-        attributes: ['id'],
-        where: {
-          work_id: work.id,
-        },
-      });
-      work_id = text.id;
+      work_id = work.id.toString().replace(/^2016/, 2022);
     }
     if(musicAlbum) {
       await MusicAlbumWorkRelation.create({
@@ -658,7 +633,7 @@ async function dealWorkAuthorProfession(pool) {
     });
   }
   last = 5464;
-  // last = 0;
+  last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -678,40 +653,16 @@ async function dealWorkAuthorProfession(pool) {
     }
     let work_id;
     if(work.kind === 1) {
-      let video = await Video.findOne({
-        attributes: ['id'],
-        where: {
-          work_id: work.id,
-        },
-      });
-      work_id = video.id;
+      work_id = work.id.toString().replace(/^2016/,  2020);
     }
     else if(work.kind === 2) {
-      let audio = await Audio.findOne({
-        attributes: ['id'],
-        where: {
-          work_id: work.id,
-        },
-      });
-      work_id = audio.id;
+      work_id = work.id;
     }
     else if(work.kind === 3) {
-      let image = await Image.findOne({
-        attributes: ['id'],
-        where: {
-          work_id: work.id,
-        },
-      });
-      work_id = image.id;
+      work_id = work.id.toString().replace(/^2016/,  2021);
     }
     else if(work.kind === 4) {
-      let text = await Text.findOne({
-        attributes: ['id'],
-        where: {
-          work_id: work.id,
-        },
-      });
-      work_id = text.id;
+      work_id = work.id.toString().replace(/^2016/,  2022);
     }
     let worksWork = await WorksWorkRelation.findOne({
       attributes: ['works_id'],
@@ -756,7 +707,7 @@ async function dealWorkAuthorProfession(pool) {
   }
   hash = {};
   last = 4131;
-  // last = 0;
+  last = 0;
   let special = {
     51: true,
     52: true,
@@ -1160,31 +1111,13 @@ async function dealUserWork(pool) {
       workHash[item.ItemsID] = work;
       switch(work.kind) {
         case 1:
-          let video = await Video.findOne({
-            attributes: ['id'],
-            where: {
-              work_id: item.ItemsID,
-            }
-          });
-          workHash[item.ItemsID].id = video.id;
+          workHash[item.ItemsID].id = item.ItemsID.toString().replace(/^2016/, 2020);
           break;
         case 2:
-          let audio = await Audio.findOne({
-            attributes: ['id'],
-            where: {
-              id: item.ItemsID,
-            }
-          });
-          workHash[item.ItemsID].id = audio.id;
+          workHash[item.ItemsID].id = item.ItemsID;
           break;
         case 3:
-          let image = await Image.findOne({
-            attributes: ['id'],
-            where: {
-              work_id: item.ItemsID,
-            }
-          });
-          workHash[item.ItemsID].id = image.id;
+          workHash[item.ItemsID].id = item.ItemsID.toString().replace(/^2016/, 2021);
           break;
       }
     }
@@ -1321,31 +1254,13 @@ async function dealUserWork(pool) {
         workHash[ItemsID] = work;
         switch(work.kind) {
           case 1:
-            let video = await Video.findOne({
-              attributes: ['id'],
-              where: {
-                work_id: ItemsID,
-              }
-            });
-            workHash[ItemsID].id = video.id;
+            workHash[ItemsID].id = ItemsID.toString().replace(/^2016/, 2020);
             break;
           case 2:
-            let audio = await Audio.findOne({
-              attributes: ['id'],
-              where: {
-                id: ItemsID,
-              }
-            });
-            workHash[ItemsID].id = audio.id;
+            workHash[ItemsID].id = ItemsID;
             break;
           case 3:
-            let image = await Image.findOne({
-              attributes: ['id'],
-              where: {
-                work_id: ItemsID,
-              }
-            });
-            workHash[ItemsID].id = image.id;
+            workHash[ItemsID].id = ItemsID.toString().replace(/^2016/, 2021);
             break;
         }
       }
@@ -1401,28 +1316,6 @@ async function dealUserWork(pool) {
   }
 }
 
-async function modifyMusicAlubmWork() {
-  let last = 134;
-  // last = 0;
-  let sql = `SELECT
-    album_id, work_id
-    FROM music_album_work_relation WHERE id>${last}`;
-  let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
-  for(let i = 0, len = res.length; i < len; i++) {
-    let item = res[i];
-    let sql2 = `SELECT
-      works_id
-      FROM works_work_relation
-      WHERE work_id=${item.work_id} LIMIT 0,1`;
-    let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
-    if(res2.length) {
-      let worksId = res2[0].works_id;
-      let sql3 = `UPDATE music_album_work_relation SET works_id=${worksId}
-        WHERE album_id=${item.album_id}`;
-      await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
-    }
-  }
-}
 async function modifyWorksComment() {
   let last = 631;
   let sql = `SELECT
