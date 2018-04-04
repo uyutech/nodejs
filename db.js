@@ -1136,18 +1136,18 @@ async function dealUserWork(pool) {
         where: {
           id: item.ItemsID,
         },
+        raw: true,
       });
-      work = work.toJSON();
       workHash[item.ItemsID] = work;
       switch(work.kind) {
         case 1:
-          workHash[item.ItemsID].id = item.ItemsID.toString().replace(/^2016/, 2020);
+          work.id = item.ItemsID.toString().replace(/^2016/, 2020);
           break;
         case 2:
-          workHash[item.ItemsID].id = item.ItemsID;
+          work.id = item.ItemsID;
           break;
         case 3:
-          workHash[item.ItemsID].id = item.ItemsID.toString().replace(/^2016/, 2021);
+          work.id = item.ItemsID.toString().replace(/^2016/, 2021);
           break;
       }
     }

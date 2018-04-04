@@ -15,6 +15,23 @@ class Controller extends egg.Controller {
     res.limit = 10;
     ctx.body = ctx.helper.okJSON(res);
   }
+  async favor() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let [video, audio, image] = await Promise.all([
+      service.user.favorVideo(uid, 0, 10),
+      service.user.favorAudio(uid, 0, 10),
+      service.user.favorImage(uid, 0, 10)
+    ]);
+    video.limit = 10;
+    audio.limit = 10;
+    image.limit = 10;
+    ctx.body = ctx.helper.okJSON({
+      video,
+      audio,
+      image,
+    });
+  }
 }
 
 module.exports = Controller;

@@ -158,43 +158,6 @@ class Service extends egg.Service {
   }
 
   /**
-   * 粉丝数
-   * @param id:int 用户id
-   * @returns int
-   */
-  async fansCount(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'userFansCount_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.userUserRelation.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        target_id: id,
-        type: 1,
-        is_delete: false,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
-
-  /**
    * 是否关注了用户
    * @param id:int 用户id
    * @param uid:int 当前登录用户id
@@ -852,6 +815,581 @@ class Service extends egg.Service {
       res = 0;
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取用户收藏的视频信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async favorVideo(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.favorVideoData(id, offset, limit),
+      this.favorVideoCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取用户收藏的视频信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async favorVideoData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service, ctx } = this;
+    let res = await app.model.userWorkRelation.findAll({
+      attributes: [
+        ['works_id', 'worksId'],
+        ['work_id', 'workId']
+      ],
+      where: {
+        user_id: id,
+        type: 2,
+        kind: 1,
+        is_delete: false,
+      },
+      offset,
+      limit,
+      raw: true,
+    });
+    let worksIdHash = {};
+    let worksIdList = [];
+    res.forEach(function(item) {
+      if(!worksIdHash[item.worksId]) {
+        worksIdHash[item.worksId] = true;
+        worksIdList.push(item.worksId);
+      }
+    });
+    let workIdHash = {};
+    let workIdList = [];
+    res.forEach(function(item) {
+      if(!workIdHash[item]) {
+        workIdHash[item.workId] = true;
+        workIdList.push(item.workId);
+      }
+    });
+    let [worksList, workList, authorList] = await Promise.all([
+      service.works.infoList(worksIdList),
+      service.work.videoList(workIdList),
+      service.works.authorList(worksIdList)
+    ]);
+    let worksHash = {};
+    let workHash = {};
+    let authorHash = {};
+    let typeHash = {};
+    let typeList = [];
+    worksList.forEach(function(item) {
+      if(item) {
+        if(!worksHash[item.id]) {
+          worksHash[item.id] = item;
+        }
+        if(!typeHash[item.type]) {
+          typeHash[item.type] = true;
+          typeList.push(item.type);
+        }
+      }
+    });
+    workList.forEach(function(item) {
+      if(!workHash[item.id]) {
+        workHash[item.id] = item;
+      }
+    });
+    authorList.forEach(function(item) {
+      if(item && item.length) {
+        if(!authorHash[item[0].worksId]) {
+          authorHash[item[0].worksId] = item;
+        }
+      }
+    });
+    let professionSortList = await service.works.typeListProfessionSort(typeList);
+    let professionSortHash = {};
+    professionSortList.forEach(function(item) {
+      if(item && item.length) {
+        if(!professionSortHash[item[0].worksType]) {
+          professionSortHash[item[0].worksType] = item;
+        }
+      }
+    });
+    return res.map(function(item) {
+      let temp = {
+        id: item.worksId,
+        work: {
+          id: item.workId,
+        },
+      };
+      let works = worksHash[temp.id];
+      if(works) {
+        temp.title = works.title;
+        temp.cover = works.cover;
+        temp.type = works.type;
+        temp.typeName = works.typeName;
+      }
+      else {
+        ctx.logger.error('favor miss works uid:%s, worksId:%s, workId:%s', id, temp.id, temp.work.id);
+      }
+      let work = workHash[temp.work.id];
+      if(work) {
+        temp.work.title = work.title;
+        temp.work.cover = work.cover;
+        temp.work.url = work.url;
+        temp.work.type = work.type;
+        temp.work.typeName = work.typeName;
+      }
+      else {
+        ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);
+      }
+      let author = authorHash[temp.id];
+      if(author) {
+        if(temp.type) {
+          let professionSort = professionSortHash[temp.type];
+          if(professionSort) {
+            temp.professionSort = professionSort;
+            temp.author = service.works.reorderAuthor(author, professionSort)[0];
+          }
+          else {
+            temp.author = [author[0]];
+          }
+        }
+        else {
+          ctx.logger.error('favor miss type uid:%s, workId:%s, type:%s', id, temp.work.id, temp.type);
+        }
+      }
+      else {
+        ctx.logger.error('favor miss author uid:%s, workId:%s', id, temp.work.id);
+      }
+      return temp;
+    });
+  }
+
+  /**
+   * 获取用户收藏的视频数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async favorVideoCount(id) {
+    const { app } = this;
+    let res = await app.model.userWorkRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: 2,
+        kind: 1,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    return res;
+  }
+
+  /**
+   * 获取用户收藏的音频信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async favorAudio(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.favorAudioData(id, offset, limit),
+      this.favorAudioCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取用户收藏的音频信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async favorAudioData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service, ctx } = this;
+    let res = await app.model.userWorkRelation.findAll({
+      attributes: [
+        ['works_id', 'worksId'],
+        ['work_id', 'workId']
+      ],
+      where: {
+        user_id: id,
+        type: 2,
+        kind: 2,
+        is_delete: false,
+      },
+      offset,
+      limit,
+      raw: true,
+    });
+    let worksIdHash = {};
+    let worksIdList = [];
+    res.forEach(function(item) {
+      if(!worksIdHash[item.worksId]) {
+        worksIdHash[item.worksId] = true;
+        worksIdList.push(item.worksId);
+      }
+    });
+    let workIdHash = {};
+    let workIdList = [];
+    res.forEach(function(item) {
+      if(!workIdHash[item]) {
+        workIdHash[item.workId] = true;
+        workIdList.push(item.workId);
+      }
+    });
+    let [worksList, workList, authorList] = await Promise.all([
+      service.works.infoList(worksIdList),
+      service.work.audioList(workIdList),
+      service.works.authorList(worksIdList)
+    ]);
+    let worksHash = {};
+    let workHash = {};
+    let authorHash = {};
+    let typeHash = {};
+    let typeList = [];
+    worksList.forEach(function(item) {
+      if(item) {
+        if(!worksHash[item.id]) {
+          worksHash[item.id] = item;
+        }
+        if(!typeHash[item.type]) {
+          typeHash[item.type] = true;
+          typeList.push(item.type);
+        }
+      }
+    });
+    workList.forEach(function(item) {
+      if(!workHash[item.id]) {
+        workHash[item.id] = item;
+      }
+    });
+    authorList.forEach(function(item) {
+      if(item && item.length) {
+        if(!authorHash[item[0].worksId]) {
+          authorHash[item[0].worksId] = item;
+        }
+      }
+    });
+    let professionSortList = await service.works.typeListProfessionSort(typeList);
+    let professionSortHash = {};
+    professionSortList.forEach(function(item) {
+      if(item && item.length) {
+        if(!professionSortHash[item[0].worksType]) {
+          professionSortHash[item[0].worksType] = item;
+        }
+      }
+    });
+    return res.map(function(item) {
+      let temp = {
+        id: item.worksId,
+        work: {
+          id: item.workId,
+        },
+      };
+      let works = worksHash[temp.id];
+      if(works) {
+        temp.title = works.title;
+        temp.cover = works.cover;
+        temp.type = works.type;
+        temp.typeName = works.typeName;
+      }
+      else {
+        ctx.logger.error('favor miss works uid:%s, worksId:%s, workId:%s', id, temp.id, temp.work.id);
+      }
+      let work = workHash[temp.work.id];
+      if(work) {
+        temp.work.title = work.title;
+        temp.work.cover = work.cover;
+        temp.work.url = work.url;
+        temp.work.type = work.type;
+        temp.work.typeName = work.typeName;
+      }
+      else {
+        ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);
+      }
+      let author = authorHash[temp.id];console.log(temp.id);
+      if(author) {
+        if(temp.type) {
+          let professionSort = professionSortHash[temp.type];
+          if(professionSort) {
+            temp.author = service.works.reorderAuthor(author, professionSort)[0];
+          }
+          else {
+            temp.author = [author[0]];
+          }
+        }
+        else {
+          ctx.logger.error('favor miss type uid:%s, workId:%s, type:%s', id, temp.work.id, temp.type);
+        }
+      }
+      else {
+        ctx.logger.error('favor miss author uid:%s, workId:%s', id, temp.work.id);
+      }
+      return temp;
+    });
+  }
+
+  /**
+   * 获取用户收藏的视频数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async favorAudioCount(id) {
+    const { app } = this;
+    let res = await app.model.userWorkRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: 2,
+        kind: 2,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    return res;
+  }
+
+  /**
+   * 获取用户收藏的图片信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async favorImage(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.favorImageData(id, offset, limit),
+      this.favorImageCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取用户收藏的图片信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async favorImageData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service, ctx } = this;
+    let res = await app.model.userWorkRelation.findAll({
+      attributes: [
+        ['works_id', 'worksId'],
+        ['work_id', 'workId']
+      ],
+      where: {
+        user_id: id,
+        type: 2,
+        kind: 3,
+        is_delete: false,
+      },
+      offset,
+      limit,
+      raw: true,
+    });
+    let worksIdHash = {};
+    let worksIdList = [];
+    res.forEach(function(item) {
+      if(!worksIdHash[item.worksId]) {
+        worksIdHash[item.worksId] = true;
+        worksIdList.push(item.worksId);
+      }
+    });
+    let workIdHash = {};
+    let workIdList = [];
+    res.forEach(function(item) {
+      if(!workIdHash[item]) {
+        workIdHash[item.workId] = true;
+        workIdList.push(item.workId);
+      }
+    });
+    let [worksList, workList, authorList] = await Promise.all([
+      service.imageAlbum.infoList(worksIdList),
+      service.work.imageList(workIdList),
+      service.imageAlbum.authorList(worksIdList)
+    ]);
+    let worksHash = {};
+    let workHash = {};
+    let authorHash = {};
+    let typeHash = {};
+    let typeList = [];
+    worksList.forEach(function(item) {
+      if(item) {
+        if(!worksHash[item.id]) {
+          worksHash[item.id] = item;
+        }
+        if(!typeHash[item.type]) {
+          typeHash[item.type] = true;
+          typeList.push(item.type);
+        }
+      }
+    });
+    workList.forEach(function(item) {
+      if(!workHash[item.id]) {
+        workHash[item.id] = item;
+      }
+    });
+    authorList.forEach(function(item) {
+      if(item && item.length) {
+        if(!authorHash[item[0].worksId]) {
+          authorHash[item[0].worksId] = item;
+        }
+      }
+    });
+    let professionSortList = await service.works.typeListProfessionSort(typeList);
+    let professionSortHash = {};
+    professionSortList.forEach(function(item) {
+      if(item && item.length) {
+        if(!professionSortHash[item[0].worksType]) {
+          professionSortHash[item[0].worksType] = item;
+        }
+      }
+    });
+    return res.map(function(item) {
+      let temp = {
+        id: item.worksId,
+        work: {
+          id: item.workId,
+        },
+      };
+      let works = worksHash[temp.id];
+      if(works) {
+        temp.title = works.title;
+        temp.cover = works.cover;
+        temp.type = works.type;
+        temp.typeName = works.typeName;
+      }
+      else {
+        ctx.logger.error('favor miss works uid:%s, worksId:%s, workId:%s', id, temp.id, temp.work.id);
+      }
+      let work = workHash[temp.work.id];
+      if(work) {
+        temp.work.title = work.title;
+        temp.work.cover = work.cover;
+        temp.work.url = work.url;
+        temp.work.type = work.type;
+        temp.work.typeName = work.typeName;
+      }
+      else {
+        ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);
+      }
+      let author = authorHash[temp.id];
+      if(author) {
+        if(temp.type) {
+          let professionSort = professionSortHash[temp.type];
+          if(professionSort) {
+            temp.professionSort = professionSort;
+            temp.author = service.works.reorderAuthor(author, professionSort)[0];
+          }
+          else {
+            temp.author = [author[0]];
+          }
+        }
+        else {
+          ctx.logger.error('favor miss type uid:%s, workId:%s, type:%s', id, temp.work.id, temp.type);
+        }
+      }
+      else {
+        ctx.logger.error('favor miss author uid:%s, workId:%s', id, temp.work.id);
+      }
+      return temp;
+    });
+  }
+
+  /**
+   * 获取用户收藏的图片数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async favorImageCount(id) {
+    const { app } = this;
+    let res = await app.model.userWorkRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: 2,
+        kind: 3,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
     return res;
   }
 }

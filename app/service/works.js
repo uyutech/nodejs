@@ -483,7 +483,13 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
-  async authorList(id) {
+
+  /**
+   * 获取作品作者列表
+   * @param id:int 作品id
+   * @returns Array<Object>
+   */
+  async author(id) {
     if(!id) {
       return;
     }
@@ -511,11 +517,11 @@ class Service extends egg.Service {
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
     let authorIdList = [];
-    let hash = {};
+    let authorIdHash = {};
     res.forEach(function(item) {
       let authorId = item.authorId;
-      if(!hash[authorId]) {
-        hash[authorId] = true;
+      if(!authorIdHash[authorId]) {
+        authorIdHash[authorId] = true;
         authorIdList.push(authorId);
       }
     });
@@ -530,11 +536,110 @@ class Service extends egg.Service {
         if(authorInfo) {
           item.headUrl = authorInfo.headUrl;
           item.name = authorInfo.name;
-          item.isSettled = authorInfo.isSettled;
+          item.isSettle = authorInfo.isSettle;
         }
       });
     }
     return res;
+  }
+
+  /**
+   * 获取作品id列表的作者列表
+   * @param idList:Array<int> 作品id列表
+   * @returns Array:<Array<Object>>
+   */
+  async authorList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app, service } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        return app.redis.get('worksAuthors_' + id);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('worksAuthors_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = squel.select()
+        .from('works_author_profession_relation')
+        .from('profession')
+        .field('works_author_profession_relation.works_id', 'worksId')
+        .field('works_author_profession_relation.work_id', 'workId')
+        .field('works_author_profession_relation.author_id', 'authorId')
+        .field('works_author_profession_relation.profession_id', 'professionId')
+        .field('profession.name', 'professionName')
+        .where('works_author_profession_relation.works_id IN ?', noCacheIdList)
+        .where('works_author_profession_relation.is_delete=false')
+        .where('works_author_profession_relation.profession_id=profession.id')
+        .toString();
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let worksId = item.worksId;
+          let temp = hash[worksId] = hash[worksId] || [];
+          temp.push(item);
+        });
+        noCacheIdList.forEach(function(id, i) {
+          let item = hash[id];
+          if(item) {
+            cache[i] = item;
+            app.redis.setex('worksAuthors_' + id, CACHE_TIME, JSON.stringify(item));
+          }
+        });
+      }
+    }
+    let authorIdList = [];
+    let authorIdHash = {};
+    cache.forEach(function(list) {
+      if(list && list.length) {
+        list.forEach(function(item) {
+          if(!authorIdHash[item.authorId]) {
+            authorIdHash[item.authorId] = true;
+            authorIdList.push(item.authorId);
+          }
+        });
+      }
+    });
+    if(authorIdList.length) {
+      let list = await service.author.infoList(authorIdList);
+      let hash = {};
+      list.forEach(function(item) {
+        hash[item.id] = item;
+      });
+      cache.forEach(function(list) {
+        if(list && list.length) {
+          list.forEach(function(item) {
+            let authorInfo = hash[item.authorId];
+            if(authorInfo) {
+              item.headUrl = authorInfo.headUrl;
+              item.name = authorInfo.name;
+              item.isSettle = authorInfo.isSettle;
+            }
+          });
+        }
+      });
+    }
+    return cache;
   }
 
   /**
@@ -655,22 +760,29 @@ class Service extends egg.Service {
     let professionSort = await this.typeProfessionSort(info.type);
     return [info, professionSort];
   }
-  reorderAuthor(authorList, rule) {
+
+  /**
+   * 根据规则排序作者显示
+   * @param list:Array<Object> 作者列表
+   * @param rule:Array 规则列表
+   * @returns Array<Array<Object>>
+   */
+  reorderAuthor(list, rule) {
     rule = rule || [];
     let res = [];
     // 先去重
     let exist = {};
-    for(let i = authorList.length - 1; i >= 0; i--) {
-      let item = authorList[i];
+    for(let i = list.length - 1; i >= 0; i--) {
+      let item = list[i];
       let key = item.authorId + '_' + item.professionId;
       if(exist[key]) {
-        authorList.splice(i, 1);
+        list.splice(i, 1);
       }
       exist[key] = true;
     }
     // 相同职业合并，并存成hash
     let hash = {};
-    authorList.forEach(function(item) {
+    list.forEach(function(item) {
       hash[item.professionId] = hash[item.professionId] || [];
       hash[item.professionId].push(item);
     });

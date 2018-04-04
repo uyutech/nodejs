@@ -59,7 +59,6 @@ class Service extends egg.Service {
         .field('music_album.type')
         .field('works_type.name', 'typeName')
         .where('music_album.id IN ?', noCacheIdList)
-        .where('music_album.is_authorize=true')
         .where('music_album.type=works_type.id')
         .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
