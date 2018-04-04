@@ -1392,6 +1392,97 @@ class Service extends egg.Service {
     }
     return res;
   }
+
+  /**
+   * 获取用户收藏的画圈信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async favorPost(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.favorPostData(id, offset, limit),
+      this.favorPostCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取用户收藏的画圈信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async favorPostData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.userCommentRelation.findAll({
+      attributes: [
+        ['comment_id', 'commentId'],
+        ['create_time', 'createTime']
+      ],
+      where: {
+        user_id: id,
+        type: 2,
+        is_delete: false,
+      },
+      offset,
+      limit,
+      order: [
+        ['id', 'DESC']
+      ],
+      raw: true,
+    });
+    let idList = res.map(function(item) {
+      return item.commentId;
+    });
+    let postList = await service.post.infoList(idList);
+    return postList;
+  }
+
+  /**
+   * 获取用户收藏的画圈数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async favorPostCount(id) {
+    const { app } = this;
+    let res = await app.model.userCommentRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: 2,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    return res;
+  }
 }
 
 module.exports = Service;

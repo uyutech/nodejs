@@ -11,12 +11,12 @@ const squel = require('squel');
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
+  /**
+   * 根据id获取画圈信息
+   * @param id
+   * @returns Object
+   */
   async info(id) {
-    /**
-     * 根据id获取画圈信息
-     * @param id
-     * @returns Object
-     */
     if(!id) {
       return;
     }
@@ -47,6 +47,83 @@ class Service extends egg.Service {
       res = await service.comment.plus(res);
     }
     return res;
+  }
+
+  /**
+   * 根据id列表获取画圈信息列表
+   * @param idList:Array<int>
+   * @returns Array<Object>
+   */
+  async infoList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app, service } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        return app.redis.get('postInfo_' + id);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('postInfo_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.comment.findAll({
+        attributes: [
+          'id',
+          ['user_id', 'uid'],
+          ['author_id', 'aid'],
+          'content',
+          ['parent_id', 'pid'],
+          ['root_id', 'rid'],
+          ['create_time', 'createTime']
+        ],
+        where: {
+          id: idList,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.id;
+          hash[id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('postInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('postInfo_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    if(cache.length) {
+      cache = await service.comment.plusList(cache);
+    }
+    return cache;
   }
 
   /**

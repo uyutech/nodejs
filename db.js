@@ -74,6 +74,7 @@ const AuthorCommentRelation = require('./app/model/authorCommentRelation')({ seq
 const WorksCommentRelation = require('./app/model/worksCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleCommentRelation = require('./app/model/circleCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserWorkRelation = require('./app/model/userWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
+const UserCommentRelation = require('./app/model/userCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -95,9 +96,9 @@ const UserWorkRelation = require('./app/model/userWorkRelation')({ sequelizeCirc
     await dealUser(pool);
     await dealComment(pool);
     await dealUserWork(pool);
+    await dealUserPost(pool);
     // await modifyWorksComment();
     // await modifyAuthorComment();
-    // await modifyWorksRelation();
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -781,7 +782,7 @@ async function dealWorkAuthorProfession(pool) {
 async function dealCircle(pool) {
   console.log('------- dealCircle --------');
   await CircleType.sync();
-  if(true) {
+  if(false) {
     CircleType.create({
       name: '普通',
       tag: '普通',
@@ -1346,6 +1347,53 @@ async function dealUserWork(pool) {
   }
 }
 
+async function dealUserPost(pool) {
+  console.log('------- dealUserPost --------');
+  await UserCommentRelation.sync();
+  let hash = {};
+  let last = 3967;
+  // last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Users_CollectionList WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    hash[item.ID] = item.UID;
+  }
+  last = 8609;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_Post WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let uid = hash[item.CollectionID];
+    if(uid) {
+      await UserCommentRelation.create({
+        user_id: uid,
+        comment_id: item.CommentID,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+        type: 2,
+        is_delete: !!item.ISDel,
+      });
+    }
+    else {
+      console.error('no uid');
+    }
+  }
+  last = 1348457;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Behavior WHERE ID>${last} AND BehaviorNumber=231;`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await UserCommentRelation.create({
+      user_id: item.UID,
+      comment_id: item.CommentID,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+      type: 1,
+      is_delete: !!item.ISDel,
+    });
+  }
+}
+
 async function modifyWorksComment() {
   let last = 631;
   let sql = `SELECT
@@ -1398,31 +1446,3 @@ async function modifyAuthorComment() {
     }
   }
 }
-// async function modifyWorksRelation() {
-//   let last = 0;
-//   let sql = `SELECT
-//     id
-//     FROM music_album
-//     WHERE id>${last}`;
-//   let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
-//   for(let i = 0, len = res.length; i < len; i++) {
-//     let item = res[i];
-//     let sql2 = `UPDATE works_author_profession_relation
-//       SET works_id=${item.id}
-//       WHERE works_id=${(item.id+'').replace(/^2014/, 2015)}`;
-//     await sequelize.query(sql2, { type: Sequelize.QueryTypes.UPDATE });
-//   }
-//   last = 0;
-//   sql = `SELECT
-//     id
-//     FROM image_album
-//     WHERE id>${last}`;
-//   res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
-//   for(let i = 0, len = res.length; i < len; i++) {
-//     let item = res[i];
-//     let sql2 = `UPDATE works_author_profession_relation
-//       SET works_id=${item.id}
-//       WHERE works_id=${(item.id+'').replace(/^2013/, 2015)}`;
-//     await sequelize.query(sql2, { type: Sequelize.QueryTypes.UPDATE });
-//   }
-// }
