@@ -28,18 +28,18 @@ class Controller extends egg.Controller {
       raw: true,
     });
     let banner = [];
-    let list = [];
+    let list = {};
     if(tag.length) {
       [banner, list] = await Promise.all([
         service.find.banner(tag[0].id),
         service.find.list(tag[0].id, 0, limit)
       ]);
+      list.limit = limit;
     }
     ctx.body = ctx.helper.okJSON({
       tag,
       banner,
       list,
-      limit,
     });
   }
   async tag() {
@@ -49,11 +49,8 @@ class Controller extends egg.Controller {
     if(!body.tag) {
       return;
     }
-    let [banner, list] = await service.find.data(body.tag);
-    ctx.body = ctx.helper.okJSON({
-      banner,
-      list,
-    });
+    let res = await service.find.list(body.tag, body.offset || 0, body.limit || limit);
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

@@ -406,6 +406,9 @@ class Service extends egg.Service {
    * @returns Object{ data:Array<Object>, count:int }
    */
   async comment(id, offset, limit) {
+    if(!id) {
+      return;
+    }
     let [data, count] = await Promise.all([
       this.commentData(id, offset, limit),
       this.commentCount(id)
@@ -458,6 +461,9 @@ class Service extends egg.Service {
    * @returns int
    */
   async commentCount(id) {
+    if(!id) {
+      return;
+    }
     const { app } = this;
     let cacheKey = 'worksCommentCount_' + id;
     let res = await app.redis.get(cacheKey);
@@ -558,7 +564,9 @@ class Service extends egg.Service {
     const { app, service } = this;
     let cache = await Promise.all(
       idList.map(function(id) {
-        return app.redis.get('worksAuthors_' + id);
+        if(id !== null && id !== undefined) {
+          return app.redis.get('worksAuthors_' + id);
+        }
       })
     );
     let noCacheIdList = [];
@@ -599,7 +607,8 @@ class Service extends egg.Service {
           let temp = hash[worksId] = hash[worksId] || [];
           temp.push(item);
         });
-        noCacheIdList.forEach(function(id, i) {
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
           let item = hash[id];
           if(item) {
             cache[i] = item;
@@ -900,8 +909,8 @@ class Service extends egg.Service {
         if(!worksHash[id]) {
           worksHash[id] = item;
         }
-        if(!typeHash[id]) {
-          typeHash[id] = true;
+        if(!typeHash[item.type]) {
+          typeHash[item.type] = true;
           typeList.push(item.type);
         }
       }

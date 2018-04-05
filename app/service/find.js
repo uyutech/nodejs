@@ -44,6 +44,16 @@ class Service extends egg.Service {
     if(!tag) {
       return;
     }
+    let [data, count] = await Promise.all([
+      this.listData(tag, offset, limit),
+      this.listCount(tag)
+    ]);
+    return { data, count };
+  }
+  async listData(tag, offset, limit) {
+    if(!tag) {
+      return;
+    }
     offset = parseInt(offset) || 0;
     limit = parseInt(limit) || 1;
     if(offset < 0 || limit < 1) {
@@ -113,7 +123,7 @@ class Service extends egg.Service {
           });
           break;
       }
-    });
+    });console.log(111,worksIdList)
     let [worksList, authorList] = await Promise.all([
       service.works.infoListPlus(worksIdList),
       service.author.infoList(authorIdList)
@@ -155,6 +165,36 @@ class Service extends egg.Service {
           break;
       }
     });
+    return res;
+  }
+  async listCount(tag) {
+    if(!tag) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'findCount_' + tag;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.recommend.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        tag,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 }
