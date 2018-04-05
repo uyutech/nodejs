@@ -1,21 +1,26 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/4/4.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('text', {
+  return sequelizeCircling.define('recommend', {
     id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
-    work_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      unique: true,
+    tag: {
+      type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
+    },
+    type: {
+      type: Sequelize.SMALLINT.UNSIGNED,
+      allowNull: false,
+      comment: '1大作品，2音乐专辑，3相册，4作者列表，5大作品列表',
     },
     title: {
       type: Sequelize.STRING(32),
@@ -27,7 +32,12 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    type: {
+    describe: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      defaultValue: '',
+    },
+    weight: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
@@ -37,19 +47,9 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
   }, {
     indexes: [
     ],
-    comment: '文本类小作品信息',
+    comment: '推荐内容',
   });
 };

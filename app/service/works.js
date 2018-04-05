@@ -114,7 +114,7 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
@@ -213,7 +213,7 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.worksId;
           hash[id] = item.num;
         });
@@ -272,7 +272,7 @@ class Service extends egg.Service {
     let imageIdList = [];
     let textIdList = [];
     let workIdList = [];
-    res.forEach(function(item) {
+    res.forEach((item) => {
       switch(item.kind) {
         case 1:
           videoIdList.push(item.workId);
@@ -312,22 +312,22 @@ class Service extends egg.Service {
     let audioHash = {};
     let imageHash = {};
     let textHash = {};
-    videoList.forEach(function(item) {
+    videoList.forEach((item) => {
       if(item) {
         videoHash[item.id] = item;
       }
     });
-    audioList.forEach(function(item) {
+    audioList.forEach((item) => {
       if(item) {
         audioHash[item.id] = item;
       }
     });
-    imageList.forEach(function(item) {
+    imageList.forEach((item) => {
       if(item) {
         imageHash[item.id] = item;
       }
     });
-    textList.forEach(function(item) {
+    textList.forEach((item) => {
       if(item) {
         textHash[item.id] = item;
       }
@@ -360,7 +360,7 @@ class Service extends egg.Service {
         favorCountHash[id] = item;
       }
     })
-    return res.map(function(item) {
+    return res.map((item) => {
       let temp = {
         id: item.workId,
         kind: item.kind,
@@ -518,7 +518,7 @@ class Service extends egg.Service {
     }
     let authorIdList = [];
     let authorIdHash = {};
-    res.forEach(function(item) {
+    res.forEach((item) => {
       let authorId = item.authorId;
       if(!authorIdHash[authorId]) {
         authorIdHash[authorId] = true;
@@ -528,10 +528,10 @@ class Service extends egg.Service {
     if(authorIdList.length) {
       let list = await service.author.infoList(authorIdList);
       let hash = {};
-      list.forEach(function(item) {
+      list.forEach((item) => {
         hash[item.id] = item;
       });
-      res.forEach(function(item) {
+      res.forEach((item) => {
         let authorInfo = hash[item.authorId];
         if(authorInfo) {
           item.headUrl = authorInfo.headUrl;
@@ -594,7 +594,7 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let worksId = item.worksId;
           let temp = hash[worksId] = hash[worksId] || [];
           temp.push(item);
@@ -612,7 +612,7 @@ class Service extends egg.Service {
     let authorIdHash = {};
     cache.forEach(function(list) {
       if(list && list.length) {
-        list.forEach(function(item) {
+        list.forEach((item) => {
           if(!authorIdHash[item.authorId]) {
             authorIdHash[item.authorId] = true;
             authorIdList.push(item.authorId);
@@ -623,12 +623,12 @@ class Service extends egg.Service {
     if(authorIdList.length) {
       let list = await service.author.infoList(authorIdList);
       let hash = {};
-      list.forEach(function(item) {
+      list.forEach((item) => {
         hash[item.id] = item;
       });
       cache.forEach(function(list) {
         if(list && list.length) {
-          list.forEach(function(item) {
+          list.forEach((item) => {
             let authorInfo = hash[item.authorId];
             if(authorInfo) {
               item.headUrl = authorInfo.headUrl;
@@ -727,7 +727,7 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           hash[item.worksType] = hash[item.worksType] || [];
           hash[item.worksType].push(item);
         });
@@ -782,14 +782,14 @@ class Service extends egg.Service {
     }
     // 相同职业合并，并存成hash
     let hash = {};
-    list.forEach(function(item) {
+    list.forEach((item) => {
       hash[item.professionId] = hash[item.professionId] || [];
       hash[item.professionId].push(item);
     });
     // 遍历规则，如遇到则将对应职业的作者们存入
     let lastGroup = -1;
     let last;
-    rule.forEach(function(item) {
+    rule.forEach((item) => {
       let authors = hash[item.professionId];
       if(authors) {
         if(lastGroup !== item.group) {
@@ -833,6 +833,123 @@ class Service extends egg.Service {
     });
     res.push(temp);
     return res;
+  }
+
+  /**
+   * 获取大作品数据，包括主要作者信息
+   * @param worksIdList:Array<int> 大作品id列表
+   * @returns Array<Object>
+   */
+  async infoListPlus(worksIdList) {
+    if(!worksIdList) {
+      return;
+    }
+    if(!worksIdList.length) {
+      return [];
+    }
+    let [worksList, authorList] = await Promise.all([
+      this.infoList(worksIdList),
+      this.authorList(worksIdList)
+    ]);
+    return await this.infoListPlusByAuthor(worksList, authorList);
+  }
+
+  /**
+   * 包装大作品数据，补上主要作者信息
+   * @param worksList:Array<Object> 大作品基本信息
+   * @returns Array<Object>
+   */
+  async infoListPlusByData(worksList) {
+    if(!worksList) {
+      return;
+    }
+    if(!worksList.length) {
+      return [];
+    }
+    let authorIdList = worksList.map(function(item) {
+      return item.id;
+    });
+    let authorList = await this.authorList(authorIdList);
+    return await this.infoListPlusByAuthor(worksList, authorList);
+  }
+
+  /**
+   * 包装大作品数据，补上主要作者信息
+   * @param worksList:Array<Object> 大作品基本信息
+   * @param authorList:Array<Object> 作者基本信息
+   * @returns Array<Object>
+   */
+  async infoListPlusByAuthor(worksList, authorList) {
+    if(!worksList) {
+      return;
+    }
+    if(!worksList.length) {
+      return [];
+    }
+    if(!authorList.length) {
+      return worksList;
+    }
+    const { ctx } = this;
+    let worksHash = {};
+    let authorHash = {};
+    let typeList = [];
+    let typeHash = {};
+    worksList.forEach((item) => {
+      if(item) {
+        let id = item.id;
+        if(!worksHash[id]) {
+          worksHash[id] = item;
+        }
+        if(!typeHash[id]) {
+          typeHash[id] = true;
+          typeList.push(item.type);
+        }
+      }
+    });
+    authorList.forEach((item) => {
+      if(item && item.length) {
+        if(!authorHash[item[0].worksId]) {
+          authorHash[item[0].worksId] = item;
+        }
+      }
+    });
+    let professionSortHash = {};
+    if(typeList) {
+      let professionSortList = await this.typeListProfessionSort(typeList);
+      professionSortList.forEach((item) => {
+        if(item && item.length) {
+          if(!professionSortHash[item[0].worksType]) {
+            professionSortHash[item[0].worksType] = item;
+          }
+        }
+      });
+    }
+    worksList.forEach((item) => {
+      if(item) {
+        let id = item.id;
+        let author = authorHash[id];
+        if(author) {
+          if(item.type) {
+            let professionSort = professionSortHash[item.type];
+            if(professionSort) {
+              item.professionSort = professionSort;
+              item.author = this.reorderAuthor(author, professionSort)[0];
+            }
+            else {
+              item.author = this.reorderAuthor(author)[0];
+            }
+          }
+          else {
+            item.author = this.reorderAuthor(author)[0];
+            ctx.logger.error('miss type worksId:%s', id);
+          }
+        }
+        else {
+          ctx.logger.error('miss author worksId:%s', id);
+        }
+      }
+    });
+    return worksList;
   }
 }
 

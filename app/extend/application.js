@@ -55,6 +55,9 @@ const worksTypeProfessionSort = require('../model/worksTypeProfessionSort');
 const musicAlbum = require('../model/musicAlbum');
 const musicAlbumWorkRelation = require('../model/musicAlbumWorkRelation');
 const musicAlbumAuthorProfessionRelation = require('../model/musicAlbumAuthorProfessionRelation');
+const recommend = require('../model/recommend');
+const recommendTag = require('../model/recommendTag');
+const recommendBanner = require('../model/recommendBanner');
 
 module.exports = {
   get Sequelize() {
@@ -166,6 +169,9 @@ module.exports = {
         musicAlbum: musicAlbum(this),
         musicAlbumWorkRelation: musicAlbumWorkRelation(this),
         musicAlbumAuthorProfessionRelation: musicAlbumAuthorProfessionRelation(this),
+        recommend: recommend(this),
+        recommendTag: recommendTag(this),
+        recommendBanner: recommendBanner(this),
       };
     }
     return this[MODEL];

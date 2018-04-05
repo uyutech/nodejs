@@ -22,12 +22,12 @@ class Service extends egg.Service {
       return [];
     }
     const { app } = this;
-    let res = await app.model.findAll({
+    let res = await app.model.comment.findAll({
       attributes: [
         'id',
         ['user_id', 'uid'],
         ['author_id', 'aid'],
-        'cotent',
+        'content',
         ['parent_id', 'pid'],
         ['root_id', 'rid'],
         ['create_time', 'createTime']

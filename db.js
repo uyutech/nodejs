@@ -75,6 +75,9 @@ const WorksCommentRelation = require('./app/model/worksCommentRelation')({ seque
 const CircleCommentRelation = require('./app/model/circleCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserWorkRelation = require('./app/model/userWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserCommentRelation = require('./app/model/userCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
+const Recommend = require('./app/model/recommend')({ sequelizeCircling: sequelize, Sequelize });
+const RecommendTag = require('./app/model/recommendTag')({ sequelizeCircling: sequelize, Sequelize });
+const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -97,6 +100,9 @@ const UserCommentRelation = require('./app/model/userCommentRelation')({ sequeli
     await dealComment(pool);
     await dealUserWork(pool);
     await dealUserPost(pool);
+    await Recommend.sync();
+    await RecommendTag.sync();
+    await RecommendBanner.sync();
     // await modifyWorksComment();
     // await modifyAuthorComment();
     console.log('======== END ========');

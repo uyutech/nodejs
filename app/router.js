@@ -334,4 +334,7 @@ module.exports = app => {
 
   app.post('/h5/my2/post', app.middlewares.needLoginJson(), 'h52.my.post');
   app.post('/h5/my2/favor', app.middlewares.needLoginJson(), 'h52.my.favor');
+
+  app.post('/h5/find2/index', 'h52.find.index');
+  app.post('/h5/find2/tag', 'h52.find.tag');
 };
