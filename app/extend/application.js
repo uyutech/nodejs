@@ -58,6 +58,8 @@ const musicAlbumAuthorProfessionRelation = require('../model/musicAlbumAuthorPro
 const recommend = require('../model/recommend');
 const recommendTag = require('../model/recommendTag');
 const recommendBanner = require('../model/recommendBanner');
+const recommendList = require('../model/recommendList');
+const banner = require('../model/banner');
 
 module.exports = {
   get Sequelize() {
@@ -172,6 +174,8 @@ module.exports = {
         recommend: recommend(this),
         recommendTag: recommendTag(this),
         recommendBanner: recommendBanner(this),
+        recommendList: recommendList(this),
+        banner: banner(this),
       };
     }
     return this[MODEL];

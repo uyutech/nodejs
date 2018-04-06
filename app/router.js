@@ -337,4 +337,7 @@ module.exports = app => {
 
   app.post('/h5/find2/index', 'h52.find.index');
   app.post('/h5/find2/tag', 'h52.find.tag');
+
+  app.post('/h5/circling2/index', 'h52.circling.index');
+  app.post('/h5/circling2/post', 'h52.circling.post');
 };

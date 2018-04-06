@@ -1,40 +1,27 @@
 /**
- * Created by army8735 on 2018/4/4.
+ * Created by army8735 on 2018/4/6.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('recommend_banner', {
+  return sequelizeCircling.define('recommend_list', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    tag: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-    },
-    title: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    pic: {
-      type: Sequelize.TEXT,
-      allowNull: false,
-      defaultValue: '',
-    },
-    target_id: {
+    works_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    type: {
+    kind: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '1大作品，2作者，3用户，4画圈',
+      defaultValue: 0,
+      comment: '1视频，2音频，3图片',
     },
     weight: {
       type: Sequelize.SMALLINT.UNSIGNED,
@@ -49,10 +36,15 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'tag_weight',
-        fields: ['tag', 'weight'],
+        name: 'kind_works_id',
+        unique: true,
+        fields: ['kind', 'works_id']
+      },
+      {
+        name: 'kind_weight',
+        fields: ['kind', 'weight']
       }
     ],
-    comment: '推荐banner',
+    comment: '推荐下拉列表',
   });
 };

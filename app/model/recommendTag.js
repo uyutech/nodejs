@@ -8,7 +8,7 @@ module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('recommend_tag', {
     id: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
@@ -17,6 +17,12 @@ module.exports = app => {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
+    },
+    kind: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0总体，1视频，2音频，3图片，4文字',
     },
     is_delete: {
       type: Sequelize.BOOLEAN,

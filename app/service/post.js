@@ -226,6 +226,82 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取全部画圈
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async all(offset, limit) {
+    let [data, count] = await Promise.all([
+      this.allData(offset, limit),
+      this.allCount()
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取全部画圈信息
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async allData(offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let res = await app.model.comment.findAll({
+      attributes: [
+        'id',
+        ['user_id', 'uid'],
+        ['author_id', 'aid'],
+        'content',
+        ['parent_id', 'pid'],
+        ['root_id', 'rid'],
+        ['create_time', 'createTime']
+      ],
+      where: {
+        root_id: 0,
+        is_delete: false,
+      },
+      order: [
+        ['id', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    return res;
+  }
+
+  /**
+   * 获取全部画圈信息
+   * @returns int
+   */
+  async allCount() {
+    const { app } = this;
+    let res = await app.model.comment.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        is_delete: false,
+        root_id: 0,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    return res;
+  }
 }
 
 module.exports = Service;

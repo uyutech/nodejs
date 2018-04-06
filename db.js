@@ -78,6 +78,8 @@ const UserCommentRelation = require('./app/model/userCommentRelation')({ sequeli
 const Recommend = require('./app/model/recommend')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendTag = require('./app/model/recommendTag')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
+const RecommendList = require('./app/model/recommendList')({ sequelizeCircling: sequelize, Sequelize });
+const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -89,6 +91,11 @@ const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircli
       // server: '101.132.140.109',
       database: 'CirclingDB',
     });
+    await Recommend.sync();
+    await RecommendTag.sync();
+    await RecommendBanner.sync();
+    await RecommendList.sync();
+    await Banner.sync();
     await dealAuthor(pool);
     await dealAuthorMainWorks(pool);
     await dealWork(pool);
@@ -100,9 +107,6 @@ const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircli
     await dealComment(pool);
     await dealUserWork(pool);
     await dealUserPost(pool);
-    await Recommend.sync();
-    await RecommendTag.sync();
-    await RecommendBanner.sync();
     // await modifyWorksComment();
     // await modifyAuthorComment();
     console.log('======== END ========');
@@ -960,7 +964,7 @@ async function dealComment(pool) {
   await CircleCommentRelation.sync();
   await Comment.sync();
   await CommentNum.sync();
-  let last = 440045;
+  let last = 440051;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -989,7 +993,7 @@ async function dealComment(pool) {
       });
       await Comment.create({
         id: item.ID,
-        user_id: 0,
+        user_id: item.UID,
         author_id: 0,
         is_author: false,
         content: item.CurrentAuthorID,
@@ -1092,7 +1096,7 @@ async function dealComment(pool) {
       });
       await Comment.create({
         id: item.ID,
-        user_id: 0,
+        user_id: item.UID,
         author_id: 0,
         is_author: false,
         content: item.Content,

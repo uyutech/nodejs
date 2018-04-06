@@ -148,6 +148,88 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取全部圈子
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async all(offset, limit) {
+    let [data, count] = await Promise.all([
+      this.allData(offset, limit),
+      this.allCount()
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取全部圈子信息
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async allData(offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'allCircle_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.circle.findAll({
+      attributes: [
+        'id',
+        'name'
+      ],
+      where: {
+        is_delete: false,
+        is_public: true,
+      },
+      offset,
+      limit,
+      raw: true,
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取全部圈子数量
+   * @returns int
+   */
+  async allCount() {
+    const { app } = this;
+    let cacheKey = 'allCircleCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.circle.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        is_delete: false,
+        is_public: true,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
 }
 
 module.exports = Service;

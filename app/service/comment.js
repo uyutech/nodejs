@@ -95,7 +95,7 @@ class Service extends egg.Service {
         delete item.uid;
         item.isAuthor = true;
       }
-      else {
+      else if(item.uid) {
         if(!userIdHash[item.uid]) {
           userIdHash[item.uid] = true;
           userIdList.push(item.uid);
@@ -136,11 +136,15 @@ class Service extends egg.Service {
     ]);
     userIdHash = {};
     userList.forEach(function(item) {
-      userIdHash[item.id] = item;
+      if(item) {
+        userIdHash[item.id] = item;
+      }
     });
     authorIdHash = {};
     authorList.forEach(function(item) {
-      authorIdHash[item.id] = item;
+      if(item) {
+        authorIdHash[item.id] = item;
+      }
     });
     quotes.forEach(function(item) {
       if(item.isAuthor) {

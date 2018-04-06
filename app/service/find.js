@@ -60,13 +60,11 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'recommend_' + tag + '_' + offset + '_' + limit;
-    let res;
-    if(offset === 0) {
-      res = await app.redis.get(cacheKey);
-    }
+    let cacheKey = 'find_' + tag + '_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
+      app.redis.expire(cacheKey, CACHE_TIME);
     }
     else {
       res = await app.model.recommend.findAll({
@@ -87,9 +85,7 @@ class Service extends egg.Service {
         limit,
         raw: true,
       });
-      if(offset === 0) {
-        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-      }
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
     let worksIdList = [];
     let worksIdHash = {};
@@ -123,7 +119,7 @@ class Service extends egg.Service {
           });
           break;
       }
-    });console.log(111,worksIdList)
+    });
     let [worksList, authorList] = await Promise.all([
       service.works.infoListPlus(worksIdList),
       service.author.infoList(authorIdList)
@@ -184,6 +180,97 @@ class Service extends egg.Service {
       ],
       where: {
         tag,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 根据kind类型获取推荐列表
+   * @param kind:int 类型
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async kind(kind, offset, limit) {
+    if(!kind) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.kindData(kind, offset, limit),
+      this.kindCount(kind)
+    ]);
+    return { data, count };
+  }
+  async kindData(kind, offset, limit) {
+    if(!kind) {
+      return;
+    }
+    kind = parseInt(kind) || 1;
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'findKind_' + kind + '_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+      app.redis.expire(cacheKey, CACHE_TIME);
+    }
+    else {
+      res = await app.model.recommendList.findAll({
+        attributes: [
+          ['works_id', 'worksId']
+        ],
+        where: {
+          kind,
+          is_delete: false,
+        },
+        order: [
+          ['weight', 'DESC']
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    let idList = res.map(function(item) {
+      return item.worksId;
+    });console.log(idList);
+    switch(kind) {
+      case 1:
+        return service.works.infoListPlus(idList);
+    }
+  }
+  async kindCount(kind) {
+    if(!kind) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'findKindCount_' + kind;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.recommendList.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        kind,
         is_delete: false,
       },
       raw: true,
