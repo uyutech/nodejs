@@ -361,16 +361,17 @@ class Service extends egg.Service {
   /**
    * 获取作者的留言数据
    * @param id:int 作者id
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async comment(id, offset, limit) {
+  async commentList(id, uid, offset, limit) {
     if(!id) {
       return;
     }
     let [data, count] = await Promise.all([
-      this.commentData(id, offset, limit),
+      this.commentData(id, uid, offset, limit),
       this.commentCount(id)
     ]);
     return { data, count };
@@ -379,11 +380,12 @@ class Service extends egg.Service {
   /**
    * 获取留言详情
    * @param id:int 作者id
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async commentData(id, offset, limit) {
+  async commentData(id, uid, offset, limit) {
     if(!id) {
       return;
     }
@@ -411,7 +413,7 @@ class Service extends egg.Service {
       .limit(limit)
       .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = await service.comment.plusList(res);
+    res = await service.comment.plusList(res, uid);
     return res;
   }
 

@@ -103,8 +103,12 @@ class Service extends egg.Service {
         if(item.rid !== item.pid && item.rid !== 0 && quoteHash[item.pid]) {
           item.quote = quoteHash[item.pid];
         }
-        item.likeCount = countList[i] || 0;
-        item.isLike = likeList[i];
+        if(countList) {
+          item.likeCount = countList[i] || 0;
+        }
+        if(likeList) {
+          item.isLike = likeList[i];
+        }
       }
     });
     return dataList;
@@ -217,7 +221,7 @@ class Service extends egg.Service {
    */
   async plusListLike(dataList, uid) {
     if(!dataList || !uid) {
-      return;
+      return {};
     }
     let idList = dataList.map(function(item) {
       if(item) {

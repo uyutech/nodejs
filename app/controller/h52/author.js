@@ -6,7 +6,7 @@
 
 const egg = require('egg');
 
-const limit = 10;
+const LIMIT = 10;
 
 class Controller extends egg.Controller {
   async index() {
@@ -26,25 +26,25 @@ class Controller extends egg.Controller {
       mainWorks,
       musicAlbum,
       workKindList,
-      comment
+      commentList
     ] = await Promise.all([
       service.author.info(authorId),
       service.author.isFollow(authorId, uid),
       service.author.fansCount(authorId),
       service.author.aliases(authorId),
       service.author.outsides(authorId),
-      service.author.mainWorks(authorId, 0, limit),
-      service.author.musicAlbum(authorId, 0, limit),
+      service.author.mainWorks(authorId, 0, LIMIT),
+      service.author.musicAlbum(authorId, 0, LIMIT),
       service.author.workKindList(authorId),
-      service.author.comment(authorId, 0, limit)
+      service.author.commentList(authorId, uid, 0, LIMIT)
     ]);
-    mainWorks.limit = limit;
+    mainWorks.limit = LIMIT;
     let kindWork;
     if(workKindList.length) {
-      kindWork = await service.author.kindWork(authorId, workKindList[0].kind, 0, limit);
-      kindWork.limit = limit;
+      kindWork = await service.author.kindWork(authorId, uid, workKindList[0].kind, 0, LIMIT);
+      kindWork.limit = LIMIT;
     }
-    comment.limit = limit;
+    commentList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       info,
       isFollow,
@@ -55,11 +55,11 @@ class Controller extends egg.Controller {
       musicAlbum,
       workKindList,
       kindWork,
-      comment,
+      commentList,
     });
   }
 
-  async comment() {
+  async commentList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
@@ -67,8 +67,8 @@ class Controller extends egg.Controller {
     if(!authorId) {
       return;
     }
-    let res = await service.author.comment(authorId, body.offset || 0, body.limit || limit);
-    res.limit = limit;
+    let res = await service.author.commentList(authorId, uid, body.offset || 0, LIMIT);
+    res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -88,12 +88,11 @@ class Controller extends egg.Controller {
       return;
     }
     offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || limit;
-    if(offset < 0 || limit < 1) {
+    if(offset < 0) {
       return;
     }
-    let kindWork = await service.author.kindWork(authorId, kind, offset, limit);
-    kindWork.limit = 10;
+    let kindWork = await service.author.kindWork(authorId, kind, offset, LIMIT);
+    kindWork.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(kindWork);
   }
 
