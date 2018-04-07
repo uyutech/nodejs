@@ -120,6 +120,15 @@ class Service extends egg.Service {
     return cache;
   }
 
+  async clearInfoCache(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userInfo_' + id;
+    await app.redis.del(cacheKey);
+  }
+
   /**
    * 获取用户关注的人列表基本信息
    * @param id:int 用户id
