@@ -33,6 +33,9 @@ class Controller extends egg.Controller {
       service.circle.all(0, LIMIT),
       service.post.allData(0, LIMIT)
     ]);
+    if(circle) {
+      circle.limit = LIMIT;
+    }
     if(post) {
       post = await service.comment.plusList(post);
       post = {
@@ -46,6 +49,16 @@ class Controller extends egg.Controller {
       circle,
       post,
     });
+  }
+
+  async circle() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let offset = body.offset || 0;
+    offset = parseInt(offset) || 0;
+    let res = await service.circle.all(0, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 
   async post() {
