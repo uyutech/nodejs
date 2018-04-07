@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2018/4/2.
+ * Created by army8735 on 2018/4/7.
  */
 
 'use strict';
@@ -12,8 +12,7 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let postId = body.postId;
+    let postId = ctx.params.postId;
     if(!postId) {
       return;
     }
@@ -22,22 +21,11 @@ class Controller extends egg.Controller {
       service.post.comment(postId, 0, LIMIT)
     ]);
     comment.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON({
+    await ctx.render('dpost2', {
+      postId,
       info,
       comment,
     });
-  }
-  async comment() {
-    const { ctx, service } = this;
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let postId = body.postId;
-    if(!postId) {
-      return;
-    }
-    let res = await service.post.comment(postId, body.offset || 0, LIMIT);
-    res.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

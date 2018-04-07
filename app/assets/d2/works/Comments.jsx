@@ -9,15 +9,15 @@ import Comment from '../component/comment/Comment.jsx';
 import net from '../common/net';
 import util from '../common/util';
 
-let take;
-let skip = 0;
+let limit = 10;
+let offset = 0;
 let ajax;
 
-class WorksComment extends migi.Component {
+class Comments extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    take = self.props.data.take;
+    limit = self.props.data.limit;
     self.on(migi.Event.DOM, function() {
       let page = self.ref.page;
       let page2 = self.ref.page2;
@@ -25,13 +25,13 @@ class WorksComment extends migi.Component {
         if(page2) {
           page2.index = i;
         }
-        skip = (i - 1) * take;
+        offset = (i - 1) * limit;
         self.loadPage();
       });
       if(page2) {
         page2.on('page', function(i) {
           page.index = i;
-          skip = (i - 1) * take;
+          offset = (i - 1) * limit;
           self.loadPage();
         });
       }
@@ -43,10 +43,10 @@ class WorksComment extends migi.Component {
     if(ajax) {
       ajax.abort();
     }
-    ajax = net.postJSON('/api2/works/comment', { worksId: self.props.worksId , skip, take }, function(res) {
+    ajax = net.postJSON('/api2/works/comment', { worksId: self.props.worksId , offset, limit }, function(res) {
       if(res.success) {
         let data = res.data;
-        skip += take;
+        offset += limit;
         comment.setData(data.data);
       }
       else {
@@ -65,7 +65,7 @@ class WorksComment extends migi.Component {
       <div class="fn">
         <ul class="type fn-clear"
             onClick={ { li: this.switchType2 } }>
-          <li class="cur" rel="0">全部<small>{ this.props.data.size }</small></li>
+          <li class="cur" rel="0">全部<small>{ this.props.data.count }</small></li>
           {
             this.props.isLogin
               ? <li rel="1">我的</li>
@@ -74,11 +74,11 @@ class WorksComment extends migi.Component {
         </ul>
       </div>
       <Page ref="page"
-            total={ Math.ceil(this.props.data.size / take) }/>
+            total={ Math.ceil(this.props.data.count / limit) }/>
       <Comment ref="comment"
                data={ this.props.data.data }/>
     </div>;
   }
 }
 
-export default WorksComment;
+export default Comments;

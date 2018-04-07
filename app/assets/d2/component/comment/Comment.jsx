@@ -33,8 +33,8 @@ class Comment extends migi.Component {
         <div class="profile fn-clear">
           <a class="pic"
              href={ item.isAuthor
-               ? '/author/' + item.authorId
-               : '/user/' + item.userId }>
+               ? '/author/' + item.aid
+               : '/user/' + item.uid }>
             <img class="pic"
                  src={ util.autoSsl(util.img60_60_80(item.headUrl
                    || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
@@ -42,9 +42,9 @@ class Comment extends migi.Component {
           <div class="txt">
             <a class="name"
                href={ item.isAuthor
-                 ? '/author/' + item.authorId
-                 : '/user/' + item.userId }>{ item.isAuthor ? item.name : item.nickname }</a>
-            <small class="time" rel={ 1 }>{ util.formatDate(item.updateTime) }</small>
+                 ? '/author/' + item.aid
+                 : '/user/' + item.uid }>{ item.isAuthor ? item.name : item.nickname }</a>
+            <small class="time" rel={ 1 }>{ util.formatDate(item.createTime) }</small>
           </div>
         </div>
       </div>

@@ -297,10 +297,15 @@ module.exports = app => {
 
   app.get('/d/author2/:authorId', 'd2.author.index');
 
+  app.get('/d/post2/:postId', 'd2.post.index');
+
   app.post('/d/api2/works/comment', 'api2.works.comment');
   app.post('/d/api2/works/like', app.middlewares.needLoginJson(), 'api2.works.like');
   app.post('/d/api2/works/favor', app.middlewares.needLoginJson(), 'api2.works.favor');
+
   app.post('/d/api2/author/comment', 'api2.author.comment');
+
+  app.post('/d/api2/post/comment', 'api2.post.comment');
 
   app.get('/count/worksCommentNum', app.middlewares.needLoginJson(), 'count.worksCommentNum');
   app.get('/count/authorCommentNum', app.middlewares.needLoginJson(), 'count.authorCommentNum');

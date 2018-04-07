@@ -51,6 +51,7 @@ module.exports = {
 
     dworks2: './app/view/d2/works.jsx',
     dauthor2: './app/view/d2/author.jsx',
+    dpost2: './app/view/d2/post.jsx',
   },
   output: {
     path: __dirname + '/app/view',

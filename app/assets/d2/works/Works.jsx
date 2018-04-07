@@ -7,7 +7,7 @@
 
 import Title from './Title.jsx';
 import Media from './Media.jsx';
-import WorksComment from './WorksComment.jsx';
+import Comments from './Comments.jsx';
 import Author from './Author.jsx';
 import Text from './Text.jsx';
 import Image from './Image.jsx';
@@ -91,9 +91,9 @@ class Works extends migi.Component {
                kind={ self.kind }
                videoList={ self.videoList }
                audioList={ self.audioList }/>
-        <WorksComment ref="worksComment"
-                      worksId={ self.props.worksId }
-                      data={ self.props.comment }/>
+        <Comments ref="comments"
+                  worksId={ self.props.worksId }
+                  data={ self.props.comment }/>
       </div>
       <div class="side">
         <ul class="sel fn-clear" ref="sel">

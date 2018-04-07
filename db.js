@@ -112,6 +112,7 @@ const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelize
     await dealUserPost(pool);
     // await modifyWorksComment();
     // await modifyAuthorComment();
+    await modifyPostComment();
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -1434,16 +1435,19 @@ async function modifyWorksComment() {
     FROM works_comment_relation
     WHERE id>${last}`;
   let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+  // 遍历每个作品虚拟根评论
   for(let i = 0, len = res.length; i < len; i++) {
     let item = res[i];
     let sql2 = `SELECT id, parent_id, root_id FROM comment
       WHERE root_id=${item.comment_id}`;
+    // 查找其一级评论
     let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
     if(res2.length) {
       for(let j = 0; j < res2.length; j++) {
         let item2 = res2[j];
+        // 部分2+级错误评论的root_id为一级评论id，纠正其root_id
         let sql3 = `UPDATE comment SET root_id=${item2.root_id}
-        WHERE root_id=${item2.id} AND root_id=parent_id`;
+        WHERE root_id=${item2.id} OR parent_id=${item2.id}`;
         await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
       }
     }
@@ -1457,24 +1461,62 @@ async function modifyAuthorComment() {
     FROM author_comment_relation
     WHERE id>${last}`;
   let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+  // 遍历每个作者虚拟根评论
   for(let i = 0, len = res.length; i < len; i++) {
     let item = res[i];
     let sql2 = `SELECT id, parent_id, root_id FROM comment
       WHERE root_id=${item.comment_id}`;
+    // 查找其一级评论
     let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
     if(res2.length) {
       for(let j = 0; j < res2.length; j++) {
         let item2 = res2[j];
+        // 部分2+级错误评论的root_id为一级评论id，纠正其root_id
         let sql3 = `UPDATE comment SET root_id=${item2.root_id}
-        WHERE root_id=${item2.id} AND root_id=parent_id`;
+        WHERE root_id=${item2.id} OR parent_id=${item2.id}`;
         await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
-        // let sql4 = `UPDATE comment SET root_id=${item2.root_id}
-        // WHERE parent_id=${item2.id} AND root_id=-1`;
-        // await sequelize.query(sql4, { type: Sequelize.QueryTypes.UPDATE });
-        let sql5 = `UPDATE comment SET root_id=${item2.root_id}
-        WHERE root_id=${item2.id}`;
-        await sequelize.query(sql5, { type: Sequelize.QueryTypes.UPDATE });
       }
     }
+  }
+}
+async function modifyPostComment() {
+  let last = 440051;
+  // last = 0;
+  // TODO: 这里包含了上面2部分，应该只需要处理一次即可
+  let sql = `SELECT
+    *
+    FROM comment
+    WHERE id>${last} AND parent_id=0 AND root_id=0`;
+  let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+  // 遍历每个根评论
+  for(let i = 0, len = res.length; i < len; i++) {
+    let item = res[i];
+    // 找出直属于它的评论id
+    let sql2 = `SELECT id FROM comment WHERE root_id=${item.id}`;
+    let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
+    let idList = res2.map(function(item) {
+      return item.id;
+    });
+    if(!idList.length) {
+      continue;
+    }
+    // 更新属于这些直属评论的root_id
+    let sql3 = `UPDATE comment set root_id=${item.id}
+      WHERE root_id IN (${idList.join(',')}) OR parent_id IN (${idList.join(',')});`;
+    await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
+    // // 查找其1级评论
+    // let sql2 = `SELECT id, parent_id, root_id FROM comment
+    //   WHERE root_id=${item.id} OR parent_id=${item.id}`;
+    // let res2 = await sequelize.query(sql2, { type: Sequelize.QueryTypes.SELECT });
+    // if(res2.length) {
+    //   // 遍历每个1级评论
+    //   for(let j = 0; j < res2.length; j++) {
+    //     let item2 = res2[j];
+    //     // 部分2+级错误评论的root_id或parent_id为一级评论id，纠正其root_id
+    //     let sql3 = `UPDATE comment SET root_id=${item2.root_id}
+    //     WHERE root_id=${item2.id} OR parent_id=${item2.id}`;
+    //     await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
+    //   }
+    // }
   }
 }

@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 
+const LIMIT = 10;
+
 class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
@@ -16,11 +18,11 @@ class Controller extends egg.Controller {
     }
     let [[info, professionSort], authorList, collection, comment] = await Promise.all([
       service.works.infoAndTypeProfessionSort(worksId),
-      service.works.authorList(worksId),
+      service.works.author(worksId),
       service.works.collection(worksId, uid),
-      service.works.comment(worksId, 0, 10)
+      service.works.comment(worksId, 0, LIMIT)
     ]);
-    comment.take = 10;
+    comment.limit = LIMIT;
     authorList = service.works.reorderAuthor(authorList, professionSort);
     await ctx.render('dworks2', {
       worksId,

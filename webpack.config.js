@@ -53,6 +53,7 @@ module.exports = {
 
     dworks2: './app/assets/d2/works/index.jsx',
     dauthor2: './app/assets/d2/author/index.jsx',
+    dpost2: './app/assets/d2/post/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',
