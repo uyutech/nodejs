@@ -6,33 +6,35 @@
 
 const egg = require('egg');
 
+const LIMIT = 10;
+
 class Controller extends egg.Controller {
-  async post() {
+  async postList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let res = await service.user.post(uid, body.offset || 0, body.limit || 10);
-    res.limit = 10;
+    let res = await service.user.postList(uid, body.offset || 0, LIMIT);
+    res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
-  async favor() {
+  async favorList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [video, audio, image, post] = await Promise.all([
-      service.user.favorVideo(uid, 0, 10),
-      service.user.favorAudio(uid, 0, 10),
-      service.user.favorImage(uid, 0, 10),
-      service.user.favorPost(uid, 0, 10)
+    let [videoList, audioList, imageList, postList] = await Promise.all([
+      service.user.favorVideoList(uid, 0, LIMIT),
+      service.user.favorAudioList(uid, 0, LIMIT),
+      service.user.favorImageList(uid, 0, LIMIT),
+      service.user.favorPostList(uid, 0, LIMIT)
     ]);
-    video.limit = 10;
-    audio.limit = 10;
-    image.limit = 10;
-    post.limit = 10;
+    videoList.limit = LIMIT;
+    audioList.limit = LIMIT;
+    imageList.limit = LIMIT;
+    postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
-      video,
-      audio,
-      image,
-      post,
+      videoList,
+      audioList,
+      imageList,
+      postList,
     });
   }
 }

@@ -12,21 +12,21 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [friend, followUser, fans, followAuthor] = await Promise.all([
-      service.user.friend(uid, 0, limit),
-      service.user.followUser(uid, 0, limit),
-      service.user.fans(uid, 0, limit),
-      service.user.followAuthor(uid, 0, limit)
+    let [friendList, followUserList, fansList, followAuthorList] = await Promise.all([
+      service.user.friendList(uid, 0, limit),
+      service.user.followUserList(uid, 0, limit),
+      service.user.fansList(uid, 0, limit),
+      service.user.followAuthorList(uid, 0, limit)
     ]);
-    friend.limit = limit;
-    followUser.limit = limit;
-    fans.limit = limit;
-    followAuthor.limit = limit;
+    friendList.limit = limit;
+    followUserList.limit = limit;
+    fansList.limit = limit;
+    followAuthorList.limit = limit;
     ctx.body = ctx.helper.okJSON({
-      friend,
-      followUser,
-      fans,
-      followAuthor,
+      friendList,
+      followUserList,
+      fansList,
+      followAuthorList,
     });
   }
 }

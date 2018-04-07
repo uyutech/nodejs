@@ -17,26 +17,26 @@ class Controller extends egg.Controller {
     if(!userId) {
       return;
     }
-    let [info, followPersonCount, fansCount, isFollow, isFans, post] = await Promise.all([
+    let [info, followPersonCount, fansCount, isFollow, isFans, postList] = await Promise.all([
       service.user.info(userId),
       service.user.followPersonCount(userId),
       service.user.fansCount(userId),
       service.user.isFollow(userId, uid),
       service.user.isFans(userId, uid),
-      service.user.post(userId, 0, limit)
+      service.user.postList(userId, 0, limit)
     ]);
     delete info.coins;
-    post.limit = limit;
+    postList.limit = limit;
     ctx.body = ctx.helper.okJSON({
       info,
       followPersonCount,
       fansCount,
       isFollow,
       isFans,
-      post,
+      postList,
     });
   }
-  async post() {
+  async postList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;

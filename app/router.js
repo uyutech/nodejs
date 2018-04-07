@@ -325,15 +325,15 @@ module.exports = app => {
   app.post('/h5/post2/comment', 'h52.post.comment');
 
   app.post('/h5/user2/index', 'h52.user.index');
-  app.post('/h5/user2/post', 'h52.user.post');
+  app.post('/h5/user2/postList', 'h52.user.postList');
   app.post('/h5/user2/follow', app.middlewares.needLoginJson(), 'h52.user.follow');
   app.post('/h5/user2/unFollow', app.middlewares.needLoginJson(), 'h52.user.unFollow');
 
 
   app.post('/h5/relation2/index', app.middlewares.needLoginJson(), 'h52.relation.index');
 
-  app.post('/h5/my2/post', app.middlewares.needLoginJson(), 'h52.my.post');
-  app.post('/h5/my2/favor', app.middlewares.needLoginJson(), 'h52.my.favor');
+  app.post('/h5/my2/postList', app.middlewares.needLoginJson(), 'h52.my.postList');
+  app.post('/h5/my2/favorList', app.middlewares.needLoginJson(), 'h52.my.favorList');
 
   app.post('/h5/find2/index', 'h52.find.index');
   app.post('/h5/find2/tag', 'h52.find.tag');
@@ -343,4 +343,5 @@ module.exports = app => {
   app.post('/h5/circling2/post', 'h52.circling.post');
 
   app.post('/h5/follow2/index', app.middlewares.needLoginJson(), 'h52.follow.index');
+  app.post('/h5/follow2/circle', app.middlewares.needLoginJson(), 'h52.follow.circle');
 };

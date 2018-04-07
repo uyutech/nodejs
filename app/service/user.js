@@ -411,7 +411,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async followUser(id, offset, limit) {
+  async followUserList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -513,7 +513,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async fans(id, offset, limit) {
+  async fansList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -615,7 +615,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async friend(id, offset, limit) {
+  async friendList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -726,7 +726,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async followAuthor(id, offset, limit) {
+  async followAuthorList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -830,7 +830,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ size:int, data:Array<Object> }
    */
-  async post(id, offset, limit) {
+  async postList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -929,7 +929,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async favorVideo(id, offset, limit) {
+  async favorVideoList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -1121,7 +1121,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async favorAudio(id, offset, limit) {
+  async favorAudioList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -1312,7 +1312,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async favorImage(id, offset, limit) {
+  async favorImageList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -1504,7 +1504,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async favorPost(id, offset, limit) {
+  async favorPostList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -1641,8 +1641,8 @@ class Service extends egg.Service {
     });
     let idList = res.map(function(item) {
       return item.circleId;
-    });console.log(idList);
-    res = await service.circle.infoList(idList);console.log(res);
+    });
+    res = await service.circle.infoList(idList);
     return res;
   }
 
