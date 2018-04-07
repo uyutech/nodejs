@@ -268,7 +268,17 @@ class Service extends egg.Service {
       return;
     }
     state = !!state;
-    const { app, ctx } = this;
+    const { app, ctx, service } = this;
+    // 不能超过最大关注数
+    if(state) {
+      let now = await service.user.followPersonCount(uid);
+      if(now > 500) {
+        return {
+          success: false,
+          message: '超过关注人数上限啦',
+        };
+      }
+    }
     // 更新内存中用户对作者关系的状态
     let userRelationCache;
     if(state) {
@@ -340,8 +350,11 @@ class Service extends egg.Service {
       }
     }
     return {
-      state,
-      count,
+      success: true,
+      data: {
+        state,
+        count,
+      },
     };
   }
 

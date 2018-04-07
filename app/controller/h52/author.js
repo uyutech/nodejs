@@ -58,6 +58,7 @@ class Controller extends egg.Controller {
       comment,
     });
   }
+
   async comment() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
@@ -70,6 +71,7 @@ class Controller extends egg.Controller {
     res.limit = limit;
     ctx.body = ctx.helper.okJSON(res);
   }
+
   async kindWork() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
@@ -94,6 +96,7 @@ class Controller extends egg.Controller {
     kindWork.limit = 10;
     ctx.body = ctx.helper.okJSON(kindWork);
   }
+
   async follow() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
@@ -103,8 +106,14 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.author.follow(authorId, uid, true);
-    ctx.body = ctx.helper.okJSON(res);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
   }
+
   async unFollow() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;

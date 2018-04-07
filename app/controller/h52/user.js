@@ -36,6 +36,7 @@ class Controller extends egg.Controller {
       postList,
     });
   }
+
   async postList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
@@ -48,6 +49,7 @@ class Controller extends egg.Controller {
     res.limit = limit;
     ctx.body = ctx.helper.okJSON(res);
   }
+
   async follow() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
@@ -57,8 +59,14 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.user.follow(userId, uid, true);
-    ctx.body = ctx.helper.okJSON(res);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
   }
+
   async unFollow() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;

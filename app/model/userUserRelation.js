@@ -49,10 +49,6 @@ module.exports = app => {
         fields: ['user_id', 'target_id'],
       },
       {
-        name: 'user_id_type',
-        fields: ['user_id', 'type', 'update_time'],
-      },
-      {
         name: 'target_id_type',
         fields: ['target_id', 'type', 'update_time']
       }

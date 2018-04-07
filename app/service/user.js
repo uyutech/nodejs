@@ -121,6 +121,38 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取用户关注的人列表基本信息
+   * @param id:int 用户id
+   * @returns Array<Object>
+   */
+  async followPersonBaseList(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'followPersonBase_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userUserRelation.findAll({
+      attributes: [
+        ['target_id', 'targetId'],
+        'type'
+      ],
+      where: {
+        user_id: id,
+        type: [1, 3],
+        is_delete: false,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
    * 获取用户的关注的人列表，包括用户和作者
    * @param id:int 用户id
    * @param offset:int 分页开始
@@ -162,9 +194,7 @@ class Service extends egg.Service {
       ],
       where: {
         user_id: id,
-        type: {
-          [Sequelize.Op.or]: [1, 3],
-        },
+        type: [1, 3],
         is_delete: false,
       },
       order: [
@@ -244,9 +274,7 @@ class Service extends egg.Service {
       ],
       where: {
         user_id: id,
-        type: {
-          [Sequelize.Op.or]: [1, 3],
-        },
+        type: [1, 3],
         is_delete: false,
       },
       raw: true,
@@ -328,6 +356,16 @@ class Service extends egg.Service {
     }
     state = !!state;
     const { app, ctx } = this;
+    // 不能超过最大关注数
+    if(state) {
+      let now = await service.user.followPersonCount(uid);
+      if(now > 500) {
+        return {
+          success: false,
+          message: '超过关注人数上限啦',
+        };
+      }
+    }
     // 更新内存中用户对作者关系的状态
     let userRelationCache;
     if(state) {
@@ -1669,6 +1707,135 @@ class Service extends egg.Service {
       where: {
         user_id: id,
         type: 1,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取关注的人的画圈
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ size:int, data:Array<Object> }
+   */
+  async followPostList(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let followPersonBaseList = await this.followPersonBaseList(id);
+    let userIdList = [];
+    let authorIdList = [];
+    followPersonBaseList.forEach(function(item) {
+      if(item.type === 1) {
+        userIdList.push(item.targetId);
+      }
+      else {
+        authorIdList.push(item.targetId);
+      }
+    });
+    let [data, count] = await Promise.all([
+      this.followPostData(userIdList, authorIdList, offset, limit),
+      this.followPostCount(id, userIdList, authorIdList)
+    ]);
+    return {
+      data,
+      count,
+    };
+  }
+
+  /**
+   * 获取关注的人的画圈
+   * @param userIdList:Array<int> 关注的用户id列表
+   * @param authorIdList:Array<int> 关注的作者id列表
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async followPostData(userIdList, authorIdList, offset, limit) {
+    if(!userIdList || !authorIdList) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.comment.findAll({
+      attributes: [
+        'id',
+        ['user_id', 'uid'],
+        ['author_id', 'aid'],
+        'content',
+        ['parent_id', 'pid'],
+        ['root_id', 'rid'],
+        ['create_time', 'createTime']
+      ],
+      where: {
+        [Sequelize.Op.or]: [
+          {
+            user_id: userIdList,
+          },
+          {
+            author_id: authorIdList,
+          }
+        ],
+        root_id: 0,
+        is_delete: false,
+      },
+      order: [
+        ['id', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    res = await service.comment.plusList(res);
+    return res;
+  }
+
+  /**
+   * 获取关注的人的画圈数量
+   * @param id:int 用户id
+   * @param userIdList:Array<int> 关注的用户id列表
+   * @param authorIdList:Array<int> 关注的作者id列表
+   * @returns int
+   */
+  async followPostCount(id, userIdList, authorIdList) {
+    if(!userIdList || !authorIdList) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userFollowPostCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.comment.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        [Sequelize.Op.or]: [
+          {
+            user_id: userIdList,
+          },
+          {
+            author_id: authorIdList,
+          }
+        ],
+        root_id: 0,
         is_delete: false,
       },
       raw: true,

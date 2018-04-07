@@ -72,6 +72,10 @@ module.exports = app => {
         fields: ['user_id', 'root_id'],
       },
       {
+        name: 'author_id_root_id',
+        fields: ['author_id', 'root_id'],
+      },
+      {
         name: 'root_id_parent_id',
         fields: ['root_id', 'parent_id'],
       }
