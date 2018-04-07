@@ -17,9 +17,9 @@ class Controller extends egg.Controller {
     if(!userId) {
       return;
     }
-    let [info, followCount, fansCount, isFollow, isFans, post] = await Promise.all([
+    let [info, followPersonCount, fansCount, isFollow, isFans, post] = await Promise.all([
       service.user.info(userId),
-      service.user.followCount(userId),
+      service.user.followPersonCount(userId),
       service.user.fansCount(userId),
       service.user.isFollow(userId, uid),
       service.user.isFans(userId, uid),
@@ -29,7 +29,7 @@ class Controller extends egg.Controller {
     post.limit = limit;
     ctx.body = ctx.helper.okJSON({
       info,
-      followCount,
+      followPersonCount,
       fansCount,
       isFollow,
       isFans,

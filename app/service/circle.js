@@ -52,6 +52,73 @@ class Service extends egg.Service {
     return res;
   }
 
+  async infoList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        return app.redis.get('circleInfo_' + id);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('circleInfo_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let sql = squel.select()
+        .from('circle')
+        .from('circle_type')
+        .field('circle.id')
+        .field('circle.name')
+        .field('circle.describe')
+        .field('circle.banner')
+        .field('circle.is_public', 'isPublic')
+        .field('circle.type')
+        .field('circle_type.name', 'typeName')
+        .where('circle.id IN ?', noCacheIdList)
+        .where('is_delete=false')
+        .where('circle.type=circle_type.id')
+        .toString();console.log(sql);
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          hash[item.id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('circleInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('circleInfo_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
+  }
+
   /**
    * 获取圈子下的画圈
    * @param id:int 圈子id

@@ -30,6 +30,7 @@ const sequelize = new Sequelize('circling', 'root', '87351984@', {
     underscored: true,
     freezeTableName: true,
   },
+  // logging: null,
 });
 
 const Author = require('./app/model/author')({ sequelizeCircling: sequelize, Sequelize });
@@ -80,6 +81,7 @@ const RecommendTag = require('./app/model/recommendTag')({ sequelizeCircling: se
 const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendList = require('./app/model/recommendList')({ sequelizeCircling: sequelize, Sequelize });
 const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Sequelize });
+const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -104,6 +106,7 @@ const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Seq
     await dealWorkAuthorProfession(pool);
     await dealCircle(pool);
     await dealUser(pool);
+    await dealUserCircle(pool);
     await dealComment(pool);
     await dealUserWork(pool);
     await dealUserPost(pool);
@@ -951,6 +954,25 @@ async function dealUser(pool) {
       target_id: item.AuthorID,
       type: 3,
       is_delete: false,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+  }
+}
+
+async function dealUserCircle(pool) {
+  console.log('------- dealUserCircle --------');
+  await UserCircleRelation.sync();
+  let last = 131208;
+  // last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_Circling WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await UserCircleRelation.create({
+      user_id: item.UID,
+      circle_id: item.CirclingID,
+      type: item.FollowType,
+      is_delete: item.ISDel,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });

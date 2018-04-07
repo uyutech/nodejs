@@ -356,11 +356,6 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
     let [data, count] = await Promise.all([
       this.commentData(id, offset, limit),
       this.commentCount(id)

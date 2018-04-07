@@ -121,16 +121,118 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取用户的关注的人列表，包括用户和作者
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async followPersonList(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.followPersonData(id, offset, limit),
+      this.followPersonCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取用户的关注的人列表信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async followPersonData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.userUserRelation.findAll({
+      attributes: [
+        ['target_id', 'targetId'],
+        'type'
+      ],
+      where: {
+        user_id: id,
+        type: {
+          [Sequelize.Op.or]: [1, 3],
+        },
+        is_delete: false,
+      },
+      order: [
+        ['update_time', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    let userIdList = [];
+    let authorIdList = [];
+    res.forEach(function(item) {
+      if(item.type === 1) {
+        userIdList.push(item.targetId);
+      }
+      else {
+        authorIdList.push(item.targetId);
+      }
+    });
+    let [userList, authorList] = await Promise.all([
+      service.user.infoList(userIdList),
+      service.author.infoList(authorIdList)
+    ]);
+    let userHash = {};
+    userList.forEach(function(item) {
+      if(item) {
+        userHash[item.id] = item;
+      }
+    });
+    let authorHash = {};
+    authorList.forEach(function(item) {
+      authorHash[item.id] = item;
+    });
+    return res.map(function(item) {
+      let temp = {
+        id: item.targetId,
+        isAuthor: item.type === 3,
+      };
+      if(item.type === 1) {
+        let user = userHash[item.targetId];
+        if(user) {
+          temp.nickname = user.nickname;
+          temp.headUrl = user.headUrl;
+        }
+      }
+      else {
+        let author = authorHash[item.targetId];
+        if(author) {
+          temp.name = author.name;
+          temp.headUrl = author.headUrl;
+          temp.isSettle = author.isSettle;
+        }
+      }
+      return temp;
+    });
+  }
+
+  /**
    * 关注数
    * @param id:int 用户id
    * @returns int
    */
-  async followCount(id) {
+  async followPersonCount(id) {
     if(!id) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'userFollowCount_' + id;
+    let cacheKey = 'userFollowPersonCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -142,7 +244,9 @@ class Service extends egg.Service {
       ],
       where: {
         user_id: id,
-        type: [1, 3],
+        type: {
+          [Sequelize.Op.or]: [1, 3],
+        },
         is_delete: false,
       },
       raw: true,
@@ -1481,6 +1585,101 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
+    return res;
+  }
+
+  /**
+   * 获取用户关注的圈子列表
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async circleList(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.circleData(id, offset, limit),
+      this.circleCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取用户关注的圈子列表信息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async circleData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.userCircleRelation.findAll({
+      attributes: [
+        ['circle_id', 'circleId']
+      ],
+      where: {
+        user_id: id,
+        type: 1,
+        is_delete: false,
+      },
+      order: [
+        ['update_time', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    let idList = res.map(function(item) {
+      return item.circleId;
+    });console.log(idList);
+    res = await service.circle.infoList(idList);console.log(res);
+    return res;
+  }
+
+  /**
+   * 获取用户关注的圈子列表数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async circleCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userCircleCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userCircleRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: 1,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 }

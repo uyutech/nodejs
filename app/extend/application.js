@@ -60,6 +60,7 @@ const recommendTag = require('../model/recommendTag');
 const recommendBanner = require('../model/recommendBanner');
 const recommendList = require('../model/recommendList');
 const banner = require('../model/banner');
+const userCircleRelation = require('../model/userCircleRelation');
 
 module.exports = {
   get Sequelize() {
@@ -176,6 +177,7 @@ module.exports = {
         recommendBanner: recommendBanner(this),
         recommendList: recommendList(this),
         banner: banner(this),
+        userCircleRelation: userCircleRelation(this),
       };
     }
     return this[MODEL];
