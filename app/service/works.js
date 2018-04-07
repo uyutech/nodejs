@@ -236,6 +236,7 @@ class Service extends egg.Service {
   /**
    * 根据大作品id获取小作品集合信息
    * @param id:int 大作品id
+   * @param uid:int 用户id
    * @returns Array<Object>
    */
   async collection(id, uid) {
@@ -401,16 +402,17 @@ class Service extends egg.Service {
   /**
    * 获取评论全部信息
    * @param id:int 作品id
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Object{ data:Array<Object>, count:int }
    */
-  async comment(id, offset, limit) {
+  async commentList(id, uid, offset, limit) {
     if(!id) {
       return;
     }
     let [data, count] = await Promise.all([
-      this.commentData(id, offset, limit),
+      this.commentData(id, uid, offset, limit),
       this.commentCount(id)
     ]);
     return { data, count };
@@ -419,11 +421,12 @@ class Service extends egg.Service {
   /**
    * 获取评论数据
    * @param id:int 作品id
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async commentData(id, offset, limit) {
+  async commentData(id, uid, offset, limit) {
     if(!id) {
       return;
     }
@@ -451,7 +454,7 @@ class Service extends egg.Service {
       .limit(limit)
       .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = await service.comment.plusList(res);
+    res = await service.comment.plusList(res, uid);
     return res;
   }
 
@@ -941,7 +944,6 @@ class Service extends egg.Service {
           if(item.type) {
             let professionSort = professionSortHash[item.type];
             if(professionSort) {
-              item.professionSort = professionSort;
               item.author = this.reorderAuthor(author, professionSort)[0];
             }
             else {

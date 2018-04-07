@@ -311,7 +311,7 @@ module.exports = app => {
   app.get('/count/authorCommentNum', app.middlewares.needLoginJson(), 'count.authorCommentNum');
 
   app.post('/h5/works2/index', 'h52.works.index');
-  app.post('/h5/works2/comment', 'h52.works.comment');
+  app.post('/h5/works2/commentList', 'h52.works.commentList');
   app.post('/h5/works2/like', app.middlewares.needLoginJson(), 'h52.works.like');
   app.post('/h5/works2/favor', app.middlewares.needLoginJson(), 'h52.works.favor');
   app.post('/h5/works2/unLike', app.middlewares.needLoginJson(), 'h52.works.unLike');
@@ -352,4 +352,7 @@ module.exports = app => {
   app.post('/h5/my2/relation2', app.middlewares.needLoginJson(), 'h52.my.relation');
   app.post('/h5/my2/nickname', app.middlewares.needLoginJson(), 'h52.my.nickname');
   app.post('/h5/my2/sign', app.middlewares.needLoginJson(), 'h52.my.sign');
+
+  app.post('/h5/comment2/like', app.middlewares.needLoginJson(), 'h52.comment.like');
+  app.post('/h5/comment2/unLike', app.middlewares.needLoginJson(), 'h52.comment.unLike');
 };

@@ -48,10 +48,6 @@ class Service extends egg.Service {
     if(!uid || !worksId || !workId || !type) {
       return;
     }
-    type = parseInt(type);
-    if(type !== 1 && type !== 2) {
-      return;
-    }
     state = !!state;
     let kind = this.getKind(workId);
     if(!kind) {
@@ -59,16 +55,16 @@ class Service extends egg.Service {
     }
     const { app, ctx } = this;
     // 更新内存中用户对作品关系的状态
-    let userRelationCache;
+    let cache;
     if(state) {
-      userRelationCache = app.redis.setex('userWorkRelation_' + uid + '_' + workId + '_' + type, CACHE_TIME, 'true');
+      cache = app.redis.setex('userWorkRelation_' + uid + '_' + workId + '_' + type, CACHE_TIME, 'true');
     }
     else {
-      userRelationCache = app.redis.setex('userWorkRelation_' + uid + '_' + workId + '_' + type, CACHE_TIME, 'false');
+      cache = app.redis.setex('userWorkRelation_' + uid + '_' + workId + '_' + type, CACHE_TIME, 'false');
     }
     // 入库
     await Promise.all([
-      userRelationCache,
+      cache,
       app.model.userWorkRelation.upsert({
         user_id: uid,
         works_id: worksId,
@@ -122,13 +118,8 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      if(res) {
-        count = res.num;
-        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
-      }
-      else {
-        ctx.logger.error('workCount_%s_%s find null', workId, type);
-      }
+      count = res.num || 0;
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
     }
     return {
       state,
