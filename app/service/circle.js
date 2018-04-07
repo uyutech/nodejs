@@ -126,7 +126,7 @@ class Service extends egg.Service {
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async post(id, offset, limit) {
+  async postList(id, offset, limit) {
     if(!id) {
       return;
     }
@@ -285,6 +285,81 @@ class Service extends egg.Service {
       where: {
         is_delete: false,
         is_public: true,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 是否关注了圈子
+   * @param id:int 圈子id
+   * @param uid:int 当前登录用户id
+   * @returns boolean
+   */
+  async isFollow(id, uid) {
+    if(!id) {
+      return;
+    }
+    if(!uid) {
+      return false;
+    }
+    const { app } = this;
+    let cacheKey = 'userCircleRelation_' + uid + '_' + id + '_' + 1;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userCircleRelation.findOne({
+      where: {
+        user_id: uid,
+        type: 1,
+        circle_id: id,
+        is_delete: false,
+      },
+    });
+    if(res) {
+      res = true;
+    }
+    else {
+      res = false;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获得粉丝数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async fansCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'circleFansCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userCircleRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        circle_id: id,
+        type: 1,
+        is_delete: false,
       },
       raw: true,
     });

@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 
+const LIMIT = 10;
+
 class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
@@ -15,14 +17,18 @@ class Controller extends egg.Controller {
     if(!circleId) {
       return;
     }
-    let [info, post] = await Promise.all([
+    let [info, isFollow, fansCount, postList] = await Promise.all([
       service.circle.info(circleId),
-      service.circle.post(circleId, 0, 10)
+      service.circle.isFollow(circleId, uid),
+      service.circle.fansCount(circleId),
+      service.circle.postList(circleId, 0, LIMIT)
     ]);
-    comment.limit = 10;
+    postList.limit = 10;
     ctx.body = ctx.helper.okJSON({
       info,
-      post,
+      isFollow,
+      fansCount,
+      postList,
     });
   }
   async post() {
@@ -33,8 +39,8 @@ class Controller extends egg.Controller {
     if(!circleId) {
       return;
     }
-    let res = await service.circle.post(circleId, body.offset || 0, body.limit || 10);
-    res.limit = 10;
+    let res = await service.circle.postList(circleId, body.offset || 0, LIMIT);
+    res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
 }
