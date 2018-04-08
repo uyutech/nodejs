@@ -10,6 +10,42 @@ const CACHE_TIME = 10;
 
 class Service extends egg.Service {
   /**
+   * 根据评论id列取评论详情
+   * @param id:int 评论id
+   * @returns Object
+   */
+  async info(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'comment_' + id;
+    let res = await this.app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.comment.findOne({
+      attributes: [
+        'id',
+        ['user_id', 'uid'],
+        ['author_id', 'aid'],
+        'content',
+        ['parent_id', 'pid'],
+        ['root_id', 'rid'],
+        ['create_time', 'createTime']
+      ],
+      where: {
+        id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
    * 根据评论id列表获取评论详情
    * @param idList:Array<int> 评论id列表
    * @returns Array<Object>
@@ -21,50 +57,190 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app } = this;
-    let res = await app.model.comment.findAll({
-      attributes: [
-        'id',
-        ['user_id', 'uid'],
-        ['author_id', 'aid'],
-        'content',
-        ['parent_id', 'pid'],
-        ['root_id', 'rid'],
-        ['create_time', 'createTime']
-      ],
-      where: {
-        id: idList,
-        is_delete: false,
-      },
-      raw: true,
+    const { app, service } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        return app.redis.get('comment_' + id);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('comment_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
     });
-    return res;
+    if(noCacheIdList.length) {
+      let res = await app.model.comment.findAll({
+        attributes: [
+          'id',
+          ['user_id', 'uid'],
+          ['author_id', 'aid'],
+          'content',
+          ['parent_id', 'pid'],
+          ['root_id', 'rid'],
+          ['create_time', 'createTime']
+        ],
+        where: {
+          id: idList,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.id;
+          hash[id] = item;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id];
+          if(temp) {
+            cache[i] = temp;
+            app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
+          }
+          else {
+            app.redis.setex('comment_' + id, CACHE_TIME, 'null');
+          }
+        });
+      }
+    }
+    return cache;
   }
 
   /**
-   * 包装评论数据，补上用户信息
+   * 包装评论数据，补上用户信息、点赞信息
    * @param data:Object 评论基本信息
-   * @returns Array<Object>
+   * @param uid:int 用户id
+   * @returns Object
    */
-  async plus(data) {
+  async plus(data, uid) {
+    if(!data) {
+      return;
+    }
+    let [{ quote, authorHash, userHash }, { count, like }] = await Promise.all([
+      this.plusQuoteAndPerson(data),
+      this.plusLike(data, uid)
+    ]);
+    if(data.isAuthor) {
+      let author = authorHash[data.aid];
+      if(author) {
+        data.name = author.name;
+        data.headUrl = author.headUrl;
+      }
+    }
+    else {
+      let user = userHash[data.uid];
+      if(user) {
+        data.nickname = user.nickname;
+        data.headUrl = user.headUrl;
+      }
+    }
+    if(data.rid !== data.pid && data.rid !== 0 && quote) {
+      data.quote = quote;
+    }
+    data.likeCount = count || 0;
+    data.isLike = like;
+    return data;
+  }
+
+  /**
+   * 获取评论引用数据和用户数据
+   * @param data:Object 评论基本信息
+   * @returns Object{ userHash, authorHash, quote }
+   */
+  async plusQuoteAndPerson(data) {
     if(!data) {
       return;
     }
     const { service } = this;
+    let userIdList = [];
+    let userIdHash = {};
+    let authorIdList = [];
+    let authorIdHash = {};
+    let quoteId;
     if(data.aid) {
+      if(!authorIdHash[data.aid]) {
+        authorIdHash[data.aid] = true;
+        authorIdList.push(data.aid);
+      }
       delete data.uid;
       data.isAuthor = true;
-      let author = await service.author.info(data.aid);
-      data.name = author.name;
-      data.headUrl = author.headUrl;
     }
-    else {
+    else if(data.uid) {
+      if(!userIdHash[data.uid]) {
+        userIdHash[data.uid] = true;
+        userIdList.push(data.uid);
+      }
       delete data.aid;
-      let user = await service.user.info(data.uid);
-      data.nickname = user.nickname;
-      data.headUrl = user.headUrl;
     }
-    return data;
+    if(data.rid !== data.pid && data.rid !== 0) {
+      quoteId = data.pid;
+    }
+    let quote = await this.info(quoteId);
+    if(quote) {
+      if(quote.aid) {
+        if(!authorIdHash[quote.aid]) {
+          authorIdHash[quote.aid] = true;
+          authorIdList.push(quote.aid);
+        }
+        delete quote.uid;
+        quote.isAuthor = true;
+      }
+      else {
+        if(!userIdHash[quote.uid]) {
+          userIdHash[quote.uid] = true;
+          userIdList.push(quote.uid);
+        }
+        delete quote.aid;
+      }
+      if(quote.content.length > 60) {
+        quote.slice = true;
+        quote.content = quote.content.slice(0, 60) + '...';
+      }
+    }
+    let [userList, authorList] = await Promise.all([
+      service.user.infoList(userIdList),
+      service.author.infoList(authorIdList)
+    ]);
+    let userHash = {};
+    userList.forEach(function(item) {
+      if(item) {
+        userHash[item.id] = item;
+      }
+    });
+    let authorHash = {};
+    authorList.forEach(function(item) {
+      if(item) {
+        authorHash[item.id] = item;
+      }
+    });
+    if(quote) {
+      if(quote.isAuthor) {
+        quote.name = authorHash[quote.aid].name;
+        quote.headUrl = authorHash[quote.aid].headUrl;
+      }
+      else {
+        quote.nickname = userHash[quote.uid].nickname;
+        quote.headUrl = userHash[quote.uid].headUrl;
+      }
+    }
+    return {
+      quote,
+      authorHash,
+      userHash,
+    };
   }
 
   /**
@@ -215,6 +391,27 @@ class Service extends egg.Service {
 
   /**
    * 根据评论数据获取其点赞数和是否点赞
+   * @param data:Object 评论
+   * @param uid:int 用户id
+   * @returns Object{ count, like }
+   */
+  async plusLike(data, uid) {
+    if(!data || !uid) {
+      return {};
+    }
+    let id = data.id;
+    let [count, like] = await Promise.all([
+      this.likeCount(id),
+      this.isLike(id, uid)
+    ]);
+    return {
+      count,
+      like,
+    }
+  }
+
+  /**
+   * 根据评论数据获取其点赞数和是否点赞
    * @param dataList:Array<Object> 评论列表
    * @param uid:int 用户id
    * @returns Object{ countList, likeList }
@@ -236,6 +433,38 @@ class Service extends egg.Service {
       countList,
       likeList,
     };
+  }
+
+  /**
+   * 获取评论点赞数
+   * @param id:int 评论id
+   * @returns int
+   */
+  async likeCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'commentCount_' + id + '_1';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userCommentRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        comment_id: id,
+        type: 1,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    res = res.num || 0;
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
   }
 
   /**
@@ -303,6 +532,40 @@ class Service extends egg.Service {
       }
     }
     return cache;
+  }
+
+  /**
+   * 获取评论是否点赞
+   * @param id: 评论id
+   * @param uid:int 用户id
+   * @returns boolean
+   */
+  async isLike(id, uid) {
+    if(!id || !uid) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userCommentRelation_' + uid + '_' + id + '_1';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME)
+      return JSON.parse(res);
+    }
+    res = await app.model.userCommentRelation.findOne({
+      attributes: [
+        ['comment_id', 'commentId']
+      ],
+      where: {
+        user_id: uid,
+        type: 1,
+        comment_id: id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    res = !!res;
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
   }
 
   /**
