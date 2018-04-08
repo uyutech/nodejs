@@ -24,7 +24,7 @@ class Service extends egg.Service {
     const { service } = this;
     let res = await service.comment.info(id);
     if(res) {
-      res = await service.comment.plus(res, uid);
+      res = await service.comment.plusFull(res, uid);
     }
     return res;
   }

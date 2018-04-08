@@ -43,7 +43,6 @@ const WorksAuthorProfessionRelation = require('./app/model/worksAuthorProfession
 const CircleType = require('./app/model/circleType')({ sequelizeCircling: sequelize, Sequelize });
 const Circle = require('./app/model/circle')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTop = require('./app/model/circleTop')({ sequelizeCircling: sequelize, Sequelize });
-const CircleNum = require('./app/model/circleNum')({ sequelizeCircling: sequelize, Sequelize });
 const Tag = require('./app/model/tag')({ sequelizeCircling: sequelize, Sequelize });
 const TagCommentRelation = require('./app/model/tagCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTagRelation = require('./app/model/circleTagRelation')({ sequelizeCircling: sequelize, Sequelize });
@@ -108,6 +107,7 @@ const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelize
     await dealUser(pool);
     await dealUserCircle(pool);
     await dealComment(pool);
+    await dealCircleComment(pool);
     await dealUserWork(pool);
     await dealUserPost(pool);
     await dealCommentMedia(pool);
@@ -817,7 +817,6 @@ async function dealCircle(pool) {
   }
   await Circle.sync();
   await CircleTop.sync();
-  await CircleNum.sync();
   await Tag.sync();
   await CircleTagRelation.sync();
   await TagCommentRelation.sync();
@@ -851,6 +850,7 @@ async function dealCircle(pool) {
   }
   let tagOldIdHash = {};
   last = 2021000000008340;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Tag_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -863,7 +863,8 @@ async function dealCircle(pool) {
     tagOldIdHash[item.ID] = res.dataValues.id;
   }
   last = 977;
-  result = await pool.request().query(`SELECT * FROM dbo.Concern_Cirling_tag WHERE ID>${last};`);
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Concern_Cirling_TAG WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     await CircleTagRelation.create({
@@ -876,6 +877,7 @@ async function dealCircle(pool) {
     });
   }
   last = 291033;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Tag_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1049,23 +1051,25 @@ async function dealComment(pool) {
         where: {
           comment_id: item.ID,
         },
+        raw: true,
       });
       let circleIdHash = {};
       if(tagComment && tagComment.length) {
         let ids = tagComment.map(function(item) {
-          return item.dataValues.tag_id;
+          return item.tag_id;
         });
         let circleTag = await CircleTagRelation.findAll({
           attributes: ['circle_id'],
           where: {
             tag_id: ids,
           },
+          raw: true,
         });
         if(circleTag && circleTag.length) {
           ids = [];
           let hash = {};
           circleTag.forEach(function(item) {
-            let id = item.dataValues.circle_id;
+            let id = item.circle_id;
             if(!hash[id]) {
               hash[id] = true;
               ids.push(id);
@@ -1078,38 +1082,29 @@ async function dealComment(pool) {
               circle_id: id,
               comment_id: item.ID,
               type: 1,
-              is_delete: !!item.ISDel,
-              create_time: item.CreateTime,
-              update_time: item.CreateTime,
             });
           }
         }
       }
-      if(item.CirclingIDList) {
-        let list = item.CirclingIDList.split(',');
-        for(let j = 0; j < list.length; j++) {
-          if(circleIdHash[list[j]]) {
-            await CircleCommentRelation.update({
-              type: 0,
-            }, {
-              where: {
-                circle_id: circleIdHash[list[j]],
-                comment_id: item.ID,
-              },
-            });
-          }
-          else {
-            await CircleCommentRelation.create({
-              circle_id: list[j],
-              comment_id: item.ID,
-              type: 0,
-              is_delete: !!item.ISDel,
-              create_time: item.CreateTime,
-              update_time: item.CreateTime,
-            });
-          }
-        }
-      }
+      // if(item.CirclingIDList) {
+      //   let list = item.CirclingIDList.split(',');
+      //   for(let j = 0; j < list.length; j++) {
+      //     let circleId = list[j];
+      //     await CircleCommentRelation.upsert({
+      //       circle_id: circleId,
+      //       comment_id: item.ID,
+      //       type: 0,
+      //       is_delete: !!item.ISDel,
+      //       create_time: item.CreateTime,
+      //       update_time: item.CreateTime,
+      //     }, {
+      //       where: {
+      //         circle_id: circleId,
+      //         comment_id: item.ID,
+      //       },
+      //     });
+      //   }
+      // }
     }
     // 作品主页虚拟留言
     else if(item.RootID === -4) {
@@ -1147,6 +1142,53 @@ async function dealComment(pool) {
         root_id: item.RootID,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
+      });
+    }
+  }
+}
+
+async function dealCircleComment(pool) {
+  console.log('------- dealCircleComment --------');
+  let last = 291033;
+  // last = 0;
+  let hash = {};
+  let result = await pool.request().query(`SELECT * FROM dbo.Concern_Tag_Comment WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let circleId = hash[item.TagID];
+    if(!circleId) {
+      let tag = await Tag.findOne({
+        attributes: ['id'],
+        where: {
+          temp_id: item.TagID,
+        },
+        raw: true,
+      });
+      circleId = await CircleTagRelation.findOne({
+        attributes: [
+          ['circle_id', 'circleId']
+        ],
+        where: {
+          tag_id: tag.id,
+        },
+        raw: true,
+      });
+      if(circleId) {
+        circleId = circleId.circleId;
+        if(circleId) {
+          hash[item.TagID] = circleId;
+        }
+      }
+    }
+    if(circleId) {
+      await CircleCommentRelation.upsert({
+        circle_id: circleId,
+        comment_id: item.CommentID,
+        type: 0,
+      }, {
+        where: {
+          comment_id: item.CommentID,
+        },
       });
     }
   }
@@ -1563,5 +1605,12 @@ async function modifyPostComment() {
     //     await sequelize.query(sql3, { type: Sequelize.QueryTypes.UPDATE });
     //   }
     // }
+  }
+}
+
+async function temp(pool) {
+  let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE CirclingIDList IS NOT NULL;`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
   }
 }

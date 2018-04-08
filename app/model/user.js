@@ -26,7 +26,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,
-      comment: '0正常，1红名单，2黑名单',
+      comment: '0正常，1红名单，2黑名单，3假账号',
     },
     reg_state: {
       type: Sequelize.TINYINT.UNSIGNED,
