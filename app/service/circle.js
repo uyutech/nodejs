@@ -37,7 +37,6 @@ class Service extends egg.Service {
       .field('circle.type')
       .field('circle_type.name', 'typeName')
       .where('circle.id=?', id)
-      .where('is_delete=false')
       .where('circle.type=circle_type.id')
       .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
@@ -97,9 +96,8 @@ class Service extends egg.Service {
         .field('circle.type')
         .field('circle_type.name', 'typeName')
         .where('circle.id IN ?', noCacheIdList)
-        .where('is_delete=false')
         .where('circle.type=circle_type.id')
-        .toString();console.log(sql);
+        .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
@@ -182,7 +180,7 @@ class Service extends egg.Service {
       .limit(limit)
       .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = await service.comment.plusList(res, uid);
+    res = await service.comment.plusListFull(res, uid);
     return res;
   }
 

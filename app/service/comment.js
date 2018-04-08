@@ -224,7 +224,7 @@ class Service extends egg.Service {
   }
 
   /**
-   * 包装评论数据，补上用户信息、点赞信息、收藏信息、附件媒体
+   * 包装评论数据，补上用户信息、点赞信息
    * @param data:Object 评论基本信息
    * @param uid:int 用户id
    * @returns Object
@@ -235,13 +235,54 @@ class Service extends egg.Service {
     }
     let [
       { quote, authorHash, userHash },
+      [ likeCount, isLike ]
+    ] = await Promise.all([
+      this.quoteAndPerson(data),
+      this.operateRelation(data.id, uid, 1)
+    ]);
+    if(data.isAuthor) {
+      let author = authorHash[data.aid];
+      if(author) {
+        data.name = author.name;
+        data.headUrl = author.headUrl;
+      }
+    }
+    else {
+      let user = userHash[data.uid];
+      if(user) {
+        data.nickname = user.nickname;
+        data.headUrl = user.headUrl;
+      }
+    }
+    if(data.rid !== data.pid && data.rid !== 0 && quote) {
+      data.quote = quote;
+    }
+    data.likeCount = likeCount || 0;
+    data.isLike = isLike;
+    return data;
+  }
+
+  /**
+   * 包装评论数据，补上用户信息、点赞信息、收藏信息、回复数量，附件媒体
+   * @param data:Object 评论基本信息
+   * @param uid:int 用户id
+   * @returns Object
+   */
+  async plusFull(data, uid) {
+    if(!data) {
+      return;
+    }
+    let [
+      { quote, authorHash, userHash },
       [ likeCount, isLike ],
       [ favorCount, isFavor ],
+      replyCount,
       media
     ] = await Promise.all([
-      this.plusQuoteAndPerson(data),
-      this.plusRelation(data, uid, 1),
-      this.plusRelation(data, uid, 2),
+      this.quoteAndPerson(data),
+      this.operateRelation(data.id, uid, 1),
+      this.operateRelation(data.id, uid, 2),
+      this.replyCount(data.id),
       this.media(data.id)
     ]);
     if(data.isAuthor) {
@@ -265,6 +306,7 @@ class Service extends egg.Service {
     data.isLike = isLike;
     data.favorCount = favorCount || 0;
     data.isFavor = isFavor;
+    data.replyCount = replyCount || 0;
     if(media) {
       media.forEach(function(item) {
         delete item.commentId;
@@ -279,7 +321,7 @@ class Service extends egg.Service {
    * @param data:Object 评论基本信息
    * @returns Object{ userHash, authorHash, quote }
    */
-  async plusQuoteAndPerson(data) {
+  async quoteAndPerson(data) {
     if(!data) {
       return;
     }
@@ -363,30 +405,33 @@ class Service extends egg.Service {
   }
 
   /**
-   * 包装评论数据，补上用户信息、点赞信息、收藏信息
+   * 包装评论数据，补上用户信息、点赞信息、收藏信息、回复数、媒体信息
    * @param dataList:Array<Object> 评论基本信息
    * @param uid:int 用户id
    * @returns Array<Object>
    */
-  async plusList(dataList, uid) {
+  async plusListFull(dataList, uid) {
     if(!dataList) {
       return;
     }
     if(!dataList.length) {
       return [];
     }
+    let idList = dataList.map(function(item) {
+      return item.id;
+    });
     let [
       { quoteHash, authorHash, userHash },
       [ likeCountList, likeList ],
       [ favorCountList, favorList ],
+      replyCountList,
       mediaList
     ] = await Promise.all([
-      this.plusListQuoteAndPerson(dataList),
-      this.plusRelationList(dataList, uid, 1),
-      this.plusRelationList(dataList, uid, 2),
-      this.mediaList(dataList.map(function(item) {
-        return item.id;
-      }))
+      this.quoteAndPersonList(dataList),
+      this.operateRelationList(idList, uid, 1),
+      this.operateRelationList(idList, uid, 2),
+      this.replyCountList(idList),
+      this.mediaList(idList)
     ]);
     dataList.forEach(function(item, i) {
       if(item) {
@@ -419,6 +464,9 @@ class Service extends egg.Service {
         if(favorList) {
           item.isFavor = favorList[i];
         }
+        if(replyCountList) {
+          item.replyCount = replyCountList[i] || 0;
+        }
         if(mediaList) {
           let media = mediaList[i];
           if(media) {
@@ -439,7 +487,7 @@ class Service extends egg.Service {
    * @param uid:int 用户id
    * @returns Array<Object>
    */
-  async plusListNoFavor(dataList, uid) {
+  async plusList(dataList, uid) {
     if(!dataList) {
       return;
     }
@@ -450,8 +498,8 @@ class Service extends egg.Service {
       { quoteHash, authorHash, userHash },
       [ likeCountList, likeList ]
     ] = await Promise.all([
-      this.plusListQuoteAndPerson(dataList),
-      this.plusRelationList(dataList, uid, 1)
+      this.quoteAndPersonList(dataList),
+      this.operateRelationList(dataList, uid, 1)
     ]);
     dataList.forEach(function(item, i) {
       if(item) {
@@ -488,7 +536,7 @@ class Service extends egg.Service {
    * @param dataList:Array<Object> 评论基本信息
    * @returns Object{ userHash, authorHash, quoteHash }
    */
-  async plusListQuoteAndPerson(dataList) {
+  async quoteAndPersonList(dataList) {
     if(!dataList || !dataList.length) {
       return {};
     }
@@ -583,17 +631,16 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据评论数据获取其点赞数和是否点赞
-   * @param data:Object 评论
+   * 根据评论id获取其点赞数和是否点赞
+   * @param id:int 评论id
    * @param uid:int 用户id
    * @param type:int 类型
    * @returns Array{ count, state }
    */
-  async plusRelation(data, uid, type) {
-    if(!data || !uid || !type) {
+  async operateRelation(id, uid, type) {
+    if(!id || !uid || !type) {
       return [];
     }
-    let id = data.id;
     let [count, state] = await Promise.all([
       this.relationCount(id, type),
       this.isRelation(id, uid, type)
@@ -605,21 +652,16 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据评论数据获取其点赞数和是否点赞
-   * @param dataList:Array<Object> 评论列表
+   * 根据评论id列表获取其点赞数和是否点赞
+   * @param idList:Array<int> 评论列表id
    * @param uid:int 用户id
    * @param type:int 类型
    * @returns Array{ countList:Array, stateList:Array }
    */
-  async plusRelationList(dataList, uid, type) {
-    if(!dataList || !uid || !type) {
+  async operateRelationList(idList, uid, type) {
+    if(!idList || !uid || !type) {
       return [];
     }
-    let idList = dataList.map(function(item) {
-      if(item) {
-        return item.id;
-      }
-    });
     let [countList, stateList] = await Promise.all([
       this.relationCountList(idList, type),
       this.isRelationList(idList, uid, type)
@@ -916,6 +958,102 @@ class Service extends egg.Service {
       state,
       count,
     };
+  }
+
+  /**
+   * 根据评论id获取回复数量
+   * @param id:int
+   * @returns Array<int>
+   */
+  async replyCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'commentReplyCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.reids.expire(cacheKey, CACHE_TIME);
+      return JSON.stringify(res);
+    }
+    res = await app.model.comment.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        root_id: id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    res = res.num || 0;
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+  
+  /**
+   * 根据评论id列表获取回复数量
+   * @param idList:Array<int>
+   * @returns Array<int>
+   */
+  async replyCountList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        return app.redis.get('commentReplyCount_' + id);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('commentReplyCount_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.comment.findAll({
+        attributes: [
+          ['root_id', 'rootId'],
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          root_id: noCacheIdList,
+          is_delete: false,
+        },
+        group: 'rootId',
+        raw: true,
+      });
+      if(res.length) {
+        let hash = {};
+        res.forEach(function(item) {
+          let id = item.rootId;
+          hash[id] = item.num;
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let temp = hash[id] || 0;
+          cache[i] = temp;
+          app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
+        });
+      }
+    }
+    return cache;
   }
 }
 

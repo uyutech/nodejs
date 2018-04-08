@@ -37,7 +37,7 @@ class Controller extends egg.Controller {
       circleList.limit = LIMIT;
     }
     if(postList) {
-      postList = await service.comment.plusList(postList, uid);
+      postList = await service.comment.plusListFull(postList, uid);
       postList = {
         data: postList,
         count: 100,
@@ -68,7 +68,7 @@ class Controller extends egg.Controller {
     let offset = body.offset || 0;
     offset = parseInt(offset) || 0;
     let post = await service.post.allData(offset, LIMIT);
-    post = await service.comment.plusList(post, uid);
+    post = await service.comment.plusListFull(post, uid);
     ctx.body = ctx.helper.okJSON({
       data: post,
       count: 100,

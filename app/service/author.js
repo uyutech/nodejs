@@ -39,7 +39,6 @@ class Service extends egg.Service {
       ],
       where: {
         id,
-        is_delete: false,
       },
       raw: true,
     });
@@ -95,7 +94,6 @@ class Service extends egg.Service {
         ],
         where: {
           id: noCacheIdList,
-          is_delete: false,
         },
         raw: true,
       });
@@ -413,7 +411,7 @@ class Service extends egg.Service {
       .limit(limit)
       .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = await service.comment.plusListNoFavor(res, uid);
+    res = await service.comment.plusList(res, uid);
     return res;
   }
 

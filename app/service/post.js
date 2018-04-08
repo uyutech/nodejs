@@ -45,7 +45,7 @@ class Service extends egg.Service {
     const { service } = this;
     let res = await service.comment.infoList(idList);
     if(res) {
-      res = await service.comment.plusList(res, uid);
+      res = await service.comment.plusListFull(res, uid);
     }
     return res;
   }
@@ -113,7 +113,7 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    res = await service.comment.plusListNoFavor(res, uid);
+    res = await service.comment.plusList(res, uid);
     return res;
   }
 
