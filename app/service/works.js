@@ -454,7 +454,7 @@ class Service extends egg.Service {
       .limit(limit)
       .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = await service.comment.plusList(res, uid);
+    res = await service.comment.plusListNoFavor(res, uid);
     return res;
   }
 

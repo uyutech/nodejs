@@ -15,7 +15,7 @@ class Controller extends egg.Controller {
     if(!commentId) {
       return;
     }
-    let res = await service.comment.like(commentId, uid, true);
+    let res = await service.comment.operate(commentId, uid, 1, true);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -27,7 +27,31 @@ class Controller extends egg.Controller {
     if(!commentId) {
       return;
     }
-    let res = await service.comment.like(commentId, uid, false);
+    let res = await service.comment.operate(commentId, uid, 1, false);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async favor() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let commentId = body.commentId;
+    if(!commentId) {
+      return;
+    }
+    let res = await service.comment.operate(commentId, uid, 2, true);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async unFavor() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let commentId = body.commentId;
+    if(!commentId) {
+      return;
+    }
+    let res = await service.comment.operate(commentId, uid, 2, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

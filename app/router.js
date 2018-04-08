@@ -339,8 +339,8 @@ module.exports = app => {
   app.post('/h5/find2/tag', 'h52.find.tag');
 
   app.post('/h5/circling2/index', 'h52.circling.index');
-  app.post('/h5/circling2/circle', 'h52.circling.circle');
-  app.post('/h5/circling2/post', 'h52.circling.post');
+  app.post('/h5/circling2/circleList', 'h52.circling.circleList');
+  app.post('/h5/circling2/postList', 'h52.circling.postList');
 
   app.post('/h5/follow2/index', app.middlewares.needLoginJson(), 'h52.follow.index');
   app.post('/h5/follow2/circle', app.middlewares.needLoginJson(), 'h52.follow.circle');
@@ -355,4 +355,6 @@ module.exports = app => {
 
   app.post('/h5/comment2/like', app.middlewares.needLoginJson(), 'h52.comment.like');
   app.post('/h5/comment2/unLike', app.middlewares.needLoginJson(), 'h52.comment.unLike');
+  app.post('/h5/comment2/favor', app.middlewares.needLoginJson(), 'h52.comment.favor');
+  app.post('/h5/comment2/unFavor', app.middlewares.needLoginJson(), 'h52.comment.unFavor');
 };
