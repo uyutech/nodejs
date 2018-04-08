@@ -21,9 +21,9 @@ class Controller extends egg.Controller {
       service.circle.info(circleId),
       service.circle.isFollow(circleId, uid),
       service.circle.fansCount(circleId),
-      service.circle.postList(circleId, 0, LIMIT)
+      service.circle.postList(circleId, uid, 0, LIMIT)
     ]);
-    postList.limit = 10;
+    postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       info,
       isFollow,
@@ -31,7 +31,8 @@ class Controller extends egg.Controller {
       postList,
     });
   }
-  async post() {
+
+  async postList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
@@ -39,10 +40,12 @@ class Controller extends egg.Controller {
     if(!circleId) {
       return;
     }
-    let res = await service.circle.postList(circleId, body.offset || 0, LIMIT);
+    let res = await service.circle.postList(circleId, uid, body.offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
+
+  async all() {}
 }
 
 module.exports = Controller;

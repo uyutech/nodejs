@@ -832,8 +832,7 @@ async function dealCircle(pool) {
       banner: item.Banner || '',
       cover: (item.CoverPic || '').replace(/^https?:/, ''),
       type: parseInt(item.CirclingType || 0) + 1,
-      is_delete: !!item.ISDel,
-      is_public: !!item.IsOpen,
+      is_delete: !item.IsOpen,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });

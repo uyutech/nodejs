@@ -37,11 +37,6 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
-    is_public: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,

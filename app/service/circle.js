@@ -13,7 +13,7 @@ const CACHE_TIME = 10;
 class Service extends egg.Service {
   /**
    * 根据id获取圈子信息
-   * @param id
+   * @param id:int 圈子id
    * @returns Object
    */
   async info(id) {
@@ -34,7 +34,6 @@ class Service extends egg.Service {
       .field('circle.name')
       .field('circle.describe')
       .field('circle.banner')
-      .field('circle.is_public', 'isPublic')
       .field('circle.type')
       .field('circle_type.name', 'typeName')
       .where('circle.id=?', id)
@@ -52,6 +51,11 @@ class Service extends egg.Service {
     return res;
   }
 
+  /**
+   * 根据id列表获取圈子信息列表
+   * @param idList:Array<int> 圈子id列表
+   * @returns Array<Object>
+   */
   async infoList(idList) {
     if(!idList) {
       return;
@@ -90,7 +94,6 @@ class Service extends egg.Service {
         .field('circle.name')
         .field('circle.describe')
         .field('circle.banner')
-        .field('circle.is_public', 'isPublic')
         .field('circle.type')
         .field('circle_type.name', 'typeName')
         .where('circle.id IN ?', noCacheIdList)
@@ -122,11 +125,12 @@ class Service extends egg.Service {
   /**
    * 获取圈子下的画圈
    * @param id:int 圈子id
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async postList(id, offset, limit) {
+  async postList(id, uid, offset, limit) {
     if(!id) {
       return;
     }
@@ -136,7 +140,7 @@ class Service extends egg.Service {
       return;
     }
     let [data, count] = await Promise.all([
-      this.postData(id, offset, limit),
+      this.postData(id, uid, offset, limit),
       this.postCount(id)
     ]);
     return { data, count };
@@ -145,11 +149,12 @@ class Service extends egg.Service {
   /**
    * 获取圈子下画圈数据
    * @param id:int 圈子的id
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async postData(id, offset, limit) {
+  async postData(id, uid, offset, limit) {
     if(!id) {
       return;
     }
@@ -177,7 +182,7 @@ class Service extends egg.Service {
       .limit(limit)
       .toString();
     let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = await service.comment.plusList(res);
+    res = await service.comment.plusList(res, uid);
     return res;
   }
 
