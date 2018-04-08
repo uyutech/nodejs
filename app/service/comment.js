@@ -120,7 +120,111 @@ class Service extends egg.Service {
   }
 
   /**
-   * 包装评论数据，补上用户信息、点赞信息、收藏信息
+   * 返回评论id的媒体信息
+   * @param id:int 评论id
+   * @returns Array<Object>
+   */
+  async media(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'commentMedia_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME)
+      return JSON.parse(res);
+    }
+    res = await app.model.commentMedia.findAll({
+      attributes: [
+        ['comment_id', 'commentId'],
+        'kind',
+        'url',
+        'width',
+        'height',
+        'duration'
+      ],
+      where: {
+        comment_id: id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 返回评论id列表的媒体信息
+   * @param idList:int 评论id
+   * @returns Array<Object>
+   */
+  async mediaList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map(function(id) {
+        return app.redis.get('commentMedia_' + id);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach(function(item, i) {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('commentMedia_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.commentMedia.findAll({
+        attributes: [
+          ['comment_id', 'commentId'],
+          'kind',
+          'url',
+          'width',
+          'height',
+          'duration'
+        ],
+        where: {
+          comment_id: noCacheIdList,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      if(res.length) {
+        let hash = {};
+        res.forEach((item) => {
+          let id = item.commentId;
+          let temp = hash[id] = hash[id] || [];
+          temp.push(item);
+        });
+        noCacheIndexList.forEach(function(i) {
+          let id = idList[i];
+          let item = hash[id];
+          cache[i] = item;
+          app.redis.setex('commentMedia_' + id, CACHE_TIME, JSON.stringify(item));
+        });
+      }
+    }
+    return cache;
+  }
+
+  /**
+   * 包装评论数据，补上用户信息、点赞信息、收藏信息、附件媒体
    * @param data:Object 评论基本信息
    * @param uid:int 用户id
    * @returns Object
@@ -132,11 +236,13 @@ class Service extends egg.Service {
     let [
       { quote, authorHash, userHash },
       [ likeCount, isLike ],
-      [ favorCount, isFavor ]
+      [ favorCount, isFavor ],
+      media
     ] = await Promise.all([
       this.plusQuoteAndPerson(data),
       this.plusRelation(data, uid, 1),
-      this.plusRelation(data, uid, 2)
+      this.plusRelation(data, uid, 2),
+      this.media(data.id)
     ]);
     if(data.isAuthor) {
       let author = authorHash[data.aid];
@@ -159,6 +265,12 @@ class Service extends egg.Service {
     data.isLike = isLike;
     data.favorCount = favorCount || 0;
     data.isFavor = isFavor;
+    if(media) {
+      media.forEach(function(item) {
+        delete item.commentId;
+      });
+      data.media = media;
+    }
     return data;
   }
 
@@ -266,11 +378,15 @@ class Service extends egg.Service {
     let [
       { quoteHash, authorHash, userHash },
       [ likeCountList, likeList ],
-      [ favorCountList, favorList ]
+      [ favorCountList, favorList ],
+      mediaList
     ] = await Promise.all([
       this.plusListQuoteAndPerson(dataList),
       this.plusRelationList(dataList, uid, 1),
-      this.plusRelationList(dataList, uid, 2)
+      this.plusRelationList(dataList, uid, 2),
+      this.mediaList(dataList.map(function(item) {
+        return item.id;
+      }))
     ]);
     dataList.forEach(function(item, i) {
       if(item) {
@@ -302,6 +418,15 @@ class Service extends egg.Service {
         }
         if(favorList) {
           item.isFavor = favorList[i];
+        }
+        if(mediaList) {
+          let media = mediaList[i];
+          if(media) {
+            media.forEach(function(item) {
+              delete item.commentId;
+            });
+            item.media = media;
+          }
         }
       }
     });

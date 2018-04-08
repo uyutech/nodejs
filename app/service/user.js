@@ -932,7 +932,7 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    res = await service.comment.plusList(res);
+    res = await service.comment.plusList(res, id);
     return res;
   }
   /**

@@ -23,8 +23,7 @@ const circleCommentRelation = require('../model/circleCommentRelation');
 const circleNum = require('../model/circleNum');
 const circleTagRelation = require('../model/circleTagRelation');
 const comment = require('../model/comment');
-const commentImage = require('../model/commentImage');
-const commentNum = require('../model/commentNum');
+const commentMedia = require('../model/commentMedia');
 const profession = require('../model/profession');
 const professionSkillRelation = require('../model/professionSkillRelation');
 const skill = require('../model/skill');
@@ -140,8 +139,7 @@ module.exports = {
         circleNum: circleNum(this),
         circleTagRelation: circleTagRelation(this),
         comment: comment(this),
-        commentImage: commentImage(this),
-        commentNum: commentNum(this),
+        commentMedia: commentMedia(this),
         profession: profession(this),
         professionSkillRelation: professionSkillRelation(this),
         skill: skill(this),

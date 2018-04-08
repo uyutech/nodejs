@@ -70,7 +70,7 @@ const WorksWorkRelation = require('./app/model/worksWorkRelation')({ sequelizeCi
 const MusicAlbumWorkRelation = require('./app/model/musicAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbumWorkRelation = require('./app/model/imageAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Comment = require('./app/model/comment')({ sequelizeCircling: sequelize, Sequelize });
-const CommentNum = require('./app/model/commentNum')({ sequelizeCircling: sequelize, Sequelize });
+const CommentMedia = require('./app/model/commentMedia')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorCommentRelation = require('./app/model/authorCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const WorksCommentRelation = require('./app/model/worksCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleCommentRelation = require('./app/model/circleCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
@@ -110,6 +110,7 @@ const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelize
     await dealComment(pool);
     await dealUserWork(pool);
     await dealUserPost(pool);
+    await dealCommentMedia(pool);
     // await modifyWorksComment();
     // await modifyAuthorComment();
     await modifyPostComment();
@@ -247,7 +248,7 @@ async function dealAuthor(pool) {
 async function dealAuthorMainWorks(pool) {
   console.log('------- dealAuthorMainWorks --------');
   await AuthorMainWorks.sync();
-  let last = 295;
+  let last = 296;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Authors_WorksList WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -985,7 +986,6 @@ async function dealComment(pool) {
   await WorksCommentRelation.sync();
   await CircleCommentRelation.sync();
   await Comment.sync();
-  await CommentNum.sync();
   let last = 440051;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1019,6 +1019,7 @@ async function dealComment(pool) {
         author_id: 0,
         is_author: false,
         content: item.CurrentAuthorID,
+        is_delete: true,
         review: 3,
         state: 0,
         parent_id: 0,
@@ -1122,6 +1123,7 @@ async function dealComment(pool) {
         author_id: 0,
         is_author: false,
         content: item.Content,
+        is_delete: true,
         review: 3,
         state: 0,
         parent_id: 0,
@@ -1422,6 +1424,50 @@ async function dealUserPost(pool) {
       update_time: item.CreateTime,
       type: 1,
       is_delete: !!item.ISDel,
+    });
+  }
+}
+
+async function dealCommentMedia(pool) {
+  console.log('------- dealCommentMedia --------');
+  await CommentMedia.sync();
+  let last = 64316;
+  // last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Media WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let kind = item.FileType || 0;
+    if(kind === 3) {
+      kind = 0;
+    }
+    let workId = item.ItemsID || 0;
+    let worksId = 0;
+    if(kind == 1 || kind == 2) {
+      workId = workId.toString().replace(/^2016/, 2020);
+      let query = await WorksWorkRelation.findOne({
+        attributes: [
+          ['works_id', 'worksId']
+        ],
+        where: {
+          work_id: workId,
+        },
+        raw: true,
+      });
+      if(query) {
+        worksId = query.worksId;
+      }
+    }
+    await CommentMedia.create({
+      comment_id: item.CommentID,
+      works_id: worksId ,
+      work_id: item.ItemsID || 0,
+      kind: item.FileType || 3,
+      width: item.Width,
+      height: item.Height,
+      url: item.FileUrl || '',
+      duration: 0,
+      is_delete: false,
+      update_time: item.CreateTime,
     });
   }
 }

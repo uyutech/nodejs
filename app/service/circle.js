@@ -261,7 +261,6 @@ class Service extends egg.Service {
       ],
       where: {
         is_delete: false,
-        is_public: true,
       },
       offset,
       limit,
@@ -289,7 +288,6 @@ class Service extends egg.Service {
       ],
       where: {
         is_delete: false,
-        is_public: true,
       },
       raw: true,
     });

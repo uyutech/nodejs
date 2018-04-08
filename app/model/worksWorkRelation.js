@@ -24,7 +24,6 @@ module.exports = app => {
     kind: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 0,
       comment: '1视频，2音频，3图片，4文字',
     },
     is_delete: {
