@@ -79,7 +79,6 @@ class Controller extends egg.Controller {
     let authorId = body.authorId;
     let kind = body.kind;
     let offset = body.offset;
-    let limit = body.limit;
     if(!authorId || kind === undefined) {
       return;
     }
