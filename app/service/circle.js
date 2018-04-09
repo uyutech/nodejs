@@ -182,21 +182,18 @@ class Service extends egg.Service {
     }
     const { app, service } = this;
     let sql = squel.select()
+      .from('tag_comment_relation FORCE INDEX (tag_id_comment_id_type)')
       .from('comment')
-      .field('id')
-      .field('user_id', 'uid')
-      .field('author_id', 'aid')
-      .field('content')
-      .field('parent_id', 'pid')
-      .field('root_id', 'rid')
-      .field('create_time', 'createTime')
-      .where('id IN ?', squel.select()
-        .from('tag_comment_relation FORCE INDEX (tag_id_comment_id_type)')
-        .field('comment_id', 'id')
-        .where('tag_id IN ?', tagList)
-        .where('is_delete=false')
-      )
-      .order('id', false)
+      .field('comment.id')
+      .field('comment.user_id', 'uid')
+      .field('comment.author_id', 'aid')
+      .field('comment.content')
+      .field('comment.parent_id', 'pid')
+      .field('comment.root_id', 'rid')
+      .field('comment.create_time', 'createTime')
+      .where('tag_comment_relation.tag_id IN ?', tagList)
+      .where('tag_comment_relation.comment_id=comment.id')
+      .order('tag_comment_relation.comment_id', false)
       .offset(offset)
       .limit(limit)
       .toString();
@@ -222,15 +219,10 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     let sql = squel.select()
-      .from('comment')
+      .from('tag_comment_relation FORCE INDEX (tag_id_comment_id_type)')
       .field('COUNT(*)', 'num')
-      .where('id IN ?', squel.select()
-        .from('tag_comment_relation FORCE INDEX (tag_id_comment_id_type)')
-        .field('comment_id', 'id')
-        .where('tag_id IN ?', tagList)
-        .where('is_delete=false')
-      )
-      .where('comment.is_delete=false')
+      .where('tag_id IN ?', tagList)
+      .where('is_delete=false')
       .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
