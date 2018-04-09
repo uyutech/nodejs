@@ -21,6 +21,12 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0直接选择，1内容输入',
+    },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
@@ -39,13 +45,13 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'tag_id_comment_id',
+        name: 'tag_id_comment_id_type',
         unique: true,
-        fields: ['tag_id', 'comment_id'],
+        fields: ['tag_id', 'comment_id', 'type'],
       },
       {
-        name: 'comment_id',
-        fields: ['comment_id'],
+        name: 'comment_id_type',
+        fields: ['comment_id', 'type'],
       }
     ],
     comment: '标签留言关联信息',

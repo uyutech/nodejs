@@ -12,7 +12,7 @@ const LIMIT = 10;
 
 class Controller extends egg.Controller {
   async index() {
-    const { ctx, service, app } = this;
+    const { ctx, service } = this;
     let uid = ctx.session.uid;
     let [personList, circleList, postList] = await Promise.all([
       service.user.followPersonList(uid, 0, LIMIT),

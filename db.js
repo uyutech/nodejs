@@ -107,10 +107,11 @@ const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelize
     await dealUser(pool);
     await dealUserCircle(pool);
     await dealComment(pool);
-    await dealCircleComment(pool);
+    // await dealCircleComment(pool);
     await dealUserWork(pool);
     await dealUserPost(pool);
     await dealCommentMedia(pool);
+    // await temp(pool);
     // await modifyWorksComment();
     // await modifyAuthorComment();
     await modifyPostComment();
@@ -884,6 +885,7 @@ async function dealCircle(pool) {
     await TagCommentRelation.create({
       tag_id: tagOldIdHash[item.TagID],
       comment_id: item.CommentID,
+      type: 1,
       is_delete: !!item.ISDel,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
@@ -986,9 +988,10 @@ async function dealComment(pool) {
   console.log('------- dealComment --------');
   await AuthorCommentRelation.sync();
   await WorksCommentRelation.sync();
-  await CircleCommentRelation.sync();
+  // await CircleCommentRelation.sync();
   await Comment.sync();
   let last = 440051;
+  let hash = {};
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1046,46 +1049,82 @@ async function dealComment(pool) {
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
-      let tagComment = await TagCommentRelation.findAll({
-        attributes: ['tag_id'],
-        where: {
-          comment_id: item.ID,
-        },
-        raw: true,
-      });
-      let circleIdHash = {};
-      if(tagComment && tagComment.length) {
-        let ids = tagComment.map(function(item) {
-          return item.tag_id;
-        });
-        let circleTag = await CircleTagRelation.findAll({
-          attributes: ['circle_id'],
-          where: {
-            tag_id: ids,
-          },
-          raw: true,
-        });
-        if(circleTag && circleTag.length) {
-          ids = [];
-          let hash = {};
-          circleTag.forEach(function(item) {
-            let id = item.circle_id;
-            if(!hash[id]) {
-              hash[id] = true;
-              ids.push(id);
-            }
-          });
-          for(let j = 0; j < ids.length; j++) {
-            let id = ids[j];
-            circleIdHash[id] = true;
-            await CircleCommentRelation.create({
-              circle_id: id,
-              comment_id: item.ID,
-              type: 1,
-            });
+      if(item.CirclingIDList && item.CirclingIDList.length) {
+        let list = item.CirclingIDList.split(',');
+        let idList = [];
+        for(let j = 0; j < list.length; j++) {
+          let circleId = list[j];
+          let tagId = hash[circleId];
+          if(tagId) {
+            idList.push(tagId);
           }
+          else {
+            let circleTagRelation = await CircleTagRelation.findOne({
+              attributes: [
+                'tag_id'
+              ],
+              where: {
+                circle_id: circleId,
+              },
+              raw: true,
+            });
+            tagId = hash[circleId] = circleTagRelation.tag_id;
+            idList.push(tagId);
+          }
+          await TagCommentRelation.upsert({
+            tag_id: tagId,
+            comment_id: hash[circleId],
+            type: 0,
+            is_delete: false,
+            create_time: item.CreateTime,
+            update_time: item.CreateTime,
+          }, {
+            where: {
+              comment_id: item.CommentID,
+            },
+          });
         }
       }
+      // let tagComment = await TagCommentRelation.findAll({
+      //   attributes: ['tag_id'],
+      //   where: {
+      //     comment_id: item.ID,
+      //   },
+      //   raw: true,
+      // });
+      // let circleIdHash = {};
+      // if(tagComment && tagComment.length) {
+      //   let ids = tagComment.map(function(item) {
+      //     return item.tag_id;
+      //   });
+      //   let circleTag = await CircleTagRelation.findAll({
+      //     attributes: ['circle_id'],
+      //     where: {
+      //       tag_id: ids,
+      //     },
+      //     raw: true,
+      //   });
+      //   if(circleTag && circleTag.length) {
+      //     ids = [];
+      //     let hash = {};
+      //     circleTag.forEach(function(item) {
+      //       let id = item.circle_id;
+      //       if(!hash[id]) {
+      //         hash[id] = true;
+      //         ids.push(id);
+      //       }
+      //     });
+      //     for(let j = 0; j < ids.length; j++) {
+      //       let id = ids[j];
+      //       circleIdHash[id] = true;
+      //       await CircleCommentRelation.create({
+      //         circle_id: id,
+      //         comment_id: item.ID,
+      //         type: 1,
+      //       });
+      //     }
+      //   }
+      // }
       // if(item.CirclingIDList) {
       //   let list = item.CirclingIDList.split(',');
       //   for(let j = 0; j < list.length; j++) {
@@ -1473,7 +1512,7 @@ async function dealUserPost(pool) {
 async function dealCommentMedia(pool) {
   console.log('------- dealCommentMedia --------');
   await CommentMedia.sync();
-  let last = 64316;
+  let last = 72119;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Media WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1609,8 +1648,44 @@ async function modifyPostComment() {
 }
 
 async function temp(pool) {
+  let last = 0;
+  let hash = {};
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE CirclingIDList IS NOT NULL;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
+    let list = item.CirclingIDList.split(',');
+    let idList = [];
+    for(let j = 0; j < list.length; j++) {
+      let circleId = list[j];
+      let tagId = hash[circleId];
+      if(tagId) {
+        idList.push(tagId);
+      }
+      else {
+        let circleTagRelation = await CircleTagRelation.findOne({
+          attributes: [
+            'tag_id'
+          ],
+          where: {
+            circle_id: circleId,
+          },
+          raw: true,
+        });
+        tagId = hash[circleId] = circleTagRelation.tag_id;
+        idList.push(tagId);
+      }
+      await TagCommentRelation.upsert({
+        tag_id: tagId,
+        comment_id: hash[circleId],
+        type: 0,
+        is_delete: false,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      }, {
+        where: {
+          comment_id: item.CommentID,
+        },
+      });
+    }
   }
 }

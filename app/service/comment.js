@@ -216,7 +216,7 @@ class Service extends egg.Service {
         });
         noCacheIndexList.forEach(function(i) {
           let id = idList[i];
-          let item = hash[id];
+          let item = hash[id] || null;
           cache[i] = item;
           app.redis.setex('commentMedia_' + id, CACHE_TIME, JSON.stringify(item));
         });

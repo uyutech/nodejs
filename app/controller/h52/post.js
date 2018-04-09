@@ -27,6 +27,7 @@ class Controller extends egg.Controller {
       commentList,
     });
   }
+
   async commentList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;

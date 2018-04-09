@@ -25,7 +25,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0直属，1活动引导',
+      comment: '0直属，1活动引导，2从属',
     },
     is_delete: {
       type: Sequelize.BOOLEAN,

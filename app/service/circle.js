@@ -93,6 +93,7 @@ class Service extends egg.Service {
         .field('circle.name')
         .field('circle.describe')
         .field('circle.banner')
+        .field('circle.cover')
         .field('circle.type')
         .field('circle_type.name', 'typeName')
         .where('circle.id IN ?', noCacheIdList)
@@ -132,28 +133,46 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
+    const { app } = this;
+    let cacheKey = 'circleTag_' + id;
+    let tagList = await app.redis.get(cacheKey);
+    if(tagList) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      tagList = JSON.parse(tagList);
+    }
+    else {
+      tagList = await app.model.circleTagRelation.findAll({
+        attributes: [
+          ['tag_id', 'tagId']
+        ],
+        where: {
+          circle_id: id,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      tagList = tagList.map((item) => {
+        return item.tagId;
+      });
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(tagList));
     }
     let [data, count] = await Promise.all([
-      this.postData(id, uid, offset, limit),
-      this.postCount(id)
+      this.postData(tagList, uid, offset, limit),
+      this.postCount(tagList)
     ]);
     return { data, count };
   }
 
   /**
    * 获取圈子下画圈数据
-   * @param id:int 圈子的id
+   * @param tagList:Array<int> 圈子关联的标签id列表
    * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async postData(id, uid, offset, limit) {
-    if(!id) {
+  async postData(tagList, uid, offset, limit) {
+    if(!tagList || !tagList.length) {
       return;
     }
     offset = parseInt(offset) || 0;
@@ -163,19 +182,21 @@ class Service extends egg.Service {
     }
     const { app, service } = this;
     let sql = squel.select()
-      .from('circle_comment_relation')
       .from('comment')
-      .field('comment.id')
-      .field('comment.user_id', 'uid')
-      .field('comment.author_id', 'aid')
-      .field('comment.content')
-      .field('comment.parent_id', 'pid')
-      .field('comment.root_id', 'rid')
-      .field('comment.create_time', 'createTime')
-      .where('circle_comment_relation.circle_id=?', id)
-      .where('circle_comment_relation.comment_id=comment.id')
-      .where('comment.is_delete=false')
-      .order('comment.id', false)
+      .field('id')
+      .field('user_id', 'uid')
+      .field('author_id', 'aid')
+      .field('content')
+      .field('parent_id', 'pid')
+      .field('root_id', 'rid')
+      .field('create_time', 'createTime')
+      .where('id IN ?', squel.select()
+        .from('tag_comment_relation FORCE INDEX (tag_id_comment_id_type)')
+        .field('comment_id', 'id')
+        .where('tag_id IN ?', tagList)
+        .where('is_delete=false')
+      )
+      .order('id', false)
       .offset(offset)
       .limit(limit)
       .toString();
@@ -186,26 +207,29 @@ class Service extends egg.Service {
 
   /**
    * 获取圈子下画圈数量
-   * @param id:int 圈子的id
+   * @param tagList:Array<int> 圈子关联的标签id列表
    * @returns int
    */
-  async postCount(id) {
-    if(!id) {
+  async postCount(tagList) {
+    if(!tagList || !tagList.length) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'circleCommentCount_' + id;
+    let cacheKey = 'tagListCommentCount_' + tagList.join(',');
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     let sql = squel.select()
-      .from('circle_comment_relation')
       .from('comment')
       .field('COUNT(*)', 'num')
-      .where('circle_comment_relation.circle_id=?', id)
-      .where('circle_comment_relation.comment_id=comment.id')
+      .where('id IN ?', squel.select()
+        .from('tag_comment_relation FORCE INDEX (tag_id_comment_id_type)')
+        .field('comment_id', 'id')
+        .where('tag_id IN ?', tagList)
+        .where('is_delete=false')
+      )
       .where('comment.is_delete=false')
       .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
