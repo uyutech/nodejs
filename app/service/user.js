@@ -115,6 +115,55 @@ class Service extends egg.Service {
     return cache;
   }
 
+  /**
+   * 获取用户作者信息
+   * @param id:int
+   * @returns Array<Object>
+   */
+  async author(id) {
+    if(!id) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'userAuthor_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+      app.redis.expire(cacheKey, CACHE_TIME);
+    }
+    else {
+      res = await app.model.userAuthorRelation.findAll({
+        attributes: [
+          ['author_id', 'id'],
+          'type'
+        ],
+        where: {
+          user_id: id,
+          is_delete: false,
+        },
+        order: [
+          'type'
+        ],
+        raw: true,
+      });
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    let idList = res.map((item) => {
+      return item.id;
+    });
+    let infoList = await service.author.infoList(idList);
+    res.forEach((item, i) => {
+      if(item && infoList[i]) {
+        Object.assign(item, infoList[i]);
+      }
+    });
+    return res;
+  }
+
+  /**
+   * 清除用户信息缓存
+   * @param id:int 用户id
+   */
   async clearInfoCache(id) {
     if(!id) {
       return;
@@ -1673,6 +1722,7 @@ class Service extends egg.Service {
         user_id: id,
         type: 1,
         is_delete: false,
+        is_circle_delete: false,
       },
       order: [
         ['update_time', 'DESC']
@@ -1712,6 +1762,7 @@ class Service extends egg.Service {
         user_id: id,
         type: 1,
         is_delete: false,
+        is_circle_delete: false,
       },
       raw: true,
     });

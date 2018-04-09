@@ -24,7 +24,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0主账号，1成员，2编辑',
+      comment: '1主账号，2成员，3编辑',
     },
     is_delete: {
       type: Sequelize.BOOLEAN,

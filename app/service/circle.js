@@ -177,7 +177,7 @@ class Service extends egg.Service {
     }
     const { app, service } = this;
     let sql = squel.select()
-      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_comment_id)')
+      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
       .from('comment')
       .field('comment.id')
       .field('comment.user_id', 'uid')
@@ -188,6 +188,7 @@ class Service extends egg.Service {
       .field('comment.create_time', 'createTime')
       .where('tag_comment_relation.tag_id IN ?', tagList)
       .where('tag_comment_relation.is_delete=false')
+      .where('tag_comment_relation.is_comment_delete=false')
       .where('tag_comment_relation.comment_id=comment.id')
       .order('tag_comment_relation.comment_id', false)
       .offset(offset)
@@ -215,10 +216,11 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     let sql = squel.select()
-      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_comment_id)')
+      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
       .field('COUNT(*)', 'num')
       .where('tag_id IN ?', tagList)
       .where('is_delete=false')
+      .where('is_comment_delete=false')
       .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
@@ -384,6 +386,134 @@ class Service extends egg.Service {
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 获取圈子下的tag列表
+   * @param id:int 圈子id
+   * @param type:int
+   * @returns Array<Object>
+   */
+  async tag(id, type) {
+    if(!id || !type) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'circleTag_' + id + '_' + type;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.circleTagRelation.findAll({
+        attributes: [
+          ['tag_id', 'tagId']
+        ],
+        where: {
+          circle_id: id,
+          type,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.tagId;
+      });
+      app.reids.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    return await service.tag.infoList(res);
+  }
+
+  /**
+   * 获取圈子列表下的tag列表
+   * @param idList:Array<int> 圈子列表id
+   * @param type:int
+   * @returns Array<Array<Object>>
+   */
+  async tagList(idList, type) {
+    if(!idList || !type) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app, service } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        return app.redis.get('circleTag_' + id + '_' + type);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('tag_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.circleTagRelation.findAll({
+        attributes: [
+          ['circle_id', 'circleId'],
+          ['tag_id', 'tagId']
+        ],
+        where: {
+          circle_id: idList,
+          type,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      if(res.length) {
+        let hash = {};
+        res.forEach((item) => {
+          let id = item.circleId;
+          let temp = hash[id] = hash[id] || [];
+          temp.push(item.tagId);
+        });
+        noCacheIndexList.forEach((i) => {
+          let id = idList[i];
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('circleTag_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
+        });
+      }
+    }
+    let tagIdList = [];
+    let tagIdHash = {};
+    cache.forEach((item) => {
+      if(item) {
+        item.forEach((id) => {
+          if(!tagIdHash[id]) {
+            tagIdHash[id] = true;
+            tagIdList.push(id);
+          }
+        });
+      }
+    });
+    let tagList = await service.tag.infoList(tagIdList);
+    let hash = {};
+    tagList.forEach((item) => {
+      hash[item.id] = item;
+    });
+    return cache.map((item) => {
+      if(item) {
+        return item.map((id) => {
+          return hash[id] || null;
+        });
+      }
+      return item;
+    });
   }
 }
 

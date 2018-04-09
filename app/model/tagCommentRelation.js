@@ -32,6 +32,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
+    is_comment_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -50,8 +55,8 @@ module.exports = app => {
         fields: ['tag_id', 'comment_id', 'type'],
       },
       {
-        name: 'tag_id_is_delete_comment_id',
-        fields: ['tag_id', 'is_delete', 'comment_id'],
+        name: 'tag_id_is_delete_is_comment_delete_comment_id',
+        fields: ['tag_id', 'is_delete', 'is_comment_delete', 'comment_id'],
       },
       {
         name: 'comment_id_type',

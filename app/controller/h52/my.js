@@ -12,13 +12,24 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [info, followPersonCount, fansCount] = await Promise.all([
+    let [info, author, followPersonCount, fansCount] = await Promise.all([
       service.user.info(uid),
+      service.user.author(uid),
       service.user.followPersonCount(uid),
       service.user.fansCount(uid)
     ]);
+    author = author.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        headUrl: item.headUrl,
+        isSettle: item.isSettle,
+        type: item.type,
+      };
+    });
     ctx.body = ctx.helper.okJSON({
       info,
+      author,
       followPersonCount,
       fansCount,
     });

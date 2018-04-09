@@ -107,14 +107,9 @@ class Service extends egg.Service {
         });
         noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('comment_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }

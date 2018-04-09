@@ -115,6 +115,12 @@ const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelize
     // await modifyWorksComment();
     // await modifyAuthorComment();
     await modifyPostComment();
+
+//     await sequelize.query(`UPDATE tag_comment_relation set is_comment_delete=TRUE
+// WHERE comment_id IN (SELECT id as comment_id FROM comment WHERE is_delete=true);`, { type: Sequelize.QueryTypes.UPDATE });
+//     await sequelize.query(`UPDATE user_circle_relation SET is_circle_delete=TRUE WHERE circle_id IN(
+// SELECT id as circle_id FROM circle WHERE is_delete=TRUE);`, { type: Sequelize.QueryTypes.UPDATE });
+
     console.log('======== END ========');
   } catch (err) {
     console.error(err);
@@ -872,7 +878,7 @@ async function dealCircle(pool) {
       circle_id: item.CirclingID,
       tag_id: tagOldIdHash[item.TagID],
       is_delete: !!item.ISDel,
-      type: item.State || 0,
+      type: (item.State || 0) + 1,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -928,9 +934,9 @@ async function dealUser(pool) {
     await UserAuthorRelation.create({
       user_id: item.UID,
       author_id: item.AuthroID,
-      type: item.UserAuthorType,
+      type: item.UserAuthorType + 1,
       is_delete: !!item.ISDel,
-      settle: item.UserAuthorState,
+      settle: item.UserAuthorState + 1,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -978,6 +984,7 @@ async function dealUserCircle(pool) {
       circle_id: item.CirclingID,
       type: item.FollowType,
       is_delete: item.ISDel,
+      is_circle_delete: false,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
