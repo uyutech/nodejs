@@ -55,7 +55,7 @@ class Controller extends egg.Controller {
     if(!worksId || !workId) {
       return;
     }
-    let res = await service.work.like(uid, worksId, workId, true);
+    let res = await service.work.like(worksId, workId, uid, true);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -68,7 +68,7 @@ class Controller extends egg.Controller {
     if(!worksId || !workId) {
       return;
     }
-    let res = await service.work.like(uid, worksId, workId, false);
+    let res = await service.work.like(worksId, workId, uid, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -81,7 +81,7 @@ class Controller extends egg.Controller {
     if(!worksId || !workId) {
       return;
     }
-    let res = await service.work.favor(uid, worksId, workId, true);
+    let res = await service.work.favor(worksId, workId, uid, true);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -94,7 +94,7 @@ class Controller extends egg.Controller {
     if(!worksId || !workId) {
       return;
     }
-    let res = await service.work.favor(uid, worksId, workId, false);
+    let res = await service.work.favor(worksId, workId, uid, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

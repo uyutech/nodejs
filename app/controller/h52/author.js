@@ -122,7 +122,12 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.author.follow(authorId, uid, false);
-    ctx.body = ctx.helper.okJSON(res);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
   }
 }
 

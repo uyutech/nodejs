@@ -239,12 +239,7 @@ class Service extends egg.Service {
         is_delete: false,
       },
     });
-    if(res) {
-      res = true;
-    }
-    else {
-      res = false;
-    }
+    res = !!res;
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -261,6 +256,17 @@ class Service extends egg.Service {
       return;
     }
     state = !!state;
+    let now = await this.isFollow(id, uid);
+    if(now === state) {
+      let count = await this.fansCount(id);
+      return {
+        success: true,
+        data: {
+          state,
+          count,
+        },
+      };
+    }
     const { app, ctx, service } = this;
     // 不能超过最大关注数
     if(state) {
@@ -273,16 +279,17 @@ class Service extends egg.Service {
       }
     }
     // 更新内存中用户对作者关系的状态
-    let userRelationCache;
+    let cache;
+    let cacheKey = 'userUserRelation_' + uid + '_' + id + '_' + 3;
     if(state) {
-      userRelationCache = app.redis.setex('userUserRelation_' + uid + '_' + id + '_' + 3, CACHE_TIME, 'true');
+      cache = app.redis.setex(cacheKey, CACHE_TIME, 'true');
     }
     else {
-      userRelationCache = app.redis.setex('userUserRelation_' + uid + '_' + id + '_' + 3, CACHE_TIME, 'false');
+      cache = app.redis.setex(cacheKey, CACHE_TIME, 'false');
     }
     // 入库
     await Promise.all([
-      userRelationCache,
+      cache,
       app.model.userUserRelation.upsert({
         user_id: uid,
         target_id: id,
@@ -299,9 +306,9 @@ class Service extends egg.Service {
       })
     ]);
     // 更新计数，优先内存缓存
-    let cacheKey = 'authorFansCount_' + id;
+    cacheKey = 'authorFansCount_' + id;
     let res = await app.redis.get(cacheKey);
-    let count;
+    let count = 0;
     if(res) {
       count = JSON.parse(res);
       if(state) {
@@ -335,12 +342,12 @@ class Service extends egg.Service {
         raw: true,
       });
       if(res) {
-        count = res.num;
-        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
+        count = res.num || 0;
       }
       else {
-        ctx.logger.error('authorFansCount_%s find null', id);
+        count = 0;
       }
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
     }
     return {
       success: true,

@@ -294,10 +294,10 @@ class Service extends egg.Service {
       service.work.audioList(audioIdList),
       service.work.imageList(imageIdList),
       service.work.textList(textIdList),
-      service.work.userLikeList(uid, workIdList),
-      service.work.userFavorList(uid, workIdList),
-      service.work.likeCount(workIdList),
-      service.work.favorCount(workIdList)
+      service.work.isLikeList(workIdList, uid),
+      service.work.isFavorList(workIdList, uid),
+      service.work.likeCountList(workIdList),
+      service.work.favorCountList(workIdList)
     ]);
     let videoHash = {};
     let audioHash = {};
