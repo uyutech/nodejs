@@ -497,7 +497,7 @@ async function dealWorks(pool) {
     }
     await WorksNum.create({
       works_id: item.ID,
-      type: 0,
+      type: 1,
       num: item.Popular,
       update_time: item.CreateTime,
     });

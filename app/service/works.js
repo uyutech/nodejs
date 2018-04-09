@@ -112,19 +112,19 @@ class Service extends egg.Service {
         .where('works.type=works_type.id')
         .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('worksInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('worksInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -206,19 +206,19 @@ class Service extends egg.Service {
         WHERE works_num.works_id IN (${noCacheIdList.join(', ')})
         AND type=0;`;
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.worksId;
           hash[id] = item.num;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('worksPopular_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('worksPopular_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -551,22 +551,22 @@ class Service extends egg.Service {
         .where('works_author_profession_relation.profession_id=profession.id')
         .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let worksId = item.worksId;
           let temp = hash[worksId] = hash[worksId] || [];
           temp.push(item);
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let item = hash[id] || null;
-          if(item) {
-            cache[i] = item;
-            app.redis.setex('worksAuthors_' + id, CACHE_TIME, JSON.stringify(item));
-          }
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let item = hash[id] || null;
+        if(item) {
+          cache[i] = item;
+          app.redis.setex('worksAuthors_' + id, CACHE_TIME, JSON.stringify(item));
+        }
+      });
     }
     let authorIdList = [];
     let authorIdHash = {};
@@ -685,19 +685,19 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           hash[item.worksType] = hash[item.worksType] || [];
           hash[item.worksType].push(item);
         });
-        noCacheIndexList.forEach((i) => {
-          let worksType = typeList[i];
-          let temp = hash[worksType] || null;
-          cache[i] = temp;
-          app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let worksType = typeList[i];
+        let temp = hash[worksType] || null;
+        cache[i] = temp;
+        app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -904,6 +904,106 @@ class Service extends egg.Service {
       }
     });
     return worksList;
+  }
+
+  /**
+   * 统计数字
+   * @param id:int 大作品id
+   * @param type:int 类型
+   * @returns int
+   */
+  async numCount(id, type) {
+    if(!id || !type) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'worksNum_' + id + '_' + type;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.worksNum.findOne({
+      attributes: [
+        'num'
+      ],
+      where: {
+        works_id: id,
+        type,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 统计数字列表
+   * @param idList:int 大作品id列表
+   * @param type:int 类型
+   * @returns int
+   */
+  async numCountList(idList, type) {
+    if(!idList || !type) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        return app.redis.get('worksNum_' + id + '_' + type);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let worksId = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('worksNum_' + worksId + '_' + type, CACHE_TIME);
+      }
+      else if(worksId !== null && worksId !== undefined) {
+        if(!noCacheIdHash[worksId]) {
+          noCacheIdHash[worksId] = true;
+          noCacheIdList.push(worksId);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.worksNum.findAll({
+        attributes: [
+          ['works_id', 'worksId'],
+          'num'
+        ],
+        where: {
+          works_id: noCacheIdList,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          hash[item.worksId] = item.num;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let worksId = idList[i];
+        let num = hash[worksId] || 0;
+        cache[i] = num;
+        app.redis.setex('worksNum_' + worksId + '_' + type, CACHE_TIME, JSON.stringify(num));
+      });
+    }
+    return cache;
   }
 }
 

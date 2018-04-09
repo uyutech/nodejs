@@ -98,19 +98,19 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('userInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('userInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -919,7 +919,7 @@ class Service extends egg.Service {
    * @param id:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
-   * @returns Object{ size:int, data:Array<Object> }
+   * @returns Object{ count:int, data:Array<Object> }
    */
   async postList(id, offset, limit) {
     if(!id) {
@@ -1781,7 +1781,7 @@ class Service extends egg.Service {
    * @param id:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
-   * @returns Object{ size:int, data:Array<Object> }
+   * @returns Object{ count:int, data:Array<Object> }
    */
   async followPostList(id, offset, limit) {
     if(!id) {

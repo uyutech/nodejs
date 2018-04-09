@@ -87,19 +87,19 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('tag_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('tag_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }

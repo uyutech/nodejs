@@ -97,19 +97,19 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('authorInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('authorInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -461,7 +461,7 @@ class Service extends egg.Service {
     }
     return res;
   }
-  async mainWorksSize(id) {
+  async mainWorksCount(id) {
     if(!id) {
       return;
     }
@@ -501,14 +501,14 @@ class Service extends egg.Service {
       return;
     }
     // 先取得作者所有主打大作品列表id
-    let [idList, size] = await Promise.all([
+    let [idList, count] = await Promise.all([
       this.mainWorksIdList(id, offset, limit),
-      this.mainWorksSize(id)
+      this.mainWorksCount(id)
     ]);
     // 根据id获取信息
     let data = await this.worksListByIdList(id, idList);
     return {
-      size,
+      count,
       data,
     };
   }
@@ -528,18 +528,20 @@ class Service extends egg.Service {
     }
     const { service } = this;
     // 获取大作品信息、作者在此大作品中的职种id
-    let [worksList, worksListProfessionIdList] = await Promise.all([
+    let [worksList, worksListProfessionIdList, numList] = await Promise.all([
       service.works.infoList(worksIdList),
-      this.worksListProfessionIdList(worksIdList, id)
+      this.worksListProfessionIdList(worksIdList, id),
+      service.works.numCountList(worksIdList, 1)
     ]);
     // 汇集所有大作品类型
     let worksTypeList = [];
     let hash = {};
-    worksList.forEach((item) => {
+    worksList.forEach((item, i) => {
       if(!hash[item.type]) {
         hash[item.type] = true;
         worksTypeList.push(item.type);
       }
+      item.popular = numList[i] || 0;
     });
     // 汇集全部职种id
     let professionIdList = [];
@@ -649,19 +651,19 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let temp = hash[item.worksId] = hash[item.worksId] || [];
           temp.push(item.professionId);
         });
-        noCacheIndexList.forEach((i) => {
-          let worksId = idList[i];
-          let temp = hash[worksId] || null;
-          cache[i] = temp;
-          app.redis.setex('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let worksId = idList[i];
+        let temp = hash[worksId] || null;
+        cache[i] = temp;
+        app.redis.setex('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -724,17 +726,17 @@ class Service extends egg.Service {
     }
     const { service } = this;
     // 先取得作者所有参与专辑列表id
-    let [idList, size] = await Promise.all([
+    let [idList, count] = await Promise.all([
       this.musicAlbumIdList(id, offset, limit),
-      this.musicAlbumSize(id)
+      this.musicAlbumCount(id)
     ]);
     let data = await service.musicAlbum.infoList(idList);
     return {
-      size,
+      count,
       data,
     };
   }
-  async musicAlbumSize(id) {
+  async musicAlbumCount(id) {
     if(!id) {
       return;
     }
@@ -876,19 +878,19 @@ class Service extends egg.Service {
         .where('kind IN ?', noCacheIdList)
         .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           hash[item.kind] = hash[item.kind] || [];
           hash[item.kind].push(item.professionId);
         });
-        noCacheIndexList.forEach((i) => {
-          let kind = kindList[i];
-          let temp = hash[kind] || null;
-          cache[i] = temp;
-          app.redis.setex('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let kind = kindList[i];
+        let temp = hash[kind] || null;
+        cache[i] = temp;
+        app.redis.setex('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -994,8 +996,8 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let temp = hash[item.workId] = hash[item.workId] || {
             worksId: item.worksId,
@@ -1006,13 +1008,13 @@ class Service extends egg.Service {
             temp.professionIdList.push(item.professionId);
           }
         });
-        noCacheIndexList.forEach((i) => {
-          let workId = idList[i];
-          let temp = hash[workId] || null;
-          cache[i] = temp;
-          app.redis.setex('authorKindWorkBaseList_' + workId, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let workId = idList[i];
+        let temp = hash[workId] || null;
+        cache[i] = temp;
+        app.redis.setex('authorKindWorkBaseList_' + workId, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -1101,17 +1103,17 @@ class Service extends egg.Service {
    * @param kind:int 种类
    * @param offset:int 分页开始
    * @param limit:int 分页数量
-   * @returns { data: Array<Object>, size: int }
+   * @returns { data: Array<Object>, count: int }
    */
   async kindWork(id, kind, offset, limit) {
     if(!id) {
       return;
     }
-    let [data, size] = await Promise.all([
+    let [data, count] = await Promise.all([
       this.kindWorkData(id, kind, offset, limit),
       this.kindWorkSize(id, kind)
     ]);
-    return { data, size };
+    return { data, count };
   }
 
   /**

@@ -100,18 +100,18 @@ class Service extends egg.Service {
         .where('circle.type=circle_type.id')
         .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           hash[item.id] = item;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('circleInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('circleInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -474,20 +474,20 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.circleId;
           let temp = hash[id] = hash[id] || [];
           temp.push(item.tagId);
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('circleTag_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('circleTag_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     let tagIdList = [];
     let tagIdHash = {};

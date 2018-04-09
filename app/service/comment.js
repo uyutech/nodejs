@@ -99,19 +99,19 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -204,20 +204,20 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.commentId;
           let temp = hash[id] = hash[id] || [];
           temp.push(item);
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let item = hash[id] || null;
-          cache[i] = item;
-          app.redis.setex('commentMedia_' + id, CACHE_TIME, JSON.stringify(item));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let item = hash[id] || null;
+        cache[i] = item;
+        app.redis.setex('commentMedia_' + id, CACHE_TIME, JSON.stringify(item));
+      });
     }
     return cache;
   }
@@ -768,19 +768,19 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.commentId;
           hash[id] = true;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let item = hash[id] || false;
-          cache[i] = item;
-          app.redis.setex('userCommentRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, JSON.stringify(item));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let item = hash[id] || false;
+        cache[i] = item;
+        app.redis.setex('userCommentRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, JSON.stringify(item));
+      });
     }
     return cache;
   }
@@ -861,27 +861,26 @@ class Service extends egg.Service {
           [Sequelize.fn('COUNT', '*'), 'num']
         ],
         where: {
-          comment_id: idList,
+          comment_id: noCacheIdList,
           type,
           is_delete: false,
         },
         group: 'commentId',
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.commentId;
           hash[id] = item.num;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let item = hash[id];
-          let num = item || 0;
-          cache[i] = num;
-          app.redis.setex('commentCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(num));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let num = hash[id] || 0;
+        cache[i] = num;
+        app.redis.setex('commentCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(num));
+      });
     }
     return cache;
   }
@@ -1050,19 +1049,19 @@ class Service extends egg.Service {
         group: 'rootId',
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.rootId;
           hash[id] = item.num;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || 0;
-          cache[i] = temp;
-          app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || 0;
+        cache[i] = temp;
+        app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     return cache;
   }
@@ -1159,20 +1158,20 @@ class Service extends egg.Service {
         .where('circle_tag_relation.is_delete=false')
         .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.commentId;
           let temp = hash[id] = hash[id] || [];
           temp.push(item.circleId);
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let item = hash[id] || null;
-          cache[i] = item;
-          app.redis.setex('commentCircle_' + id, CACHE_TIME, JSON.stringify(item));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let item = hash[id] || null;
+        cache[i] = item;
+        app.redis.setex('commentCircle_' + id, CACHE_TIME, JSON.stringify(item));
+      });
     }
     let circleIdList = [];
     let circleIdHash = {};

@@ -187,21 +187,20 @@ class Service extends egg.Service {
         .where('image_album_author_profession_relation.profession_id=profession.id')
         .toString();
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let worksId = item.worksId;
           let temp = hash[worksId] = hash[worksId] || [];
           temp.push(item);
         });
-        noCacheIdList.forEach((id, i) => {
-          let item = hash[id];
-          if(item) {
-            cache[i] = item;
-            app.redis.setex('imageAlbumAuthors_' + id, CACHE_TIME, JSON.stringify(item));
-          }
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('imageAlbumAuthors_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
     let authorIdList = [];
     let authorIdHash = {};

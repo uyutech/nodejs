@@ -41,7 +41,7 @@ class Controller extends egg.Controller {
     mainWorks.limit = LIMIT;
     let kindWork;
     if(workKindList.length) {
-      kindWork = await service.author.kindWork(authorId, uid, workKindList[0].kind, 0, LIMIT);
+      kindWork = await service.author.kindWork(authorId, workKindList[0].kind, 0, LIMIT);
       kindWork.limit = LIMIT;
     }
     commentList.limit = LIMIT;
