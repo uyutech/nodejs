@@ -730,7 +730,13 @@ class Service extends egg.Service {
       this.musicAlbumIdList(id, offset, limit),
       this.musicAlbumCount(id)
     ]);
-    let data = await service.musicAlbum.infoList(idList);
+    let [data, numCountList] = await Promise.all([
+      service.musicAlbum.infoList(idList),
+      service.works.numCountList(idList, 1)
+    ]);
+    data.forEach((item, i) => {
+      item.popular = numCountList[i] || 0;
+    });
     return {
       count,
       data,

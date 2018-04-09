@@ -450,9 +450,11 @@ async function dealWorks(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Works_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
+    let worksId = item.ID;
     if(['5', '6', '18'].indexOf(item.WorksType) > -1) {
+      worksId = worksId.replace(/^2015/, '2014');
       await MusicAlbum.create({
-        id: item.ID.replace(/^2015/, '2014'),
+        id: worksId,
         title: item.Title || '',
         sub_title: item.sub_Title || '',
         describe: item.Describe || '',
@@ -466,8 +468,9 @@ async function dealWorks(pool) {
       });
     }
     else if(['11', '12'].indexOf(item.WorksType) > -1) {
+      worksId = worksId.replace(/^2015/, '2013');
       await ImageAlbum.create({
-        id: item.ID.replace(/^2015/, '2013'),
+        id: worksId,
         title: item.Title || '',
         sub_title: item.sub_Title || '',
         describe: item.Describe || '',
@@ -482,7 +485,7 @@ async function dealWorks(pool) {
     }
     else {
       await Works.create({
-        id: item.ID,
+        id: worksId,
         title: item.Title || '',
         sub_title: item.sub_Title || '',
         describe: item.Describe || '',
@@ -496,7 +499,7 @@ async function dealWorks(pool) {
       });
     }
     await WorksNum.create({
-      works_id: item.ID,
+      works_id: worksId,
       type: 1,
       num: item.Popular,
       update_time: item.CreateTime,
