@@ -212,7 +212,7 @@ class Service extends egg.Service {
     let cacheKey = 'tagListCommentCount_' + tagList.join(',');
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
+      // app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     let sql = squel.select()

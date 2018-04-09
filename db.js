@@ -891,8 +891,9 @@ async function dealCircle(pool) {
     await TagCommentRelation.create({
       tag_id: tagOldIdHash[item.TagID],
       comment_id: item.CommentID,
-      type: 1,
+      type: 2,
       is_delete: !!item.ISDel,
+      is_comment_delete: false,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -1081,7 +1082,7 @@ async function dealComment(pool) {
           await TagCommentRelation.upsert({
             tag_id: tagId,
             comment_id: item.ID,
-            type: 0,
+            type: 1,
             is_delete: false,
             create_time: item.CreateTime,
             update_time: item.CreateTime,
@@ -1684,7 +1685,7 @@ async function temp(pool) {
       await TagCommentRelation.upsert({
         tag_id: tagId,
         comment_id: item.ID,
-        type: 0,
+        type: 1,
         is_delete: false,
         create_time: item.CreateTime,
         update_time: item.CreateTime,

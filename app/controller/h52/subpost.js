@@ -69,6 +69,58 @@ class Controller extends egg.Controller {
       activity,
     });
   }
+
+  async sub() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let content = body.content;
+    let image = body.image;
+    let circleId = body.circleId;
+    if(!content || content.length < 3) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '字数不能少于3个字哦~',
+      });
+    }
+    if(content.length > 4096) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '字数不能多于4096个字哦~',
+      });
+    }
+    if(!circleId) {
+      circleId = '2019000000000000';
+    }
+    circleId = circleId.split(',');
+    if(!circleId.length) {
+      return;
+    }
+    if(image) {
+      image = JSON.parse(image);
+    }
+    let tagList = await service.circle.tagList(circleId, 1);
+    let tagId = [];
+    let tagHash = {};
+    tagList.map((item) => {
+      if(item) {
+        item.forEach(function(tag) {
+          if(!tagHash[tag.id]) {
+            tagHash[tag.id] = true;
+            tagId.push(tag.id);
+          }
+        });
+      }
+    });
+    let res = await service.post.add(uid, {
+      content,
+      circleId,
+      tagId,
+      image,
+      authorId: body.authorId,
+    });
+    if(res) {
+      ctx.body = ctx.helper.okJSON(res);
+    }
+  }
 }
 
 module.exports = Controller;

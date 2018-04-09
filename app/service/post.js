@@ -127,7 +127,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'circleCommentCount_' + id;
+    let cacheKey = 'commentCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -210,7 +210,13 @@ class Service extends egg.Service {
    */
   async allCount() {
     const { app } = this;
-    let res = await app.model.comment.findOne({
+    let cacheKey = 'allPostCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.comment.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
@@ -226,6 +232,79 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 添加画圈
+   * @param uid:int 用户id
+   * @param data:Object 数据
+   */
+  async add(uid, data) {
+    if(!uid || !data) {
+      return;
+    }
+    const { app, service } = this;
+    if(data.authorId) {
+      let check = await service.author.isUser(data.authorId, uid);
+      if(!check) {
+        return;
+      }
+    }
+    let now = new Date();
+    let create = await app.model.comment.create({
+      user_id: uid,
+      author_id: data.authorId || 0,
+      content: data.content,
+      is_delete: false,
+      review: 0,
+      state: 0,
+      parent_id: 0,
+      root_id: 0,
+      create_time: now,
+      update_time: now,
+    });
+    if(create) {
+      let query = [];
+      if(data.tagId && data.tagId.length) {
+        query = data.tagId.map((id) => {
+          return app.model.tagCommentRelation.create({
+            tag_id: id,
+            comment_id: create.id,
+            type: 1,
+            is_delete: false,
+            is_comment_delete: false,
+            create_time: now,
+            update_time: now,
+          });
+        });
+      }
+      if(data.image && data.image.length) {
+        query = query.concat(data.image.map((item) => {
+          return app.model.commentMedia.create({
+            comment_id: create.id,
+            works_id: 0,
+            work_id: 0,
+            kind: 0,
+            url: item.url,
+            width: item.width,
+            height: item.height,
+            duration: 0,
+            is_delete: false,
+            update_time: now,
+          });
+        }));
+      }
+      await Promise.all(query);
+      let cacheKey = 'allPostCount';
+      let expire = await app.redis.expire(cacheKey, CACHE_TIME);
+      if(expire) {
+        app.redis.incr(cacheKey);
+      }
+    }
+    let res = await service.comment.info(create.id);
+    res = await service.comment.plusFull(res, uid);
     return res;
   }
 }

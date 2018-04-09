@@ -331,6 +331,7 @@ module.exports = app => {
   app.post('/h5/post2/commentList', 'h52.post.commentList');
 
   app.post('/h5/subpost2/index', 'h52.subpost.index');
+  app.post('/h5/subpost2/sub', app.middlewares.needLoginJson(), 'h52.subpost.sub');
 
   app.post('/h5/user2/index', 'h52.user.index');
   app.post('/h5/user2/postList', 'h52.user.postList');
@@ -360,4 +361,5 @@ module.exports = app => {
   app.post('/h5/comment2/unLike', app.middlewares.needLoginJson(), 'h52.comment.unLike');
   app.post('/h5/comment2/favor', app.middlewares.needLoginJson(), 'h52.comment.favor');
   app.post('/h5/comment2/unFavor', app.middlewares.needLoginJson(), 'h52.comment.unFavor');
+  app.post('/h5/comment2/sub', app.middlewares.needLoginJson(), 'h52.comment.sub');
 };

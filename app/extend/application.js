@@ -26,6 +26,7 @@ const profession = require('../model/profession');
 const professionSkillRelation = require('../model/professionSkillRelation');
 const skill = require('../model/skill');
 const tag = require('../model/tag');
+const tagCommentRelation = require('../model/tagCommentRelation');
 const user = require('../model/user');
 const userDelivery = require('../model/userDelivery');
 const userAuthorRelation = require('../model/userAuthorRelation');
@@ -140,6 +141,7 @@ module.exports = {
         professionSkillRelation: professionSkillRelation(this),
         skill: skill(this),
         tag: tag(this),
+        tagCommentRelation: tagCommentRelation(this),
         user: user(this),
         userDelivery: userDelivery(this),
         userAuthorRelation: userAuthorRelation(this),

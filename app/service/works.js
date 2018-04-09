@@ -390,6 +390,41 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取作品的评论id
+   * @param id:int 作品id
+   * @returns int
+   */
+  async commentId(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'worksComment_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.worksCommentRelation.findOne({
+      attributes: [
+        ['comment_id', 'commentId']
+      ],
+      where: {
+        works_id: id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.commentId;
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    else {
+      return;
+    }
+    return res;
+  }
+
+  /**
    * 获取评论全部信息
    * @param id:int 作品id
    * @param uid:int 用户id
@@ -401,86 +436,9 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    let [data, count] = await Promise.all([
-      this.commentData(id, uid, offset, limit),
-      this.commentCount(id)
-    ]);
-    return { data, count };
-  }
-
-  /**
-   * 获取评论数据
-   * @param id:int 作品id
-   * @param uid:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Array<Object>
-   */
-  async commentData(id, uid, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    const { app, service } = this;
-    let sql = squel.select()
-      .from('works_comment_relation')
-      .from('comment')
-      .field('comment.id')
-      .field('comment.user_id', 'uid')
-      .field('comment.author_id', 'aid')
-      .field('comment.content')
-      .field('comment.parent_id', 'pid')
-      .field('comment.root_id', 'rid')
-      .field('comment.create_time', 'createTime')
-      .where('works_comment_relation.works_id=?', id)
-      .where('works_comment_relation.comment_id=comment.root_id')
-      .where('comment.is_delete=false')
-      .order('comment.id', false)
-      .offset(offset)
-      .limit(limit)
-      .toString();
-    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = await service.comment.plusList(res, uid);
-    return res;
-  }
-
-  /**
-   * 获取评论size
-   * @param id:int 作品id
-   * @returns int
-   */
-  async commentCount(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'worksCommentCount_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    let sql = squel.select()
-      .from('works_comment_relation')
-      .from('comment')
-      .field('COUNT(*)', 'num')
-      .where('works_comment_relation.works_id=?', id)
-      .where('works_comment_relation.comment_id=comment.root_id')
-      .where('comment.is_delete=false')
-      .toString();
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0].num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
+    const { service } = this;
+    let commentId = await this.commentId(id);
+    return await service.post.commentList(commentId, uid, offset, limit);
   }
 
   /**
@@ -737,7 +695,7 @@ class Service extends egg.Service {
           let worksType = typeList[i];
           let temp = hash[worksType] || null;
           cache[i] = temp;
-          app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, JSON.stringify(res));
+          app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }

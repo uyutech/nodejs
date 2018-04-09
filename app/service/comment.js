@@ -1089,7 +1089,7 @@ class Service extends egg.Service {
         .from('tag_comment_relation')
         .from('circle_tag_relation')
         .where('tag_comment_relation.comment_id=?', id)
-        .where('tag_comment_relation.type=0')
+        .where('tag_comment_relation.type=1')
         .where('tag_comment_relation.is_delete=false')
         .where('tag_comment_relation.tag_id=circle_tag_relation.tag_id')
         .where('circle_tag_relation.is_delete=false')
@@ -1153,7 +1153,7 @@ class Service extends egg.Service {
         .from('tag_comment_relation')
         .from('circle_tag_relation')
         .where('tag_comment_relation.comment_id IN ?', noCacheIdList)
-        .where('tag_comment_relation.type=0')
+        .where('tag_comment_relation.type=1')
         .where('tag_comment_relation.is_delete=false')
         .where('tag_comment_relation.tag_id=circle_tag_relation.tag_id')
         .where('circle_tag_relation.is_delete=false')
@@ -1201,6 +1201,41 @@ class Service extends egg.Service {
         });
       }
     });
+  }
+
+  /**
+   * 添加回复
+   * @param uid:int 用户id
+   * @param rid:int 根id
+   * @param data:Object 数据
+   */
+  async add(uid, rid, data) {
+    if(!uid || !rid) {
+      return;
+    }
+    const { app, service } = this;
+    if(data.authorId) {
+      let check = await service.author.isUser(data.authorId, uid);
+      if(!check) {
+        return;
+      }
+    }
+    let now = new Date();
+    let create = await app.model.comment.create({
+      user_id: uid,
+      author_id: data.authorId || 0,
+      content: data.content,
+      is_delete: false,
+      review: 0,
+      state: 0,
+      parent_id: data.pid || rid,
+      root_id: rid,
+      create_time: now,
+      update_time: now,
+    });
+    let res = await service.comment.info(create.id);
+    res = await service.comment.plusFull(res, uid);
+    return res;
   }
 }
 
