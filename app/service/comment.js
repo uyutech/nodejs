@@ -6,6 +6,8 @@
 
 const egg = require('egg');
 const Sequelize = require('sequelize');
+const squel = require('squel');
+
 const CACHE_TIME = 10;
 
 class Service extends egg.Service {
@@ -59,14 +61,14 @@ class Service extends egg.Service {
     }
     const { app, service } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         return app.redis.get('comment_' + id);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -99,11 +101,11 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
           let temp = hash[id];
           if(temp) {
@@ -168,7 +170,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== undefined && id !== null) {
           return app.redis.get('commentMedia_' + id);
         }
@@ -177,7 +179,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -214,7 +216,7 @@ class Service extends egg.Service {
           let temp = hash[id] = hash[id] || [];
           temp.push(item);
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
           let item = hash[id] || null;
           cache[i] = item;
@@ -314,7 +316,7 @@ class Service extends egg.Service {
     data.replyCount = replyCount || 0;
     data.circle = circle;
     if(media) {
-      media.forEach(function(item) {
+      media.forEach((item) => {
         delete item.commentId;
       });
       data.media = media;
@@ -382,13 +384,13 @@ class Service extends egg.Service {
       service.author.infoList(authorIdList)
     ]);
     let userHash = {};
-    userList.forEach(function(item) {
+    userList.forEach((item) => {
       if(item) {
         userHash[item.id] = item;
       }
     });
     let authorHash = {};
-    authorList.forEach(function(item) {
+    authorList.forEach((item) => {
       if(item) {
         authorHash[item.id] = item;
       }
@@ -423,7 +425,7 @@ class Service extends egg.Service {
     if(!dataList.length) {
       return [];
     }
-    let idList = dataList.map(function(item) {
+    let idList = dataList.map((item) => {
       return item.id;
     });
     let [
@@ -441,7 +443,7 @@ class Service extends egg.Service {
       this.circleList(idList),
       this.mediaList(idList)
     ]);
-    dataList.forEach(function(item, i) {
+    dataList.forEach((item, i) => {
       if(item) {
         if(item.isAuthor) {
           let author = authorHash[item.aid];
@@ -481,7 +483,7 @@ class Service extends egg.Service {
         if(mediaList) {
           let media = mediaList[i];
           if(media) {
-            media.forEach(function(item) {
+            media.forEach((item) => {
               delete item.commentId;
             });
             item.media = media;
@@ -505,7 +507,7 @@ class Service extends egg.Service {
     if(!dataList.length) {
       return [];
     }
-    let idList = dataList.map(function(item) {
+    let idList = dataList.map((item) => {
       return item.id;
     });
     let [
@@ -515,7 +517,7 @@ class Service extends egg.Service {
       this.quoteAndPersonList(dataList),
       this.operateRelationList(idList, uid, 1)
     ]);
-    dataList.forEach(function(item, i) {
+    dataList.forEach((item, i) => {
       if(item) {
         if(item.isAuthor) {
           let author = authorHash[item.aid];
@@ -561,7 +563,7 @@ class Service extends egg.Service {
     let authorIdHash = {};
     let quoteIdList = [];
     let quoteIdHash = {};
-    dataList.forEach(function(item) {
+    dataList.forEach((item) => {
       if(item) {
         if(item.aid) {
           if(!authorIdHash[item.aid]) {
@@ -585,7 +587,7 @@ class Service extends egg.Service {
     });
     let quoteList = await this.infoList(quoteIdList);
     let quoteHash = {};
-    quoteList.forEach(function(item) {
+    quoteList.forEach((item) => {
       if(item) {
         if(item.aid) {
           if(!authorIdHash[item.aid]) {
@@ -614,18 +616,18 @@ class Service extends egg.Service {
       service.author.infoList(authorIdList)
     ]);
     let userHash = {};
-    userList.forEach(function(item) {
+    userList.forEach((item) => {
       if(item) {
         userHash[item.id] = item;
       }
     });
     let authorHash = {};
-    authorList.forEach(function(item) {
+    authorList.forEach((item) => {
       if(item) {
         authorHash[item.id] = item;
       }
     });
-    quoteList.forEach(function(item) {
+    quoteList.forEach((item) => {
       if(item) {
         if(item.isAuthor) {
           item.name = authorHash[item.aid].name;
@@ -737,14 +739,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         return app.redis.get('userCommentRelation_' + uid + '_' + id + '_' + type);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -777,7 +779,7 @@ class Service extends egg.Service {
           let id = item.commentId;
           hash[id] = true;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
           let item = hash[id] || false;
           cache[i] = item;
@@ -836,14 +838,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         return app.redis.get('commentCount_' + id + '_' + type);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -877,7 +879,7 @@ class Service extends egg.Service {
           let id = item.commentId;
           hash[id] = item.num;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
           let item = hash[id];
           let num = item || 0;
@@ -1019,14 +1021,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         return app.redis.get('commentReplyCount_' + id);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -1055,11 +1057,11 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.rootId;
           hash[id] = item.num;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
           let temp = hash[id] || 0;
           cache[i] = temp;
@@ -1087,23 +1089,24 @@ class Service extends egg.Service {
       res = JSON.parse(res);
     }
     else {
-      res = await app.model.circleCommentRelation.findAll({
-        attributes: [
-          ['circle_id', 'circleId']
-        ],
-        where: {
-          comment_id: id,
-          type: 0,
-        },
-        raw: true,
-      });
+      let sql = squel.select()
+        .field('circle_tag_relation.circle_id', 'circleId')
+        .from('tag_comment_relation')
+        .from('circle_tag_relation')
+        .where('tag_comment_relation.comment_id=?', id)
+        .where('tag_comment_relation.type=0')
+        .where('tag_comment_relation.is_delete=false')
+        .where('tag_comment_relation.tag_id=circle_tag_relation.tag_id')
+        .where('circle_tag_relation.is_delete=false')
+        .toString();
+      res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       res = res.map((item) => {
         return item.circleId;
       });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
     res = await service.circle.infoList(res);
-    return res.map(function(item) {
+    return res.map((item) => {
       return {
         id: item.id,
         name: item.name,
@@ -1149,17 +1152,18 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let res = await app.model.circleCommentRelation.findAll({
-        attributes: [
-          ['circle_id', 'circleId'],
-          ['comment_id', 'commentId']
-        ],
-        where: {
-          comment_id: noCacheIdList,
-          type: 0,
-        },
-        raw: true,
-      });
+      let sql = squel.select()
+        .field('tag_comment_relation.comment_id', 'commentId')
+        .field('circle_tag_relation.circle_id', 'circleId')
+        .from('tag_comment_relation')
+        .from('circle_tag_relation')
+        .where('tag_comment_relation.comment_id IN ?', noCacheIdList)
+        .where('tag_comment_relation.type=0')
+        .where('tag_comment_relation.is_delete=false')
+        .where('tag_comment_relation.tag_id=circle_tag_relation.tag_id')
+        .where('circle_tag_relation.is_delete=false')
+        .toString();
+      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
         res.forEach((item) => {
@@ -1169,7 +1173,7 @@ class Service extends egg.Service {
         });
         noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let item = hash[id];
+          let item = hash[id] || null;
           cache[i] = item;
           app.redis.setex('commentCircle_' + id, CACHE_TIME, JSON.stringify(item));
         });

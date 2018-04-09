@@ -91,7 +91,7 @@ class Service extends egg.Service {
     let worksIdHash = {};
     let authorIdList = [];
     let authorIdHash = {};
-    res.forEach(function(item) {
+    res.forEach((item) => {
       switch(item.type) {
         case 1:
           item.content = item.content.trim();
@@ -102,7 +102,7 @@ class Service extends egg.Service {
           break;
         case 4:
           item.content = item.content.trim().split(',');
-          item.content.forEach(function(item) {
+          item.content.forEach((item) => {
             if(!authorIdHash[item.trim()]) {
               authorIdHash[item.trim()] = true;
               authorIdList.push(item.trim());
@@ -111,7 +111,7 @@ class Service extends egg.Service {
           break;
         case 5:
           item.content = item.content.trim().split(',');
-          item.content.forEach(function(item) {
+          item.content.forEach((item) => {
             if(!worksIdHash[item.trim()]) {
               worksIdHash[item.trim()] = true;
               worksIdList.push(item.trim());
@@ -148,7 +148,7 @@ class Service extends egg.Service {
         case 4:
           item.content = item.content.map((item) => {
             return authorHash[item];
-          }).filter(function(item) {
+          }).filter((item) => {
             return item;
           });
           break;
@@ -246,7 +246,7 @@ class Service extends egg.Service {
       });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
-    let idList = res.map(function(item) {
+    let idList = res.map((item) => {
       return item.worksId;
     });console.log(idList);
     switch(kind) {

@@ -19,7 +19,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('profession_' + id);
         }
@@ -28,7 +28,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -51,23 +51,18 @@ class Service extends egg.Service {
         where: {
           id: noCacheIdList,
         },
+        raw: true,
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
-          item = item.toJSON();
+        res.forEach((item) => {
           hash[item.id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('profession_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('profession_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('profession_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }

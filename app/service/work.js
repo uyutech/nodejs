@@ -191,7 +191,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('video_' + id);
         }
@@ -200,7 +200,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -233,11 +233,11 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
           let temp = hash[id];
           if(temp) {
@@ -267,7 +267,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('audio_' + id);
         }
@@ -276,7 +276,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -307,20 +307,15 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('audio_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('audio_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('audio_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -341,7 +336,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('image_' + id);
         }
@@ -350,7 +345,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -381,20 +376,15 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('image_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('image_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('image_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -415,7 +405,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('text_' + id);
         }
@@ -424,7 +414,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -453,20 +443,15 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('text_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('text_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('text_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -502,7 +487,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('userWorkRelation_' + uid + '_' + id + '_' + type);
         }
@@ -511,7 +496,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -540,20 +525,15 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.workId;
           hash[id] = true;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = true;
-            app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, 'true');
-          }
-          else {
-            app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, 'false');
-          }
+          let temp = hash[id] || null;
+          cache[i] = true;
+          app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, 'true');
         });
       }
     }
@@ -593,7 +573,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('workCount_' + id + '_' + type);
         }
@@ -602,7 +582,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -632,21 +612,15 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.workId;
           hash[id] = item.num;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('workCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            cache[i] = 0;
-            app.redis.setex('workCount_' + id + '_' + type, CACHE_TIME, '0');
-          }
+          let temp = hash[id] || 0;
+          cache[i] = temp;
+          app.redis.setex('workCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }

@@ -19,7 +19,6 @@ const authorOutside = require('../model/authorOutside');
 const authorAlias = require('../model/authorAlias');
 const circleType = require('../model/circleType');
 const circle = require('../model/circle');
-const circleCommentRelation = require('../model/circleCommentRelation');
 const circleTagRelation = require('../model/circleTagRelation');
 const comment = require('../model/comment');
 const commentMedia = require('../model/commentMedia');
@@ -134,7 +133,6 @@ module.exports = {
         authorAlias: authorAlias(this),
         circleType: circleType(this),
         circle: circle(this),
-        circleCommentRelation: circleCommentRelation(this),
         circleTagRelation: circleTagRelation(this),
         comment: comment(this),
         commentMedia: commentMedia(this),

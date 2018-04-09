@@ -1073,14 +1073,14 @@ async function dealComment(pool) {
           }
           await TagCommentRelation.upsert({
             tag_id: tagId,
-            comment_id: hash[circleId],
+            comment_id: item.ID,
             type: 0,
             is_delete: false,
             create_time: item.CreateTime,
             update_time: item.CreateTime,
           }, {
             where: {
-              comment_id: item.CommentID,
+              comment_id: item.ID,
             },
           });
         }
@@ -1676,14 +1676,14 @@ async function temp(pool) {
       }
       await TagCommentRelation.upsert({
         tag_id: tagId,
-        comment_id: hash[circleId],
+        comment_id: item.ID,
         type: 0,
         is_delete: false,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       }, {
         where: {
-          comment_id: item.CommentID,
+          comment_id: item.ID,
         },
       });
     }

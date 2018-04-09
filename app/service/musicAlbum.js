@@ -25,7 +25,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('musicAlbumInfo_' + id);
         }
@@ -34,7 +34,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -64,20 +64,15 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('musicAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('musicAlbumInfo_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('musicAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }

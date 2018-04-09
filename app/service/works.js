@@ -73,7 +73,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('worksInfo_' + id);
         }
@@ -82,7 +82,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -118,16 +118,11 @@ class Service extends egg.Service {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('worksInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('worksInfo_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('worksInfo_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -180,7 +175,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('worksPopular_' + id);
         }
@@ -189,7 +184,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -217,16 +212,11 @@ class Service extends egg.Service {
           let id = item.worksId;
           hash[id] = item.num;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('worksPopular_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('worksPopular_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('worksPopular_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -335,13 +325,13 @@ class Service extends egg.Service {
     });
     let userLikeHash = {};
     let userFavorHash = {};
-    userLikeList.forEach(function(item, i) {
+    userLikeList.forEach((item, i) => {
       if(item) {
         let id = workIdList[i];
         userLikeHash[id] = item;
       }
     });
-    userFavorList.forEach(function(item, i) {
+    userFavorList.forEach((item, i) => {
       if(item) {
         let id = workIdList[i];
         userFavorHash[id] = item;
@@ -349,13 +339,13 @@ class Service extends egg.Service {
     });
     let likeCountHash = {};
     let favorCountHash = {};
-    likeCountList.forEach(function(item, i) {
+    likeCountList.forEach((item, i) => {
       if(item !== null && item !== undefined) {
         let id = workIdList[i];
         likeCountHash[id] = item;
       }
     });
-    favorCountList.forEach(function(item, i) {
+    favorCountList.forEach((item, i) => {
       if(item !== null && item !== undefined) {
         let id = workIdList[i];
         favorCountHash[id] = item;
@@ -566,7 +556,7 @@ class Service extends egg.Service {
     }
     const { app, service } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('worksAuthors_' + id);
         }
@@ -575,7 +565,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -610,9 +600,9 @@ class Service extends egg.Service {
           let temp = hash[worksId] = hash[worksId] || [];
           temp.push(item);
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let item = hash[id];
+          let item = hash[id] || null;
           if(item) {
             cache[i] = item;
             app.redis.setex('worksAuthors_' + id, CACHE_TIME, JSON.stringify(item));
@@ -622,7 +612,7 @@ class Service extends egg.Service {
     }
     let authorIdList = [];
     let authorIdHash = {};
-    cache.forEach(function(list) {
+    cache.forEach((list) => {
       if(list && list.length) {
         list.forEach((item) => {
           if(!authorIdHash[item.authorId]) {
@@ -638,7 +628,7 @@ class Service extends egg.Service {
       list.forEach((item) => {
         hash[item.id] = item;
       });
-      cache.forEach(function(list) {
+      cache.forEach((list) => {
         if(list && list.length) {
           list.forEach((item) => {
             let authorInfo = hash[item.authorId];
@@ -703,14 +693,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      typeList.map(function(type) {
+      typeList.map((type) => {
         return app.redis.get('typeProfessionSort_' + type);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let type = typeList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -743,16 +733,11 @@ class Service extends egg.Service {
           hash[item.worksType] = hash[item.worksType] || [];
           hash[item.worksType].push(item);
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let worksType = typeList[i];
-          let temp = hash[worksType];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, JSON.stringify(res));
-          }
-          else {
-            app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, 'null');
-          }
+          let temp = hash[worksType] || null;
+          cache[i] = temp;
+          app.redis.setex('typeProfessionSort_' + worksType, CACHE_TIME, JSON.stringify(res));
         });
       }
     }
@@ -813,7 +798,7 @@ class Service extends egg.Service {
         last.push({
           id: first.professionId,
           name: first.professionName,
-          list: authors.map(function(author) {
+          list: authors.map((author) => {
             return {
               id: author.authorId,
               name: author.name,
@@ -826,7 +811,7 @@ class Service extends egg.Service {
     });
     // 没有对应规则的剩余的存入末尾
     let temp = [];
-    Object.keys(hash).forEach(function(key) {
+    Object.keys(hash).forEach((key) => {
       let authors = hash[key];
       let first = authors[0];
       temp.push({
@@ -834,7 +819,7 @@ class Service extends egg.Service {
         name: first.professionName,
         kind: first.kind,
         kindName: first.kindName,
-        list: authors.map(function(author) {
+        list: authors.map((author) => {
           return {
             id: author.authorId,
             name: author.name,
@@ -878,7 +863,7 @@ class Service extends egg.Service {
     if(!worksList.length) {
       return [];
     }
-    let authorIdList = worksList.map(function(item) {
+    let authorIdList = worksList.map((item) => {
       return item.id;
     });
     let authorList = await this.authorList(authorIdList);

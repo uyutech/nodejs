@@ -25,7 +25,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         if(id !== null && id !== undefined) {
           return app.redis.get('imageAlbumInfo_' + id);
         }
@@ -34,7 +34,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -64,20 +64,15 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('imageAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('imageAlbumInfo_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('imageAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -118,7 +113,7 @@ class Service extends egg.Service {
     }
     let authorIdList = [];
     let authorIdHash = {};
-    res.forEach(function(item) {
+    res.forEach((item) => {
       let authorId = item.authorId;
       if(!authorIdHash[authorId]) {
         authorIdHash[authorId] = true;
@@ -128,10 +123,10 @@ class Service extends egg.Service {
     if(authorIdList.length) {
       let list = await service.author.infoList(authorIdList);
       let hash = {};
-      list.forEach(function(item) {
+      list.forEach((item) => {
         hash[item.id] = item;
       });
-      res.forEach(function(item) {
+      res.forEach((item) => {
         let authorInfo = hash[item.authorId];
         if(authorInfo) {
           item.headUrl = authorInfo.headUrl;
@@ -157,14 +152,14 @@ class Service extends egg.Service {
     }
     const { app, service } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         return app.redis.get('imageAlbumAuthors_' + id);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -194,12 +189,12 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let worksId = item.worksId;
           let temp = hash[worksId] = hash[worksId] || [];
           temp.push(item);
         });
-        noCacheIdList.forEach(function(id, i) {
+        noCacheIdList.forEach((id, i) => {
           let item = hash[id];
           if(item) {
             cache[i] = item;
@@ -210,9 +205,9 @@ class Service extends egg.Service {
     }
     let authorIdList = [];
     let authorIdHash = {};
-    cache.forEach(function(list) {
+    cache.forEach((list) => {
       if(list && list.length) {
-        list.forEach(function(item) {
+        list.forEach((item) => {
           if(!authorIdHash[item.authorId]) {
             authorIdHash[item.authorId] = true;
             authorIdList.push(item.authorId);
@@ -223,12 +218,12 @@ class Service extends egg.Service {
     if(authorIdList.length) {
       let list = await service.author.infoList(authorIdList);
       let hash = {};
-      list.forEach(function(item) {
+      list.forEach((item) => {
         hash[item.id] = item;
       });
-      cache.forEach(function(list) {
+      cache.forEach((list) => {
         if(list && list.length) {
-          list.forEach(function(item) {
+          list.forEach((item) => {
             let authorInfo = hash[item.authorId];
             if(authorInfo) {
               item.headUrl = authorInfo.headUrl;

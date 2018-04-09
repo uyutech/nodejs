@@ -61,14 +61,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         return app.redis.get('userInfo_' + id);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -100,20 +100,15 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('userInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('userInfo_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('userInfo_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -215,7 +210,7 @@ class Service extends egg.Service {
     });
     let userIdList = [];
     let authorIdList = [];
-    res.forEach(function(item) {
+    res.forEach((item) => {
       if(item.type === 1) {
         userIdList.push(item.targetId);
       }
@@ -228,16 +223,16 @@ class Service extends egg.Service {
       service.author.infoList(authorIdList)
     ]);
     let userHash = {};
-    userList.forEach(function(item) {
+    userList.forEach((item) => {
       if(item) {
         userHash[item.id] = item;
       }
     });
     let authorHash = {};
-    authorList.forEach(function(item) {
+    authorList.forEach((item) => {
       authorHash[item.id] = item;
     });
-    return res.map(function(item) {
+    return res.map((item) => {
       let temp = {
         id: item.targetId,
         isAuthor: item.type === 3,
@@ -505,11 +500,11 @@ class Service extends egg.Service {
     if(!res.length) {
       return [];
     }
-    let idList = res.map(function(item) {
+    let idList = res.map((item) => {
       return item.userId;
     });
     res = await this.infoList(idList);
-    res.forEach(function(item) {
+    res.forEach((item) => {
       delete item.sign;
       delete item.coins;
     });
@@ -607,11 +602,11 @@ class Service extends egg.Service {
     if(!res.length) {
       return [];
     }
-    let idList = res.map(function(item) {
+    let idList = res.map((item) => {
       return item.userId;
     });
     res = await this.infoList(idList);
-    res.forEach(function(item) {
+    res.forEach((item) => {
       delete item.sign;
       delete item.coins;
     });
@@ -715,11 +710,11 @@ class Service extends egg.Service {
     if(!res.length) {
       return [];
     }
-    let idList = res.map(function(item) {
+    let idList = res.map((item) => {
       return item.userId;
     });
     res = await this.infoList(idList);
-    res.forEach(function(item) {
+    res.forEach((item) => {
       delete item.sign;
       delete item.coins;
     });
@@ -820,11 +815,11 @@ class Service extends egg.Service {
     if(!res.length) {
       return [];
     }
-    let idList = res.map(function(item) {
+    let idList = res.map((item) => {
       return item.authorId;
     });
     res = await service.author.infoList(idList);
-    res.forEach(function(item) {
+    res.forEach((item) => {
       delete item.sign;
       delete item.fansName;
       delete item.fansCircleName;
@@ -1026,7 +1021,7 @@ class Service extends egg.Service {
     });
     let worksIdHash = {};
     let worksIdList = [];
-    res.forEach(function(item) {
+    res.forEach((item) => {
       if(!worksIdHash[item.worksId]) {
         worksIdHash[item.worksId] = true;
         worksIdList.push(item.worksId);
@@ -1034,7 +1029,7 @@ class Service extends egg.Service {
     });
     let workIdHash = {};
     let workIdList = [];
-    res.forEach(function(item) {
+    res.forEach((item) => {
       if(!workIdHash[item]) {
         workIdHash[item.workId] = true;
         workIdList.push(item.workId);
@@ -1050,7 +1045,7 @@ class Service extends egg.Service {
     let authorHash = {};
     let typeHash = {};
     let typeList = [];
-    worksList.forEach(function(item) {
+    worksList.forEach((item) => {
       if(item) {
         if(!worksHash[item.id]) {
           worksHash[item.id] = item;
@@ -1061,12 +1056,12 @@ class Service extends egg.Service {
         }
       }
     });
-    workList.forEach(function(item) {
+    workList.forEach((item) => {
       if(!workHash[item.id]) {
         workHash[item.id] = item;
       }
     });
-    authorList.forEach(function(item) {
+    authorList.forEach((item) => {
       if(item && item.length) {
         if(!authorHash[item[0].worksId]) {
           authorHash[item[0].worksId] = item;
@@ -1075,14 +1070,14 @@ class Service extends egg.Service {
     });
     let professionSortList = await service.works.typeListProfessionSort(typeList);
     let professionSortHash = {};
-    professionSortList.forEach(function(item) {
+    professionSortList.forEach((item) => {
       if(item && item.length) {
         if(!professionSortHash[item[0].worksType]) {
           professionSortHash[item[0].worksType] = item;
         }
       }
     });
-    return res.map(function(item) {
+    return res.map((item) => {
       let temp = {
         id: item.worksId,
         work: {
@@ -1218,7 +1213,7 @@ class Service extends egg.Service {
     });
     let worksIdHash = {};
     let worksIdList = [];
-    res.forEach(function(item) {
+    res.forEach((item) => {
       if(!worksIdHash[item.worksId]) {
         worksIdHash[item.worksId] = true;
         worksIdList.push(item.worksId);
@@ -1226,7 +1221,7 @@ class Service extends egg.Service {
     });
     let workIdHash = {};
     let workIdList = [];
-    res.forEach(function(item) {
+    res.forEach((item) => {
       if(!workIdHash[item]) {
         workIdHash[item.workId] = true;
         workIdList.push(item.workId);
@@ -1242,7 +1237,7 @@ class Service extends egg.Service {
     let authorHash = {};
     let typeHash = {};
     let typeList = [];
-    worksList.forEach(function(item) {
+    worksList.forEach((item) => {
       if(item) {
         if(!worksHash[item.id]) {
           worksHash[item.id] = item;
@@ -1253,12 +1248,12 @@ class Service extends egg.Service {
         }
       }
     });
-    workList.forEach(function(item) {
+    workList.forEach((item) => {
       if(!workHash[item.id]) {
         workHash[item.id] = item;
       }
     });
-    authorList.forEach(function(item) {
+    authorList.forEach((item) => {
       if(item && item.length) {
         if(!authorHash[item[0].worksId]) {
           authorHash[item[0].worksId] = item;
@@ -1267,14 +1262,14 @@ class Service extends egg.Service {
     });
     let professionSortList = await service.works.typeListProfessionSort(typeList);
     let professionSortHash = {};
-    professionSortList.forEach(function(item) {
+    professionSortList.forEach((item) => {
       if(item && item.length) {
         if(!professionSortHash[item[0].worksType]) {
           professionSortHash[item[0].worksType] = item;
         }
       }
     });
-    return res.map(function(item) {
+    return res.map((item) => {
       let temp = {
         id: item.worksId,
         work: {
@@ -1409,7 +1404,7 @@ class Service extends egg.Service {
     });
     let worksIdHash = {};
     let worksIdList = [];
-    res.forEach(function(item) {
+    res.forEach((item) => {
       if(!worksIdHash[item.worksId]) {
         worksIdHash[item.worksId] = true;
         worksIdList.push(item.worksId);
@@ -1417,7 +1412,7 @@ class Service extends egg.Service {
     });
     let workIdHash = {};
     let workIdList = [];
-    res.forEach(function(item) {
+    res.forEach((item) => {
       if(!workIdHash[item]) {
         workIdHash[item.workId] = true;
         workIdList.push(item.workId);
@@ -1433,7 +1428,7 @@ class Service extends egg.Service {
     let authorHash = {};
     let typeHash = {};
     let typeList = [];
-    worksList.forEach(function(item) {
+    worksList.forEach((item) => {
       if(item) {
         if(!worksHash[item.id]) {
           worksHash[item.id] = item;
@@ -1444,12 +1439,12 @@ class Service extends egg.Service {
         }
       }
     });
-    workList.forEach(function(item) {
+    workList.forEach((item) => {
       if(!workHash[item.id]) {
         workHash[item.id] = item;
       }
     });
-    authorList.forEach(function(item) {
+    authorList.forEach((item) => {
       if(item && item.length) {
         if(!authorHash[item[0].worksId]) {
           authorHash[item[0].worksId] = item;
@@ -1458,14 +1453,14 @@ class Service extends egg.Service {
     });
     let professionSortList = await service.works.typeListProfessionSort(typeList);
     let professionSortHash = {};
-    professionSortList.forEach(function(item) {
+    professionSortList.forEach((item) => {
       if(item && item.length) {
         if(!professionSortHash[item[0].worksType]) {
           professionSortHash[item[0].worksType] = item;
         }
       }
     });
-    return res.map(function(item) {
+    return res.map((item) => {
       let temp = {
         id: item.worksId,
         work: {
@@ -1601,7 +1596,7 @@ class Service extends egg.Service {
       ],
       raw: true,
     });
-    let idList = res.map(function(item) {
+    let idList = res.map((item) => {
       return item.commentId;
     });
     let postList = await service.post.infoList(idList);
@@ -1686,7 +1681,7 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    let idList = res.map(function(item) {
+    let idList = res.map((item) => {
       return item.circleId;
     });
     res = await service.circle.infoList(idList);
@@ -1744,7 +1739,7 @@ class Service extends egg.Service {
     let followPersonBaseList = await this.followPersonBaseList(id);
     let userIdList = [];
     let authorIdList = [];
-    followPersonBaseList.forEach(function(item) {
+    followPersonBaseList.forEach((item) => {
       if(item.type === 1) {
         userIdList.push(item.targetId);
       }

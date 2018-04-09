@@ -60,14 +60,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         return app.redis.get('authorInfo_' + id);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -99,20 +99,15 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('authorInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('authorInfo_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('authorInfo_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -489,7 +484,7 @@ class Service extends egg.Service {
       raw: true,
     });
     if(res.length) {
-      res = res.map(function(item) {
+      res = res.map((item) => {
         return item.worksId;
       });
       if(offset === 0) {
@@ -572,7 +567,7 @@ class Service extends egg.Service {
     // 汇集所有大作品类型
     let worksTypeList = [];
     let hash = {};
-    worksList.forEach(function(item) {
+    worksList.forEach((item) => {
       if(!hash[item.type]) {
         hash[item.type] = true;
         worksTypeList.push(item.type);
@@ -581,9 +576,9 @@ class Service extends egg.Service {
     // 汇集全部职种id
     let professionIdList = [];
     hash = {};
-    worksListProfessionIdList.forEach(function(item) {
+    worksListProfessionIdList.forEach((item) => {
       if(item) {
-        item.forEach(function(id) {
+        item.forEach((id) => {
           if(id !== null && id !== undefined && !hash[id]) {
             hash[id] = true;
             professionIdList.push(id);
@@ -597,27 +592,27 @@ class Service extends egg.Service {
       service.profession.infoList(professionIdList),
     ]);
     let typeProfessionSortHash = {};
-    worksTypeList.forEach(function(worksType, i) {
+    worksTypeList.forEach((worksType, i) => {
       let sort = typeListProfessionSort[i];
       if(sort) {
         typeProfessionSortHash[worksType] = sort;
       }
     });
     let professionHash = {};
-    professionList.forEach(function(item) {
+    professionList.forEach((item) => {
       if(item) {
         professionHash[item.id] = item;
       }
     });
     // 遍历大作品，根据对应的排序信息将最优先展示的职种放入；如果没有排序，默认第一个
-    worksList.forEach(function(item, i) {
+    worksList.forEach((item, i) => {
       let type = item.type;
       let sort = typeProfessionSortHash[type];
       let professionIdList = worksListProfessionIdList[i];
       if(sort) {
         if(professionIdList && professionIdList.length) {
           let has = {};
-          professionIdList.forEach(function(item) {
+          professionIdList.forEach((item) => {
             has[item] = true;
           });
           for(let j = 0, len = sort.length; j < len; j++) {
@@ -651,7 +646,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(worksId) {
+      idList.map((worksId) => {
         if(worksId !== null && worksId !== undefined) {
           return app.redis.get('authorWorksProfessionIdList_' + id + '_' + worksId);
         }
@@ -660,7 +655,7 @@ class Service extends egg.Service {
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let worksId = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -688,20 +683,15 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let temp = hash[item.worksId] = hash[item.worksId] || [];
           temp.push(item.professionId);
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let worksId = idList[i];
-          let temp = hash[worksId];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME, 'null');
-          }
+          let temp = hash[worksId] || null;
+          cache[i] = temp;
+          app.redis.setex('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -744,7 +734,7 @@ class Service extends egg.Service {
       .limit(limit)
       .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    let idList = res.map(function(item) {
+    let idList = res.map((item) => {
       return item.albumId;
     });
     if(offset === 0) {
@@ -832,7 +822,7 @@ class Service extends egg.Service {
         .order('kind')
         .toString();
       kindList = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-      kindList = kindList.map(function(item) {
+      kindList = kindList.map((item) => {
         return item.kind;
       });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(kindList));
@@ -841,8 +831,8 @@ class Service extends egg.Service {
     let professionIdList = await this.workKindListProfessionIdList(id, kindList);
     let professionIdHash = {};
     let pid = [];
-    professionIdList.forEach(function(list) {
-      list.forEach(function(id) {
+    professionIdList.forEach((list) => {
+      list.forEach((id) => {
         if(!professionIdHash[id]) {
           professionIdHash[id] = true;
           pid.push(id);
@@ -852,16 +842,16 @@ class Service extends egg.Service {
     // 根据去重的职种id列表获取职种信息列表
     let professionList = await service.profession.infoList(pid);
     let professionHash = {};
-    professionList.forEach(function(item) {
+    professionList.forEach((item) => {
       professionHash[item.id] = item;
     });
-    let res = kindList.map(function(kind, i) {
+    let res = kindList.map((kind, i) => {
       let temp = {
         kind,
         name: service.work.getKindName(kind),
       };
       let list = [];
-      professionIdList[i].forEach(function(item) {
+      professionIdList[i].forEach((item) => {
         if(professionHash[item]) {
           list.push(professionHash[item]);
         }
@@ -887,14 +877,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      kindList.map(function(kind) {
+      kindList.map((kind) => {
         return app.redis.get('authorWorkKindListProfessionIdList_' + id + '_' + kind);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let kind = kindList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -920,20 +910,15 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           hash[item.kind] = hash[item.kind] || [];
           hash[item.kind].push(item.professionId);
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let kind = kindList[i];
-          let temp = hash[kind];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME, 'null');
-          }
+          let temp = hash[kind] || null;
+          cache[i] = temp;
+          app.redis.setex('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -983,7 +968,7 @@ class Service extends egg.Service {
       .limit(limit)
       .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = res.map(function(item) {
+    res = res.map((item) => {
       return item.workId;
     });
     if(offset === 0) {
@@ -1007,14 +992,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(workId) {
+      idList.map((workId) => {
         return app.redis.get('authorKindWorkBaseList_' + workId);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let workId = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -1043,7 +1028,7 @@ class Service extends egg.Service {
       });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           let temp = hash[item.workId] = hash[item.workId] || {
             worksId: item.worksId,
             workId: item.workId,
@@ -1053,16 +1038,11 @@ class Service extends egg.Service {
             temp.professionIdList.push(item.professionId);
           }
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let workId = idList[i];
-          let temp = hash[workId];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('authorKindWorkBaseList_' + workId, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('authorKindWorkBaseList_' + workId, CACHE_TIME, 'null');
-          }
+          let temp = hash[workId] || null;
+          cache[i] = temp;
+          app.redis.setex('authorKindWorkBaseList_' + workId, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -1090,7 +1070,7 @@ class Service extends egg.Service {
     let workIdHash = {};
     let professionIdList = [];
     let professionIdHash = {};
-    list.forEach(function(item) {
+    list.forEach((item) => {
       let worksId = item.worksId;
       if(!worksIdHash[worksId]) {
         worksIdHash[worksId] = true;
@@ -1102,7 +1082,7 @@ class Service extends egg.Service {
         workIdList.push(workId);
       }
       let pIdList = item.professionIdList;
-      pIdList.forEach(function(professionId) {
+      pIdList.forEach((professionId) => {
         if(!professionIdHash[professionId]) {
           professionIdHash[professionId] = true;
           professionIdList.push(professionId);
@@ -1115,18 +1095,18 @@ class Service extends egg.Service {
       service.work.infoList(workIdList, kind)
     ]);
     let worksInfoHash = {};
-    worksInfoList.forEach(function(item) {
+    worksInfoList.forEach((item) => {
       worksInfoHash[item.id] = item;
     });
     let workInfoHash = {};
-    workInfoList.forEach(function(item) {
+    workInfoList.forEach((item) => {
       workInfoHash[item.id] = item;
     });
     let professionInfoHash = {};
-    professionInfoList.forEach(function(item) {
+    professionInfoList.forEach((item) => {
       professionInfoHash[item.id] = item;
     });
-    return list.map(function(item) {
+    return list.map((item) => {
       let temp = {
         id: item.worksId,
       };
@@ -1138,7 +1118,7 @@ class Service extends egg.Service {
       }
       temp.professionList = [];
       let pIdList = item.professionIdList;
-      pIdList.forEach(function(professionId) {
+      pIdList.forEach((professionId) => {
         if(professionInfoHash[professionId]) {
           temp.professionList.push(professionInfoHash[professionId]);
         }

@@ -64,14 +64,14 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map(function(id) {
+      idList.map((id) => {
         return app.redis.get('circleInfo_' + id);
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
-    cache.forEach(function(item, i) {
+    cache.forEach((item, i) => {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
@@ -102,19 +102,14 @@ class Service extends egg.Service {
       let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
       if(res.length) {
         let hash = {};
-        res.forEach(function(item) {
+        res.forEach((item) => {
           hash[item.id] = item;
         });
-        noCacheIndexList.forEach(function(i) {
+        noCacheIndexList.forEach((i) => {
           let id = idList[i];
-          let temp = hash[id];
-          if(temp) {
-            cache[i] = temp;
-            app.redis.setex('circleInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-          }
-          else {
-            app.redis.setex('circleInfo_' + id, CACHE_TIME, 'null');
-          }
+          let temp = hash[id] || null;
+          cache[i] = temp;
+          app.redis.setex('circleInfo_' + id, CACHE_TIME, JSON.stringify(temp));
         });
       }
     }
@@ -182,7 +177,7 @@ class Service extends egg.Service {
     }
     const { app, service } = this;
     let sql = squel.select()
-      .from('tag_comment_relation FORCE INDEX (tag_id_comment_id_type)')
+      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_comment_id)')
       .from('comment')
       .field('comment.id')
       .field('comment.user_id', 'uid')
@@ -192,6 +187,7 @@ class Service extends egg.Service {
       .field('comment.root_id', 'rid')
       .field('comment.create_time', 'createTime')
       .where('tag_comment_relation.tag_id IN ?', tagList)
+      .where('tag_comment_relation.is_delete=false')
       .where('tag_comment_relation.comment_id=comment.id')
       .order('tag_comment_relation.comment_id', false)
       .offset(offset)
@@ -219,7 +215,7 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     let sql = squel.select()
-      .from('tag_comment_relation FORCE INDEX (tag_id_comment_id_type)')
+      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_comment_id)')
       .field('COUNT(*)', 'num')
       .where('tag_id IN ?', tagList)
       .where('is_delete=false')
