@@ -40,7 +40,8 @@ class Service extends egg.Service {
     // 新版密码追加string更加安全，先尝试新版
     let res = await app.model.userAccount.findOne({
       attributes: [
-        'password'
+        'password',
+        ['user_id', 'userId']
       ],
       where: {
         name: phone,
@@ -54,7 +55,7 @@ class Service extends egg.Service {
       if(res.password === md5) {
         return {
           success: true,
-          id: res.user_id,
+          data: res.userId,
         };
       }
       return {
@@ -66,7 +67,7 @@ class Service extends egg.Service {
     // 老用户
     res = await app.model.userAccount.findOne({
       attributes: [
-        'user_id'
+        ['user_id', 'userId']
       ],
       where: {
         name: phone,
@@ -77,7 +78,7 @@ class Service extends egg.Service {
     if(res) {
       return {
         success: true,
-        id: res.user_id,
+        data: res.userId,
       };
     }
     return {
