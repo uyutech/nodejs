@@ -920,7 +920,7 @@ async function dealUser(pool) {
     }
     await User.create({
       id: item.ID,
-      author_id: item.CurrentAuthorID || 0,
+      // author_id: item.CurrentAuthorID || 0,
       is_delete : item.ISDel ? 0 : 1,
       state: 0,
       reg_state: item.User_Reg_Stat || 0,

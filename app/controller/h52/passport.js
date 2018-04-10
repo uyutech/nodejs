@@ -10,10 +10,10 @@ class Controller extends egg.Controller {
   async login() {
     const { ctx, service } = this;
     let body = ctx.request.body;
-    let name = body.name;
+    let phone = body.phone;
     let pw = body.pw;
-    if(!name || !/^1\d{10}$/.test(name)) {
-      return ctx.helper.errorJSON({
+    if(!phone || !/^1\d{10}$/.test(phone)) {
+      return ctx.body = ctx.helper.errorJSON({
         message: '手机号不合法~',
       });
     }
@@ -22,7 +22,7 @@ class Controller extends egg.Controller {
         message: '密码长度不符合要求~',
       });
     }
-    let res = await service.passport.check(name, pw);
+    let res = await service.passport.check(phone, pw);
     if(res.success) {
       ctx.session.uid = res.data;
       ctx.body = ctx.helper.okJSON();
@@ -44,11 +44,13 @@ class Controller extends egg.Controller {
       });
     }
     let res = await service.passport.resetCode(phone);
-    if(res) {
+    if(res.success) {
       ctx.body = ctx.helper.okJSON();
     }
     else {
-      ctx.body = ctx.helper.errorJSON();
+      ctx.body = ctx.helper.errorJSON({
+        message: res.message,
+      });
     }
   }
 
@@ -74,11 +76,65 @@ class Controller extends egg.Controller {
       });
     }
     let res = await service.passport.reset(phone, pw, code);
-    if(res) {
+    if(res.success) {
       ctx.body = ctx.helper.okJSON();
     }
     else {
-      ctx.body = ctx.helper.errorJSON();
+      ctx.body = ctx.helper.errorJSON({
+        message: res.message,
+      });
+    }
+  }
+
+  async registerCode() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let phone = body.phone;
+    if(!phone || !/^1\d{10}$/.test(phone)) {
+      return ctx.helper.errorJSON({
+        message: '手机号不合法~',
+      });
+    }
+    let res = await service.passport.registerCode(phone);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON({
+        message: res.message,
+      });
+    }
+  }
+
+  async register() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let phone = body.phone;
+    let pw = body.pw;
+    let code = body.code;
+    if(!phone || !/^1\d{10}$/.test(phone)) {
+      return ctx.helper.errorJSON({
+        message: '手机号不合法~',
+      });
+    }
+    if(!pw || pw.length < 6) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '密码长度不符合要求~',
+      });
+    }
+    if(!code || code.length !== 6) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '验证码长度不符合要求~',
+      });
+    }
+    let res = await service.passport.register(phone, pw, code);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON({
+        message: res.message,
+      });
     }
   }
 

@@ -12,22 +12,6 @@ module.exports = app => {
       primaryKey: true,
       allowNull: false,
     },
-    author_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-    },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    state: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 1,
-      comment: '0正常，1红名单，2黑名单，3假账号',
-    },
     reg_state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
@@ -58,6 +42,17 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
+    },
+    is_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    state: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 1,
+      comment: '0正常，1红名单，2黑名单，3假账号',
     },
     create_time: {
       type: Sequelize.DATE,

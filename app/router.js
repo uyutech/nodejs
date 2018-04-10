@@ -372,6 +372,8 @@ module.exports = app => {
   app.post('/h5/search2/tag', 'h52.search.tag');
 
   app.post('/h5/passport2/login', 'h52.passport.login');
+  app.post('/h5/passport2/registerCode', 'h52.passport.registerCode');
+  app.post('/h5/passport2/register', 'h52.passport.register');
   app.post('/h5/passport2/resetCode', 'h52.passport.resetCode');
   app.post('/h5/passport2/reset', 'h52.passport.reset');
   app.post('/h5/passport2/loginOut', app.middlewares.needLoginJson(), 'h52.passport.loginOut');

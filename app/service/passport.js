@@ -9,7 +9,6 @@ const Sequelize = require('sequelize');
 const squel = require('squel');
 const Spark = require('spark-md5');
 const SMSClient = require('@alicloud/sms-sdk');
-const uuidv4 = require('uuid/v4');
 
 const TEMPLATE = {
   '1': 'SMS_80275178', // 注册
@@ -26,24 +25,25 @@ const CACHE_TIME = 600;
 class Service extends egg.Service {
   /**
    * 校验用户名和密码
-   * @param name:String 登录名
+   * @param phone:String 登录名
    * @param pw:String 密码明文
    * @returns Object{ success: boolean, data:int }
    */
-  async check(name, pw) {
-    if(!name || !pw) {
-      return;
+  async check(phone, pw) {
+    if(!phone || !pw) {
+      return {
+        success: false,
+      };
     }
     const { app } = this;
     let md5 = Spark.hash(pw + 'uyuTech');
-    // 新版密码追加stirng更加安全，先尝试新版
+    // 新版密码追加string更加安全，先尝试新版
     let res = await app.model.userAccount.findOne({
       attributes: [
-        'user_id'
+        'password'
       ],
       where: {
-        name,
-        password: md5,
+        name: phone,
         update_time: {
           $gt: new Date('2018-04-10')
         },
@@ -51,9 +51,15 @@ class Service extends egg.Service {
       raw: true,
     });
     if(res) {
+      if(res.password === md5) {
+        return {
+          success: true,
+          id: res.user_id,
+        };
+      }
       return {
-        success: true,
-        id: res.user_id,
+        success: false,
+        message: '账号密码不匹配~',
       };
     }
     md5 = Spark.hash(pw);
@@ -63,7 +69,7 @@ class Service extends egg.Service {
         'user_id'
       ],
       where: {
-        name,
+        name: phone,
         password: md5,
       },
       raw: true,
@@ -76,6 +82,7 @@ class Service extends egg.Service {
     }
     return {
       success: false,
+      message: '账号密码不匹配~',
     };
   }
 
@@ -85,9 +92,28 @@ class Service extends egg.Service {
    */
   async registerCode(phone) {
     if(!phone || !/^1\d{10}$/.test(phone)) {
-      return;
+      return {
+        success: false,
+        message: '手机号不合法~',
+      };
     }
     const { app } = this;
+    let check = await app.model.userAccount.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        name: phone,
+        type: 1,
+      },
+      raw: true,
+    });
+    if(check) {
+      return {
+        success: false,
+        message: '这个账号已经注册过了哦~',
+      };
+    }
     let code = Math.floor(Math.random() * 1000000) + '';
     if(code.length < 6) {
       code = '000000' + code;
@@ -101,7 +127,107 @@ class Service extends egg.Service {
       TemplateCode: TEMPLATE[1] || 'SMS_80275178',
       TemplateParam: '{"code":"' + code + '"}',
     });
-    return res.Code === 'OK';
+    return {
+      success: res.Code === 'OK',
+    };
+  }
+
+  async register(phone, pw, code) {
+    if(!phone || !/^1\d{10}$/.test(phone)) {
+      return {
+        success: false,
+        message: '手机号不合法~',
+      };
+    }
+    if(!pw || pw.length < 6) {
+      return {
+        success: false,
+        message: '密码长度不符合要求~',
+      };
+    }
+    if(!code || code.length !== 6) {
+      return {
+        success: false,
+        message: '验证码长度不符合要求~',
+      };
+    }
+    const { app } = this;
+    let cacheKey = 'resetCode_' + phone + '_1';
+    let check = await app.redis.get(cacheKey);
+    if(app.config.env !== 'prod') {
+      if(!check && code !== '888888') {
+        return {
+          success: false,
+          message: '验证码不正确~',
+        };
+      }
+    }
+    else {
+      if(!check) {
+        return {
+          success: false,
+          message: '验证码不正确~',
+        };
+      }
+    }
+    check = await app.model.userAccount.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        name: phone,
+        type: 1,
+      },
+      raw: true,
+    });
+    if(check) {
+      return {
+        success: false,
+        message: '这个账号已经注册过了哦~',
+      };
+    }
+    app.redis.del(cacheKey);
+    let transaction = await app.sequelizeCircling.transaction();
+    try {
+      let last = await app.model.user.findOne({
+        transaction,
+        attributes: [
+          'id'
+        ],
+        order: [
+          ['id', 'DESC']
+        ],
+        limit: 1,
+        raw: true,
+      });
+      let id = last.id + Math.floor(Math.random() * 5) + 1;
+      let create = await app.model.user.create({
+        id,
+        nickname: '转圈' + id,
+      }, {
+        transaction,
+        raw: true,
+      });
+      let md5 = Spark.hash(pw + 'uyuTech');
+      await app.model.userAccount.create({
+        name: phone,
+        password: md5,
+        type: 1,
+        user_id: create.id,
+      }, {
+        transaction,
+      });
+      await transaction.commit();
+      return {
+        success: true,
+        data: create,
+      };
+    } catch(err) {
+      await transaction.rollback();
+      return {
+        success: false,
+      };
+    }
   }
 
   /**
@@ -110,9 +236,28 @@ class Service extends egg.Service {
    */
   async resetCode(phone) {
     if(!phone || !/^1\d{10}$/.test(phone)) {
-      return;
+      return {
+        success: false,
+        message: '手机号不合法~',
+      };
     }
     const { app } = this;
+    let check = await app.model.userAccount.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        name: phone,
+        type: 1,
+      },
+      raw: true,
+    });
+    if(!check) {
+      return {
+        success: false,
+        message: '请先注册这个账号哦~',
+      };
+    }
     let code = Math.floor(Math.random() * 1000000) + '';
     if(code.length < 6) {
       code = '000000' + code;
@@ -126,7 +271,9 @@ class Service extends egg.Service {
       TemplateCode: TEMPLATE[2] || 'SMS_80275178',
       TemplateParam: '{"code":"' + code + '"}',
     });
-    return res.Code === 'OK';
+    return {
+      success: res.Code === 'OK',
+    };
   }
 
   /**
@@ -138,19 +285,41 @@ class Service extends egg.Service {
    */
   async reset(phone, pw, code) {
     if(!phone || !/^1\d{10}$/.test(phone)) {
-      return;
+      return {
+        success: false,
+        message: '手机号不合法~',
+      };
     }
     if(!pw || pw.length < 6) {
-      return;
+      return {
+        success: false,
+        message: '密码长度不符合要求~',
+      };
     }
     if(!code || code.length !== 6) {
-      return;
+      return {
+        success: false,
+        message: '验证码长度不符合要求~',
+      };
     }
     const { app } = this;
     let cacheKey = 'resetCode_' + phone + '_2';
     let check = await app.redis.get(cacheKey);
-    if(!check) {
-      return;
+    if(app.config.env !== 'prod') {
+      if(!check && code !== '888888') {
+        return {
+          success: false,
+          message: '验证码不正确~',
+        };
+      }
+    }
+    else {
+      if(!check) {
+        return {
+          success: false,
+          message: '验证码不正确~',
+        };
+      }
     }
     app.redis.del(cacheKey);
     let md5 = Spark.hash(pw + 'uyuTech');
@@ -164,7 +333,9 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    return res !== null && res.length > 0;
+    return {
+      success: res !== null && res.length > 0,
+    };
   }
 }
 
