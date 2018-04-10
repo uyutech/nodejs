@@ -23,15 +23,73 @@ class Controller extends egg.Controller {
       });
     }
     let res = await service.passport.check(phone, pw);
-    if(res.success) {
-      ctx.session.uid = res.data;
-      ctx.body = ctx.helper.okJSON();
-    }
-    else {
-      ctx.body = ctx.helper.errorJSON({
-        message: '用户名密码不匹配',
+    if(!res.success) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: res.message,
       });
     }
+    let uid = res.data;
+    let [user, author, followPersonCount, fansCount] = await Promise.all([
+      service.user.info(uid),
+      service.user.author(uid),
+      service.user.followPersonCount(uid),
+      service.user.fansCount(uid)
+    ]);
+    author = author.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        headUrl: item.headUrl,
+        isSettle: item.isSettle,
+        type: item.type,
+      };
+    });
+    ctx.session.uid = uid;
+    ctx.body = ctx.helper.okJSON({
+      user,
+      author,
+      followPersonCount,
+      fansCount,
+    });
+  }
+
+  async loginWeibo() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let openId = body.openId;
+    let token = body.token;
+    if(!openId || !token) {
+      return;
+    }
+    let res = await service.passport.loginWeibo(openId, token);
+    if(!res.success) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: res.message,
+      });
+    }
+    let uid = res.data;
+    let [user, author, followPersonCount, fansCount] = await Promise.all([
+      service.user.info(uid),
+      service.user.author(uid),
+      service.user.followPersonCount(uid),
+      service.user.fansCount(uid)
+    ]);
+    author = author.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        headUrl: item.headUrl,
+        isSettle: item.isSettle,
+        type: item.type,
+      };
+    });
+    ctx.session.uid = uid;
+    ctx.body = ctx.helper.okJSON({
+      user,
+      author,
+      followPersonCount,
+      fansCount,
+    });
   }
 
   async resetCode() {

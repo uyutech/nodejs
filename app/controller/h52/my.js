@@ -13,7 +13,7 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [info, author, followPersonCount, fansCount] = await Promise.all([
+    let [user, author, followPersonCount, fansCount] = await Promise.all([
       service.user.info(uid),
       service.user.author(uid),
       service.user.followPersonCount(uid),
@@ -29,7 +29,7 @@ class Controller extends egg.Controller {
       };
     });
     ctx.body = ctx.helper.okJSON({
-      info,
+      user,
       author,
       followPersonCount,
       fansCount,

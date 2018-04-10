@@ -372,6 +372,7 @@ module.exports = app => {
   app.post('/h5/search2/tag', 'h52.search.tag');
 
   app.post('/h5/passport2/login', 'h52.passport.login');
+  app.post('/h5/passport2/loginWeibo', 'h52.passport.loginWeibo');
   app.post('/h5/passport2/registerCode', 'h52.passport.registerCode');
   app.post('/h5/passport2/register', 'h52.passport.register');
   app.post('/h5/passport2/resetCode', 'h52.passport.resetCode');

@@ -220,7 +220,7 @@ class Service extends egg.Service {
       await transaction.commit();
       return {
         success: true,
-        data: create,
+        data: create.id,
       };
     } catch(err) {
       await transaction.rollback();
@@ -336,6 +336,98 @@ class Service extends egg.Service {
     return {
       success: res !== null && res.length > 0,
     };
+  }
+
+  /**
+   * 使用weibo的openId和token登录
+   * @param openId:String
+   * @param token:String
+   * @returns { success: boolean, data: int }
+   */
+  async loginWeibo(openId, token) {
+    if(!openId || !token) {
+      return {
+        success: false,
+      };
+    }
+    const { app, ctx, } = this;
+    let find = await app.model.userOauth.findOne({
+      attributes: [
+        ['user_id', 'userId']
+      ],
+      where: {
+        open_id: openId,
+      },
+      raw: true,
+    });
+    if(find) {
+      await app.model.userOauth.update({
+        token,
+      }, {
+        where: {
+          open_id: openId,
+        },
+        raw: true,
+      });
+      return {
+        success: true,
+        data: find.userId,
+      };
+    }
+    else {
+      let weibo = await ctx.curl('https://api.weibo.com/2/users/show.json', {
+        data: {
+          uid: openId,
+          access_token: token,
+        },
+        dataType: 'json',
+        gzip: true,
+      });
+      weibo = weibo.data;
+      let name = weibo.screen_name || weibo.name;
+      let headUrl = weibo.avatar_hd || weibo.avatar_large || weibo.profile_image_url;
+      let transaction = await app.sequelizeCircling.transaction();
+      try {
+        let last = await app.model.user.findOne({
+          transaction,
+          attributes: [
+            'id'
+          ],
+          order: [
+            ['id', 'DESC']
+          ],
+          limit: 1,
+          raw: true,
+        });
+        let id = last.id + Math.floor(Math.random() * 5) + 1;
+        let create = await app.model.user.create({
+          id,
+          nickname: '转圈' + name,
+          headUrl,
+        }, {
+          transaction,
+          raw: true,
+        });
+        await app.model.userOauth.create({
+          uid: openId,
+          access_token: token,
+          type: 1,
+          user_id: create.id,
+        }, {
+          transaction,
+        });
+        await transaction.commit();
+        return {
+          success: true,
+          data: create.id,
+        };
+      } catch(err) {
+        await transaction.rollback();
+        return {
+          success: false,
+        };
+      }
+    }
   }
 }
 
