@@ -365,4 +365,9 @@ module.exports = app => {
 
   app.post('/h5/tag2/index', 'h52.tag.index');
   app.post('/h5/tag2/postList', 'h52.tag.postList');
+
+  app.post('/h5/search2/author', 'h52.search.author');
+  app.post('/h5/search2/user', 'h52.search.user');
+  app.post('/h5/search2/works', 'h52.search.works');
+  app.post('/h5/search2/tag', 'h52.search.tag');
 };

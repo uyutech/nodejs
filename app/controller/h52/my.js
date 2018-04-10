@@ -7,6 +7,7 @@
 const egg = require('egg');
 
 const LIMIT = 10;
+const PERSON_LIMIT = 30;
 
 class Controller extends egg.Controller {
   async index() {
@@ -39,15 +40,15 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let [friendList, followUserList, fansList, followAuthorList] = await Promise.all([
-      service.user.friendList(uid, 0, LIMIT),
-      service.user.followUserList(uid, 0, LIMIT),
-      service.user.fansList(uid, 0, LIMIT),
-      service.user.followAuthorList(uid, 0, LIMIT)
+      service.user.friendList(uid, 0, PERSON_LIMIT),
+      service.user.followUserList(uid, 0, PERSON_LIMIT),
+      service.user.fansList(uid, 0, PERSON_LIMIT),
+      service.user.followAuthorList(uid, 0, PERSON_LIMIT)
     ]);
-    friendList.limit = LIMIT;
-    followUserList.limit = LIMIT;
-    fansList.limit = LIMIT;
-    followAuthorList.limit = LIMIT;
+    friendList.limit = PERSON_LIMIT;
+    followUserList.limit = PERSON_LIMIT;
+    fansList.limit = PERSON_LIMIT;
+    followAuthorList.PERSON_LIMIT = PERSON_LIMIT;
     ctx.body = ctx.helper.okJSON({
       friendList,
       followUserList,

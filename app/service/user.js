@@ -370,12 +370,7 @@ class Service extends egg.Service {
         is_delete: false,
       },
     });
-    if(res) {
-      res = true;
-    }
-    else {
-      res = false;
-    }
+    res = !!res;
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -1891,6 +1886,103 @@ class Service extends egg.Service {
           }
         ],
         root_id: 0,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取类似名字的作者
+   * @param name:String 名字
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{data: Array<Object>, count: int}
+   */
+  async listByName(name, offset, limit) {
+    if(!name) {
+      return;
+    }
+    let [idList, count] = await Promise.all([
+      this.idListByName(name, offset, limit),
+      this.countByName(name)
+    ]);
+    let data = await this.infoList(idList);
+    return {
+      data,
+      count,
+    };
+  }
+
+  async idListByName(name, offset, limit) {
+    if(!name) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userIdListByName_' + name + '_' + offset + '_' + limit;
+    let res;
+    if(offset === 0) {
+      res = await app.redis.get(cacheKey);
+      if(res) {
+        res = JSON.parse(res);
+      }
+    }
+    if(!res) {
+      res = await app.model.user.findAll({
+        attributes: [
+          'id'
+        ],
+        where: {
+          nickname: {
+            $like: '%' + name + '%',
+          },
+          is_delete: false,
+        },
+        offset,
+        limit,
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.id;
+      });
+      if(offset === 0) {
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      }
+    }
+    return res;
+  }
+
+  async countByName(name) {
+    if(!name) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userCountByName_' + name;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.user.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        nickname: {
+          $like: '%' + name + '%',
+        },
         is_delete: false,
       },
       raw: true,
