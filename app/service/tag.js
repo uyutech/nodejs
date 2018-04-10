@@ -103,6 +103,135 @@ class Service extends egg.Service {
     }
     return cache;
   }
+
+  /**
+   * 根据名字获取id
+   * @param name:String tag名
+   * @returns int
+   */
+  async getIdByName(name) {
+    if(!name) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'tagName_' + name;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.tag.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        name,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.id;
+    }
+    else {
+      res = null;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取标签下的画圈
+   * @param id:int 标签id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async postList(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.postData(id, uid, offset, limit),
+      this.postCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取标签下画圈数据
+   * @param id:int 标签id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async postData(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let sql = squel.select()
+      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
+      .from('comment')
+      .field('comment.id')
+      .field('comment.user_id', 'uid')
+      .field('comment.author_id', 'aid')
+      .field('comment.content')
+      .field('comment.parent_id', 'pid')
+      .field('comment.root_id', 'rid')
+      .field('comment.create_time', 'createTime')
+      .where('tag_comment_relation.tag_id=?', id)
+      .where('tag_comment_relation.is_delete=false')
+      .where('tag_comment_relation.is_comment_delete=false')
+      .where('tag_comment_relation.comment_id=comment.id')
+      .order('tag_comment_relation.comment_id', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
+    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    res = await service.comment.plusListFull(res, uid);
+    return res;
+  }
+
+  /**
+   * 获取标签下画圈数量
+   * @param id:int 标签id
+   * @returns int
+   */
+  async postCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'tagCommentCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      // app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = squel.select()
+      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
+      .field('COUNT(*)', 'num')
+      .where('tag_id=?', id)
+      .where('is_delete=false')
+      .where('is_comment_delete=false')
+      .toString();
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0].num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
 }
 
 module.exports = Service;

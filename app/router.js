@@ -362,4 +362,7 @@ module.exports = app => {
   app.post('/h5/comment2/favor', app.middlewares.needLoginJson(), 'h52.comment.favor');
   app.post('/h5/comment2/unFavor', app.middlewares.needLoginJson(), 'h52.comment.unFavor');
   app.post('/h5/comment2/sub', app.middlewares.needLoginJson(), 'h52.comment.sub');
+
+  app.post('/h5/tag2/index', 'h52.tag.index');
+  app.post('/h5/tag2/postList', 'h52.tag.postList');
 };
