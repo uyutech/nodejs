@@ -18,7 +18,7 @@ module.exports = app => {
       allowNull: false,
     },
     alias: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING,
       allowNull: false,
     },
     is_delete: {

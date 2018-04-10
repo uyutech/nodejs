@@ -7,6 +7,7 @@
 const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
+const Spark = require('spark-md5');
 
 const CACHE_TIME = 10;
 

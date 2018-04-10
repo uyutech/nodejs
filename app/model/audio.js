@@ -13,7 +13,7 @@ module.exports = app => {
       allowNull: false,
     },
     title: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
     },
@@ -43,7 +43,7 @@ module.exports = app => {
       defaultValue: 0,
     },
     is_delete: {
-      type: Sequelize.TINYINT.UNSIGNED,
+      type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },

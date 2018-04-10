@@ -35,7 +35,7 @@ module.exports = app => {
       comment: '0初始化选是否公开，1点击披马甲去改名字，10改用户名字，11点击公开后或者披马甲改完名字后去选关注，99普通完成，100作者完成',
     },
     nickname: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING,
       allowNull: false,
     },
     sex: {
@@ -51,11 +51,6 @@ module.exports = app => {
     },
     sign: {
       type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: '',
-    },
-    password: {
-      type: Sequelize.CHAR(32),
       allowNull: false,
       defaultValue: '',
     },

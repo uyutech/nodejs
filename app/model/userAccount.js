@@ -1,53 +1,40 @@
 /**
- * Created by army8735 on 2018/1/26.
+ * Created by army8735 on 2018/4/10.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('author', {
+  return sequelizeCircling.define('user_account', {
     id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
-    },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      comment: '0个人，1组合，2团体，3虚拟',
     },
     name: {
       type: Sequelize.STRING,
       allowNull: false,
+      defaultValue: '',
     },
-    fans_name: {
-      type: Sequelize.STRING,
+    password: {
+      type: Sequelize.CHAR(32),
       allowNull: false,
       defaultValue: '',
     },
-    fans_circle_name: {
-      type: Sequelize.STRING,
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
+      defaultValue: 1,
+      comment: '1手机号',
     },
-    head_url: {
-      type: Sequelize.STRING,
+    user_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
-    },
-    is_settle: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    sign: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: '',
     },
     is_delete: {
-      type: Sequelize.TINYINT.UNSIGNED,
+      type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
@@ -64,11 +51,16 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'user_id_type',
+        unique: true,
+        fields: ['user_id', 'type'],
+      },
+      {
         name: 'name',
         unique: true,
         fields: ['name'],
       }
     ],
-    comment: '作者基本信息',
+    comment: '用户账户',
   });
 };

@@ -13,12 +13,12 @@ module.exports = app => {
       allowNull: false,
     },
     title: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
     },
     sub_title: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
     },

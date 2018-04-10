@@ -1,46 +1,36 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/4/10.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('image', {
+  return sequelizeCircling.define('user_oauth', {
     id: {
-      type: Sequelize.BIGINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
-    work_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      unique: true,
-      allowNull: false,
-    },
-    title: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    width: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-    },
-    height: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-    },
-    url: {
+    open_id: {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
     },
-    type: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+    token: {
+      type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: 0,
+    },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 1,
+      comment: '1微博，2微信',
+    },
+    user_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
     },
     is_delete: {
       type: Sequelize.BOOLEAN,
@@ -59,7 +49,12 @@ module.exports = app => {
     },
   }, {
     indexes: [
+      {
+        name: 'user_id_type',
+        unique: true,
+        fields: ['user_id', 'type'],
+      }
     ],
-    comment: '图片类小作品信息',
+    comment: '用户oauth账户',
   });
 };

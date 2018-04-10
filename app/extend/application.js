@@ -59,6 +59,8 @@ const recommendBanner = require('../model/recommendBanner');
 const recommendList = require('../model/recommendList');
 const banner = require('../model/banner');
 const userCircleRelation = require('../model/userCircleRelation');
+const userAccount = require('../model/userAccount');
+const userOauth = require('../model/userOauth');
 
 module.exports = {
   get Sequelize() {
@@ -174,6 +176,8 @@ module.exports = {
         recommendList: recommendList(this),
         banner: banner(this),
         userCircleRelation: userCircleRelation(this),
+        userAccount: userAccount(this),
+        userOauth: userOauth(this),
       };
     }
     return this[MODEL];

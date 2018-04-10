@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "@alicloud/sms-sdk": "^1.0.3",
+    "@alicloud/sms-sdk": "^1.0.9",
     "ali-oss": "~4.13.1",
     "aliyun-sdk": "~1.10.19",
     "anima-querystring": "~2.0.0",

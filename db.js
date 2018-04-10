@@ -81,6 +81,8 @@ const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircli
 const RecommendList = require('./app/model/recommendList')({ sequelizeCircling: sequelize, Sequelize });
 const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Sequelize });
 const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelizeCircling: sequelize, Sequelize });
+const UserAccount = require('./app/model/userAccount')({ sequelizeCircling: sequelize, Sequelize });
+const UserOauth = require('./app/model/userOauth')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -111,10 +113,11 @@ const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelize
     await dealUserWork(pool);
     await dealUserPost(pool);
     await dealCommentMedia(pool);
+    await dealAccount(pool);
     // await temp(pool);
     // await modifyWorksComment();
     // await modifyAuthorComment();
-    await modifyPostComment();
+    // await modifyPostComment();
 
 //     await sequelize.query(`UPDATE tag_comment_relation set is_comment_delete=TRUE
 // WHERE comment_id IN (SELECT id as comment_id FROM comment WHERE is_delete=true);`, { type: Sequelize.QueryTypes.UPDATE });
@@ -925,7 +928,7 @@ async function dealUser(pool) {
       sex: item.User_Sex || 0,
       head_url: item.User_Head_Url || '',
       sign: item.Sign || '',
-      password: item.User_Pwd || '',
+      // password: item.User_Pwd || '',
       coins: 0,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
@@ -1561,6 +1564,51 @@ async function dealCommentMedia(pool) {
       is_delete: false,
       update_time: item.CreateTime,
     });
+  }
+}
+
+async function dealAccount(pool) {
+  console.log('------- dealAccount --------');
+  await UserAccount.sync();
+  await UserOauth.sync();
+  let last = 17635;
+  last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Users_Open_Account WHERE ID>${last} AND ISDel=0;`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    if(item.OpenType === 'telphone') {
+      await UserAccount.create({
+        name: item.OpenID || '',
+        password: (item.Token || '').toLowerCase(),
+        type: 1,
+        user_id: item.UID,
+        is_delete: false,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+    else if(item.OpenType === 'weibo') {
+      await UserOauth.create({
+        open_id: item.OpenID || '',
+        token: (item.Token || '').toLowerCase(),
+        type: 1,
+        user_id: item.UID,
+        is_delete: false,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
+    else if(item.OpenType === 'wechat') {
+      await UserOauth.create({
+        open_id: item.OpenID,
+        token: (item.Token || '').toLowerCase(),
+        type: 2,
+        user_id: item.UID,
+        is_delete: false,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
   }
 }
 

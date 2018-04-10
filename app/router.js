@@ -370,4 +370,9 @@ module.exports = app => {
   app.post('/h5/search2/user', 'h52.search.user');
   app.post('/h5/search2/works', 'h52.search.works');
   app.post('/h5/search2/tag', 'h52.search.tag');
+
+  app.post('/h5/passport2/login', 'h52.passport.login');
+  app.post('/h5/passport2/resetCode', 'h52.passport.resetCode');
+  app.post('/h5/passport2/reset', 'h52.passport.reset');
+  app.post('/h5/passport2/loginOut', app.middlewares.needLoginJson(), 'h52.passport.loginOut');
 };

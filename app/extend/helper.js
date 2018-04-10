@@ -20,6 +20,7 @@ let helper = {
     };
   },
   errorJSON(data) {
+    data = data || {};
     return {
       success: false,
       code: data.code,
