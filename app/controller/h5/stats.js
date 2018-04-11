@@ -5,7 +5,6 @@
 'use strict';
 
 const egg = require('egg');
-const moment = require('moment');
 const Sequelize = require('sequelize');
 
 class Controller extends egg.Controller {
@@ -17,9 +16,8 @@ class Controller extends egg.Controller {
     let url = this.ctx.query.url || '';
     let search = this.ctx.query.search || '';
     let first = this.ctx.query.first === 'true' ? 1 : 0;
-    let date = moment().format('YYYYMMDD');
-    let s = `INSERT INTO user_visit (uuid, uid, ip, platform, url, search, first, create_time, create_date)
-      VALUES ('${uuid}', ${uid}, '${ip}', ${platform}, '${url}', '${search}', ${first}, NOW(), ${date});`;
+    let s = `INSERT INTO user_visit (uuid, uid, ip, platform, url, search, first, create_time)
+      VALUES ('${uuid}', ${uid}, '${ip}', ${platform}, '${url}', '${search}', ${first}, NOW());`;
     await this.app.sequelizeStats.query(s, { type: Sequelize.QueryTypes.INSERT });
     this.ctx.body = {
       success: true,
