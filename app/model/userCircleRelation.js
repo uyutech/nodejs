@@ -26,11 +26,6 @@ module.exports = app => {
       allowNull: false,
       comment: '1关注，3屏蔽',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     is_circle_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
@@ -41,17 +36,16 @@ module.exports = app => {
       allowNull: false,
       defaultValue: Sequelize.NOW,
     },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
   }, {
     indexes: [
       {
         name: 'user_id_circle_id',
         unique: true,
         fields: ['user_id', 'circle_id'],
+      },
+      {
+        name: 'user_id_type_circle_id_is_circle_delete',
+        fields: ['user_id', 'type', 'circle_id', 'is_circle_delete']
       },
       {
         name: 'circle_id_type',

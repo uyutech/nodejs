@@ -26,12 +26,12 @@ module.exports = app => {
       allowNull: false,
       comment: '1点赞留言，2收藏留言',
     },
-    is_delete: {
+    is_comment_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
-    update_time: {
+    create_time: {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,
@@ -42,6 +42,10 @@ module.exports = app => {
         name: 'user_id_type_comment_id',
         unique: true,
         fields: ['user_id', 'type', 'comment_id'],
+      },
+      {
+        name: 'user_id_type_comment_id_is_comment_delete',
+        fields: ['user_id', 'type', 'comment_id', 'is_comment_delete']
       },
       {
         name: 'comment_id_type',

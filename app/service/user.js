@@ -515,8 +515,7 @@ class Service extends egg.Service {
       .field('target_id', 'userId')
       .where('user_id=?', id)
       .where('type=1')
-      .where('is_delete=false')
-      .order('update_time', false)
+      .order('id', false)
       .offset(offset)
       .limit(limit)
       .toString();
@@ -616,8 +615,7 @@ class Service extends egg.Service {
       .field('user_id', 'userId')
       .where('target_id=?', id)
       .where('type=1')
-      .where('is_delete=false')
-      .order('update_time', false)
+      .order('id', false)
       .offset(offset)
       .limit(limit)
       .toString();
@@ -722,9 +720,8 @@ class Service extends egg.Service {
         .field('target_id')
         .where('user_id=?', id)
         .where('type=1')
-        .where('is_delete=false'))
-      .where('is_delete=false')
-      .order('update_time', false)
+      )
+      .order('id', false)
       .offset(offset)
       .limit(limit)
       .toString();
@@ -769,8 +766,7 @@ class Service extends egg.Service {
         .field('target_id')
         .where('user_id=?', id)
         .where('type=1')
-        .where('is_delete=false'))
-      .where('is_delete=false')
+      )
       .toString();
     res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
     if(res.length) {
@@ -828,8 +824,7 @@ class Service extends egg.Service {
       .field('target_id', 'authorId')
       .where('user_id=?', id)
       .where('type=3')
-      .where('is_delete=false')
-      .order('update_time', false)
+      .order('id', false)
       .offset(offset)
       .limit(limit)
       .toString();
@@ -1693,11 +1688,10 @@ class Service extends egg.Service {
       where: {
         user_id: id,
         type: 1,
-        is_delete: false,
         is_circle_delete: false,
       },
       order: [
-        ['update_time', 'DESC']
+        ['id', 'DESC']
       ],
       offset,
       limit,
@@ -1733,7 +1727,6 @@ class Service extends egg.Service {
       where: {
         user_id: id,
         type: 1,
-        is_delete: false,
         is_circle_delete: false,
       },
       raw: true,

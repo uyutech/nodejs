@@ -709,7 +709,6 @@ class Service extends egg.Service {
         user_id: uid,
         type,
         comment_id: id,
-        is_delete: false,
       },
       raw: true,
     });
@@ -764,7 +763,6 @@ class Service extends egg.Service {
           user_id: uid,
           type,
           comment_id: idList,
-          is_delete: false,
         },
         raw: true,
       });
@@ -809,7 +807,6 @@ class Service extends egg.Service {
       where: {
         comment_id: id,
         type,
-        is_delete: false,
       },
       raw: true,
     });
@@ -863,7 +860,6 @@ class Service extends egg.Service {
         where: {
           comment_id: noCacheIdList,
           type,
-          is_delete: false,
         },
         group: 'commentId',
         raw: true,
@@ -898,71 +894,51 @@ class Service extends egg.Service {
       return;
     }
     state = !!state;
+    let now = await this.isRelation(id, uid, type);
+    if(now === state) {
+      let count = await this.count(id, type);
+      return {
+        state,
+        count,
+      };
+    }
     const { app } = this;
-    // 更新内存中用户对留言关系的状态
-    let cache;
+    // 更新内存中用户对留言关系的状态，同时入库
+    let cacheKey = 'userCommentRelation_' + uid + '_' + id + '_' + type;
     if(state) {
-      cache = app.redis.setex('userCommentRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, 'true');
-    }
-    else {
-      cache = app.redis.setex('userCommentRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, 'false');
-    }
-    // 入库
-    await Promise.all([
-      cache,
-      app.model.userCommentRelation.upsert({
-        user_id: uid,
-        comment_id: id,
-        type,
-        is_delete: !state,
-        update_time: new Date(),
-      }, {
-        where: {
+      await Promise.all([
+        app.redis.setex(cacheKey, CACHE_TIME, 'true'),
+        app.model.userCommentRelation.create({
           user_id: uid,
-          type,
           comment_id: id,
-        },
-        raw: true,
-      })
-    ]);
-    // 更新计数，优先内存缓存
-    let cacheKey = 'commentCount_' + id + '_' + type;
-    let res = await app.redis.get(cacheKey);
-    let count;
-    if(res) {
-      count = JSON.parse(res);
-      if(state) {
-        count++;
-      }
-      else {
-        count--;
-      }
-      count = Math.max(count, 0);
-      // 可能因为2次操作之间的延迟导致key过期设置超时失败，此时放弃操作内存防止数据不一致
-      let expire = await app.redis.expire(cacheKey, CACHE_TIME);
-      if(expire) {
-        if(state) {
-          app.redis.incr(cacheKey);
-        }
-        else {
-          app.redis.decr(cacheKey);
-        }
-      }
+          type,
+        }, {
+          raw: true,
+        })
+      ]);
     }
     else {
-      res = await app.model.userCommentRelation.findOne({
-        attributes: [
-          [Sequelize.fn('COUNT', '*'), 'num']
-        ],
-        where: {
-          comment_id: id,
-          type,
-          is_delete: false,
-        },
-        raw: true,
-      });
-      count = res.num || 0;
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
+      await Promise.all([
+        app.redis.setex(cacheKey, CACHE_TIME, 'false'),
+        app.model.userCommentRelation.destroy({
+          where: {
+            user_id: uid,
+            comment_id: id,
+            type,
+          },
+        })
+      ]);
+    }
+    // 更新计数，优先内存缓存
+    cacheKey = 'commentCount_' + id + '_' + type;
+    let count = await this.relationCount(id, type);
+    if(state) {
+      count++;
+      app.redis.incr(cacheKey);
+    }
+    else {
+      count--;
+      app.redis.decr(cacheKey);
     }
     return {
       state,

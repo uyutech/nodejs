@@ -327,7 +327,7 @@ class Service extends egg.Service {
       return false;
     }
     const { app } = this;
-    let cacheKey = 'userCircleRelation_' + uid + '_' + id + '_' + 1;
+    let cacheKey = 'userCircleRelation_' + uid + '_' + id + '_1';
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -338,15 +338,10 @@ class Service extends egg.Service {
         user_id: uid,
         type: 1,
         circle_id: id,
-        is_delete: false,
       },
+      raw: true,
     });
-    if(res) {
-      res = true;
-    }
-    else {
-      res = false;
-    }
+    res = !!res;
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -374,7 +369,6 @@ class Service extends egg.Service {
       where: {
         circle_id: id,
         type: 1,
-        is_delete: false,
       },
       raw: true,
     });
