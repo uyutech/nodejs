@@ -21,6 +21,7 @@ module.exports = app => {
     token: {
       type: Sequelize.STRING,
       allowNull: false,
+      defaultValue: '',
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
@@ -31,11 +32,6 @@ module.exports = app => {
     user_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-    },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,

@@ -373,6 +373,10 @@ module.exports = app => {
 
   app.post('/h5/passport2/login', 'h52.passport.login');
   app.post('/h5/passport2/loginWeibo', 'h52.passport.loginWeibo');
+  app.post('/h5/passport2/bindList', app.middlewares.needLoginJson(), 'h52.passport.bindList');
+  app.post('/h5/passport2/bindWeibo', app.middlewares.needLoginJson(), 'h52.passport.bindWeibo');
+  app.post('/h5/passport2/bindCode', app.middlewares.needLoginJson(), 'h52.passport.bindCode');
+  app.post('/h5/passport2/bindPhone', app.middlewares.needLoginJson(), 'h52.passport.bindPhone');
   app.post('/h5/passport2/registerCode', 'h52.passport.registerCode');
   app.post('/h5/passport2/register', 'h52.passport.register');
   app.post('/h5/passport2/resetCode', 'h52.passport.resetCode');

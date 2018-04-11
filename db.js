@@ -30,6 +30,7 @@ const sequelize = new Sequelize('circling', 'root', '87351984@', {
     underscored: true,
     freezeTableName: true,
   },
+  timezone: '+08:00',
   // logging: null,
 });
 

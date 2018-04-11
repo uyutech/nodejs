@@ -120,7 +120,7 @@ class Service extends egg.Service {
       code = '000000' + code;
       code = code.slice(-6);
     }
-    let cacheKey = 'resetCode_' + phone + '_1';
+    let cacheKey = 'registerCode_' + phone;
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(code));
     let res = await smsClient.sendSMS({
       PhoneNumbers: phone,
@@ -153,7 +153,7 @@ class Service extends egg.Service {
       };
     }
     const { app } = this;
-    let cacheKey = 'resetCode_' + phone + '_1';
+    let cacheKey = 'registerCode_' + phone;
     let check = await app.redis.get(cacheKey);
     if(app.config.env !== 'prod') {
       if(!check && code !== '888888') {
@@ -163,13 +163,11 @@ class Service extends egg.Service {
         };
       }
     }
-    else {
-      if(!check) {
-        return {
-          success: false,
-          message: '验证码不正确~',
-        };
-      }
+    else if(!check) {
+      return {
+        success: false,
+        message: '验证码不正确~',
+      };
     }
     check = await app.model.userAccount.findOne({
       attributes: [
@@ -221,7 +219,7 @@ class Service extends egg.Service {
       await transaction.commit();
       return {
         success: true,
-        data: create.id,
+        data: create.id ,
       };
     } catch(err) {
       await transaction.rollback();
@@ -264,7 +262,7 @@ class Service extends egg.Service {
       code = '000000' + code;
       code = code.slice(-6);
     }
-    let cacheKey = 'resetCode_' + phone + '_2';
+    let cacheKey = 'resetCode_' + phone;
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(code));
     let res = await smsClient.sendSMS({
       PhoneNumbers: phone,
@@ -304,7 +302,7 @@ class Service extends egg.Service {
       };
     }
     const { app } = this;
-    let cacheKey = 'resetCode_' + phone + '_2';
+    let cacheKey = 'resetCode_' + phone;
     let check = await app.redis.get(cacheKey);
     if(app.config.env !== 'prod') {
       if(!check && code !== '888888') {
@@ -314,13 +312,11 @@ class Service extends egg.Service {
         };
       }
     }
-    else {
-      if(!check) {
-        return {
-          success: false,
-          message: '验证码不正确~',
-        };
-      }
+    else if(!check) {
+      return {
+        success: false,
+        message: '验证码不正确~',
+      };
     }
     app.redis.del(cacheKey);
     let md5 = Spark.hash(pw + 'uyuTech');
@@ -343,7 +339,7 @@ class Service extends egg.Service {
    * 使用weibo的openId和token登录
    * @param openId:String
    * @param token:String
-   * @returns { success: boolean, data: int }
+   * @returns Object{ success: boolean, data: int }
    */
   async loginWeibo(openId, token) {
     if(!openId || !token) {
@@ -364,6 +360,7 @@ class Service extends egg.Service {
     if(find) {
       await app.model.userOauth.update({
         token,
+        update_time: new Date(),
       }, {
         where: {
           open_id: openId,
@@ -384,6 +381,11 @@ class Service extends egg.Service {
         dataType: 'json',
         gzip: true,
       });
+      if(!weibo || weibo.error || !weibo.data) {
+        return {
+          success: false,
+        };
+      }
       weibo = weibo.data;
       let name = weibo.screen_name || weibo.name;
       let headUrl = weibo.avatar_hd || weibo.avatar_large || weibo.profile_image_url;
@@ -401,7 +403,7 @@ class Service extends egg.Service {
           raw: true,
         });
         let id = last.id + Math.floor(Math.random() * 5) + 1;
-        let create = await app.model.user.create({
+        await app.model.user.create({
           id,
           nickname: '转圈' + name,
           headUrl,
@@ -410,17 +412,18 @@ class Service extends egg.Service {
           raw: true,
         });
         await app.model.userOauth.create({
-          uid: openId,
-          access_token: token,
+          open_id: openId,
+          token,
           type: 1,
-          user_id: create.id,
+          user_id: id,
         }, {
           transaction,
+          raw: true,
         });
         await transaction.commit();
         return {
           success: true,
-          data: create.id,
+          data: id,
         };
       } catch(err) {
         await transaction.rollback();
@@ -429,6 +432,239 @@ class Service extends egg.Service {
         };
       }
     }
+  }
+
+  /**
+   * 获取账户列表
+   * @param uid:int 用户id
+   * @returns Array<Object>
+   */
+  async accountList(uid) {
+    if(!uid) {
+      return;
+    }
+    const { app } = this;
+    let res = await app.model.userAccount.findAll({
+      attributes: [
+        'name',
+        'type'
+      ],
+      where: {
+        user_id: uid,
+      },
+      raw: true,
+    });
+    return res;
+  }
+
+  /**
+   * 获取绑定列表
+   * @param uid:int 用户id
+   * @returns Array<Object>
+   */
+  async oauthList(uid) {
+    if(!uid) {
+      return;
+    }
+    const { app } = this;
+    let res = await app.model.userOauth.findAll({
+      attributes: [
+        ['open_id', 'id'],
+        'type'
+      ],
+      where: {
+        user_id: uid,
+      },
+      raw: true,
+    });
+    return res;
+  }
+
+  /**
+   * 绑定微博
+   * @param uid:int 用户id
+   * @param openId:String
+   * @param token:String
+   * @returns Object{ success: boolean, data:int }
+   */
+  async bindWeibo(uid, openId, token) {
+    if(!uid || !openId || !token) {
+      return {
+        success: false,
+      };
+    }
+    const { app, ctx, } = this;
+    let find = await app.model.userOauth.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        user_id: uid,
+        type: 1,
+      },
+      raw: true,
+    });
+    if(find) {
+      return {
+        success: false,
+        message: '这个账号已经绑定过微博了哦~',
+      };
+    }
+    find = await app.model.userOauth.findOne({
+      attributes: [
+        ['user_id', 'userId']
+      ],
+      where: {
+        open_id: openId,
+        type: 1,
+      },
+      raw: true,
+    });
+    if(find) {
+      return {
+        success: false,
+        message: '这个微博已经被绑定过了哦~',
+      };
+    }
+    let weibo = await ctx.curl('https://api.weibo.com/2/users/show.json', {
+      data: {
+        uid: openId,
+        access_token: token,
+      },
+      dataType: 'json',
+      gzip: true,
+    });
+    if(!weibo || weibo.error || !weibo.data) {
+      return {
+        success: false,
+      };
+    }
+    let res = await app.model.userOauth.create({
+      open_id: openId,
+      token,
+      type: 1,
+      user_id: uid,
+    }, {
+      raw: true,
+    });console.log(33,res);
+    return {
+      success: true,
+      data: openId,
+    };
+  }
+
+  /**
+   * 发送绑定验证码
+   * @param phone:String 手机号
+   */
+  async bindCode(phone) {
+    if(!phone || !/^1\d{10}$/.test(phone)) {
+      return {
+        success: false,
+        message: '手机号不合法~',
+      };
+    }
+    const { app } = this;
+    let check = await app.model.userAccount.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        name: phone,
+        type: 1,
+      },
+      raw: true,
+    });
+    if(check) {
+      return {
+        success: false,
+        message: '这个号码已经绑定过了哦~',
+      };
+    }
+    let code = Math.floor(Math.random() * 1000000) + '';
+    if(code.length < 6) {
+      code = '000000' + code;
+      code = code.slice(-6);
+    }
+    let cacheKey = 'bindCode_' + phone;
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(code));
+    let res = await smsClient.sendSMS({
+      PhoneNumbers: phone,
+      SignName: '转圈Circling',
+      TemplateCode: TEMPLATE[3] || 'SMS_80275178',
+      TemplateParam: '{"code":"' + code + '"}',
+    });
+    return {
+      success: res.Code === 'OK',
+    };
+  }
+
+  async bindPhone(uid, phone, pw, code) {
+    if(!phone || !/^1\d{10}$/.test(phone)) {
+      return {
+        success: false,
+        message: '手机号不合法~',
+      };
+    }
+    if(!pw || pw.length < 6) {
+      return {
+        success: false,
+        message: '密码长度不符合要求~',
+      };
+    }
+    if(!code || code.length !== 6) {
+      return {
+        success: false,
+        message: '验证码长度不符合要求~',
+      };
+    }
+    const { app } = this;
+    let cacheKey = 'bindCode_' + phone;
+    let check = await app.redis.get(cacheKey);
+    if(app.config.env !== 'prod') {
+      if(!check && code !== '888888') {
+        return {
+          success: false,
+          message: '验证码不正确~',
+        };
+      }
+    }
+    else if(!check) {
+      return {
+        success: false,
+        message: '验证码不正确~',
+      };
+    }
+    check = await app.model.userAccount.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        name: phone,
+        type: 1,
+      },
+      raw: true,
+    });
+    if(check) {
+      return {
+        success: false,
+        message: '这个账号已经注册过了哦~',
+      };
+    }
+    app.redis.del(cacheKey);
+    let md5 = Spark.hash(pw + 'uyuTech');
+    await app.model.userAccount.create({
+      name: phone,
+      password: md5,
+      type: 1,
+      user_id: uid,
+    }, {
+      raw: true,
+    });
+    return {
+      success: true,
+      data: phone,
+    };
   }
 }
 

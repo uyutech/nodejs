@@ -93,6 +93,7 @@ module.exports = {
           underscored: true,
           freezeTableName: true,
         },
+        timezone: '+08:00',
       });
     }
     return this[SEQUELIZE_CIRCLING];
@@ -121,6 +122,7 @@ module.exports = {
           underscored: true,
           freezeTableName: true,
         },
+        timezone: '+08:00',
       });
     }
     return this[SEQUELIZE_STATS];
