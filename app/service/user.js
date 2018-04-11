@@ -206,6 +206,45 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取用户圈友id列表
+   * @param id:int 用户id
+   * @returns Array<int>
+   */
+  async friendIdList(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'friendId_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = squel.select()
+      .from('user_person_relation')
+      .field('user_id', 'userId')
+      .where('target_id=?', id)
+      .where('type=1')
+      .where('user_id IN ?', squel.select()
+        .from('user_person_relation')
+        .field('target_id')
+        .where('user_id=?', id)
+        .where('type=1')
+      )
+      .order('id', false)
+      .toString();
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(!res.length) {
+      return [];
+    }
+    let idList = res.map((item) => {
+      return item.userId;
+    });
+    return idList;
+  }
+
+  /**
    * 获取用户的关注的人列表，包括用户和作者
    * @param id:int 用户id
    * @param offset:int 分页开始
@@ -1808,7 +1847,7 @@ class Service extends egg.Service {
    * @returns Array<Object>
    */
   async followPostData(id, userIdList, authorIdList, offset, limit) {
-    if(!userIdList || !authorIdList) {
+    if(!id || !userIdList || !authorIdList) {
       return;
     }
     offset = parseInt(offset) || 0;
@@ -1858,14 +1897,14 @@ class Service extends egg.Service {
    * @returns int
    */
   async followPostCount(id, userIdList, authorIdList) {
-    if(!userIdList || !authorIdList) {
+    if(!id || !userIdList || !authorIdList) {
       return;
     }
     const { app } = this;
     let cacheKey = 'userFollowPostCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
+      // app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.comment.findOne({
@@ -1892,7 +1931,111 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, 20, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取圈友的画圈
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async friendPostList(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let idList = await this.friendIdList(id);
+    let [data, count] = await Promise.all([
+      this.friendPostData(id, idList, offset, limit),
+      this.friendPostCount(id, idList)
+    ]);
+    return {
+      data,
+      count,
+    };
+  }
+
+  /**
+   * 获取圈友的画圈
+   * @param id:int 用户id
+   * @param idList:Array<int> 圈友列表
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async friendPostData(id, idList, offset, limit) {
+    if(!id || !idList) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.comment.findAll({
+      attributes: [
+        'id',
+        ['user_id', 'uid'],
+        ['author_id', 'aid'],
+        'content',
+        ['parent_id', 'pid'],
+        ['root_id', 'rid'],
+        ['create_time', 'createTime']
+      ],
+      where: {
+        user_id: idList,
+        root_id: 0,
+        is_delete: false,
+      },
+      order: [
+        ['id', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    res = await service.comment.plusListFull(res, id);
+    return res;
+  }
+
+  /**
+   * 获取圈友的画圈数量
+   * @param id:int 用户id
+   * @param idList:Array<int> 圈友id列表
+   * @returns int
+   */
+  async friendPostCount(id, idList) {
+    if(!id || !idList) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'friendPostCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      // app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.comment.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: idList,
+        root_id: 0,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, 20, JSON.stringify(res));
     return res;
   }
 
