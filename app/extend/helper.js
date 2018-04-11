@@ -20,6 +20,11 @@ let helper = {
     };
   },
   errorJSON(data) {
+    if(typeof data === 'string') {
+      data = {
+        message: data,
+      };
+    }
     data = data || {};
     return {
       success: false,

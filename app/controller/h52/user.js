@@ -54,9 +54,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let userId = body.userId;
+    let userId = parseInt(body.userId);
     if(!userId) {
       return;
+    }
+    if(uid === userId) {
+      ctx.body = ctx.helper.errorJSON('不能关注自己');
     }
     let res = await service.user.follow(userId, uid, true);
     if(res.success) {
@@ -71,12 +74,20 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let userId = body.userId;
+    let userId = parseInt(body.userId);
     if(!userId) {
       return;
     }
+    if(uid === userId) {
+      ctx.body = ctx.helper.errorJSON('不能关注自己');
+    }
     let res = await service.user.follow(userId, uid, false);
-    ctx.body = ctx.helper.okJSON(res);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
   }
 }
 

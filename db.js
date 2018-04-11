@@ -49,7 +49,7 @@ const TagCommentRelation = require('./app/model/tagCommentRelation')({ sequelize
 const CircleTagRelation = require('./app/model/circleTagRelation')({ sequelizeCircling: sequelize, Sequelize });
 const User = require('./app/model/user')({ sequelizeCircling: sequelize, Sequelize });
 const UserAuthorRelation = require('./app/model/userAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
-const UserUserRelation = require('./app/model/userUserRelation')({ sequelizeCircling: sequelize, Sequelize });
+const UserPersonRelation = require('./app/model/userPersonRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Work = require('./app/model/work')({ sequelizeCircling: sequelize, Sequelize });
 const Audio = require('./app/model/Audio')({ sequelizeCircling: sequelize, Sequelize });
 const Video = require('./app/model/Video')({ sequelizeCircling: sequelize, Sequelize });
@@ -911,7 +911,7 @@ async function dealUser(pool) {
   console.log('------- dealUser --------');
   await User.sync();
   await UserAuthorRelation.sync();
-  await UserUserRelation.sync();
+  await UserPersonRelation.sync();
   let last = 2018000000043080;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -954,13 +954,13 @@ async function dealUser(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_User WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await UserUserRelation.create({
+    await UserPersonRelation.create({
       user_id: item.UID,
       target_id: item.ToUID,
       type: 1,
-      is_delete: false,
+      // is_delete: false,
       create_time: item.CreateTime,
-      update_time: item.CreateTime,
+      // update_time: item.CreateTime,
     });
   }
   last = 31853;
@@ -968,13 +968,13 @@ async function dealUser(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await UserUserRelation.create({
+    await UserPersonRelation.create({
       user_id: item.UID,
       target_id: item.AuthorID,
       type: 3,
-      is_delete: false,
+      // is_delete: false,
       create_time: item.CreateTime,
-      update_time: item.CreateTime,
+      // update_time: item.CreateTime,
     });
   }
 }
@@ -1335,9 +1335,9 @@ async function dealUserWork(pool) {
         works_id: worksId,
         kind: work.kind,
         type: 2,
-        is_delete: false,
+        // is_delete: false,
         create_time: item.CreateTime,
-        update_time: item.CreateTime,
+        // update_time: item.CreateTime,
       });
     }
     else {
@@ -1353,9 +1353,9 @@ async function dealUserWork(pool) {
           works_id: worksId,
           kind: work.kind,
           type: 2,
-          is_delete: false,
+          // is_delete: false,
           create_time: item.CreateTime,
-          update_time: item.CreateTime,
+          // update_time: item.CreateTime,
         });
       }
       else {
@@ -1373,9 +1373,9 @@ async function dealUserWork(pool) {
             works_id: worksId,
             kind: work.kind,
             type: 2,
-            is_delete: false,
+            // is_delete: false,
             create_time: item.CreateTime,
-            update_time: item.CreateTime,
+            // update_time: item.CreateTime,
           });
         }
       }
@@ -1469,9 +1469,9 @@ async function dealUserWork(pool) {
         works_id: worksId,
         kind: work.kind,
         type: 1,
-        is_delete: false,
+        // is_delete: false,
         create_time: createTime,
-        update_time: createTime,
+        // update_time: createTime,
       });
     }
   }

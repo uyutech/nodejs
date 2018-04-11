@@ -36,12 +36,7 @@ module.exports = app => {
       allowNull: false,
       comment: '1点赞作品，2收藏作品',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    update_time: {
+    create_time: {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,

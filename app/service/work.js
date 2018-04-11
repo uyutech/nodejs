@@ -62,78 +62,42 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    // 更新内存中用户对作品关系的状态
-    let cache;
+    // 更新内存中用户对作品关系的状态，同时入库
     let cacheKey = 'userWorkRelation_' + uid + '_' + workId + '_' + type;
     if(state) {
-      cache = app.redis.setex(cacheKey, CACHE_TIME, 'true');
+      await Promise.all([
+        app.redis.setex(cacheKey, CACHE_TIME, 'true'),
+        app.model.userWorkRelation.create({
+          user_id: uid,
+          works_id: worksId,
+          work_id: workId,
+          kind,
+          type,
+        })
+      ]);
     }
     else {
-      cache = app.redis.setex(cacheKey, CACHE_TIME, 'false');
+      await Promise.all([
+        app.redis.setex(cacheKey, CACHE_TIME, 'false'),
+        app.model.userWorkRelation.destroy({
+          where: {
+            work_id: workId,
+            user_id: uid,
+            type,
+          },
+        })
+      ]);
     }
-    // 入库
-    await Promise.all([
-      cache,
-      app.model.userWorkRelation.upsert({
-        user_id: uid,
-        works_id: worksId,
-        work_id: workId,
-        kind,
-        type,
-        is_delete: !state,
-        update_time: new Date(),
-      }, {
-        where: {
-          work_id: workId,
-          type,
-          user_id: uid,
-        },
-        raw: true,
-      })
-    ]);
     // 更新计数，优先内存缓存
     cacheKey = 'workCount_' + workId + '_' + type;
-    let res = await app.redis.get(cacheKey);
-    let count = 0;
-    if(res) {
-      count = JSON.parse(res);
-      if(state) {
-        count++;
-      }
-      else {
-        count--;
-      }
-      count = Math.max(count, 0);
-      // 可能因为2次操作之间的延迟导致key过期设置超时失败，此时放弃操作内存防止数据不一致
-      let expire = await app.redis.expire(cacheKey, CACHE_TIME);
-      if(expire) {
-        if(state) {
-          app.redis.incr(cacheKey);
-        }
-        else {
-          app.redis.decr(cacheKey);
-        }
-      }
+    let count = await this.count(workId, type);
+    if(state) {
+      count++;
+      app.redis.incr(cacheKey);
     }
     else {
-      res = await app.model.userWorkRelation.findOne({
-        attributes: [
-          [Sequelize.fn('COUNT', '*'), 'num']
-        ],
-        where: {
-          work_id: workId,
-          type,
-          is_delete: false,
-        },
-        raw: true,
-      });
-      if(res) {
-        count = res.num || 0;
-      }
-      else {
-        count = 0;
-      }
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
+      count--;
+      app.redis.decr(cacheKey);
     }
     return {
       state,
@@ -511,7 +475,6 @@ class Service extends egg.Service {
         user_id: uid,
         type,
         work_id: id,
-        is_delete: false,
       },
       raw: true,
     });
@@ -581,7 +544,6 @@ class Service extends egg.Service {
           user_id: uid,
           type,
           work_id: noCacheIdList,
-          is_delete: false,
         },
         raw: true,
       });
@@ -638,7 +600,6 @@ class Service extends egg.Service {
       where: {
         work_id: id,
         type,
-        is_delete: false,
       },
       raw: true,
     });
@@ -717,7 +678,6 @@ class Service extends egg.Service {
         where: {
           work_id: noCacheIdList,
           type,
-          is_delete: false,
         },
         group: 'work_id',
         raw: true,

@@ -190,14 +190,13 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.userUserRelation.findOne({
+    res = await app.model.userPersonRelation.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
       where: {
         target_id: id,
         type: 3,
-        is_delete: false,
       },
       raw: true,
     });
@@ -225,18 +224,17 @@ class Service extends egg.Service {
       return false;
     }
     const { app } = this;
-    let cacheKey = 'userUserRelation_' + uid + '_' + id + '_' + 3;
+    let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_3';
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.userUserRelation.findOne({
+    res = await app.model.userPersonRelation.findOne({
       where: {
         user_id: uid,
         type: 3,
         target_id: id,
-        is_delete: false,
       },
     });
     res = !!res;
@@ -278,76 +276,42 @@ class Service extends egg.Service {
         };
       }
     }
-    // 更新内存中用户对作者关系的状态
-    let cache;
-    let cacheKey = 'userUserRelation_' + uid + '_' + id + '_' + 3;
+    // 更新内存中用户对作者关系的状态，同时入库
+    let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_3';
     if(state) {
-      cache = app.redis.setex(cacheKey, CACHE_TIME, 'true');
+      await Promise.all([
+        app.redis.setex(cacheKey, CACHE_TIME, 'true'),
+        app.model.userPersonRelation.create({
+          user_id: uid,
+          target_id: id,
+          type: 3,
+        }, {
+          raw: true,
+        })
+      ]);
     }
     else {
-      cache = app.redis.setex(cacheKey, CACHE_TIME, 'false');
+      await Promise.all([
+        app.redis.setex(cacheKey, CACHE_TIME, 'false'),
+        app.model.userPersonRelation.destroy({
+          where: {
+            user_id: uid,
+            target_id: id,
+            type: 3,
+          },
+        })
+      ]);
     }
-    // 入库
-    await Promise.all([
-      cache,
-      app.model.userUserRelation.upsert({
-        user_id: uid,
-        target_id: id,
-        type: 3,
-        is_delete: !state,
-        update_time: new Date(),
-      }, {
-        where: {
-          user_id: uid,
-          type: 3,
-          target_id: id,
-        },
-        raw: true,
-      })
-    ]);
     // 更新计数，优先内存缓存
     cacheKey = 'authorFansCount_' + id;
-    let res = await app.redis.get(cacheKey);
-    let count = 0;
-    if(res) {
-      count = JSON.parse(res);
-      if(state) {
-        count++;
-      }
-      else {
-        count--;
-      }
-      count = Math.max(count, 0);
-      // 可能因为2次操作之间的延迟导致key过期设置超时失败，此时放弃操作内存防止数据不一致
-      let expire = await app.redis.expire(cacheKey, CACHE_TIME);
-      if(expire) {
-        if(state) {
-          app.redis.incr(cacheKey);
-        }
-        else {
-          app.redis.decr(cacheKey);
-        }
-      }
+    let count = await this.fansCount(id);
+    if(state) {
+      count++;
+      app.redis.incr(cacheKey);
     }
     else {
-      res = await app.model.userUserRelation.findOne({
-        attributes: [
-          [Sequelize.fn('COUNT', '*'), 'num']
-        ],
-        where: {
-          target_id: id,
-          type: 3,
-          is_delete: false,
-        },
-        raw: true,
-      });
-      if(res) {
-        count = res.num || 0;
-      }
-      else {
-        count = 0;
-      }
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(count));
+      count--;
+      app.redis.decr(cacheKey);
     }
     return {
       success: true,

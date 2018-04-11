@@ -6,7 +6,7 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_user_relation', {
+  return sequelizeCircling.define('user_person_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -26,17 +26,7 @@ module.exports = app => {
       allowNull: false,
       comment: '1关注用户，2拉黑用户，3关注作者，4拉黑作者',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,
@@ -50,7 +40,7 @@ module.exports = app => {
       },
       {
         name: 'target_id_type',
-        fields: ['target_id', 'type', 'update_time']
+        fields: ['target_id', 'type']
       }
     ],
     comment: '用户和用户关联信息',
