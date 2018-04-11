@@ -1029,8 +1029,10 @@ class Service extends egg.Service {
         user_id: id,
         type: 2,
         kind: 1,
-        is_delete: false,
       },
+      order: [
+        ['id', 'DESC']
+      ],
       offset,
       limit,
       raw: true,
@@ -1159,7 +1161,6 @@ class Service extends egg.Service {
         user_id: id,
         type: 2,
         kind: 1,
-        is_delete: false,
       },
       raw: true,
     });
@@ -1221,8 +1222,10 @@ class Service extends egg.Service {
         user_id: id,
         type: 2,
         kind: 2,
-        is_delete: false,
       },
+      order: [
+        ['id', 'DESC']
+      ],
       offset,
       limit,
       raw: true,
@@ -1350,7 +1353,6 @@ class Service extends egg.Service {
         user_id: id,
         type: 2,
         kind: 2,
-        is_delete: false,
       },
       raw: true,
     });
@@ -1412,7 +1414,6 @@ class Service extends egg.Service {
         user_id: id,
         type: 2,
         kind: 3,
-        is_delete: false,
       },
       offset,
       limit,
@@ -1542,7 +1543,6 @@ class Service extends egg.Service {
         user_id: id,
         type: 2,
         kind: 3,
-        is_delete: false,
       },
       raw: true,
     });
@@ -1603,7 +1603,7 @@ class Service extends egg.Service {
       where: {
         user_id: id,
         type: 2,
-        is_delete: false,
+        is_comment_delete: false,
       },
       offset,
       limit,
@@ -1633,7 +1633,7 @@ class Service extends egg.Service {
       where: {
         user_id: id,
         type: 2,
-        is_delete: false,
+        is_comment_delete: false,
       },
       raw: true,
     });
