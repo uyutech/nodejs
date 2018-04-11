@@ -511,7 +511,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let sql = squel.select()
-      .from('user_user_relation')
+      .from('user_person_relation')
       .field('target_id', 'userId')
       .where('user_id=?', id)
       .where('type=1')
@@ -611,7 +611,7 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let sql = squel.select()
-      .from('user_user_relation')
+      .from('user_person_relation')
       .field('user_id', 'userId')
       .where('target_id=?', id)
       .where('type=1')
@@ -711,12 +711,12 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let sql = squel.select()
-      .from('user_user_relation')
+      .from('user_person_relation')
       .field('user_id', 'userId')
       .where('target_id=?', id)
       .where('type=1')
       .where('user_id IN ?', squel.select()
-        .from('user_user_relation')
+        .from('user_person_relation')
         .field('target_id')
         .where('user_id=?', id)
         .where('type=1')
@@ -757,12 +757,12 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     let sql = squel.select()
-      .from('user_user_relation')
+      .from('user_person_relation')
       .field('COUNT(*)', 'num')
       .where('target_id=?', id)
       .where('type=1')
       .where('user_id IN ?', squel.select()
-        .from('user_user_relation')
+        .from('user_person_relation')
         .field('target_id')
         .where('user_id=?', id)
         .where('type=1')
@@ -820,7 +820,7 @@ class Service extends egg.Service {
     }
     const { app, service } = this;
     let sql = squel.select()
-      .from('user_user_relation')
+      .from('user_person_relation')
       .field('target_id', 'authorId')
       .where('user_id=?', id)
       .where('type=3')
