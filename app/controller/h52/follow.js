@@ -14,11 +14,10 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [personList, circleList, postList, friendPostList] = await Promise.all([
+    let [personList, circleList, postList] = await Promise.all([
       service.user.followPersonList(uid, 0, LIMIT),
       service.user.circleList(uid, 0, LIMIT),
       service.user.followPostList(uid, 0, LIMIT),
-      service.user.friendPostList(uid, 0, LIMIT)
     ]);
     personList.limit = LIMIT;
     circleList.limit = LIMIT;
@@ -27,7 +26,6 @@ class Controller extends egg.Controller {
       personList,
       circleList,
       postList,
-      friendPostList,
     });
   }
 
@@ -47,6 +45,15 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let res = await service.user.followPostList(uid, body.offset || 0, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async friendPostList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let res = await service.user.friendPostList(uid, body.offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
