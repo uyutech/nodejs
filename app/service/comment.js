@@ -960,7 +960,7 @@ class Service extends egg.Service {
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.stringify(res);
+      return JSON.parse(res);
     }
     res = await app.model.comment.findOne({
       attributes: [
@@ -1208,8 +1208,8 @@ class Service extends egg.Service {
       create_time: now,
       update_time: now,
     });
-    let res = await service.comment.info(create.id);
-    res = await service.comment.plusFull(res, uid);
+    let res = await this.info(create.id);
+    res = await this.plusFull(res, uid);
     return res;
   }
 }

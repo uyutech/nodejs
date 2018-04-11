@@ -570,7 +570,7 @@ class Service extends egg.Service {
    * @returns int
    */
   async likeCount(id) {
-    return await this.count(id, 1);
+    return await this.relationCount(id, 1);
   }
 
   /**
@@ -579,10 +579,10 @@ class Service extends egg.Service {
    * @returns int
    */
   async favorCount(id) {
-    return await this.count(id, 2);
+    return await this.relationCount(id, 2);
   }
 
-  async count(id, type) {
+  async relationCount(id, type) {
     if(!id || !type) {
       return;
     }
