@@ -1276,9 +1276,7 @@ class Service extends egg.Service {
     let typeList = [];
     worksList.forEach((item) => {
       if(item) {
-        if(!worksHash[item.id]) {
-          worksHash[item.id] = item;
-        }
+        worksHash[item.id] = item;
         if(!typeHash[item.type]) {
           typeHash[item.type] = true;
           typeList.push(item.type);
@@ -1286,7 +1284,7 @@ class Service extends egg.Service {
       }
     });
     workList.forEach((item) => {
-      if(!workHash[item.id]) {
+      if(item) {
         workHash[item.id] = item;
       }
     });
@@ -1453,29 +1451,37 @@ class Service extends egg.Service {
         workIdList.push(item.workId);
       }
     });
-    let [worksList, workList, authorList] = await Promise.all([
+    let [
+      worksList,
+      workList,
+      authorList,
+      likeCountList,
+      isLikeList
+    ] = await Promise.all([
       service.imageAlbum.infoList(worksIdList),
       service.work.imageList(workIdList),
-      service.imageAlbum.authorList(worksIdList)
+      service.imageAlbum.authorList(worksIdList),
+      service.work.likeCountList(workIdList),
+      service.work.isLikeList(workIdList, id)
     ]);
     let worksHash = {};
     let workHash = {};
     let authorHash = {};
     let typeHash = {};
     let typeList = [];
-    worksList.forEach((item) => {
+    worksList.forEach((item, i) => {
       if(item) {
-        if(!worksHash[item.id]) {
-          worksHash[item.id] = item;
-        }
+        worksHash[item.id] = item;
         if(!typeHash[item.type]) {
           typeHash[item.type] = true;
           typeList.push(item.type);
         }
       }
     });
-    workList.forEach((item) => {
-      if(!workHash[item.id]) {
+    workList.forEach((item, i) => {
+      if(item) {
+        item.likeCount = likeCountList[i] || 0;
+        item.isLike = isLikeList[i] || false;
         workHash[item.id] = item;
       }
     });
@@ -1519,6 +1525,8 @@ class Service extends egg.Service {
         temp.work.url = work.url;
         temp.work.type = work.type;
         temp.work.typeName = work.typeName;
+        temp.work.likeCount = work.likeCount;
+        temp.work.isLike = work.isLike;
       }
       else {
         ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);
@@ -1633,8 +1641,7 @@ class Service extends egg.Service {
     let idList = res.map((item) => {
       return item.commentId;
     });
-    let postList = await service.post.infoList(idList);
-    return postList;
+    return await service.post.infoList(idList);
   }
 
   /**
