@@ -154,6 +154,73 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取画圈列表下留言数量列表
+   * @param idList:Array<int> 画圈的id列表
+   * @returns Array<int> 留言数量列表
+   */
+  async commentCountList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('commentCount_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('commentCount_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.comment.findAll({
+        attributes: [
+          ['root_id', 'rootId'],
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          root_id: noCacheIdList,
+          is_delete: false,
+        },
+        group: 'rootId',
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.rootId;
+          hash[id] = item.num;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || 0;
+        cache[i] = temp;
+        app.redis.setex('commentCount_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
+
+  /**
    * 获取全部画圈
    * @param offset:int 分页开始
    * @param limit:int 分页尺寸

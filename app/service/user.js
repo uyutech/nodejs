@@ -1053,29 +1053,43 @@ class Service extends egg.Service {
         workIdList.push(item.workId);
       }
     });
-    let [worksList, workList, authorList] = await Promise.all([
+    let [
+      worksList,
+      workList,
+      authorList,
+      likeCountList,
+      isLikeList,
+      commentCountList,
+      playCountList
+    ] = await Promise.all([
       service.works.infoList(worksIdList),
       service.work.videoList(workIdList),
-      service.works.authorList(worksIdList)
+      service.works.authorList(worksIdList),
+      service.work.likeCountList(workIdList),
+      service.work.isLikeList(workIdList, id),
+      service.works.commentCountList(worksIdList),
+      service.work.playCountList(workIdList)
     ]);
     let worksHash = {};
     let workHash = {};
     let authorHash = {};
     let typeHash = {};
     let typeList = [];
-    worksList.forEach((item) => {
+    worksList.forEach((item, i) => {
       if(item) {
-        if(!worksHash[item.id]) {
-          worksHash[item.id] = item;
-        }
+        item.commentCount = commentCountList[i] || 0;
+        worksHash[item.id] = item;
         if(!typeHash[item.type]) {
           typeHash[item.type] = true;
           typeList.push(item.type);
         }
       }
     });
-    workList.forEach((item) => {
-      if(!workHash[item.id]) {
+    workList.forEach((item, i) => {
+      if(item) {
+        item.likeCount = likeCountList[i] || 0;
+        item.isLike = isLikeList[i] || false;
+        item.playCount = playCountList[i] || 0;
         workHash[item.id] = item;
       }
     });
@@ -1108,6 +1122,7 @@ class Service extends egg.Service {
         temp.cover = works.cover;
         temp.type = works.type;
         temp.typeName = works.typeName;
+        temp.commentCount = works.commentCount;
       }
       else {
         ctx.logger.error('favor miss works uid:%s, worksId:%s, workId:%s', id, temp.id, temp.work.id);
@@ -1119,6 +1134,9 @@ class Service extends egg.Service {
         temp.work.url = work.url;
         temp.work.type = work.type;
         temp.work.typeName = work.typeName;
+        temp.work.likeCount = work.likeCount;
+        temp.work.isLike = work.isLike;
+        temp.work.playCount = work.playCount;
       }
       else {
         ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);

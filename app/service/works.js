@@ -425,6 +425,102 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取大作品列表评论id列表
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<int>
+   */
+  async commentIdList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('worksComment_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('worksComment_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.worksCommentRelation.findAll({
+        attributes: [
+          ['works_id', 'worksId'],
+          ['comment_id', 'commentId']
+        ],
+        where: {
+          works_id: noCacheIdList,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.worksId;
+          hash[id] = item.commentId;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('worksComment_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
+
+  /**
+   * 获取大作品评论数量
+   * @param id:int 大作品id
+   * @returns int
+   */
+  async commentCount(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let commentId = await this.commentId(id);
+    return await service.post.commentCount(commentId);
+  }
+
+  /**
+   * 获取大作品列表评论数量
+   * @param idList:int 大作品id
+   * @returns Array<int>
+   */
+  async commentCountList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let commentIdList = await this.commentIdList(idList);
+    return await service.post.commentCountList(commentIdList);
+  }
+
+  /**
    * 获取评论全部信息
    * @param id:int 作品id
    * @param uid:int 用户id

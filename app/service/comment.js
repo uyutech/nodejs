@@ -992,7 +992,9 @@ class Service extends egg.Service {
     const { app } = this;
     let cache = await Promise.all(
       idList.map((id) => {
-        return app.redis.get('commentReplyCount_' + id);
+        if(id !== null && id !== undefined) {
+          return app.redis.get('commentReplyCount_' + id);
+        }
       })
     );
     let noCacheIdList = [];
@@ -1029,14 +1031,14 @@ class Service extends egg.Service {
       if(res.length) {
         res.forEach((item) => {
           let id = item.rootId;
-          hash[id] = item.num;
+          hash[id] = item.num || 0;
         });
       }
       noCacheIndexList.forEach((i) => {
         let id = idList[i];
         let temp = hash[id] || 0;
         cache[i] = temp;
-        app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('commentReplyCount_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;

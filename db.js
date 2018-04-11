@@ -296,28 +296,33 @@ async function dealWork(pool) {
     });
   }
   last = 2016000000008449;
-  // last = 0;
+  last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    let work = await Work.create({
+    await Work.create({
       id: item.ID,
-      // title: item.ItemsName || '',
       kind: item.BigType,
-      // type: item.ItemType,
-      // is_delete: !!item.ISDel,
-      // create_time: item.CreateTime,
-      // update_time: item.CreateTime,
     });
-    // await WorkNum.create({
-    //   work_id: item.ID,
-    //   type: 0,
-    //   num: 0,
-    //   update_time: item.CreateTime,
-    // });
+    let workId = item.ID;
+    if(item.BigType === 1) {
+      workId = workId.toString().replace(/^2016/, 2020);
+    }
+    else if(item.BigType === 3) {
+      workId = workId.toString().replace(/^2016/, 2021);
+    }
+    else if(item.BigType === 4) {
+      workId = workId.toString().replace(/^2016/, 2022);
+    }
+    await WorkNum.create({
+      work_id: workId,
+      type: 1,
+      num: item.PlayCountRaw,
+      update_time: item.CreateTime,
+    });
     if(item.BigType === 2) {
       await Audio.create({
-        id: item.ID,
+        id: workId,
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
@@ -332,7 +337,7 @@ async function dealWork(pool) {
     }
     else if(item.BigType === 1) {
       await Video.create({
-        id: item.ID.toString().replace(/^2016/, 2020),
+        id: workId,
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
@@ -348,7 +353,7 @@ async function dealWork(pool) {
     }
     else if(item.BigType === 3) {
       await Image.create({
-        id: item.ID.toString().replace(/^2016/, 2021),
+        id: workId,
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
@@ -363,7 +368,7 @@ async function dealWork(pool) {
     }
     else if(item.BigType === 4) {
       await Text.create({
-        id: item.ID.toString().replace(/^2016/, 2022),
+        id: workId,
         work_id: item.ID,
         type: item.ItemType,
         title: item.ItemsName || '',
@@ -1573,7 +1578,7 @@ async function dealAccount(pool) {
   await UserAccount.sync();
   await UserOauth.sync();
   let last = 17635;
-  last = 0;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Open_Account WHERE ID>${last} AND ISDel=0;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
