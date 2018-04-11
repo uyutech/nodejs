@@ -896,7 +896,7 @@ class Service extends egg.Service {
     state = !!state;
     let now = await this.isRelation(id, uid, type);
     if(now === state) {
-      let count = await this.count(id, type);
+      let count = await this.relationCount(id, type);
       return {
         state,
         count,

@@ -1789,7 +1789,7 @@ class Service extends egg.Service {
       }
     });
     let [data, count] = await Promise.all([
-      this.followPostData(userIdList, authorIdList, offset, limit),
+      this.followPostData(id, userIdList, authorIdList, offset, limit),
       this.followPostCount(id, userIdList, authorIdList)
     ]);
     return {
@@ -1800,13 +1800,14 @@ class Service extends egg.Service {
 
   /**
    * 获取关注的人的画圈
+   * @param id:int 用户id
    * @param userIdList:Array<int> 关注的用户id列表
    * @param authorIdList:Array<int> 关注的作者id列表
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async followPostData(userIdList, authorIdList, offset, limit) {
+  async followPostData(id, userIdList, authorIdList, offset, limit) {
     if(!userIdList || !authorIdList) {
       return;
     }
@@ -1845,7 +1846,7 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    res = await service.comment.plusListFull(res);
+    res = await service.comment.plusListFull(res, id);
     return res;
   }
 
