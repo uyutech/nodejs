@@ -175,6 +175,7 @@ class Service extends egg.Service {
     if(offset < 0 || limit < 1) {
       return;
     }
+    // TODO: 缓存圈子的标签idList
     const { app, service } = this;
     let sql = squel.select()
       .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
@@ -402,15 +403,19 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
+    let where = {
+      circle_id: id,
+      type,
+      is_delete: false,
+    };
+    if(type) {
+      where.type = type;
+    }
     res = await app.model.circleTagRelation.findAll({
       attributes: [
         ['tag_id', 'tagId']
       ],
-      where: {
-        circle_id: id,
-        type,
-        is_delete: false,
-      },
+      where,
       raw: true,
     });
     res = res.map((item) => {
@@ -467,16 +472,19 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
+      let where = {
+        circle_id: noCacheIdList,
+        is_delete: false,
+      };
+      if(type) {
+        where.type = type;
+      }
       let res = await app.model.circleTagRelation.findAll({
         attributes: [
           ['circle_id', 'circleId'],
           ['tag_id', 'tagId']
         ],
-        where: {
-          circle_id: noCacheIdList,
-          type,
-          is_delete: false,
-        },
+        where,
         raw: true,
       });
       let hash = {};

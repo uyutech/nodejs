@@ -287,10 +287,10 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    let idList = res.map((item) => {
+    let commentIdList = res.map((item) => {
       return item.commentId;
     });
-    return await service.post.infoList(idList, uid);
+    return await service.post.infoList(commentIdList, uid);
   }
 
   /**
@@ -352,14 +352,83 @@ class Service extends egg.Service {
     return { data, count };
   }
 
-  async postListData() {}
+  /**
+   * 获取标签id列表下的画圈
+   * @param idList:Array<int> 标签id列表
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async postListData(idList, uid, offset, limit) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let sql = squel.select()
+      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
+      .field('comment_id', 'commentId')
+      .where('tag_id IN ?', idList)
+      .where('is_delete=false')
+      .where('is_comment_delete=false')
+      .order('comment_id', false)
+      .offset(offset)
+      .limit(limit)
+      .toString();
+    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    let commentIdList = res.map((item) => {
+      return item.commentId;
+    });
+    return await service.post.infoList(commentIdList, uid);
+  }
 
   /**
    * 获取标签id列表下画圈数量
    * @param idList:Array<int> 标签id列表
    * @returns int
    */
-  async postListCount(idList) {}
+  async postListCount(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cacheKey = 'tagListCommentCount_' + idList.join(',');
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      // app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.tagCommentRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        tag_id: idList,
+        is_delete: false,
+        is_comment_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, 30, JSON.stringify(res));
+    return res;
+  }
 
   /**
    * 获取类似名字的标签

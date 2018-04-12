@@ -31,19 +31,12 @@ class Controller extends egg.Controller {
         ]
       }),
       service.circle.all(0, LIMIT),
-      service.post.allData(0, LIMIT)
+      service.post.all(uid, 0, LIMIT)
     ]);
     if(circleList) {
       circleList.limit = LIMIT;
     }
-    if(postList) {
-      postList = await service.comment.plusListFull(postList, uid);
-      postList = {
-        data: postList,
-        count: 100,
-        limit: LIMIT,
-      };
-    }
+    postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       bannerList,
       circleList,
@@ -62,23 +55,34 @@ class Controller extends egg.Controller {
   }
 
   async postList() {
-    const { ctx, app, service } = this;
+    const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let circleId = (body.circleId || '').split(',');
     let offset = body.offset || 0;
     offset = parseInt(offset) || 0;
-    let post;
-    if(circleId) {
+    let res;
+    if(circleId.length) {
       let tagIdList = await service.circle.tagIdList(circleId);
-      post = await service.tag.listPostList(tagIdList, uid, offset, LIMIT);
+      let temp = [];
+      let hash = {};
+      tagIdList.forEach((arr) => {
+        arr.forEach((item) => {
+          if(!hash[item]) {
+            hash[item] = true;
+            temp.push(item);
+          }
+        });
+      });
+      if(temp.length) {
+        res = await service.tag.listPostList(temp, uid, offset, LIMIT);
+      }
     }
-    else {
-      post = await service.post.all(offset, LIMIT);
+    if(!res) {
+      res = await service.post.all(uid, offset, LIMIT);
     }
-    post = await service.comment.plusListFull(post, uid);
-    post.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(post);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

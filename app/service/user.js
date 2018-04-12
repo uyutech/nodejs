@@ -1906,7 +1906,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, 20, JSON.stringify(res));
+    app.redis.setex(cacheKey, 30, JSON.stringify(res));
     return res;
   }
 
@@ -2010,7 +2010,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, 20, JSON.stringify(res));
+    app.redis.setex(cacheKey, 30, JSON.stringify(res));
     return res;
   }
 
@@ -2162,7 +2162,7 @@ class Service extends egg.Service {
       offset,
       limit,
       raw: true,
-    });console.log(res);
+    });
     let idList = res.map((item) => {
       return item.commentId;
     });
@@ -2219,7 +2219,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, 20, JSON.stringify(res));
+    app.redis.setex(cacheKey, 30, JSON.stringify(res));
     return res;
   }
 }

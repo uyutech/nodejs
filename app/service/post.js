@@ -187,13 +187,14 @@ class Service extends egg.Service {
 
   /**
    * 获取全部画圈
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页尺寸
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async all(offset, limit) {
+  async all(uid, offset, limit) {
     let [data, count] = await Promise.all([
-      this.allData(offset, limit),
+      this.allData(uid, offset, limit),
       this.allCount()
     ]);
     return { data, count };
@@ -201,17 +202,18 @@ class Service extends egg.Service {
 
   /**
    * 获取全部画圈信息
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页尺寸
    * @returns Array<Object>
    */
-  async allData(offset, limit) {
+  async allData(uid, offset, limit) {
     offset = parseInt(offset) || 0;
     limit = parseInt(limit) || 1;
     if(offset < 0 || limit < 1) {
       return;
     }
-    const { app } = this;
+    const { app, service } = this;
     let res = await app.model.comment.findAll({
       attributes: [
         'id',
@@ -233,7 +235,7 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    return res;
+    return await service.comment.plusListFull(res, uid);
   }
 
   /**
