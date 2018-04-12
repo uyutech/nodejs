@@ -91,7 +91,7 @@ class Controller extends egg.Controller {
       circleId = '2019000000000000';
     }
     circleId = circleId.split(',');
-    if(!circleId.length) {
+    if(!circleId.length || circleId.length > 3) {
       return;
     }
     if(image) {

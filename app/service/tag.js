@@ -238,7 +238,7 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取标签下的画圈
+   * 获取标签id下的画圈
    * @param id:int 标签id
    * @param uid:int 用户id
    * @param offset:int 分页开始
@@ -257,7 +257,7 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取标签下画圈数据
+   * 获取标签id下画圈数据
    * @param id:int 标签id
    * @param uid:int 用户id
    * @param offset:int 分页开始
@@ -274,31 +274,27 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let sql = squel.select()
-      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
-      .from('comment')
-      .field('comment.id')
-      .field('comment.user_id', 'uid')
-      .field('comment.author_id', 'aid')
-      .field('comment.content')
-      .field('comment.parent_id', 'pid')
-      .field('comment.root_id', 'rid')
-      .field('comment.create_time', 'createTime')
-      .where('tag_comment_relation.tag_id=?', id)
-      .where('tag_comment_relation.is_delete=false')
-      .where('tag_comment_relation.is_comment_delete=false')
-      .where('tag_comment_relation.comment_id=comment.id')
-      .order('tag_comment_relation.comment_id', false)
-      .offset(offset)
-      .limit(limit)
-      .toString();
-    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    res = await service.comment.plusListFull(res, uid);
-    return res;
+    let res = await app.model.tagCommentRelation.findAll({
+      attributes: [
+        ['comment_id', 'commentId']
+      ],
+      where: {
+        tag_id: id,
+        is_delete: false,
+        is_comment_delete: false,
+      },
+      offset,
+      limit,
+      raw: true,
+    });
+    let idList = res.map((item) => {
+      return item.commentId;
+    });
+    return await service.post.infoList(idList, uid);
   }
 
   /**
-   * 获取标签下画圈数量
+   * 获取标签id下画圈数量
    * @param id:int 标签id
    * @returns int
    */
@@ -310,19 +306,22 @@ class Service extends egg.Service {
     let cacheKey = 'tagCommentCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      // app.redis.expire(cacheKey, CACHE_TIME);
+      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = squel.select()
-      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
-      .field('COUNT(*)', 'num')
-      .where('tag_id=?', id)
-      .where('is_delete=false')
-      .where('is_comment_delete=false')
-      .toString();
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0].num || 0;
+    res = await app.model.tagCommentRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        tag_id: id,
+        is_delete: false,
+        is_comment_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
     }
     else {
       res = 0;
@@ -330,6 +329,37 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取标签id列表下的画圈
+   * @param idList:Array<int> 标签id列表
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async listPostList(idList, uid, offset, limit) {
+    if(!idList || !uid) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    let [data, count] = await Promise.all([
+      this.postListData(idList, uid, offset, limit),
+      this.postListCount(idList)
+    ]);
+    return { data, count };
+  }
+
+  async postListData() {}
+
+  /**
+   * 获取标签id列表下画圈数量
+   * @param idList:Array<int> 标签id列表
+   * @returns int
+   */
+  async postListCount(idList) {}
 
   /**
    * 获取类似名字的标签

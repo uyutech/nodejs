@@ -383,59 +383,66 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取圈子下的tag列表
+   * 获取圈子下的tag的id列表
    * @param id:int 圈子id
-   * @param type:int
+   * @param type:int/null 空为全部
    * @returns Array<Object>
    */
-  async tag(id, type) {
-    if(!id || !type) {
+  async tagId(id, type) {
+    if(!id) {
       return;
     }
-    const { app, service } = this;
-    let cacheKey = 'circleTag_' + id + '_' + type;
+    const { app } = this;
+    let cacheKey = 'circleTagId_' + id;
+    if(type) {
+      cacheKey += '_' + type;
+    }
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
-      res = JSON.parse(res);
+      return JSON.parse(res);
     }
-    else {
-      res = await app.model.circleTagRelation.findAll({
-        attributes: [
-          ['tag_id', 'tagId']
-        ],
-        where: {
-          circle_id: id,
-          type,
-          is_delete: false,
-        },
-        raw: true,
-      });
-      res = res.map((item) => {
-        return item.tagId;
-      });
-      app.reids.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    }
-    return await service.tag.infoList(res);
+    res = await app.model.circleTagRelation.findAll({
+      attributes: [
+        ['tag_id', 'tagId']
+      ],
+      where: {
+        circle_id: id,
+        type,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    res = res.map((item) => {
+      return item.tagId;
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
   }
 
   /**
-   * 获取圈子列表下的tag列表
-   * @param idList:Array<int> 圈子列表id
-   * @param type:int
-   * @returns Array<Array<Object>>
+   * 获取圈子列表下的tag的id列表
+   * @param idList:Array<int> 圈子id列表
+   * @param type:int/null 空为全部
+   * @returns Array<Object>
    */
-  async tagList(idList, type) {
-    if(!idList || !type) {
+  async tagIdList(idList, type) {
+    if(!idList) {
       return;
     }
     if(!idList.length) {
       return [];
     }
-    const { app, service } = this;
+    const { app } = this;
     let cache = await Promise.all(
       idList.map((id) => {
-        return app.redis.get('circleTag_' + id + '_' + type);
+        if(id !== null && id !== undefined) {
+          let cacheKey = 'circleTagId_' + id;
+          if(type) {
+            cacheKey += '_' + type;
+          }
+          return app.redis.get(cacheKey);
+        }
       })
     );
     let noCacheIdList = [];
@@ -445,7 +452,11 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('tag_' + id, CACHE_TIME);
+        let cacheKey = 'circleTagId_' + id;
+        if(type) {
+          cacheKey += '_' + type;
+        }
+        app.redis.expire(cacheKey, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -462,7 +473,7 @@ class Service extends egg.Service {
           ['tag_id', 'tagId']
         ],
         where: {
-          circle_id: idList,
+          circle_id: noCacheIdList,
           type,
           is_delete: false,
         },
@@ -478,35 +489,75 @@ class Service extends egg.Service {
       }
       noCacheIndexList.forEach((i) => {
         let id = idList[i];
-        let temp = hash[id] || null;
+        let temp = hash[id] || [];
         cache[i] = temp;
-        app.redis.setex('circleTag_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
+        let cacheKey = 'circleTagId_' + id;
+        if(type) {
+          cacheKey += '_' + type;
+        }
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(temp));
       });
     }
-    let tagIdList = [];
+    return cache;
+  }
+
+  /**
+   * 获取圈子下的tag列表
+   * @param id:int 圈子id
+   * @param type:int/null 空为全部
+   * @returns Array<Object>
+   */
+  async tag(id, type) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let tagIdList = await this.tagId(id, type);
+    if(!tagIdList) {
+      return [];
+    }
+    return await service.tag.infoList(tagIdList);
+  }
+
+  /**
+   * 获取圈子列表下的tag列表
+   * @param idList:Array<int> 圈子列表id
+   * @param type:int
+   * @returns Array<Array<Object>>
+   */
+  async tagList(idList, type) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let list = await this.tagIdList(idList, type);
+    let tagIdList = []
     let tagIdHash = {};
-    cache.forEach((item) => {
-      if(item) {
-        item.forEach((id) => {
-          if(!tagIdHash[id]) {
-            tagIdHash[id] = true;
-            tagIdList.push(id);
-          }
-        });
-      }
+    list.forEach((arr) => {
+      arr.forEach((item) => {
+        if(!tagIdHash[item]) {
+          tagIdHash[item] = true;
+          tagIdList.push(item);
+        }
+      });
     });
-    let tagList = await service.tag.infoList(tagIdList);
+    let infoList = await service.tag.infoList(tagIdList);
     let hash = {};
-    tagList.forEach((item) => {
+    infoList.forEach((item) => {
       hash[item.id] = item;
     });
-    return cache.map((item) => {
-      if(item) {
-        return item.map((id) => {
-          return hash[id] || null;
-        });
-      }
-      return item;
+    return idList.map((id, i) => {
+      let temp = [];
+      let tagIdList = list[i];
+      tagIdList.forEach((item) => {
+        if(hash[item.id]) {
+          temp.push(hash[item.id]);
+        }
+      });
+      return temp;
     });
   }
 }

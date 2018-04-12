@@ -65,15 +65,20 @@ class Controller extends egg.Controller {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
+    let circleId = (body.circleId || '').split(',');
     let offset = body.offset || 0;
     offset = parseInt(offset) || 0;
-    let post = await service.post.allData(offset, LIMIT);
+    let post;
+    if(circleId) {
+      let tagIdList = await service.circle.tagIdList(circleId);
+      post = await service.tag.listPostList(tagIdList, uid, offset, LIMIT);
+    }
+    else {
+      post = await service.post.all(offset, LIMIT);
+    }
     post = await service.comment.plusListFull(post, uid);
-    ctx.body = ctx.helper.okJSON({
-      data: post,
-      count: 100,
-      limit: LIMIT,
-    });
+    post.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(post);
   }
 }
 
