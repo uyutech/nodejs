@@ -106,7 +106,6 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON();
   }
 
-
   async sign() {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
@@ -124,6 +123,16 @@ class Controller extends egg.Controller {
     });
     service.user.clearInfoCache(uid);
     ctx.body = ctx.helper.okJSON();
+  }
+
+  async message() {
+    const { ctx, app, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.messageList(uid, offset, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

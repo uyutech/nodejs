@@ -84,6 +84,7 @@ const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Seq
 const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserAccount = require('./app/model/userAccount')({ sequelizeCircling: sequelize, Sequelize });
 const UserOauth = require('./app/model/userOauth')({ sequelizeCircling: sequelize, Sequelize });
+const Message = require('./app/model/message')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -115,6 +116,7 @@ const UserOauth = require('./app/model/userOauth')({ sequelizeCircling: sequeliz
     await dealUserPost(pool);
     await dealCommentMedia(pool);
     await dealAccount(pool);
+    await dealMessage(pool);
     // await temp(pool);
     // await modifyWorksComment();
     // await modifyAuthorComment();
@@ -296,7 +298,7 @@ async function dealWork(pool) {
     });
   }
   last = 2016000000008449;
-  last = 0;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1615,6 +1617,41 @@ async function dealAccount(pool) {
         update_time: item.CreateTime,
       });
     }
+  }
+}
+
+async function dealMessage(pool) {
+  console.log('------- dealMessage --------');
+  await Message.sync();
+  let last = 276335;
+  // last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Notify WHERE ID>${last} AND type=2;`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await Message.create({
+      id: item.ID,
+      user_id: item.sendUsers_InfoID,
+      author_id: item.CurrentAuthorID || 0,
+      is_author: !!item.CurrentAuthorID,
+      target_id: 0,
+      type: item.targetType,
+      comment_id: item.currenttargetid,
+      ref_id: item.urlID,
+    });
+  }
+  last = 283423;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Users_Notify WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await Message.update({
+      target_id: item.UID,
+      is_read: item.isRead,
+    }, {
+      where: {
+        id: item.NID,
+      },
+    });
   }
 }
 

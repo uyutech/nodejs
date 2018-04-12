@@ -238,10 +238,10 @@ class Service extends egg.Service {
     if(!res.length) {
       return [];
     }
-    let idList = res.map((item) => {
+    res = res.map((item) => {
       return item.userId;
     });
-    return idList;
+    return res;
   }
 
   /**
@@ -500,6 +500,7 @@ class Service extends egg.Service {
       count--;
       app.redis.decr(cacheKey);
     }
+    app.redis.del('friendId_' + uid);
     return {
       success: true,
       data: {
@@ -720,58 +721,32 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    let [data, count] = await Promise.all([
-      this.friendData(id, offset, limit),
-      this.friendCount(id)
-    ]);
-    return { data, count };
+    let idList = await this.friendIdList(id);
+    let data = await this.friendData(idList, offset, limit);
+    return { data, count: idList.length };
   }
 
   /**
    * 获得互相关注的圈友信息
-   * @param id:int 用户id
+   * @param idList:int 用户id列表
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async friendData(id, offset, limit) {
-    if(!id) {
+  async friendData(idList, offset, limit) {
+    if(!idList) {
       return;
+    }
+    if(!idList.length) {
+      return [];
     }
     offset = parseInt(offset) || 0;
     limit = parseInt(limit) || 1;
     if(offset < 0 || limit < 1) {
       return;
     }
-    const { app } = this;
-    let sql = squel.select()
-      .from('user_person_relation')
-      .field('user_id', 'userId')
-      .where('target_id=?', id)
-      .where('type=1')
-      .where('user_id IN ?', squel.select()
-        .from('user_person_relation')
-        .field('target_id')
-        .where('user_id=?', id)
-        .where('type=1')
-      )
-      .order('id', false)
-      .offset(offset)
-      .limit(limit)
-      .toString();
-    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(!res.length) {
-      return [];
-    }
-    let idList = res.map((item) => {
-      return item.userId;
-    });
-    res = await this.infoList(idList);
+    idList = idList.slice(offset, limit);
+    let res = await this.infoList(idList);
     res.forEach((item) => {
       delete item.sign;
       delete item.coins;
@@ -2133,6 +2108,102 @@ class Service extends egg.Service {
       res = 0;
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   *
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ data: Array<Object>, count:int }
+   */
+  async messageList(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.messageData(id, offset, limit),
+      this.messageCount(id)
+    ]);
+    return {
+      data,
+      count,
+    };
+  }
+
+  async messageData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.message.findAll({
+      attributes: [
+        'id',
+        // ['user_id', 'uid'],
+        // ['author_id', 'aid'],
+        ['is_read', 'isRead'],
+        'type',
+        ['ref_id', 'refId'],
+        ['comment_id', 'commentId']
+      ],
+      where: {
+        target_id: id,
+      },
+      order: [
+        'is_read',
+        ['id', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    let idList = res.map((item) => {
+      return item.commentId;
+    });
+    let infoList = await service.comment.infoList(idList);
+    infoList = await service.comment.plusList(infoList);
+    res.forEach((item, i) => {
+      let comment = infoList[i];
+      if(comment) {
+        item.comment = comment;
+      }
+      delete item.commentId;
+    });
+    return res;
+  }
+
+  async messageCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'messageCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.message.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        target_id: id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, 20, JSON.stringify(res));
     return res;
   }
 }

@@ -61,6 +61,7 @@ const banner = require('../model/banner');
 const userCircleRelation = require('../model/userCircleRelation');
 const userAccount = require('../model/userAccount');
 const userOauth = require('../model/userOauth');
+const message = require('../model/message');
 
 module.exports = {
   get Sequelize() {
@@ -180,6 +181,7 @@ module.exports = {
         userCircleRelation: userCircleRelation(this),
         userAccount: userAccount(this),
         userOauth: userOauth(this),
+        message: message(this),
       };
     }
     return this[MODEL];

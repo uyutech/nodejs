@@ -313,6 +313,7 @@ class Service extends egg.Service {
       count--;
       app.redis.decr(cacheKey);
     }
+    app.redis.del('friendId_' + uid);
     return {
       success: true,
       data: {

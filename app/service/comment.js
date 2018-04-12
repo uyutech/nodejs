@@ -59,7 +59,7 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app, service } = this;
+    const { app } = this;
     let cache = await Promise.all(
       idList.map((id) => {
         return app.redis.get('comment_' + id);
@@ -574,12 +574,12 @@ class Service extends egg.Service {
             userIdList.push(item.uid);
           }
           delete item.aid;
-        }
+        }console.log(item.rid, item.pid);
         if(item.rid !== item.pid && item.rid !== 0 && !quoteIdHash[item.pid]) {
           quoteIdList.push(item.pid);
         }
       }
-    });
+    });console.log(quoteIdList)
     let quoteList = await this.infoList(quoteIdList);
     let quoteHash = {};
     quoteList.forEach((item) => {
@@ -698,7 +698,7 @@ class Service extends egg.Service {
     let cacheKey = 'userCommentRelation_' + uid + '_' + id + '_' + type;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME)
+      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userCommentRelation.findOne({
