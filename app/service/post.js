@@ -67,9 +67,10 @@ class Service extends egg.Service {
     if(offset < 0 || limit < 1) {
       return;
     }
+    const { service } = this;
     let [data, count] = await Promise.all([
       this.commentData(id, uid, offset, limit),
-      this.commentCount(id)
+      service.comment.replyCount(id)
     ]);
     return { data, count };
   }
@@ -114,42 +115,6 @@ class Service extends egg.Service {
       raw: true,
     });
     res = await service.comment.plusList(res, uid);
-    return res;
-  }
-
-  /**
-   * 获取画圈下留言数量
-   * @param id:int 画圈的id
-   * @returns int 留言数量
-   */
-  async commentCount(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'commentCount_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.comment.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        root_id: id,
-        is_delete: false,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 

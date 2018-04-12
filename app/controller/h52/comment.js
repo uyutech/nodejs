@@ -56,11 +56,11 @@ class Controller extends egg.Controller {
   }
 
   async sub() {
-    const { ctx, service } = this;
+    const { ctx, service, app } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let content = body.content;
-    if(!body.id || !body.type) {
+    if(!body.id) {
       return;
     }
     if(!content || content.length < 3) {
@@ -73,18 +73,28 @@ class Controller extends egg.Controller {
         message: '字数不能多于2048个字哦~',
       });
     }
-    let commentId = body.id;
+    let rid = body.id;
+    let pid = rid;
     if(body.type === '3') {
-      commentId = await service.works.commentId(commentId);
+      pid = rid = await service.works.commentId(rid);
     }
     else if(body.type === '2') {
-      commentId = await service.author.commentId(commentId);
+      pid = rid = await service.author.commentId(rid);
     }
-    let res = await service.comment.add(uid, commentId, {
-      content,
-      authorId: body.authorId,
-      pid: body.pid,
-    });
+    else if(body.type === '1') {
+      //
+    }
+    else {
+      rid = await service.comment.getRootId(pid);
+      if(!rid) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+    }
+    let [res] = await Promise.all([
+      service.comment.add(uid, rid, pid, content, body.authorId),
+      service.comment.replyCount(rid)
+    ]);
+    app.redis.incr('commentReplyCount_' + rid);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

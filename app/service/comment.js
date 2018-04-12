@@ -972,7 +972,12 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    res = res.num || 0;
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -1184,15 +1189,17 @@ class Service extends egg.Service {
    * 添加回复
    * @param uid:int 用户id
    * @param rid:int 根id
-   * @param data:Object 数据
+   * @param pid:int 父id
+   * @param content:int 内容
+   * @param authorId:Object 作者id
    */
-  async add(uid, rid, data) {
-    if(!uid || !rid) {
+  async add(uid, rid, pid, content, authorId) {
+    if(!uid || !rid || !pid) {
       return;
     }
     const { app, service } = this;
-    if(data.authorId) {
-      let check = await service.author.isUser(data.authorId, uid);
+    if(authorId) {
+      let check = await service.author.isUser(authorId, uid);
       if(!check) {
         return;
       }
@@ -1200,18 +1207,48 @@ class Service extends egg.Service {
     let now = new Date();
     let create = await app.model.comment.create({
       user_id: uid,
-      author_id: data.authorId || 0,
-      content: data.content,
+      author_id: authorId || 0,
+      content: content,
       is_delete: false,
       review: 0,
       state: 0,
-      parent_id: data.pid || rid,
+      parent_id: pid,
       root_id: rid,
       create_time: now,
       update_time: now,
     });
     let res = await this.info(create.id);
     res = await this.plusFull(res, uid);
+    return res;
+  }
+
+  async getRootId(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'commentRidByPid_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.comment.findOne({
+      attributes: [
+        ['root_id', 'rootId']
+      ],
+      where: {
+        id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.rootId;
+    }
+    else {
+      res = null;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 }
