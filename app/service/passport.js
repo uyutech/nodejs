@@ -546,7 +546,7 @@ class Service extends egg.Service {
       user_id: uid,
     }, {
       raw: true,
-    });console.log(33,res);
+    });
     return {
       success: true,
       data: openId,

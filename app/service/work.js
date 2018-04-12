@@ -49,9 +49,11 @@ class Service extends egg.Service {
       return;
     }
     state = !!state;
-    let now = await this.isRelation(workId, uid, type);
+    let [now, count] = await Promise.all([
+      this.isRelation(workId, uid, type),
+      this.relationCount(workId, type)
+    ]);
     if(now === state) {
-      let count = await this.count(workId, type);
       return {
         state,
         count,
@@ -90,14 +92,11 @@ class Service extends egg.Service {
     }
     // 更新计数，优先内存缓存
     cacheKey = 'workCount_' + workId + '_' + type;
-    let count = await this.count(workId, type);
     if(state) {
-      count++;
-      app.redis.incr(cacheKey);
+      count = await app.redis.incr(cacheKey);
     }
     else {
-      count--;
-      app.redis.decr(cacheKey);
+      count = await app.redis.decr(cacheKey);
     }
     return {
       state,

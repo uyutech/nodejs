@@ -20,6 +20,7 @@ module.exports = app => {
     author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
     },
     is_author: {
       type: Sequelize.BOOLEAN,
@@ -50,6 +51,16 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
       comment: '言论id',
+    },
+    create_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    update_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
     },
   }, {
     indexes: [

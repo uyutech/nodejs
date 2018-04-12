@@ -1346,7 +1346,7 @@ class Service extends egg.Service {
       else {
         ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);
       }
-      let author = authorHash[temp.id];console.log(temp.id);
+      let author = authorHash[temp.id];
       if(author) {
         if(temp.type) {
           let professionSort = professionSortHash[temp.type];

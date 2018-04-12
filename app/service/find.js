@@ -248,7 +248,7 @@ class Service extends egg.Service {
     }
     let idList = res.map((item) => {
       return item.worksId;
-    });console.log(idList);
+    });
     switch(kind) {
       case 1:
         return service.works.infoListPlus(idList);

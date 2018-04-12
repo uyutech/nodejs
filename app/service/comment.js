@@ -574,12 +574,12 @@ class Service extends egg.Service {
             userIdList.push(item.uid);
           }
           delete item.aid;
-        }console.log(item.rid, item.pid);
+        }
         if(item.rid !== item.pid && item.rid !== 0 && !quoteIdHash[item.pid]) {
           quoteIdList.push(item.pid);
         }
       }
-    });console.log(quoteIdList)
+    });
     let quoteList = await this.infoList(quoteIdList);
     let quoteHash = {};
     quoteList.forEach((item) => {
@@ -894,9 +894,11 @@ class Service extends egg.Service {
       return;
     }
     state = !!state;
-    let now = await this.isRelation(id, uid, type);
+    let [now, count] = await Promise.all([
+      this.isRelation(id, uid, type),
+      this.relationCount(id, type)
+    ]);
     if(now === state) {
-      let count = await this.relationCount(id, type);
       return {
         state,
         count,
@@ -931,14 +933,11 @@ class Service extends egg.Service {
     }
     // 更新计数，优先内存缓存
     cacheKey = 'commentCount_' + id + '_' + type;
-    let count = await this.relationCount(id, type);
     if(state) {
-      count++;
-      app.redis.incr(cacheKey);
+      count = await app.redis.incr(cacheKey);
     }
     else {
-      count--;
-      app.redis.decr(cacheKey);
+      count = await app.redis.decr(cacheKey);
     }
     return {
       state,
@@ -1244,6 +1243,66 @@ class Service extends egg.Service {
     });
     if(res) {
       res = res.rootId;
+    }
+    else {
+      res = null;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  async worksId(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'commentWorks_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.worksCommentRelation.findOne({
+      attributes: [
+        ['works_id', 'worksId']
+      ],
+      where: {
+        comment_id: id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.worksId;
+    }
+    else {
+      res = null;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  async authorId(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'commentAuthor_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.worksCommentRelation.findOne({
+      attributes: [
+        ['author_id', 'authorId']
+      ],
+      where: {
+        comment_id: id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.authorId;
     }
     else {
       res = null;

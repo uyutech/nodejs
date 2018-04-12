@@ -60,7 +60,7 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let content = body.content;
-    if(!body.id) {
+    if(!body.id || !body.type) {
       return;
     }
     if(!content || content.length < 3) {
@@ -74,26 +74,104 @@ class Controller extends egg.Controller {
       });
     }
     let rid = body.id;
-    let pid = rid;
-    if(body.type === '3') {
-      pid = rid = await service.works.commentId(rid);
-    }
-    else if(body.type === '2') {
-      pid = rid = await service.author.commentId(rid);
-    }
-    else if(body.type === '1') {
-      //
-    }
-    else {
-      rid = await service.comment.getRootId(pid);
+    let pid = body.pid;
+    // 回复作品
+    if(body.type === '2') {
+      rid = await service.works.commentId(rid);
       if(!rid) {
         return ctx.body = ctx.helper.errorJSON();
       }
     }
-    let [res] = await Promise.all([
-      service.comment.add(uid, rid, pid, content, body.authorId),
-      service.comment.replyCount(rid)
-    ]);
+    // 回复作者
+    else if(body.type === '1') {
+      rid = await service.author.commentId(rid);
+      if(!rid) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+    }
+    // 回复画圈
+    else if(body.type === '3') {
+    }
+    else {
+      return ctx.body = ctx.helper.errorJSON();
+    }
+    pid = pid || rid;
+    await service.comment.replyCount(rid);
+    let res = await service.comment.add(uid, rid, pid, content, body.authorId);
+    if(!res) {
+      return ctx.body = ctx.helper.errorJSON();
+    }
+    if(body.type === '2') {
+      if(pid) {
+        let comment = await service.comment.info(pid);
+        if(comment.uid !== uid) {
+          app.model.message.create({
+            user_id: uid,
+            author_id: body.authorId || 0,
+            is_author: !!body.authorId,
+            target_id: comment.uid,
+            type: 2,
+            ref_id: rid,
+            comment_id: res.id,
+            create_time: new Date(),
+            update_time: new Date(),
+          });
+        }
+      }
+    }
+    else if(body.type === '1') {
+      if(pid) {
+        let comment = await service.comment.info(pid);
+        if(comment.uid !== uid) {
+          app.model.message.create({
+            user_id: uid,
+            author_id: body.authorId || 0,
+            is_author: !!body.authorId,
+            target_id: comment.uid,
+            type: 1,
+            ref_id: rid,
+            comment_id: res.id,
+            create_time: new Date(),
+            update_time: new Date(),
+          });
+        }
+      }
+    }
+    else if(body.type === '3') {
+      if(pid !== rid) {
+        let comment = await service.comment.info(pid);
+        if(comment.uid !== uid) {
+          app.model.message.create({
+            user_id: uid,
+            author_id: body.authorId || 0,
+            is_author: !!body.authorId,
+            target_id: comment.uid,
+            type: 3,
+            ref_id: rid,
+            comment_id: res.id,
+            create_time: new Date(),
+            update_time: new Date(),
+          });
+        }
+      }
+      else {
+        let post = await service.post.info(rid);
+        if(post.uid !== uid) {
+          app.model.message.create({
+            user_id: uid,
+            author_id: body.authorId || 0,
+            is_author: !!body.authorId,
+            target_id: post.uid,
+            type: 4,
+            ref_id: rid,
+            comment_id: res.id,
+            create_time: new Date(),
+            update_time: new Date(),
+          });
+        }
+      }
+    }
+    // app.model.message.create({});
     app.redis.incr('commentReplyCount_' + rid);
     ctx.body = ctx.helper.okJSON(res);
   }

@@ -20,6 +20,7 @@ module.exports = app => {
     author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
     },
     is_author: {
       type: Sequelize.BOOLEAN,
