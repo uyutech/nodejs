@@ -1646,7 +1646,7 @@ async function dealMessage(pool) {
     let item = result.recordset[i];
     await Message.update({
       target_id: item.UID,
-      is_read: item.isRead,
+      is_read: !!item.isRead,
     }, {
       where: {
         id: item.NID,

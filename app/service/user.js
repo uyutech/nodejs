@@ -2162,7 +2162,7 @@ class Service extends egg.Service {
       offset,
       limit,
       raw: true,
-    });
+    });console.log(res);
     let idList = res.map((item) => {
       return item.commentId;
     });
@@ -2175,6 +2175,22 @@ class Service extends egg.Service {
       }
       delete item.commentId;
     });
+    let noReadIdList = [];
+    res.forEach((item) => {
+      if(!item.isRead) {
+        noReadIdList.push(item.id);
+      }
+    });
+    if(noReadIdList.length) {
+      app.model.message.update({
+        is_read: true,
+      }, {
+        where: {
+          id: noReadIdList,
+        },
+        raw: true,
+      });
+    }
     return res;
   }
 

@@ -251,12 +251,16 @@ class Service extends egg.Service {
    */
   async follow(id, uid, state) {
     if(!id || !uid) {
-      return;
+      return {
+        success: false,
+      };
     }
     state = !!state;
-    let now = await this.isFollow(id, uid);
+    let [now, count] = await Promise.all([
+      this.isFollow(id, uid),
+      this.fansCount(id)
+    ]);
     if(now === state) {
-      let count = await this.fansCount(id);
       return {
         success: true,
         data: {
@@ -304,14 +308,11 @@ class Service extends egg.Service {
     }
     // 更新计数，优先内存缓存
     cacheKey = 'authorFansCount_' + id;
-    let count = await this.fansCount(id);
     if(state) {
-      count++;
-      app.redis.incr(cacheKey);
+      count = await app.redis.incr(cacheKey);
     }
     else {
-      count--;
-      app.redis.decr(cacheKey);
+      count = await app.redis.decr(cacheKey);
     }
     app.redis.del('friendId_' + uid);
     return {

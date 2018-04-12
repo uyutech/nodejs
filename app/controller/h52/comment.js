@@ -102,8 +102,8 @@ class Controller extends egg.Controller {
       return ctx.body = ctx.helper.errorJSON();
     }
     if(body.type === '2') {
-      if(pid) {
-        let comment = await service.comment.info(pid);
+      if(body.pid) {
+        let comment = await service.comment.info(body.pid);
         if(comment.uid !== uid) {
           app.model.message.create({
             user_id: uid,
@@ -120,8 +120,8 @@ class Controller extends egg.Controller {
       }
     }
     else if(body.type === '1') {
-      if(pid) {
-        let comment = await service.comment.info(pid);
+      if(body.pid) {
+        let comment = await service.comment.info(body.pid);
         if(comment.uid !== uid) {
           app.model.message.create({
             user_id: uid,
