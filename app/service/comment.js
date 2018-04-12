@@ -734,7 +734,9 @@ class Service extends egg.Service {
     const { app } = this;
     let cache = await Promise.all(
       idList.map((id) => {
-        return app.redis.get('userCommentRelation_' + uid + '_' + id + '_' + type);
+        if(id !== undefined && id !== null) {
+          return app.redis.get('userCommentRelation_' + uid + '_' + id + '_' + type);
+        }
       })
     );
     let noCacheIdList = [];

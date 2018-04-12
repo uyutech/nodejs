@@ -21,6 +21,7 @@ module.exports = app => {
     temp_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
     },
     is_delete: {
       type: Sequelize.BOOLEAN,

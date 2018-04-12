@@ -109,12 +109,12 @@ class Service extends egg.Service {
    * @param name:String tag名
    * @returns int
    */
-  async getIdByName(name) {
+  async idByName(name) {
     if(!name) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'tagName_' + name;
+    let cacheKey = 'tagNameId_' + name;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -133,10 +133,108 @@ class Service extends egg.Service {
       res = res.id;
     }
     else {
-      res = null;
+      res = app.model.tag.create({
+        name,
+      }, {
+        raw: true,
+      });
+      res = res.id;
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 根据名字列表获取id列表
+   * @param nameList:String tag名列表
+   * @returns Array<int>
+   */
+  async idListByName(nameList) {
+    if(!nameList) {
+      return;
+    }
+    if(!nameList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      nameList.map((item) => {
+        if(item) {
+          return app.redis.get('tagNameId_' + item);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let name = nameList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('tagNameId_' + name, CACHE_TIME);
+      }
+      else if(name) {
+        if(!noCacheIdHash[name]) {
+          noCacheIdHash[name] = true;
+          noCacheIdList.push(name);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.tag.findAll({
+        attributes: [
+          'id',
+          'name'
+        ],
+        where: {
+          name: noCacheIdList,
+        },
+        raw: true,
+      });
+      let hash = {};
+      let createList = [];
+      if(res.length) {
+        res.forEach((item) => {
+          if(item) {
+            let name = item.name;
+            hash[name] = item.id;
+          }
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let name = nameList[i];
+        let item = hash[name];
+        if(item) {
+          cache[i] = item;
+          app.redis.setex('tagNameId_' + name, CACHE_TIME, JSON.stringify(item));
+        }
+        else {
+          createList.push(app.model.tag.create({
+            name,
+          }, {
+            raw: true,
+          }));
+        }
+      });
+      if(createList.length) {
+        let temp = await Promise.all(createList);
+        temp.forEach((item) => {
+          hash[item.name] = item.id;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        if(!cache[i]) {
+          let name = nameList[i];
+          let item = hash[name];
+          if(item) {
+            cache[i] = item;
+            app.redis.setex('tagNameId_' + name, CACHE_TIME, JSON.stringify(item));
+          }
+        }
+      });
+    }
+    return cache;
   }
 
   /**

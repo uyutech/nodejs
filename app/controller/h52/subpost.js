@@ -97,7 +97,21 @@ class Controller extends egg.Controller {
     if(image) {
       image = JSON.parse(image);
     }
-    let tagList = await service.circle.tagList(circleId, 1);
+    let match = content.match(/#([^#\n\s]+?)#/g);
+    let tagNameList = [];
+    let tagNameHash = {};
+    if(match && match.length) {
+      match.forEach((item) => {
+        if(!tagNameHash[item]) {
+          tagNameHash[item] = true;
+          tagNameList.push(item.slice(1, -1));
+        }
+      });
+    }
+    let [tagList, tagIdList] = await Promise.all([
+      service.circle.tagList(circleId, 1),
+      service.tag.idListByName(tagNameList)
+    ]);
     let tagId = [];
     let tagHash = {};
     tagList.map((item) => {
@@ -112,8 +126,8 @@ class Controller extends egg.Controller {
     });
     let res = await service.post.add(uid, {
       content,
-      circleId,
       tagId,
+      tagIdList,
       image,
       authorId: body.authorId,
     });

@@ -288,6 +288,7 @@ class Service extends egg.Service {
     let create = await app.model.comment.create({
       user_id: uid,
       author_id: data.authorId || 0,
+      is_author: !!data.authorId,
       content: data.content,
       is_delete: false,
       review: 0,
@@ -311,6 +312,19 @@ class Service extends egg.Service {
             update_time: now,
           });
         });
+      }
+      if(data.tagIdList && data.tagIdList.length) {
+        query = query.concat(data.tagIdList.map((id) => {
+          return app.model.tagCommentRelation.create({
+            tag_id: id,
+            comment_id: create.id,
+            type: 2,
+            is_delete: false,
+            is_comment_delete: false,
+            create_time: now,
+            update_time: now,
+          });
+        }));
       }
       if(data.image && data.image.length) {
         query = query.concat(data.image.map((item) => {
