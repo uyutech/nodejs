@@ -40,6 +40,7 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
   async list(tag, offset, limit) {
     if(!tag) {
       return;
@@ -50,6 +51,7 @@ class Service extends egg.Service {
     ]);
     return { data, count };
   }
+
   async listData(tag, offset, limit) {
     if(!tag) {
       return;
@@ -120,15 +122,17 @@ class Service extends egg.Service {
           break;
       }
     });
-    let [worksList, authorList] = await Promise.all([
+    let [[worksList, worksAuthorList], authorList] = await Promise.all([
       service.works.infoListPlus(worksIdList),
       service.author.infoList(authorIdList)
     ]);
     let worksHash = {};
-    worksList.forEach((item) => {
+    worksList.forEach((item, i) => {
       if(item) {
         if(!worksHash[item.id]) {
           worksHash[item.id] = item;
+          let author = worksAuthorList[i];
+          item.author = author.length ? author[0] : [];
         }
       }
     });

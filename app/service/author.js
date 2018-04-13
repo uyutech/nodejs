@@ -562,145 +562,34 @@ class Service extends egg.Service {
       return [];
     }
     const { service } = this;
-    // 获取大作品信息、作者在此大作品中的职种id
-    let [worksList, worksListProfessionIdList, numList] = await Promise.all([
-      service.works.infoList(worksIdList),
-      this.worksListProfessionIdList(worksIdList, id),
+    // 获取大作品信息、相关作者信息
+    let [[worksList, worksAuthorList], numList] = await Promise.all([
+      service.works.infoListPlus(worksIdList),
       service.works.numCountList(worksIdList, 1)
     ]);
-    // 汇集所有大作品类型
-    let worksTypeList = [];
-    let hash = {};
     worksList.forEach((item, i) => {
-      if(!hash[item.type]) {
-        hash[item.type] = true;
-        worksTypeList.push(item.type);
-      }
-      item.popular = numList[i] || 0;
-    });
-    // 汇集全部职种id
-    let professionIdList = [];
-    hash = {};
-    worksListProfessionIdList.forEach((item) => {
       if(item) {
-        item.forEach((id) => {
-          if(id !== null && id !== undefined && !hash[id]) {
-            hash[id] = true;
-            professionIdList.push(id);
-          }
-        });
-      }
-    });
-    // 查询大作品类型对应的排序规则，和职种名称
-    let [typeListProfessionSort, professionList] = await Promise.all([
-      service.works.typeListProfessionSort(worksTypeList),
-      service.profession.infoList(professionIdList),
-    ]);
-    let typeProfessionSortHash = {};
-    worksTypeList.forEach((worksType, i) => {
-      let sort = typeListProfessionSort[i];
-      if(sort) {
-        typeProfessionSortHash[worksType] = sort;
-      }
-    });
-    let professionHash = {};
-    professionList.forEach((item) => {
-      if(item) {
-        professionHash[item.id] = item;
-      }
-    });
-    // 遍历大作品，根据对应的排序信息将最优先展示的职种放入；如果没有排序，默认第一个
-    worksList.forEach((item, i) => {
-      let type = item.type;
-      let sort = typeProfessionSortHash[type];
-      let professionIdList = worksListProfessionIdList[i];
-      if(sort) {
-        if(professionIdList && professionIdList.length) {
-          let has = {};
-          professionIdList.forEach((item) => {
-            has[item] = true;
-          });
-          for(let j = 0, len = sort.length; j < len; j++) {
-            let professionId = sort[j].professionId;
-            if(has[professionId]) {
-              item.profession = professionHash[professionId];
-              break;
+        let author = worksAuthorList[i];
+        let profession = [];
+        // 根据顺序将本作者的职种附加上去
+        author.forEach((group) => {
+          group.forEach((item) => {
+            for(let i = 0, len = item.list.length; i < len; i++) {
+              if(item.list[i].id === id) {
+                profession.push({
+                  id: item.id,
+                  name: item.name,
+                });
+                break;
+              }
             }
-          }
-        }
-      }
-      else if(professionIdList.length) {
-        item.profession = professionHash[professionIdList[0]];
+          });
+        });
+        item.profession = profession;
+        item.popular = numList[i] || 0;
       }
     });
     return worksList;
-  }
-
-  /**
-   * 获取大作品id列表中，作者id参与的职种id列表
-   * @param idList<int> 大作品id列表
-   * @param id:int 作者id
-   * @returns Array<Array<int>> 对应idList索引序，每项为此大作品中作者id参与的职种id列表
-   */
-  async worksListProfessionIdList(idList, id) {
-    if(!idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    const { app } = this;
-    let cache = await Promise.all(
-      idList.map((worksId) => {
-        if(worksId !== null && worksId !== undefined) {
-          return app.redis.get('authorWorksProfessionIdList_' + id + '_' + worksId);
-        }
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach((item, i) => {
-      let worksId = idList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        app.redis.expire('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME);
-      }
-      else if(worksId !== null && worksId !== undefined) {
-        if(!noCacheIdHash[worksId]) {
-          noCacheIdHash[worksId] = true;
-          noCacheIdList.push(worksId);
-        }
-        noCacheIndexList.push(i);
-      }
-    });
-    if(noCacheIdList.length) {
-      let res = await app.model.worksAuthorProfessionRelation.findAll({
-        attributes: [
-          ['works_id', 'worksId'],
-          ['profession_id', 'professionId']
-        ],
-        where: {
-          works_id: noCacheIdList,
-          author_id: id,
-        },
-        raw: true,
-      });
-      let hash = {};
-      if(res.length) {
-        res.forEach((item) => {
-          let temp = hash[item.worksId] = hash[item.worksId] || [];
-          temp.push(item.professionId);
-        });
-      }
-      noCacheIndexList.forEach((i) => {
-        let worksId = idList[i];
-        let temp = hash[worksId] || null;
-        cache[i] = temp;
-        app.redis.setex('authorWorksProfessionIdList_' + id + '_' + worksId, CACHE_TIME, JSON.stringify(temp));
-      });
-    }
-    return cache;
   }
 
   /**

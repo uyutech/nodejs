@@ -85,6 +85,8 @@ const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelize
 const UserAccount = require('./app/model/userAccount')({ sequelizeCircling: sequelize, Sequelize });
 const UserOauth = require('./app/model/userOauth')({ sequelizeCircling: sequelize, Sequelize });
 const Message = require('./app/model/message')({ sequelizeCircling: sequelize, Sequelize });
+const WorkAuthorRelation = require('./app/model/WorkAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
+const WorksAuthorRelation = require('./app/model/WorksAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -656,6 +658,8 @@ async function dealWorksWork(pool) {
 async function dealWorkAuthorProfession(pool) {
   console.log('------- dealWorkAuthorProfession --------');
   await Profession.sync();
+  await WorkAuthorRelation.sync();
+  await WorksAuthorRelation.sync();
   await WorksAuthorProfessionRelation.sync();
   await MusicAlbumAuthorProfessionRelation.sync();
   await ImageAlbumAuthorProfessionRelation.sync();
@@ -703,6 +707,14 @@ async function dealWorkAuthorProfession(pool) {
     else if(work.kind === 4) {
       work_id = work.id.toString().replace(/^2016/,  2022);
     }
+    await WorkAuthorRelation.create({
+      work_id,
+      author_id: item.AuthorID,
+      kind: work.kind,
+      profession_id: item.Enum_AuthorTypeID,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
     let worksWork = await WorksWorkRelation.findOne({
       attributes: ['works_id'],
       where: {
@@ -771,6 +783,13 @@ async function dealWorkAuthorProfession(pool) {
         },
       });
       if(music) {
+        await WorksAuthorRelation.create({
+          works_id: music.id,
+          author_id: item.AuthorID,
+          profession_id: item.Enum_AuthorTypeID,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
         await MusicAlbumAuthorProfessionRelation.create({
           album_id: music.id,
           work_id: 0,
@@ -790,6 +809,13 @@ async function dealWorkAuthorProfession(pool) {
         },
       });
       if(image) {
+        await WorksAuthorRelation.create({
+          works_id: image.id,
+          author_id: item.AuthorID,
+          profession_id: item.Enum_AuthorTypeID,
+          create_time: item.CreateTime,
+          update_time: item.CreateTime,
+        });
         await ImageAlbumAuthorProfessionRelation.create({
           album_id: image.id,
           work_id: 0,
@@ -802,6 +828,13 @@ async function dealWorkAuthorProfession(pool) {
         });
         continue;
       }
+      await WorksAuthorRelation.create({
+        works_id: item.WorksID,
+        author_id: item.AuthorID,
+        profession_id: item.Enum_AuthorTypeID,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
       await WorksAuthorProfessionRelation.create({
         works_id: item.WorksID,
         work_id: 0,

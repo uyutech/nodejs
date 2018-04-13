@@ -14,7 +14,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let circleId = body.circleId;
+    let circleId = parseInt(body.circleId);
     if(!circleId) {
       return;
     }
@@ -37,7 +37,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let circleId = body.circleId;
+    let circleId = parseInt(body.circleId);
     if(!circleId) {
       return;
     }
@@ -58,10 +58,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    if(!body.circleId) {
+    let circleId = parseInt(body.circleId);
+    if(!circleId) {
       return;
     }
-    let res = await service.circle.follow(body.circleId, uid, true);
+    let res = await service.circle.follow(circleId, uid, true);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);
     }
@@ -74,10 +75,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    if(!body.circleId) {
+    let circleId = parseInt(body.circleId);
+    if(!circleId) {
       return;
     }
-    let res = await service.circle.follow(body.circleId, uid, false);
+    let res = await service.circle.follow(circleId, uid, false);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);
     }

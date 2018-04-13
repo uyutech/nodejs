@@ -11,7 +11,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let commentId = body.commentId;
+    let commentId = parseInt(body.commentId);
     if(!commentId) {
       return;
     }
@@ -23,7 +23,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let commentId = body.commentId;
+    let commentId = parseInt(body.commentId);
     if(!commentId) {
       return;
     }
@@ -35,7 +35,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let commentId = body.commentId;
+    let commentId = parseInt(body.commentId);
     if(!commentId) {
       return;
     }
@@ -47,7 +47,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let commentId = body.commentId;
+    let commentId = parseInt(body.commentId);
     if(!commentId) {
       return;
     }
@@ -171,7 +171,6 @@ class Controller extends egg.Controller {
         }
       }
     }
-    // app.model.message.create({});
     app.redis.incr('commentReplyCount_' + rid);
     ctx.body = ctx.helper.okJSON(res);
   }

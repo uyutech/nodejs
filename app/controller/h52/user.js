@@ -13,7 +13,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let userId = body.userId;
+    let userId = parseInt(body.userId);
     if(!userId) {
       return;
     }
@@ -41,7 +41,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let userId = body.userId;
+    let userId = parseInt(body.userId);
     if(!userId) {
       return;
     }

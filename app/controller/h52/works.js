@@ -13,23 +13,27 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = body.worksId;
+    let worksId = parseInt(body.worksId);
     if(!worksId) {
       return;
     }
-    let [[info, professionSort], author, collection, commentList] = await Promise.all([
-      service.works.infoAndTypeProfessionSort(worksId),
+    let [[info, professionSort], author, [collection, collectionAuthor], commentList] = await Promise.all([
+      service.works.infoAndProfessionSort(worksId),
       service.works.author(worksId),
-      service.works.collection(worksId, uid),
+      service.works.collectionAndAuthor(worksId, uid),
       service.works.commentList(worksId, uid, 0, LIMIT)
     ]);
     commentList.limit = LIMIT;
+    collectionAuthor.forEach((item) => {
+      author = author.concat(item);
+    });
     author = service.works.reorderAuthor(author, professionSort);
     ctx.body = ctx.helper.okJSON({
       info,
       collection,
       author,
       commentList,
+      collectionAuthor,
     });
   }
 
@@ -37,7 +41,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = body.worksId;
+    let worksId = parseInt(body.worksId);
     if(!worksId) {
       return;
     }
@@ -50,7 +54,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = body.worksId;
+    let worksId = parseInt(body.worksId);
     let workId = body.workId;
     if(!worksId || !workId) {
       return;
@@ -63,7 +67,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = body.worksId;
+    let worksId = parseInt(body.worksId);
     let workId = body.workId;
     if(!worksId || !workId) {
       return;
@@ -76,7 +80,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = body.worksId;
+    let worksId = parseInt(body.worksId);
     let workId = body.workId;
     if(!worksId || !workId) {
       return;
@@ -89,7 +93,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = body.worksId;
+    let worksId = parseInt(body.worksId);
     let workId = body.workId;
     if(!worksId || !workId) {
       return;

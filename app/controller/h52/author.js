@@ -14,7 +14,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let authorId = body.authorId;
+    let authorId = parseInt(body.authorId);
     if(!authorId) {
       return;
     }
@@ -64,7 +64,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let authorId = body.authorId;
+    let authorId = parseInt(body.authorId);
     if(!authorId) {
       return;
     }
@@ -77,7 +77,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let authorId = body.authorId;
+    let authorId = parseInt(body.authorId);
     let kind = body.kind;
     let offset = body.offset;
     if(!authorId || kind === undefined) {
@@ -100,7 +100,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let authorId = body.authorId;
+    let authorId = parseInt(body.authorId);
     if(!authorId) {
       return;
     }
@@ -117,7 +117,7 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let authorId = body.authorId;
+    let authorId = parseInt(body.authorId);
     if(!authorId) {
       return;
     }

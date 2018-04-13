@@ -48,6 +48,8 @@ const workNum = require('../model/workNum');
 const worksWorkRelation = require('../model/worksWorkRelation');
 const worksCommentRelation = require('../model/worksCommentRelation');
 const worksRecommend = require('../model/worksRecommend');
+const workAuthorRelation = require('../model/workAuthorRelation');
+const worksAuthorRelation = require('../model/worksAuthorRelation');
 const worksAuthorProfessionRelation = require('../model/worksAuthorProfessionRelation');
 const worksTypeProfessionSort = require('../model/worksTypeProfessionSort');
 const musicAlbum = require('../model/musicAlbum');
@@ -168,6 +170,8 @@ module.exports = {
         worksWorkRelation: worksWorkRelation(this),
         worksCommentRelation: worksCommentRelation(this),
         worksRecommend: worksRecommend(this),
+        workAuthorRelation: workAuthorRelation(this),
+        worksAuthorRelation: worksAuthorRelation(this),
         worksAuthorProfessionRelation: worksAuthorProfessionRelation(this),
         worksTypeProfessionSort: worksTypeProfessionSort(this),
         musicAlbum: musicAlbum(this),
