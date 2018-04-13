@@ -7,6 +7,7 @@
 const egg = require('egg');
 
 const LIMIT = 10;
+const ALL_LIMIT = 40;
 
 class Controller extends egg.Controller {
   async index() {
@@ -123,10 +124,18 @@ class Controller extends egg.Controller {
     let res = await service.author.follow(authorId, uid, false);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);
-    }
+  }
     else {
       ctx.body = ctx.helper.errorJSON(res.message);
     }
+  }
+
+  async all() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let res = await service.author.all(0, ALL_LIMIT);
+    res.limit = ALL_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

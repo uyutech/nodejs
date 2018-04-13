@@ -34,6 +34,7 @@ class Service extends egg.Service {
         'nickname',
         'sex',
         ['head_url', 'headUrl'],
+        ['reg_state', 'regState'],
         'sign',
         'coins',
         'sign'
@@ -90,6 +91,7 @@ class Service extends egg.Service {
           'nickname',
           'sex',
           ['head_url', 'headUrl'],
+          ['reg_state', 'regState'],
           'sign',
           'coins'
         ],
@@ -136,7 +138,8 @@ class Service extends egg.Service {
       res = await app.model.userAuthorRelation.findAll({
         attributes: [
           ['author_id', 'id'],
-          'type'
+          'type',
+          'settle'
         ],
         where: {
           user_id: id,
@@ -344,7 +347,7 @@ class Service extends egg.Service {
   }
 
   /**
-   * 关注数
+   * 关注人数
    * @param id:int 用户id
    * @returns int
    */
@@ -354,6 +357,42 @@ class Service extends egg.Service {
     }
     const { app } = this;
     let cacheKey = 'userFollowPersonCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userPersonRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        type: [1, 3],
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 关注圈子数
+   * @param id:int 用户id
+   * @returns int
+   */
+  async followCircleCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'userFollowCircleCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -2221,6 +2260,26 @@ class Service extends egg.Service {
     }
     app.redis.setex(cacheKey, 30, JSON.stringify(res));
     return res;
+  }
+
+  async updateAuthorSettle(uid, authorId, settle) {
+    if(!uid || !authorId) {
+      return;
+    }
+    const { app, service } = this;
+    let check = await service.author.isUser(authorId, uid);
+    if(!check) {
+      return;
+    }
+    return await app.model.userAuthorRelation.update({
+      settle,
+    }, {
+      where: {
+        user_id: uid,
+        author_id: authorId,
+      },
+      raw: true,
+    });
   }
 }
 

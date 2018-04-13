@@ -7,6 +7,7 @@
 const egg = require('egg');
 
 const LIMIT = 10;
+const ALL_LIMIT = 30;
 
 class Controller extends egg.Controller {
   async index() {
@@ -45,7 +46,45 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON(res);
   }
 
-  async all() {}
+  async all() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let res = await service.circle.all(body.offset || 0, ALL_LIMIT);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async follow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    if(!body.circleId) {
+      return;
+    }
+    let res = await service.circle.follow(body.circleId, uid, true);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async unFollow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    if(!body.circleId) {
+      return;
+    }
+    let res = await service.circle.follow(body.circleId, uid, false);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
 }
 
 module.exports = Controller;

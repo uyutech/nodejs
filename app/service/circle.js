@@ -279,7 +279,10 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    // 只缓存第一页
+    if(offset === 0) {
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
     return res;
   }
 
@@ -345,6 +348,75 @@ class Service extends egg.Service {
     res = !!res;
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 是否关注了圈子列表
+   * @param idList:int 圈子id列表
+   * @param uid:int 当前登录用户id
+   * @returns Array<boolean>
+   */
+  async isFollowList(idList, uid) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    if(!uid) {
+      return false;
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== undefined && id !== null) {
+          return app.redis.get('userCircleRelation_' + uid + '_' + id + '_1');
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('userCircleRelation_' + uid + '_' + id + '_1', CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.userCircleRelation.findAll({
+        attributes: [
+          ['circle_id', 'circleId']
+        ],
+        where: {
+          circle_id: noCacheIdList,
+          user_id: uid,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.circleId;
+          hash[id] = true;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || false;
+        cache[i] = temp;
+        app.redis.setex('userCircleRelation_' + uid + '_' + id + '_1', CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
   }
 
   /**
@@ -542,7 +614,7 @@ class Service extends egg.Service {
     }
     const { service } = this;
     let list = await this.tagIdList(idList, type);
-    let tagIdList = []
+    let tagIdList = [];
     let tagIdHash = {};
     list.forEach((arr) => {
       arr.forEach((item) => {
@@ -567,6 +639,87 @@ class Service extends egg.Service {
       });
       return temp;
     });
+  }
+
+  /**
+   * 关注/取关圈子
+   * @param id:int 圈子id
+   * @param uid:int 用户id
+   * @param state
+   * @returns Object{ count:int, state:boolean }
+   */
+  async follow(id, uid, state) {
+    if(!id || !uid) {
+      return {
+        success: false,
+      };
+    }
+    state = !!state;
+    let [now, count] = await Promise.all([
+      this.isFollow(id, uid),
+      this.fansCount(id)
+    ]);
+    if(now === state) {
+      return {
+        success: true,
+        data: {
+          state,
+          count,
+        },
+      };
+    }
+    const { app, service } = this;
+    // 不能超过最大关注数
+    if(state) {
+      let now = await service.user.followCircleCount(uid);
+      if(now > 500) {
+        return {
+          success: false,
+          message: '超过关注圈数上限啦',
+        };
+      }
+    }
+    // 更新内存中用户对作者关系的状态，同时入库
+    let cacheKey = 'userCircleRelation_' + uid + '_' + id + '_1';
+    if(state) {
+      await Promise.all([
+        app.redis.setex(cacheKey, CACHE_TIME, 'true'),
+        app.model.userCircleRelation.create({
+          user_id: uid,
+          circle_id: id,
+          type: 1,
+        }, {
+          raw: true,
+        })
+      ]);
+    }
+    else {
+      await Promise.all([
+        app.redis.setex(cacheKey, CACHE_TIME, 'false'),
+        app.model.userCircleRelation.destroy({
+          where: {
+            user_id: uid,
+            circle_id: id,
+            type: 1,
+          },
+        })
+      ]);
+    }
+    // 更新计数，优先内存缓存
+    cacheKey = 'circleFansCount_' + id;
+    if(state) {
+      count = await app.redis.incr(cacheKey);
+    }
+    else {
+      count = await app.redis.decr(cacheKey);
+    }
+    return {
+      success: true,
+      data: {
+        state,
+        count,
+      },
+    };
   }
 }
 

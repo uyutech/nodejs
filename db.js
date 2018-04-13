@@ -109,6 +109,7 @@ const Message = require('./app/model/message')({ sequelizeCircling: sequelize, S
     await dealWorkAuthorProfession(pool);
     await dealCircle(pool);
     await dealUser(pool);
+    await dealUserPlus(pool);
     await dealUserCircle(pool);
     await dealComment(pool);
     // await dealCircleComment(pool);
@@ -815,6 +816,23 @@ async function dealWorkAuthorProfession(pool) {
   }
 }
 
+async function dealUserPlus(pool) {
+  console.log('------- dealUserPlus --------');
+  let last = 2018000000043048;
+  // last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Users_Profile WHERE ProfileID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await User.update({
+      coins: item.CirclingCoins,
+    }, {
+      where: {
+        id: item.ProfileID,
+      },
+    });
+  }
+}
+
 async function dealCircle(pool) {
   console.log('------- dealCircle --------');
   await CircleType.sync();
@@ -919,7 +937,7 @@ async function dealUser(pool) {
   await User.sync();
   await UserAuthorRelation.sync();
   await UserPersonRelation.sync();
-  let last = 2018000000043080;
+  let last = 2018000000043048;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];

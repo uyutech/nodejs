@@ -243,6 +243,75 @@ class Service extends egg.Service {
   }
 
   /**
+   * 是否关注了作者列表
+   * @param idList:int 作者id列表
+   * @param uid:int 用户id
+   * @returns boolean
+   */
+  async isFollowList(idList, uid) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    if(!uid) {
+      return false;
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== undefined && id !== null) {
+          return app.redis.get('userPersonRelation_' + uid + '_' + id + '_3');
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('userPersonRelation_' + uid + '_' + id + '_3', CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.userCircleRelation.findAll({
+        attributes: [
+          ['author_id', 'authorId']
+        ],
+        where: {
+          author_id: noCacheIdList,
+          user_id: uid,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.authorId;
+          hash[id] = true;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || false;
+        cache[i] = temp;
+        app.redis.setex('userPersonRelation_' + uid + '_' + id + '_3', CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
+
+  /**
    * 关注/取关作者
    * @param id:int 作者id
    * @param uid:int 用户id
@@ -269,7 +338,7 @@ class Service extends egg.Service {
         },
       };
     }
-    const { app, ctx, service } = this;
+    const { app, service } = this;
     // 不能超过最大关注数
     if(state) {
       let now = await service.user.followPersonCount(uid);
@@ -1172,6 +1241,13 @@ class Service extends egg.Service {
     };
   }
 
+  /**
+   * 获取类似名字的作者
+   * @param name:String 名字
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
   async idListByName(name, offset, limit) {
     if(!name) {
       return;
@@ -1215,6 +1291,11 @@ class Service extends egg.Service {
     return res;
   }
 
+  /**
+   * 获取类似名字的作者数量
+   * @param name:String 名字
+   * @returns int
+   */
   async countByName(name) {
     if(!name) {
       return;
@@ -1233,6 +1314,90 @@ class Service extends egg.Service {
         name: {
           $like: '%' + name + '%',
         },
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取全部作者
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async all(offset, limit) {
+    let [data, count] = await Promise.all([
+      this.allData(offset, limit),
+      this.allCount()
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取全部作者信息
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async allData(offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'allAuthor_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.author.findAll({
+      attributes: [
+        'id',
+        'name',
+        ['head_url', 'headUrl'],
+        'sign',
+        ['fans_name', 'fansName'],
+        ['fans_circle_name', 'fansCircleName'],
+        ['is_settle', 'isSettle']
+      ],
+      where: {
+        is_delete: false,
+      },
+      offset,
+      limit,
+      raw: true,
+    });
+    // 只缓存第一页
+    if(offset === 0) {
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    return res;
+  }
+
+  async allCount() {
+    const { app } = this;
+    let cacheKey = 'allAuthorCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.author.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
         is_delete: false,
       },
       raw: true,
