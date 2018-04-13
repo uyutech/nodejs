@@ -33,7 +33,6 @@ class Controller extends egg.Controller {
       collection,
       author,
       commentList,
-      collectionAuthor,
     });
   }
 

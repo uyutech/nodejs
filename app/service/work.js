@@ -166,7 +166,7 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app } = this;
+    const { app, service } = this;
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
@@ -192,23 +192,22 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      // TODO: 拆分
-      let sql = squel.select()
-        .from('video')
-        .from('work_type')
-        .field('video.id')
-        .field('video.title')
-        .field('video.width')
-        .field('video.height')
-        .field('video.duration')
-        .field('video.cover')
-        .field('video.url')
-        .field('video.type')
-        .field('work_type.name', 'typeName')
-        .where('video.id IN ?', noCacheIdList)
-        .where('video.type=work_type.id')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.video.findAll({
+        attributes: [
+          'id',
+          'title',
+          'width',
+          'height',
+          'duration',
+          'cover',
+          'url',
+          'type'
+        ],
+        where: {
+          id: noCacheIdList,
+        },
+        raw: true,
+      });
       let hash = {};
       if(res.length) {
         res.forEach((item) => {
@@ -218,16 +217,28 @@ class Service extends egg.Service {
       }
       noCacheIndexList.forEach((i) => {
         let id = idList[i];
-        let temp = hash[id];
-        if(temp) {
-          cache[i] = temp;
-          app.redis.setex('video_' + id, CACHE_TIME, JSON.stringify(temp));
-        }
-        else {
-          app.redis.setex('video_' + id, CACHE_TIME, 'null');
-        }
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('video_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
+    let typeIdList = [];
+    let typeIdHash = {};
+    cache.forEach((item) => {
+      if(item && !typeIdHash[item.type]) {
+        typeIdList.push(item.type);
+      }
+    });
+    let typeList = await service.workType.infoList(typeIdList);
+    let typeHash = {};
+    typeList.forEach((item) => {
+      typeHash[item.id] = item;
+    });
+    cache.forEach((item) => {
+      if(item) {
+        item.typeName = typeHash[item.type].name;
+      }
+    });
     return cache;
   }
 
@@ -243,7 +254,7 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app } = this;
+    const { app, service } = this;
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
@@ -269,20 +280,20 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = squel.select()
-        .from('audio')
-        .from('work_type')
-        .field('audio.id')
-        .field('audio.title')
-        .field('audio.duration')
-        .field('audio.cover')
-        .field('audio.url')
-        .field('audio.type')
-        .field('work_type.name', 'typeName')
-        .where('audio.id IN ?', noCacheIdList)
-        .where('audio.type=work_type.id')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.audio.findAll({
+        attributes: [
+          'id',
+          'title',
+          'duration',
+          'cover',
+          'url',
+          'type'
+        ],
+        where: {
+          id: noCacheIdList,
+        },
+        raw: true,
+      });
       let hash = {};
       if(res.length) {
         res.forEach((item) => {
@@ -297,6 +308,23 @@ class Service extends egg.Service {
         app.redis.setex('audio_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
+    let typeIdList = [];
+    let typeIdHash = {};
+    cache.forEach((item) => {
+      if(item && !typeIdHash[item.type]) {
+        typeIdList.push(item.type);
+      }
+    });
+    let typeList = await service.workType.infoList(typeIdList);
+    let typeHash = {};
+    typeList.forEach((item) => {
+      typeHash[item.id] = item;
+    });
+    cache.forEach((item) => {
+      if(item) {
+        item.typeName = typeHash[item.type].name;
+      }
+    });
     return cache;
   }
 
@@ -312,7 +340,7 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app } = this;
+    const { app, service } = this;
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
@@ -338,20 +366,20 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = squel.select()
-        .from('image')
-        .from('work_type')
-        .field('image.id')
-        .field('image.title')
-        .field('image.width')
-        .field('image.height')
-        .field('image.url')
-        .field('image.type')
-        .field('work_type.name', 'typeName')
-        .where('image.id IN ?', noCacheIdList)
-        .where('image.type=work_type.id')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.image.findAll({
+        attributes: [
+          'id',
+          'title',
+          'width',
+          'height',
+          'url',
+          'type'
+        ],
+        where: {
+          id: noCacheIdList,
+        },
+        raw: true,
+      });
       let hash = {};
       if(res.length) {
         res.forEach((item) => {
@@ -366,6 +394,23 @@ class Service extends egg.Service {
         app.redis.setex('image_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
+    let typeIdList = [];
+    let typeIdHash = {};
+    cache.forEach((item) => {
+      if(item && !typeIdHash[item.type]) {
+        typeIdList.push(item.type);
+      }
+    });
+    let typeList = await service.workType.infoList(typeIdList);
+    let typeHash = {};
+    typeList.forEach((item) => {
+      typeHash[item.id] = item;
+    });
+    cache.forEach((item) => {
+      if(item) {
+        item.typeName = typeHash[item.type].name;
+      }
+    });
     return cache;
   }
 
@@ -381,7 +426,7 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app } = this;
+    const { app, service } = this;
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
@@ -407,18 +452,18 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = squel.select()
-        .from('text')
-        .from('work_type')
-        .field('text.id')
-        .field('text.title')
-        .field('text.content')
-        .field('text.type')
-        .field('work_type.name', 'typeName')
-        .where('text.id IN ?', noCacheIdList)
-        .where('text.type=work_type.id')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.text.findAll({
+        attributes: [
+          'id',
+          'title',
+          'content',
+          'type'
+        ],
+        where: {
+          id: noCacheIdList,
+        },
+        raw: true,
+      });
       let hash = {};
       if(res.length) {
         res.forEach((item) => {
@@ -433,6 +478,23 @@ class Service extends egg.Service {
         app.redis.setex('text_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
+    let typeIdList = [];
+    let typeIdHash = {};
+    cache.forEach((item) => {
+      if(item && !typeIdHash[item.type]) {
+        typeIdList.push(item.type);
+      }
+    });
+    let typeList = await service.workType.infoList(typeIdList);
+    let typeHash = {};
+    typeList.forEach((item) => {
+      typeHash[item.id] = item;
+    });
+    cache.forEach((item) => {
+      if(item) {
+        item.typeName = typeHash[item.type].name;
+      }
+    });
     return cache;
   }
 

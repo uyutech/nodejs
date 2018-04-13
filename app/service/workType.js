@@ -20,13 +20,13 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'worksType_' + id;
+    let cacheKey = 'workType_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.worksType.findOne({
+    res = await app.model.workType.findOne({
       attributes: [
         'id',
         'name'
@@ -56,7 +56,7 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
-          return app.redis.get('worksType_' + id);
+          return app.redis.get('workType_' + id);
         }
       })
     );
@@ -67,7 +67,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('worksType_' + id, CACHE_TIME);
+        app.redis.expire('workType_' + id, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -78,7 +78,7 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let res = await app.model.worksType.findAll({
+      let res = await app.model.workType.findAll({
         attributes: [
           'id',
           'name'
@@ -98,7 +98,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('worksType_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('workType_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;
