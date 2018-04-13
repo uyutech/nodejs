@@ -54,9 +54,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'works_id_kind_work_id',
+        name: 'works_id_work_id',
         unique: true,
-        fields: ['works_id', 'kind', 'work_id'],
+        fields: ['works_id', 'work_id'],
       }
     ],
     comment: '大作品小作品关系',

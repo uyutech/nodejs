@@ -1,6 +1,8 @@
 /**
- * Created by army8735 on 2018/3/30.
+ * Created by army8735 on 2018/4/13.
  */
+
+'use strict';
 
 'use strict';
 
@@ -20,13 +22,13 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'profession_' + id;
+    let cacheKey = 'worksType_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.profession.findOne({
+    res = await app.model.worksType.findOne({
       attributes: [
         'id',
         'name'
@@ -40,11 +42,6 @@ class Service extends egg.Service {
     return res;
   }
 
-  /**
-   * 获取职种信息列表
-   * @param idList:Array<int> 职种id列表
-   * @returns Array<Object>
-   */
   async infoList(idList) {
     if(!idList) {
       return;
@@ -56,7 +53,7 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
-          return app.redis.get('profession_' + id);
+          return app.redis.get('worksType_' + id);
         }
       })
     );
@@ -67,7 +64,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('profession_' + id, CACHE_TIME);
+        app.redis.expire('worksType_' + id, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -78,7 +75,7 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let res = await app.model.profession.findAll({
+      let res = await app.model.worksType.findAll({
         attributes: [
           'id',
           'name'
@@ -98,7 +95,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('profession_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('worksType_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;

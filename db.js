@@ -1768,44 +1768,40 @@ async function modifyPostComment() {
 }
 
 async function temp(pool) {
-  let last = 0;
-  let hash = {};
-  let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE CirclingIDList IS NOT NULL;`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    let list = item.CirclingIDList.split(',');
-    let idList = [];
-    for(let j = 0; j < list.length; j++) {
-      let circleId = list[j];
-      let tagId = hash[circleId];
-      if(tagId) {
-        idList.push(tagId);
-      }
-      else {
-        let circleTagRelation = await CircleTagRelation.findOne({
-          attributes: [
-            'tag_id'
-          ],
-          where: {
-            circle_id: circleId,
-          },
-          raw: true,
-        });
-        tagId = hash[circleId] = circleTagRelation.tag_id;
-        idList.push(tagId);
-      }
-      await TagCommentRelation.upsert({
-        tag_id: tagId,
-        comment_id: item.ID,
-        type: 1,
-        is_delete: false,
-        create_time: item.CreateTime,
-        update_time: item.CreateTime,
-      }, {
-        where: {
-          comment_id: item.ID,
-        },
-      });
-    }
+  let res = await MusicAlbum.findAll({
+    attributes: [
+      'id'
+    ],
+    raw: true,
+  });
+  for(let i = 0; i < res.length; i++) {
+    let item = res[i];
+    let oldId = item.id.toString().replace(/^2014/, 2015);
+    await WorksCommentRelation.update({
+      works_id: item.id,
+    }, {
+      where: {
+        works_id: oldId,
+      },
+      raw: true,
+    });
+  }
+  res = await ImageAlbum.findAll({
+    attributes: [
+      'id'
+    ],
+    raw: true,
+  });
+  for(let i = 0; i < res.length; i++) {
+    let item = res[i];
+    let oldId = item.id.toString().replace(/^2013/, 2015);
+    await WorksCommentRelation.update({
+      works_id: item.id,
+    }, {
+      where: {
+        works_id: oldId,
+      },
+      raw: true,
+    });
   }
 }

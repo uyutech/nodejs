@@ -26,36 +26,36 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    const { app } = this;
+    const { app, service } = this;
     let cacheKey = 'worksInfo_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    let sql = squel.select()
-      .from('works')
-      .from('works_type')
-      .field('works.id')
-      .field('works.title')
-      .field('works.sub_title', 'subTitle')
-      .field('works.state')
-      .field('works.cover')
-      .field('works.type')
-      .field('works_type.name', 'typeName')
-      .where('works.id=?', id)
-      .where('works.is_authorize=true')
-      .where('works.type=works_type.id')
-      .toString();
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0];
-      res.worksStateName = WORKS_STATE_NAME[res.worksState];
+      res = JSON.parse(res);
     }
     else {
-      res = null;
+      res = await app.model.works.findOne({
+        attributes: [
+          'id',
+          'title',
+          ['sub_title', 'subTitle'],
+          'state',
+          'cover',
+          'type'
+        ],
+        where: {
+          id,
+        },
+        raw: true,
+      });
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    if(res) {
+      let type = await service.worksType.info(res.type);
+      if(type) {
+        res.typeName = type.name;
+      }
+    }
     return res;
   }
 
@@ -97,6 +97,7 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
+      // TODO: 拆分
       let sql = squel.select()
         .from('works')
         .from('works_type')
@@ -249,6 +250,7 @@ class Service extends egg.Service {
         ],
         where: {
           works_id: id,
+          is_delete: false,
         },
         order: [
           ['weight', 'DESC'],
@@ -350,7 +352,7 @@ class Service extends egg.Service {
         let id = workIdList[i];
         favorCountHash[id] = item;
       }
-    })
+    });
     return res.map((item) => {
       let temp = {
         id: item.workId,
@@ -554,45 +556,64 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
     }
     else {
-      let sql = squel.select()
-        .from('works_author_profession_relation')
-        .from('profession')
-        .field('works_author_profession_relation.works_id', 'worksId')
-        .field('works_author_profession_relation.work_id', 'workId')
-        .field('works_author_profession_relation.author_id', 'authorId')
-        .field('works_author_profession_relation.profession_id', 'professionId')
-        .field('profession.name', 'professionName')
-        .where('works_author_profession_relation.works_id=?', id)
-        .where('works_author_profession_relation.is_delete=false')
-        .where('works_author_profession_relation.profession_id=profession.id')
-        .toString();
-      res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      res = await app.model.worksAuthorProfessionRelation.findAll({
+        attributes: [
+          ['work_id', 'workId'],
+          ['author_id', 'authorId'],
+          ['profession_id', 'professionId']
+        ],
+        where: {
+          works_id: id,
+          is_delete: false,
+        },
+        raw: true,
+      });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
     let authorIdList = [];
     let authorIdHash = {};
+    let professionIdList = [];
+    let professionIdHash = {};
     res.forEach((item) => {
       let authorId = item.authorId;
       if(!authorIdHash[authorId]) {
         authorIdHash[authorId] = true;
         authorIdList.push(authorId);
       }
+      let professionId = item.professionId;
+      if(!professionIdHash[professionId]) {
+        professionIdHash[professionId] = true;
+        professionIdList.push(professionId);
+      }
     });
-    if(authorIdList.length) {
-      let list = await service.author.infoList(authorIdList);
-      let hash = {};
-      list.forEach((item) => {
-        hash[item.id] = item;
-      });
-      res.forEach((item) => {
-        let authorInfo = hash[item.authorId];
-        if(authorInfo) {
-          item.headUrl = authorInfo.headUrl;
-          item.name = authorInfo.name;
-          item.isSettle = authorInfo.isSettle;
-        }
-      });
-    }
+    let [authorList, professionList] = await Promise.all([
+      service.author.infoList(authorIdList),
+      service.profession.infoList(professionIdList)
+    ]);
+    let authorHash = {};
+    let professionHash = {};
+    authorList.forEach((item) => {
+      if(item) {
+        authorHash[item.id] = item;
+      }
+    });
+    professionList.forEach((item) => {
+      if(item) {
+        professionHash[item.id] = item;
+      }
+    });
+    res.forEach((item) => {
+      let authorInfo = authorHash[item.authorId];
+      if(authorInfo) {
+        item.headUrl = authorInfo.headUrl;
+        item.name = authorInfo.name;
+        item.isSettle = authorInfo.isSettle;
+      }
+      let professionInfo = professionHash[item.professionId];
+      if(professionInfo) {
+        item.professionName = professionInfo.name;
+      }
+    });
     return res;
   }
 
@@ -634,6 +655,7 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
+      // TODO: 拆分
       let sql = squel.select()
         .from('works_author_profession_relation')
         .from('profession')

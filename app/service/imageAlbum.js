@@ -12,6 +12,19 @@ const CACHE_TIME = 10;
 
 class Service extends egg.Service {
   /**
+   * 根据专辑id获取专辑信息
+   * @param id:int 专辑id
+   * @returns Object
+   */
+  async info(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = '';
+  }
+
+  /**
    * 根据专辑id列表获取专辑信息
    * @param idList:Array<int> 专辑id列表
    * @returns Array<Object>
