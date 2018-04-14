@@ -421,7 +421,9 @@ class Service extends egg.Service {
       return [];
     }
     let idList = dataList.map((item) => {
-      return item.id;
+      if(item) {
+        return item.id;
+      }
     });
     let [
       { quoteHash, authorHash, userHash },
@@ -1051,6 +1053,110 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取评论对应的tagId
+   * @param id:int 评论id
+   * @param type:int 类型
+   * @returns Array<int>
+   */
+  async tag(id, type) {
+    if(!id || !type) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'commentTag_' + id + '_' + type;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.tagCommentRelation.findAll({
+      attributes: [
+        ['tag_id', 'tagId'],
+      ],
+      where: {
+        comment_id: id,
+        type,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    res = res.map((item) => {
+      return item.tagId;
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取评论列表对应的tagId
+   * @param idList:Array<int> 评论id列表
+   * @param type:int 类型
+   * @returns Array<Array<int>>
+   */
+  async tagList(idList, type) {
+    if(!idList || !type) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('commentTag_' + id + '_' + type);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('commentTag_' + id + '_' + type, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.tagCommentRelation.findAll({
+        attributes: [
+          ['comment_id', 'commentId'],
+          ['tag_id', 'tagId']
+        ],
+        where: {
+          comment_id: noCacheIdList,
+          type,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.commentId;
+          let temp = hash[id] = hash[id] || [];
+          temp.push(item.tagId);
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let item = hash[id] || [];
+        cache[i] = item;
+        app.redis.setex('commentTag_' + id + '_' + type, CACHE_TIME, JSON.stringify(item));
+      });
+    }
+    return cache;
+  }
+
+  /**
    * 获取评论所属画圈信息
    * @param id:int 评论id
    * @returns Array<Object>
@@ -1059,31 +1165,20 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    const { app, service } = this;
-    let cacheKey = 'commentCircle_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      res = JSON.parse(res);
-    }
-    else {
-      let sql = squel.select()
-        .field('circle_tag_relation.circle_id', 'circleId')
-        .from('tag_comment_relation')
-        .from('circle_tag_relation')
-        .where('tag_comment_relation.comment_id=?', id)
-        .where('tag_comment_relation.type=1')
-        .where('tag_comment_relation.is_delete=false')
-        .where('tag_comment_relation.tag_id=circle_tag_relation.tag_id')
-        .where('circle_tag_relation.is_delete=false')
-        .toString();
-      res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-      res = res.map((item) => {
-        return item.circleId;
+    const { service } = this;
+    let tagIdList = await this.tag(id, 1);
+    let circleIdList = await service.tag.circleIdList(tagIdList, 1);
+    let list = [];
+    let hash = {};
+    circleIdList.forEach((arr) => {
+      arr.forEach((id) => {
+        if(!hash[id]) {
+          hash[id] = true;
+          list.push(id);
+        }
       });
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    }
-    res = await service.circle.infoList(res);
+    });
+    let res = await service.circle.infoList(list);
     return res.map((item) => {
       return {
         id: item.id,
@@ -1104,85 +1199,59 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app, service } = this;
-    let cache = await Promise.all(
-      idList.map((id) => {
-        if(id !== undefined && id !== null) {
-          return app.redis.get('commentCircle_' + id);
+    const { service } = this;
+    let tagIdList = await this.tagList(idList, 1);
+    let list = [];
+    let hash = {};
+    tagIdList.forEach((arr) => {
+      arr.forEach((tagId) => {
+        if(!hash[tagId]) {
+          hash[tagId] = true;
+          list.push(tagId);
         }
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach((item, i) => {
-      let id = idList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        app.redis.expire('commentCircle_' + id, CACHE_TIME);
-      }
-      else if(id !== null && id !== undefined) {
-        if(!noCacheIdHash[id]) {
-          noCacheIdHash[id] = true;
-          noCacheIdList.push(id);
-        }
-        noCacheIndexList.push(i);
-      }
-    });
-    if(noCacheIdList.length) {
-      let sql = squel.select()
-        .field('tag_comment_relation.comment_id', 'commentId')
-        .field('circle_tag_relation.circle_id', 'circleId')
-        .from('tag_comment_relation')
-        .from('circle_tag_relation')
-        .where('tag_comment_relation.comment_id IN ?', noCacheIdList)
-        .where('tag_comment_relation.type=1')
-        .where('tag_comment_relation.is_delete=false')
-        .where('tag_comment_relation.tag_id=circle_tag_relation.tag_id')
-        .where('circle_tag_relation.is_delete=false')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-      let hash = {};
-      if(res.length) {
-        res.forEach((item) => {
-          let id = item.commentId;
-          let temp = hash[id] = hash[id] || [];
-          temp.push(item.circleId);
-        });
-      }
-      noCacheIndexList.forEach((i) => {
-        let id = idList[i];
-        let item = hash[id] || null;
-        cache[i] = item;
-        app.redis.setex('commentCircle_' + id, CACHE_TIME, JSON.stringify(item));
       });
-    }
-    let circleIdList = [];
-    let circleIdHash = {};
-    cache.forEach((item) => {
-      if(item) {
-        item.forEach((id) => {
-          if(!circleIdHash[id]) {
-            circleIdHash[id] = true;
-            circleIdList.push(id);
+    });
+    let circleIdList = await service.tag.circleIdList(list, 1);
+    let list2 = [];
+    let hash2 = {};
+    circleIdList.forEach((arr) => {
+      arr.forEach((id) => {
+        if(!hash2[id]) {
+          hash2[id] = true;
+          list2.push(id);
+        }
+      });
+    });
+    let res = await service.circle.infoList(list2);
+    let circleHash = {};
+    list2.forEach((id, i) => {
+      circleHash[id] = {
+        id,
+        name: res[i].name,
+      };
+    });
+    let tagCircleHash = {};
+    list.forEach((tagId) => {
+      let temp = tagCircleHash[tagId] = [];
+      circleIdList.forEach((circleIds) => {
+        circleIds.forEach((circleId) => {
+          temp.push(circleHash[circleId]);
+        });
+      });
+    });
+    return tagIdList.map((arr) => {
+      let temp = [];
+      let hash = {};
+      arr.forEach((tagId) => {
+        let circleList = tagCircleHash[tagId];
+        circleList.forEach((circle) => {
+          if(!hash[circle.id]) {
+            hash[circle.id] = true;
+            temp.push(circle);
           }
         });
-      }
-    });
-    let res = await service.circle.infoList(circleIdList);
-    let hash = {};
-    res.forEach((item) => {
-      hash[item.id] = item;
-    });
-    return cache.map((item) => {
-      if(item) {
-        return item.map((id) => {
-          return {
-            id,
-            name: hash[id].name,
-          };
-        });
-      }
+      });
+      return temp;
     });
   }
 

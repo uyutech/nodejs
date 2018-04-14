@@ -21,6 +21,11 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
+    is_comment_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     tag_id: {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,

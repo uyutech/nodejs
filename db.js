@@ -40,7 +40,7 @@ const AuthorAlias = require('./app/model/authorAlias')({ sequelizeCircling: sequ
 const AuthorNum = require('./app/model/authorNum')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorOutside = require('./app/model/authorOutside')({ sequelizeCircling: sequelize, Sequelize });
 const Profession = require('./app/model/profession')({ sequelizeCircling: sequelize, Sequelize });
-const WorksAuthorProfessionRelation = require('./app/model/worksAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
+// const WorksAuthorProfessionRelation = require('./app/model/worksAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleType = require('./app/model/circleType')({ sequelizeCircling: sequelize, Sequelize });
 const Circle = require('./app/model/circle')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTop = require('./app/model/circleTop')({ sequelizeCircling: sequelize, Sequelize });
@@ -659,7 +659,7 @@ async function dealWorkAuthorProfession(pool) {
   await Profession.sync();
   await WorkAuthorRelation.sync();
   await WorksAuthorRelation.sync();
-  await WorksAuthorProfessionRelation.sync();
+  // await WorksAuthorProfessionRelation.sync();
   await MusicAlbumAuthorRelation.sync();
   await ImageAlbumAuthorRelation.sync();
   let last = 61;
@@ -1033,7 +1033,6 @@ async function dealComment(pool) {
   console.log('------- dealComment --------');
   await AuthorCommentRelation.sync();
   await WorksCommentRelation.sync();
-  // await CircleCommentRelation.sync();
   await Comment.sync();
   let last = 440051;
   let hash = {};
@@ -1130,65 +1129,6 @@ async function dealComment(pool) {
           });
         }
       }
-      // let tagComment = await TagCommentRelation.findAll({
-      //   attributes: ['tag_id'],
-      //   where: {
-      //     comment_id: item.ID,
-      //   },
-      //   raw: true,
-      // });
-      // let circleIdHash = {};
-      // if(tagComment && tagComment.length) {
-      //   let ids = tagComment.map(function(item) {
-      //     return item.tag_id;
-      //   });
-      //   let circleTag = await CircleTagRelation.findAll({
-      //     attributes: ['circle_id'],
-      //     where: {
-      //       tag_id: ids,
-      //     },
-      //     raw: true,
-      //   });
-      //   if(circleTag && circleTag.length) {
-      //     ids = [];
-      //     let hash = {};
-      //     circleTag.forEach(function(item) {
-      //       let id = item.circle_id;
-      //       if(!hash[id]) {
-      //         hash[id] = true;
-      //         ids.push(id);
-      //       }
-      //     });
-      //     for(let j = 0; j < ids.length; j++) {
-      //       let id = ids[j];
-      //       circleIdHash[id] = true;
-      //       await CircleCommentRelation.create({
-      //         circle_id: id,
-      //         comment_id: item.ID,
-      //         type: 1,
-      //       });
-      //     }
-      //   }
-      // }
-      // if(item.CirclingIDList) {
-      //   let list = item.CirclingIDList.split(',');
-      //   for(let j = 0; j < list.length; j++) {
-      //     let circleId = list[j];
-      //     await CircleCommentRelation.upsert({
-      //       circle_id: circleId,
-      //       comment_id: item.ID,
-      //       type: 0,
-      //       is_delete: !!item.ISDel,
-      //       create_time: item.CreateTime,
-      //       update_time: item.CreateTime,
-      //     }, {
-      //       where: {
-      //         circle_id: circleId,
-      //         comment_id: item.ID,
-      //       },
-      //     });
-      //   }
-      // }
     }
     // 作品主页虚拟留言
     else if(item.RootID === -4) {
@@ -1233,46 +1173,44 @@ async function dealComment(pool) {
 
 async function dealCircleComment(pool) {
   console.log('------- dealCircleComment --------');
-  let last = 291033;
-  // last = 0;
+  await CircleCommentRelation.sync();
+  let res = await CircleTagRelation.findAll({
+    attributes: [
+      'circle_id',
+      'tag_id'
+    ],
+  });
   let hash = {};
-  let result = await pool.request().query(`SELECT * FROM dbo.Concern_Tag_Comment WHERE ID>${last};`);
-  for(let i = 0, len = result.recordset.length; i < len; i++) {
-    let item = result.recordset[i];
-    let circleId = hash[item.TagID];
-    if(!circleId) {
-      let tag = await Tag.findOne({
-        attributes: ['id'],
-        where: {
-          temp_id: item.TagID,
-        },
-        raw: true,
-      });
-      circleId = await CircleTagRelation.findOne({
-        attributes: [
-          ['circle_id', 'circleId']
-        ],
-        where: {
-          tag_id: tag.id,
-        },
-        raw: true,
-      });
-      if(circleId) {
-        circleId = circleId.circleId;
-        if(circleId) {
-          hash[item.TagID] = circleId;
-        }
+  res.forEach((item) => {
+    hash[item.tag_id] = hash[item.tag_id] || [];
+    hash[item.tag_id].push(item.circle_id);
+  });
+  res = await TagCommentRelation.findAll({
+    attributes: [
+      'tag_id',
+      'comment_id',
+      'is_comment_delete'
+    ],
+    where: {
+      is_delete: false,
+    },
+    raw: true,
+  });
+  let hash2 = {};
+  for(let i = 0, len = res.length; i < len; i++) {
+    let item = res[i];
+    let circleId = hash[item.tag_id] || [];
+    for(let j = 0; j < circleId.length; j++) {
+      let key = circleId[j] + '_' + item.comment_id + '_' + item.tag_id;
+      if(hash2[key]) {
+        continue;
       }
-    }
-    if(circleId) {
-      await CircleCommentRelation.upsert({
-        circle_id: circleId,
-        comment_id: item.CommentID,
-        type: 0,
-      }, {
-        where: {
-          comment_id: item.CommentID,
-        },
+      hash2[key] = true;
+      await CircleCommentRelation.create({
+        circle_id: circleId[j],
+        comment_id: item.comment_id,
+        is_comment_delete: item.is_comment_delete,
+        tag_id: item.tag_id,
       });
     }
   }

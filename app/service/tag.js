@@ -281,7 +281,6 @@ class Service extends egg.Service {
       where: {
         tag_id: id,
         is_delete: false,
-        is_comment_delete: false,
       },
       offset,
       limit,
@@ -316,7 +315,6 @@ class Service extends egg.Service {
       where: {
         tag_id: id,
         is_delete: false,
-        is_comment_delete: false,
       },
       raw: true,
     });
@@ -327,106 +325,6 @@ class Service extends egg.Service {
       res = 0;
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
-
-  /**
-   * 获取标签id列表下的画圈
-   * @param idList:Array<int> 标签id列表
-   * @param uid:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Object{ count:int, data:Array<Object> }
-   */
-  async listPostList(idList, uid, offset, limit) {
-    if(!idList || !uid) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    let [data, count] = await Promise.all([
-      this.postListData(idList, uid, offset, limit),
-      this.postListCount(idList)
-    ]);
-    return { data, count };
-  }
-
-  /**
-   * 获取标签id列表下的画圈
-   * @param idList:Array<int> 标签id列表
-   * @param uid:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Array<Object>
-   */
-  async postListData(idList, uid, offset, limit) {
-    if(!idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    const { app, service } = this;
-    let sql = squel.select()
-      .from('tag_comment_relation FORCE INDEX (tag_id_is_delete_is_comment_delete_comment_id)')
-      .field('comment_id', 'commentId')
-      .where('tag_id IN ?', idList)
-      .where('is_delete=false')
-      .where('is_comment_delete=false')
-      .order('comment_id', false)
-      .offset(offset)
-      .limit(limit)
-      .toString();
-    let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    let commentIdList = res.map((item) => {
-      return item.commentId;
-    });
-    return await service.post.infoList(commentIdList, uid);
-  }
-
-  /**
-   * 获取标签id列表下画圈数量
-   * @param idList:Array<int> 标签id列表
-   * @returns int
-   */
-  async postListCount(idList) {
-    if(!idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    const { app } = this;
-    let cacheKey = 'tagListCommentCount_' + idList.join(',');
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      // app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.tagCommentRelation.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        tag_id: idList,
-        is_delete: false,
-        is_comment_delete: false,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, 30, JSON.stringify(res));
     return res;
   }
 
@@ -522,6 +420,83 @@ class Service extends egg.Service {
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 获取标签对应的圈子id
+   * @param id:int 标签id
+   * @param type:int 类型
+   * @returns Array<int>
+   */
+  async circleId(id, type) {}
+
+  /**
+   * 获取标签对应的圈子id
+   * @param idList:int 标签id
+   * @param type:int 类型
+   * @returns Array<Array<int>>
+   */
+  async circleIdList(idList, type) {
+    if(!idList || !type) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== undefined && id !== null) {
+          return app.redis.get('tagCircle_' + id + '_' + type);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('tagCircle_' + id + '_' + type, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.circleTagRelation.findAll({
+        attributes: [
+          ['circle_id', 'circleId'],
+          ['tag_id', 'tagId']
+        ],
+        where: {
+          tag_id: noCacheIdList,
+          type,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.tagId;
+          let temp = hash[id] = hash[id] || [];
+          temp.push(item.circleId);
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let item = hash[id] || [];
+        cache[i] = item;
+        app.redis.setex('tagCircle_' + id + '_' + type, CACHE_TIME, JSON.stringify(item));
+      });
+    }
+    return cache;
   }
 }
 

@@ -47,9 +47,8 @@ class Controller extends egg.Controller {
   async circleList() {
     const { ctx, service } = this;
     let body = ctx.request.body;
-    let offset = body.offset || 0;
-    offset = parseInt(offset) || 0;
-    let res = await service.circle.all(offset, LIMIT);
+    let offset = parseInt(body.offset);
+    let res = await service.circle.all(offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -59,27 +58,26 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let circleId = (body.circleId || '').split(',');
-    let offset = body.offset || 0;
-    offset = parseInt(offset) || 0;
+    let offset = parseInt(body.offset);
     let res;
     if(circleId.length) {
-      let tagIdList = await service.circle.tagIdList(circleId);
-      let temp = [];
-      let hash = {};
-      tagIdList.forEach((arr) => {
-        arr.forEach((item) => {
-          if(!hash[item]) {
-            hash[item] = true;
-            temp.push(item);
-          }
-        });
-      });
-      if(temp.length) {
-        res = await service.tag.listPostList(temp, uid, offset, LIMIT);
-      }
+      // let tagIdList = await service.circle.tagIdList(circleId);
+      // let temp = [];
+      // let hash = {};
+      // tagIdList.forEach((arr) => {
+      //   arr.forEach((item) => {
+      //     if(!hash[item]) {
+      //       hash[item] = true;
+      //       temp.push(item);
+      //     }
+      //   });
+      // });
+      // if(temp.length) {
+      //   res = await service.tag.listPostList(temp, uid, offset || 0, LIMIT);
+      // }
     }
-    if(!res) {
-      res = await service.post.all(uid, offset, LIMIT);
+    else {
+      res = await service.post.all(uid, offset || 0, LIMIT);
     }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
