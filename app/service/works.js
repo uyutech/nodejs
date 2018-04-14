@@ -389,8 +389,8 @@ class Service extends egg.Service {
       audioList,
       imageList,
       textList,
-      userLikeList,
-      userFavorList,
+      isLikeList,
+      isFavorList,
       likeCountList,
       favorCountList,
       authorList
@@ -431,13 +431,13 @@ class Service extends egg.Service {
     });
     let userLikeHash = {};
     let userFavorHash = {};
-    userLikeList.forEach((item, i) => {
+    isLikeList.forEach((item, i) => {
       if(item) {
         let id = workIdList[i];
         userLikeHash[id] = item;
       }
     });
-    userFavorList.forEach((item, i) => {
+    isFavorList.forEach((item, i) => {
       if(item) {
         let id = workIdList[i];
         userFavorHash[id] = item;
@@ -678,6 +678,11 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
     const { service } = this;
     let commentId = await this.commentId(id);
     return await service.post.commentList(commentId, uid, offset, limit);
@@ -693,7 +698,7 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'worksAuthors_' + id;
+    let cacheKey = 'worksAuthor_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
@@ -707,6 +712,7 @@ class Service extends egg.Service {
         ],
         where: {
           works_id: id,
+          is_delete: false,
         },
         raw: true,
       });
@@ -771,7 +777,7 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
-          return app.redis.get('worksAuthors_' + id);
+          return app.redis.get('worksAuthor_' + id);
         }
       })
     );
@@ -782,7 +788,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('worksAuthors_' + id, CACHE_TIME);
+        app.redis.expire('worksAuthor_' + id, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -820,7 +826,7 @@ class Service extends egg.Service {
         let item = hash[id] || [];
         if(item) {
           cache[i] = item;
-          app.redis.setex('worksAuthors_' + id, CACHE_TIME, JSON.stringify(item));
+          app.redis.setex('worksAuthor_' + id, CACHE_TIME, JSON.stringify(item));
         }
       });
     }

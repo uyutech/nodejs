@@ -21,22 +21,16 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.TINYINT.UNSIGNED,
+    tag_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: 0,
-      comment: '0直接关联，1间接（比如通过标签）关联',
     },
   }, {
     indexes: [
       {
-        name: 'circle_id_comment_id',
+        name: 'circle_id_comment_id_tag_id',
         unique: true,
-        fields: ['circle_id', 'comment_id'],
-      },
-      {
-        name: 'comment_id_type',
-        fields: ['comment_id', 'type'],
+        fields: ['circle_id', 'comment_id', 'tag_id'],
       }
     ],
     comment: '圈子留言关联信息',

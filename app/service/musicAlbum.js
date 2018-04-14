@@ -71,7 +71,7 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app } = this;
+    const { app, service } = this;
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
@@ -96,20 +96,20 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = squel.select()
-        .from('music_album')
-        .from('works_type')
-        .field('music_album.id')
-        .field('music_album.title')
-        .field('music_album.sub_title', 'subTitle')
-        .field('music_album.state')
-        .field('music_album.cover')
-        .field('music_album.type')
-        .field('works_type.name', 'typeName')
-        .where('music_album.id IN ?', noCacheIdList)
-        .where('music_album.type=works_type.id')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.musicAlbum.findOne({
+        attributes: [
+          'id',
+          'title',
+          ['sub_title', 'subTitle'],
+          'state',
+          'cover',
+          'type'
+        ],
+        where: {
+          id: noCacheIdList,
+        },
+        raw: true,
+      });
       let hash = {};
       if(res.length) {
         res.forEach((item) => {
@@ -124,8 +124,27 @@ class Service extends egg.Service {
         app.redis.setex('musicAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
+    let typeIdList = [];
+    let typeIdHash = {};
+    cache.forEach((item) => {
+      if(item && !typeIdHash[item.type]) {
+        typeIdHash[item.type] = true;
+        typeIdList.push(item.type);
+      }
+    });
+    let typeList = await service.worksType.infoList(typeIdList);
+    let typeHash = {};
+    typeList.forEach((item) => {
+      typeHash[item.id] = item;
+    });
+    cache.forEach((item) => {
+      if(item) {
+        item.typeName = typeHash[item.type].name;
+      }
+    });
     return cache;
   }
+
   /**
    * 根据专辑id获取小作品集合信息
    * @param id:int 专辑id
@@ -241,7 +260,7 @@ class Service extends egg.Service {
     let worksHash = {};
     worksList.forEach((item) => {
       worksHash[item.id] = item;
-    });console.log(worksIdList);console.log(worksList);
+    });
     return res.map((item) => {
       let temp = {
         id: item.workId,
@@ -280,16 +299,15 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'worksAuthors_' + id;
+    let cacheKey = 'musicAlbumAuthor_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
       app.redis.expire(cacheKey, CACHE_TIME);
     }
     else {
-      res = await app.model.musicAlbumAuthorProfessionRelation.findAll({
+      res = await app.model.musicAlbumAuthorRelation.findAll({
         attributes: [
-          ['work_id', 'workId'],
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],

@@ -20,8 +20,37 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    const { app } = this;
-    let cacheKey = '';
+    const { app, service } = this;
+    let cacheKey = 'imageAlbumInfo_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.imageAlbum.findOne({
+        attributes: [
+          'id',
+          'title',
+          ['sub_title', 'subTitle'],
+          'state',
+          'cover',
+          'type'
+        ],
+        where: {
+          id,
+        },
+        raw: true,
+      });
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    if(res) {
+      let type = await service.worksType.info(res.type);
+      if(type) {
+        res.typeName = type.name;
+      }
+    }
+    return res;
   }
 
   /**
@@ -36,7 +65,7 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app } = this;
+    const { app, service } = this;
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
@@ -61,34 +90,52 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = squel.select()
-        .from('image_album')
-        .from('works_type')
-        .field('image_album.id')
-        .field('image_album.title')
-        .field('image_album.sub_title', 'subTitle')
-        .field('image_album.state')
-        .field('image_album.cover')
-        .field('image_album.type')
-        .field('works_type.name', 'typeName')
-        .where('image_album.id IN ?', noCacheIdList)
-        .where('image_album.type=works_type.id')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.imageAlbum.findOne({
+        attributes: [
+          'id',
+          'title',
+          ['sub_title', 'subTitle'],
+          'state',
+          'cover',
+          'type'
+        ],
+        where: {
+          id: noCacheIdList,
+        },
+        raw: true,
+      });
       if(res.length) {
         let hash = {};
         res.forEach((item) => {
           let id = item.id;
           hash[id] = item;
         });
-        noCacheIndexList.forEach((i) => {
-          let id = idList[i];
-          let temp = hash[id] || null;
-          cache[i] = temp;
-          app.redis.setex('imageAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
-        });
       }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('imageAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
     }
+    let typeIdList = [];
+    let typeIdHash = {};
+    cache.forEach((item) => {
+      if(item && !typeIdHash[item.type]) {
+        typeIdHash[item.type] = true;
+        typeIdList.push(item.type);
+      }
+    });
+    let typeList = await service.worksType.infoList(typeIdList);
+    let typeHash = {};
+    typeList.forEach((item) => {
+      typeHash[item.id] = item;
+    });
+    cache.forEach((item) => {
+      if(item) {
+        item.typeName = typeHash[item.type].name;
+      }
+    });
     return cache;
   }
 
@@ -102,151 +149,230 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'imageAlbumAuthors_' + id;
+    let cacheKey = 'imageAlbumAuthor_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
       app.redis.expire(cacheKey, CACHE_TIME);
     }
     else {
-      let sql = squel.select()
-        .from('image_album_author_profession_relation')
-        .from('profession')
-        .field('image_album_author_profession_relation.album_id', 'albumId')
-        .field('image_album_author_profession_relation.work_id', 'workId')
-        .field('image_album_author_profession_relation.author_id', 'authorId')
-        .field('image_album_author_profession_relation.profession_id', 'professionId')
-        .field('profession.name', 'professionName')
-        .where('image_album_author_profession_relation.album_id=?', id)
-        .where('image_album_author_profession_relation.is_delete=false')
-        .where('image_album_author_profession_relation.profession_id=profession.id')
-        .toString();
-      res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      res = await app.model.imageAlbumAuthorRelation.findAll({
+        attributes: [
+          ['author_id', 'authorId'],
+          ['profession_id', 'professionId']
+        ],
+        where: {
+          album_id: id,
+          is_delete: false,
+        },
+        raw: true,
+      });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
     let authorIdList = [];
     let authorIdHash = {};
+    let professionIdList = [];
+    let professionIdHash = {};
     res.forEach((item) => {
       let authorId = item.authorId;
       if(!authorIdHash[authorId]) {
         authorIdHash[authorId] = true;
         authorIdList.push(authorId);
       }
+      let professionId = item.professionId;
+      if(!professionIdHash[professionId]) {
+        professionIdHash[professionId] = true;
+        professionIdList.push(professionId);
+      }
     });
-    if(authorIdList.length) {
-      let list = await service.author.infoList(authorIdList);
-      let hash = {};
-      list.forEach((item) => {
-        hash[item.id] = item;
-      });
-      res.forEach((item) => {
-        let authorInfo = hash[item.authorId];
-        if(authorInfo) {
-          item.headUrl = authorInfo.headUrl;
-          item.name = authorInfo.name;
-          item.isSettle = authorInfo.isSettle;
-        }
-      });
+    let [authorList, professionList] = await Promise.all([
+      service.author.infoList(authorIdList),
+      service.profession.infoList(professionIdList)
+    ]);
+    let authorHash = {};
+    let professionHash = {};
+    authorList.forEach((item) => {
+      if(item) {
+        authorHash[item.id] = item;
+      }
+    });
+    professionList.forEach((item) => {
+      if(item) {
+        professionHash[item.id] = item;
+      }
+    });
+    res.forEach((item) => {
+      let authorInfo = authorHash[item.authorId];
+      if(authorInfo) {
+        item.headUrl = authorInfo.headUrl;
+        item.name = authorInfo.name;
+        item.isSettle = authorInfo.isSettle;
+      }
+      let professionInfo = professionHash[item.professionId];
+      if(professionInfo) {
+        item.professionName = professionInfo.name;
+      }
+    });
+    return res;
+  }
+
+  /**
+   * 获取专辑的评论id
+   * @param id:int 专辑id
+   * @returns int
+   */
+  async commentId(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'imageAlbumComment_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.worksCommentRelation.findOne({
+      attributes: [
+        ['comment_id', 'commentId']
+      ],
+      where: {
+        works_id: id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.commentId;
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    else {
+      return;
     }
     return res;
   }
 
   /**
-   * 获取作品id列表的作者列表
-   * @param idList:Array<int> 作品id列表
-   * @returns Array:<Array<Object>>
+   * 获取评论全部信息
+   * @param id:int 作品id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ data:Array<Object>, count:int }
    */
-  async authorList(idList) {
-    if(!idList) {
+  async commentList(id, uid, offset, limit) {
+    if(!id) {
       return;
     }
-    if(!idList.length) {
-      return [];
+    const { service } = this;
+    let commentId = await this.commentId(id);
+    return await service.post.commentList(commentId, uid, offset, limit);
+  }
+
+  /**
+   * 获取图片列表数据
+   * @param id:int 相册id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async imageList(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.imageData(id, uid, offset, limit),
+      this.imageCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取图片列表数据
+   * @param id:int 相册id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async imageData(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
     }
     const { app, service } = this;
-    let cache = await Promise.all(
-      idList.map((id) => {
-        return app.redis.get('imageAlbumAuthors_' + id);
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach((item, i) => {
-      let id = idList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        app.redis.expire('worksAuthors_' + id, CACHE_TIME);
-      }
-      else if(id !== null && id !== undefined) {
-        if(!noCacheIdHash[id]) {
-          noCacheIdHash[id] = true;
-          noCacheIdList.push(id);
-        }
-        noCacheIndexList.push(i);
-      }
+    let res = await app.model.imageAlbumWorkRelation.findAll({
+      attributes: [
+        ['work_id', 'workId']
+      ],
+      where: {
+        album_id: id,
+        kind: 3,
+        is_delete: false,
+      },
+      order: [
+        ['weight', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
     });
-    if(noCacheIdList.length) {
-      let sql = squel.select()
-        .from('image_album_author_profession_relation')
-        .from('profession')
-        .field('image_album_author_profession_relation.album_id', 'albumId')
-        .field('image_album_author_profession_relation.work_id', 'workId')
-        .field('image_album_author_profession_relation.author_id', 'authorId')
-        .field('image_album_author_profession_relation.profession_id', 'professionId')
-        .field('profession.name', 'professionName')
-        .where('image_album_author_profession_relation.album_id IN ?', noCacheIdList)
-        .where('image_album_author_profession_relation.is_delete=false')
-        .where('image_album_author_profession_relation.profession_id=profession.id')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-      let hash = {};
-      if(res.length) {
-        res.forEach((item) => {
-          let worksId = item.worksId;
-          let temp = hash[worksId] = hash[worksId] || [];
-          temp.push(item);
-        });
-      }
-      noCacheIndexList.forEach((i) => {
-        let id = idList[i];
-        let temp = hash[id] || null;
-        cache[i] = temp;
-        app.redis.setex('imageAlbumAuthors_' + id, CACHE_TIME, JSON.stringify(temp));
-      });
-    }
-    let authorIdList = [];
-    let authorIdHash = {};
-    cache.forEach((list) => {
-      if(list && list.length) {
-        list.forEach((item) => {
-          if(!authorIdHash[item.authorId]) {
-            authorIdHash[item.authorId] = true;
-            authorIdList.push(item.authorId);
-          }
-        });
-      }
+    let imageIdList = res.map((item) => {
+      return item.workId;
     });
-    if(authorIdList.length) {
-      let list = await service.author.infoList(authorIdList);
-      let hash = {};
-      list.forEach((item) => {
-        hash[item.id] = item;
-      });
-      cache.forEach((list) => {
-        if(list && list.length) {
-          list.forEach((item) => {
-            let authorInfo = hash[item.authorId];
-            if(authorInfo) {
-              item.headUrl = authorInfo.headUrl;
-              item.name = authorInfo.name;
-              item.isSettle = authorInfo.isSettle;
-            }
-          });
-        }
-      });
+    let [imageList, isLikeList, likeCountList, authorList] = await Promise.all([
+      service.work.imageList(imageIdList),
+      service.work.isLikeList(imageIdList, uid),
+      service.work.likeCountList(imageIdList),
+      service.work.authorList(imageIdList)
+    ]);
+    imageList.forEach((item, i) => {
+      item.isLike = isLikeList[i];
+      item.likeCount = likeCountList[i];
+      item.author = authorList[i];
+    });
+    return imageList;
+  }
+
+  /**
+   * 获取图片数量
+   * @param id:int 相册id
+   * @returns int
+   */
+  async imageCount(id) {
+    if(!id) {
+      return;
     }
-    return cache;
+    const { app } = this;
+    let cacheKey = 'imageAlbumCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.imageAlbumWorkRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        album_id: id,
+        kind: 3,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, res);
+    return res;
   }
 }
 

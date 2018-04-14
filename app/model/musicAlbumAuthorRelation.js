@@ -6,7 +6,7 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('music_album_author_profession_relation', {
+  return sequelizeCircling.define('music_album_author_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -16,16 +16,6 @@ module.exports = app => {
     album_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-    },
-    work_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      allowNull: false,
-    },
-    kind: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-      comment: '0总体，1视频，2音频',
     },
     author_id: {
       type: Sequelize.BIGINT.UNSIGNED,
@@ -53,9 +43,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'album_id_work_id_author_id_profession_id',
+        name: 'album_id_author_id_profession_id',
         unique: true,
-        fields: ['album_id', 'work_id', 'author_id', 'profession_id'],
+        fields: ['album_id', 'author_id', 'profession_id'],
       },
       {
         name: 'author_id',

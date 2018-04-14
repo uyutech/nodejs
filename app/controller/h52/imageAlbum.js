@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2018/4/13.
+ * Created by army8735 on 2018/4/14.
  */
 
 'use strict';
@@ -17,20 +17,32 @@ class Controller extends egg.Controller {
     if(!albumId) {
       return;
     }
-    let [info, author, collection, commentList] = await Promise.all([
-      service.musicAlbum.info(albumId),
-      service.musicAlbum.author(albumId),
-      service.musicAlbum.collection(albumId, uid),
-      service.musicAlbum.commentList(albumId, uid, 0, LIMIT)
+    let [info, author, imageList, commentList] = await Promise.all([
+      service.imageAlbum.info(albumId),
+      service.imageAlbum.author(albumId),
+      service.imageAlbum.imageList(albumId, uid, 0, LIMIT),
+      service.imageAlbum.commentList(albumId, uid, 0, LIMIT)
     ]);
     commentList.limit = LIMIT;
     author = service.works.reorderAuthor(author);
     ctx.body = ctx.helper.okJSON({
       info,
-      collection,
+      imageList,
       author,
       commentList,
     });
+  }
+
+  async imageList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let albumId = parseInt(body.albumId);
+    if(!albumId) {
+      return;
+    }
+    let res = service.imageAlbum.imageList(albumId, uid, body.offset || 0, LIMIT);
+    ctx.body = ctx.helper.okJSON(res);
   }
 
   async commentList() {
@@ -41,7 +53,7 @@ class Controller extends egg.Controller {
     if(!albumId) {
       return;
     }
-    let res = await service.musicAlbum.commentList(albumId, uid, body.offset || 0, LIMIT);
+    let res = await service.imageAlbum.commentList(albumId, uid, body.offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

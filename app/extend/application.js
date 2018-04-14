@@ -20,6 +20,7 @@ const authorAlias = require('../model/authorAlias');
 const circleType = require('../model/circleType');
 const circle = require('../model/circle');
 const circleTagRelation = require('../model/circleTagRelation');
+const circleCommentRelation = require('../model/circleCommentRelation');
 const comment = require('../model/comment');
 const commentMedia = require('../model/commentMedia');
 const profession = require('../model/profession');
@@ -50,11 +51,13 @@ const worksCommentRelation = require('../model/worksCommentRelation');
 const worksRecommend = require('../model/worksRecommend');
 const workAuthorRelation = require('../model/workAuthorRelation');
 const worksAuthorRelation = require('../model/worksAuthorRelation');
-const worksAuthorProfessionRelation = require('../model/worksAuthorProfessionRelation');
 const worksTypeProfessionSort = require('../model/worksTypeProfessionSort');
 const musicAlbum = require('../model/musicAlbum');
 const musicAlbumWorkRelation = require('../model/musicAlbumWorkRelation');
-const musicAlbumAuthorProfessionRelation = require('../model/musicAlbumAuthorProfessionRelation');
+const musicAlbumAuthorRelation = require('../model/musicAlbumAuthorRelation');
+const imageAlbum = require('../model/imageAlbum');
+const imageAlbumWorkRelation = require('../model/imageAlbumWorkRelation');
+const imageAlbumAuthorRelation = require('../model/imageAlbumAuthorRelation');
 const recommend = require('../model/recommend');
 const recommendTag = require('../model/recommendTag');
 const recommendBanner = require('../model/recommendBanner');
@@ -142,6 +145,7 @@ module.exports = {
         circleType: circleType(this),
         circle: circle(this),
         circleTagRelation: circleTagRelation(this),
+        circleCommentRelation: circleCommentRelation(this),
         comment: comment(this),
         commentMedia: commentMedia(this),
         profession: profession(this),
@@ -172,11 +176,13 @@ module.exports = {
         worksRecommend: worksRecommend(this),
         workAuthorRelation: workAuthorRelation(this),
         worksAuthorRelation: worksAuthorRelation(this),
-        worksAuthorProfessionRelation: worksAuthorProfessionRelation(this),
         worksTypeProfessionSort: worksTypeProfessionSort(this),
         musicAlbum: musicAlbum(this),
         musicAlbumWorkRelation: musicAlbumWorkRelation(this),
-        musicAlbumAuthorProfessionRelation: musicAlbumAuthorProfessionRelation(this),
+        musicAlbumAuthorRelation: musicAlbumAuthorRelation(this),
+        imageAlbum: imageAlbum(this),
+        imageAlbumWorkRelation: imageAlbumWorkRelation(this),
+        imageAlbumAuthorRelation: imageAlbumAuthorRelation(this),
         recommend: recommend(this),
         recommendTag: recommendTag(this),
         recommendBanner: recommendBanner(this),

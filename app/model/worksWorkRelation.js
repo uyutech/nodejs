@@ -8,7 +8,7 @@ module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('works_work_relation', {
     id: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
@@ -57,6 +57,10 @@ module.exports = app => {
         name: 'works_id_work_id',
         unique: true,
         fields: ['works_id', 'work_id'],
+      },
+      {
+        name: 'works_id_weight',
+        fields: ['works_id', 'weight'],
       }
     ],
     comment: '大作品小作品关系',

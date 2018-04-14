@@ -318,6 +318,11 @@ module.exports = app => {
   app.post('/h5/works2/unFavor', app.middlewares.needLoginJson(), 'h52.works.unFavor');
 
   app.post('/h5/musicAlbum/index', 'h52.musicAlbum.index');
+  app.post('/h5/musicAlbum/commentList', 'h52.musicAlbum.commentList');
+
+  app.post('/h5/imageAlbum/index', 'h52.imageAlbum.index');
+  app.post('/h5/imageAlbum/imageList', 'h52.imageAlbum.imageList');
+  app.post('/h5/imageAlbum/commentList', 'h52.imageAlbum.commentList');
 
   app.post('/h5/author2/index', 'h52.author.index');
   app.post('/h5/author2/commentList', 'h52.author.commentList');

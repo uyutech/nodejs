@@ -61,8 +61,8 @@ const WorksType = require('./app/model/worksType')({ sequelizeCircling: sequeliz
 const Works = require('./app/model/works')({ sequelizeCircling: sequelize, Sequelize });
 const WorksTypeProfessionSort = require('./app/model/worksTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
 const MusicAlbum = require('./app/model/musicAlbum')({ sequelizeCircling: sequelize, Sequelize });
-const MusicAlbumAuthorProfessionRelation = require('./app/model/musicAlbumAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
-const ImageAlbumAuthorProfessionRelation = require('./app/model/imageAlbumAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
+const MusicAlbumAuthorRelation = require('./app/model/MusicAlbumAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
+const ImageAlbumAuthorRelation = require('./app/model/ImageAlbumAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbum = require('./app/model/imageAlbum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksNum = require('./app/model/worksNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksTimeline = require('./app/model/worksTimeline')({ sequelizeCircling: sequelize, Sequelize });
@@ -614,7 +614,6 @@ async function dealWorksWork(pool) {
         kind: work.kind,
         is_delete: !!item.ISDel,
         weight: item.sort || 0,
-        tag: item.Describe || '',
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -661,8 +660,8 @@ async function dealWorkAuthorProfession(pool) {
   await WorkAuthorRelation.sync();
   await WorksAuthorRelation.sync();
   await WorksAuthorProfessionRelation.sync();
-  await MusicAlbumAuthorProfessionRelation.sync();
-  await ImageAlbumAuthorProfessionRelation.sync();
+  await MusicAlbumAuthorRelation.sync();
+  await ImageAlbumAuthorRelation.sync();
   let last = 61;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Enum_AuthorType WHERE ID>${last};`);
@@ -715,46 +714,46 @@ async function dealWorkAuthorProfession(pool) {
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
-    let worksWork = await WorksWorkRelation.findOne({
-      attributes: ['works_id'],
-      where: {
-        work_id,
-        kind: work.kind,
-      },
-    });
-    if(!worksWork) {
-      let imageWork = await ImageAlbumWorkRelation.findOne({
-        attributes: ['album_id'],
-        where: {
-          work_id,
-          kind: work.kind,
-        },
-      });
-      if(!imageWork) {
-        continue;
-      }
-      await ImageAlbumAuthorProfessionRelation.create({
-        album_id: imageWork.album_id,
-        work_id,
-        kind: work.kind,
-        author_id: item.AuthorID,
-        profession_id: item.Enum_AuthorTypeID,
-        is_delete: false,
-        create_time: item.CreateTime,
-        update_time: item.CreateTime,
-      });
-      continue;
-    }
-    await WorksAuthorProfessionRelation.create({
-      works_id: worksWork.works_id,
-      work_id,
-      kind: work.kind,
-      author_id: item.AuthorID,
-      profession_id: item.Enum_AuthorTypeID,
-      is_delete: false,
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
-    });
+    // let worksWork = await WorksWorkRelation.findOne({
+    //   attributes: ['works_id'],
+    //   where: {
+    //     work_id,
+    //     kind: work.kind,
+    //   },
+    // });
+    // if(!worksWork) {
+    //   let imageWork = await ImageAlbumWorkRelation.findOne({
+    //     attributes: ['album_id'],
+    //     where: {
+    //       work_id,
+    //       kind: work.kind,
+    //     },
+    //   });
+    //   if(!imageWork) {
+    //     continue;
+    //   }
+    //   await ImageAlbumAuthorRelation.create({
+    //     album_id: imageWork.album_id,
+    //     work_id,
+    //     kind: work.kind,
+    //     author_id: item.AuthorID,
+    //     profession_id: item.Enum_AuthorTypeID,
+    //     is_delete: false,
+    //     create_time: item.CreateTime,
+    //     update_time: item.CreateTime,
+    //   });
+    //   continue;
+    // }
+    // await WorksAuthorProfessionRelation.create({
+    //   works_id: worksWork.works_id,
+    //   work_id,
+    //   kind: work.kind,
+    //   author_id: item.AuthorID,
+    //   profession_id: item.Enum_AuthorTypeID,
+    //   is_delete: false,
+    //   create_time: item.CreateTime,
+    //   update_time: item.CreateTime,
+    // });
   }
   hash = {};
   last = 4131;
@@ -783,17 +782,8 @@ async function dealWorkAuthorProfession(pool) {
         },
       });
       if(music) {
-        await WorksAuthorRelation.create({
-          works_id: music.id,
-          author_id: item.AuthorID,
-          profession_id: item.Enum_AuthorTypeID,
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-        await MusicAlbumAuthorProfessionRelation.create({
+        await MusicAlbumAuthorRelation.create({
           album_id: music.id,
-          work_id: 0,
-          kind: 0,
           author_id: item.AuthorID,
           profession_id: item.Enum_AuthorTypeID,
           is_delete: false,
@@ -809,17 +799,8 @@ async function dealWorkAuthorProfession(pool) {
         },
       });
       if(image) {
-        await WorksAuthorRelation.create({
-          works_id: image.id,
-          author_id: item.AuthorID,
-          profession_id: item.Enum_AuthorTypeID,
-          create_time: item.CreateTime,
-          update_time: item.CreateTime,
-        });
-        await ImageAlbumAuthorProfessionRelation.create({
+        await ImageAlbumAuthorRelation.create({
           album_id: image.id,
-          work_id: 0,
-          kind: 0,
           author_id: item.AuthorID,
           profession_id: item.Enum_AuthorTypeID,
           is_delete: false,
@@ -830,15 +811,6 @@ async function dealWorkAuthorProfession(pool) {
       }
       await WorksAuthorRelation.create({
         works_id: item.WorksID,
-        author_id: item.AuthorID,
-        profession_id: item.Enum_AuthorTypeID,
-        create_time: item.CreateTime,
-        update_time: item.CreateTime,
-      });
-      await WorksAuthorProfessionRelation.create({
-        works_id: item.WorksID,
-        work_id: 0,
-        kind: 0,
         author_id: item.AuthorID,
         profession_id: item.Enum_AuthorTypeID,
         is_delete: false,
