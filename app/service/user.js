@@ -1367,7 +1367,6 @@ class Service extends egg.Service {
       service.work.likeCountList(workIdList),
       service.work.isLikeList(workIdList, id)
     ]);
-    let workHash = {};
     workList.forEach((item, i) => {
       if(item) {
         item.likeCount = likeCountList[i] || 0;

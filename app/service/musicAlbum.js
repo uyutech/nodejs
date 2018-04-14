@@ -417,6 +417,179 @@ class Service extends egg.Service {
     let commentId = await this.commentId(id);
     return await service.post.commentList(commentId, uid, offset, limit);
   }
+
+  /**
+   * 根据专辑id列表获取专辑信息以及职种排序规则
+   * @param idList:Array<int> 专辑id列表
+   * @returns Object{ info:Object, professionSort:Array<Object> }
+   */
+  async infoListAndProfessionSort(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [[], []];
+    }
+    const { service } = this;
+    let infoList = await this.infoList(idList);
+    let typeList = [];
+    let typeHash = {};
+    infoList.forEach((item) => {
+      if(item && !typeHash[item.type]) {
+        typeHash[item.type] = true;
+        typeList.push(item.type);
+      }
+    });
+    let list = await service.works.typeListProfessionSort(typeList);
+    let professionSortHash = {};
+    list.forEach((item, i) => {
+      let type = typeList[i];
+      professionSortHash[type] = item;
+    });
+    let professionSortList = infoList.map((item) => {
+      return professionSortHash[item.type];
+    });
+    return [infoList, professionSortList];
+  }
+
+  /**
+   * 获取专辑数据，包括作者信息
+   * @param albumIdList:Array<int> 专辑id列表
+   * @returns Array<Object>
+   */
+  async infoListPlus(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [[], []];
+    }
+    const { service } = this;
+    let [[infoList, professionSortList], authorList] = await Promise.all([
+      this.infoListAndProfessionSort(idList),
+      this.authorList(idList),
+    ]);
+    authorList.forEach((author, i) => {
+      authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
+    });
+    return [infoList, authorList];
+  }
+
+  /**
+   * 获取专辑id列表的作者列表
+   * @param idList:Array<int> 专辑id列表
+   * @returns Array:<Array<Object>>
+   */
+  async authorList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app, service } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('musicAlbumAuthor_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('musicAlbumAuthor_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.musicAlbumAuthorRelation.findAll({
+        attributes: [
+          ['album_id', 'albumId'],
+          ['author_id', 'authorId'],
+          ['profession_id', 'professionId']
+        ],
+        where: {
+          album_id: noCacheIdList,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.albumId;
+          let temp = hash[id] = hash[id] || [];
+          temp.push({
+            id: item.authorId,
+            professionId: item.professionId,
+          });
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let item = hash[id] || [];
+        if(item) {
+          cache[i] = item;
+          app.redis.setex('musicAlbumAuthor_' + id, CACHE_TIME, JSON.stringify(item));
+        }
+      });
+    }
+    let authorIdList = [];
+    let authorIdHash = {};
+    let professionIdList = [];
+    let professionIdHash = {};
+    cache.forEach((list) => {
+      list.forEach((item) => {
+        let authorId = item.id;
+        if(!authorIdHash[authorId]) {
+          authorIdHash[authorId] = true;
+          authorIdList.push(authorId);
+        }
+        let professionId = item.professionId;
+        if(!professionIdHash[professionId]) {
+          professionIdHash[professionId] = true;
+          professionIdList.push(professionId);
+        }
+      });
+    });
+    let [authorList, professionList] = await Promise.all([
+      service.author.infoList(authorIdList),
+      service.profession.infoList(professionIdList)
+    ]);
+    let authorHash = {};
+    authorList.forEach((item) => {
+      authorHash[item.id] = item;
+    });
+    let professionHash = {};
+    professionList.forEach((item) => {
+      professionHash[item.id] = item;
+    });
+    cache.forEach((list) => {
+      list.forEach((item) => {
+        let authorInfo = authorHash[item.id];
+        if(authorInfo) {
+          item.headUrl = authorInfo.headUrl;
+          item.name = authorInfo.name;
+          item.isSettle = authorInfo.isSettle;
+        }
+        let professionInfo = professionHash[item.professionId];
+        if(professionInfo) {
+          item.professionName = professionInfo.name;
+        }
+      });
+    });
+    return cache;
+  }
 }
 
 module.exports = Service;

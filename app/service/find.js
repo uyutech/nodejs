@@ -93,6 +93,10 @@ class Service extends egg.Service {
     let worksIdHash = {};
     let authorIdList = [];
     let authorIdHash = {};
+    let musicAlbumIdList = [];
+    let musicAlbumIdHash = {};
+    let imageAlbumIdList = [];
+    let imageAlbumIdHash = {};
     res.forEach((item) => {
       switch(item.type) {
         case 1:
@@ -100,6 +104,20 @@ class Service extends egg.Service {
           if(!worksIdHash[item.content]) {
             worksIdHash[item.content] = true;
             worksIdList.push(item.content);
+          }
+          break;
+        case 2:
+          item.content = item.content.trim();
+          if(!musicAlbumIdHash[item.content]) {
+            musicAlbumIdHash[item.content] = true;
+            musicAlbumIdList.push(item.content);
+          }
+          break;
+        case 3:
+          item.content = item.content.trim();
+          if(!imageAlbumIdHash[item.content]) {
+            imageAlbumIdHash[item.content] = true;
+            imageAlbumIdList.push(item.content);
           }
           break;
         case 4:
@@ -122,8 +140,16 @@ class Service extends egg.Service {
           break;
       }
     });
-    let [[worksList, worksAuthorList], authorList, fansCountList] = await Promise.all([
+    let [
+      [worksList, worksAuthorList],
+      [musicAlbumList, musicAlbumAuthorList],
+      [imageAlbumList, imageAlbumAuthorList],
+      authorList,
+      fansCountList
+    ] = await Promise.all([
       service.works.infoListPlus(worksIdList),
+      service.musicAlbum.infoListPlus(musicAlbumIdList),
+      service.imageAlbum.infoListPlus(imageAlbumIdList),
       service.author.infoList(authorIdList),
       service.author.fansCountList(authorIdList)
     ]);
@@ -131,8 +157,7 @@ class Service extends egg.Service {
     worksList.forEach((item, i) => {
       if(item) {
         worksHash[item.id] = item;
-        let author = worksAuthorList[i];
-        item.author = author.length ? author[0] : [];
+        item.author = worksAuthorList[i][0];
       }
     });
     let authorHash = {};
@@ -142,10 +167,30 @@ class Service extends egg.Service {
         item.fansCount = fansCountList[i];
       }
     });
+    let musicAlbumHash = {};
+    musicAlbumList.forEach((item, i) => {
+      if(item) {
+        musicAlbumHash[item.id] = item;
+        item.author = musicAlbumAuthorList[i][0];
+      }
+    });
+    let imageAlbumHash = {};
+    imageAlbumList.forEach((item, i) => {
+      if(item) {
+        imageAlbumHash[item.id] = item;
+        item.author = imageAlbumAuthorList[i][0];
+      }
+    });
     res.forEach((item) => {
       switch(item.type) {
         case 1:
           item.content = worksHash[item.content];
+          break;
+        case 2:
+          item.content = musicAlbumList[item.content];
+          break;
+        case 3:
+          item.content = imageAlbumHash[item.content];
           break;
         case 4:
           item.content = item.content.map((item) => {
@@ -199,21 +244,23 @@ class Service extends egg.Service {
   /**
    * 根据kind类型获取推荐列表
    * @param kind:int 类型
+   * @param uid:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页尺寸
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async kind(kind, offset, limit) {
+  async kindList(kind, uid, offset, limit) {
     if(!kind) {
       return;
     }
     let [data, count] = await Promise.all([
-      this.kindData(kind, offset, limit),
+      this.kindData(kind, uid, offset, limit),
       this.kindCount(kind)
     ]);
     return { data, count };
   }
-  async kindData(kind, offset, limit) {
+
+  async kindData(kind, uid, offset, limit) {
     if(!kind) {
       return;
     }
@@ -227,20 +274,22 @@ class Service extends egg.Service {
     let cacheKey = 'findKind_' + kind + '_' + offset + '_' + limit;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      res = JSON.parse(res);
       app.redis.expire(cacheKey, CACHE_TIME);
+      res = JSON.parse(res);
     }
     else {
       res = await app.model.recommendList.findAll({
         attributes: [
-          ['works_id', 'worksId']
+          ['works_id', 'worksId'],
+          ['work_id', 'workId']
         ],
         where: {
           kind,
           is_delete: false,
         },
         order: [
-          ['weight', 'DESC']
+          ['weight', 'DESC'],
+          ['id', 'DESC']
         ],
         offset,
         limit,
@@ -248,14 +297,104 @@ class Service extends egg.Service {
       });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     }
-    let idList = res.map((item) => {
-      return item.worksId;
+    let worksIdList = [];
+    let worksIdHash = {};
+    let workIdList = [];
+    let workIdHash = {};
+    res.forEach((item) => {
+      if(!worksIdHash[item.worksId]) {
+        worksIdList.push(item.worksId);
+      }
+      if(!workIdHash[item.workId]) {
+        workIdList.push(item.workId);
+      }
     });
-    switch(kind) {
-      case 1:
-        return service.works.infoListPlus(idList);
+    if(kind === 1) {
+      let [
+        [worksList, authorList],
+        workList,
+        likeCountList,
+        isLikeList,
+        commentCountList,
+        playCountList
+      ] = await Promise.all([
+        service.works.infoListPlus(worksIdList),
+        service.work.videoList(workIdList),
+        service.work.likeCountList(workIdList),
+        service.work.isLikeList(workIdList, uid),
+        service.works.commentCountList(worksIdList),
+        service.work.playCountList(workIdList)
+      ]);
+      let worksHash = {};
+      worksList.forEach((item, i) => {
+        item.author = authorList[i][0];
+        item.commentCount = commentCountList[i];
+        worksHash[item.id] = item;
+      });
+      workList.forEach((item, i) => {
+        if(item) {
+          item.likeCount = likeCountList[i] || 0;
+          item.isLike = isLikeList[i] || false;
+          item.playCount = playCountList[i] || 0;
+        }
+      });
+      return res.map((item, i) => {
+        let works = worksHash[item.worksId];
+        if(works) {
+          let copy = Object.assign({}, works);
+          let work = workList[i];
+          if(work) {
+            copy.work = work;
+          }
+          return copy;
+        }
+      });
+    }
+    else if(kind === 2) {
+      let [[worksList, authorList], workList] = await Promise.all([
+        service.works.infoListPlus(worksIdList),
+        service.work.audioList(workIdList)
+      ]);
+      let worksHash = {};
+      worksList.forEach((item, i) => {
+        item.author = authorList[i][0];
+        worksHash[item.id] = item;
+      });
+      return res.map((item, i) => {
+        let works = worksHash[item.worksId];
+        if(works) {
+          let copy = Object.assign({}, works);
+          let work = workList[i];
+          if(work) {
+            copy.work = work;
+          }
+          return copy;
+        }
+      });
+    }
+    else if(kind === 3) {
+      let [
+        workList,
+        authorList,
+        likeCountList,
+        isLikeList
+      ] = await Promise.all([
+        service.work.imageList(workIdList),
+        service.work.authorList(workIdList),
+        service.work.likeCountList(workIdList),
+        service.work.isLikeList(workIdList, uid)
+      ]);
+      workList.forEach((item, i) => {
+        if(item) {
+          item.likeCount = likeCountList[i] || 0;
+          item.isLike = isLikeList[i] || false;
+          item.author = authorList[i];
+        }
+      });
+      return workList;
     }
   }
+
   async kindCount(kind) {
     if(!kind) {
       return;

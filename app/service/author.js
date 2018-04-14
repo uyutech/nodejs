@@ -952,24 +952,6 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取作者参与小作品种类的小大作品基本信息列表
-   * @param id:int 作者id
-   * @param kind:int 种类
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Array<Object>
-   */
-  async kindWorkBaseList(id, kind, offset, limit) {
-    if(!id || !kind) {
-      return;
-    }
-    const { service } = this;
-    let idList = await this.kindWorkIdList(id, kind, offset, limit);
-    let authorBaseList = await service.work.authorBaseList(idList);
-    return authorBaseList;
-  }
-
-  /**
    * 获取作者在小作品中的职种列表
    * @param id:int 作者id
    * @param workId:int 作品id

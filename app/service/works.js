@@ -813,8 +813,8 @@ class Service extends egg.Service {
       let hash = {};
       if(res.length) {
         res.forEach((item) => {
-          let worksId = item.worksId;
-          let temp = hash[worksId] = hash[worksId] || [];
+          let id = item.worksId;
+          let temp = hash[id] = hash[id] || [];
           temp.push({
             id: item.authorId,
             professionId: item.professionId,
@@ -1000,7 +1000,7 @@ class Service extends egg.Service {
 
   /**
    * 根据作品id列表获取作品信息以及职种排序规则
-   * @param idList:int 作品id列表
+   * @param idList:Array<int> 作品id列表
    * @returns Object{ info:Object, professionSort:Array<Object> }
    */
   async infoListAndProfessionSort(idList) {
@@ -1008,7 +1008,7 @@ class Service extends egg.Service {
       return;
     }
     if(!idList.length) {
-      return [];
+      return [[], []];
     }
     let infoList = await this.infoList(idList);
     let typeList = [];
@@ -1107,20 +1107,20 @@ class Service extends egg.Service {
 
   /**
    * 获取大作品数据，包括作者信息
-   * @param worksIdList:Array<int> 大作品id列表
-   * @returns Array<Object>
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<Array<Object>, Array<Object>>
    */
-  async infoListPlus(worksIdList) {
-    if(!worksIdList) {
+  async infoListPlus(idList) {
+    if(!idList) {
       return;
     }
-    if(!worksIdList.length) {
-      return [];
+    if(!idList.length) {
+      return [[], []];
     }
     let [[infoList, professionSortList], authorList, collectionAuthorList] = await Promise.all([
-      this.infoListAndProfessionSort(worksIdList),
-      this.authorList(worksIdList),
-      this.collectionListAuthor(worksIdList),
+      this.infoListAndProfessionSort(idList),
+      this.authorList(idList),
+      this.collectionListAuthor(idList),
     ]);
     collectionAuthorList.forEach((arr, i) => {
       arr.forEach((item) => {
@@ -1131,84 +1131,6 @@ class Service extends egg.Service {
       authorList[i] = this.reorderAuthor(author, professionSortList[i]);
     });
     return [infoList, authorList];
-  }
-
-  /**
-   * 包装大作品数据，补上主要作者信息
-   * @param worksList:Array<Object> 大作品基本信息
-   * @param authorList:Array<Object> 作者基本信息
-   * @returns Array<Object>
-   */
-  async infoListPlusByAuthor(worksList, authorList) {
-    if(!worksList) {
-      return;
-    }
-    if(!worksList.length) {
-      return [];
-    }
-    if(!authorList.length) {
-      return worksList;
-    }
-    const { ctx } = this;
-    let worksHash = {};
-    let authorHash = {};
-    let typeList = [];
-    let typeHash = {};
-    worksList.forEach((item) => {
-      if(item) {
-        let id = item.id;
-        if(!worksHash[id]) {
-          worksHash[id] = item;
-        }
-        if(!typeHash[item.type]) {
-          typeHash[item.type] = true;
-          typeList.push(item.type);
-        }
-      }
-    });
-    authorList.forEach((item) => {
-      if(item && item.length) {
-        if(!authorHash[item[0].worksId]) {
-          authorHash[item[0].worksId] = item;
-        }
-      }
-    });
-    let professionSortHash = {};
-    if(typeList) {
-      let professionSortList = await this.typeListProfessionSort(typeList);
-      professionSortList.forEach((item) => {
-        if(item && item.length) {
-          if(!professionSortHash[item[0].worksType]) {
-            professionSortHash[item[0].worksType] = item;
-          }
-        }
-      });
-    }
-    worksList.forEach((item) => {
-      if(item) {
-        let id = item.id;
-        let author = authorHash[id];
-        if(author) {
-          if(item.type) {
-            let professionSort = professionSortHash[item.type];
-            if(professionSort) {
-              item.author = this.reorderAuthor(author, professionSort)[0];
-            }
-            else {
-              item.author = this.reorderAuthor(author)[0];
-            }
-          }
-          else {
-            item.author = this.reorderAuthor(author)[0];
-            ctx.logger.error('miss type worksId:%s', id);
-          }
-        }
-        else {
-          ctx.logger.error('miss author worksId:%s', id);
-        }
-      }
-    });
-    return worksList;
   }
 
   /**

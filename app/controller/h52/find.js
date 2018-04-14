@@ -30,12 +30,12 @@ class Controller extends egg.Controller {
     });
     let banner = [];
     let list = {};
-    let kind;
+    let kindList;
     if(tag.length) {
-      [banner, list, kind] = await Promise.all([
+      [banner, list, kindList] = await Promise.all([
         service.find.banner(tag[0].id),
         service.find.list(tag[0].id, 0, LIMIT),
-        service.find.kind(tag[0].kind, 0, LIMIT)
+        service.find.kindList(tag[0].kind, uid, 0, LIMIT)
       ]);
       list.limit = LIMIT;
     }
@@ -43,43 +43,45 @@ class Controller extends egg.Controller {
       tag,
       banner,
       list,
-      kind,
+      kindList,
     });
   }
   async tag() {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    if(!body.tag || !body.kind) {
+    let tag = parseInt(body.tag);
+    let kind = parseInt(body.kind);
+    let offset = parseInt(body.offset);
+    if(!tag) {
       return;
     }
-    let offset = body.offset || 0;
-    offset = parseInt(offset) || 0;
-    let banner;
-    let list;
-    let kind;
-    if(body.kind && body.kind !== '0') {
+    let banner = [];
+    let list = {};
+    let kindList;
+    if(kind) {
       if(offset) {
-        kind = await service.find.kind(kind, offset, LIMIT);
+        kindList = await service.find.kindList(kind, uid, offset, LIMIT);
       }
       else {
-        [banner, list, kind] = await Promise.all([
-          service.find.banner(body.tag),
-          service.find.list(body.tag, offset, LIMIT),
-          service.find.kind(body.kind, offset, LIMIT)
+        [banner, list, kindList] = await Promise.all([
+          service.find.banner(tag),
+          service.find.list(tag, 0, LIMIT),
+          service.find.kindList(kind, uid, 0, LIMIT)
         ]);
-        list.limit = LIMIT;
-        kind.limit = LIMIT;
       }
     }
     else {
-      list = await service.find.list(body.tag, offset, LIMIT);
-      list.limit = LIMIT;
+      [banner, list] = await Promise.all([
+        service.find.banner(tag),
+        service.find.list(tag, offset, LIMIT)
+      ]);
     }
+    list.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       banner,
       list,
-      kind,
+      kindList,
     });
   }
 }

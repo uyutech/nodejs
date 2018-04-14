@@ -17,6 +17,10 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    work_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+    },
     kind: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
@@ -36,9 +40,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'kind_works_id',
+        name: 'kind_work_id',
         unique: true,
-        fields: ['kind', 'works_id']
+        fields: ['kind', 'work_id']
       },
       {
         name: 'kind_weight',
