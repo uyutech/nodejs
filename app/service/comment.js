@@ -1204,12 +1204,14 @@ class Service extends egg.Service {
     let list = [];
     let hash = {};
     tagIdList.forEach((arr) => {
-      arr.forEach((tagId) => {
-        if(!hash[tagId]) {
-          hash[tagId] = true;
-          list.push(tagId);
-        }
-      });
+      if(arr) {
+        arr.forEach((tagId) => {
+          if(!hash[tagId]) {
+            hash[tagId] = true;
+            list.push(tagId);
+          }
+        });
+      }
     });
     let circleIdList = await service.tag.circleIdList(list, 1);
     let list2 = [];
@@ -1232,26 +1234,30 @@ class Service extends egg.Service {
     });
     let tagCircleHash = {};
     list.forEach((tagId) => {
-      let temp = tagCircleHash[tagId] = [];
-      circleIdList.forEach((circleIds) => {
-        circleIds.forEach((circleId) => {
-          temp.push(circleHash[circleId]);
+      if(tagId) {
+        let temp = tagCircleHash[tagId] = [];
+        circleIdList.forEach((circleIds) => {
+          circleIds.forEach((circleId) => {
+            temp.push(circleHash[circleId]);
+          });
         });
-      });
+      }
     });
     return tagIdList.map((arr) => {
-      let temp = [];
-      let hash = {};
-      arr.forEach((tagId) => {
-        let circleList = tagCircleHash[tagId];
-        circleList.forEach((circle) => {
-          if(!hash[circle.id]) {
-            hash[circle.id] = true;
-            temp.push(circle);
-          }
+      if(arr) {
+        let temp = [];
+        let hash = {};
+        arr.forEach((tagId) => {
+          let circleList = tagCircleHash[tagId];
+          circleList.forEach((circle) => {
+            if(!hash[circle.id]) {
+              hash[circle.id] = true;
+              temp.push(circle);
+            }
+          });
         });
-      });
-      return temp;
+        return temp;
+      }
     });
   }
 
