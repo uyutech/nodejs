@@ -186,8 +186,8 @@ class Service extends egg.Service {
         case 1:
           item.content = worksHash[item.content];
           break;
-        case 2:
-          item.content = musicAlbumList[item.content];
+        case 2:console.log(item.content);
+          item.content = musicAlbumHash[item.content];
           break;
         case 3:
           item.content = imageAlbumHash[item.content];

@@ -47,7 +47,7 @@ class Controller extends egg.Controller {
     });
   }
   async tag() {
-    const { ctx, app, service } = this;
+    const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let tag = parseInt(body.tag);
