@@ -60,21 +60,20 @@ class Controller extends egg.Controller {
     let circleId = (body.circleId || '').split(',');
     let offset = parseInt(body.offset);
     let res;
-    if(circleId.length) {
-      // let tagIdList = await service.circle.tagIdList(circleId);
-      // let temp = [];
-      // let hash = {};
-      // tagIdList.forEach((arr) => {
-      //   arr.forEach((item) => {
-      //     if(!hash[item]) {
-      //       hash[item] = true;
-      //       temp.push(item);
-      //     }
-      //   });
-      // });
-      // if(temp.length) {
-      //   res = await service.tag.listPostList(temp, uid, offset || 0, LIMIT);
-      // }
+    if(circleId.length && circleId[0]) {
+      let query = await Promise.all(
+        circleId.map((id) => {
+          return service.circle.postList(id, uid, offset || 0, LIMIT);
+        })
+      );
+      res = {
+        data: [],
+        count: 0,
+      };
+      query.forEach((item) => {
+        res.data = res.data.concat(item.data);
+        res.count += item.count;
+      });
     }
     else {
       res = await service.post.all(uid, offset || 0, LIMIT);
