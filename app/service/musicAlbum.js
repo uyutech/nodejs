@@ -96,7 +96,7 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let res = await app.model.musicAlbum.findOne({
+      let res = await app.model.musicAlbum.findAll({
         attributes: [
           'id',
           'title',

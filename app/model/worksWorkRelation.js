@@ -59,8 +59,8 @@ module.exports = app => {
         fields: ['works_id', 'work_id'],
       },
       {
-        name: 'works_id_weight',
-        fields: ['works_id', 'weight'],
+        name: 'work_id',
+        fields: ['work_id'],
       }
     ],
     comment: '大作品小作品关系',

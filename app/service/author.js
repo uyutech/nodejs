@@ -618,16 +618,18 @@ class Service extends egg.Service {
         return JSON.parse(res);
       }
     }
-    let sql = squel.select()
-      .from('music_album_author_profession_relation')
-      .field('album_id', 'albumId')
-      .distinct()
-      .where('author_id=?', id)
-      .where('is_delete=false')
-      .offset(offset)
-      .limit(limit)
-      .toString();
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    res = await app.model.musicAlbumAuthorRelation.findAll({
+      attributes: [
+        ['album_id', 'albumId']
+      ],
+      where: {
+        author_id: id,
+        is_delete: false,
+      },
+      offset: offset,
+      limit: limit,
+      raw: true,
+    });
     let idList = res.map((item) => {
       return item.albumId;
     });
@@ -677,7 +679,7 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.musicAlbumAuthorProfessionRelation.findOne({
+    res = await app.model.musicAlbumAuthorRelation.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
@@ -714,21 +716,23 @@ class Service extends egg.Service {
       kindList = JSON.parse(kindList);
     }
     else {
-      let sql = squel.select()
-        .from('works_author_profession_relation')
-        .field('kind')
-        .distinct()
-        .where('author_id=?', id)
-        .order('kind')
-        .toString();
-      kindList = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      kindList = await app.model.workAuthorRelation.findAll({
+        attributes: [
+          Sequelize.literal('DISTINCT kind')
+        ],
+        where: {
+          author_id: id,
+          is_delete: false,
+        },
+        raw: true,
+      });
       kindList = kindList.map((item) => {
         return item.kind;
       });
       app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(kindList));
     }
     // 取得种类列表下对应的职种id列表
-    let professionIdList = await this.workKindListProfessionIdList(id, kindList);
+    let professionIdList = await this.workKindListProfessionId(id, kindList);
     let professionIdHash = {};
     let pid = [];
     professionIdList.forEach((list) => {
@@ -745,7 +749,7 @@ class Service extends egg.Service {
     professionList.forEach((item) => {
       professionHash[item.id] = item;
     });
-    let res = kindList.map((kind, i) => {
+    return kindList.map((kind, i) => {
       let temp = {
         kind,
         name: service.work.getKindName(kind),
@@ -759,7 +763,6 @@ class Service extends egg.Service {
       temp.professionList = list;
       return temp;
     });
-    return res;
   }
 
   /**
@@ -768,7 +771,7 @@ class Service extends egg.Service {
    * @param kindList:Array<int> 种类列表
    * @returns {Promise<void>}
    */
-  async workKindListProfessionIdList(id, kindList) {
+  async workKindListProfessionId(id, kindList) {
     if(!id || !kindList) {
       return;
     }
@@ -778,7 +781,7 @@ class Service extends egg.Service {
     const { app } = this;
     let cache = await Promise.all(
       kindList.map((kind) => {
-        return app.redis.get('authorWorkKindListProfessionIdList_' + id + '_' + kind);
+        return app.redis.get('authorWorkKindListProfessionId_' + id + '_' + kind);
       })
     );
     let noCacheIdList = [];
@@ -788,7 +791,7 @@ class Service extends egg.Service {
       let kind = kindList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME);
+        app.redis.expire('authorWorkKindListProfessionId_' + id + '_' + kind, CACHE_TIME);
       }
       else if(kind !== null && kind !== undefined) {
         if(!noCacheIdHash[kind]) {
@@ -799,15 +802,18 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = squel.select()
-        .from('works_author_profession_relation')
-        .field('profession_id', 'professionId')
-        .field('kind')
-        .distinct()
-        .where('author_id=?', id)
-        .where('kind IN ?', noCacheIdList)
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.workAuthorRelation.findAll({
+        attributes: [
+          Sequelize.literal('DISTINCT profession_id AS professionId'),
+          'kind'
+        ],
+        where: {
+          author_id: id,
+          kind: noCacheIdList,
+          is_delete: false,
+        },
+        raw: true,
+      });
       let hash = {};
       if(res.length) {
         res.forEach((item) => {
@@ -819,7 +825,7 @@ class Service extends egg.Service {
         let kind = kindList[i];
         let temp = hash[kind] || null;
         cache[i] = temp;
-        app.redis.setex('authorWorkKindListProfessionIdList_' + id + '_' + kind, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('authorWorkKindListProfessionId_' + id + '_' + kind, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;
@@ -832,10 +838,10 @@ class Service extends egg.Service {
    * @param kind:int 种类
    * @param offset:int 分页开始
    * @param limit:int 分页数量
-   * @returns Array<Object>
+   * @returns Array<int>
    */
   async kindWorkIdList(id, kind, offset, limit) {
-    if(!id || kind === null || kind === undefined) {
+    if(!id || !kind) {
       return;
     }
     offset = parseInt(offset) || 0;
@@ -853,21 +859,22 @@ class Service extends egg.Service {
         return JSON.parse(res);
       }
     }
-    let sql = squel.select()
-      .from('works_author_profession_relation')
-      .from('works')
-      .field('works_author_profession_relation.work_id', 'workId')
-      .distinct()
-      .where('works_author_profession_relation.author_id=?', id)
-      .where('works_author_profession_relation.kind=?', kind)
-      .where('works_author_profession_relation.is_delete=false')
-      .where('works_author_profession_relation.works_id=works.id')
-      .where('works.state=0')
-      .order('workId', false)
-      .offset(offset)
-      .limit(limit)
-      .toString();
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    res = await app.model.workAuthorRelation.findAll({
+      attributes: [
+        Sequelize.literal('DISTINCT work_id AS workId')
+      ],
+      where: {
+        author_id: id,
+        kind,
+        is_delete: false,
+      },
+      order: [
+        ['work_id', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
     res = res.map((item) => {
       return item.workId;
     });
@@ -880,30 +887,85 @@ class Service extends egg.Service {
   /**
    * 获取作者参与小作品种类的小大作品基本信息列表
    * @param id:int 作者id
-   * @param idList:Array<int> 小作品id列表
+   * @param kind:int 种类
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async kindWorkBaseList(id, idList) {
-    if(!id || !idList) {
+  async kindWorkBaseList(id, kind, offset, limit) {
+    if(!id || !kind) {
       return;
     }
-    if(!idList.length) {
+    const { service } = this;
+    let idList = await this.kindWorkIdList(id, kind, offset, limit);
+    let authorBaseList = await service.work.authorBaseList(idList);
+    return authorBaseList;
+  }
+
+  /**
+   * 获取作者在小作品中的职种列表
+   * @param id:int 作者id
+   * @param workId:int 作品id
+   * @returns Array<int>
+   */
+  async workProfessionIdList(id, workId) {
+    if(!id || !workId) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'authorWorkProfessionIdList_' + id + '_' + workId;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.workAuthorRelation.findAll({
+      attributes: [
+        ['profession_id', 'professionId']
+      ],
+      where: {
+        author_id: id,
+        work_id: workId,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    res = res.map((item) => {
+      return item.professionId;
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取作者在小作品列表中的职种
+   * @param id:int 作者id
+   * @param workIdList:Array<int> 作品id列表
+   * @returns Array<Array<int>>
+   */
+  async workListProfessionIdList(id, workIdList) {
+    if(!id || !workIdList) {
+      return;
+    }
+    if(!workIdList.length) {
       return [];
     }
     const { app } = this;
     let cache = await Promise.all(
-      idList.map((workId) => {
-        return app.redis.get('authorKindWorkBaseList_' + workId);
+      workIdList.map((workId) => {
+        if(workId !== null && workId !== undefined) {
+          return app.redis.get('authorWorkProfessionIdList_' + id + '_' + workId);
+        }
       })
     );
     let noCacheIdList = [];
     let noCacheIdHash = {};
     let noCacheIndexList = [];
     cache.forEach((item, i) => {
-      let workId = idList[i];
+      let workId = workIdList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('authorKindWorkBaseList_' + workId, CACHE_TIME);
+        app.redis.expire('authorWorkProfessionIdList_' + id + '_' + workId, CACHE_TIME);
       }
       else if(workId !== null && workId !== undefined) {
         if(!noCacheIdHash[workId]) {
@@ -914,39 +976,53 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let res = await app.model.worksAuthorProfessionRelation.findAll({
+      let res = await app.model.workAuthorRelation.findAll({
         attributes: [
           ['work_id', 'workId'],
-          ['works_id', 'worksId'],
           ['profession_id', 'professionId']
         ],
         where: {
           author_id: id,
           work_id: noCacheIdList,
+          is_delete: false,
         },
         raw: true,
       });
       let hash = {};
       if(res.length) {
         res.forEach((item) => {
-          let temp = hash[item.workId] = hash[item.workId] || {
-            worksId: item.worksId,
-            workId: item.workId,
-            professionIdList: [],
-          };
-          if(item.worksId === temp.worksId) {
-            temp.professionIdList.push(item.professionId);
-          }
+          let id = item.workId;
+          let temp = hash[id] = hash[id] || [];
+          temp.push(item.professionId);
         });
       }
       noCacheIndexList.forEach((i) => {
-        let workId = idList[i];
-        let temp = hash[workId] || null;
+        let workId = workIdList[i];
+        let temp = hash[workId] || [];
         cache[i] = temp;
-        app.redis.setex('authorKindWorkBaseList_' + workId, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('authorWorkProfessionIdList_' + id + '_' + workId, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;
+  }
+
+  /**
+   * 获取作者参与小作品种类的大作品列表和分页数据
+   * @param id:int 作者id
+   * @param kind:int 种类
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ data: Array<Object>, count: int }
+   */
+  async kindWorkList(id, kind, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.kindWorkData(id, kind, offset, limit),
+      this.kindWorkSize(id, kind)
+    ]);
+    return { data, count };
   }
 
   /**
@@ -962,88 +1038,45 @@ class Service extends egg.Service {
       return;
     }
     const { service } = this;
-    let idList = await this.kindWorkIdList(id, kind, offset, limit);
-    let list = await this.kindWorkBaseList(id, idList);
-    let worksIdList = [];
-    let worksIdHash = {};
-    let workIdList = [];
-    let workIdHash = {};
-    let professionIdList = [];
-    let professionIdHash = {};
-    list.forEach((item) => {
-      let worksId = item.worksId;
-      if(!worksIdHash[worksId]) {
-        worksIdHash[worksId] = true;
-        worksIdList.push(worksId);
-      }
-      let workId = item.workId;
-      if(!workIdHash[workId]) {
-        workIdHash[workId] = true;
-        workIdList.push(workId);
-      }
-      let pIdList = item.professionIdList;
-      pIdList.forEach((professionId) => {
-        if(!professionIdHash[professionId]) {
-          professionIdHash[professionId] = true;
-          professionIdList.push(professionId);
-        }
-      });
-    });
-    let [worksInfoList, professionInfoList, workInfoList] = await Promise.all([
-      service.works.infoList(worksIdList),
-      service.profession.infoList(professionIdList),
+    let workIdList = await this.kindWorkIdList(id, kind, offset, limit);
+    let [professionIdList, worksIdList, workList] = await Promise.all([
+      this.workListProfessionIdList(id, workIdList),
+      service.work.belongIdList(workIdList),
       service.work.infoList(workIdList, kind)
     ]);
-    let worksInfoHash = {};
-    worksInfoList.forEach((item) => {
-      worksInfoHash[item.id] = item;
-    });
-    let workInfoHash = {};
-    workInfoList.forEach((item) => {
-      workInfoHash[item.id] = item;
-    });
-    let professionInfoHash = {};
-    professionInfoList.forEach((item) => {
-      professionInfoHash[item.id] = item;
-    });
-    return list.map((item) => {
-      let temp = {
-        id: item.worksId,
-      };
-      if(worksInfoHash[temp.id]) {
-        Object.assign(temp, worksInfoHash[temp.id]);
-      }
-      if(workInfoHash[item.workId]) {
-        temp.work = workInfoHash[item.workId];
-      }
-      temp.professionList = [];
-      let pIdList = item.professionIdList;
-      pIdList.forEach((professionId) => {
-        if(professionInfoHash[professionId]) {
-          temp.professionList.push(professionInfoHash[professionId]);
+    let idList = [];
+    let hash = {};
+    professionIdList.forEach((arr) => {
+      arr.forEach((id) => {
+        if(!hash[id]) {
+          hash[id] = true;
+          idList.push(id);
         }
       });
-      return temp;
     });
-  }
-
-  /**
-   * 获取作者参与小作品种类的大作品列表和分页数据
-   * @param id:int 作者id
-   * @param kind:int 种类
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns { data: Array<Object>, count: int }
-   */
-  async kindWork(id, kind, offset, limit) {
-    if(!id) {
-      return;
-    }
-    let [data, count] = await Promise.all([
-      this.kindWorkData(id, kind, offset, limit),
-      this.kindWorkSize(id, kind)
+    let [professionList, worksList] = await Promise.all([
+      service.profession.infoList(idList),
+      service.works.infoList(worksIdList)
     ]);
-    return { data, count };
+    let professionHash = {};
+    professionList.forEach((item) => {
+      professionHash[item.id] = item;
+    });
+    let worksHash = {};
+    worksList.forEach((item) => {
+      worksHash[item.id] = item;
+    });
+    return workIdList.map((workId, i) => {
+      let worksId = worksIdList[i];
+      let works = Object.assign({}, worksHash[worksId]);
+      let work = workList[i];
+      works.work = work;
+      let pIdList = professionIdList[i];
+      work.profession = pIdList.map((professionId) => {
+        return professionHash[professionId];
+      });
+      return works;
+    });
   }
 
   /**
@@ -1063,19 +1096,19 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = squel.select()
-      .from('works_author_profession_relation')
-      .from('works')
-      .field('COUNT(DISTINCT works_author_profession_relation.work_id)', 'num')
-      .where('works_author_profession_relation.author_id=?', id)
-      .where('works_author_profession_relation.kind=?', kind)
-      .where('works_author_profession_relation.is_delete=false')
-      .where('works_author_profession_relation.works_id=works.id')
-      .where('works.state=0')
-      .toString();
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0].num || 0;
+    res = await app.model.workAuthorRelation.findOne({
+      attributes: [
+        Sequelize.literal('COUNT(DISTINCT work_id) AS num')
+      ],
+      where: {
+        author_id: id,
+        kind,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
     }
     else {
       res = 0;

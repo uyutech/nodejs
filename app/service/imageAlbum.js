@@ -104,8 +104,8 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      let hash = {};
       if(res.length) {
-        let hash = {};
         res.forEach((item) => {
           let id = item.id;
           hash[id] = item;

@@ -40,10 +40,10 @@ class Controller extends egg.Controller {
       service.author.commentList(authorId, uid, 0, LIMIT)
     ]);
     mainWorks.limit = LIMIT;
-    let kindWork;
+    let kindWorkList;
     if(workKindList.length) {
-      kindWork = await service.author.kindWork(authorId, workKindList[0].kind, 0, LIMIT);
-      kindWork.limit = LIMIT;
+      kindWorkList = await service.author.kindWorkList(authorId, workKindList[0].kind, 0, LIMIT);
+      kindWorkList.limit = LIMIT;
     }
     commentList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
@@ -55,7 +55,7 @@ class Controller extends egg.Controller {
       mainWorks,
       musicAlbum,
       workKindList,
-      kindWork,
+      kindWorkList,
       commentList,
     });
   }
@@ -65,35 +65,28 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let authorId = parseInt(body.authorId);
+    let offset = parseInt(body.offset);
     if(!authorId) {
       return;
     }
-    let res = await service.author.commentList(authorId, uid, body.offset || 0, LIMIT);
+    let res = await service.author.commentList(authorId, uid, offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
 
-  async kindWork() {
+  async kindWorkList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let authorId = parseInt(body.authorId);
-    let kind = body.kind;
-    let offset = body.offset;
-    if(!authorId || kind === undefined) {
+    let kind = parseInt(body.kind);
+    let offset = parseInt(body.offset);
+    if(!authorId || !kind) {
       return;
     }
-    kind = parseInt(kind);
-    if(isNaN(kind)) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    if(offset < 0) {
-      return;
-    }
-    let kindWork = await service.author.kindWork(authorId, kind, offset, LIMIT);
-    kindWork.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(kindWork);
+    let kindWorkList = await service.author.kindWorkList(authorId, kind, offset || 0, LIMIT);
+    kindWorkList.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(kindWorkList);
   }
 
   async follow() {

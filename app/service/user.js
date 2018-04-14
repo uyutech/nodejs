@@ -1044,11 +1044,6 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
     let [data, count] = await Promise.all([
       this.favorVideoData(id, offset, limit),
       this.favorVideoCount(id)
@@ -1098,122 +1093,54 @@ class Service extends egg.Service {
         worksIdList.push(item.worksId);
       }
     });
-    let workIdHash = {};
     let workIdList = [];
     res.forEach((item) => {
-      if(!workIdHash[item]) {
-        workIdHash[item.workId] = true;
-        workIdList.push(item.workId);
-      }
+      workIdList.push(item.workId);
     });
     let [
-      worksList,
+      [worksList, authorList],
       workList,
-      authorList,
       likeCountList,
       isLikeList,
       commentCountList,
       playCountList
     ] = await Promise.all([
-      service.works.infoList(worksIdList),
+      service.works.infoListPlus(worksIdList),
       service.work.videoList(workIdList),
-      service.works.authorList(worksIdList),
       service.work.likeCountList(workIdList),
       service.work.isLikeList(workIdList, id),
       service.works.commentCountList(worksIdList),
       service.work.playCountList(workIdList)
     ]);
     let worksHash = {};
-    let workHash = {};
-    let authorHash = {};
-    let typeHash = {};
-    let typeList = [];
     worksList.forEach((item, i) => {
-      if(item) {
-        item.commentCount = commentCountList[i] || 0;
-        worksHash[item.id] = item;
-        if(!typeHash[item.type]) {
-          typeHash[item.type] = true;
-          typeList.push(item.type);
-        }
-      }
+      item.author = authorList[i][0];
+      item.commentCount = commentCountList[i];
+      worksHash[item.id] = item;
     });
     workList.forEach((item, i) => {
       if(item) {
         item.likeCount = likeCountList[i] || 0;
         item.isLike = isLikeList[i] || false;
         item.playCount = playCountList[i] || 0;
-        workHash[item.id] = item;
       }
     });
-    authorList.forEach((item) => {
-      if(item && item.length) {
-        if(!authorHash[item[0].worksId]) {
-          authorHash[item[0].worksId] = item;
-        }
-      }
-    });
-    let professionSortList = await service.works.typeListProfessionSort(typeList);
-    let professionSortHash = {};
-    professionSortList.forEach((item) => {
-      if(item && item.length) {
-        if(!professionSortHash[item[0].worksType]) {
-          professionSortHash[item[0].worksType] = item;
-        }
-      }
-    });
-    return res.map((item) => {
-      let temp = {
-        id: item.worksId,
-        work: {
-          id: item.workId,
-        },
-      };
-      let works = worksHash[temp.id];
+    return res.map((item, i) => {
+      let works = worksHash[item.worksId];
       if(works) {
-        temp.title = works.title;
-        temp.cover = works.cover;
-        temp.type = works.type;
-        temp.typeName = works.typeName;
-        temp.commentCount = works.commentCount;
-      }
-      else {
-        ctx.logger.error('favor miss works uid:%s, worksId:%s, workId:%s', id, temp.id, temp.work.id);
-      }
-      let work = workHash[temp.work.id];
-      if(work) {
-        temp.work.title = work.title;
-        temp.work.cover = work.cover;
-        temp.work.url = work.url;
-        temp.work.type = work.type;
-        temp.work.typeName = work.typeName;
-        temp.work.likeCount = work.likeCount;
-        temp.work.isLike = work.isLike;
-        temp.work.playCount = work.playCount;
-      }
-      else {
-        ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);
-      }
-      let author = authorHash[temp.id];
-      if(author) {
-        if(temp.type) {
-          let professionSort = professionSortHash[temp.type];
-          if(professionSort) {
-            temp.professionSort = professionSort;
-            temp.author = service.works.reorderAuthor(author, professionSort)[0];
-          }
-          else {
-            temp.author = [author[0]];
-          }
+        let copy = Object.assign({}, works);
+        let work = workList[i];
+        if(work) {
+          copy.work = work;
         }
         else {
-          ctx.logger.error('favor miss type uid:%s, workId:%s, type:%s', id, temp.work.id, temp.type);
+          ctx.logger.error('favor miss work uid:%s, %j', id, item);
         }
+        return copy;
       }
       else {
-        ctx.logger.error('favor miss author uid:%s, workId:%s', id, temp.work.id);
+        ctx.logger.error('favor miss works uid:%s, %j', id, item);
       }
-      return temp;
     });
   }
 
@@ -1309,101 +1236,35 @@ class Service extends egg.Service {
         worksIdList.push(item.worksId);
       }
     });
-    let workIdHash = {};
     let workIdList = [];
     res.forEach((item) => {
-      if(!workIdHash[item]) {
-        workIdHash[item.workId] = true;
-        workIdList.push(item.workId);
-      }
+      workIdList.push(item.workId);
     });
-    let [worksList, workList, authorList] = await Promise.all([
-      service.works.infoList(worksIdList),
-      service.work.audioList(workIdList),
-      service.works.authorList(worksIdList)
+    let [[worksList, authorList], workList] = await Promise.all([
+      service.works.infoListPlus(worksIdList),
+      service.work.audioList(workIdList)
     ]);
     let worksHash = {};
-    let workHash = {};
-    let authorHash = {};
-    let typeHash = {};
-    let typeList = [];
-    worksList.forEach((item) => {
-      if(item) {
-        worksHash[item.id] = item;
-        if(!typeHash[item.type]) {
-          typeHash[item.type] = true;
-          typeList.push(item.type);
-        }
-      }
+    worksList.forEach((item, i) => {
+      item.author = authorList[i][0];
+      worksHash[item.id] = item;
     });
-    workList.forEach((item) => {
-      if(item) {
-        workHash[item.id] = item;
-      }
-    });
-    authorList.forEach((item) => {
-      if(item && item.length) {
-        if(!authorHash[item[0].worksId]) {
-          authorHash[item[0].worksId] = item;
-        }
-      }
-    });
-    let professionSortList = await service.works.typeListProfessionSort(typeList);
-    let professionSortHash = {};
-    professionSortList.forEach((item) => {
-      if(item && item.length) {
-        if(!professionSortHash[item[0].worksType]) {
-          professionSortHash[item[0].worksType] = item;
-        }
-      }
-    });
-    return res.map((item) => {
-      let temp = {
-        id: item.worksId,
-        work: {
-          id: item.workId,
-        },
-      };
-      let works = worksHash[temp.id];
+    return res.map((item, i) => {
+      let works = worksHash[item.worksId];
       if(works) {
-        temp.title = works.title;
-        temp.cover = works.cover;
-        temp.type = works.type;
-        temp.typeName = works.typeName;
-      }
-      else {
-        ctx.logger.error('favor miss works uid:%s, worksId:%s, workId:%s', id, temp.id, temp.work.id);
-      }
-      let work = workHash[temp.work.id];
-      if(work) {
-        temp.work.title = work.title;
-        temp.work.cover = work.cover;
-        temp.work.url = work.url;
-        temp.work.type = work.type;
-        temp.work.typeName = work.typeName;
-      }
-      else {
-        ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);
-      }
-      let author = authorHash[temp.id];
-      if(author) {
-        if(temp.type) {
-          let professionSort = professionSortHash[temp.type];
-          if(professionSort) {
-            temp.author = service.works.reorderAuthor(author, professionSort)[0];
-          }
-          else {
-            temp.author = [author[0]];
-          }
+        let copy = Object.assign({}, works);
+        let work = workList[i];
+        if(work) {
+          copy.work = work;
         }
         else {
-          ctx.logger.error('favor miss type uid:%s, workId:%s, type:%s', id, temp.work.id, temp.type);
+          ctx.logger.error('favor miss work uid:%s, %j', id, item);
         }
+        return copy;
       }
       else {
-        ctx.logger.error('favor miss author uid:%s, workId:%s', id, temp.work.id);
+        ctx.logger.error('favor miss works uid:%s, %j', id, item);
       }
-      return temp;
     });
   }
 
@@ -1476,7 +1337,6 @@ class Service extends egg.Service {
     const { app, service, ctx } = this;
     let res = await app.model.userWorkRelation.findAll({
       attributes: [
-        ['works_id', 'worksId'],
         ['work_id', 'workId']
       ],
       where: {
@@ -1488,14 +1348,6 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    let worksIdHash = {};
-    let worksIdList = [];
-    res.forEach((item) => {
-      if(!worksIdHash[item.worksId]) {
-        worksIdHash[item.worksId] = true;
-        worksIdList.push(item.worksId);
-      }
-    });
     let workIdHash = {};
     let workIdList = [];
     res.forEach((item) => {
@@ -1505,106 +1357,25 @@ class Service extends egg.Service {
       }
     });
     let [
-      worksList,
       workList,
       authorList,
       likeCountList,
       isLikeList
     ] = await Promise.all([
-      service.imageAlbum.infoList(worksIdList),
       service.work.imageList(workIdList),
-      service.imageAlbum.authorList(worksIdList),
+      service.work.authorList(workIdList),
       service.work.likeCountList(workIdList),
       service.work.isLikeList(workIdList, id)
     ]);
-    let worksHash = {};
     let workHash = {};
-    let authorHash = {};
-    let typeHash = {};
-    let typeList = [];
-    worksList.forEach((item, i) => {
-      if(item) {
-        worksHash[item.id] = item;
-        if(!typeHash[item.type]) {
-          typeHash[item.type] = true;
-          typeList.push(item.type);
-        }
-      }
-    });
     workList.forEach((item, i) => {
       if(item) {
         item.likeCount = likeCountList[i] || 0;
         item.isLike = isLikeList[i] || false;
-        workHash[item.id] = item;
+        item.author = authorList[i];
       }
     });
-    authorList.forEach((item) => {
-      if(item && item.length) {
-        if(!authorHash[item[0].worksId]) {
-          authorHash[item[0].worksId] = item;
-        }
-      }
-    });
-    let professionSortList = await service.works.typeListProfessionSort(typeList);
-    let professionSortHash = {};
-    professionSortList.forEach((item) => {
-      if(item && item.length) {
-        if(!professionSortHash[item[0].worksType]) {
-          professionSortHash[item[0].worksType] = item;
-        }
-      }
-    });
-    return res.map((item) => {
-      let temp = {
-        id: item.worksId,
-        work: {
-          id: item.workId,
-        },
-      };
-      let works = worksHash[temp.id];
-      if(works) {
-        temp.title = works.title;
-        temp.cover = works.cover;
-        temp.type = works.type;
-        temp.typeName = works.typeName;
-      }
-      else {
-        ctx.logger.error('favor miss works uid:%s, worksId:%s, workId:%s', id, temp.id, temp.work.id);
-      }
-      let work = workHash[temp.work.id];
-      if(work) {
-        temp.work.title = work.title;
-        temp.work.cover = work.cover;
-        temp.work.url = work.url;
-        temp.work.type = work.type;
-        temp.work.typeName = work.typeName;
-        temp.work.likeCount = work.likeCount;
-        temp.work.isLike = work.isLike;
-      }
-      else {
-        ctx.logger.error('favor miss work uid:%s, workId:%s', id, temp.work.id);
-      }
-      let author = authorHash[temp.id];
-      if(author) {
-        if(temp.type) {
-          let professionSort = professionSortHash[temp.type];
-          if(professionSort) {
-            temp.professionSort = professionSort;
-            temp.author = service.works.reorderAuthor(author, professionSort)[0];
-          }
-          else {
-            temp.author = [author[0]];
-          }
-        }
-        else {
-          ctx.logger.error('favor miss type uid:%s, workId:%s, type:%s', id, temp.work.id, temp.type);
-        }
-      }
-      else {
-        ctx.logger.error('favor miss author uid:%s, workId:%s', id, temp.work.id);
-      }
-      return temp;
-    });
+    return workList;
   }
 
   /**

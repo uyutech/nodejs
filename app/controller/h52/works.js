@@ -41,10 +41,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let worksId = parseInt(body.worksId);
+    let offset = parseInt(body.offset);
     if(!worksId) {
       return;
     }
-    let res = await service.works.commentList(worksId, uid, body.offset || 0, LIMIT);
+    let res = await service.works.commentList(worksId, uid, offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -54,7 +55,7 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let worksId = parseInt(body.worksId);
-    let workId = body.workId;
+    let workId = parseInt(body.workId);
     if(!worksId || !workId) {
       return;
     }
@@ -67,7 +68,7 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let worksId = parseInt(body.worksId);
-    let workId = body.workId;
+    let workId = parseInt(body.workId);
     if(!worksId || !workId) {
       return;
     }
@@ -80,7 +81,7 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let worksId = parseInt(body.worksId);
-    let workId = body.workId;
+    let workId = parseInt(body.workId);
     if(!worksId || !workId) {
       return;
     }
@@ -93,7 +94,7 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let worksId = parseInt(body.worksId);
-    let workId = body.workId;
+    let workId = parseInt(body.workId);
     if(!worksId || !workId) {
       return;
     }

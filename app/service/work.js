@@ -860,7 +860,7 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据作品id列取作者和职种基本信息
+   * 根据作品id取作者和职种基本信息
    * @param id:int
    * @returns Array<Object>
    */
@@ -1074,6 +1074,71 @@ class Service extends egg.Service {
       });
     });
     return list;
+  }
+
+  /**
+   * 获取所属大作品id
+   * @param idList:Array<int> 作品id列表
+   * @returns Array<int>
+   */
+  async belongIdList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== undefined && id !== null) {
+          return app.redis.get('workBelong_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('workBelong_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.worksWorkRelation.findAll({
+        attributes: [
+          ['works_id', 'worksId'],
+          ['work_id', 'workId']
+        ],
+        where: {
+          work_id: noCacheIdList,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          hash[item.workId] = item.worksId;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || null;
+        cache[i] = temp;
+        app.redis.setex('workBelong_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
   }
 }
 

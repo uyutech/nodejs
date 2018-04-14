@@ -38,10 +38,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let albumId = parseInt(body.albumId);
+    let offset = parseInt(body.offset);
     if(!albumId) {
       return;
     }
-    let res = await service.musicAlbum.commentList(albumId, uid, body.offset || 0, LIMIT);
+    let res = await service.musicAlbum.commentList(albumId, uid, offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
