@@ -185,23 +185,22 @@ class Controller extends egg.Controller {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    if(!body.ids) {
-      return ctx.body = ctx.helper.okJSON();
-    }
     let idList = body.ids.split(',');
-    let query = idList.map((id) => {
-      return app.model.userCircleRelation.upsert({
-        user_id: uid,
-        circle_id: id,
-        type: 1,
-      }, {
-        where: {
+    if(idList) {
+      let query = idList.map((id) => {
+        return app.model.userCircleRelation.upsert({
+          user_id: uid,
           circle_id: id,
-        },
-        raw: true,
-      })
-    });
-    let res = await query;
+          type: 1,
+        }, {
+          where: {
+            circle_id: id,
+          },
+          raw: true,
+        })
+      });
+      await query;
+    }
     app.model.user.update({
       reg_state: 12,
     }, {
@@ -210,30 +209,30 @@ class Controller extends egg.Controller {
       },
       raw: true,
     });
-    ctx.body = ctx.helper.okJSON(res);
+    service.user.clearInfoCache(uid);
+    ctx.body = ctx.helper.okJSON();
   }
 
   async guideAuthor() {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    if(!body.ids) {
-      return ctx.body = ctx.helper.okJSON();
-    }
     let idList = body.ids.split(',');
-    let query = idList.map((id) => {
-      return app.model.userPersonRelation.upsert({
-        user_id: uid,
-        target_id: id,
-        type: 3,
-      }, {
-        where: {
+    if(idList) {
+      let query = idList.map((id) => {
+        return app.model.userPersonRelation.upsert({
+          user_id: uid,
           target_id: id,
-        },
-        raw: true,
-      })
-    });
-    let res = await query;
+          type: 3,
+        }, {
+          where: {
+            target_id: id,
+          },
+          raw: true,
+        })
+      });
+      await query;
+    }
     app.model.user.update({
       reg_state: 99,
     }, {
@@ -242,7 +241,8 @@ class Controller extends egg.Controller {
       },
       raw: true,
     });
-    ctx.body = ctx.helper.okJSON(res);
+    service.user.clearInfoCache(uid);
+    ctx.body = ctx.helper.okJSON();
   }
 }
 

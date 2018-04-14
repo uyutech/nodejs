@@ -211,6 +211,73 @@ class Service extends egg.Service {
   }
 
   /**
+   * 粉丝数
+   * @param idList:Array<int> 作者id列表
+   * @returns Array<int>
+   */
+  async fansCountList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== undefined && id !== null) {
+          return app.redis.get('authorFansCount_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('authorFansCount_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.userPersonRelation.findAll({
+        attributes: [
+          ['target_id', 'targetId'],
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          target_id: noCacheIdList,
+          type: 3,
+        },
+        group: 'target_id',
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.targetId;
+          hash[id] = item.num || 0;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || 0;
+        cache[i] = temp;
+        app.redis.setex('authorFansCount_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
+
+  /**
    * 是否关注了作者
    * @param id:int 作者id
    * @param uid:int 用户id

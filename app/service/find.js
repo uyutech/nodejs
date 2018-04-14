@@ -122,26 +122,24 @@ class Service extends egg.Service {
           break;
       }
     });
-    let [[worksList, worksAuthorList], authorList] = await Promise.all([
+    let [[worksList, worksAuthorList], authorList, fansCountList] = await Promise.all([
       service.works.infoListPlus(worksIdList),
-      service.author.infoList(authorIdList)
+      service.author.infoList(authorIdList),
+      service.author.fansCountList(authorIdList)
     ]);
     let worksHash = {};
     worksList.forEach((item, i) => {
       if(item) {
-        if(!worksHash[item.id]) {
-          worksHash[item.id] = item;
-          let author = worksAuthorList[i];
-          item.author = author.length ? author[0] : [];
-        }
+        worksHash[item.id] = item;
+        let author = worksAuthorList[i];
+        item.author = author.length ? author[0] : [];
       }
     });
     let authorHash = {};
-    authorList.forEach((item)=> {
+    authorList.forEach((item, i)=> {
       if(item) {
-        if(!authorHash[item.id]) {
-          authorHash[item.id] = item;
-        }
+        authorHash[item.id] = item;
+        item.fansCount = fansCountList[i];
       }
     });
     res.forEach((item) => {
