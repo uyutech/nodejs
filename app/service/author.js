@@ -1058,17 +1058,18 @@ class Service extends egg.Service {
   /**
    * 获取作者参与小作品种类的大作品列表和分页数据
    * @param id:int 作者id
+   * @param uid:int 用户id
    * @param kind:int 种类
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Object{ data: Array<Object>, count: int }
    */
-  async kindWorkList(id, kind, offset, limit) {
+  async kindWorkList(id, uid, kind, offset, limit) {
     if(!id) {
       return;
     }
     let [data, count] = await Promise.all([
-      this.kindWorkData(id, kind, offset, limit),
+      this.kindWorkData(id, uid, kind, offset, limit),
       this.kindWorkSize(id, kind)
     ]);
     return { data, count };
@@ -1077,55 +1078,159 @@ class Service extends egg.Service {
   /**
    * 获取作者参与小作品种类的大作品列表
    * @param id:int 作者id
+   * @param uid:int 用户id
    * @param kind:int 种类
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async kindWorkData(id, kind, offset, limit) {
+  async kindWorkData(id, uid, kind, offset, limit) {
     if(!id || kind === null || kind === undefined) {
       return;
     }
     const { service } = this;
     let workIdList = await this.kindWorkIdList(id, kind, offset, limit);
-    let [professionIdList, worksIdList, workList] = await Promise.all([
-      this.workListProfessionIdList(id, workIdList),
-      service.work.belongIdList(workIdList),
-      service.work.infoList(workIdList, kind)
-    ]);
-    let idList = [];
-    let hash = {};
-    professionIdList.forEach((arr) => {
-      arr.forEach((id) => {
-        if(!hash[id]) {
-          hash[id] = true;
-          idList.push(id);
+    if(kind === 1) {
+      let [professionIdList, worksIdList] = await Promise.all([
+        this.workListProfessionIdList(id, workIdList),
+        service.work.belongIdList(workIdList),
+      ]);
+      let idList = [];
+      let hash = {};
+      professionIdList.forEach((arr) => {
+        arr.forEach((id) => {
+          if(!hash[id]) {
+            hash[id] = true;
+            idList.push(id);
+          }
+        });
+      });
+      let [
+        worksList,
+        workList,
+        likeCountList,
+        isLikeList,
+        commentCountList,
+        playCountList,
+        professionList
+      ] = await Promise.all([
+        service.works.infoList(worksIdList),
+        service.work.videoList(workIdList),
+        service.work.likeCountList(workIdList),
+        service.work.isLikeList(workIdList, uid),
+        service.works.commentCountList(worksIdList),
+        service.work.playCountList(workIdList),
+        service.profession.infoList(idList)
+      ]);
+      let professionHash = {};
+      professionList.forEach((item) => {
+        professionHash[item.id] = item;
+      });
+      let worksHash = {};
+      worksList.forEach((item, i) => {
+        if(item) {
+          worksHash[item.id] = item;
+          item.commentCount = commentCountList[i];
         }
       });
-    });
-    let [professionList, worksList] = await Promise.all([
-      service.profession.infoList(idList),
-      service.works.infoList(worksIdList)
-    ]);
-    let professionHash = {};
-    professionList.forEach((item) => {
-      professionHash[item.id] = item;
-    });
-    let worksHash = {};
-    worksList.forEach((item) => {
-      worksHash[item.id] = item;
-    });
-    return workIdList.map((workId, i) => {
-      let worksId = worksIdList[i];
-      let works = Object.assign({}, worksHash[worksId]);
-      let work = workList[i];
-      works.work = work;
-      let pIdList = professionIdList[i];
-      work.profession = pIdList.map((professionId) => {
-        return professionHash[professionId];
+      workList.forEach((item, i) => {
+        if(item) {
+          item.likeCount = likeCountList[i] || 0;
+          item.isLike = isLikeList[i] || false;
+          item.playCount = playCountList[i] || 0;
+        }
       });
-      return works;
-    });
+      return workIdList.map((workId, i) => {
+        let worksId = worksIdList[i];
+        let copy = Object.assign({}, worksHash[worksId]);
+        let work = workList[i];
+        copy.work = work;
+        let pIdList = professionIdList[i];
+        work.profession = pIdList.map((professionId) => {
+          return professionHash[professionId];
+        });
+        return copy;
+      });
+    }
+    else if(kind === 2) {
+      let [professionIdList, worksIdList] = await Promise.all([
+        this.workListProfessionIdList(id, workIdList),
+        service.work.belongIdList(workIdList)
+      ]);
+      let idList = [];
+      let hash = {};
+      professionIdList.forEach((arr) => {
+        arr.forEach((id) => {
+          if(!hash[id]) {
+            hash[id] = true;
+            idList.push(id);
+          }
+        });
+      });
+      let [professionList, worksList, workList] = await Promise.all([
+        service.profession.infoList(idList),
+        service.works.infoList(worksIdList),
+        service.work.audioList(workIdList)
+      ]);
+      let professionHash = {};
+      professionList.forEach((item) => {
+        professionHash[item.id] = item;
+      });
+      let worksHash = {};
+      worksList.forEach((item) => {
+        worksHash[item.id] = item;
+      });
+      return workIdList.map((workId, i) => {
+        let worksId = worksIdList[i];
+        let copy = Object.assign({}, worksHash[worksId]);
+        let work = workList[i];
+        copy.work = work;
+        let pIdList = professionIdList[i];
+        work.profession = pIdList.map((professionId) => {
+          return professionHash[professionId];
+        });
+        return copy;
+      });
+    }
+    else if(kind === 3) {
+      let [
+        professionIdList,
+        workList,
+        likeCountList,
+        isLikeList
+      ] = await Promise.all([
+        this.workListProfessionIdList(id, workIdList),
+        service.work.imageList(workIdList),
+        service.work.likeCountList(workIdList),
+        service.work.isLikeList(workIdList, uid)
+      ]);
+      let idList = [];
+      let hash = {};
+      professionIdList.forEach((arr) => {
+        arr.forEach((id) => {
+          if(!hash[id]) {
+            hash[id] = true;
+            idList.push(id);
+          }
+        });
+      });
+      let professionList = await service.profession.infoList(idList);
+      let professionHash = {};
+      professionList.forEach((item) => {
+        professionHash[item.id] = item;
+      });
+      workList.forEach((item, i) => {
+        if(item) {
+          item.likeCount = likeCountList[i] || 0;
+          item.isLike = isLikeList[i] || false;
+          let pIdList = professionIdList[i];
+          item.profession = pIdList.map((professionId) => {
+            return professionHash[professionId];
+          });
+        }
+      });
+      return workList;
+    }
   }
 
   /**

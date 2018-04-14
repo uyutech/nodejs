@@ -42,7 +42,7 @@ class Controller extends egg.Controller {
     mainWorks.limit = LIMIT;
     let kindWorkList;
     if(workKindList.length) {
-      kindWorkList = await service.author.kindWorkList(authorId, workKindList[0].kind, 0, LIMIT);
+      kindWorkList = await service.author.kindWorkList(authorId, uid, workKindList[0].kind, 0, LIMIT);
       kindWorkList.limit = LIMIT;
     }
     commentList.limit = LIMIT;
@@ -84,7 +84,7 @@ class Controller extends egg.Controller {
     if(!authorId || !kind) {
       return;
     }
-    let kindWorkList = await service.author.kindWorkList(authorId, kind, offset || 0, LIMIT);
+    let kindWorkList = await service.author.kindWorkList(authorId, uid, kind, offset || 0, LIMIT);
     kindWorkList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(kindWorkList);
   }

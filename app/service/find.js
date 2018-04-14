@@ -327,9 +327,11 @@ class Service extends egg.Service {
       ]);
       let worksHash = {};
       worksList.forEach((item, i) => {
-        item.author = authorList[i][0];
-        item.commentCount = commentCountList[i];
-        worksHash[item.id] = item;
+        if(item) {
+          item.author = authorList[i][0];
+          item.commentCount = commentCountList[i];
+          worksHash[item.id] = item;
+        }
       });
       workList.forEach((item, i) => {
         if(item) {
