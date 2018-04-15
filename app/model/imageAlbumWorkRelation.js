@@ -21,6 +21,12 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    works_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+      default: 0,
+      comment: '引用大作品id',
+    },
     kind: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,

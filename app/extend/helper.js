@@ -65,6 +65,7 @@ let helper = {
       temp = 2018000000000000 + temp;
       data.CurrentUid = temp.toString().slice(0, 16);
     }
+    let end;
     try {
       res = await this.ctx.curl(url, {
         method: 'POST',
@@ -74,11 +75,11 @@ let helper = {
       });
     }
     catch(e) {
-      let end = Date.now();
+      end = Date.now();
       this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
       throw new Error(e);
     }
-    let end = Date.now();
+    end = Date.now();
     this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
     return res;
   },
@@ -107,6 +108,7 @@ let helper = {
       temp = 2018000000000000 + temp;
       data.CurrentUid = temp.toString().slice(0, 16);
     }
+    let end;
     try {
       res = yield this.ctx.curl(url, {
         method: 'POST',
@@ -116,11 +118,11 @@ let helper = {
       });
     }
     catch(e) {
-      let end = Date.now();
+      end = Date.now();
       this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
       throw new Error(e);
     }
-    let end = Date.now();
+    end = Date.now();
     this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
     return res;
   },

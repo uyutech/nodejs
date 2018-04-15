@@ -16,20 +16,23 @@ class Controller extends egg.Controller {
     if(!worksId) {
       return;
     }
-    let [[info, professionSort], authorList, collection, comment] = await Promise.all([
-      service.works.infoAndTypeProfessionSort(worksId),
+    let [[info, professionSort], author, [collection, collectionAuthor], commentList] = await Promise.all([
+      service.works.infoAndProfessionSort(worksId),
       service.works.author(worksId),
-      service.works.collection(worksId, uid),
-      service.works.comment(worksId, 0, LIMIT)
+      service.works.collectionAndAuthor(worksId, uid),
+      service.works.commentList(worksId, uid, 0, LIMIT)
     ]);
-    comment.limit = LIMIT;
-    authorList = service.works.reorderAuthor(authorList, professionSort);
+    commentList.limit = LIMIT;
+    collectionAuthor.forEach((item) => {
+      author = author.concat(item);
+    });
+    author = service.works.reorderAuthor(author, professionSort);
     await ctx.render('dworks2', {
       worksId,
       info,
       collection,
-      authorList,
-      comment,
+      author,
+      commentList,
     });
   }
 }

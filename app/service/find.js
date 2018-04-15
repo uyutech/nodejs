@@ -157,7 +157,7 @@ class Service extends egg.Service {
     worksList.forEach((item, i) => {
       if(item) {
         worksHash[item.id] = item;
-        item.author = worksAuthorList[i][0];
+        item.author = service.works.firstAuthor(worksAuthorList[i]);
       }
     });
     let authorHash = {};

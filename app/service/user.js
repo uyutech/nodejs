@@ -1114,7 +1114,7 @@ class Service extends egg.Service {
     ]);
     let worksHash = {};
     worksList.forEach((item, i) => {
-      item.author = authorList[i][0];
+      item.author = service.works.firstAuthor(authorList[i]);
       item.commentCount = commentCountList[i];
       worksHash[item.id] = item;
     });
@@ -1246,7 +1246,7 @@ class Service extends egg.Service {
     ]);
     let worksHash = {};
     worksList.forEach((item, i) => {
-      item.author = authorList[i][0];
+      item.author = service.works.firstAuthor(authorList[i]);
       worksHash[item.id] = item;
     });
     return res.map((item, i) => {

@@ -1076,6 +1076,7 @@ class Service extends egg.Service {
               id: author.id,
               name: author.name,
               headUrl: author.headUrl,
+              isSettle: author.isSettle,
             };
           }),
         });
@@ -1097,6 +1098,7 @@ class Service extends egg.Service {
             id: author.id,
             name: author.name,
             headUrl: author.headUrl,
+            isSettle: author.isSettle,
           };
         }),
       });
@@ -1106,9 +1108,41 @@ class Service extends egg.Service {
   }
 
   /**
+   * 根据全部作者取出优先作者
+   * 优先显示入住的，没有入住的话查找后面的组顺延
+   * 同种类作者有一个入住即全部显示
+   * @param author:Array<Array<Object>>
+   */
+  firstAuthor(author) {
+    if(!author) {
+      return;
+    }
+    if(!author.length) {
+      return [];
+    }
+    let res = [];
+    for(let i = 0, len = author.length; i < len; i++) {
+      let group = author[i];
+      for(let j = 0, len2 = group.length; j < len2; j++) {
+        let item = group[j];
+        for(let k = 0, len3 = item.list.length; k < len3; k++) {
+          if(item.list[k].isSettle) {
+            res.push(item);
+            break;
+          }
+        }
+      }
+      if(res.length) {
+        break;
+      }
+    }
+    return res;
+  }
+
+  /**
    * 获取大作品数据，包括作者信息
    * @param idList:Array<int> 大作品id列表
-   * @returns Array<Array<Object>, Array<Object>>
+   * @returns Array[Array<Object>, Array<Object>]
    */
   async infoListPlus(idList) {
     if(!idList) {

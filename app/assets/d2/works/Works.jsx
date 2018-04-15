@@ -93,14 +93,14 @@ class Works extends migi.Component {
                audioList={ self.audioList }/>
         <Comments ref="comments"
                   worksId={ self.props.worksId }
-                  data={ self.props.comment }/>
+                  data={ self.props.commentList }/>
       </div>
       <div class="side">
         <ul class="sel fn-clear" ref="sel">
           <li class="cur">简介</li>
         </ul>
         <div class="box box-fn-top-left">
-          <Author ref="author" list={ self.props.authorList }/>
+          <Author ref="author" list={ self.props.author }/>
           <Text ref="text" list={ self.textList }/>
           <Image ref="image" list={ self.imgList }/>
         </div>

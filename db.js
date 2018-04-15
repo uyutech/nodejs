@@ -81,12 +81,14 @@ const RecommendTag = require('./app/model/recommendTag')({ sequelizeCircling: se
 const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendList = require('./app/model/recommendList')({ sequelizeCircling: sequelize, Sequelize });
 const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Sequelize });
+const RecommendComment = require('./app/model/recommendComment')({ sequelizeCircling: sequelize, Sequelize });
 const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserAccount = require('./app/model/userAccount')({ sequelizeCircling: sequelize, Sequelize });
 const UserOauth = require('./app/model/userOauth')({ sequelizeCircling: sequelize, Sequelize });
 const Message = require('./app/model/message')({ sequelizeCircling: sequelize, Sequelize });
 const WorkAuthorRelation = require('./app/model/WorkAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const WorksAuthorRelation = require('./app/model/WorksAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
+const WorkTypeProfessionSort = require('./app/model/WorkTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -103,6 +105,7 @@ const WorksAuthorRelation = require('./app/model/WorksAuthorRelation')({ sequeli
     await RecommendBanner.sync();
     await RecommendList.sync();
     await Banner.sync();
+    await RecommendComment.sync();
     await dealAuthor(pool);
     await dealAuthorMainWorks(pool);
     await dealWork(pool);
@@ -550,6 +553,7 @@ async function dealWorksWork(pool) {
   await MusicAlbumWorkRelation.sync();
   await ImageAlbumWorkRelation.sync();
   await WorksTypeProfessionSort.sync();
+  await WorkTypeProfessionSort.sync();
   let last = 1699;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_WorksItems WHERE ID>${last};`);
