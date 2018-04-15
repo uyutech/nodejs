@@ -439,7 +439,7 @@ class Service extends egg.Service {
       this.replyCountList(idList),
       this.circleList(idList),
       this.mediaList(idList)
-    ]);
+    ]);console.log(circleList)
     dataList.forEach((item, i) => {
       if(item) {
         if(item.isAuthor) {
@@ -1233,13 +1233,15 @@ class Service extends egg.Service {
       };
     });
     let tagCircleHash = {};
-    list.forEach((tagId) => {
+    list.forEach((tagId, i) => {
       if(tagId) {
         let temp = tagCircleHash[tagId] = [];
-        circleIdList.forEach((circleIds) => {
-          circleIds.forEach((circleId) => {
+        let hash = {};
+        circleIdList[i].forEach((circleId) => {
+          if(!hash[circleId]) {
+            hash[circleId] = true;
             temp.push(circleHash[circleId]);
-          });
+          }
         });
       }
     });

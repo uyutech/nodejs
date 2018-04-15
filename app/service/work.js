@@ -566,10 +566,10 @@ class Service extends egg.Service {
   }
 
   async isRelationList(idList, uid, type) {
-    if(!idList || !uid || !type) {
+    if(!idList || !type) {
       return;
     }
-    if(!idList.length) {
+    if(!uid || !idList.length) {
       return [];
     }
     const { app } = this;
