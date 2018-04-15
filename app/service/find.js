@@ -311,15 +311,15 @@ class Service extends egg.Service {
     });
     if(kind === 1) {
       let [
-        [worksList, authorList],
-        workList,
+        worksList,
+        [workList, authorList],
         likeCountList,
         isLikeList,
         commentCountList,
         playCountList
       ] = await Promise.all([
-        service.works.infoListPlus(worksIdList),
-        service.work.videoList(workIdList),
+        service.works.infoList(worksIdList),
+        service.work.infoListPlus(workIdList, kind),
         service.work.likeCountList(workIdList),
         service.work.isLikeList(workIdList, uid),
         service.works.commentCountList(worksIdList),
@@ -328,7 +328,6 @@ class Service extends egg.Service {
       let worksHash = {};
       worksList.forEach((item, i) => {
         if(item) {
-          item.author = authorList[i][0];
           item.commentCount = commentCountList[i];
           worksHash[item.id] = item;
         }
@@ -338,6 +337,7 @@ class Service extends egg.Service {
           item.likeCount = likeCountList[i] || 0;
           item.isLike = isLikeList[i] || false;
           item.playCount = playCountList[i] || 0;
+          item.author = service.works.firstAuthor(authorList[i]);
         }
       });
       return res.map((item, i) => {
@@ -353,13 +353,12 @@ class Service extends egg.Service {
       });
     }
     else if(kind === 2) {
-      let [[worksList, authorList], workList] = await Promise.all([
-        service.works.infoListPlus(worksIdList),
-        service.work.audioList(workIdList)
+      let [worksList, [workList, authorList]] = await Promise.all([
+        service.works.infoList(worksIdList),
+        service.work.infoListPlus(workIdList, kind)
       ]);
       let worksHash = {};
-      worksList.forEach((item, i) => {
-        item.author = authorList[i][0];
+      worksList.forEach((item) => {
         worksHash[item.id] = item;
       });
       return res.map((item, i) => {
@@ -367,6 +366,7 @@ class Service extends egg.Service {
         if(works) {
           let copy = Object.assign({}, works);
           let work = workList[i];
+          work.author = service.works.firstAuthor(authorList[i]);
           if(work) {
             copy.work = work;
           }

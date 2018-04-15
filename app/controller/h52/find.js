@@ -46,6 +46,7 @@ class Controller extends egg.Controller {
       kindList,
     });
   }
+
   async tag() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;

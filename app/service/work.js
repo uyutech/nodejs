@@ -142,6 +142,12 @@ class Service extends egg.Service {
    * @returns Array<Object>
    */
   async infoList(idList, kind) {
+    if(!idList || !kind) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
     switch(kind) {
       case 1:
         return await this.videoList(idList);
@@ -154,6 +160,48 @@ class Service extends egg.Service {
     }
     return [];
   }
+
+  /**
+   * 根据id列表返回小作品信息和作者信息
+   * @param idList:Array<int>
+   * @param kind:int
+   * @returns Array<Object>
+   */
+  async infoListPlus(idList, kind) {
+    if(!idList || !kind) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let [infoList, authorList] = await Promise.all([
+      this.infoList(idList, kind),
+      this.authorList(idList)
+    ]);
+    let typeList = [];
+    let typeHash = {};
+    infoList.forEach((item) => {
+      if(!typeHash[item.type]) {
+        typeHash[item.type] = true;
+        typeList.push(item.type);
+      }
+    });
+    let list = await this.typeListProfessionSort(typeList);
+    let professionSortHash = {};
+    list.forEach((item, i) => {
+      let type = typeList[i];
+      professionSortHash[type] = item;
+    });
+    let professionSortList = infoList.map((item) => {
+      return professionSortHash[item.type];
+    });
+    authorList.forEach((author, i) => {
+      authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
+    });
+    return [infoList, authorList];
+  }
+
   /**
    * 根据id列表获取视频信息
    * @param idList:Array<int>
@@ -946,7 +994,7 @@ class Service extends egg.Service {
 
   /**
    * 根据作品id列取作者和职种基本信息
-   * @param idList:int
+   * @param idList:Array<int> 作品id列表
    * @returns Array<Array<Object>>
    */
   async authorBaseList(idList) {
@@ -1017,7 +1065,7 @@ class Service extends egg.Service {
 
   /**
    * 根据作品id列表获取作者和职种信息
-   * @param idList
+   * @param idList:Array<int> 作品id列表
    * @returns Array<Object>
    */
   async authorList(idList) {
@@ -1136,6 +1184,113 @@ class Service extends egg.Service {
         let temp = hash[id] || null;
         cache[i] = temp;
         app.redis.setex('workBelong_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
+
+  /**
+   * 根据作品类型获取职种排序规则
+   * @param type:int 作品类型
+   * @returns Array<Object>
+   */
+  async typeProfessionSort(type) {
+    if(!type) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'workTypeProfessionSort_' + type;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.workTypeProfessionSort.findAll({
+      attributes: [
+        ['profession_id', 'professionId'],
+        'group',
+        'weight'
+      ],
+      where: {
+        work_type: type,
+      },
+      order: [
+        'group',
+        ['weight', 'DESC']
+      ],
+      raw: true,
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 根据作品类型列表获取职种排序规则列表
+   * @param typeList:int 作品类型列表
+   * @returns Array<Array<Object>>
+   */
+  async typeListProfessionSort(typeList) {
+    if(!typeList) {
+      return;
+    }
+    if(!typeList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      typeList.map((type) => {
+        return app.redis.get('workTypeProfessionSort_' + type);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let type = typeList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('workTypeProfessionSort_' + type, CACHE_TIME);
+      }
+      else if(type !== null && type !== undefined) {
+        if(!noCacheIdHash[type]) {
+          noCacheIdHash[type] = true;
+          noCacheIdList.push(type);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.workTypeProfessionSort.findAll({
+        attributes: [
+          ['work_type', 'workType'],
+          'group',
+          'weight',
+          ['profession_id', 'professionId']
+        ],
+        where: {
+          work_type: noCacheIdList,
+        },
+        order: [
+          'group',
+          ['weight', 'DESC']
+        ],
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let temp = hash[item.workType] = hash[item.workType] || [];
+          temp.push({
+            group: item.group,
+            professionId: item.professionId,
+          });
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let type = typeList[i];
+        let temp = hash[type] || [];
+        cache[i] = temp;
+        app.redis.setex('workTypeProfessionSort_' + type, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;

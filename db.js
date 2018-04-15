@@ -80,7 +80,7 @@ const Recommend = require('./app/model/recommend')({ sequelizeCircling: sequeliz
 const RecommendTag = require('./app/model/recommendTag')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendList = require('./app/model/recommendList')({ sequelizeCircling: sequelize, Sequelize });
-const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Sequelize });
+const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendComment = require('./app/model/recommendComment')({ sequelizeCircling: sequelize, Sequelize });
 const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserAccount = require('./app/model/userAccount')({ sequelizeCircling: sequelize, Sequelize });
@@ -104,7 +104,7 @@ const WorkTypeProfessionSort = require('./app/model/WorkTypeProfessionSort')({ s
     await RecommendTag.sync();
     await RecommendBanner.sync();
     await RecommendList.sync();
-    await Banner.sync();
+    await RecommendBanner.sync();
     await RecommendComment.sync();
     await dealAuthor(pool);
     await dealAuthorMainWorks(pool);

@@ -887,7 +887,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'typeProfessionSort_' + type;
+    let cacheKey = 'worksTypeProfessionSort_' + type;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -927,7 +927,7 @@ class Service extends egg.Service {
     const { app } = this;
     let cache = await Promise.all(
       typeList.map((type) => {
-        return app.redis.get('typeProfessionSort_' + type);
+        return app.redis.get('worksTypeProfessionSort_' + type);
       })
     );
     let noCacheIdList = [];
@@ -937,7 +937,7 @@ class Service extends egg.Service {
       let type = typeList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('typeProfessionSort_' + type, CACHE_TIME);
+        app.redis.expire('worksTypeProfessionSort_' + type, CACHE_TIME);
       }
       else if(type !== null && type !== undefined) {
         if(!noCacheIdHash[type]) {
@@ -978,7 +978,7 @@ class Service extends egg.Service {
         let type = typeList[i];
         let temp = hash[type] || [];
         cache[i] = temp;
-        app.redis.setex('typeProfessionSort_' + type, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('worksTypeProfessionSort_' + type, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;

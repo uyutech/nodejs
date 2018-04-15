@@ -1090,42 +1090,23 @@ class Service extends egg.Service {
     }
     const { service } = this;
     let workIdList = await this.kindWorkIdList(id, kind, offset, limit);
+    let worksIdList = await service.work.belongIdList(workIdList);
     if(kind === 1) {
-      let [professionIdList, worksIdList] = await Promise.all([
-        this.workListProfessionIdList(id, workIdList),
-        service.work.belongIdList(workIdList),
-      ]);
-      let idList = [];
-      let hash = {};
-      professionIdList.forEach((arr) => {
-        arr.forEach((id) => {
-          if(!hash[id]) {
-            hash[id] = true;
-            idList.push(id);
-          }
-        });
-      });
       let [
         worksList,
-        workList,
+        [workList, authorList],
         likeCountList,
         isLikeList,
         commentCountList,
-        playCountList,
-        professionList
+        playCountList
       ] = await Promise.all([
         service.works.infoList(worksIdList),
-        service.work.videoList(workIdList),
+        service.work.infoListPlus(workIdList, kind),
         service.work.likeCountList(workIdList),
         service.work.isLikeList(workIdList, uid),
         service.works.commentCountList(worksIdList),
-        service.work.playCountList(workIdList),
-        service.profession.infoList(idList)
+        service.work.playCountList(workIdList)
       ]);
-      let professionHash = {};
-      professionList.forEach((item) => {
-        professionHash[item.id] = item;
-      });
       let worksHash = {};
       worksList.forEach((item, i) => {
         if(item) {
@@ -1145,37 +1126,30 @@ class Service extends egg.Service {
         let copy = Object.assign({}, worksHash[worksId]);
         let work = workList[i];
         copy.work = work;
-        let pIdList = professionIdList[i];
-        work.profession = pIdList.map((professionId) => {
-          return professionHash[professionId];
+        let professionList = [];
+        let author = authorList[i];console.log(author);
+        author.forEach((group) => {
+          group.forEach((item) => {
+            for(let i = 0, len = item.list.length; i < len; i++) {
+              if(item.list[i].id === id) {
+                professionList.push({
+                  id: item.id,
+                  name: item.name,
+                });
+                break;
+              }
+            }
+          });
         });
+        work.profession = professionList;
         return copy;
       });
     }
     else if(kind === 2) {
-      let [professionIdList, worksIdList] = await Promise.all([
-        this.workListProfessionIdList(id, workIdList),
-        service.work.belongIdList(workIdList)
-      ]);
-      let idList = [];
-      let hash = {};
-      professionIdList.forEach((arr) => {
-        arr.forEach((id) => {
-          if(!hash[id]) {
-            hash[id] = true;
-            idList.push(id);
-          }
-        });
-      });
-      let [professionList, worksList, workList] = await Promise.all([
-        service.profession.infoList(idList),
+      let [worksList, [workList, authorList]] = await Promise.all([
         service.works.infoList(worksIdList),
-        service.work.audioList(workIdList)
+        service.work.infoListPlus(workIdList, kind)
       ]);
-      let professionHash = {};
-      professionList.forEach((item) => {
-        professionHash[item.id] = item;
-      });
       let worksHash = {};
       worksList.forEach((item) => {
         worksHash[item.id] = item;
@@ -1185,48 +1159,55 @@ class Service extends egg.Service {
         let copy = Object.assign({}, worksHash[worksId]);
         let work = workList[i];
         copy.work = work;
-        let pIdList = professionIdList[i];
-        work.profession = pIdList.map((professionId) => {
-          return professionHash[professionId];
+        let professionList = [];
+        let author = authorList[i];console.log(author);
+        author.forEach((group) => {
+          group.forEach((item) => {
+            for(let i = 0, len = item.list.length; i < len; i++) {
+              if(item.list[i].id === id) {
+                professionList.push({
+                  id: item.id,
+                  name: item.name,
+                });
+                break;
+              }
+            }
+          });
         });
+        work.profession = professionList;
         return copy;
       });
     }
     else if(kind === 3) {
       let [
-        professionIdList,
-        workList,
+        [workList, authorList],
         likeCountList,
         isLikeList
       ] = await Promise.all([
-        this.workListProfessionIdList(id, workIdList),
-        service.work.imageList(workIdList),
+        service.work.infoListPlus(workIdList, kind),
         service.work.likeCountList(workIdList),
         service.work.isLikeList(workIdList, uid)
       ]);
-      let idList = [];
-      let hash = {};
-      professionIdList.forEach((arr) => {
-        arr.forEach((id) => {
-          if(!hash[id]) {
-            hash[id] = true;
-            idList.push(id);
-          }
-        });
-      });
-      let professionList = await service.profession.infoList(idList);
-      let professionHash = {};
-      professionList.forEach((item) => {
-        professionHash[item.id] = item;
-      });
       workList.forEach((item, i) => {
         if(item) {
           item.likeCount = likeCountList[i] || 0;
           item.isLike = isLikeList[i] || false;
-          let pIdList = professionIdList[i];
-          item.profession = pIdList.map((professionId) => {
-            return professionHash[professionId];
+          let professionList = [];
+          let author = authorList[i];
+          author.forEach((group) => {
+            group.forEach((item) => {
+              for(let i = 0, len = item.list.length; i < len; i++) {
+                if(item.list[i].id === id) {
+                  professionList.push({
+                    id: item.id,
+                    name: item.name,
+                  });
+                  break;
+                }
+              }
+            });
           });
+          item.profession = professionList;
         }
       });
       return workList;
