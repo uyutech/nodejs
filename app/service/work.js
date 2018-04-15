@@ -118,7 +118,7 @@ class Service extends egg.Service {
       2020: 1,
       2021: 3,
       2022: 4,
-    }[id.slice(0, 4)] || 0;
+    }[id.toString().slice(0, 4)] || 0;
   }
 
   /**
