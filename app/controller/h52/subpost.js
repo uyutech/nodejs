@@ -71,7 +71,7 @@ class Controller extends egg.Controller {
   }
 
   async sub() {
-    const { ctx, service } = this;
+    const { ctx, app, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let content = body.content;
@@ -91,6 +91,11 @@ class Controller extends egg.Controller {
       circleId = '2019000000000000';
     }
     circleId = circleId.split(',');
+    circleId = circleId.map((item) => {
+      return parseInt(item);
+    }).filter((item) => {
+      return item;
+    });
     if(!circleId.length || circleId.length > 3) {
       return;
     }
@@ -109,27 +114,37 @@ class Controller extends egg.Controller {
       });
     }
     let [tagList, tagIdList] = await Promise.all([
-      service.circle.tagList(circleId, 1),
+      service.circle.tagIdList(circleId, 1),
       service.tag.idListByName(tagNameList)
     ]);
     let tagId = [];
     let tagHash = {};
     tagList.map((item) => {
       if(item) {
-        item.forEach(function(tag) {
-          if(!tagHash[tag.id]) {
-            tagHash[tag.id] = true;
-            tagId.push(tag.id);
+        item.forEach(function(id) {
+          if(!tagHash[id]) {
+            tagHash[id] = true;
+            tagId.push(id);
           }
         });
       }
     });
-    let res = await service.post.add(uid, {
-      content,
-      tagId,
-      tagIdList,
-      image,
-      authorId: body.authorId,
+    let [circleIdList, res] = await Promise.all([
+      service.tag.circleIdList(tagId, 1),
+      service.post.add(uid, {
+        content,
+        tagId,
+        tagIdList,
+        image,
+        authorId: body.authorId,
+      })
+    ]);console.log(circleIdList);
+    circleIdList.forEach((arr, i) => {
+      app.model.circleCommentRelation.create({
+        circle_id: circleId,
+        comment_id: res.id,
+        tag_id: tagId[i],
+      });
     });
     if(res) {
       ctx.body = ctx.helper.okJSON(res);

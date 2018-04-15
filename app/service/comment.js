@@ -1083,7 +1083,7 @@ class Service extends egg.Service {
     res = res.map((item) => {
       return item.tagId;
     });
-    app.redis.setex(cacheKey, CACHE_TIME, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 
