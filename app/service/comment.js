@@ -439,7 +439,7 @@ class Service extends egg.Service {
       this.replyCountList(idList),
       this.circleList(idList),
       this.mediaList(idList)
-    ]);console.log(circleList)
+    ]);
     dataList.forEach((item, i) => {
       if(item) {
         if(item.isAuthor) {
