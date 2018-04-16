@@ -45,7 +45,7 @@ let helper = {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
-    url += 'traceID=' + this.ctx.traceID || '';
+    url += 'tranceId=' + this.ctx.tranceId || '';
     let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
@@ -76,11 +76,11 @@ let helper = {
     }
     catch(e) {
       end = Date.now();
-      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
       throw new Error(e);
     }
     end = Date.now();
-    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
     return res;
   },
   * postServiceJSON2(url, data) {
@@ -88,7 +88,7 @@ let helper = {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
-    url += 'traceID=' + this.ctx.traceID || '';
+    url += 'tranceId=' + this.ctx.tranceId || '';
     let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
@@ -119,11 +119,11 @@ let helper = {
     }
     catch(e) {
       end = Date.now();
-      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
       throw new Error(e);
     }
     end = Date.now();
-    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
     return res;
   },
   autoSsl: function(url) {

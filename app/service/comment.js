@@ -370,7 +370,7 @@ class Service extends egg.Service {
           }
         }
         else if(item.kind === 2) {
-          if(!videoIdHash[id]) {
+          if(!audioIdHash[id]) {
             audioIdHash[id] = true;
             audioIdList.push(id);
           }

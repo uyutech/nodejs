@@ -11,7 +11,7 @@ class Service extends egg.Service {
   async textScan(text) {
     const md5 = crypto.createHash('md5');
     const hmac = crypto.createHmac('sha1', 'vXKFU7M5ajYsNOD0FcXhE1uNLsLlE2');
-    const traceID = this.ctx.traceID;
+    const tranceId = this.ctx.tranceId;
     const uid = this.ctx.session ? this.ctx.session.uid || '' : '';
     const ip = this.ctx.request.header['x-real-ip'];
     const date = new Date().toUTCString();
@@ -21,7 +21,7 @@ class Service extends egg.Service {
       tasks: [
         {
           content: text,
-          dataId: traceID,
+          dataId: tranceId,
           time: Date.now(),
         }
       ],
