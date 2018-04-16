@@ -44,8 +44,6 @@ const workType = require('../model/workType');
 const works = require('../model/works');
 const worksType = require('../model/worksType');
 const worksTimeline = require('../model/worksTimeline');
-const worksNum = require('../model/worksNum');
-const workNum = require('../model/workNum');
 const workTypeProfessionSort = require('../model/workTypeProfessionSort');
 const worksWorkRelation = require('../model/worksWorkRelation');
 const worksCommentRelation = require('../model/worksCommentRelation');
@@ -169,8 +167,6 @@ module.exports = {
         works: works(this),
         worksType: worksType(this),
         worksTimeline: worksTimeline(this),
-        worksNum: worksNum(this),
-        workNum: workNum(this),
         workTypeProfessionSort: workTypeProfessionSort(this),
         worksWorkRelation: worksWorkRelation(this),
         worksCommentRelation: worksCommentRelation(this),
