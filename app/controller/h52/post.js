@@ -40,6 +40,21 @@ class Controller extends egg.Controller {
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
+
+  async refList() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let [worksList, workList, authorList, userList, postList] = await Promise.all([
+      service.works.infoList(body.worksIdList),
+      service.work.infoList(body.workIdList),
+      service.author.infoList(body.authorIdList),
+      service.user.infoList(body.userIdList),
+      service.comment.infoList(body.postIdList)
+    ]);
+    ctx.body = ctx.helper.okJSON({
+      worksList, workList, authorList, userList, postList,
+    });
+  }
 }
 
 module.exports = Controller;
