@@ -10,12 +10,6 @@ const squel = require('squel');
 
 const CACHE_TIME = 10;
 
-const WORKS_STATE_NAME = {
-  0: '已完成',
-  1: '未完成', // 公开
-  2: '未完成', // 保密
-};
-
 class Service extends egg.Service {
   /**
    * 根据专辑id获取专辑信息
@@ -41,7 +35,8 @@ class Service extends egg.Service {
           ['sub_title', 'subTitle'],
           'state',
           'cover',
-          'type'
+          'type',
+          'popular'
         ],
         where: {
           id,
@@ -103,7 +98,8 @@ class Service extends egg.Service {
           ['sub_title', 'subTitle'],
           'state',
           'cover',
-          'type'
+          'type',
+          'popular'
         ],
         where: {
           id: noCacheIdList,

@@ -249,7 +249,8 @@ class Service extends egg.Service {
           'duration',
           'cover',
           'url',
-          'type'
+          'type',
+          'views'
         ],
         where: {
           id: noCacheIdList,
@@ -335,7 +336,8 @@ class Service extends egg.Service {
           'duration',
           'cover',
           'url',
-          'type'
+          'type',
+          'views'
         ],
         where: {
           id: noCacheIdList,
@@ -421,7 +423,8 @@ class Service extends egg.Service {
           'width',
           'height',
           'url',
-          'type'
+          'type',
+          'views'
         ],
         where: {
           id: noCacheIdList,
@@ -505,7 +508,8 @@ class Service extends egg.Service {
           'id',
           'title',
           'content',
-          'type'
+          'type',
+          'views'
         ],
         where: {
           id: noCacheIdList,
@@ -804,104 +808,6 @@ class Service extends egg.Service {
         let temp = hash[id] || 0;
         cache[i] = temp;
         app.redis.setex('workCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
-      });
-    }
-    return cache;
-  }
-
-  /**
-   * 获取播放数
-   * @param id:int 作品id
-   * @returns int
-   */
-  async playCount(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'playCount_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.workNum.findOne({
-      attributes: [
-        'num'
-      ],
-      where: {},
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
-
-  /**
-   * 获取播放数列表
-   * @param idList:Array<int> 作品id列表
-   * @returns Array<int>
-   */
-  async playCountList(idList) {
-    if(!idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    const { app } = this;
-    let cache = await Promise.all(
-      idList.map((id) => {
-        if(id !== null && id !== undefined) {
-          return app.redis.get('playCount_' + id);
-        }
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach((item, i) => {
-      let id = idList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        app.redis.expire('playCount_' + id, CACHE_TIME);
-      }
-      else if(id !== null && id !== undefined) {
-        if(!noCacheIdHash[id]) {
-          noCacheIdHash[id] = true;
-          noCacheIdList.push(id);
-        }
-        noCacheIndexList.push(i);
-      }
-    });
-    if(noCacheIdList.length) {
-      let res = await app.model.workNum.findAll({
-        attributes: [
-          ['work_id', 'workId'],
-          'num'
-        ],
-        where: {
-          work_id: noCacheIdList,
-        },
-        raw: true,
-      });
-      let hash = {};
-      if(res.length) {
-        res.forEach((item) => {
-          let id = item.workId;
-          hash[id] = item.num || 0;
-        });
-      }
-      noCacheIndexList.forEach((i) => {
-        let id = idList[i];
-        let temp = hash[id] || 0;
-        cache[i] = temp;
-        app.redis.setex('playCount_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;

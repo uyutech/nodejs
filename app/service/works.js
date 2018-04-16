@@ -10,12 +10,6 @@ const squel = require('squel');
 
 const CACHE_TIME = 10;
 
-const WORKS_STATE_NAME = {
-  0: '已完成',
-  1: '未完成', // 公开
-  2: '未完成', // 保密
-};
-
 class Service extends egg.Service {
   /**
    * 根据作品id获取作品信息
@@ -41,7 +35,9 @@ class Service extends egg.Service {
           ['sub_title', 'subTitle'],
           'state',
           'cover',
-          'type'
+          'type',
+          'popular',
+          ['is_authorize', 'isAuthorize']
         ],
         where: {
           id,
@@ -104,7 +100,9 @@ class Service extends egg.Service {
           ['sub_title', 'subTitle'],
           'state',
           'cover',
-          'type'
+          'type',
+          'popular',
+          ['is_authorize', 'isAuthorize']
         ],
         where: {
           id: noCacheIdList,
@@ -143,100 +141,6 @@ class Service extends egg.Service {
         item.typeName = typeHash[item.type].name;
       }
     });
-    return cache;
-  }
-
-  /**
-   * 根据作品id获取作品热度
-   * @param id:int 作品id
-   * @returns int
-   */
-  async popular(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'worksPopular_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    let sql = `SELECT
-      works.num
-      FROM works_num
-      WHERE works_num.works_id=${id}
-      AND type=0;`;
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0].num;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
-
-  /**
-   * 根据作品id列表获取作品热度列表
-   * @param idList:Array<int> 作品id列表
-   * @returns Array<int>
-   */
-  async popularList(idList) {
-    if(!idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    const { app } = this;
-    let cache = await Promise.all(
-      idList.map((id) => {
-        if(id !== null && id !== undefined) {
-          return app.redis.get('worksPopular_' + id);
-        }
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach((item, i) => {
-      let id = idList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        app.redis.expire('worksPopular_' + id, CACHE_TIME);
-      }
-      else if(id !== null && id !== undefined) {
-        if(!noCacheIdHash[id]) {
-          noCacheIdHash[id] = true;
-          noCacheIdList.push(id);
-        }
-        noCacheIndexList.push(i);
-      }
-    });
-    if(noCacheIdList.length) {
-      let sql = `SELECT
-        works.works_id AS worksId
-        works.num
-        FROM works_num
-        WHERE works_num.works_id IN (${noCacheIdList.join(', ')})
-        AND type=0;`;
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-      let hash = {};
-      if(res.length) {
-        res.forEach((item) => {
-          let id = item.worksId;
-          hash[id] = item.num;
-        });
-      }
-      noCacheIndexList.forEach((i) => {
-        let id = idList[i];
-        let temp = hash[id] || null;
-        cache[i] = temp;
-        app.redis.setex('worksPopular_' + id, CACHE_TIME, JSON.stringify(temp));
-      });
-    }
     return cache;
   }
 
@@ -1168,106 +1072,6 @@ class Service extends egg.Service {
   }
 
   /**
-   * 统计数字
-   * @param id:int 大作品id
-   * @param type:int 类型
-   * @returns int
-   */
-  async numCount(id, type) {
-    if(!id || !type) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'worksNum_' + id + '_' + type;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.worksNum.findOne({
-      attributes: [
-        'num'
-      ],
-      where: {
-        works_id: id,
-        type,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
-
-  /**
-   * 统计数字列表
-   * @param idList:int 大作品id列表
-   * @param type:int 类型
-   * @returns int
-   */
-  async numCountList(idList, type) {
-    if(!idList || !type) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    const { app } = this;
-    let cache = await Promise.all(
-      idList.map((id) => {
-        return app.redis.get('worksNum_' + id + '_' + type);
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach((item, i) => {
-      let worksId = idList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        app.redis.expire('worksNum_' + worksId + '_' + type, CACHE_TIME);
-      }
-      else if(worksId !== null && worksId !== undefined) {
-        if(!noCacheIdHash[worksId]) {
-          noCacheIdHash[worksId] = true;
-          noCacheIdList.push(worksId);
-        }
-        noCacheIndexList.push(i);
-      }
-    });
-    if(noCacheIdList.length) {
-      let res = await app.model.worksNum.findAll({
-        attributes: [
-          ['works_id', 'worksId'],
-          'num'
-        ],
-        where: {
-          works_id: noCacheIdList,
-        },
-        raw: true,
-      });
-      let hash = {};
-      if(res.length) {
-        res.forEach((item) => {
-          hash[item.worksId] = item.num;
-        });
-      }
-      noCacheIndexList.forEach((i) => {
-        let worksId = idList[i];
-        let num = hash[worksId] || 0;
-        cache[i] = num;
-        app.redis.setex('worksNum_' + worksId + '_' + type, CACHE_TIME, JSON.stringify(num));
-      });
-    }
-    return cache;
-  }
-
-  /**
    * 获取类似名字的作品
    * @param name:String 名字
    * @param offset:int 分页开始
@@ -1282,13 +1086,7 @@ class Service extends egg.Service {
       this.idListByName(name, offset, limit),
       this.countByName(name)
     ]);
-    let [data, countList] = await Promise.all([
-      this.infoList(idList),
-      this.numCountList(idList, 1)
-    ]);
-    data.forEach((item, i) => {
-      item.popular = countList[i] || 0;
-    });
+    let data = await this.infoList(idList);
     return {
       data,
       count,

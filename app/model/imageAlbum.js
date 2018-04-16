@@ -31,6 +31,16 @@ module.exports = app => {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
     },
+    cover: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
+    },
+    popular: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
@@ -40,12 +50,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,
-      comment: '0正常，1未完成公开，2未完成保密',
-    },
-    cover: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: '',
+      comment: '1正常，2未完成公开，3未完成保密',
     },
     create_time: {
       type: Sequelize.DATE,

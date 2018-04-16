@@ -633,10 +633,7 @@ class Service extends egg.Service {
     }
     const { service } = this;
     // 获取大作品信息、相关作者信息
-    let [[worksList, worksAuthorList], numList] = await Promise.all([
-      service.works.infoListPlus(worksIdList),
-      service.works.numCountList(worksIdList, 1)
-    ]);
+    let [worksList, worksAuthorList] = await service.works.infoListPlus(worksIdList);
     worksList.forEach((item, i) => {
       if(item) {
         let author = worksAuthorList[i];
@@ -656,7 +653,6 @@ class Service extends egg.Service {
           });
         });
         item.profession = profession;
-        item.popular = numList[i] || 0;
       }
     });
     return worksList;
@@ -726,13 +722,7 @@ class Service extends egg.Service {
       this.musicAlbumIdList(id, offset, limit),
       this.musicAlbumCount(id)
     ]);
-    let [data, numCountList] = await Promise.all([
-      service.musicAlbum.infoList(idList),
-      service.works.numCountList(idList, 1)
-    ]);
-    data.forEach((item, i) => {
-      item.popular = numCountList[i] || 0;
-    });
+    let data = await service.musicAlbum.infoList(idList);
     return {
       count,
       data,
@@ -1100,15 +1090,13 @@ class Service extends egg.Service {
         [workList, authorList],
         likeCountList,
         isLikeList,
-        commentCountList,
-        playCountList
+        commentCountList
       ] = await Promise.all([
         service.works.infoList(worksIdList),
         service.work.infoListPlus(workIdList, kind),
         service.work.likeCountList(workIdList),
         service.work.isLikeList(workIdList, uid),
-        service.works.commentCountList(worksIdList),
-        service.work.playCountList(workIdList)
+        service.works.commentCountList(worksIdList)
       ]);
       let worksHash = {};
       worksList.forEach((item, i) => {
@@ -1121,7 +1109,6 @@ class Service extends egg.Service {
         if(item) {
           item.likeCount = likeCountList[i] || 0;
           item.isLike = isLikeList[i] || false;
-          item.playCount = playCountList[i] || 0;
         }
       });
       return workIdList.map((workId, i) => {

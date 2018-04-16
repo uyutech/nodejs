@@ -23,6 +23,9 @@ class Controller extends egg.Controller {
       service.imageAlbum.imageList(albumId, uid, 0, LIMIT),
       service.imageAlbum.commentList(albumId, uid, 0, LIMIT)
     ]);
+    if(info.state === 3) {
+      return;
+    }
     commentList.limit = LIMIT;
     author = service.works.reorderAuthor(author);
     ctx.body = ctx.helper.okJSON({

@@ -315,15 +315,13 @@ class Service extends egg.Service {
         [workList, authorList],
         likeCountList,
         isLikeList,
-        commentCountList,
-        playCountList
+        commentCountList
       ] = await Promise.all([
         service.works.infoList(worksIdList),
         service.work.infoListPlus(workIdList, kind),
         service.work.likeCountList(workIdList),
         service.work.isLikeList(workIdList, uid),
-        service.works.commentCountList(worksIdList),
-        service.work.playCountList(workIdList)
+        service.works.commentCountList(worksIdList)
       ]);
       let worksHash = {};
       worksList.forEach((item, i) => {
@@ -336,7 +334,6 @@ class Service extends egg.Service {
         if(item) {
           item.likeCount = likeCountList[i] || 0;
           item.isLike = isLikeList[i] || false;
-          item.playCount = playCountList[i] || 0;
           item.author = service.works.firstAuthor(authorList[i]);
         }
       });

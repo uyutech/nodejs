@@ -23,6 +23,9 @@ class Controller extends egg.Controller {
       service.works.collectionAndAuthor(worksId, uid),
       service.works.commentList(worksId, uid, 0, LIMIT)
     ]);
+    if(info.state === 3) {
+      return;
+    }
     commentList.limit = LIMIT;
     collectionAuthor.forEach((item) => {
       author = author.concat(item);

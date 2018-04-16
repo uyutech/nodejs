@@ -323,12 +323,12 @@ async function dealWork(pool) {
     else if(item.BigType === 4) {
       workId = workId.toString().replace(/^2016/, 2022);
     }
-    await WorkNum.create({
-      work_id: workId,
-      type: 1,
-      num: item.PlayCountRaw,
-      update_time: item.CreateTime,
-    });
+    // await WorkNum.create({
+    //   work_id: workId,
+    //   type: 1,
+    //   num: item.PlayCountRaw,
+    //   update_time: item.CreateTime,
+    // });
     if(item.BigType === 2) {
       await Audio.create({
         id: workId,
@@ -342,6 +342,7 @@ async function dealWork(pool) {
         cover: '',
         url: item.FileUrl || '',
         lrc: '',
+        views: item.PlayCountRaw,
       });
     }
     else if(item.BigType === 1) {
@@ -358,6 +359,7 @@ async function dealWork(pool) {
         duration: 0,
         cover: '',
         url: item.FileUrl || '',
+        views: item.PlayCountRaw,
       });
     }
     else if(item.BigType === 3) {
@@ -373,6 +375,7 @@ async function dealWork(pool) {
         height: 0,
         time: 0,
         url: item.FileUrl || '',
+        views: item.PlayCountRaw,
       });
     }
     else if(item.BigType === 4) {
@@ -385,6 +388,7 @@ async function dealWork(pool) {
         create_time: item.CreateTime,
         update_time: item.CreateTime,
         content: '',
+        views: item.PlayCountRaw,
       });
     }
   }
@@ -450,7 +454,7 @@ async function dealWorks(pool) {
   console.log('------- dealWorks --------');
   await WorksType.sync();
   await Works.sync();
-  await WorksNum.sync();
+  // await WorksNum.sync();
   await MusicAlbum.sync();
   await ImageAlbum.sync();
   await WorksTimeline.sync();
@@ -479,8 +483,9 @@ async function dealWorks(pool) {
         type: item.WorksType,
         is_authorize: true,
         is_delete: !!item.ISDel,
-        state: Math.max(item.WorkState - 1, 0),
+        state: Math.max(item.WorkState, 1),
         cover: item.cover_Pic || '',
+        popular: item.Popular || 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -495,8 +500,9 @@ async function dealWorks(pool) {
         type: item.WorksType,
         is_authorize: true,
         is_delete: !!item.ISDel,
-        state: Math.max(item.WorkState - 1, 0),
+        state: Math.max(item.WorkState, 1),
         cover: item.cover_Pic || '',
+        popular: item.Popular || 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -510,18 +516,19 @@ async function dealWorks(pool) {
         type: item.WorksType,
         is_authorize: true,
         is_delete: !!item.ISDel,
-        state: Math.max(item.WorkState - 1, 0),
+        state: Math.max(item.WorkState, 1),
         cover: item.cover_Pic || '',
+        popular: item.Popular || 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
     }
-    await WorksNum.create({
-      works_id: worksId,
-      type: 1,
-      num: item.Popular,
-      update_time: item.CreateTime,
-    });
+    // await WorksNum.create({
+    //   works_id: worksId,
+    //   type: 1,
+    //   num: item.Popular,
+    //   update_time: item.CreateTime,
+    // });
   }
   last = 71;
   // last = 0;
@@ -1742,40 +1749,49 @@ async function modifyPostComment() {
 }
 
 async function temp(pool) {
-  let res = await MusicAlbum.findAll({
+  let res = await WorkNum.findAll({
     attributes: [
-      'id'
+      'work_id',
+      'num'
     ],
-    raw: true,
   });
   for(let i = 0; i < res.length; i++) {
     let item = res[i];
-    let oldId = item.id.toString().replace(/^2014/, 2015);
-    await WorksCommentRelation.update({
-      works_id: item.id,
-    }, {
-      where: {
-        works_id: oldId,
-      },
-      raw: true,
-    });
-  }
-  res = await ImageAlbum.findAll({
-    attributes: [
-      'id'
-    ],
-    raw: true,
-  });
-  for(let i = 0; i < res.length; i++) {
-    let item = res[i];
-    let oldId = item.id.toString().replace(/^2013/, 2015);
-    await WorksCommentRelation.update({
-      works_id: item.id,
-    }, {
-      where: {
-        works_id: oldId,
-      },
-      raw: true,
-    });
+    if(/^2020/.test(item.work_id)) {
+      await Video.update({
+        views: item.num,
+      }, {
+        where: {
+          id: item.work_id,
+        },
+      });
+    }
+    else if(/^2021/.test(item.work_id)) {
+      await Image.update({
+        views: item.num,
+      }, {
+        where: {
+          id: item.work_id,
+        },
+      });
+    }
+    else if(/^2022/.test(item.work_id)) {
+      await Text.update({
+        views: item.num,
+      }, {
+        where: {
+          id: item.work_id,
+        },
+      });
+    }
+    else {
+      await Audio.update({
+        views: item.num,
+      }, {
+        where: {
+          id: item.works_id,
+        },
+      });
+    }
   }
 }
