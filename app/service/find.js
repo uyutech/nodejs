@@ -380,7 +380,7 @@ class Service extends egg.Service {
         likeCountList,
         isLikeList
       ] = await Promise.all([
-        service.work.infoListPlus(workIdList),
+        service.work.infoListPlus(workIdList, kind),
         service.work.likeCountList(workIdList),
         service.work.isLikeList(workIdList, uid)
       ]);
