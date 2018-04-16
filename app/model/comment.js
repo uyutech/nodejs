@@ -69,16 +69,16 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'user_id_root_id_is_delete',
-        fields: ['user_id', 'root_id', 'is_delete'],
+        name: 'user_id_root_id',
+        fields: ['user_id', 'root_id'],
       },
       {
-        name: 'author_id_root_id_is_delete',
-        fields: ['author_id', 'root_id', 'is_delete'],
+        name: 'author_id_root_id',
+        fields: ['author_id', 'root_id'],
       },
       {
-        name: 'root_id_is_delete',
-        fields: ['root_id', 'is_delete'],
+        name: 'root_id',
+        fields: ['root_id'],
       }
     ],
     comment: '评论基本信息',

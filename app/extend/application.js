@@ -17,6 +17,7 @@ const authorCommentRelation = require('../model/authorCommentRelation');
 const authorNum = require('../model/authorNum');
 const authorOutside = require('../model/authorOutside');
 const authorAlias = require('../model/authorAlias');
+const authorDynamic = require('../model/authorDynamic');
 const circleType = require('../model/circleType');
 const circle = require('../model/circle');
 const circleTagRelation = require('../model/circleTagRelation');
@@ -44,7 +45,6 @@ const works = require('../model/works');
 const worksType = require('../model/worksType');
 const worksTimeline = require('../model/worksTimeline');
 const worksNum = require('../model/worksNum');
-const worksState = require('../model/worksState');
 const workNum = require('../model/workNum');
 const workTypeProfessionSort = require('../model/workTypeProfessionSort');
 const worksWorkRelation = require('../model/worksWorkRelation');
@@ -63,7 +63,6 @@ const recommend = require('../model/recommend');
 const recommendTag = require('../model/recommendTag');
 const recommendBanner = require('../model/recommendBanner');
 const recommendList = require('../model/recommendList');
-const banner = require('../model/banner');
 const userCircleRelation = require('../model/userCircleRelation');
 const userAccount = require('../model/userAccount');
 const userOauth = require('../model/userOauth');
@@ -143,6 +142,7 @@ module.exports = {
         authorNum: authorNum(this),
         authorOutside: authorOutside(this),
         authorAlias: authorAlias(this),
+        authorDynamic: authorDynamic(this),
         circleType: circleType(this),
         circle: circle(this),
         circleTagRelation: circleTagRelation(this),
@@ -170,7 +170,6 @@ module.exports = {
         worksType: worksType(this),
         worksTimeline: worksTimeline(this),
         worksNum: worksNum(this),
-        worksState: worksState(this),
         workNum: workNum(this),
         workTypeProfessionSort: workTypeProfessionSort(this),
         worksWorkRelation: worksWorkRelation(this),
@@ -189,7 +188,6 @@ module.exports = {
         recommendTag: recommendTag(this),
         recommendBanner: recommendBanner(this),
         recommendList: recommendList(this),
-        banner: banner(this),
         userCircleRelation: userCircleRelation(this),
         userAccount: userAccount(this),
         userOauth: userOauth(this),

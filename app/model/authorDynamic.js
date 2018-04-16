@@ -1,38 +1,37 @@
 /**
- * Created by army8735 on 2018/3/25.
+ * Created by army8735 on 2018/4/15.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('tag_comment_relation', {
+  return sequelizeCircling.define('author_dynamic', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    tag_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    author_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    comment_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    target_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 0,
-      comment: '1直接选择，2内容输入',
+      comment: '1画圈',
     },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
-    is_comment_delete: {
+    is_target_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -50,15 +49,15 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'tag_id_comment_id_type',
+        name: 'author_id_type_target_id',
         unique: true,
-        fields: ['tag_id', 'comment_id', 'type'],
+        fields: ['author_id', 'type', 'target_id'],
       },
       {
-        name: 'comment_id_type',
-        fields: ['comment_id', 'type'],
+        name: 'author_id_create_time',
+        fields: ['author_id', 'create_time'],
       }
     ],
-    comment: '标签留言关联信息',
+    comment: '作者动态',
   });
 };

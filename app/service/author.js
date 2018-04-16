@@ -529,7 +529,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMainWorksIdList_' + id + '_' + offset + '_' + limit;
+    let cacheKey = 'authorMainWorksIdList_' + id;
     let res;
     if(offset === 0) {
       res = await app.redis.get(cacheKey);
@@ -574,15 +574,18 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    let sql = squel.select()
-      .from('author_main_works')
-      .field('COUNT(*)', 'num')
-      .where('author_id', id)
-      .where('is_delete=false')
-      .toString();
-    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    if(res.length) {
-      res = res[0].num || 0;
+    res = await app.model.authorMainWorks.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        author_id: id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
     }
     else {
       res = 0;
@@ -676,7 +679,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMusicAlbumIdList_' + id + '_' + offset + '_' + limit;
+    let cacheKey = 'authorMusicAlbumIdList_' + id;
     let res;
     if(offset === 0) {
       res = await app.redis.get(cacheKey);
@@ -917,7 +920,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorKindWorkIdList_' + id + '_' + kind + '_' + offset + '_' + limit;
+    let cacheKey = 'authorKindWorkIdList_' + id + '_' + kind;
     let res;
     if(offset === 0) {
       res = await app.redis.get(cacheKey);
@@ -1315,7 +1318,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorIdListByName_' + name + '_' + offset + '_' + limit;
+    let cacheKey = 'authorIdListByName_' + name;
     let res;
     if(offset === 0) {
       res = await app.redis.get(cacheKey);
@@ -1415,7 +1418,7 @@ class Service extends egg.Service {
     let cacheKey = 'allAuthor_' + offset + '_' + limit;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
+      // app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.author.findAll({
@@ -1435,10 +1438,7 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    // 只缓存第一页
-    if(offset === 0) {
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 
@@ -1455,6 +1455,102 @@ class Service extends egg.Service {
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
       where: {
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取作者动态
+   * @param id:int 作者id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data: Array<Object> }
+   */
+  async dynamicList(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.dynamicData(id, uid, offset, limit),
+      this.dynamicCount(id)
+    ]);
+    return { data, count };
+  }
+
+  async dynamicData(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'authorDynamic_' + id;
+    let res;
+    if(offset === 0) {
+      res = await app.redis.get(cacheKey);
+      if(res) {
+        app.redis.expire(cacheKey, CACHE_TIME);
+        res = JSON.parse(res);
+      }
+    }
+    if(!res) {
+      res = await app.model.authorDynamic.findAll({
+        attributes: [
+          ['target_id', 'targetId'],
+          'type'
+        ],
+        where: {
+          author_id: id,
+          is_delete: false,
+        },
+        order: [
+          ['create_time', 'DESC']
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      if(offset === 0) {
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      }
+    }
+    let idList = res.map((item) => {
+      return item.targetId;
+    });
+    return await service.post.infoList(idList, uid);
+  }
+
+  async dynamicCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'authorDynamicCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.authorDynamic.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        author_id: id,
         is_delete: false,
       },
       raw: true,

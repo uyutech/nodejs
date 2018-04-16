@@ -78,7 +78,6 @@ const UserWorkRelation = require('./app/model/userWorkRelation')({ sequelizeCirc
 const UserCommentRelation = require('./app/model/userCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Recommend = require('./app/model/recommend')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendTag = require('./app/model/recommendTag')({ sequelizeCircling: sequelize, Sequelize });
-const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendList = require('./app/model/recommendList')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendComment = require('./app/model/recommendComment')({ sequelizeCircling: sequelize, Sequelize });
@@ -86,9 +85,10 @@ const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelize
 const UserAccount = require('./app/model/userAccount')({ sequelizeCircling: sequelize, Sequelize });
 const UserOauth = require('./app/model/userOauth')({ sequelizeCircling: sequelize, Sequelize });
 const Message = require('./app/model/message')({ sequelizeCircling: sequelize, Sequelize });
-const WorkAuthorRelation = require('./app/model/WorkAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
-const WorksAuthorRelation = require('./app/model/WorksAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
-const WorkTypeProfessionSort = require('./app/model/WorkTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
+const WorkAuthorRelation = require('./app/model/workAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
+const WorksAuthorRelation = require('./app/model/worksAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
+const WorkTypeProfessionSort = require('./app/model/workTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
+const AuthorDynamic = require('./app/model/authorDynamic')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -123,6 +123,7 @@ const WorkTypeProfessionSort = require('./app/model/WorkTypeProfessionSort')({ s
     await dealCommentMedia(pool);
     await dealAccount(pool);
     await dealMessage(pool);
+    // await dealAuthorDynamic(pool);
     // await temp(pool);
     // await modifyWorksComment();
     // await modifyAuthorComment();
@@ -1616,6 +1617,32 @@ async function dealMessage(pool) {
       where: {
         id: item.NID,
       },
+    });
+  }
+}
+
+async function dealAuthorDynamic(pool) {
+  console.log('------- dealAuthorDynamic --------');
+  await AuthorDynamic.sync();
+  let res = await Comment.findAll({
+    attributes: [
+      'id',
+      'author_id'
+    ],
+    where: {
+      author_id: {
+        $gt: 0
+      },
+      root_id: 0,
+    },
+    raw: true,
+  });
+  for(let i = 0; i < res.length; i++) {
+    let item = res[i];
+    await AuthorDynamic.create({
+      author_id: item.author_id,
+      target_id: item.id,
+      type: 1,
     });
   }
 }

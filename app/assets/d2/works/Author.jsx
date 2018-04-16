@@ -26,9 +26,14 @@ class Author extends migi.Component {
                   <dt>{ item.name }</dt>
                   {
                     (item.list || []).map(function(author) {
+                      if(author.isSettle) {
+                        return <dd>
+                          <img src={util.autoSsl(util.img48_48_80(author.headUrl))
+                            || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'}/>
+                          <span>{ author.name }</span>
+                        </dd>;
+                      }
                       return <dd>
-                        <img src={ util.autoSsl(util.img48_48_80(author.headUrl))
-                          || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
                         <span>{ author.name }</span>
                       </dd>;
                     })

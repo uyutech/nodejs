@@ -359,7 +359,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'tagListByName_' + name + '_' + offset + '_' + limit;
+    let cacheKey = 'tagListByName_' + name;
     let res;
     if(offset === 0) {
       res = await app.redis.get(cacheKey);

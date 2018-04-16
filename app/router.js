@@ -325,6 +325,7 @@ module.exports = app => {
   app.post('/h5/imageAlbum/commentList', 'h52.imageAlbum.commentList');
 
   app.post('/h5/author2/index', 'h52.author.index');
+  app.post('/h5/author2/dynamicList', 'h52.author.dynamicList');
   app.post('/h5/author2/commentList', 'h52.author.commentList');
   app.post('/h5/author2/kindWorkList', 'h52.author.kindWorkList');
   app.post('/h5/author2/follow', app.middlewares.needLoginJson(), 'h52.author.follow');

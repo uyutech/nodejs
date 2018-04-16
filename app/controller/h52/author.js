@@ -27,6 +27,7 @@ class Controller extends egg.Controller {
       mainWorks,
       musicAlbum,
       workKindList,
+      dynamicList,
       commentList
     ] = await Promise.all([
       service.author.info(authorId),
@@ -37,6 +38,7 @@ class Controller extends egg.Controller {
       service.author.mainWorks(authorId, 0, LIMIT),
       service.author.musicAlbum(authorId, 0, LIMIT),
       service.author.workKindList(authorId),
+      service.author.dynamicList(authorId, uid, 0, LIMIT),
       service.author.commentList(authorId, uid, 0, LIMIT)
     ]);
     mainWorks.limit = LIMIT;
@@ -45,6 +47,7 @@ class Controller extends egg.Controller {
       kindWorkList = await service.author.kindWorkList(authorId, uid, workKindList[0].kind, 0, LIMIT);
       kindWorkList.limit = LIMIT;
     }
+    dynamicList.limit = LIMIT;
     commentList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       info,
@@ -56,8 +59,23 @@ class Controller extends egg.Controller {
       musicAlbum,
       workKindList,
       kindWorkList,
+      dynamicList,
       commentList,
     });
+  }
+
+  async dynamicList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let authorId = parseInt(body.authorId);
+    let offset = parseInt(body.offset) || 0;
+    if(!authorId) {
+      return;
+    }
+    let res = await service.author.commentList(authorId, uid, offset, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 
   async commentList() {
@@ -65,11 +83,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let authorId = parseInt(body.authorId);
-    let offset = parseInt(body.offset);
+    let offset = parseInt(body.offset) || 0;
     if(!authorId) {
       return;
     }
-    let res = await service.author.commentList(authorId, uid, offset || 0, LIMIT);
+    let res = await service.author.dynamicList(authorId, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -80,11 +98,11 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let authorId = parseInt(body.authorId);
     let kind = parseInt(body.kind);
-    let offset = parseInt(body.offset);
+    let offset = parseInt(body.offset) || 0;
     if(!authorId || !kind) {
       return;
     }
-    let kindWorkList = await service.author.kindWorkList(authorId, uid, kind, offset || 0, LIMIT);
+    let kindWorkList = await service.author.kindWorkList(authorId, uid, kind, offset, LIMIT);
     kindWorkList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(kindWorkList);
   }
