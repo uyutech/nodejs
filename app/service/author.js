@@ -1087,7 +1087,7 @@ class Service extends egg.Service {
     if(kind === 1) {
       let [
         worksList,
-        [workList, authorList],
+        workList,
         likeCountList,
         isLikeList,
         commentCountList
@@ -1117,8 +1117,7 @@ class Service extends egg.Service {
         let work = workList[i];
         copy.work = work;
         let professionList = [];
-        let author = authorList[i];console.log(author);
-        author.forEach((group) => {
+        work.author.forEach((group) => {
           group.forEach((item) => {
             for(let i = 0, len = item.list.length; i < len; i++) {
               if(item.list[i].id === id) {
@@ -1132,11 +1131,12 @@ class Service extends egg.Service {
           });
         });
         work.profession = professionList;
+        delete work.author;
         return copy;
       });
     }
     else if(kind === 2) {
-      let [worksList, [workList, authorList]] = await Promise.all([
+      let [worksList, workList] = await Promise.all([
         service.works.infoList(worksIdList),
         service.work.infoListPlus(workIdList, kind)
       ]);
@@ -1150,8 +1150,7 @@ class Service extends egg.Service {
         let work = workList[i];
         copy.work = work;
         let professionList = [];
-        let author = authorList[i];console.log(author);
-        author.forEach((group) => {
+        work.author.forEach((group) => {
           group.forEach((item) => {
             for(let i = 0, len = item.list.length; i < len; i++) {
               if(item.list[i].id === id) {
@@ -1165,12 +1164,13 @@ class Service extends egg.Service {
           });
         });
         work.profession = professionList;
+        delete work.author;
         return copy;
       });
     }
     else if(kind === 3) {
       let [
-        [workList, authorList],
+        workList,
         likeCountList,
         isLikeList
       ] = await Promise.all([
@@ -1184,7 +1184,7 @@ class Service extends egg.Service {
           item.isLike = isLikeList[i] || false;
           let professionList = [];
           let author = authorList[i];
-          author.forEach((group) => {
+          item.author.forEach((group) => {
             group.forEach((item) => {
               for(let i = 0, len = item.list.length; i < len; i++) {
                 if(item.list[i].id === id) {
@@ -1198,6 +1198,7 @@ class Service extends egg.Service {
             });
           });
           item.profession = professionList;
+          delete item.author;
         }
       });
       return workList;

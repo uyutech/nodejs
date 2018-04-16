@@ -17,18 +17,10 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    works_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      defaultValue: 0,
-    },
-    work_id: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      defaultValue: 0,
-    },
     kind: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0图片，1小作品视频，2小作品音频',
+      comment: '3图片',
     },
     url: {
       type: Sequelize.STRING,
@@ -55,6 +47,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
+    create_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
     update_time: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -67,6 +64,6 @@ module.exports = app => {
         fields: ['comment_id'],
       }
     ],
-    comment: '评论基本信息',
+    comment: '评论附带信息',
   });
 };

@@ -312,7 +312,7 @@ class Service extends egg.Service {
     if(kind === 1) {
       let [
         worksList,
-        [workList, authorList],
+        workList,
         likeCountList,
         isLikeList,
         commentCountList
@@ -334,7 +334,7 @@ class Service extends egg.Service {
         if(item) {
           item.likeCount = likeCountList[i] || 0;
           item.isLike = isLikeList[i] || false;
-          item.author = service.works.firstAuthor(authorList[i]);
+          item.author = service.works.firstAuthor(item.author);
         }
       });
       return res.map((item, i) => {
@@ -350,7 +350,7 @@ class Service extends egg.Service {
       });
     }
     else if(kind === 2) {
-      let [worksList, [workList, authorList]] = await Promise.all([
+      let [worksList, workList] = await Promise.all([
         service.works.infoList(worksIdList),
         service.work.infoListPlus(workIdList, kind)
       ]);
@@ -363,7 +363,7 @@ class Service extends egg.Service {
         if(works) {
           let copy = Object.assign({}, works);
           let work = workList[i];
-          work.author = service.works.firstAuthor(authorList[i]);
+          work.author = service.works.firstAuthor(work.author);
           if(work) {
             copy.work = work;
           }
@@ -374,12 +374,10 @@ class Service extends egg.Service {
     else if(kind === 3) {
       let [
         workList,
-        authorList,
         likeCountList,
         isLikeList
       ] = await Promise.all([
-        service.work.imageList(workIdList),
-        service.work.authorList(workIdList),
+        service.work.infoListPlus(workIdList),
         service.work.likeCountList(workIdList),
         service.work.isLikeList(workIdList, uid)
       ]);
@@ -387,7 +385,7 @@ class Service extends egg.Service {
         if(item) {
           item.likeCount = likeCountList[i] || 0;
           item.isLike = isLikeList[i] || false;
-          item.author = authorList[i];
+          item.author = service.works.firstAuthor(item.author);
         }
       });
       return workList;

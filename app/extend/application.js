@@ -24,6 +24,7 @@ const circleTagRelation = require('../model/circleTagRelation');
 const circleCommentRelation = require('../model/circleCommentRelation');
 const comment = require('../model/comment');
 const commentMedia = require('../model/commentMedia');
+const commentWork = require('../model/commentWork');
 const profession = require('../model/profession');
 const professionSkillRelation = require('../model/professionSkillRelation');
 const skill = require('../model/skill');
@@ -61,6 +62,7 @@ const recommend = require('../model/recommend');
 const recommendTag = require('../model/recommendTag');
 const recommendBanner = require('../model/recommendBanner');
 const recommendList = require('../model/recommendList');
+const banner = require('../model/banner');
 const userCircleRelation = require('../model/userCircleRelation');
 const userAccount = require('../model/userAccount');
 const userOauth = require('../model/userOauth');
@@ -147,6 +149,7 @@ module.exports = {
         circleCommentRelation: circleCommentRelation(this),
         comment: comment(this),
         commentMedia: commentMedia(this),
+        commentWork: commentWork(this),
         profession: profession(this),
         professionSkillRelation: professionSkillRelation(this),
         skill: skill(this),
@@ -184,6 +187,7 @@ module.exports = {
         recommendTag: recommendTag(this),
         recommendBanner: recommendBanner(this),
         recommendList: recommendList(this),
+        banner: banner(this),
         userCircleRelation: userCircleRelation(this),
         userAccount: userAccount(this),
         userOauth: userOauth(this),

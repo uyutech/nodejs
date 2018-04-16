@@ -214,12 +214,189 @@ class Service extends egg.Service {
       }
       noCacheIndexList.forEach((i) => {
         let id = idList[i];
-        let item = hash[id] || null;
+        let item = hash[id] || [];
         cache[i] = item;
         app.redis.setex('commentMedia_' + id, CACHE_TIME, JSON.stringify(item));
       });
     }
     return cache;
+  }
+
+  /**
+   * 获取评论下附带的作品
+   * @param id:int 评论id
+   * @returns Array<Object>
+   */
+  async work(id) {
+    if(!id) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'commentWork_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.commentWork.findAll({
+        attributes: [
+          ['work_id', 'workId'],
+          'kind'
+        ],
+        where: {
+          comment_id: id,
+          is_delete: false,
+        },
+        raw: true,
+      });
+    }
+    let videoIdList = [];
+    let videoIdHash = {};
+    let audioIdList = [];
+    let audioIdHash = {};
+    res.forEach((item) => {
+      let id = item.workId;
+      if(item.kind === 1) {
+        if(!videoIdHash[id]) {
+          videoIdHash[id] = true;
+          videoIdList.push(id);
+        }
+      }
+      else if(item.kind === 2) {
+        if(!audioIdHash[id]) {
+          audioIdHash[id] = true;
+          audioIdList.push(id);
+        }
+      }
+    });
+    let [videoList, audioList] = await Promise.all([
+      service.work.infoListPlus(videoIdList, 1),
+      service.work.infoListPlus(audioIdList, 2)
+    ]);
+    let hash = {};
+    videoList.forEach((item) => {
+      item.kind = 1;
+      item.author = service.works.firstAuthor(item.author);
+      hash[item.id] = item;
+    });
+    audioList.forEach((item) => {
+      item.kind = 2;
+      item.author = service.works.firstAuthor(item.author);
+      hash[item.id] = item;
+    });
+    return res.map((item) => {
+      return hash[item.workId];
+    });
+  }
+
+  /**
+   * 获取评论列表下附带的作品
+   * @param idList:int 评论id列表
+   * @returns Array<Array<Object>>
+   */
+  async workList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app, service } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        return app.redis.get('commentWork_' + id);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('commentWork_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.commentWork.findAll({
+        attributes: [
+          ['comment_id', 'commentId'],
+          ['work_id', 'workId'],
+          'kind'
+        ],
+        where: {
+          comment_id: noCacheIdList,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.commentId;
+          let temp = hash[id] = hash[id] || [];
+          temp.push({
+            workId: item.workId,
+            kind: item.kind,
+          });
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || [];
+        cache[i] = temp;
+        app.redis.setex('commentWork_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    let videoIdList = [];
+    let videoIdHash = {};
+    let audioIdList = [];
+    let audioIdHash = {};
+    cache.forEach((arr) => {
+      arr.forEach((item) => {
+        let id = item.workId;
+        if(item.kind === 1) {
+          if(!videoIdHash[id]) {
+            videoIdHash[id] = true;
+            videoIdList.push(id);
+          }
+        }
+        else if(item.kind === 2) {
+          if(!videoIdHash[id]) {
+            audioIdHash[id] = true;
+            audioIdList.push(id);
+          }
+        }
+      });
+    });
+    let [videoList, audioList] = await Promise.all([
+      service.work.infoListPlus(videoIdList, 1),
+      service.work.infoListPlus(audioIdList, 2)
+    ]);
+    let hash = {};
+    videoList.forEach((item) => {
+      item.kind = 1;
+      item.author = service.works.firstAuthor(item.author);
+      hash[item.id] = item;
+    });
+    audioList.forEach((item) => {
+      item.kind = 2;
+      item.author = service.works.firstAuthor(item.author);
+      hash[item.id] = item;
+    });
+    return cache.map((arr) => {
+      return arr.map((item) => {
+        return hash[item.workId];
+      });
+    });
   }
 
   /**
@@ -278,14 +455,16 @@ class Service extends egg.Service {
       [ favorCount, isFavor ],
       replyCount,
       circle,
-      media
+      media,
+      work
     ] = await Promise.all([
       this.quoteAndPerson(data),
       this.operateRelation(id, uid, 1),
       this.operateRelation(id, uid, 2),
       this.replyCount(id),
       this.circle(id),
-      this.media(id)
+      this.media(id),
+      this.work(id)
     ]);
     if(data.isAuthor) {
       let author = authorHash[data.aid];
@@ -310,12 +489,11 @@ class Service extends egg.Service {
     data.isFavor = isFavor;
     data.replyCount = replyCount || 0;
     data.circle = circle;
-    if(media) {
-      media.forEach((item) => {
-        delete item.commentId;
-      });
-      data.media = media;
-    }
+    media.forEach((item) => {
+      delete item.commentId;
+    });
+    data.media = media;
+    data.work = work;
     return data;
   }
 
@@ -431,14 +609,16 @@ class Service extends egg.Service {
       [ favorCountList, favorList ],
       replyCountList,
       circleList,
-      mediaList
+      mediaList,
+      workList
     ] = await Promise.all([
       this.quoteAndPersonList(dataList),
       this.operateRelationList(idList, uid, 1),
       this.operateRelationList(idList, uid, 2),
       this.replyCountList(idList),
       this.circleList(idList),
-      this.mediaList(idList)
+      this.mediaList(idList),
+      this.workList(idList)
     ]);
     dataList.forEach((item, i) => {
       if(item) {
@@ -477,15 +657,12 @@ class Service extends egg.Service {
         if(circleList) {
           item.circle = circleList[i];
         }
-        if(mediaList) {
-          let media = mediaList[i];
-          if(media) {
-            media.forEach((item) => {
-              delete item.commentId;
-            });
-            item.media = media;
-          }
-        }
+        let media = mediaList[i];
+        media.forEach((item) => {
+          delete item.commentId;
+        });
+        item.media = media;
+        item.work = workList[i];
       }
     });
     return dataList;

@@ -339,7 +339,6 @@ class Service extends egg.Service {
             width: item.width,
             height: item.height,
             duration: 0,
-            is_delete: false,
             update_time: now,
           });
         }));

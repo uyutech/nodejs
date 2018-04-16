@@ -137,34 +137,81 @@ class Service extends egg.Service {
 
   /**
    * 根据id列表返回小作品信息
-   * @param idList:Array<int>
-   * @param kind:int
+   * @param idList:Array<int> id列表
+   * @param kind:int 类型，为空为自行判断
    * @returns Array<Object>
    */
   async infoList(idList, kind) {
-    if(!idList || !kind) {
+    if(!idList) {
       return;
     }
     if(!idList.length) {
       return [];
     }
-    switch(kind) {
-      case 1:
-        return await this.videoList(idList);
-      case 2:
-        return await this.audioList(idList);
-      case 3:
-        return await this.imageList(idList);
-      case 4:
-        return await this.textList(idList);
+    if(!kind) {
+      let videoIdList = [];
+      let audioIdList = [];
+      let imageIdList = [];
+      let textIdList = [];
+      idList.forEach((id) => {
+        let kind = this.getKind(id);
+        switch(kind) {
+          case 1:
+            videoIdList.push(id);
+            break;
+          case 2:
+            audioIdList.push(id);
+            break;
+          case 3:
+            imageIdList.push(id);
+            break;
+          case 4:
+            textIdList.push(id);
+            break;
+        }
+      });
+      let [videoList, audioList, imageList, textList] = await Promise.all([
+        this.videoList(videoIdList),
+        this.audioList(audioIdList),
+        this.imageList(imageIdList),
+        this.textList(textIdList),
+      ]);
+      let hash = {};
+      videoList.forEach((item) => {
+        hash[item.id] = item;
+      });
+      audioList.forEach((item) => {
+        hash[item.id] = item;
+      });
+      imageList.forEach((item) => {
+        hash[item.id] = item;
+      });
+      textList.forEach((item) => {
+        hash[item.id] = item;
+      });
+      return idList.map((id) => {
+        return hash[id];
+      });
+    }
+    else {
+      switch(kind) {
+        case 1:
+          return await this.videoList(idList);
+        case 2:
+          return await this.audioList(idList);
+        case 3:
+          return await this.imageList(idList);
+        case 4:
+          return await this.textList(idList);
+      }
     }
     return [];
   }
 
   /**
    * 根据id列表返回小作品信息和作者信息
-   * @param idList:Array<int>
-   * @param kind:int
+   * @param idList:Array<int> id列表
+   * @param kind:int 类型
    * @returns Array<Object>
    */
   async infoListPlus(idList, kind) {
@@ -199,7 +246,10 @@ class Service extends egg.Service {
     authorList.forEach((author, i) => {
       authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
     });
-    return [infoList, authorList];
+    infoList.forEach((item, i) => {
+      item.author = authorList[i];
+    });
+    return infoList;
   }
 
   /**

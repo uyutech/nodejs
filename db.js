@@ -56,7 +56,6 @@ const Video = require('./app/model/Video')({ sequelizeCircling: sequelize, Seque
 const Image = require('./app/model/Image')({ sequelizeCircling: sequelize, Sequelize });
 const Text = require('./app/model/Text')({ sequelizeCircling: sequelize, Sequelize });
 const WorkType = require('./app/model/workType')({ sequelizeCircling: sequelize, Sequelize });
-const WorkNum = require('./app/model/workNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksType = require('./app/model/worksType')({ sequelizeCircling: sequelize, Sequelize });
 const Works = require('./app/model/works')({ sequelizeCircling: sequelize, Sequelize });
 const WorksTypeProfessionSort = require('./app/model/worksTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
@@ -64,13 +63,13 @@ const MusicAlbum = require('./app/model/musicAlbum')({ sequelizeCircling: sequel
 const MusicAlbumAuthorRelation = require('./app/model/MusicAlbumAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbumAuthorRelation = require('./app/model/ImageAlbumAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbum = require('./app/model/imageAlbum')({ sequelizeCircling: sequelize, Sequelize });
-const WorksNum = require('./app/model/worksNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksTimeline = require('./app/model/worksTimeline')({ sequelizeCircling: sequelize, Sequelize });
 const WorksWorkRelation = require('./app/model/worksWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const MusicAlbumWorkRelation = require('./app/model/musicAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbumWorkRelation = require('./app/model/imageAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const Comment = require('./app/model/comment')({ sequelizeCircling: sequelize, Sequelize });
 const CommentMedia = require('./app/model/commentMedia')({ sequelizeCircling: sequelize, Sequelize });
+const CommentWork = require('./app/model/commentWork')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorCommentRelation = require('./app/model/authorCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const WorksCommentRelation = require('./app/model/worksCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleCommentRelation = require('./app/model/circleCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
@@ -291,7 +290,6 @@ async function dealWork(pool) {
   await Video.sync();
   await Image.sync();
   await Text.sync();
-  await WorkNum.sync();
   let last = 46;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkItemType WHERE ID>${last};`);
@@ -323,12 +321,6 @@ async function dealWork(pool) {
     else if(item.BigType === 4) {
       workId = workId.toString().replace(/^2016/, 2022);
     }
-    // await WorkNum.create({
-    //   work_id: workId,
-    //   type: 1,
-    //   num: item.PlayCountRaw,
-    //   update_time: item.CreateTime,
-    // });
     if(item.BigType === 2) {
       await Audio.create({
         id: workId,
@@ -454,7 +446,6 @@ async function dealWorks(pool) {
   console.log('------- dealWorks --------');
   await WorksType.sync();
   await Works.sync();
-  // await WorksNum.sync();
   await MusicAlbum.sync();
   await ImageAlbum.sync();
   await WorksTimeline.sync();
@@ -523,12 +514,6 @@ async function dealWorks(pool) {
         update_time: item.CreateTime,
       });
     }
-    // await WorksNum.create({
-    //   works_id: worksId,
-    //   type: 1,
-    //   num: item.Popular,
-    //   update_time: item.CreateTime,
-    // });
   }
   last = 71;
   // last = 0;
@@ -1507,42 +1492,57 @@ async function dealUserPost(pool) {
 async function dealCommentMedia(pool) {
   console.log('------- dealCommentMedia --------');
   await CommentMedia.sync();
+  await CommentWork.sync();
   let last = 72119;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Media WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     let kind = item.FileType || 0;
-    if(kind === 3) {
+    if(kind == 3) {
       kind = 0;
+    }
+    if(kind == 0) {
+      await CommentMedia.create({
+        comment_id: item.CommentID,
+        kind: 3,
+        width: item.Width,
+        height: item.Height,
+        url: item.FileUrl || '',
+        duration: 0,
+        is_delete: false,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+      continue;
     }
     let workId = item.ItemsID || 0;
     let worksId = 0;
-    if(kind == 1 || kind == 2) {
+    if(kind == 1) {
       workId = workId.toString().replace(/^2016/, 2020);
-      let query = await WorksWorkRelation.findOne({
-        attributes: [
-          ['works_id', 'worksId']
-        ],
-        where: {
-          work_id: workId,
-        },
-        raw: true,
-      });
-      if(query) {
-        worksId = query.worksId;
-      }
     }
-    await CommentMedia.create({
+    let query = await WorksWorkRelation.findOne({
+      attributes: [
+        ['works_id', 'worksId']
+      ],
+      where: {
+        work_id: workId,
+      },
+      raw: true,
+    });
+    if(query) {
+      worksId = query.worksId;
+    }
+    else {
+      continue;
+    }
+    await CommentWork.create({
       comment_id: item.CommentID,
       works_id: worksId ,
-      work_id: item.ItemsID || 0,
-      kind: item.FileType || 3,
-      width: item.Width,
-      height: item.Height,
-      url: item.FileUrl || '',
-      duration: 0,
+      work_id: workId,
+      kind,
       is_delete: false,
+      create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
   }
