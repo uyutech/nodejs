@@ -125,14 +125,20 @@ module.exports = appInfo => {
   };
 
   config.database = {
-    stats: {
-      name: 'stats',
+    circling: {
+      name: 'circling',
       username: 'uyutech',
       password: 'uyuTech2017',
       host: 'rm-uf6s915okm3a004l5.mysql.rds.aliyuncs.com',
     },
-    circling: {
-      name: 'circling',
+    mall: {
+      name: 'mall',
+      username: 'uyutech',
+      password: 'uyuTech2017',
+      host: 'rm-uf6s915okm3a004l5.mysql.rds.aliyuncs.com',
+    },
+    stats: {
+      name: 'stats',
       username: 'uyutech',
       password: 'uyuTech2017',
       host: 'rm-uf6s915okm3a004l5.mysql.rds.aliyuncs.com',

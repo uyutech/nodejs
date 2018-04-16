@@ -16,14 +16,20 @@ module.exports = appInfo => {
       password: 'uyuTech123',
     },
     database: {
-      stats: {
-        name: 'stats',
+      circling: {
+        name: 'circling',
         username: 'root',
         password: '87351984@',
         host: 'localhost',
       },
-      circling: {
-        name: 'circling',
+      mall: {
+        name: 'mall',
+        username: 'root',
+        password: '87351984@',
+        host: 'localhost',
+      },
+      stats: {
+        name: 'stats',
         username: 'root',
         password: '87351984@',
         host: 'localhost',

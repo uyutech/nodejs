@@ -8,13 +8,13 @@ const Sequelize = require('sequelize');
 
 const SEQUELIZE = Symbol('Application#Sequelize');
 const SEQUELIZE_CIRCLING = Symbol('Application#sequelizeCircling');
+const SEQUELIZE_MALL = Symbol('Application#sequelizeMall');
 const SEQUELIZE_STATS = Symbol('Application#sequelizeStats');
 const MODEL = Symbol('Application#Model');
 
 const author = require('../model/author');
 const authorMainWorks = require('../model/authorMainWorks');
 const authorCommentRelation = require('../model/authorCommentRelation');
-const authorNum = require('../model/authorNum');
 const authorOutside = require('../model/authorOutside');
 const authorAlias = require('../model/authorAlias');
 const authorDynamic = require('../model/authorDynamic');
@@ -68,6 +68,8 @@ const userCircleRelation = require('../model/userCircleRelation');
 const userAccount = require('../model/userAccount');
 const userOauth = require('../model/userOauth');
 const message = require('../model/message');
+const product = require('../model/product');
+const order = require('../model/order');
 
 module.exports = {
   get Sequelize() {
@@ -105,6 +107,35 @@ module.exports = {
     }
     return this[SEQUELIZE_CIRCLING];
   },
+  get sequelizeMall() {
+    if(!this[SEQUELIZE_MALL]) {
+      let database = this.config.database;
+      this[SEQUELIZE_MALL] = new Sequelize(database.mall.name, database.mall.username, database.mall.password, {
+        host: database.stats.host,
+        dialect: 'mysql',
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        },
+        dialectOptions: {
+          charset: 'utf8mb4',
+          collate: 'utf8mb4_unicode_ci'
+        },
+        options: {
+          charset: 'utf8mb4',
+        },
+        define: {
+          timestamps: false,
+          underscored: true,
+          freezeTableName: true,
+        },
+        timezone: '+08:00',
+      });
+    }
+    return this[SEQUELIZE_MALL];
+  },
   get sequelizeStats() {
     if(!this[SEQUELIZE_STATS]) {
       let database = this.config.database;
@@ -140,7 +171,6 @@ module.exports = {
         author: author(this),
         authorMainWorks: authorMainWorks(this),
         authorCommentRelation: authorCommentRelation(this),
-        authorNum: authorNum(this),
         authorOutside: authorOutside(this),
         authorAlias: authorAlias(this),
         authorDynamic: authorDynamic(this),
@@ -194,6 +224,8 @@ module.exports = {
         userAccount: userAccount(this),
         userOauth: userOauth(this),
         message: message(this),
+        product: product(this),
+        order: order(this),
       };
     }
     return this[MODEL];

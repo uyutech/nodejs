@@ -33,11 +33,34 @@ const sequelize = new Sequelize('circling', 'root', '87351984@', {
   timezone: '+08:00',
   // logging: null,
 });
+const sequelizeMall = new Sequelize('mall', 'root', '87351984@', {
+  host: 'localhost',
+  dialect: 'mysql',
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
+  dialectOptions: {
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
+  },
+  options: {
+    charset: 'utf8mb4',
+  },
+  define: {
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
+  },
+  timezone: '+08:00',
+  // logging: null,
+});
 
 const Author = require('./app/model/author')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorMainWorks = require('./app/model/authorMainWorks')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorAlias = require('./app/model/authorAlias')({ sequelizeCircling: sequelize, Sequelize });
-const AuthorNum = require('./app/model/authorNum')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorOutside = require('./app/model/authorOutside')({ sequelizeCircling: sequelize, Sequelize });
 const Profession = require('./app/model/profession')({ sequelizeCircling: sequelize, Sequelize });
 // const WorksAuthorProfessionRelation = require('./app/model/worksAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
@@ -90,6 +113,9 @@ const WorkTypeProfessionSort = require('./app/model/workTypeProfessionSort')({ s
 const AuthorDynamic = require('./app/model/authorDynamic')({ sequelizeCircling: sequelize, Sequelize });
 const UserAddress = require('./app/model/userAddress')({ sequelizeCircling: sequelize, Sequelize });
 const CommentPoint = require('./app/model/commentPoint')({ sequelizeCircling: sequelize, Sequelize });
+
+const Product = require('./app/model/product')({ sequelizeMall: sequelizeMall, Sequelize });
+const Order = require('./app/model/order')({ sequelizeMall: sequelizeMall, Sequelize });
 
 (async () => {
   try {
@@ -147,7 +173,6 @@ async function dealAuthor(pool) {
   console.log('------- dealAuthor --------');
   await Author.sync();
   await AuthorAlias.sync();
-  await AuthorNum.sync();
   await AuthorOutside.sync();
   let last = 2017000000005795;
   let result = await pool.request().query(`SELECT * FROM dbo.Authors_Info WHERE ID>${last};`);
@@ -921,6 +946,7 @@ async function dealCircle(pool) {
       temp_id: item.ID,
       is_delete: false,
       create_time: item.CreateTime,
+      update_time: item.CreateTime,
     });
     tagOldIdHash[item.ID] = res.dataValues.id;
   }
@@ -1645,6 +1671,41 @@ async function dealMessage(pool) {
       where: {
         id: item.NID,
       },
+    });
+  }
+}
+
+async function dealMall(pool) {
+  console.log('------- dealMall --------');
+  await Product.sync();
+  await Order.sync();
+  let last = 15;
+  // last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.Mall_Product WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await Product.create({
+      name: item.ProductName,
+      cover: item.CoverPic || '',
+      describe: item.Describe || '',
+      price: item.price,
+      discount: item.Discount,
+      is_delete: item.state === 3,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+  }
+  last = 607;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Mall_Order WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await Order.create({
+      user_id: item.UID,
+      name: item.OrderName,
+      phone: item.OrderPhone,
+      address: item.OrderAddress,
+      state: item.State,
     });
   }
 }

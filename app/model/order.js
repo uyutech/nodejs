@@ -1,26 +1,41 @@
 /**
- * Created by army8735 on 2018/1/28.
+ * Created by army8735 on 2018/4/16.
  */
 
 'use strict';
 
 module.exports = app => {
-  const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('tag', {
+  const { sequelizeMall, Sequelize } = app;
+  return sequelizeMall.define('order', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    temp_id: {
+    user_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 0,
+    },
+    name: {
+      type: Sequelize.STRING(32),
+      allowNull: false,
+      defaultValue: '',
+    },
+    phone: {
+      type: Sequelize.STRING(32),
+      allowNull: false,
+      defaultValue: '',
+    },
+    address: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
+    },
+    state: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      comment: '1未发货，2已发货，3已收货',
     },
     is_delete: {
       type: Sequelize.BOOLEAN,
@@ -40,11 +55,10 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'name',
-        unique: true,
-        fields: ['name'],
+        name: 'user_id',
+        fields: ['user_id'],
       }
     ],
-    comment: '标签基本信息',
+    comment: '商品基本信息',
   });
 };
