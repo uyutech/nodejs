@@ -20,7 +20,12 @@ module.exports = app => {
     type: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
-      comment: '1大作品，2音乐专辑，3相册，4作者列表，5大作品列表',
+      comment: '1大作品，2音乐专辑，3相册，4作者列表，5大作品列表，6画圈',
+    },
+    cover: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
     },
     title: {
       type: Sequelize.STRING(32),
@@ -50,8 +55,8 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'tag_weight',
-        fields: ['tag', 'weight'],
+        name: 'tag_weight_is_delete',
+        fields: ['tag', 'weight', 'is_delete'],
       }
     ],
     comment: '推荐内容',

@@ -930,7 +930,9 @@ class Service extends egg.Service {
       professionSortHash[type] = item;
     });
     let professionSortList = infoList.map((item) => {
-      return professionSortHash[item.type];
+      if(item) {
+        return professionSortHash[item.type];
+      }
     });
     return [infoList, professionSortList];
   }

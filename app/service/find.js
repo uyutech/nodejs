@@ -72,6 +72,7 @@ class Service extends egg.Service {
       res = await app.model.recommend.findAll({
         attributes: [
           'type',
+          'cover',
           'title',
           'content',
           'describe'
@@ -138,6 +139,8 @@ class Service extends egg.Service {
             }
           });
           break;
+        case 6:
+          item.content = item.content.trim();
       }
     });
     let [
