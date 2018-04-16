@@ -244,6 +244,90 @@ class Controller extends egg.Controller {
     service.user.clearInfoCache(uid);
     ctx.body = ctx.helper.okJSON();
   }
+
+  async address() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let res = await service.user.address(uid);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async updateAddressName() {
+    const { ctx, app } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let value = body.value;
+    if(!id || !value) {
+      return;
+    }
+    if(value.length > 32) {
+      ctx.body = ctx.helper.errorJSON('名字不能超过32个字~');
+    }
+    let res = await app.model.userAddress.update({
+      name: value,
+    }, {
+      where: {
+        id,
+        user_id: uid,
+      },
+      raw: true,
+    });
+    if(res.length) {
+      ctx.body = ctx.helper.okJSON();
+    }
+  }
+
+  async updateAddressPhone() {
+    const { ctx, app } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let value = body.value;
+    if(!id || !value) {
+      return;
+    }
+    if(!/^1\d{10}$/.test(value)) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '手机号不合法~',
+      });
+    }
+    let res = await app.model.userAddress.update({
+      phone: value,
+    }, {
+      where: {
+        id,
+        user_id: uid,
+      },
+      raw: true,
+    });
+    if(res.length) {
+      ctx.body = ctx.helper.okJSON();
+    }
+  }
+
+  async updateAddress() {
+    const { ctx, app } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let value = body.value;
+    if(!id || !value) {
+      return;
+    }
+    let res = await app.model.userAddress.update({
+      address: value,
+    }, {
+      where: {
+        id,
+        user_id: uid,
+      },
+      raw: true,
+    });
+    if(res.length) {
+      ctx.body = ctx.helper.okJSON();
+    }
+  }
 }
 
 module.exports = Controller;

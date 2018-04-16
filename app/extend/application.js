@@ -25,13 +25,14 @@ const circleCommentRelation = require('../model/circleCommentRelation');
 const comment = require('../model/comment');
 const commentMedia = require('../model/commentMedia');
 const commentWork = require('../model/commentWork');
+const commentPoint = require('../model/commentPoint');
 const profession = require('../model/profession');
 const professionSkillRelation = require('../model/professionSkillRelation');
 const skill = require('../model/skill');
 const tag = require('../model/tag');
 const tagCommentRelation = require('../model/tagCommentRelation');
 const user = require('../model/user');
-const userDelivery = require('../model/userDelivery');
+const userAddress = require('../model/userAddress');
 const userAuthorRelation = require('../model/userAuthorRelation');
 const userCommentRelation = require('../model/userCommentRelation');
 const userPersonRelation = require('../model/userPersonRelation');
@@ -150,13 +151,14 @@ module.exports = {
         comment: comment(this),
         commentMedia: commentMedia(this),
         commentWork: commentWork(this),
+        commentPoint: commentPoint(this),
         profession: profession(this),
         professionSkillRelation: professionSkillRelation(this),
         skill: skill(this),
         tag: tag(this),
         tagCommentRelation: tagCommentRelation(this),
         user: user(this),
-        userDelivery: userDelivery(this),
+        userAddress: userAddress(this),
         userAuthorRelation: userAuthorRelation(this),
         userCommentRelation: userCommentRelation(this),
         userPersonRelation: userPersonRelation(this),

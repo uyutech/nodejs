@@ -1,12 +1,12 @@
 /**
- * Created by army8735 on 2018/1/29.
+ * Created by army8735 on 2018/4/16.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_delivery', {
+  return sequelizeCircling.define('comment_point', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -17,31 +17,15 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    name: {
-      type: Sequelize.STRING(32),
+    point: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
     },
-    phone: {
-      type: Sequelize.STRING(32),
+    buff: {
+      type: Sequelize.FLOAT.UNSIGNED,
       allowNull: false,
-    },
-    address: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    post_code: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-    },
-    is_default: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
+      defaultValue: 1,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -57,9 +41,10 @@ module.exports = app => {
     indexes: [
       {
         name: 'user_id',
+        unique: true,
         fields: ['user_id'],
       }
     ],
-    comment: '用户收货信息',
+    comment: '用户留言积分和乘积系数',
   });
 };

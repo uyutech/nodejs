@@ -88,6 +88,8 @@ const WorkAuthorRelation = require('./app/model/workAuthorRelation')({ sequelize
 const WorksAuthorRelation = require('./app/model/worksAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const WorkTypeProfessionSort = require('./app/model/workTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorDynamic = require('./app/model/authorDynamic')({ sequelizeCircling: sequelize, Sequelize });
+const UserAddress = require('./app/model/userAddress')({ sequelizeCircling: sequelize, Sequelize });
+const CommentPoint = require('./app/model/commentPoint')({ sequelizeCircling: sequelize, Sequelize });
 
 (async () => {
   try {
@@ -122,11 +124,13 @@ const AuthorDynamic = require('./app/model/authorDynamic')({ sequelizeCircling: 
     await dealCommentMedia(pool);
     await dealAccount(pool);
     await dealMessage(pool);
+    await dealMall(pool);
     // await dealAuthorDynamic(pool);
+    // await modifyPostComment();
+
     // await temp(pool);
     // await modifyWorksComment();
     // await modifyAuthorComment();
-    // await modifyPostComment();
 
 //     await sequelize.query(`UPDATE tag_comment_relation set is_comment_delete=TRUE
 // WHERE comment_id IN (SELECT id as comment_id FROM comment WHERE is_delete=true);`, { type: Sequelize.QueryTypes.UPDATE });
@@ -820,6 +824,8 @@ async function dealWorkAuthorProfession(pool) {
 
 async function dealUserPlus(pool) {
   console.log('------- dealUserPlus --------');
+  await UserAddress.sync();
+  await CommentPoint.sync();
   let last = 2018000000043048;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Profile WHERE ProfileID>${last};`);
@@ -832,6 +838,21 @@ async function dealUserPlus(pool) {
         id: item.ProfileID,
       },
     });
+    if(item.CommentIntegral || item.Buff != 1) {
+      await CommentPoint.create({
+        user_id: item.ProfileID,
+        point: item.CommentIntegral,
+        buff: item.Buff,
+      });
+    }
+    if(item.OrderName && item.OrderAddress && item.OrderPhone) {
+      await UserAddress.create({
+        user_id: item.ProfileID,
+        name: item.OrderName,
+        address: item.OrderAddress,
+        phone: item.OrderPhone,
+      });
+    }
   }
 }
 
@@ -1347,7 +1368,7 @@ async function dealUserWork(pool) {
     }
   }
   hash = {};
-  last = 46852;
+  last = 507890;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${last} AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {

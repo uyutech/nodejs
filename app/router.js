@@ -374,6 +374,10 @@ module.exports = app => {
   app.post('/h5/my2/guideNameAndSex', app.middlewares.needLoginJson(), 'h52.my.guideNameAndSex');
   app.post('/h5/my2/guideCircle', app.middlewares.needLoginJson(), 'h52.my.guideCircle');
   app.post('/h5/my2/guideAuthor', app.middlewares.needLoginJson(), 'h52.my.guideAuthor');
+  app.post('/h5/my2/address', app.middlewares.needLoginJson(), 'h52.my.address');
+  app.post('/h5/my2/updateAddressName', app.middlewares.needLoginJson(), 'h52.my.updateAddressName');
+  app.post('/h5/my2/updateAddressPhone', app.middlewares.needLoginJson(), 'h52.my.updateAddressPhone');
+  app.post('/h5/my2/updateAddress', app.middlewares.needLoginJson(), 'h52.my.updateAddress');
 
   app.post('/h5/comment2/like', app.middlewares.needLoginJson(), 'h52.comment.like');
   app.post('/h5/comment2/unLike', app.middlewares.needLoginJson(), 'h52.comment.unLike');

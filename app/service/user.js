@@ -1918,7 +1918,7 @@ class Service extends egg.Service {
   }
 
   /**
-   *
+   * 获取消息
    * @param id:int 用户id
    * @param offset:int 分页开始
    * @param limit:int 分页尺寸
@@ -1938,6 +1938,13 @@ class Service extends egg.Service {
     };
   }
 
+  /**
+   * 获取消息
+   * @param id:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ data: Array<Object>, count:int }
+   */
   async messageData(id, offset, limit) {
     if(!id) {
       return;
@@ -2000,6 +2007,11 @@ class Service extends egg.Service {
     return res;
   }
 
+  /**
+   * 获取消息数量
+   * @param id:int 用户id
+   * @returns int
+   */
   async messageCount(id) {
     if(!id) {
       return;
@@ -2029,12 +2041,19 @@ class Service extends egg.Service {
     return res;
   }
 
-  async updateAuthorSettle(uid, authorId, settle) {
-    if(!uid || !authorId) {
+  /**
+   * 更新用户的作者入住状态
+   * @param id:int 用户id
+   * @param authorId:int 作者id
+   * @param settle:int 入住状态
+   * @returns Object
+   */
+  async updateAuthorSettle(id, authorId, settle) {
+    if(!id || !authorId) {
       return;
     }
     const { app, service } = this;
-    let check = await service.author.isUser(authorId, uid);
+    let check = await service.author.isUser(authorId, id);
     if(!check) {
       return;
     }
@@ -2042,11 +2061,44 @@ class Service extends egg.Service {
       settle,
     }, {
       where: {
-        user_id: uid,
+        user_id: id,
         author_id: authorId,
       },
       raw: true,
     });
+  }
+
+  /**
+   * 获取用户的地址
+   * @param id:int 用户id
+   * @returns Array<Object>
+   */
+  async address(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'address_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userAddress.findAll({
+      attributes: [
+        'id',
+        'name',
+        'phone',
+        'address'
+      ],
+      where: {
+        user_id: id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
   }
 }
 
