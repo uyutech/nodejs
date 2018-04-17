@@ -20,6 +20,7 @@ module.exports = app => {
     works_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
     },
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,

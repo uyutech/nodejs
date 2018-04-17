@@ -1034,32 +1034,34 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取用户收藏的视频信息
+   * 获取用户收藏的列表
    * @param id:int 用户id
+   * @param kind:int 类型
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async favorVideoList(id, offset, limit) {
-    if(!id) {
+  async favorList(id, kind, offset, limit) {
+    if(!id || !kind) {
       return;
     }
     let [data, count] = await Promise.all([
-      this.favorVideoData(id, offset, limit),
-      this.favorVideoCount(id)
+      this.favorData(id, kind, offset, limit),
+      this.favorCount(id, kind)
     ]);
     return { data, count };
   }
 
   /**
-   * 获取用户收藏的视频信息
+   * 获取用户收藏的列表信息
    * @param id:int 用户id
+   * @param kind:int 类型
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async favorVideoData(id, offset, limit) {
-    if(!id) {
+  async favorData(id, kind, offset, limit) {
+    if(!id || !kind) {
       return;
     }
     offset = parseInt(offset) || 0;
@@ -1075,11 +1077,10 @@ class Service extends egg.Service {
       ],
       where: {
         user_id: id,
-        type: 2,
-        kind: 1,
+        kind,
       },
       order: [
-        ['id', 'DESC']
+        ['work_id', 'DESC']
       ],
       offset,
       limit,
@@ -1099,286 +1100,52 @@ class Service extends egg.Service {
     });
     let [worksList, workList] = await Promise.all([
       service.works.infoListPlusCount(worksIdList),
-      service.work.infoListPlusFull(workIdList, 1, id)
+      service.work.infoListPlusFull(workIdList, kind, id)
     ]);
     let worksHash = {};
     worksList.forEach((item) => {
-      item.author = service.works.firstAuthor(item.author);
-      worksHash[item.id] = item;
-    });
-    workList.forEach((item) => {
-      item.author = service.works.firstAuthor(item.author);
-    });
-    return res.map((item, i) => {
-      let works = worksHash[item.worksId];
-      if(works) {
-        let copy = Object.assign({}, works);
-        let work = workList[i];
-        if(work) {
-          copy.work = work;
-        }
-        else {
-          ctx.logger.error('favor miss work uid:%s, %j', id, item);
-        }
-        return copy;
-      }
-      else {
-        ctx.logger.error('favor miss works uid:%s, %j', id, item);
-      }
-    });
-  }
-
-  /**
-   * 获取用户收藏的视频数量
-   * @param id:int 用户id
-   * @returns int
-   */
-  async favorVideoCount(id) {
-    const { app } = this;
-    let res = await app.model.userWorkRelation.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        user_id: id,
-        type: 2,
-        kind: 1,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    return res;
-  }
-
-  /**
-   * 获取用户收藏的音频信息
-   * @param id:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Object{ count:int, data:Array<Object> }
-   */
-  async favorAudioList(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    let [data, count] = await Promise.all([
-      this.favorAudioData(id, offset, limit),
-      this.favorAudioCount(id)
-    ]);
-    return { data, count };
-  }
-
-  /**
-   * 获取用户收藏的音频信息
-   * @param id:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Array<Object>
-   */
-  async favorAudioData(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    const { app, service, ctx } = this;
-    let res = await app.model.userWorkRelation.findAll({
-      attributes: [
-        ['works_id', 'worksId'],
-        ['work_id', 'workId']
-      ],
-      where: {
-        user_id: id,
-        type: 2,
-        kind: 2,
-      },
-      order: [
-        ['id', 'DESC']
-      ],
-      offset,
-      limit,
-      raw: true,
-    });
-    let worksIdHash = {};
-    let worksIdList = [];
-    res.forEach((item) => {
-      if(!worksIdHash[item.worksId]) {
-        worksIdHash[item.worksId] = true;
-        worksIdList.push(item.worksId);
-      }
-    });
-    let workIdList = [];
-    res.forEach((item) => {
-      workIdList.push(item.workId);
-    });
-    let [worksList, workList] = await Promise.all([
-      service.works.infoListPlusCount(worksIdList),
-      service.work.infoListPlusFull(workIdList, 2, id)
-    ]);
-    let worksHash = {};
-    worksList.forEach((item, i) => {
-      item.author = service.works.firstAuthor(item.author);
-      worksHash[item.id] = item;
-    });
-    workList.forEach((item) => {
-      item.author = service.works.firstAuthor(item.author);
-    });
-    return res.map((item, i) => {
-      let works = worksHash[item.worksId];
-      if(works) {
-        let copy = Object.assign({}, works);
-        let work = workList[i];
-        if(work) {
-          copy.work = work;
-        }
-        else {
-          ctx.logger.error('favor miss work uid:%s, %j', id, item);
-        }
-        return copy;
-      }
-      else {
-        ctx.logger.error('favor miss works uid:%s, %j', id, item);
-      }
-    });
-  }
-
-  /**
-   * 获取用户收藏的视频数量
-   * @param id:int 用户id
-   * @returns int
-   */
-  async favorAudioCount(id) {
-    const { app } = this;
-    let res = await app.model.userWorkRelation.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        user_id: id,
-        type: 2,
-        kind: 2,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    return res;
-  }
-
-  /**
-   * 获取用户收藏的图片信息
-   * @param id:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Object{ count:int, data:Array<Object> }
-   */
-  async favorImageList(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    let [data, count] = await Promise.all([
-      this.favorImageData(id, offset, limit),
-      this.favorImageCount(id)
-    ]);
-    return { data, count };
-  }
-
-  /**
-   * 获取用户收藏的图片信息
-   * @param id:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Array<Object>
-   */
-  async favorImageData(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    const { app, service, ctx } = this;
-    let res = await app.model.userWorkRelation.findAll({
-      attributes: [
-        ['work_id', 'workId']
-      ],
-      where: {
-        user_id: id,
-        type: 2,
-        kind: 3,
-      },
-      offset,
-      limit,
-      raw: true,
-    });
-    let workIdHash = {};
-    let workIdList = [];
-    res.forEach((item) => {
-      if(!workIdHash[item]) {
-        workIdHash[item.workId] = true;
-        workIdList.push(item.workId);
-      }
-    });
-    let [
-      workList,
-      authorList,
-      likeCountList,
-      isLikeList
-    ] = await Promise.all([
-      service.work.imageList(workIdList),
-      service.work.authorList(workIdList),
-      service.work.likeCountList(workIdList),
-      service.work.isLikeList(workIdList, id)
-    ]);
-    workList.forEach((item, i) => {
       if(item) {
-        item.likeCount = likeCountList[i] || 0;
-        item.isLike = isLikeList[i] || false;
-        item.author = authorList[i];
+        item.author = service.works.firstAuthor(item.author);
+        worksHash[item.id] = item;
       }
     });
-    return workList;
+    workList.forEach((item) => {
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+      }
+    });
+    return workList.map((item, i) => {
+      let worksId = worksIdList[i];
+      let copy = Object.assign({}, worksHash[worksId] || {});
+      copy.work = item;
+      return copy;
+    });
   }
 
   /**
-   * 获取用户收藏的图片数量
+   * 获取用户收藏的数量
    * @param id:int 用户id
+   * @param kind:int 类型
    * @returns int
    */
-  async favorImageCount(id) {
+  async favorCount(id, kind) {
+    if(!id || !kind) {
+      return;
+    }
     const { app } = this;
-    let res = await app.model.userWorkRelation.findOne({
+    let cacheKey = 'favorCount_' + id + '_' + kind;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.userWorkRelation.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
       where: {
         user_id: id,
-        type: 2,
-        kind: 3,
+        kind,
       },
       raw: true,
     });
@@ -1388,6 +1155,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
 

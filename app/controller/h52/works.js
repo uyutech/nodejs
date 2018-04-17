@@ -57,9 +57,9 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId);
+    let worksId = parseInt(body.worksId) || 0;
     let workId = parseInt(body.workId);
-    if(!worksId || !workId) {
+    if(!workId) {
       return;
     }
     let res = await service.work.like(worksId, workId, uid, true);
@@ -70,9 +70,9 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId);
+    let worksId = parseInt(body.worksId) || 0;
     let workId = parseInt(body.workId);
-    if(!worksId || !workId) {
+    if(!workId) {
       return;
     }
     let res = await service.work.like(worksId, workId, uid, false);
@@ -83,9 +83,9 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId);
+    let worksId = parseInt(body.worksId) || 0;
     let workId = parseInt(body.workId);
-    if(!worksId || !workId) {
+    if(!workId) {
       return;
     }
     let res = await service.work.favor(worksId, workId, uid, true);
@@ -96,9 +96,9 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId);
+    let worksId = parseInt(body.worksId) || 0;
     let workId = parseInt(body.workId);
-    if(!worksId || !workId) {
+    if(!workId) {
       return;
     }
     let res = await service.work.favor(worksId, workId, uid, false);

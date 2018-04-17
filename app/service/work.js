@@ -45,7 +45,7 @@ class Service extends egg.Service {
    * @returns Object{ state:boolean, count:int }
    */
   async operate(worksId, workId, uid, type, state) {
-    if(!worksId || !workId || !uid || !type) {
+    if(!workId || !uid || !type) {
       return;
     }
     state = !!state;
@@ -209,6 +209,60 @@ class Service extends egg.Service {
   }
 
   /**
+   * 根据id列表返回小作品信息和作者信息
+   * @param idList:Array<int> id列表
+   * @param kind:int 类型
+   * @returns Array<Object>
+   */
+  async infoListPlusAuthor(idList, kind) {
+    if(!idList || !kind) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let [infoList, authorList] = await Promise.all([
+      this.infoList(idList, kind),
+      this.authorList(idList)
+    ]);
+    let typeList = [];
+    let typeHash = {};
+    infoList.forEach((item) => {
+      if(item) {
+        if(!typeHash[item.type]) {
+          typeHash[item.type] = true;
+          typeList.push(item.type);
+        }
+      }
+    });
+    let list = await this.typeListProfessionSort(typeList);
+    let professionSortHash = {};
+    list.forEach((item, i) => {
+      if(item) {
+        let type = typeList[i];
+        professionSortHash[type] = item;
+      }
+    });
+    let professionSortList = infoList.map((item) => {
+      if(item) {
+        return professionSortHash[item.type];
+      }
+    });
+    authorList.forEach((author, i) => {
+      if(author) {
+        authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
+      }
+    });
+    infoList.forEach((item, i) => {
+      if(item) {
+        item.author = authorList[i];
+      }
+    });
+    return infoList;
+  }
+
+  /**
    * 根据id列表返回小作品信息、统计数字和作者信息
    * @param idList:Array<int> id列表
    * @param kind:int 类型
@@ -222,43 +276,22 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { service } = this;
-    let [infoList, authorList, isLikeList, isFavorList, likeCountList, favorCountList, viewsList] = await Promise.all([
-      this.infoList(idList, kind),
-      this.authorList(idList),
+    let [infoList, isLikeList, isFavorList, likeCountList, favorCountList, viewsList] = await Promise.all([
+      this.infoListPlusAuthor(idList, kind),
       this.isRelationList(idList, 1, uid),
       this.isRelationList(idList, 2, uid),
       this.relationCountList(idList, 1),
       this.relationCountList(idList, 2),
       this.numCountList(idList, 1)
     ]);
-    let typeList = [];
-    let typeHash = {};
-    infoList.forEach((item) => {
-      if(!typeHash[item.type]) {
-        typeHash[item.type] = true;
-        typeList.push(item.type);
-      }
-    });
-    let list = await this.typeListProfessionSort(typeList);
-    let professionSortHash = {};
-    list.forEach((item, i) => {
-      let type = typeList[i];
-      professionSortHash[type] = item;
-    });
-    let professionSortList = infoList.map((item) => {
-      return professionSortHash[item.type];
-    });
-    authorList.forEach((author, i) => {
-      authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
-    });
     infoList.forEach((item, i) => {
-      item.views = viewsList[i];
-      item.isLike = isLikeList[i];
-      item.isFavor = isFavorList[i];
-      item.likeCount = likeCountList[i];
-      item.favorCount = favorCountList[i];
-      item.author = authorList[i];
+      if(item) {
+        item.isLike = isLikeList[i];
+        item.isFavor = isFavorList[i];
+        item.likeCount = likeCountList[i];
+        item.favorCount = favorCountList[i];
+        item.views = viewsList[i];
+      }
     });
     return infoList;
   }
@@ -652,7 +685,7 @@ class Service extends egg.Service {
         work_id: id,
       },
       raw: true,
-    });
+    });console.log(222,res);
     res = !!res;
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;

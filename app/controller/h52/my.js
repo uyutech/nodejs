@@ -67,34 +67,18 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON(res);
   }
 
-  async favorVideoList() {
+  async favorList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
+    let kind = parseInt(body.kind);
     let offset = parseInt(body.offset) || 0;
-    let list = await service.user.favorVideoList(uid, offset, LIMIT);
-    list.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(list);
-  }
-
-  async favorAudioList() {
-    const { ctx, service } = this;
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let offset = parseInt(body.offset) || 0;
-    let list = await service.user.favorAudioList(uid, offset, LIMIT);
-    list.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(list);
-  }
-
-  async favorImageList() {
-    const { ctx, service } = this;
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let offset = parseInt(body.offset) || 0;
-    let list = await service.user.favorImageList(uid, offset, LIMIT);
-    list.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(list);
+    if(!kind) {
+      return;
+    }
+    let res = await service.user.favorList(uid, kind, offset, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 
   async favorPostList() {

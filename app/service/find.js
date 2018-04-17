@@ -309,75 +309,27 @@ class Service extends egg.Service {
         workIdList.push(item.workId);
       }
     });
-    if(kind === 1) {
-      let [worksList, workList] = await Promise.all([
-        service.works.infoListPlusCount(worksIdList),
-        service.work.infoListPlusFull(workIdList, kind, uid)
-      ]);
-      let worksHash = {};
-      worksList.forEach((item, i) => {
-        if(item) {
-          worksHash[item.id] = item;
-        }
-      });
-      workList.forEach((item) => {
-        if(item) {
-          item.author = service.works.firstAuthor(item.author);
-        }
-      });
-      return res.map((item, i) => {
-        let works = worksHash[item.worksId];
-        if(works) {
-          let copy = Object.assign({}, works);
-          let work = workList[i];
-          if(work) {
-            copy.work = work;
-          }
-          return copy;
-        }
-      });
-    }
-    else if(kind === 2) {
-      let [worksList, workList] = await Promise.all([
-        service.works.infoList(worksIdList),
-        service.work.infoListPlusFull(workIdList, kind)
-      ]);
-      let worksHash = {};
-      worksList.forEach((item) => {
+    let [worksList, workList] = await Promise.all([
+      service.works.infoListPlusCount(worksIdList),
+      service.work.infoListPlusFull(workIdList, kind, uid)
+    ]);
+    let worksHash = {};
+    worksList.forEach((item, i) => {
+      if(item) {
         worksHash[item.id] = item;
-      });
-      return res.map((item, i) => {
-        let works = worksHash[item.worksId];
-        if(works) {
-          let copy = Object.assign({}, works);
-          let work = workList[i];
-          work.author = service.works.firstAuthor(work.author);
-          if(work) {
-            copy.work = work;
-          }
-          return copy;
-        }
-      });
-    }
-    else if(kind === 3) {
-      let [
-        workList,
-        likeCountList,
-        isLikeList
-      ] = await Promise.all([
-        service.work.infoListPlusFull(workIdList, kind),
-        service.work.likeCountList(workIdList),
-        service.work.isLikeList(workIdList, uid)
-      ]);
-      workList.forEach((item, i) => {
-        if(item) {
-          item.likeCount = likeCountList[i] || 0;
-          item.isLike = isLikeList[i] || false;
-          item.author = service.works.firstAuthor(item.author);
-        }
-      });
-      return workList;
-    }
+      }
+    });
+    workList.forEach((item) => {
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+      }
+    });
+    return workList.map((item, i) => {
+      let worksId = worksIdList[i];
+      let copy = Object.assign({}, worksHash[worksId] || {});
+      copy.work = item;
+      return copy;
+    });
   }
 
   async kindCount(kind) {

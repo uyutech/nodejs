@@ -1122,65 +1122,31 @@ class Service extends egg.Service {
    * @returns Array<Object>
    */
   async kindWorkData(id, uid, kind, offset, limit) {
-    if(!id || kind === null || kind === undefined) {
+    if(!id || !kind) {
       return;
     }
     const { service } = this;
     let workIdList = await this.kindWorkIdList(id, kind, offset, limit);
     let worksIdList = await service.work.belongIdList(workIdList);
-    if(kind === 1) {
-      let [
-        worksList,
-        workList
-      ] = await Promise.all([
-        service.works.infoListPlusCount(worksIdList),
-        service.work.infoListPlusFull(workIdList, kind, uid)
-      ]);
-      let worksHash = {};
-      worksList.forEach((item) => {
-        if(item) {
-          worksHash[item.id] = item;
-        }
-      });
-      workList.forEach((item) => {
-        let professionList = [];
-        item.author.forEach((group) => {
-          group.forEach((item) => {
-            for(let i = 0, len = item.list.length; i < len; i++) {
-              if(item.list[i].id === id) {
-                professionList.push({
-                  id: item.id,
-                  name: item.name,
-                });
-                break;
-              }
-            }
-          });
-        });
-        item.profession = professionList;
-        delete item.author;
-      });
-      return workList.map((item, i) => {
-        let worksId = worksIdList[i];
-        let copy = Object.assign({}, worksHash[worksId]);
-        copy.work = item;
-        return copy;
-      });
-    }
-    else if(kind === 2) {
-      let [worksList, workList] = await Promise.all([
-        service.works.infoList(worksIdList),
-        service.work.infoListPlusFull(workIdList, kind, uid)
-      ]);
-      let worksHash = {};
-      worksList.forEach((item) => {
+    let [
+      worksList,
+      workList
+    ] = await Promise.all([
+      service.works.infoListPlusCount(worksIdList),
+      service.work.infoListPlusFull(workIdList, kind, uid)
+    ]);
+    let worksHash = {};
+    worksList.forEach((item) => {
+      if(item) {
         worksHash[item.id] = item;
-      });
-      workList.forEach((item) => {
+      }
+    });
+    workList.forEach((item) => {
+      if(item) {
         let professionList = [];
         item.author.forEach((group) => {
           group.forEach((item) => {
-            for(let i = 0, len = item.list.length; i < len; i++) {
+            for (let i = 0, len = item.list.length; i < len; i++) {
               if(item.list[i].id === id) {
                 professionList.push({
                   id: item.id,
@@ -1193,40 +1159,14 @@ class Service extends egg.Service {
         });
         item.profession = professionList;
         delete item.author;
-      });
-      return workList.map((item, i) => {
-        let worksId = worksIdList[i];
-        let copy = Object.assign({}, worksHash[worksId]);
-        copy.work = item;
-        return copy;
-      });
-    }
-    else if(kind === 3) {
-      let [
-        workList
-      ] = await Promise.all([
-        service.work.infoListPlusFull(workIdList, kind, uid)
-      ]);
-      workList.forEach((item) => {
-        let professionList = [];
-        item.author.forEach((group) => {
-          group.forEach((item) => {
-            for(let i = 0, len = item.list.length; i < len; i++) {
-              if(item.list[i].id === id) {
-                professionList.push({
-                  id: item.id,
-                  name: item.name,
-                });
-                break;
-              }
-            }
-          });
-        });
-        item.profession = professionList;
-        delete item.author;
-      });
-      return workList;
-    }
+      }
+    });
+    return workList.map((item, i) => {
+      let worksId = worksIdList[i];
+      let copy = Object.assign({}, worksHash[worksId] || {});
+      copy.work = item;
+      return copy;
+    });
   }
 
   /**

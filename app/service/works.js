@@ -1073,7 +1073,9 @@ class Service extends egg.Service {
       authorList[i] = this.reorderAuthor(author, professionSortList[i]);
     });
     infoList.forEach((item, i) => {
-      item.author = authorList[i];
+      if(item) {
+        item.author = authorList[i];
+      }
     });
     return infoList;
   }
@@ -1100,8 +1102,10 @@ class Service extends egg.Service {
       this.commentCountList(idList)
     ]);
     list.forEach((item, i) => {
-      item.popular = popularList[i];
-      item.commentCount = commentCountList[i];
+      if(item) {
+        item.popular = popularList[i];
+        item.commentCount = commentCountList[i];
+      }
     });
     return list;
   }
@@ -1128,8 +1132,10 @@ class Service extends egg.Service {
       this.commentCountList(idList)
     ]);
     list.forEach((item, i) => {
-      item.popular =  popularList[i];
-      item.commentCount = commentCountList[i];
+      if(item) {
+        item.popular = popularList[i];
+        item.commentCount = commentCountList[i];
+      }
     });
     return list;
   }

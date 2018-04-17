@@ -35,8 +35,7 @@ class Service extends egg.Service {
           ['sub_title', 'subTitle'],
           'state',
           'cover',
-          'type',
-          'popular'
+          'type'
         ],
         where: {
           id,
@@ -98,8 +97,7 @@ class Service extends egg.Service {
           ['sub_title', 'subTitle'],
           'state',
           'cover',
-          'type',
-          'popular'
+          'type'
         ],
         where: {
           id: noCacheIdList,
