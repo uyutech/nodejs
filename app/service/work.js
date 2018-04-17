@@ -263,6 +263,40 @@ class Service extends egg.Service {
   }
 
   /**
+   * 根据id列表返回小作品信息、统计数字
+   * @param idList:Array<int> id列表
+   * @param kind:int 类型
+   * @param uid:int 用户id
+   * @returns Array<Object>
+   */
+  async infoListPlusCount(idList, kind, uid) {
+    if(!idList || !kind) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    let [infoList, isLikeList, isFavorList, likeCountList, favorCountList, viewsList] = await Promise.all([
+      this.infoList(idList, kind),
+      this.isRelationList(idList, 1, uid),
+      this.isRelationList(idList, 2, uid),
+      this.relationCountList(idList, 1),
+      this.relationCountList(idList, 2),
+      this.numCountList(idList, 1)
+    ]);
+    infoList.forEach((item, i) => {
+      if(item) {
+        item.isLike = isLikeList[i];
+        item.isFavor = isFavorList[i];
+        item.likeCount = likeCountList[i];
+        item.favorCount = favorCountList[i];
+        item.views = viewsList[i];
+      }
+    });
+    return infoList;
+  }
+
+  /**
    * 根据id列表返回小作品信息、统计数字和作者信息
    * @param idList:Array<int> id列表
    * @param kind:int 类型
@@ -1398,6 +1432,29 @@ class Service extends egg.Service {
       });
     }
     return cache;
+  }
+
+  /**
+   * 自增观看数
+   * @param id:int 作品id
+   */
+  async incrementViews(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'workNumCount_' + id + '_1';
+    await this.numCount(id, 1);
+    app.redis.incr(cacheKey);
+    app.model.workNum.update({
+      num: Sequelize.literal('num+1'),
+      update_time: new Date(),
+    }, {
+      where: {
+        work_id: id,
+        type: 1,
+      },
+    });
   }
 }
 

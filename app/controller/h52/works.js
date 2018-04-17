@@ -17,24 +17,18 @@ class Controller extends egg.Controller {
     if(!worksId) {
       return;
     }
-    let [[info, professionSort], author, [collection, collectionAuthor], commentList] = await Promise.all([
-      service.works.infoAndProfessionSort(worksId),
-      service.works.author(worksId),
-      service.works.collectionAndAuthor(worksId, uid),
+    let [info, collection, commentList] = await Promise.all([
+      service.works.infoPlusAllAuthor(worksId),
+      service.works.collectionCount(worksId, uid),
       service.works.commentList(worksId, uid, 0, LIMIT)
     ]);
     if(info.state === 3) {
       return;
     }
     commentList.limit = LIMIT;
-    collectionAuthor.forEach((item) => {
-      author = author.concat(item);
-    });
-    author = service.works.reorderAuthor(author, professionSort);
     ctx.body = ctx.helper.okJSON({
       info,
       collection,
-      author,
       commentList,
     });
   }
@@ -44,11 +38,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let worksId = parseInt(body.worksId);
-    let offset = parseInt(body.offset);
+    let offset = parseInt(body.offset) || 0;
     if(!worksId) {
       return;
     }
-    let res = await service.works.commentList(worksId, uid, offset || 0, LIMIT);
+    let res = await service.works.commentList(worksId, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

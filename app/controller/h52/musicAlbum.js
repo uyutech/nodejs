@@ -17,21 +17,18 @@ class Controller extends egg.Controller {
     if(!albumId) {
       return;
     }
-    let [info, author, collection, commentList] = await Promise.all([
-      service.musicAlbum.info(albumId),
-      service.musicAlbum.author(albumId),
-      service.musicAlbum.collection(albumId, uid),
+    let [info, collection, commentList] = await Promise.all([
+      service.musicAlbum.infoPlusAuthor(albumId),
+      service.musicAlbum.collectionFull(albumId, uid),
       service.musicAlbum.commentList(albumId, uid, 0, LIMIT)
     ]);
     if(info.state === 3) {
       return;
     }
     commentList.limit = LIMIT;
-    author = service.works.reorderAuthor(author);
     ctx.body = ctx.helper.okJSON({
       info,
       collection,
-      author,
       commentList,
     });
   }
@@ -41,11 +38,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let albumId = parseInt(body.albumId);
-    let offset = parseInt(body.offset);
+    let offset = parseInt(body.offset) || 0;
     if(!albumId) {
       return;
     }
-    let res = await service.musicAlbum.commentList(albumId, uid, offset || 0, LIMIT);
+    let res = await service.musicAlbum.commentList(albumId, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

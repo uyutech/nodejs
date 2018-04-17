@@ -317,6 +317,8 @@ module.exports = app => {
   app.post('/h5/works2/unLike', app.middlewares.needLoginJson(), 'h52.works.unLike');
   app.post('/h5/works2/unFavor', app.middlewares.needLoginJson(), 'h52.works.unFavor');
 
+  app.post('/h5/work2/addViews', 'h52.work.addViews');
+
   app.post('/h5/musicAlbum/index', 'h52.musicAlbum.index');
   app.post('/h5/musicAlbum/commentList', 'h52.musicAlbum.commentList');
 

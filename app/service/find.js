@@ -149,7 +149,7 @@ class Service extends egg.Service {
       imageAlbumList,
       authorList
     ] = await Promise.all([
-      service.works.infoListPlusAuthor(worksIdList),
+      service.works.infoListPlusAllAuthor(worksIdList),
       service.musicAlbum.infoListPlusAuthor(musicAlbumIdList),
       service.imageAlbum.infoListPlusAuthor(imageAlbumIdList),
       service.author.infoListPlusFans(authorIdList)
