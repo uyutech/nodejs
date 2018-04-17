@@ -14,20 +14,29 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
-    let tag = await app.model.recommendTag.findAll({
-      attributes: [
-        'id',
-        'name',
-        'kind'
-      ],
-      where: {
-        is_delete: false,
-      },
-      order: [
-        ['weight', 'DESC']
-      ],
-      raw: true,
-    });
+    let cacheKey = 'allTag';
+    let tag = await app.redis.get(cacheKey);
+    if(tag) {
+      app.redis.expire(cacheKey, 300);
+      tag = JSON.parse(tag);
+    }
+    else {
+      tag = await app.model.recommendTag.findAll({
+        attributes: [
+          'id',
+          'name',
+          'kind'
+        ],
+        where: {
+          is_delete: false,
+        },
+        order: [
+          ['weight', 'DESC']
+        ],
+        raw: true,
+      });
+      app.redis.setex(cacheKey, 300, JSON.stringify(tag));
+    }
     let banner = [];
     let list = {};
     let kindList;

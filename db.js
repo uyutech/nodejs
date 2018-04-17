@@ -79,6 +79,7 @@ const Video = require('./app/model/Video')({ sequelizeCircling: sequelize, Seque
 const Image = require('./app/model/Image')({ sequelizeCircling: sequelize, Sequelize });
 const Text = require('./app/model/Text')({ sequelizeCircling: sequelize, Sequelize });
 const WorkType = require('./app/model/workType')({ sequelizeCircling: sequelize, Sequelize });
+const WorkNum = require('./app/model/workNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksType = require('./app/model/worksType')({ sequelizeCircling: sequelize, Sequelize });
 const Works = require('./app/model/works')({ sequelizeCircling: sequelize, Sequelize });
 const WorksTypeProfessionSort = require('./app/model/worksTypeProfessionSort')({ sequelizeCircling: sequelize, Sequelize });
@@ -86,6 +87,7 @@ const MusicAlbum = require('./app/model/musicAlbum')({ sequelizeCircling: sequel
 const MusicAlbumAuthorRelation = require('./app/model/MusicAlbumAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbumAuthorRelation = require('./app/model/ImageAlbumAuthorRelation')({ sequelizeCircling: sequelize, Sequelize });
 const ImageAlbum = require('./app/model/imageAlbum')({ sequelizeCircling: sequelize, Sequelize });
+const WorksNum = require('./app/model/worksNum')({ sequelizeCircling: sequelize, Sequelize });
 const WorksTimeline = require('./app/model/worksTimeline')({ sequelizeCircling: sequelize, Sequelize });
 const WorksWorkRelation = require('./app/model/worksWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const MusicAlbumWorkRelation = require('./app/model/musicAlbumWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
@@ -103,6 +105,7 @@ const RecommendTag = require('./app/model/recommendTag')({ sequelizeCircling: se
 const RecommendList = require('./app/model/recommendList')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
 const RecommendComment = require('./app/model/recommendComment')({ sequelizeCircling: sequelize, Sequelize });
+const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Sequelize });
 const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserAccount = require('./app/model/userAccount')({ sequelizeCircling: sequelize, Sequelize });
 const UserOauth = require('./app/model/userOauth')({ sequelizeCircling: sequelize, Sequelize });
@@ -135,6 +138,7 @@ const PrizeExpressRelation = require('./app/model/prizeExpressRelation')({ seque
     await RecommendList.sync();
     await RecommendBanner.sync();
     await RecommendComment.sync();
+    await Banner.sync();
     await dealAuthor(pool);
     await dealAuthorMainWorks(pool);
     await dealWork(pool);
@@ -321,6 +325,7 @@ async function dealWork(pool) {
   await Video.sync();
   await Image.sync();
   await Text.sync();
+  await WorkNum.sync();
   let last = 46;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkItemType WHERE ID>${last};`);
@@ -352,6 +357,12 @@ async function dealWork(pool) {
     else if(item.BigType === 4) {
       workId = workId.toString().replace(/^2016/, 2022);
     }
+    await WorkNum.create({
+      work_id: workId,
+      type: 1,
+      num: item.PlayCountRaw || 0,
+      update_time: item.CreateTime,
+    });
     if(item.BigType === 2) {
       await Audio.create({
         id: workId,
@@ -365,7 +376,6 @@ async function dealWork(pool) {
         cover: '',
         url: item.FileUrl || '',
         lrc: '',
-        views: item.PlayCountRaw,
       });
     }
     else if(item.BigType === 1) {
@@ -382,7 +392,6 @@ async function dealWork(pool) {
         duration: 0,
         cover: '',
         url: item.FileUrl || '',
-        views: item.PlayCountRaw,
       });
     }
     else if(item.BigType === 3) {
@@ -398,7 +407,6 @@ async function dealWork(pool) {
         height: 0,
         time: 0,
         url: item.FileUrl || '',
-        views: item.PlayCountRaw,
       });
     }
     else if(item.BigType === 4) {
@@ -411,7 +419,6 @@ async function dealWork(pool) {
         create_time: item.CreateTime,
         update_time: item.CreateTime,
         content: '',
-        views: item.PlayCountRaw,
       });
     }
   }
@@ -477,10 +484,12 @@ async function dealWorks(pool) {
   console.log('------- dealWorks --------');
   await WorksType.sync();
   await Works.sync();
+  await WorksNum.sync();
   await MusicAlbum.sync();
   await ImageAlbum.sync();
   await WorksTimeline.sync();
   let last = 36;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Enum_WorkType WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -507,7 +516,6 @@ async function dealWorks(pool) {
         is_delete: !!item.ISDel,
         state: Math.max(item.WorkState, 1),
         cover: item.cover_Pic || '',
-        popular: item.Popular || 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -524,7 +532,6 @@ async function dealWorks(pool) {
         is_delete: !!item.ISDel,
         state: Math.max(item.WorkState, 1),
         cover: item.cover_Pic || '',
-        popular: item.Popular || 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -540,11 +547,16 @@ async function dealWorks(pool) {
         is_delete: !!item.ISDel,
         state: Math.max(item.WorkState, 1),
         cover: item.cover_Pic || '',
-        popular: item.Popular || 0,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
     }
+    await WorksNum.create({
+      works_id: worksId,
+      type: 1,
+      num: item.Popular || 0,
+      update_time: item.CreateTime,
+    });
   }
   last = 71;
   // last = 0;
@@ -1720,7 +1732,7 @@ async function dealMall(pool) {
     });
   }
   last = 1081;
-  last = 0;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Mall_Cart WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];

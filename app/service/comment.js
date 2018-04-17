@@ -293,9 +293,10 @@ class Service extends egg.Service {
   /**
    * 获取评论列表下附带的作品
    * @param idList:int 评论id列表
+   * @param uid:int 用户id
    * @returns Array<Array<Object>>
    */
-  async workList(idList) {
+  async workList(idList, uid) {
     if(!idList) {
       return;
     }
@@ -378,17 +379,15 @@ class Service extends egg.Service {
       });
     });
     let [videoList, audioList] = await Promise.all([
-      service.work.infoListPlus(videoIdList, 1),
-      service.work.infoListPlus(audioIdList, 2)
+      service.work.infoListPlusFull(videoIdList, 1, uid),
+      service.work.infoListPlusFull(audioIdList, 2, uid)
     ]);
     let hash = {};
     videoList.forEach((item) => {
-      item.kind = 1;
       item.author = service.works.firstAuthor(item.author);
       hash[item.id] = item;
     });
     audioList.forEach((item) => {
-      item.kind = 2;
       item.author = service.works.firstAuthor(item.author);
       hash[item.id] = item;
     });

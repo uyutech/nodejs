@@ -33,15 +33,15 @@ module.exports = app => {
       defaultValue: 0,
       comment: '1视频，2音频',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     weight: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
+    },
+    is_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,

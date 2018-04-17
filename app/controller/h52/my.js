@@ -67,25 +67,44 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON(res);
   }
 
-  async favorList() {
+  async favorVideoList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [videoList, audioList, imageList, postList] = await Promise.all([
-      service.user.favorVideoList(uid, 0, LIMIT),
-      service.user.favorAudioList(uid, 0, LIMIT),
-      service.user.favorImageList(uid, 0, LIMIT),
-      service.user.favorPostList(uid, 0, LIMIT)
-    ]);
-    videoList.limit = LIMIT;
-    audioList.limit = LIMIT;
-    imageList.limit = LIMIT;
-    postList.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON({
-      videoList,
-      audioList,
-      imageList,
-      postList,
-    });
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let list = await service.user.favorVideoList(uid, offset, LIMIT);
+    list.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(list);
+  }
+
+  async favorAudioList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let list = await service.user.favorAudioList(uid, offset, LIMIT);
+    list.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(list);
+  }
+
+  async favorImageList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let list = await service.user.favorImageList(uid, offset, LIMIT);
+    list.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(list);
+  }
+
+  async favorPostList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let list = await service.user.favorPostList(uid, offset, LIMIT);
+    list.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(list);
   }
 
   async nickname() {

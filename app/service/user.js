@@ -1097,30 +1097,17 @@ class Service extends egg.Service {
     res.forEach((item) => {
       workIdList.push(item.workId);
     });
-    let [
-      [worksList, authorList],
-      workList,
-      likeCountList,
-      isLikeList,
-      commentCountList
-    ] = await Promise.all([
-      service.works.infoListPlus(worksIdList),
-      service.work.videoList(workIdList),
-      service.work.likeCountList(workIdList),
-      service.work.isLikeList(workIdList, id),
-      service.works.commentCountList(worksIdList)
+    let [worksList, workList] = await Promise.all([
+      service.works.infoListPlusCount(worksIdList),
+      service.work.infoListPlusFull(workIdList, 1, id)
     ]);
     let worksHash = {};
-    worksList.forEach((item, i) => {
-      item.author = service.works.firstAuthor(authorList[i]);
-      item.commentCount = commentCountList[i];
+    worksList.forEach((item) => {
+      item.author = service.works.firstAuthor(item.author);
       worksHash[item.id] = item;
     });
-    workList.forEach((item, i) => {
-      if(item) {
-        item.likeCount = likeCountList[i] || 0;
-        item.isLike = isLikeList[i] || false;
-      }
+    workList.forEach((item) => {
+      item.author = service.works.firstAuthor(item.author);
     });
     return res.map((item, i) => {
       let works = worksHash[item.worksId];
@@ -1237,14 +1224,17 @@ class Service extends egg.Service {
     res.forEach((item) => {
       workIdList.push(item.workId);
     });
-    let [[worksList, authorList], workList] = await Promise.all([
-      service.works.infoListPlus(worksIdList),
-      service.work.audioList(workIdList)
+    let [worksList, workList] = await Promise.all([
+      service.works.infoListPlusCount(worksIdList),
+      service.work.infoListPlusFull(workIdList, 2, id)
     ]);
     let worksHash = {};
     worksList.forEach((item, i) => {
-      item.author = service.works.firstAuthor(authorList[i]);
+      item.author = service.works.firstAuthor(item.author);
       worksHash[item.id] = item;
+    });
+    workList.forEach((item) => {
+      item.author = service.works.firstAuthor(item.author);
     });
     return res.map((item, i) => {
       let works = worksHash[item.worksId];

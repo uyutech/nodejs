@@ -144,44 +144,41 @@ class Service extends egg.Service {
       }
     });
     let [
-      [worksList, worksAuthorList],
-      [musicAlbumList, musicAlbumAuthorList],
-      [imageAlbumList, imageAlbumAuthorList],
-      authorList,
-      fansCountList
+      worksList,
+      musicAlbumList,
+      imageAlbumList,
+      authorList
     ] = await Promise.all([
-      service.works.infoListPlus(worksIdList),
-      service.musicAlbum.infoListPlus(musicAlbumIdList),
-      service.imageAlbum.infoListPlus(imageAlbumIdList),
-      service.author.infoList(authorIdList),
-      service.author.fansCountList(authorIdList)
+      service.works.infoListPlusAuthor(worksIdList),
+      service.musicAlbum.infoListPlusAuthor(musicAlbumIdList),
+      service.imageAlbum.infoListPlusAuthor(imageAlbumIdList),
+      service.author.infoListPlusFans(authorIdList)
     ]);
     let worksHash = {};
-    worksList.forEach((item, i) => {
+    worksList.forEach((item) => {
       if(item) {
         worksHash[item.id] = item;
-        item.author = service.works.firstAuthor(worksAuthorList[i]);
-      }
-    });
-    let authorHash = {};
-    authorList.forEach((item, i)=> {
-      if(item) {
-        authorHash[item.id] = item;
-        item.fansCount = fansCountList[i];
+        item.author = service.works.firstAuthor(item.author);
       }
     });
     let musicAlbumHash = {};
-    musicAlbumList.forEach((item, i) => {
+    musicAlbumList.forEach((item) => {
       if(item) {
         musicAlbumHash[item.id] = item;
-        item.author = musicAlbumAuthorList[i][0];
+        item.author = service.works.firstAuthor(item.author);
       }
     });
     let imageAlbumHash = {};
-    imageAlbumList.forEach((item, i) => {
+    imageAlbumList.forEach((item) => {
       if(item) {
         imageAlbumHash[item.id] = item;
-        item.author = imageAlbumAuthorList[i][0];
+        item.author = service.works.firstAuthor(item.author);
+      }
+    });
+    let authorHash = {};
+    authorList.forEach((item)=> {
+      if(item) {
+        authorHash[item.id] = item;
       }
     });
     res.forEach((item) => {
@@ -313,30 +310,18 @@ class Service extends egg.Service {
       }
     });
     if(kind === 1) {
-      let [
-        worksList,
-        workList,
-        likeCountList,
-        isLikeList,
-        commentCountList
-      ] = await Promise.all([
-        service.works.infoList(worksIdList),
-        service.work.infoListPlus(workIdList, kind),
-        service.work.likeCountList(workIdList),
-        service.work.isLikeList(workIdList, uid),
-        service.works.commentCountList(worksIdList)
+      let [worksList, workList] = await Promise.all([
+        service.works.infoListPlusCount(worksIdList),
+        service.work.infoListPlusFull(workIdList, kind, uid)
       ]);
       let worksHash = {};
       worksList.forEach((item, i) => {
         if(item) {
-          item.commentCount = commentCountList[i];
           worksHash[item.id] = item;
         }
       });
-      workList.forEach((item, i) => {
+      workList.forEach((item) => {
         if(item) {
-          item.likeCount = likeCountList[i] || 0;
-          item.isLike = isLikeList[i] || false;
           item.author = service.works.firstAuthor(item.author);
         }
       });
@@ -355,7 +340,7 @@ class Service extends egg.Service {
     else if(kind === 2) {
       let [worksList, workList] = await Promise.all([
         service.works.infoList(worksIdList),
-        service.work.infoListPlus(workIdList, kind)
+        service.work.infoListPlusFull(workIdList, kind)
       ]);
       let worksHash = {};
       worksList.forEach((item) => {
@@ -380,7 +365,7 @@ class Service extends egg.Service {
         likeCountList,
         isLikeList
       ] = await Promise.all([
-        service.work.infoListPlus(workIdList, kind),
+        service.work.infoListPlusFull(workIdList, kind),
         service.work.likeCountList(workIdList),
         service.work.isLikeList(workIdList, uid)
       ]);

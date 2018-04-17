@@ -412,16 +412,16 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取专辑数据，包括作者信息
+   * 获取专辑信息，包括作者信息
    * @param albumIdList:Array<int> 专辑id列表
    * @returns Array<Object>
    */
-  async infoListPlus(albumIdList) {
+  async infoListPlusAuthor(albumIdList) {
     if(!albumIdList) {
       return;
     }
     if(!albumIdList.length) {
-      return [[], []];
+      return [];
     }
     const { service } = this;
     let [[infoList, professionSortList], authorList] = await Promise.all([
@@ -431,7 +431,39 @@ class Service extends egg.Service {
     authorList.forEach((author, i) => {
       authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
     });
-    return [infoList, authorList];
+    infoList.forEach((item, i) => {
+      item.author = authorList[i];
+    });
+    return infoList;
+  }
+
+  /**
+   * 获取专辑信息和统计数字信息
+   * @param idList:Array<int> 专辑id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusCount(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let [
+      list,
+      popularList,
+      commentCountList
+    ] = await Promise.all([
+      this.infoList(idList),
+      service.works.numCountList(idList, 1),
+      service.works.commentCountList(idList)
+    ]);
+    list.forEach((item, i) => {
+      item.popular = popularList[i];
+      item.commentCount = commentCountList[i];
+    });
+    return list;
   }
 
   /**

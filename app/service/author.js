@@ -47,6 +47,23 @@ class Service extends egg.Service {
   }
 
   /**
+   * 根据作者id获取作者信息和粉丝数
+   * @param id:int 作者id
+   * @returns Object
+   */
+  async infoPlusFans(id) {
+    if(!id) {
+      return;
+    }
+    let [info, fansCount] = await Promise.all([
+      this.info(id),
+      this.fansCount(id)
+    ]);
+    info.fansCount = fansCount;
+    return info;
+  }
+
+  /**
    * 根据作者id列表获取作者信息列表
    * @param idList:Array<int> 作者id列表
    * @returns Array<Object>
@@ -115,6 +132,34 @@ class Service extends egg.Service {
     }
     return cache;
   }
+
+  /**
+   * 根据作者id列表获取作者信息列表和粉丝数列表
+   * @param idList:Array<int> 作者id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusFans(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    let [list, fansCountList] = await Promise.all([
+      this.infoList(idList),
+      this.fansCountList(idList)
+    ]);
+    list.forEach((item, i) => {
+      item.fansCount = fansCountList[i];
+    });
+    return list;
+  }
+
+  /**
+   * 获取作者别名列表
+   * @param id:int 作者id
+   * @returns Array<String>
+   */
   async aliases(id) {
     if(!id) {
       return;
@@ -135,9 +180,9 @@ class Service extends egg.Service {
         is_delete: false,
       },
     });
-    if(!res.length) {
-      res = null;
-    }
+    res = res.map((item) => {
+      return item.alias;
+    });
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -169,9 +214,6 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    if(!res.length) {
-      res = null;
-    }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
@@ -635,10 +677,10 @@ class Service extends egg.Service {
     }
     const { service } = this;
     // 获取大作品信息、相关作者信息
-    let [worksList, worksAuthorList] = await service.works.infoListPlus(worksIdList);
-    worksList.forEach((item, i) => {
+    let worksList = await service.works.infoListPlusFull(worksIdList);
+    worksList.forEach((item) => {
       if(item) {
-        let author = worksAuthorList[i];
+        let author = item.author;
         let profession = [];
         // 根据顺序将本作者的职种附加上去
         author.forEach((group) => {
@@ -655,6 +697,7 @@ class Service extends egg.Service {
           });
         });
         item.profession = profession;
+        delete item.author;
       }
     });
     return worksList;
@@ -724,7 +767,7 @@ class Service extends egg.Service {
       this.musicAlbumIdList(id, offset, limit),
       this.musicAlbumCount(id)
     ]);
-    let data = await service.musicAlbum.infoList(idList);
+    let data = await service.musicAlbum.infoListPlusCount(idList);
     return {
       count,
       data,
@@ -892,7 +935,6 @@ class Service extends egg.Service {
     }
     return cache;
   }
-
 
   /**
    * 获取作者参与小作品种类的小作品id列表
@@ -1089,37 +1131,20 @@ class Service extends egg.Service {
     if(kind === 1) {
       let [
         worksList,
-        workList,
-        likeCountList,
-        isLikeList,
-        commentCountList
+        workList
       ] = await Promise.all([
-        service.works.infoList(worksIdList),
-        service.work.infoListPlus(workIdList, kind),
-        service.work.likeCountList(workIdList),
-        service.work.isLikeList(workIdList, uid),
-        service.works.commentCountList(worksIdList)
+        service.works.infoListPlusCount(worksIdList),
+        service.work.infoListPlusFull(workIdList, kind, uid)
       ]);
       let worksHash = {};
-      worksList.forEach((item, i) => {
+      worksList.forEach((item) => {
         if(item) {
           worksHash[item.id] = item;
-          item.commentCount = commentCountList[i];
         }
       });
-      workList.forEach((item, i) => {
-        if(item) {
-          item.likeCount = likeCountList[i] || 0;
-          item.isLike = isLikeList[i] || false;
-        }
-      });
-      return workIdList.map((workId, i) => {
-        let worksId = worksIdList[i];
-        let copy = Object.assign({}, worksHash[worksId]);
-        let work = workList[i];
-        copy.work = work;
+      workList.forEach((item) => {
         let professionList = [];
-        work.author.forEach((group) => {
+        item.author.forEach((group) => {
           group.forEach((item) => {
             for(let i = 0, len = item.list.length; i < len; i++) {
               if(item.list[i].id === id) {
@@ -1132,27 +1157,28 @@ class Service extends egg.Service {
             }
           });
         });
-        work.profession = professionList;
-        delete work.author;
+        item.profession = professionList;
+        delete item.author;
+      });
+      return workList.map((item, i) => {
+        let worksId = worksIdList[i];
+        let copy = Object.assign({}, worksHash[worksId]);
+        copy.work = item;
         return copy;
       });
     }
     else if(kind === 2) {
       let [worksList, workList] = await Promise.all([
         service.works.infoList(worksIdList),
-        service.work.infoListPlus(workIdList, kind)
+        service.work.infoListPlusFull(workIdList, kind, uid)
       ]);
       let worksHash = {};
       worksList.forEach((item) => {
         worksHash[item.id] = item;
       });
-      return workIdList.map((workId, i) => {
-        let worksId = worksIdList[i];
-        let copy = Object.assign({}, worksHash[worksId]);
-        let work = workList[i];
-        copy.work = work;
+      workList.forEach((item) => {
         let professionList = [];
-        work.author.forEach((group) => {
+        item.author.forEach((group) => {
           group.forEach((item) => {
             for(let i = 0, len = item.list.length; i < len; i++) {
               if(item.list[i].id === id) {
@@ -1165,43 +1191,39 @@ class Service extends egg.Service {
             }
           });
         });
-        work.profession = professionList;
-        delete work.author;
+        item.profession = professionList;
+        delete item.author;
+      });
+      return workList.map((item, i) => {
+        let worksId = worksIdList[i];
+        let copy = Object.assign({}, worksHash[worksId]);
+        copy.work = item;
         return copy;
       });
     }
     else if(kind === 3) {
       let [
-        workList,
-        likeCountList,
-        isLikeList
+        workList
       ] = await Promise.all([
-        service.work.infoListPlus(workIdList, kind),
-        service.work.likeCountList(workIdList),
-        service.work.isLikeList(workIdList, uid)
+        service.work.infoListPlusFull(workIdList, kind, uid)
       ]);
-      workList.forEach((item, i) => {
-        if(item) {
-          item.likeCount = likeCountList[i] || 0;
-          item.isLike = isLikeList[i] || false;
-          let professionList = [];
-          let author = authorList[i];
-          item.author.forEach((group) => {
-            group.forEach((item) => {
-              for(let i = 0, len = item.list.length; i < len; i++) {
-                if(item.list[i].id === id) {
-                  professionList.push({
-                    id: item.id,
-                    name: item.name,
-                  });
-                  break;
-                }
+      workList.forEach((item) => {
+        let professionList = [];
+        item.author.forEach((group) => {
+          group.forEach((item) => {
+            for(let i = 0, len = item.list.length; i < len; i++) {
+              if(item.list[i].id === id) {
+                professionList.push({
+                  id: item.id,
+                  name: item.name,
+                });
+                break;
               }
-            });
+            }
           });
-          item.profession = professionList;
-          delete item.author;
-        }
+        });
+        item.profession = professionList;
+        delete item.author;
       });
       return workList;
     }

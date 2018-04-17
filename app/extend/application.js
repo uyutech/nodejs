@@ -43,6 +43,7 @@ const text = require('../model/text');
 const video = require('../model/video');
 const audio = require('../model/audio');
 const workType = require('../model/workType');
+const workNum = require('../model/workNum');
 const works = require('../model/works');
 const worksType = require('../model/worksType');
 const worksTimeline = require('../model/worksTimeline');
@@ -53,6 +54,7 @@ const worksRecommend = require('../model/worksRecommend');
 const workAuthorRelation = require('../model/workAuthorRelation');
 const worksAuthorRelation = require('../model/worksAuthorRelation');
 const worksTypeProfessionSort = require('../model/worksTypeProfessionSort');
+const worksNum = require('../model/worksNum');
 const musicAlbum = require('../model/musicAlbum');
 const musicAlbumWorkRelation = require('../model/musicAlbumWorkRelation');
 const musicAlbumAuthorRelation = require('../model/musicAlbumAuthorRelation');
@@ -201,6 +203,7 @@ module.exports = {
         video: video(this),
         audio: audio(this),
         workType: workType(this),
+        workNum: workNum(this),
         works: works(this),
         worksType: worksType(this),
         worksTimeline: worksTimeline(this),
@@ -211,6 +214,7 @@ module.exports = {
         workAuthorRelation: workAuthorRelation(this),
         worksAuthorRelation: worksAuthorRelation(this),
         worksTypeProfessionSort: worksTypeProfessionSort(this),
+        worksNum: worksNum(this),
         musicAlbum: musicAlbum(this),
         musicAlbumWorkRelation: musicAlbumWorkRelation(this),
         musicAlbumAuthorRelation: musicAlbumAuthorRelation(this),

@@ -36,7 +36,6 @@ class Service extends egg.Service {
           'state',
           'cover',
           'type',
-          'popular',
           ['is_authorize', 'isAuthorize']
         ],
         where: {
@@ -101,7 +100,6 @@ class Service extends egg.Service {
           'state',
           'cover',
           'type',
-          'popular',
           ['is_authorize', 'isAuthorize']
         ],
         where: {
@@ -1046,21 +1044,25 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取大作品数据，包括作者信息
+   * 获取大作品信息和全部作者信息
    * @param idList:Array<int> 大作品id列表
-   * @returns Array[Array<Object>, Array<Object>]
+   * @returns Array<Object>
    */
-  async infoListPlus(idList) {
+  async infoListPlusAuthor(idList) {
     if(!idList) {
       return;
     }
     if(!idList.length) {
-      return [[], []];
+      return [];
     }
-    let [[infoList, professionSortList], authorList, collectionAuthorList] = await Promise.all([
+    let [
+      [infoList, professionSortList],
+      authorList,
+      collectionAuthorList
+    ] = await Promise.all([
       this.infoListAndProfessionSort(idList),
       this.authorList(idList),
-      this.collectionListAuthor(idList),
+      this.collectionListAuthor(idList)
     ]);
     collectionAuthorList.forEach((arr, i) => {
       arr.forEach((item) => {
@@ -1070,7 +1072,66 @@ class Service extends egg.Service {
     authorList.forEach((author, i) => {
       authorList[i] = this.reorderAuthor(author, professionSortList[i]);
     });
-    return [infoList, authorList];
+    infoList.forEach((item, i) => {
+      item.author = authorList[i];
+    });
+    return infoList;
+  }
+
+  /**
+   * 获取大作品信息和统计数字信息
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusCount(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    let [
+      list,
+      popularList,
+      commentCountList
+    ] = await Promise.all([
+      this.infoList(idList),
+      this.numCountList(idList, 1),
+      this.commentCountList(idList)
+    ]);
+    list.forEach((item, i) => {
+      item.popular = popularList[i];
+      item.commentCount = commentCountList[i];
+    });
+    return list;
+  }
+
+  /**
+   * 获取大作品信息、统计数字和全部作者信息
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusFull(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    let [
+      list,
+      popularList,
+      commentCountList
+    ] = await Promise.all([
+      this.infoListPlusAuthor(idList),
+      this.numCountList(idList, 1),
+      this.commentCountList(idList)
+    ]);
+    list.forEach((item, i) => {
+      item.popular =  popularList[i];
+      item.commentCount = commentCountList[i];
+    });
+    return list;
   }
 
   /**
@@ -1168,6 +1229,111 @@ class Service extends egg.Service {
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
+  }
+
+
+  /**
+   * 获取统计数字
+   * @param id:int 作品id
+   * @param type:int 类型
+   * @returns int
+   */
+  async numCount(id, type) {
+    if(!id || !type) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'worksNumCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.worksNum.findOne({
+      attributes: [
+        'num'
+      ],
+      where: {
+        works_id: id,
+        type,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取统计数字列表
+   * @param idList:Array<int> 作品id列表
+   * @param type:int 类型
+   * @returns Array<int>
+   */
+  async numCountList(idList, type) {
+    if(!idList || !type) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('worksNumCount_' + id + '_' + type);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('worksNumCount_' + id + '_' + type, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.worksNum.findAll({
+        attributes: [
+          ['works_id', 'worksId'],
+          'num'
+        ],
+        where: {
+          works_id: noCacheIdList,
+          type,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.worksId;
+          hash[id] = item.num;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || 0;
+        cache[i] = temp;
+        app.redis.setex('worksNumCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
   }
 }
 

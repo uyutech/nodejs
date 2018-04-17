@@ -21,7 +21,6 @@ class Controller extends egg.Controller {
     let [
       info,
       isFollow,
-      fansCount,
       aliases,
       outsides,
       mainWorks,
@@ -30,9 +29,8 @@ class Controller extends egg.Controller {
       dynamicList,
       commentList
     ] = await Promise.all([
-      service.author.info(authorId),
+      service.author.infoPlusFans(authorId),
       service.author.isFollow(authorId, uid),
-      service.author.fansCount(authorId),
       service.author.aliases(authorId),
       service.author.outsides(authorId),
       service.author.mainWorks(authorId, 0, LIMIT),
@@ -52,7 +50,6 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON({
       info,
       isFollow,
-      fansCount,
       aliases,
       outsides,
       mainWorks,

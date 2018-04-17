@@ -209,12 +209,13 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据id列表返回小作品信息和作者信息
+   * 根据id列表返回小作品信息、统计数字和作者信息
    * @param idList:Array<int> id列表
    * @param kind:int 类型
+   * @param uid:int 用户id
    * @returns Array<Object>
    */
-  async infoListPlus(idList, kind) {
+  async infoListPlusFull(idList, kind, uid) {
     if(!idList || !kind) {
       return;
     }
@@ -222,9 +223,14 @@ class Service extends egg.Service {
       return [];
     }
     const { service } = this;
-    let [infoList, authorList] = await Promise.all([
+    let [infoList, authorList, isLikeList, isFavorList, likeCountList, favorCountList, viewsList] = await Promise.all([
       this.infoList(idList, kind),
-      this.authorList(idList)
+      this.authorList(idList),
+      this.isRelationList(idList, 1, uid),
+      this.isRelationList(idList, 2, uid),
+      this.relationCountList(idList, 1),
+      this.relationCountList(idList, 2),
+      this.numCountList(idList, 1)
     ]);
     let typeList = [];
     let typeHash = {};
@@ -247,6 +253,11 @@ class Service extends egg.Service {
       authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
     });
     infoList.forEach((item, i) => {
+      item.views = viewsList[i];
+      item.isLike = isLikeList[i];
+      item.isFavor = isFavorList[i];
+      item.likeCount = likeCountList[i];
+      item.favorCount = favorCountList[i];
       item.author = authorList[i];
     });
     return infoList;
@@ -299,8 +310,7 @@ class Service extends egg.Service {
           'duration',
           'cover',
           'url',
-          'type',
-          'views'
+          'type'
         ],
         where: {
           id: noCacheIdList,
@@ -335,6 +345,7 @@ class Service extends egg.Service {
     });
     cache.forEach((item) => {
       if(item) {
+        item.kind = 1;
         item.typeName = typeHash[item.type].name;
       }
     });
@@ -386,8 +397,7 @@ class Service extends egg.Service {
           'duration',
           'cover',
           'url',
-          'type',
-          'views'
+          'type'
         ],
         where: {
           id: noCacheIdList,
@@ -422,6 +432,7 @@ class Service extends egg.Service {
     });
     cache.forEach((item) => {
       if(item) {
+        item.kind = 2;
         item.typeName = typeHash[item.type].name;
       }
     });
@@ -473,8 +484,7 @@ class Service extends egg.Service {
           'width',
           'height',
           'url',
-          'type',
-          'views'
+          'type'
         ],
         where: {
           id: noCacheIdList,
@@ -509,6 +519,7 @@ class Service extends egg.Service {
     });
     cache.forEach((item) => {
       if(item) {
+        item.kind = 3;
         item.typeName = typeHash[item.type].name;
       }
     });
@@ -558,8 +569,7 @@ class Service extends egg.Service {
           'id',
           'title',
           'content',
-          'type',
-          'views'
+          'type'
         ],
         where: {
           id: noCacheIdList,
@@ -594,6 +604,7 @@ class Service extends egg.Service {
     });
     cache.forEach((item) => {
       if(item) {
+        item.kind = 4;
         item.typeName = typeHash[item.type].name;
       }
     });
@@ -667,7 +678,7 @@ class Service extends egg.Service {
     return await this.isRelationList(idList, uid, 2);
   }
 
-  async isRelationList(idList, uid, type) {
+  async isRelationList(idList, type, uid) {
     if(!idList || !type) {
       return;
     }
@@ -1247,6 +1258,110 @@ class Service extends egg.Service {
         let temp = hash[type] || [];
         cache[i] = temp;
         app.redis.setex('workTypeProfessionSort_' + type, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
+
+  /**
+   * 获取统计数字
+   * @param id:int 作品id
+   * @param type:int 类型
+   * @returns int
+   */
+  async numCount(id, type) {
+    if(!id || !type) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'workNumCount_' + id + '_' + type;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.workNum.findOne({
+      attributes: [
+        'num'
+      ],
+      where: {
+        work_id: id,
+        type,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取统计数字列表
+   * @param idList:Array<int> 作品id列表
+   * @param type:int 类型
+   * @returns Array<int>
+   */
+  async numCountList(idList, type) {
+    if(!idList || !type) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('workNumCount_' + id + '_' + type);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('workNumCount_' + id + '_' + type, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.workNum.findAll({
+        attributes: [
+          ['work_id', 'workId'],
+          'num'
+        ],
+        where: {
+          work_id: noCacheIdList,
+          type,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.workId;
+          hash[id] = item.num || 0;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || 0;
+        cache[i] = temp;
+        app.redis.setex('workNumCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;
