@@ -47,7 +47,7 @@ class Controller extends egg.Controller {
   async circleList() {
     const { ctx, service } = this;
     let body = ctx.request.body;
-    let offset = parseInt(body.offset);
+    let offset = parseInt(body.offset) || 0;
     let res = await service.circle.all(offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
@@ -58,12 +58,12 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let circleId = (body.circleId || '').split(',');
-    let offset = parseInt(body.offset);
+    let offset = parseInt(body.offset) || 0;
     let res;
     if(circleId.length && circleId[0]) {
       let query = await Promise.all(
         circleId.map((id) => {
-          return service.circle.postList(id, uid, offset || 0, LIMIT);
+          return service.circle.postList(id, uid, offset, LIMIT);
         })
       );
       res = {
@@ -76,7 +76,7 @@ class Controller extends egg.Controller {
       });
     }
     else {
-      res = await service.post.all(uid, offset || 0, LIMIT);
+      res = await service.post.all(uid, offset, LIMIT);
     }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);

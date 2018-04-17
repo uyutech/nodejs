@@ -306,7 +306,9 @@ class Service extends egg.Service {
     const { app, service } = this;
     let cache = await Promise.all(
       idList.map((id) => {
-        return app.redis.get('commentWork_' + id);
+        if(id !== null && id !== undefined) {
+          return app.redis.get('commentWork_' + id);
+        }
       })
     );
     let noCacheIdList = [];
@@ -362,21 +364,23 @@ class Service extends egg.Service {
     let audioIdList = [];
     let audioIdHash = {};
     cache.forEach((arr) => {
-      arr.forEach((item) => {
-        let id = item.workId;
-        if(item.kind === 1) {
-          if(!videoIdHash[id]) {
-            videoIdHash[id] = true;
-            videoIdList.push(id);
+      if(arr) {
+        arr.forEach((item) => {
+          let id = item.workId;
+          if(item.kind === 1) {
+            if(!videoIdHash[id]) {
+              videoIdHash[id] = true;
+              videoIdList.push(id);
+            }
           }
-        }
-        else if(item.kind === 2) {
-          if(!audioIdHash[id]) {
-            audioIdHash[id] = true;
-            audioIdList.push(id);
+          else if(item.kind === 2) {
+            if(!audioIdHash[id]) {
+              audioIdHash[id] = true;
+              audioIdList.push(id);
+            }
           }
-        }
-      });
+        });
+      }
     });
     let [videoList, audioList] = await Promise.all([
       service.work.infoListPlusFull(videoIdList, 1, uid),
@@ -384,17 +388,24 @@ class Service extends egg.Service {
     ]);
     let hash = {};
     videoList.forEach((item) => {
-      item.author = service.works.firstAuthor(item.author);
-      hash[item.id] = item;
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+        hash[item.id] = item;
+      }
     });
     audioList.forEach((item) => {
-      item.author = service.works.firstAuthor(item.author);
-      hash[item.id] = item;
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+        hash[item.id] = item;
+      }
     });
     return cache.map((arr) => {
-      return arr.map((item) => {
-        return hash[item.workId];
-      });
+      if(arr) {
+        return arr.map((item) => {
+          return hash[item.workId];
+        });
+      }
+      return [];
     });
   }
 
