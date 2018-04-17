@@ -13,13 +13,13 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let postId = parseInt(body.postId);
-    if(!postId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
     let [info, commentList] = await Promise.all([
-      service.post.info(postId, uid),
-      service.post.commentList(postId, uid, 0, LIMIT)
+      service.post.info(id, uid),
+      service.post.commentList(id, uid, 0, LIMIT)
     ]);
     commentList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
@@ -32,11 +32,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let postId = parseInt(body.postId);
-    if(!postId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.post.commentList(postId, uid, body.offset || 0, LIMIT);
+    let res = await service.post.commentList(id, uid, body.offset || 0, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -54,6 +54,18 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON({
       worksList, workList, authorList, userList, postList,
     });
+  }
+  
+  async report() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    await service.comment.report(id, uid);
+    ctx.body = ctx.helper.okJSON();
   }
 }
 

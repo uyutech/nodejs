@@ -57,6 +57,30 @@ const sequelizeMall = new Sequelize('mall', 'root', '87351984@', {
   timezone: '+08:00',
   // logging: null,
 });
+const sequelizeReport = new Sequelize('report', 'root', '87351984@', {
+  host: 'localhost',
+  dialect: 'mysql',
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
+  dialectOptions: {
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
+  },
+  options: {
+    charset: 'utf8mb4',
+  },
+  define: {
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
+  },
+  timezone: '+08:00',
+  // logging: null,
+});
 
 const Author = require('./app/model/author')({ sequelizeCircling: sequelize, Sequelize });
 const AuthorMainWorks = require('./app/model/authorMainWorks')({ sequelizeCircling: sequelize, Sequelize });
@@ -122,6 +146,8 @@ const Express = require('./app/model/express')({ sequelizeMall: sequelizeMall, S
 const Prize = require('./app/model/prize')({ sequelizeMall: sequelizeMall, Sequelize });
 const PrizeExpressRelation = require('./app/model/prizeExpressRelation')({ sequelizeMall: sequelizeMall, Sequelize });
 
+const ReportComment = require('./app/model/reportComment')({ sequelizeReport: sequelizeReport, Sequelize });
+
 (async () => {
   try {
     const pool = await sql.connect({
@@ -139,6 +165,7 @@ const PrizeExpressRelation = require('./app/model/prizeExpressRelation')({ seque
     await RecommendBanner.sync();
     await RecommendComment.sync();
     await Banner.sync();
+    await ReportComment.sync();
     await dealAuthor(pool);
     await dealAuthorMainWorks(pool);
     await dealWork(pool);

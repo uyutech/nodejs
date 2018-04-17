@@ -9,6 +9,7 @@ const Sequelize = require('sequelize');
 const SEQUELIZE = Symbol('Application#Sequelize');
 const SEQUELIZE_CIRCLING = Symbol('Application#sequelizeCircling');
 const SEQUELIZE_MALL = Symbol('Application#sequelizeMall');
+const SEQUELIZE_REPORT = Symbol('Application#sequelizeReport');
 const SEQUELIZE_STATS = Symbol('Application#sequelizeStats');
 const MODEL = Symbol('Application#Model');
 
@@ -74,6 +75,7 @@ const product = require('../model/product');
 const prize = require('../model/prize');
 const express = require('../model/express');
 const prizeExpressRelation = require('../model/prizeExpressRelation');
+const reportComment = require('../model/reportComment');
 
 module.exports = {
   get Sequelize() {
@@ -86,7 +88,7 @@ module.exports = {
     if(!this[SEQUELIZE_CIRCLING]) {
       let database = this.config.database;
       this[SEQUELIZE_CIRCLING] = new Sequelize(database.circling.name, database.circling.username, database.circling.password, {
-        host: database.stats.host,
+        host: database.circling.host,
         dialect: 'mysql',
         pool: {
           max: 5,
@@ -115,7 +117,7 @@ module.exports = {
     if(!this[SEQUELIZE_MALL]) {
       let database = this.config.database;
       this[SEQUELIZE_MALL] = new Sequelize(database.mall.name, database.mall.username, database.mall.password, {
-        host: database.stats.host,
+        host: database.mall.host,
         dialect: 'mysql',
         pool: {
           max: 5,
@@ -139,6 +141,35 @@ module.exports = {
       });
     }
     return this[SEQUELIZE_MALL];
+  },
+  get sequelizeReport() {
+    if(!this[SEQUELIZE_REPORT]) {
+      let database = this.config.database;
+      this[SEQUELIZE_REPORT] = new Sequelize(database.report.name, database.report.username, database.report.password, {
+        host: database.report.host,
+        dialect: 'mysql',
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        },
+        dialectOptions: {
+          charset: 'utf8mb4',
+          collate: 'utf8mb4_unicode_ci'
+        },
+        options: {
+          charset: 'utf8mb4',
+        },
+        define: {
+          timestamps: false,
+          underscored: true,
+          freezeTableName: true,
+        },
+        timezone: '+08:00',
+      });
+    }
+    return this[SEQUELIZE_REPORT];
   },
   get sequelizeStats() {
     if(!this[SEQUELIZE_STATS]) {
@@ -234,6 +265,7 @@ module.exports = {
         prize: prize(this),
         express: express(this),
         prizeExpressRelation: prizeExpressRelation(this),
+        reportComment: reportComment(this),
       };
     }
     return this[MODEL];

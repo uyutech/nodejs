@@ -1487,94 +1487,21 @@ class Service extends egg.Service {
     return res;
   }
 
-  async getRootId(id) {
-    if(!id) {
+  /**
+   * 举报
+   * @param id:int 评论id
+   * @param uid:int 用户id
+   * @returns boolean
+   */
+  async report(id, uid) {
+    if(!id || !uid) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'commentRidByPid_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.comment.findOne({
-      attributes: [
-        ['root_id', 'rootId']
-      ],
-      where: {
-        id,
-      },
-      raw: true,
+    await app.model.reportComment.create({
+      comment_id: id,
+      user_id: uid,
     });
-    if(res) {
-      res = res.rootId;
-    }
-    else {
-      res = null;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
-
-  async worksId(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'commentWorks_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.worksCommentRelation.findOne({
-      attributes: [
-        ['works_id', 'worksId']
-      ],
-      where: {
-        comment_id: id,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.worksId;
-    }
-    else {
-      res = null;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
-
-  async authorId(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'commentAuthor_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.worksCommentRelation.findOne({
-      attributes: [
-        ['author_id', 'authorId']
-      ],
-      where: {
-        comment_id: id,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.authorId;
-    }
-    else {
-      res = null;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
   }
 }
 
