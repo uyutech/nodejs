@@ -69,7 +69,9 @@ const userAccount = require('../model/userAccount');
 const userOauth = require('../model/userOauth');
 const message = require('../model/message');
 const product = require('../model/product');
-const order = require('../model/order');
+const prize = require('../model/prize');
+const express = require('../model/express');
+const prizeExpressRelation = require('../model/prizeExpressRelation');
 
 module.exports = {
   get Sequelize() {
@@ -225,7 +227,9 @@ module.exports = {
         userOauth: userOauth(this),
         message: message(this),
         product: product(this),
-        order: order(this),
+        prize: prize(this),
+        express: express(this),
+        prizeExpressRelation: prizeExpressRelation(this),
       };
     }
     return this[MODEL];

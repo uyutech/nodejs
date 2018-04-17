@@ -115,7 +115,9 @@ const UserAddress = require('./app/model/userAddress')({ sequelizeCircling: sequ
 const CommentPoint = require('./app/model/commentPoint')({ sequelizeCircling: sequelize, Sequelize });
 
 const Product = require('./app/model/product')({ sequelizeMall: sequelizeMall, Sequelize });
-const Order = require('./app/model/order')({ sequelizeMall: sequelizeMall, Sequelize });
+const Express = require('./app/model/express')({ sequelizeMall: sequelizeMall, Sequelize });
+const Prize = require('./app/model/prize')({ sequelizeMall: sequelizeMall, Sequelize });
+const PrizeExpressRelation = require('./app/model/prizeExpressRelation')({ sequelizeMall: sequelizeMall, Sequelize });
 
 (async () => {
   try {
@@ -874,6 +876,7 @@ async function dealUserPlus(pool) {
       await UserAddress.create({
         user_id: item.ProfileID,
         name: item.OrderName,
+        is_default: true,
         address: item.OrderAddress,
         phone: item.OrderPhone,
       });
@@ -1678,19 +1681,22 @@ async function dealMessage(pool) {
 async function dealMall(pool) {
   console.log('------- dealMall --------');
   await Product.sync();
-  await Order.sync();
+  await Prize.sync();
+  await Express.sync();
+  await PrizeExpressRelation.sync();
   let last = 15;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Mall_Product WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     await Product.create({
+      id: item.ID,
       name: item.ProductName,
       cover: item.CoverPic || '',
       describe: item.Describe || '',
-      price: item.price,
+      price: item.Price,
       discount: item.Discount,
-      is_delete: item.state === 3,
+      is_delete: item.State === 3,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -1700,13 +1706,46 @@ async function dealMall(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Mall_Order WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await Order.create({
+    await Express.create({
+      id: item.ID,
       user_id: item.UID,
+      product_id: 0,
       name: item.OrderName,
       phone: item.OrderPhone,
-      address: item.OrderAddress,
       state: item.State,
+      address: item.OrderAddress,
+      is_delete: item.ISDel,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
     });
+  }
+  last = 1081;
+  last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Mall_Cart WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    await Prize.create({
+      id: item.ID,
+      user_id: item.UID,
+      product_id: item.ProductID,
+      state: item.State,
+      is_delete: item.ISDel,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
+    if(item.OrderID) {
+      await PrizeExpressRelation.create({
+        prize_id: item.ID,
+        express_id: item.OrderID,
+      });
+      await Express.update({
+        product_id: item.ProductID,
+      }, {
+        where: {
+          id: item.OrderID,
+        },
+      });
+    }
   }
 }
 

@@ -221,7 +221,7 @@ class Service extends egg.Service {
         success: true,
         data: create.id ,
       };
-    } catch(err) {
+    } catch(e) {
       await transaction.rollback();
       return {
         success: false,

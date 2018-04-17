@@ -404,4 +404,10 @@ module.exports = app => {
   app.post('/h5/passport2/resetCode', 'h52.passport.resetCode');
   app.post('/h5/passport2/reset', 'h52.passport.reset');
   app.post('/h5/passport2/loginOut', app.middlewares.needLoginJson(), 'h52.passport.loginOut');
+
+  app.post('/h5/mall2/index', 'h52.mall.index');
+  app.post('/h5/mall2/prize', app.middlewares.needLoginJson(), 'h52.mall.prize');
+  app.post('/h5/mall2/express', app.middlewares.needLoginJson(), 'h52.mall.express');
+  app.post('/h5/mall2/applyExpress', app.middlewares.needLoginJson(), 'h52.mall.applyExpress');
+  app.post('/h5/mall2/cancelExpress', app.middlewares.needLoginJson(), 'h52.mall.cancelExpress');
 };

@@ -6,7 +6,7 @@
 
 module.exports = app => {
   const { sequelizeMall, Sequelize } = app;
-  return sequelizeMall.define('order', {
+  return sequelizeMall.define('prize', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -17,25 +17,14 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    name: {
-      type: Sequelize.STRING(32),
+    product_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: '',
-    },
-    phone: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    address: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: '',
     },
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '1未发货，2已发货，3已收货',
+      comment: '1未发货，2已申请发货',
     },
     is_delete: {
       type: Sequelize.BOOLEAN,
@@ -59,6 +48,6 @@ module.exports = app => {
         fields: ['user_id'],
       }
     ],
-    comment: '商品基本信息',
+    comment: '奖品信息',
   });
 };

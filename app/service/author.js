@@ -61,7 +61,9 @@ class Service extends egg.Service {
     const { app } = this;
     let cache = await Promise.all(
       idList.map((id) => {
-        return app.redis.get('authorInfo_' + id);
+        if(id !== null && id !== undefined) {
+          return app.redis.get('authorInfo_' + id);
+        }
       })
     );
     let noCacheIdList = [];
