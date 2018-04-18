@@ -159,6 +159,7 @@ class Service extends egg.Service {
       ],
       where: {
         circle_id: id,
+        is_comment_delete: false,
       },
       offset,
       limit,

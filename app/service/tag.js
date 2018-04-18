@@ -281,6 +281,7 @@ class Service extends egg.Service {
       where: {
         tag_id: id,
         is_delete: false,
+        is_comment_delete: false,
       },
       offset,
       limit,
@@ -315,6 +316,7 @@ class Service extends egg.Service {
       where: {
         tag_id: id,
         is_delete: false,
+        is_comment_delete: false,
       },
       raw: true,
     });
@@ -425,19 +427,52 @@ class Service extends egg.Service {
   /**
    * 获取标签对应的圈子id
    * @param id:int 标签id
-   * @param type:int 类型
+   * @param type:int 类型，不传为所有
    * @returns Array<int>
    */
-  async circleId(id, type) {}
+  async circle(id, type) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'tagCircle_' + id;
+    if(type) {
+      cacheKey += '_' + type
+    }
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey);
+      return JSON.parse(res);
+    }
+    let where = {
+      tag_id: id,
+      is_delete: false,
+    };
+    if(type) {
+      where.type = type;
+    }
+    res = await app.model.circleTagRelation.findAll({
+      attributes: [
+        ['circle_id', 'circleId']
+      ],
+      where,
+      raw: true,
+    });
+    res = res.map((item) => {
+      return item.tagId;
+    });
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
+  }
 
   /**
-   * 获取标签对应的圈子id
-   * @param idList:int 标签id
-   * @param type:int 类型
+   * 获取标签列表对应的圈子id列表
+   * @param idList:int 标签id列表
+   * @param type:int 类型，不传为所有
    * @returns Array<Array<int>>
    */
   async circleIdList(idList, type) {
-    if(!idList || !type) {
+    if(!idList) {
       return;
     }
     if(!idList.length) {
@@ -447,7 +482,11 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== undefined && id !== null) {
-          return app.redis.get('tagCircle_' + id + '_' + type);
+          let cacheKey = 'tagCircle_' + id;
+          if(type) {
+            cacheKey += '_' + type
+          }
+          return app.redis.get(cacheKey);
         }
       })
     );
@@ -458,7 +497,11 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('tagCircle_' + id + '_' + type, CACHE_TIME);
+        let cacheKey = 'tagCircle_' + id;
+        if(type) {
+          cacheKey += '_' + type
+        }
+        app.redis.expire(cacheKey, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -469,16 +512,19 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
+      let where = {
+        tag_id: noCacheIdList,
+        is_delete: false,
+      };
+      if(type) {
+        where.type = type;
+      }
       let res = await app.model.circleTagRelation.findAll({
         attributes: [
           ['circle_id', 'circleId'],
           ['tag_id', 'tagId']
         ],
-        where: {
-          tag_id: noCacheIdList,
-          type,
-          is_delete: false,
-        },
+        where,
         raw: true,
       });
       let hash = {};
@@ -493,7 +539,11 @@ class Service extends egg.Service {
         let id = idList[i];
         let item = hash[id] || [];
         cache[i] = item;
-        app.redis.setex('tagCircle_' + id + '_' + type, CACHE_TIME, JSON.stringify(item));
+        let cacheKey = 'tagCircle_' + id;
+        if(type) {
+          cacheKey += '_' + type
+        }
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(item));
       });
     }
     return cache;

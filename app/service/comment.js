@@ -474,7 +474,7 @@ class Service extends egg.Service {
       media,
       work
     ] = await Promise.all([
-      this.quoteAndPerson(data),
+      this.quoteAndPerson(data, uid),
       this.operateRelation(id, uid, 1),
       this.operateRelation(id, uid, 2),
       this.replyCount(id),
@@ -516,9 +516,10 @@ class Service extends egg.Service {
   /**
    * 获取言论引用数据和用户数据
    * @param data:Object 言论基本信息
+   * @param uid:int 登录id
    * @returns Object{ userHash, authorHash, quote }
    */
-  async quoteAndPerson(data) {
+  async quoteAndPerson(data, uid) {
     if(!data) {
       return;
     }
@@ -528,6 +529,7 @@ class Service extends egg.Service {
     let authorIdList = [];
     let authorIdHash = {};
     let quoteId;
+    data.isOwn = data.uid === uid;
     if(data.aid) {
       if(!authorIdHash[data.aid]) {
         authorIdHash[data.aid] = true;
@@ -628,7 +630,7 @@ class Service extends egg.Service {
       mediaList,
       workList
     ] = await Promise.all([
-      this.quoteAndPersonList(dataList),
+      this.quoteAndPersonList(dataList, uid),
       this.operateRelationList(idList, uid, 1),
       this.operateRelationList(idList, uid, 2),
       this.replyCountList(idList),
@@ -740,9 +742,10 @@ class Service extends egg.Service {
   /**
    * 获取言论引用数据和用户数据
    * @param dataList:Array<Object> 言论基本信息
+   * @param uid:int 登录id
    * @returns Object{ userHash, authorHash, quoteHash }
    */
-  async quoteAndPersonList(dataList) {
+  async quoteAndPersonList(dataList, uid) {
     if(!dataList || !dataList.length) {
       return {};
     }
@@ -755,6 +758,7 @@ class Service extends egg.Service {
     let quoteIdHash = {};
     dataList.forEach((item) => {
       if(item) {
+        item.isOwn = item.uid === uid;
         if(item.aid) {
           if(!authorIdHash[item.aid]) {
             authorIdHash[item.aid] = true;
@@ -1544,6 +1548,77 @@ class Service extends egg.Service {
       comment_id: id,
       type: 3,
     });
+    return {
+      success: true,
+    };
+  }
+
+  /**
+   * 删除言论
+   * @param id:int 言论id
+   * @param uid:int 用户id
+   */
+  async del(id, uid) {
+    if(!id || !uid) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let exist = await app.model.comment.findOne({
+      attributes: [
+        ['user_id', 'uid'],
+        ['is_delete', 'isDelete']
+      ],
+      where: {
+        id,
+      },
+      raw: true,
+    });
+    if(!exist) {
+      return {
+        success: false,
+        message: '言论不存在~',
+      };
+    }
+    if(exist.isDelete) {
+      return {
+        success: false,
+        message: '已经删除过了，无需重复删除~',
+      };
+    }
+    if(exist.uid !== uid) {
+      return {
+        success: false,
+        message: '没有权限~',
+      };
+    }
+    let now = new Date();
+    await Promise.all([
+      app.model.comment.update({
+        is_delete: true,
+      }, {
+        where: {
+          id,
+        },
+      }),
+      app.model.tagCommentRelation.update({
+        is_comment_delete: true,
+        update_time: now,
+      }, {
+        where: {
+          comment_id: id,
+        },
+      }),
+      app.model.circleCommentRelation.update({
+        is_comment_delete: true,
+        update_time: now,
+      }, {
+        where: {
+          comment_id: id,
+        },
+      })
+    ]);
     return {
       success: true,
     };

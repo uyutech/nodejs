@@ -97,7 +97,9 @@ class Controller extends egg.Controller {
       return item;
     });
     if(!circleId.length || circleId.length > 3) {
-      return;
+      return ctx.body = ctx.helper.errorJSON({
+        message: '最多只能选择3个圈子哦~',
+      });
     }
     if(image) {
       image = JSON.parse(image);
@@ -113,37 +115,52 @@ class Controller extends egg.Controller {
         }
       });
     }
-    let [tagList, tagIdList] = await Promise.all([
+    // 获取选择的圈子直接对应的话题id列表，以及手写话题的id列表
+    let [tagList, inputTagIdList] = await Promise.all([
       service.circle.tagIdList(circleId, 1),
       service.tag.idListByName(tagNameList)
     ]);
-    let tagId = [];
-    let tagHash = {};
+    let chooseTagIdList = [];
+    let chooseTagHash = {};
+    let tagIdList = [];
+    let tagIdHash = {};
     tagList.map((item) => {
       if(item) {
         item.forEach(function(id) {
-          if(!tagHash[id]) {
-            tagHash[id] = true;
-            tagId.push(id);
+          if(!chooseTagHash[id]) {
+            chooseTagHash[id] = true;
+            chooseTagIdList.push(id);
+          }
+          if(!tagIdHash[id]) {
+            tagIdHash[id] = true;
+            tagIdList.push(id);
           }
         });
       }
     });
+    inputTagIdList.map((id) => {
+      if(!tagIdHash[id]) {
+        tagIdHash[id] = true;
+        tagIdList.push(id);
+      }
+    });
     let [circleIdList, res] = await Promise.all([
-      service.tag.circleIdList(tagId, 1),
+      service.tag.circleIdList(tagIdList),
       service.post.add(uid, {
         content,
-        tagId,
-        tagIdList,
+        chooseTagIdList,
+        inputTagIdList,
         image,
         authorId: body.authorId,
       })
     ]);
     circleIdList.forEach((arr, i) => {
-      app.model.circleCommentRelation.create({
-        circle_id: circleId,
-        comment_id: res.id,
-        tag_id: tagId[i],
+      arr.forEach((id) => {
+        app.model.circleCommentRelation.create({
+          circle_id: id,
+          comment_id: res.id,
+          tag_id: tagIdList[i],
+        })
       });
     });
     if(res) {

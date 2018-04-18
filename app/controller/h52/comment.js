@@ -11,11 +11,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let commentId = parseInt(body.commentId);
-    if(!commentId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.comment.operate(commentId, uid, 1, true);
+    let res = await service.comment.operate(id, uid, 1, true);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -23,11 +23,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let commentId = parseInt(body.commentId);
-    if(!commentId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.comment.operate(commentId, uid, 1, false);
+    let res = await service.comment.operate(id, uid, 1, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -35,11 +35,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let commentId = parseInt(body.commentId);
-    if(!commentId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.comment.operate(commentId, uid, 2, true);
+    let res = await service.comment.operate(id, uid, 2, true);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -47,11 +47,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let commentId = parseInt(body.commentId);
-    if(!commentId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.comment.operate(commentId, uid, 2, false);
+    let res = await service.comment.operate(id, uid, 2, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -196,6 +196,23 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.comment.block(id, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async del() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.comment.del(id, uid);
     if(res.success) {
       ctx.body = ctx.helper.okJSON();
     }

@@ -55,6 +55,10 @@ module.exports = app => {
         fields: ['tag_id', 'comment_id', 'type'],
       },
       {
+        name: 'tag_id_is_delete_comment_delete_comment_id',
+        fields: ['tag_id', 'is_delete', 'is_comment_delete', 'comment_id'],
+      },
+      {
         name: 'comment_id_type',
         fields: ['comment_id', 'type'],
       }

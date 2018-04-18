@@ -36,6 +36,18 @@ module.exports = app => {
         name: 'circle_id_comment_id_tag_id',
         unique: true,
         fields: ['circle_id', 'comment_id', 'tag_id'],
+      },
+      {
+        name: 'circle_id_is_comment_delete_comment_id',
+        fields: ['circle_id', 'is_comment_delete', 'comment_id'],
+      },
+      {
+        name: 'tag_id_comment_id',
+        fields: ['tag_id', 'comment_id'],
+      },
+      {
+        name: 'comment_id',
+        fields: ['comment_id'],
       }
     ],
     comment: '圈子留言关联信息',

@@ -32,7 +32,7 @@ class Service extends egg.Service {
   /**
    * 根据id列表获取画圈信息列表
    * @param idList:Array<int>
-   * @param uid:int 用户id
+   * @param uid:int 用户ida
    * @returns Array<Object>
    */
   async infoList(idList, uid) {
@@ -302,8 +302,8 @@ class Service extends egg.Service {
     });
     if(create) {
       let query = [];
-      if(data.tagId && data.tagId.length) {
-        query = data.tagId.map((id) => {
+      if(data.chooseTagIdList) {
+        query = data.chooseTagIdList.map((id) => {
           return app.model.tagCommentRelation.create({
             tag_id: id,
             comment_id: create.id,
@@ -315,8 +315,8 @@ class Service extends egg.Service {
           });
         });
       }
-      if(data.tagIdList && data.tagIdList.length) {
-        query = query.concat(data.tagIdList.map((id) => {
+      if(data.inputTagIdList) {
+        query = query.concat(data.inputTagIdList.map((id) => {
           return app.model.tagCommentRelation.create({
             tag_id: id,
             comment_id: create.id,
@@ -328,7 +328,7 @@ class Service extends egg.Service {
           });
         }));
       }
-      if(data.image && data.image.length) {
+      if(data.image) {
         query = query.concat(data.image.map((item) => {
           return app.model.commentMedia.create({
             comment_id: create.id,
