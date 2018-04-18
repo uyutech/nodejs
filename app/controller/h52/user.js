@@ -6,27 +6,27 @@
 
 const egg = require('egg');
 
-const limit = 10;
+const LIMIT = 10;
 
 class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let userId = parseInt(body.userId);
-    if(!userId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
     let [info, followPersonCount, fansCount, isFollow, isFans, postList] = await Promise.all([
-      service.user.info(userId),
-      service.user.followPersonCount(userId),
-      service.user.fansCount(userId),
-      service.user.isFollow(userId, uid),
-      service.user.isFans(userId, uid),
-      service.user.postList(userId, 0, limit)
+      service.user.info(id),
+      service.user.followPersonCount(id),
+      service.user.fansCount(id),
+      service.user.isFollow(id, uid),
+      service.user.isFans(id, uid),
+      service.user.postList(id, uid, 0, LIMIT)
     ]);
     delete info.coins;
-    postList.limit = limit;
+    postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       info,
       followPersonCount,
@@ -41,12 +41,13 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let userId = parseInt(body.userId);
-    if(!userId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.user.post(userId, body.offset || 0, body.limit || limit);
-    res.limit = limit;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.postList(id, uid, offset, LIMIT);
+    res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -54,14 +55,14 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let userId = parseInt(body.userId);
-    if(!userId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    if(uid === userId) {
+    if(uid === id) {
       ctx.body = ctx.helper.errorJSON('不能关注自己');
     }
-    let res = await service.user.follow(userId, uid, true);
+    let res = await service.user.follow(id, uid, true);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);
     }
@@ -74,14 +75,14 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let userId = parseInt(body.userId);
-    if(!userId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    if(uid === userId) {
+    if(uid === id) {
       ctx.body = ctx.helper.errorJSON('不能关注自己');
     }
-    let res = await service.user.follow(userId, uid, false);
+    let res = await service.user.follow(id, uid, false);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);
     }

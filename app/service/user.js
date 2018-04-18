@@ -937,11 +937,12 @@ class Service extends egg.Service {
   /**
    * 获取用户的画圈
    * @param id:int 用户id
+   * @param uid:int 登录id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async postList(id, offset, limit) {
+  async postList(id, uid, offset, limit) {
     if(!id) {
       return;
     }
@@ -951,7 +952,7 @@ class Service extends egg.Service {
       return;
     }
     let [data, count] = await Promise.all([
-      this.postData(id, offset, limit),
+      this.postData(id, uid, offset, limit),
       this.postCount(id)
     ]);
     return { data, count };
@@ -960,11 +961,12 @@ class Service extends egg.Service {
   /**
    * 获取画圈详情
    * @param id:int 用户id
+   * @param uid:int 登录id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object>
    */
-  async postData(id, offset, limit) {
+  async postData(id, uid, offset, limit) {
     if(!id) {
       return;
     }
@@ -996,7 +998,7 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
-    res = await service.comment.plusListFull(res, id);
+    res = await service.comment.plusListFull(res, uid);
     return res;
   }
   /**
