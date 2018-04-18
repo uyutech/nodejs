@@ -14,15 +14,15 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let circleId = parseInt(body.circleId);
-    if(!circleId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
     let [info, isFollow, fansCount, postList] = await Promise.all([
-      service.circle.info(circleId),
-      service.circle.isFollow(circleId, uid),
-      service.circle.fansCount(circleId),
-      service.circle.postList(circleId, uid, 0, LIMIT)
+      service.circle.info(id),
+      service.circle.isFollow(id, uid),
+      service.circle.fansCount(id),
+      service.circle.postList(id, uid, 0, LIMIT)
     ]);
     postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
@@ -37,11 +37,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let circleId = parseInt(body.circleId);
-    if(!circleId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.circle.postList(circleId, uid, body.offset || 0, LIMIT);
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.circle.postList(circleId, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -50,7 +51,8 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let res = await service.circle.all(body.offset || 0, ALL_LIMIT);
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.circle.all(offset, ALL_LIMIT);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -58,11 +60,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let circleId = parseInt(body.circleId);
-    if(!circleId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.circle.follow(circleId, uid, true);
+    let res = await service.circle.follow(id, uid, true);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);
     }
@@ -75,11 +77,11 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let circleId = parseInt(body.circleId);
-    if(!circleId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let res = await service.circle.follow(circleId, uid, false);
+    let res = await service.circle.follow(id, uid, false);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);
     }

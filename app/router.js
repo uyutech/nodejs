@@ -354,6 +354,8 @@ module.exports = app => {
   app.post('/h5/user2/postList', 'h52.user.postList');
   app.post('/h5/user2/follow', app.middlewares.needLoginJson(), 'h52.user.follow');
   app.post('/h5/user2/unFollow', app.middlewares.needLoginJson(), 'h52.user.unFollow');
+  app.post('/h5/user2/report', 'h52.user.report');
+  app.post('/h5/user2/black', app.middlewares.needLoginJson(), 'h52.user.black');
 
 
   app.post('/h5/find2/index', 'h52.find.index');

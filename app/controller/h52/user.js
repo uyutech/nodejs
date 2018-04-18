@@ -90,6 +90,35 @@ class Controller extends egg.Controller {
       ctx.body = ctx.helper.errorJSON(res.message);
     }
   }
+
+  async report() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let uid = ctx.session.uid;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    await service.user.report(id, uid);
+    ctx.body = ctx.helper.okJSON();
+  }
+
+  async black() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.user.black(id, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
 }
 
 module.exports = Controller;

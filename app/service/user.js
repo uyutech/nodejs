@@ -1860,6 +1860,70 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 举报用户
+   * @param id:int 用户id
+   * @param uid:int 登录id
+   */
+  async report(id, uid) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    await app.model.userReport.create({
+      target_id: id,
+      type: 6,
+      user_id: uid,
+    });
+  }
+
+  /**
+   * 加入黑名单用户
+   * @param id:int 用户id
+   * @param uid:int 登录id
+   */
+  async black(id, uid) {
+    if(!id || !uid) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_3';
+    let exist = await app.model.userPersonRelation.findOne({
+      attributes: [
+        'id',
+        'type'
+      ],
+      where: {
+        user_id: uid,
+        target_id: id,
+      },
+      raw: true,
+    });
+    if(exist && exist.type === 2) {
+      return {
+        success: false,
+        message: '已经加入过黑名单无需重复加入',
+      };
+    }
+    await app.model.userPersonRelation.upsert({
+      user_id: uid,
+      target_id: id,
+      type: 2,
+      update_time: new Date(),
+    }, {
+      where: {
+        user_id: uid,
+        target_id: id,
+      },
+    });
+    app.redis.del(cacheKey);
+    return {
+      success: true,
+    }
+  }
 }
 
 module.exports = Service;
