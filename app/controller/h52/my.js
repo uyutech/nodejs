@@ -62,7 +62,8 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let res = await service.user.postList(uid, body.offset || 0, LIMIT);
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.postList(uid, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

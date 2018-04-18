@@ -292,7 +292,7 @@ class Service extends egg.Service {
         type: [1, 3],
       },
       order: [
-        ['id', 'DESC']
+        ['create_time', 'DESC']
       ],
       offset,
       limit,
@@ -1299,7 +1299,7 @@ class Service extends egg.Service {
         is_circle_delete: false,
       },
       order: [
-        ['id', 'DESC']
+        ['update_time', 'DESC']
       ],
       offset,
       limit,
@@ -1360,10 +1360,10 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    let followPersonBaseList = await this.followPersonBaseList(id);
+    let baseList = await this.followPersonBaseList(id);
     let userIdList = [];
     let authorIdList = [];
-    followPersonBaseList.forEach((item) => {
+    baseList.forEach((item) => {
       if(item.type === 1) {
         userIdList.push(item.targetId);
       }
@@ -1721,8 +1721,6 @@ class Service extends egg.Service {
     let res = await app.model.message.findAll({
       attributes: [
         'id',
-        // ['user_id', 'uid'],
-        // ['author_id', 'aid'],
         ['is_read', 'isRead'],
         'type',
         ['ref_id', 'refId'],
