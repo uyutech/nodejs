@@ -564,7 +564,7 @@ class Service extends egg.Service {
    * @param idList:Array<int> 专辑id列表
    * @returns Array<Object>
    */
-  async infoListPlusAuthor(albumIdList) {
+  async infoListPlusAuthor(idList) {
     if(!idList) {
       return;
     }
