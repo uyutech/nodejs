@@ -44,8 +44,8 @@ module.exports = app => {
         fields: ['user_id', 'comment_id', 'type'],
       },
       {
-        name: 'user_id_type_comment_id_is_comment_delete',
-        fields: ['user_id', 'type', 'comment_id', 'is_comment_delete']
+        name: 'user_id_type_is_comment_delete_create_time',
+        fields: ['user_id', 'type', 'is_comment_delete', 'create_time']
       },
       {
         name: 'comment_id_type',

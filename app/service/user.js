@@ -507,12 +507,15 @@ class Service extends egg.Service {
     if(state) {
       await Promise.all([
         app.redis.setex(cacheKey, CACHE_TIME, 'true'),
-        app.model.userPersonRelation.create({
+        app.model.userPersonRelation.upsert({
           user_id: uid,
           target_id: id,
           type: 1,
         }, {
-          raw: true,
+          where: {
+            user_id: uid,
+            target_id: id,
+          },
         })
       ]);
     }
@@ -1890,7 +1893,6 @@ class Service extends egg.Service {
       };
     }
     const { app } = this;
-    let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_3';
     let exist = await app.model.userPersonRelation.findOne({
       attributes: [
         'id',
@@ -1919,7 +1921,8 @@ class Service extends egg.Service {
         target_id: id,
       },
     });
-    app.redis.del(cacheKey);
+    app.redis.del('userPersonRelation_' + uid + '_' + id + '_1');
+    app.redis.decr('userFansCount_' + id);
     return {
       success: true,
     }

@@ -137,6 +137,12 @@ module.exports = appInfo => {
       password: 'uyuTech2017',
       host: 'rm-uf6s915okm3a004l5.mysql.rds.aliyuncs.com',
     },
+    recommend: {
+      name: 'recommend',
+      username: 'uyutech',
+      password: 'uyuTech2017',
+      host: 'rm-uf6s915okm3a004l5.mysql.rds.aliyuncs.com',
+    },
     stats: {
       name: 'stats',
       username: 'uyutech',

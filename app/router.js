@@ -342,6 +342,7 @@ module.exports = app => {
   app.post('/h5/circle2/all', 'h52.circle.all');
   app.post('/h5/circle2/follow', app.middlewares.needLoginJson(), 'h52.circle.follow');
   app.post('/h5/circle2/unFollow', app.middlewares.needLoginJson(), 'h52.circle.unFollow');
+  app.post('/h5/circle2/block', app.middlewares.needLoginJson(), 'h52.circle.block');
 
   app.post('/h5/post2/index', 'h52.post.index');
   app.post('/h5/post2/commentList', 'h52.post.commentList');

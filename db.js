@@ -57,6 +57,30 @@ const sequelizeMall = new Sequelize('mall', 'root', '87351984@', {
   timezone: '+08:00',
   // logging: null,
 });
+const sequelizeRecommend = new Sequelize('recommend', 'root', '87351984@', {
+  host: 'localhost',
+  dialect: 'mysql',
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
+  dialectOptions: {
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
+  },
+  options: {
+    charset: 'utf8mb4',
+  },
+  define: {
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
+  },
+  timezone: '+08:00',
+  // logging: null,
+});
 const sequelizeStats = new Sequelize('stats', 'root', '87351984@', {
   host: 'localhost',
   dialect: 'mysql',
@@ -124,12 +148,6 @@ const WorksCommentRelation = require('./app/model/worksCommentRelation')({ seque
 const CircleCommentRelation = require('./app/model/circleCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserWorkRelation = require('./app/model/userWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserCommentRelation = require('./app/model/userCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
-const Recommend = require('./app/model/recommend')({ sequelizeCircling: sequelize, Sequelize });
-const RecommendTag = require('./app/model/recommendTag')({ sequelizeCircling: sequelize, Sequelize });
-const RecommendList = require('./app/model/recommendList')({ sequelizeCircling: sequelize, Sequelize });
-const RecommendBanner = require('./app/model/recommendBanner')({ sequelizeCircling: sequelize, Sequelize });
-const RecommendComment = require('./app/model/recommendComment')({ sequelizeCircling: sequelize, Sequelize });
-const Banner = require('./app/model/banner')({ sequelizeCircling: sequelize, Sequelize });
 const UserCircleRelation = require('./app/model/userCircleRelation')({ sequelizeCircling: sequelize, Sequelize });
 const UserAccount = require('./app/model/userAccount')({ sequelizeCircling: sequelize, Sequelize });
 const UserOauth = require('./app/model/userOauth')({ sequelizeCircling: sequelize, Sequelize });
@@ -146,7 +164,14 @@ const Express = require('./app/model/express')({ sequelizeMall: sequelizeMall, S
 const Prize = require('./app/model/prize')({ sequelizeMall: sequelizeMall, Sequelize });
 const PrizeExpressRelation = require('./app/model/prizeExpressRelation')({ sequelizeMall: sequelizeMall, Sequelize });
 
-const UserReport = require('./app/model/userReport')({ sequelizeStats: sequelizeStats, Sequelize });
+const findList = require('./app/model/findList')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
+const findTag = require('./app/model/findTag')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
+const findKind = require('./app/model/findKind')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
+const findBanner = require('./app/model/findBanner')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
+const banner = require('./app/model/banner')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
+
+const userReport = require('./app/model/userReport')({ sequelizeStats: sequelizeStats, Sequelize });
+const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeStats, Sequelize });
 
 (async () => {
   try {
@@ -158,14 +183,15 @@ const UserReport = require('./app/model/userReport')({ sequelizeStats: sequelize
       // server: '101.132.140.109',
       database: 'CirclingDB',
     });
-    await Recommend.sync();
-    await RecommendTag.sync();
-    await RecommendBanner.sync();
-    await RecommendList.sync();
-    await RecommendBanner.sync();
-    await RecommendComment.sync();
-    await Banner.sync();
-    await UserReport.sync();
+    await findList.sync();
+    await findTag.sync();
+    await findKind.sync();
+    await findBanner.sync();
+    await banner.sync();
+
+    await userReport.sync();
+    await userVisit.sync();
+
     await dealAuthor(pool);
     await dealAuthorMainWorks(pool);
     await dealWork(pool);
@@ -1106,8 +1132,8 @@ async function dealUserCircle(pool) {
     await UserCircleRelation.create({
       user_id: item.UID,
       circle_id: item.CirclingID,
-      type: item.FollowType,
-      is_delete: item.ISDel,
+      type: item.FollowType === 3 ? 2 : 1,
+      // is_delete: item.ISDel,
       is_circle_delete: false,
       create_time: item.CreateTime,
       update_time: item.CreateTime,

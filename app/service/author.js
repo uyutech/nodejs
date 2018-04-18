@@ -1550,7 +1550,6 @@ class Service extends egg.Service {
       };
     }
     const { app } = this;
-    let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_3';
     let exist = await app.model.userPersonRelation.findOne({
       attributes: [
         'id',
@@ -1579,7 +1578,8 @@ class Service extends egg.Service {
         target_id: id,
       },
     });
-    app.redis.del(cacheKey);
+    app.redis.del('userPersonRelation_' + uid + '_' + id + '_3');
+    app.redis.decr('authorFansCount_' + id);
     return {
       success: true,
     }

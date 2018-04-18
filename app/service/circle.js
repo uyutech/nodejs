@@ -659,12 +659,16 @@ class Service extends egg.Service {
     if(state) {
       await Promise.all([
         app.redis.setex(cacheKey, CACHE_TIME, 'true'),
-        app.model.userCircleRelation.create({
+        app.model.userCircleRelation.upsert({
           user_id: uid,
           circle_id: id,
           type: 1,
+          update_time: new Date(),
         }, {
-          raw: true,
+          where: {
+            user_id: uid,
+            circle_id: id,
+          },
         })
       ]);
     }
@@ -680,7 +684,7 @@ class Service extends egg.Service {
         })
       ]);
     }
-    // 更新计数，优先内存缓存
+    // 更新计数
     cacheKey = 'circleFansCount_' + id;
     if(state) {
       count = await app.redis.incr(cacheKey);
@@ -694,6 +698,53 @@ class Service extends egg.Service {
         state,
         count,
       },
+    };
+  }
+
+  /**
+   * 屏蔽圈子
+   * @param id:int 圈子id
+   * @param uid:int 用户id
+   */
+  async block(id, uid) {
+    if(!id || !uid) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let exist = await app.model.userCircleRelation.findOne({
+      attributes: [
+        'id',
+        'type'
+      ],
+      where: {
+        user_id: uid,
+        circle_id: id,
+      },
+      raw: true,
+    });
+    if(exist && exist.type === 2) {
+      return {
+        success: false,
+        message: '已经屏蔽过无需重复屏蔽',
+      };
+    }
+    await app.model.userCircleRelation.upsert({
+      user_id: uid,
+      circle_id: id,
+      type: 2,
+      update_time: new Date(),
+    }, {
+      where: {
+        user_id: uid,
+        circle_id: id,
+      },
+    });
+    app.redis.del('userCircleRelation_' + uid + '_' + id + '_1');
+    await app.redis.decr('circleFansCount_' + id);
+    return {
+      success: true,
     };
   }
 }

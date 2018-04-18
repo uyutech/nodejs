@@ -6,36 +6,26 @@
 
 module.exports = app => {
   const { sequelizeRecommend, Sequelize } = app;
-  return sequelizeRecommend.define('banner', {
+  return sequelizeRecommend.define('find_kind', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    title: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    pic: {
-      type: Sequelize.TEXT,
-      allowNull: false,
-      defaultValue: '',
-    },
-    target_id: {
+    works_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    position: {
-      type: Sequelize.INTEGER.UNSIGNED,
+    work_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
-      comment: '展示位置',
     },
-    type: {
+    kind: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '1大作品，2作者，3用户，4画圈',
+      defaultValue: 0,
+      comment: '1视频，2音频，3图片',
     },
     weight: {
       type: Sequelize.SMALLINT.UNSIGNED,
@@ -50,10 +40,15 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'position_weight',
-        fields: ['position', 'weight'],
+        name: 'kind_work_id',
+        unique: true,
+        fields: ['kind', 'work_id']
+      },
+      {
+        name: 'kind_weight',
+        fields: ['kind', 'weight']
       }
     ],
-    comment: 'banner展示',
+    comment: '推荐下拉列表',
   });
 };

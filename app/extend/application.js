@@ -9,7 +9,7 @@ const Sequelize = require('sequelize');
 const SEQUELIZE = Symbol('Application#Sequelize');
 const SEQUELIZE_CIRCLING = Symbol('Application#sequelizeCircling');
 const SEQUELIZE_MALL = Symbol('Application#sequelizeMall');
-const SEQUELIZE_REPORT = Symbol('Application#sequelizeReport');
+const SEQUELIZE_RECOMMEND = Symbol('Application#sequelizeRecommend');
 const SEQUELIZE_STATS = Symbol('Application#sequelizeStats');
 const MODEL = Symbol('Application#Model');
 
@@ -62,20 +62,24 @@ const musicAlbumAuthorRelation = require('../model/musicAlbumAuthorRelation');
 const imageAlbum = require('../model/imageAlbum');
 const imageAlbumWorkRelation = require('../model/imageAlbumWorkRelation');
 const imageAlbumAuthorRelation = require('../model/imageAlbumAuthorRelation');
-const recommend = require('../model/recommend');
-const recommendTag = require('../model/recommendTag');
-const recommendBanner = require('../model/recommendBanner');
-const recommendList = require('../model/recommendList');
-const banner = require('../model/banner');
 const userCircleRelation = require('../model/userCircleRelation');
 const userAccount = require('../model/userAccount');
 const userOauth = require('../model/userOauth');
 const message = require('../model/message');
+
 const product = require('../model/product');
 const prize = require('../model/prize');
 const express = require('../model/express');
 const prizeExpressRelation = require('../model/prizeExpressRelation');
+
+const findList = require('../model/findList');
+const findTag = require('../model/findTag');
+const findKind = require('../model/findKind');
+const findBanner = require('../model/findBanner');
+const banner = require('../model/banner');
+
 const userReport = require('../model/userReport');
+const userVisit = require('../model/userVisit');
 
 module.exports = {
   get Sequelize() {
@@ -142,11 +146,11 @@ module.exports = {
     }
     return this[SEQUELIZE_MALL];
   },
-  get sequelizeReport() {
-    if(!this[SEQUELIZE_REPORT]) {
+  get sequelizeRecommend() {
+    if(!this[SEQUELIZE_RECOMMEND]) {
       let database = this.config.database;
-      this[SEQUELIZE_REPORT] = new Sequelize(database.report.name, database.report.username, database.report.password, {
-        host: database.report.host,
+      this[SEQUELIZE_RECOMMEND] = new Sequelize(database.recommend.name, database.recommend.username, database.recommend.password, {
+        host: database.recommend.host,
         dialect: 'mysql',
         pool: {
           max: 5,
@@ -169,7 +173,7 @@ module.exports = {
         timezone: '+08:00',
       });
     }
-    return this[SEQUELIZE_REPORT];
+    return this[SEQUELIZE_RECOMMEND];
   },
   get sequelizeStats() {
     if(!this[SEQUELIZE_STATS]) {
@@ -252,20 +256,25 @@ module.exports = {
         imageAlbum: imageAlbum(this),
         imageAlbumWorkRelation: imageAlbumWorkRelation(this),
         imageAlbumAuthorRelation: imageAlbumAuthorRelation(this),
-        recommend: recommend(this),
-        recommendTag: recommendTag(this),
-        recommendBanner: recommendBanner(this),
-        recommendList: recommendList(this),
-        banner: banner(this),
+
         userCircleRelation: userCircleRelation(this),
         userAccount: userAccount(this),
         userOauth: userOauth(this),
         message: message(this),
+
         product: product(this),
         prize: prize(this),
         express: express(this),
         prizeExpressRelation: prizeExpressRelation(this),
+
+        findList: findList(this),
+        findTag: findTag(this),
+        findKind: findKind(this),
+        findBanner: findBanner(this),
+        banner: banner(this),
+
         userReport: userReport(this),
+        userVisit: userVisit(this),
       };
     }
     return this[MODEL];

@@ -24,7 +24,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '1关注，3屏蔽',
+      comment: '1关注，2屏蔽',
     },
     is_circle_delete: {
       type: Sequelize.BOOLEAN,
@@ -32,6 +32,11 @@ module.exports = app => {
       defaultValue: false,
     },
     create_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    update_time: {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,
@@ -44,8 +49,8 @@ module.exports = app => {
         fields: ['user_id', 'circle_id'],
       },
       {
-        name: 'user_id_type_is_circle_delete',
-        fields: ['user_id', 'type', 'is_circle_delete']
+        name: 'user_id_type_is_circle_delete_update_time',
+        fields: ['user_id', 'type', 'is_circle_delete', 'update_time']
       },
       {
         name: 'circle_id_type',

@@ -21,7 +21,7 @@ class Controller extends egg.Controller {
       tag = JSON.parse(tag);
     }
     else {
-      tag = await app.model.recommendTag.findAll({
+      tag = await app.model.findTag.findAll({
         attributes: [
           'id',
           'name',
@@ -62,7 +62,7 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let tag = parseInt(body.tag);
     let kind = parseInt(body.kind);
-    let offset = parseInt(body.offset);
+    let offset = parseInt(body.offset) || 0;
     if(!tag) {
       return;
     }

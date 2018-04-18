@@ -16,12 +16,12 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'recommendBanner_' + tag;
+    let cacheKey = 'findBanner_' + tag;
     let res = await app.redis.get(cacheKey);
     if(res) {
       return JSON.parse(res);
     }
-    res = await app.model.recommendBanner.findAll({
+    res = await app.model.findBanner.findAll({
       attributes: [
         'title',
         'pic',
@@ -69,7 +69,7 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
     }
     else {
-      res = await app.model.recommend.findAll({
+      res = await app.model.findList.findAll({
         attributes: [
           'type',
           'cover',
@@ -221,7 +221,7 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.recommend.findOne({
+    res = await app.model.findList.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
@@ -278,7 +278,7 @@ class Service extends egg.Service {
       res = JSON.parse(res);
     }
     else {
-      res = await app.model.recommendList.findAll({
+      res = await app.model.findKind.findAll({
         attributes: [
           ['works_id', 'worksId'],
           ['work_id', 'workId']
@@ -343,7 +343,7 @@ class Service extends egg.Service {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.recommendList.findOne({
+    res = await app.model.findKind.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
