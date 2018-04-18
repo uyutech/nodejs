@@ -57,7 +57,7 @@ const sequelizeMall = new Sequelize('mall', 'root', '87351984@', {
   timezone: '+08:00',
   // logging: null,
 });
-const sequelizeReport = new Sequelize('report', 'root', '87351984@', {
+const sequelizeStats = new Sequelize('stats', 'root', '87351984@', {
   host: 'localhost',
   dialect: 'mysql',
   pool: {
@@ -146,7 +146,7 @@ const Express = require('./app/model/express')({ sequelizeMall: sequelizeMall, S
 const Prize = require('./app/model/prize')({ sequelizeMall: sequelizeMall, Sequelize });
 const PrizeExpressRelation = require('./app/model/prizeExpressRelation')({ sequelizeMall: sequelizeMall, Sequelize });
 
-const ReportComment = require('./app/model/reportComment')({ sequelizeReport: sequelizeReport, Sequelize });
+const UserReport = require('./app/model/userReport')({ sequelizeStats: sequelizeStats, Sequelize });
 
 (async () => {
   try {
@@ -165,7 +165,7 @@ const ReportComment = require('./app/model/reportComment')({ sequelizeReport: se
     await RecommendBanner.sync();
     await RecommendComment.sync();
     await Banner.sync();
-    await ReportComment.sync();
+    await UserReport.sync();
     await dealAuthor(pool);
     await dealAuthorMainWorks(pool);
     await dealWork(pool);
@@ -236,7 +236,7 @@ async function dealAuthor(pool) {
     if(item.BaiduUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 0,
+        type: 1,
         is_delete: false,
         url: item.BaiduUrl,
         create_time: item.CreateTime,
@@ -246,7 +246,7 @@ async function dealAuthor(pool) {
     if(item.BilibiliUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 1,
+        type: 2,
         is_delete: false,
         url: item.BilibiliUrl,
         create_time: item.CreateTime,
@@ -256,7 +256,7 @@ async function dealAuthor(pool) {
     if(item.FiveSingUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 2,
+        type: 3,
         is_delete: false,
         url: item.FiveSingUrl,
         create_time: item.CreateTime,
@@ -266,7 +266,7 @@ async function dealAuthor(pool) {
     if(item.HuabanUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 3,
+        type: 4,
         is_delete: false,
         url: item.HuabanUrl,
         create_time: item.CreateTime,
@@ -276,7 +276,7 @@ async function dealAuthor(pool) {
     if(item.LofterUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 4,
+        type: 5,
         is_delete: false,
         url: item.LofterUrl,
         create_time: item.CreateTime,
@@ -286,7 +286,7 @@ async function dealAuthor(pool) {
     if(item.PCOUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 5,
+        type: 6,
         is_delete: false,
         url: item.PCOUrl,
         create_time: item.CreateTime,
@@ -296,7 +296,7 @@ async function dealAuthor(pool) {
     if(item.WangyiUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 6,
+        type: 7,
         is_delete: false,
         url: item.WangyiUrl,
         create_time: item.CreateTime,
@@ -306,7 +306,7 @@ async function dealAuthor(pool) {
     if(item.WeiboUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 7,
+        type: 8,
         is_delete: false,
         url: item.WeiboUrl,
         create_time: item.CreateTime,
@@ -316,7 +316,7 @@ async function dealAuthor(pool) {
     if(item.ZcoolUrl) {
       await AuthorOutside.create({
         author_id: item.ID,
-        type: 8,
+        type: 9,
         is_delete: false,
         url: item.ZcoolUrl,
         create_time: item.CreateTime,

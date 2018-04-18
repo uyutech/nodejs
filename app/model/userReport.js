@@ -5,17 +5,22 @@
 'use strict';
 
 module.exports = app => {
-  const { sequelizeReport, Sequelize } = app;
-  return sequelizeReport.define('comment', {
+  const { sequelizeStats, Sequelize } = app;
+  return sequelizeStats.define('user_report', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    comment_id: {
+    target_id: {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
+    },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      comment: '1视频，2音频，3图片，4文本，5言论，6用户，7作者',
     },
     user_id: {
       type: Sequelize.BIGINT.UNSIGNED,
@@ -34,14 +39,14 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'comment_id',
-        fields: ['comment_id'],
+        name: 'target_id',
+        fields: ['target_id'],
       },
       {
         name: 'user_id',
         fields: ['user_id'],
       }
     ],
-    comment: '举报评论',
+    comment: '用户举报',
   });
 };

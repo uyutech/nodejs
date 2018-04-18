@@ -75,7 +75,7 @@ const product = require('../model/product');
 const prize = require('../model/prize');
 const express = require('../model/express');
 const prizeExpressRelation = require('../model/prizeExpressRelation');
-const reportComment = require('../model/reportComment');
+const userReport = require('../model/userReport');
 
 module.exports = {
   get Sequelize() {
@@ -265,7 +265,7 @@ module.exports = {
         prize: prize(this),
         express: express(this),
         prizeExpressRelation: prizeExpressRelation(this),
-        reportComment: reportComment(this),
+        userReport: userReport(this),
       };
     }
     return this[MODEL];

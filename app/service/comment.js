@@ -271,22 +271,26 @@ class Service extends egg.Service {
       }
     });
     let [videoList, audioList] = await Promise.all([
-      service.work.infoListPlus(videoIdList, 1),
-      service.work.infoListPlus(audioIdList, 2)
+      service.work.infoListPlusFull(videoIdList, 1),
+      service.work.infoListPlusFull(audioIdList, 2)
     ]);
     let hash = {};
     videoList.forEach((item) => {
-      item.kind = 1;
-      item.author = service.works.firstAuthor(item.author);
-      hash[item.id] = item;
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+        hash[item.id] = item;
+      }
     });
     audioList.forEach((item) => {
-      item.kind = 2;
-      item.author = service.works.firstAuthor(item.author);
-      hash[item.id] = item;
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+        hash[item.id] = item;
+      }
     });
     return res.map((item) => {
-      return hash[item.workId];
+      if(item) {
+        return hash[item.workId];
+      }
     });
   }
 
@@ -402,7 +406,9 @@ class Service extends egg.Service {
     return cache.map((arr) => {
       if(arr) {
         return arr.map((item) => {
-          return hash[item.workId];
+          if(item) {
+            return hash[item.workId];
+          }
         });
       }
       return [];
@@ -1498,8 +1504,9 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    await app.model.reportComment.create({
-      comment_id: id,
+    await app.model.userReport.create({
+      target_id: id,
+      type: 5,
       user_id: uid,
     });
   }

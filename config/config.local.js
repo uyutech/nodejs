@@ -28,12 +28,6 @@ module.exports = appInfo => {
         password: '87351984@',
         host: 'localhost',
       },
-      report: {
-        name: 'report',
-        username: 'root',
-        password: '87351984@',
-        host: 'localhost',
-      },
       stats: {
         name: 'stats',
         username: 'root',
