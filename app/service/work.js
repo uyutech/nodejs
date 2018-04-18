@@ -1456,6 +1456,27 @@ class Service extends egg.Service {
       },
     });
   }
+
+  /**
+   * 举报作品
+   * @param id:int 作品id
+   * @param uid:int 用户id
+   */
+  async report(id, uid) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let kind = this.getKind(id);
+    if(!kind) {
+      return;
+    }
+    await app.model.userReport.create({
+      target_id: id,
+      type: kind,
+      user_id: uid,
+    });
+  }
 }
 
 module.exports = Service;

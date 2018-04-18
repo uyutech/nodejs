@@ -55,18 +55,6 @@ class Controller extends egg.Controller {
       worksList, workList, authorList, userList, postList,
     });
   }
-  
-  async report() {
-    const { ctx, service } = this;
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let id = parseInt(body.id);
-    if(!id) {
-      return;
-    }
-    await service.comment.report(id, uid);
-    ctx.body = ctx.helper.okJSON();
-  }
 }
 
 module.exports = Controller;

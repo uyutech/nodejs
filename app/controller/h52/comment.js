@@ -174,6 +174,18 @@ class Controller extends egg.Controller {
     app.redis.incr('commentReplyCount_' + rid);
     ctx.body = ctx.helper.okJSON(res);
   }
+
+  async report() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    await service.comment.report(id, uid);
+    ctx.body = ctx.helper.okJSON();
+  }
 }
 
 module.exports = Controller;

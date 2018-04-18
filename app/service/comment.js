@@ -1497,10 +1497,9 @@ class Service extends egg.Service {
    * 举报
    * @param id:int 评论id
    * @param uid:int 用户id
-   * @returns boolean
    */
   async report(id, uid) {
-    if(!id || !uid) {
+    if(!id) {
       return;
     }
     const { app } = this;

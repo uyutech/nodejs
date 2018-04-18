@@ -318,6 +318,7 @@ module.exports = app => {
   app.post('/h5/works2/unFavor', app.middlewares.needLoginJson(), 'h52.works.unFavor');
 
   app.post('/h5/work2/addViews', 'h52.work.addViews');
+  app.post('/h5/work2/report', 'h52.work.report');
 
   app.post('/h5/musicAlbum/index', 'h52.musicAlbum.index');
   app.post('/h5/musicAlbum/commentList', 'h52.musicAlbum.commentList');
@@ -343,7 +344,6 @@ module.exports = app => {
   app.post('/h5/post2/index', 'h52.post.index');
   app.post('/h5/post2/commentList', 'h52.post.commentList');
   app.post('/h5/post2/refList', 'h52.post.refList');
-  app.post('/h5/post2/report', app.middlewares.needLoginJson(), 'h52.post.report');
 
   app.post('/h5/subpost2/index', 'h52.subpost.index');
   app.post('/h5/subpost2/sub', app.middlewares.needLoginJson(), 'h52.subpost.sub');
@@ -388,6 +388,7 @@ module.exports = app => {
   app.post('/h5/comment2/favor', app.middlewares.needLoginJson(), 'h52.comment.favor');
   app.post('/h5/comment2/unFavor', app.middlewares.needLoginJson(), 'h52.comment.unFavor');
   app.post('/h5/comment2/sub', app.middlewares.needLoginJson(), 'h52.comment.sub');
+  app.post('/h5/comment2/report', 'h52.comment.report');
 
   app.post('/h5/tag2/index', 'h52.tag.index');
   app.post('/h5/tag2/postList', 'h52.tag.postList');
