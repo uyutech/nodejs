@@ -347,8 +347,8 @@ module.exports = app => {
   app.post('/h5/post2/commentList', 'h52.post.commentList');
   app.post('/h5/post2/refList', 'h52.post.refList');
 
-  app.post('/h5/subpost2/index', 'h52.subpost.index');
-  app.post('/h5/subpost2/sub', app.middlewares.needLoginJson(), 'h52.subpost.sub');
+  app.post('/h5/subPost2/index', 'h52.subPost.index');
+  app.post('/h5/subPost2/sub', app.middlewares.needLoginJson(), 'h52.subPost.sub');
 
   app.post('/h5/user2/index', 'h52.user.index');
   app.post('/h5/user2/postList', 'h52.user.postList');
@@ -391,6 +391,7 @@ module.exports = app => {
   app.post('/h5/comment2/unFavor', app.middlewares.needLoginJson(), 'h52.comment.unFavor');
   app.post('/h5/comment2/sub', app.middlewares.needLoginJson(), 'h52.comment.sub');
   app.post('/h5/comment2/report', 'h52.comment.report');
+  app.post('/h5/comment2/block', app.middlewares.needLoginJson(), 'h52.comment.block');
 
   app.post('/h5/tag2/index', 'h52.tag.index');
   app.post('/h5/tag2/postList', 'h52.tag.postList');

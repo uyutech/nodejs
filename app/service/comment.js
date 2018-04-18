@@ -12,8 +12,8 @@ const CACHE_TIME = 10;
 
 class Service extends egg.Service {
   /**
-   * 根据评论id列取评论详情
-   * @param id:int 评论id
+   * 根据言论id列取言论详情
+   * @param id:int 言论id
    * @returns Object
    */
   async info(id) {
@@ -48,8 +48,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据评论id列表获取评论详情
-   * @param idList:Array<int> 评论id列表
+   * 根据言论id列表获取言论详情
+   * @param idList:Array<int> 言论id列表
    * @returns Array<Object>
    */
   async infoList(idList) {
@@ -117,8 +117,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 返回评论id的媒体信息
-   * @param id:int 评论id
+   * 返回言论id的媒体信息
+   * @param id:int 言论id
    * @returns Array<Object>
    */
   async media(id) {
@@ -152,8 +152,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 返回评论id列表的媒体信息
-   * @param idList:int 评论id
+   * 返回言论id列表的媒体信息
+   * @param idList:int 言论id
    * @returns Array<Object>
    */
   async mediaList(idList) {
@@ -223,8 +223,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论下附带的作品
-   * @param id:int 评论id
+   * 获取言论下附带的作品
+   * @param id:int 言论id
    * @returns Array<Object>
    */
   async work(id) {
@@ -295,8 +295,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论列表下附带的作品
-   * @param idList:int 评论id列表
+   * 获取言论列表下附带的作品
+   * @param idList:int 言论id列表
    * @param uid:int 用户id
    * @returns Array<Array<Object>>
    */
@@ -416,8 +416,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 包装评论数据，补上用户信息、点赞信息
-   * @param data:Object 评论基本信息
+   * 包装言论数据，补上用户信息、点赞信息
+   * @param data:Object 言论基本信息
    * @param uid:int 用户id
    * @returns Object
    */
@@ -455,8 +455,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 包装评论数据，补上用户信息、点赞信息、收藏信息、回复数量、画圈关系、附件媒体
-   * @param data:Object 评论基本信息
+   * 包装言论数据，补上用户信息、点赞信息、收藏信息、回复数量、画圈关系、附件媒体
+   * @param data:Object 言论基本信息
    * @param uid:int 用户id
    * @returns Object
    */
@@ -514,8 +514,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论引用数据和用户数据
-   * @param data:Object 评论基本信息
+   * 获取言论引用数据和用户数据
+   * @param data:Object 言论基本信息
    * @returns Object{ userHash, authorHash, quote }
    */
   async quoteAndPerson(data) {
@@ -602,8 +602,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 包装评论数据，补上用户信息、点赞信息、收藏信息、回复数、媒体信息
-   * @param dataList:Array<Object> 评论基本信息
+   * 包装言论数据，补上用户信息、点赞信息、收藏信息、回复数、媒体信息
+   * @param dataList:Array<Object> 言论基本信息
    * @param uid:int 用户id
    * @returns Array<Object>
    */
@@ -685,8 +685,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 包装评论数据，补上用户信息、点赞信息
-   * @param dataList:Array<Object> 评论基本信息
+   * 包装言论数据，补上用户信息、点赞信息
+   * @param dataList:Array<Object> 言论基本信息
    * @param uid:int 用户id
    * @returns Array<Object>
    */
@@ -738,8 +738,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论引用数据和用户数据
-   * @param dataList:Array<Object> 评论基本信息
+   * 获取言论引用数据和用户数据
+   * @param dataList:Array<Object> 言论基本信息
    * @returns Object{ userHash, authorHash, quoteHash }
    */
   async quoteAndPersonList(dataList) {
@@ -837,8 +837,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据评论id获取其点赞数和是否点赞
-   * @param id:int 评论id
+   * 根据言论id获取其点赞数和是否点赞
+   * @param id:int 言论id
    * @param uid:int 用户id
    * @param type:int 类型
    * @returns Array{ count, state }
@@ -858,8 +858,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据评论id列表获取其点赞数和是否点赞
-   * @param idList:Array<int> 评论列表id
+   * 根据言论id列表获取其点赞数和是否点赞
+   * @param idList:Array<int> 言论列表id
    * @param uid:int 用户id
    * @param type:int 类型
    * @returns Array{ countList:Array, stateList:Array }
@@ -879,8 +879,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论是否点赞/收藏
-   * @param id: 评论id
+   * 获取言论是否点赞/收藏
+   * @param id: 言论id
    * @param uid:int 用户id
    * @param type:int 类型
    * @returns boolean
@@ -913,8 +913,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论是否点赞/收藏
-   * @param idList:Array<int> 评论id列表
+   * 获取言论是否点赞/收藏
+   * @param idList:Array<int> 言论id列表
    * @param uid:int 用户id
    * @param type:int 类型
    * @returns boolean
@@ -981,8 +981,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论点赞/收藏数
-   * @param id:int 评论id
+   * 获取言论点赞/收藏数
+   * @param id:int 言论id
    * @param type:int 类型
    * @returns int
    */
@@ -1013,8 +1013,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论列表点赞/收藏数
-   * @param idList:Array<int> 评论id列表
+   * 获取言论列表点赞/收藏数
+   * @param idList:Array<int> 言论id列表
    * @param type:int 类型
    * @returns int
    */
@@ -1143,7 +1143,7 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据评论id获取回复数量
+   * 根据言论id获取回复数量
    * @param id:int
    * @returns Array<int>
    */
@@ -1179,7 +1179,7 @@ class Service extends egg.Service {
   }
   
   /**
-   * 根据评论id列表获取回复数量
+   * 根据言论id列表获取回复数量
    * @param idList:Array<int>
    * @returns Array<int>
    */
@@ -1246,8 +1246,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论对应的tagId
-   * @param id:int 评论id
+   * 获取言论对应的tagId
+   * @param id:int 言论id
    * @param type:int 类型
    * @returns Array<int>
    */
@@ -1281,8 +1281,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论列表对应的tagId
-   * @param idList:Array<int> 评论id列表
+   * 获取言论列表对应的tagId
+   * @param idList:Array<int> 言论id列表
    * @param type:int 类型
    * @returns Array<Array<int>>
    */
@@ -1350,8 +1350,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论所属画圈信息
-   * @param id:int 评论id
+   * 获取言论所属画圈信息
+   * @param id:int 言论id
    * @returns Array<Object>
    */
   async circle(id) {
@@ -1381,8 +1381,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取评论列表所属画圈信息
-   * @param idList:int 评论id列表
+   * 获取言论列表所属画圈信息
+   * @param idList:int 言论id列表
    * @returns Array<Array<Object>>
    */
   async circleList(idList) {
@@ -1494,8 +1494,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 举报
-   * @param id:int 评论id
+   * 举报言论
+   * @param id:int 言论id
    * @param uid:int 用户id
    */
   async report(id, uid) {
@@ -1508,6 +1508,45 @@ class Service extends egg.Service {
       type: 5,
       user_id: uid,
     });
+  }
+
+  /**
+   * 屏蔽言论
+   * @param id:int 言论id
+   * @param uid:int 用户id
+   */
+  async block(id, uid) {
+    if(!id || !uid) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let exist = await app.model.userCommentRelation.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        user_id: uid,
+        comment_id: id,
+        type: 3,
+      },
+      raw: true,
+    });
+    if(exist) {
+      return {
+        success: false,
+        message: '已经屏蔽过无需重复屏蔽',
+      };
+    }
+    await app.model.userCommentRelation.create({
+      user_id: uid,
+      comment_id: id,
+      type: 3,
+    });
+    return {
+      success: true,
+    };
   }
 }
 

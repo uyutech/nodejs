@@ -24,7 +24,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '1点赞留言，2收藏留言',
+      comment: '1点赞留言，2收藏留言，3屏蔽留言',
     },
     is_comment_delete: {
       type: Sequelize.BOOLEAN,
@@ -39,9 +39,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'user_id_type_comment_id',
+        name: 'user_id_comment_id_type',
         unique: true,
-        fields: ['user_id', 'type', 'comment_id'],
+        fields: ['user_id', 'comment_id', 'type'],
       },
       {
         name: 'user_id_type_comment_id_is_comment_delete',

@@ -186,6 +186,23 @@ class Controller extends egg.Controller {
     await service.comment.report(id, uid);
     ctx.body = ctx.helper.okJSON();
   }
+
+  async block() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.comment.block(id, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
 }
 
 module.exports = Controller;

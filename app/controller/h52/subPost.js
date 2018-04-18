@@ -138,7 +138,7 @@ class Controller extends egg.Controller {
         image,
         authorId: body.authorId,
       })
-    ]);console.log(circleIdList);
+    ]);
     circleIdList.forEach((arr, i) => {
       app.model.circleCommentRelation.create({
         circle_id: circleId,
