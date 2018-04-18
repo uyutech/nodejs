@@ -13,14 +13,14 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId);
-    if(!worksId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
     let [info, collection, commentList] = await Promise.all([
-      service.works.infoPlusAllAuthor(worksId),
-      service.works.collectionFull(worksId, uid),
-      service.works.commentList(worksId, uid, 0, LIMIT)
+      service.works.infoPlusAllAuthor(id),
+      service.works.collectionFull(id, uid),
+      service.works.commentList(id, uid, 0, LIMIT)
     ]);
     if(info.state === 3) {
       return;
@@ -37,12 +37,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId);
+    let id = parseInt(body.id);
     let offset = parseInt(body.offset) || 0;
-    if(!worksId) {
+    if(!id) {
       return;
     }
-    let res = await service.works.commentList(worksId, uid, offset, LIMIT);
+    let res = await service.works.commentList(id, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -51,12 +51,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId) || 0;
+    let id = parseInt(body.id) || 0;
     let workId = parseInt(body.workId);
     if(!workId) {
       return;
     }
-    let res = await service.work.like(worksId, workId, uid, true);
+    let res = await service.work.like(id, workId, uid, true);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -64,12 +64,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId) || 0;
+    let id = parseInt(body.id) || 0;
     let workId = parseInt(body.workId);
     if(!workId) {
       return;
     }
-    let res = await service.work.like(worksId, workId, uid, false);
+    let res = await service.work.like(id, workId, uid, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -77,12 +77,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId) || 0;
+    let id = parseInt(body.id) || 0;
     let workId = parseInt(body.workId);
     if(!workId) {
       return;
     }
-    let res = await service.work.favor(worksId, workId, uid, true);
+    let res = await service.work.favor(id, workId, uid, true);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -90,12 +90,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let worksId = parseInt(body.worksId) || 0;
+    let id = parseInt(body.id) || 0;
     let workId = parseInt(body.workId);
     if(!workId) {
       return;
     }
-    let res = await service.work.favor(worksId, workId, uid, false);
+    let res = await service.work.favor(id, workId, uid, false);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

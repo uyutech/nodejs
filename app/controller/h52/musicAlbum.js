@@ -13,14 +13,14 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let albumId = parseInt(body.albumId);
-    if(!albumId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
     let [info, collection, commentList] = await Promise.all([
-      service.musicAlbum.infoPlusAuthor(albumId),
-      service.musicAlbum.collectionFull(albumId, uid),
-      service.musicAlbum.commentList(albumId, uid, 0, LIMIT)
+      service.musicAlbum.infoPlusAuthor(id),
+      service.musicAlbum.collectionFull(id, uid),
+      service.musicAlbum.commentList(id, uid, 0, LIMIT)
     ]);
     if(info.state === 3) {
       return;
@@ -31,20 +31,6 @@ class Controller extends egg.Controller {
       collection,
       commentList,
     });
-  }
-
-  async commentList() {
-    const { ctx, service } = this;
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let albumId = parseInt(body.albumId);
-    let offset = parseInt(body.offset) || 0;
-    if(!albumId) {
-      return;
-    }
-    let res = await service.musicAlbum.commentList(albumId, uid, offset, LIMIT);
-    res.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

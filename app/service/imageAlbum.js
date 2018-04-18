@@ -217,254 +217,6 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取专辑的评论id
-   * @param id:int 专辑id
-   * @returns int
-   */
-  async commentId(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'imageAlbumComment_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.worksCommentRelation.findOne({
-      attributes: [
-        ['comment_id', 'commentId']
-      ],
-      where: {
-        works_id: id,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.commentId;
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    }
-    else {
-      return;
-    }
-    return res;
-  }
-
-  /**
-   * 获取评论全部信息
-   * @param id:int 作品id
-   * @param uid:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Object{ data:Array<Object>, count:int }
-   */
-  async commentList(id, uid, offset, limit) {
-    if(!id) {
-      return;
-    }
-    const { service } = this;
-    let commentId = await this.commentId(id);
-    return await service.post.commentList(commentId, uid, offset, limit);
-  }
-
-  /**
-   * 获取图片列表数据
-   * @param id:int 相册id
-   * @param uid:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页尺寸
-   * @returns Array<Object>
-   */
-  async imageList(id, uid, offset, limit) {
-    if(!id) {
-      return;
-    }
-    let [data, count] = await Promise.all([
-      this.imageData(id, uid, offset, limit),
-      this.imageCount(id)
-    ]);
-    return { data, count };
-  }
-
-  /**
-   * 获取图片列表数据
-   * @param id:int 相册id
-   * @param uid:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页尺寸
-   * @returns Array<Object>
-   */
-  async imageData(id, uid, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    const { app, service } = this;
-    let res = await app.model.imageAlbumWorkRelation.findAll({
-      attributes: [
-        ['work_id', 'workId']
-      ],
-      where: {
-        album_id: id,
-        kind: 3,
-        is_delete: false,
-      },
-      order: [
-        ['weight', 'DESC']
-      ],
-      offset,
-      limit,
-      raw: true,
-    });
-    let imageIdList = res.map((item) => {
-      return item.workId;
-    });
-    let [imageList, isLikeList, likeCountList, authorList] = await Promise.all([
-      service.work.imageList(imageIdList),
-      service.work.isLikeList(imageIdList, uid),
-      service.work.likeCountList(imageIdList),
-      service.work.authorList(imageIdList)
-    ]);
-    imageList.forEach((item, i) => {
-      item.isLike = isLikeList[i];
-      item.likeCount = likeCountList[i];
-      item.author = authorList[i];
-    });
-    return imageList;
-  }
-
-  /**
-   * 获取图片数量
-   * @param id:int 相册id
-   * @returns int
-   */
-  async imageCount(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'imageAlbumCount_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.imageAlbumWorkRelation.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        album_id: id,
-        kind: 3,
-        is_delete: false,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, res);
-    return res;
-  }
-
-  /**
-   * 根据专辑id列表获取专辑信息以及职种排序规则
-   * @param idList:Array<int> 专辑id列表
-   * @returns Object{ info:Object, professionSort:Array<Object> }
-   */
-  async infoListAndProfessionSort(idList) {
-    if(!idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [[], []];
-    }
-    const { service } = this;
-    let infoList = await this.infoList(idList);
-    let typeList = [];
-    let typeHash = {};
-    infoList.forEach((item) => {
-      if(item && !typeHash[item.type]) {
-        typeHash[item.type] = true;
-        typeList.push(item.type);
-      }
-    });
-    let list = await service.works.typeListProfessionSort(typeList);
-    let professionSortHash = {};
-    list.forEach((item, i) => {
-      let type = typeList[i];
-      professionSortHash[type] = item;
-    });
-    let professionSortList = infoList.map((item) => {
-      return professionSortHash[item.type];
-    });
-    return [infoList, professionSortList];
-  }
-
-  /**
-   * 获取专辑信息，包括作者信息
-   * @param albumIdList:Array<int> 专辑id列表
-   * @returns Array<Object>
-   */
-  async infoListPlusAuthor(albumIdList) {
-    if(!albumIdList) {
-      return;
-    }
-    if(!albumIdList.length) {
-      return [];
-    }
-    const { service } = this;
-    let [[infoList, professionSortList], authorList] = await Promise.all([
-      this.infoListAndProfessionSort(albumIdList),
-      this.authorList(albumIdList),
-    ]);
-    authorList.forEach((author, i) => {
-      authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
-    });
-    infoList.forEach((item, i) => {
-      item.author = authorList[i];
-    });
-    return infoList;
-  }
-
-  /**
-   * 获取专辑信息和统计数字信息
-   * @param idList:Array<int> 专辑id列表
-   * @returns Array<Object>
-   */
-  async infoListPlusCount(idList) {
-    if(!idList) {
-      return;
-    }
-    if(!idList.length) {
-      return [];
-    }
-    const { service } = this;
-    let [
-      list,
-      popularList,
-      commentCountList
-    ] = await Promise.all([
-      this.infoList(idList),
-      service.works.numCountList(idList, 1),
-      service.works.commentCountList(idList)
-    ]);
-    list.forEach((item, i) => {
-      item.popular = popularList[i];
-      item.commentCount = commentCountList[i];
-    });
-    return list;
-  }
-
-  /**
    * 获取专辑id列表的作者列表
    * @param idList:Array<int> 专辑id列表
    * @returns Array:<Array<Object>>
@@ -578,6 +330,287 @@ class Service extends egg.Service {
       });
     });
     return cache;
+  }
+
+  /**
+   * 获取专辑的评论id
+   * @param id:int 专辑id
+   * @returns int
+   */
+  async commentId(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'imageAlbumComment_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.worksCommentRelation.findOne({
+      attributes: [
+        ['comment_id', 'commentId']
+      ],
+      where: {
+        works_id: id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.commentId;
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    else {
+      return;
+    }
+    return res;
+  }
+
+  /**
+   * 获取评论全部信息
+   * @param id:int 作品id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ data:Array<Object>, count:int }
+   */
+  async commentList(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let commentId = await this.commentId(id);
+    return await service.post.commentList(commentId, uid, offset, limit);
+  }
+
+  /**
+   * 获取图片列表数据
+   * @param id:int 相册id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async imageList(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.imageData(id, uid, offset, limit),
+      this.imageCount(id)
+    ]);
+    return { data, count };
+  }
+
+  /**
+   * 获取图片列表数据
+   * @param id:int 相册id
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async imageData(id, uid, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.imageAlbumWorkRelation.findAll({
+      attributes: [
+        ['works_id', 'worksId'],
+        ['work_id', 'workId']
+      ],
+      where: {
+        album_id: id,
+        kind: 3,
+        is_delete: false,
+      },
+      order: [
+        ['weight', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    let worksIdList = [];
+    let workIdList = [];
+    res.forEach((item) => {
+      worksIdList.push(item.worksId);
+      workIdList.push(item.workId);
+    });
+    let workList = await service.work.infoListPlusFull(workIdList, 3, uid);
+    return workList.map((item, i) => {
+      let copy = {
+        id: worksIdList[i],
+      };
+      copy.work = item;
+      return copy;
+    });
+  }
+
+  /**
+   * 获取图片数量
+   * @param id:int 相册id
+   * @returns int
+   */
+  async imageCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'imageAlbumCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    res = await app.model.imageAlbumWorkRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        album_id: id,
+        kind: 3,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, res);
+    return res;
+  }
+
+  /**
+   * 根据作品id获取作品信息以及职种排序规则
+   * @param id:int 专辑id
+   * @returns Object{ info:Object, professionSort:Array<Object> }
+   */
+  async infoAndProfessionSort(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let info = await this.info(id);
+    let professionSort = await service.works.typeProfessionSort(info.type);
+    return [info, professionSort];
+  }
+
+  /**
+   * 根据专辑id列表获取专辑信息以及职种排序规则
+   * @param idList:Array<int> 专辑id列表
+   * @returns Object{ info:Object, professionSort:Array<Object> }
+   */
+  async infoListAndProfessionSort(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [[], []];
+    }
+    const { service } = this;
+    let infoList = await this.infoList(idList);
+    let typeList = [];
+    let typeHash = {};
+    infoList.forEach((item) => {
+      if(item && !typeHash[item.type]) {
+        typeHash[item.type] = true;
+        typeList.push(item.type);
+      }
+    });
+    let list = await service.works.typeListProfessionSort(typeList);
+    let professionSortHash = {};
+    list.forEach((item, i) => {
+      let type = typeList[i];
+      professionSortHash[type] = item;
+    });
+    let professionSortList = infoList.map((item) => {
+      return professionSortHash[item.type];
+    });
+    return [infoList, professionSortList];
+  }
+
+  /**
+   * 获取专辑信息，包括作者信息
+   * @param id:int 专辑id
+   * @returns Array<Object>
+   */
+  async infoPlusAuthor(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let [[info, professionSort], author] = await Promise.all([
+      this.infoAndProfessionSort(id),
+      this.author(id),
+    ]);
+    author = service.works.reorderAuthor(author, professionSort);
+    info.author = author;
+    return info;
+  }
+
+  /**
+   * 获取专辑信息，包括作者信息
+   * @param idList:Array<int> 专辑id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusAuthor(albumIdList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let [[infoList, professionSortList], authorList] = await Promise.all([
+      this.infoListAndProfessionSort(idList),
+      this.authorList(idList),
+    ]);
+    infoList.forEach((item, i) => {
+      if(item) {
+        item.author = service.works.reorderAuthor(authorList[i], professionSortList[i]);
+      }
+    });
+    return infoList;
+  }
+
+  /**
+   * 获取专辑信息和统计数字信息
+   * @param idList:Array<int> 专辑id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusCount(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let [
+      list,
+      popularList,
+      commentCountList
+    ] = await Promise.all([
+      this.infoList(idList),
+      service.works.numCountList(idList, 1),
+      service.works.commentCountList(idList)
+    ]);
+    list.forEach((item, i) => {
+      item.popular = popularList[i];
+      item.commentCount = commentCountList[i];
+    });
+    return list;
   }
 }
 

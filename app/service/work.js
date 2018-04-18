@@ -249,14 +249,9 @@ class Service extends egg.Service {
         return professionSortHash[item.type];
       }
     });
-    authorList.forEach((author, i) => {
-      if(author) {
-        authorList[i] = service.works.reorderAuthor(author, professionSortList[i]);
-      }
-    });
     infoList.forEach((item, i) => {
       if(item) {
-        item.author = authorList[i];
+        item.author = service.works.reorderAuthor(authorList[i], professionSortList[i]);
       }
     });
     return infoList;

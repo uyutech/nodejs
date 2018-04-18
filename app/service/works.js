@@ -881,6 +881,7 @@ class Service extends egg.Service {
    * @returns Array<Array<Object>>
    */
   reorderAuthor(list, rule) {
+    list = list || [];
     rule = rule || [];
     let res = [];
     // 先去重
@@ -946,7 +947,9 @@ class Service extends egg.Service {
         }),
       });
     });
-    res.push(temp);
+    if(temp.length) {
+      res.push(temp);
+    }
     return res;
   }
 
@@ -1055,12 +1058,9 @@ class Service extends egg.Service {
         authorList[i] = authorList[i].concat(item);
       });
     });
-    authorList.forEach((author, i) => {
-      authorList[i] = this.reorderAuthor(author, professionSortList[i]);
-    });
     infoList.forEach((item, i) => {
       if(item) {
-        item.author = authorList[i];
+        item.author = this.reorderAuthor(authorList[i], professionSortList[i]);
       }
     });
     return infoList;

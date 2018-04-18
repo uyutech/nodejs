@@ -692,7 +692,7 @@ class Service extends egg.Service {
         matchList[i] = [];
         if(matches) {
           matches.forEach((item) => {
-            let match = item.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/);
+            let match = item.match(/@\/(\w+)\/(\d+)\/?(?:\d+)?(?:\s|$)/);
             if(match) {
               let type = match[1];
               let id = match[2];

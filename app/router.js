@@ -320,12 +320,10 @@ module.exports = app => {
   app.post('/h5/work2/addViews', 'h52.work.addViews');
   app.post('/h5/work2/report', 'h52.work.report');
 
-  app.post('/h5/musicAlbum/index', 'h52.musicAlbum.index');
-  app.post('/h5/musicAlbum/commentList', 'h52.musicAlbum.commentList');
+  app.post('/h5/musicAlbum2/index', 'h52.musicAlbum.index');
 
-  app.post('/h5/imageAlbum/index', 'h52.imageAlbum.index');
-  app.post('/h5/imageAlbum/imageList', 'h52.imageAlbum.imageList');
-  app.post('/h5/imageAlbum/commentList', 'h52.imageAlbum.commentList');
+  app.post('/h5/imageAlbum2/index', 'h52.imageAlbum.index');
+  app.post('/h5/imageAlbum2/imageList', 'h52.imageAlbum.imageList');
 
   app.post('/h5/author2/index', 'h52.author.index');
   app.post('/h5/author2/dynamicList', 'h52.author.dynamicList');

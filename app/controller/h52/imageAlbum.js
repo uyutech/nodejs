@@ -13,25 +13,23 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let albumId = parseInt(body.albumId);
-    if(!albumId) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let [info, author, imageList, commentList] = await Promise.all([
-      service.imageAlbum.info(albumId),
-      service.imageAlbum.author(albumId),
-      service.imageAlbum.imageList(albumId, uid, 0, LIMIT),
-      service.imageAlbum.commentList(albumId, uid, 0, LIMIT)
+    let [info, imageList, commentList] = await Promise.all([
+      service.imageAlbum.infoPlusAuthor(id),
+      service.imageAlbum.imageList(id, uid, 0, LIMIT),
+      service.imageAlbum.commentList(id, uid, 0, LIMIT)
     ]);
     if(info.state === 3) {
       return;
     }
+    imageList.limit = LIMIT;
     commentList.limit = LIMIT;
-    author = service.works.reorderAuthor(author);
     ctx.body = ctx.helper.okJSON({
       info,
       imageList,
-      author,
       commentList,
     });
   }
@@ -40,25 +38,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let albumId = parseInt(body.albumId);
-    let offset = parseInt(body.offset);
-    if(!albumId) {
+    let id = parseInt(body.id);
+    let offset = parseInt(body.offset) || 0;
+    if(!id) {
       return;
     }
-    let res = service.imageAlbum.imageList(albumId, uid, offset || 0, LIMIT);
-    ctx.body = ctx.helper.okJSON(res);
-  }
-
-  async commentList() {
-    const { ctx, service } = this;
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let albumId = parseInt(body.albumId);
-    let offset = parseInt(body.offset);
-    if(!albumId) {
-      return;
-    }
-    let res = await service.imageAlbum.commentList(albumId, uid, offset || 0, LIMIT);
+    let res = service.imageAlbum.imageList(id, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
