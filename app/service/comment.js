@@ -464,7 +464,41 @@ class Service extends egg.Service {
     if(!data) {
       return;
     }
+    const { service } = this;
     let id = data.id;
+    let hash = {};
+    let worksIdList = [];
+    let workIdList = [];
+    let authorIdList = [];
+    let userIdList = [];
+    let matches = data.content.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/g);
+    if(matches) {
+      matches.forEach((item) => {
+        let match = item.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/);
+        if(match) {
+          let type = match[1];
+          let id = match[2];
+          if(hash[id]) {
+            return;
+          }
+          hash[id] = true;
+          switch(type) {
+            case 'works':
+              worksIdList.push(id);
+              break;
+            case 'work':
+              workIdList.push(id);
+              break;
+            case 'author':
+              authorIdList.push(id);
+              break;
+            case 'user':
+              userIdList.push(id);
+              break;
+          }
+        }
+      });
+    }
     let [
       { quote, authorHash, userHash },
       [ likeCount, isLike ],
@@ -472,7 +506,11 @@ class Service extends egg.Service {
       replyCount,
       circle,
       media,
-      work
+      work,
+      worksList,
+      workList,
+      authorList,
+      userList
     ] = await Promise.all([
       this.quoteAndPerson(data, uid),
       this.operateRelation(id, uid, 1),
@@ -480,7 +518,11 @@ class Service extends egg.Service {
       this.replyCount(id),
       this.circle(id),
       this.media(id),
-      this.work(id)
+      this.work(id),
+      service.works.infoList(worksIdList),
+      service.work.infoList(workIdList),
+      service.author.infoList(authorIdList),
+      service.user.infoList(userIdList)
     ]);
     if(data.isAuthor) {
       let author = authorHash[data.aid];
@@ -510,6 +552,27 @@ class Service extends egg.Service {
     });
     data.media = media;
     data.work = work;
+    let refHash = data.refHash = {};
+    worksList.forEach((item) => {
+      if(item) {
+        refHash[item.id] = item;
+      }
+    });
+    workList.forEach((item) => {
+      if(item) {
+        refHash[item.id] = item;
+      }
+    });
+    authorList.forEach((item) => {
+      if(item) {
+        refHash[item.id] = item;
+      }
+    });
+    worksList.forEach((item) => {
+      if(item) {
+        refHash[item.id] = item;
+      }
+    });
     return data;
   }
 
@@ -616,8 +679,45 @@ class Service extends egg.Service {
     if(!dataList.length) {
       return [];
     }
-    let idList = dataList.map((item) => {
+    const { service } = this;
+    let worksIdList = [];
+    let workIdList = [];
+    let authorIdList = [];
+    let userIdList = [];
+    let matchList = [];
+    let hash = {};
+    let idList = dataList.map((item, i) => {
       if(item) {
+        let matches = item.content.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/g);
+        matchList[i] = [];
+        if(matches) {
+          matches.forEach((item) => {
+            let match = item.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/);
+            if(match) {
+              let type = match[1];
+              let id = match[2];
+              matchList[i].push(id);
+              if(hash[id]) {
+                return;
+              }
+              hash[id] = true;
+              switch(type) {
+                case 'works':
+                  worksIdList.push(id);
+                  break;
+                case 'work':
+                  workIdList.push(id);
+                  break;
+                case 'author':
+                  authorIdList.push(id);
+                  break;
+                case 'user':
+                  userIdList.push(id);
+                  break;
+              }
+            }
+          });
+        }
         return item.id;
       }
     });
@@ -628,7 +728,11 @@ class Service extends egg.Service {
       replyCountList,
       circleList,
       mediaList,
-      workList
+      workList,
+      worksList,
+      workList2,
+      authorList,
+      userList
     ] = await Promise.all([
       this.quoteAndPersonList(dataList, uid),
       this.operateRelationList(idList, uid, 1),
@@ -636,10 +740,39 @@ class Service extends egg.Service {
       this.replyCountList(idList),
       this.circleList(idList),
       this.mediaList(idList),
-      this.workList(idList)
+      this.workList(idList),
+      service.works.infoList(worksIdList),
+      service.work.infoList(workIdList),
+      service.author.infoList(authorIdList),
+      service.user.infoList(userIdList)
     ]);
+    let allRefHash = {};
+    worksList.forEach((item) => {
+      if(item) {
+        allRefHash[item.id] = item;
+      }
+    });
+    workList2.forEach((item) => {
+      if(item) {
+        allRefHash[item.id] = item;
+      }
+    });
+    authorList.forEach((item) => {
+      if(item) {
+        allRefHash[item.id] = item;
+      }
+    });
+    worksList.forEach((item) => {
+      if(item) {
+        allRefHash[item.id] = item;
+      }
+    });
     dataList.forEach((item, i) => {
       if(item) {
+        let refHash = item.refHash = {};
+        matchList[i].forEach((id) => {
+          refHash[id] = allRefHash[id];
+        });
         if(item.isAuthor) {
           let author = authorHash[item.aid];
           if(author) {

@@ -346,7 +346,6 @@ module.exports = app => {
 
   app.post('/h5/post2/index', 'h52.post.index');
   app.post('/h5/post2/commentList', 'h52.post.commentList');
-  app.post('/h5/post2/refList', 'h52.post.refList');
 
   app.post('/h5/subPost2/index', 'h52.subPost.index');
   app.post('/h5/subPost2/sub', app.middlewares.needLoginJson(), 'h52.subPost.sub');
