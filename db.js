@@ -1076,7 +1076,7 @@ async function dealUser(pool) {
       type: 1,
       // is_delete: false,
       create_time: item.CreateTime,
-      // update_time: item.CreateTime,
+      update_time: item.CreateTime,
     });
   }
   last = 31853;
@@ -1090,7 +1090,7 @@ async function dealUser(pool) {
       type: 3,
       // is_delete: false,
       create_time: item.CreateTime,
-      // update_time: item.CreateTime,
+      update_time: item.CreateTime,
     });
   }
 }

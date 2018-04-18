@@ -31,6 +31,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: Sequelize.NOW,
     },
+    update_time: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
   }, {
     indexes: [
       {
@@ -39,10 +44,14 @@ module.exports = app => {
         fields: ['user_id', 'target_id'],
       },
       {
-        name: 'target_id_type',
-        fields: ['target_id', 'type']
+        name: 'user_id_type_update_time',
+        fields: ['user_id', 'type', 'update_time']
+      },
+      {
+        name: 'target_id_type_update_time',
+        fields: ['target_id', 'type', 'update_time']
       }
     ],
-    comment: '用户和用户关联信息',
+    comment: '用户和用户作者关联信息',
   });
 };

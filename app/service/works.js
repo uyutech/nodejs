@@ -258,7 +258,7 @@ class Service extends egg.Service {
    * @param uid:int 用户id
    * @returns Array<Object>
    */
-  async collectionCount(id, uid) {
+  async collectionFull(id, uid) {
     if(!id) {
       return;
     }
@@ -290,10 +290,10 @@ class Service extends egg.Service {
       imageList,
       textList,
     ] = await Promise.all([
-      service.work.infoListPlusCount(videoIdList, 1, uid),
-      service.work.infoListPlusCount(audioIdList, 2, uid),
-      service.work.infoListPlusCount(imageIdList, 3, uid),
-      service.work.infoListPlusCount(textIdList, 4, uid)
+      service.work.infoListPlusFull(videoIdList, 1, uid),
+      service.work.infoListPlusFull(audioIdList, 2, uid),
+      service.work.infoListPlusFull(imageIdList, 3, uid),
+      service.work.infoListPlusFull(textIdList, 4, uid)
     ]);
     let hash = {};
     videoList.forEach((item) => {
@@ -980,6 +980,27 @@ class Service extends egg.Service {
       }
     }
     return res;
+  }
+
+  /**
+   * 获取大作品信息和作者信息
+   * @param id:int 大作品id
+   * @returns Object
+   */
+  async infoPlusAuthor(id) {
+    if(!id) {
+      return;
+    }
+    let [
+      [info, professionSort],
+      author
+    ] = await Promise.all([
+      this.infoAndProfessionSort(id),
+      this.author(id)
+    ]);
+    author = this.reorderAuthor(author, professionSort);
+    info.author = author;
+    return info;
   }
 
   /**

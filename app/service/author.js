@@ -465,12 +465,16 @@ class Service extends egg.Service {
     if(state) {
       await Promise.all([
         app.redis.setex(cacheKey, CACHE_TIME, 'true'),
-        app.model.userPersonRelation.create({
+        app.model.userPersonRelation.upsert({
           user_id: uid,
           target_id: id,
           type: 3,
+          update_time: new Date(),
         }, {
-          raw: true,
+          where: {
+            user_id: uid,
+            target_id: id,
+          },
         })
       ]);
     }
@@ -1515,6 +1519,70 @@ class Service extends egg.Service {
     }
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 举报作者
+   * @param id:int 作者id
+   * @param uid:int 用户id
+   */
+  async report(id, uid) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    await app.model.userReport.create({
+      target_id: id,
+      type: 7,
+      user_id: uid,
+    });
+  }
+
+  /**
+   * 加入黑名单作者
+   * @param id:int 作者id
+   * @param uid:int 用户id
+   */
+  async black(id, uid) {
+    if(!id || !uid) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_3';
+    let exist = await app.model.userPersonRelation.findOne({
+      attributes: [
+        'id',
+        'type'
+      ],
+      where: {
+        user_id: uid,
+        target_id: id,
+      },
+      raw: true,
+    });
+    if(exist && exist.type === 4) {
+      return {
+        success: false,
+        message: '已经加入过黑名单无需重复加入',
+      };
+    }
+    await app.model.userPersonRelation.upsert({
+      user_id: uid,
+      target_id: id,
+      type: 4,
+      update_time: new Date(),
+    }, {
+      where: {
+        user_id: uid,
+        target_id: id,
+      },
+    });
+    app.redis.del(cacheKey);
+    return {
+      success: true,
+    }
   }
 }
 

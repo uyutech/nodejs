@@ -334,6 +334,8 @@ module.exports = app => {
   app.post('/h5/author2/follow', app.middlewares.needLoginJson(), 'h52.author.follow');
   app.post('/h5/author2/unFollow', app.middlewares.needLoginJson(), 'h52.author.unFollow');
   app.post('/h5/author2/all', 'h52.author.all');
+  app.post('/h5/author2/report', 'h52.author.report');
+  app.post('/h5/author2/black', app.middlewares.needLoginJson(), 'h52.author.black');
 
   app.post('/h5/circle2/index', 'h52.circle.index');
   app.post('/h5/circle2/postList', 'h52.circle.postList');
