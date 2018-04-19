@@ -307,8 +307,7 @@ module.exports = app => {
 
   app.post('/d/api2/post/comment', 'api2.post.comment');
 
-  app.get('/count/worksCommentNum', app.middlewares.needLoginJson(), 'count.worksCommentNum');
-  app.get('/count/authorCommentNum', app.middlewares.needLoginJson(), 'count.authorCommentNum');
+  app.get('/count/authorSkill', app.middlewares.needLoginJson(), 'count.authorSkill');
 
   app.post('/h5/works2/index', 'h52.works.index');
   app.post('/h5/works2/commentList', 'h52.works.commentList');

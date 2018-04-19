@@ -158,6 +158,9 @@ const WorkTypeProfessionSort = require('./app/model/workTypeProfessionSort')({ s
 const AuthorDynamic = require('./app/model/authorDynamic')({ sequelizeCircling: sequelize, Sequelize });
 const UserAddress = require('./app/model/userAddress')({ sequelizeCircling: sequelize, Sequelize });
 const CommentPoint = require('./app/model/commentPoint')({ sequelizeCircling: sequelize, Sequelize });
+const skill = require('./app/model/skill')({ sequelizeCircling: sequelize, Sequelize });
+const professionSkillRelation = require('./app/model/professionSkillRelation')({ sequelizeCircling: sequelize, Sequelize });
+const authorSkillRelation = require('./app/model/authorSkillRelation')({ sequelizeCircling: sequelize, Sequelize });
 
 const Product = require('./app/model/product')({ sequelizeMall: sequelizeMall, Sequelize });
 const Express = require('./app/model/express')({ sequelizeMall: sequelizeMall, Sequelize });
@@ -188,6 +191,9 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
     await findKind.sync();
     await findBanner.sync();
     await banner.sync();
+    await skill.sync();
+    await professionSkillRelation.sync();
+    await authorSkillRelation.sync();
 
     await userReport.sync();
     await userVisit.sync();

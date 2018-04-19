@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2018/3/30.
+ * Created by army8735 on 2018/4/19.
  */
 
 'use strict';
@@ -11,8 +11,8 @@ const CACHE_TIME = 10;
 
 class Service extends egg.Service {
   /**
-   * 获取职种信息
-   * @param id:int 职种id
+   * 获取技能信息
+   * @param id:int 技能id
    * @returns Object
    */
   async info(id) {
@@ -20,13 +20,13 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'profession_' + id;
+    let cacheKey = 'skill_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.profession.findOne({
+    res = await app.model.skill.findOne({
       attributes: [
         'id',
         'name'
@@ -41,8 +41,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取职种信息列表
-   * @param idList:Array<int> 职种id列表
+   * 获取技能信息列表
+   * @param idList:Array<int> 技能id列表
    * @returns Array<Object>
    */
   async infoList(idList) {
@@ -56,7 +56,7 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
-          return app.redis.get('profession_' + id);
+          return app.redis.get('skill_' + id);
         }
       })
     );
@@ -67,7 +67,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('profession_' + id, CACHE_TIME);
+        app.redis.expire('skill_' + id, CACHE_TIME);
       }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
@@ -78,7 +78,7 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let res = await app.model.profession.findAll({
+      let res = await app.model.skill.findAll({
         attributes: [
           'id',
           'name'
@@ -98,15 +98,11 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('profession_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('skill_' + id, CACHE_TIME, JSON.stringify(temp));
       });
     }
     return cache;
   }
-
-  async skill(id) {}
-
-  async skillList(idList) {}
 }
 
 module.exports = Service;

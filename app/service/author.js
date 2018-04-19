@@ -188,11 +188,59 @@ class Service extends egg.Service {
   }
 
   /**
+   * 作者技能列表
+   * @param id:int 作者id
+   * @returns Array<Object>
+   */
+  async skill(id) {
+    if(!id) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'authorSkill_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.authorSkillRelation.findAll({
+        attributes: [
+          ['skill_id', 'skillId'],
+          'point'
+        ],
+        where: {
+          author_id: id,
+          is_delete: false,
+        },
+        order: [
+          ['point', 'DESC']
+        ],
+        raw: true,
+      });
+      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    }
+    let skillIdList = res.map((item) => {
+      return item.skillId;
+    });
+    let skillList = await service.skill.infoList(skillIdList);
+    return res.map((item, i) => {
+      if(item) {
+        return {
+          id: item.skillId,
+          name: skillList[i].name,
+          point: item.point,
+        };
+      }
+    });
+  }
+
+  /**
    * 获取作者的站外链接
    * @param id:int 作者id
    * @returns Array<Object>
    */
-  async outsides(id) {
+  async outside(id) {
     if(!id) {
       return;
     }
