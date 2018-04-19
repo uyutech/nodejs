@@ -1327,6 +1327,25 @@ class Service extends egg.Service {
     }
     return cache;
   }
+
+  /**
+   * 检查此大作品下是否有小作品
+   * @param id:int 大作品id
+   * @param workId:int 小作品id
+   */
+  async checkWork(id, workId) {
+    if(!id || !workId) {
+      return;
+    }
+    let collectionBase = await this.collectionBase(id);
+    if(collectionBase) {
+      for (let i = 0; i < collectionBase.length; i++) {
+        if(collectionBase[i].workId === workId) {
+          return true;
+        }
+      }
+    }
+  }
 }
 
 module.exports = Service;

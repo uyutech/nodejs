@@ -332,8 +332,6 @@ class Service extends egg.Service {
         query = query.concat(data.image.map((item) => {
           return app.model.commentMedia.create({
             comment_id: create.id,
-            works_id: 0,
-            work_id: 0,
             kind: 0,
             url: item.url,
             width: item.width,
@@ -341,6 +339,14 @@ class Service extends egg.Service {
             duration: 0,
             update_time: now,
           });
+        }));
+      }
+      if(data.worksId && data.workId) {
+        query.push(app.model.commentWork.create({
+          comment_id: create.id,
+          works_id: data.worksId,
+          work_id: data.workId,
+          kind: service.work.getKind(data.workId),
         }));
       }
       await Promise.all(query);

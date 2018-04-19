@@ -77,6 +77,8 @@ class Controller extends egg.Controller {
     let content = body.content;
     let image = body.image;
     let circleId = body.circleId;
+    let worksId = parseInt(body.worksId);
+    let workId = parseInt(body.workId);
     if(!content || content.length < 3) {
       return ctx.body = ctx.helper.errorJSON({
         message: '字数不能少于3个字哦~',
@@ -116,9 +118,10 @@ class Controller extends egg.Controller {
       });
     }
     // 获取选择的圈子直接对应的话题id列表，以及手写话题的id列表
-    let [tagList, inputTagIdList] = await Promise.all([
+    let [tagList, inputTagIdList, check] = await Promise.all([
       service.circle.tagIdList(circleId, 1),
-      service.tag.idListByName(tagNameList)
+      service.tag.idListByName(tagNameList),
+      service.works.checkWork(worksId, workId)
     ]);
     let chooseTagIdList = [];
     let chooseTagHash = {};
@@ -152,6 +155,8 @@ class Controller extends egg.Controller {
         inputTagIdList,
         image,
         authorId: body.authorId,
+        worksId: check? worksId: null,
+        workId: check? workId: null,
       })
     ]);
     circleIdList.forEach((arr, i) => {

@@ -241,6 +241,7 @@ class Service extends egg.Service {
     else {
       res = await app.model.commentWork.findAll({
         attributes: [
+          ['works_id', 'worksId'],
           ['work_id', 'workId'],
           'kind'
         ],
@@ -336,6 +337,7 @@ class Service extends egg.Service {
       let res = await app.model.commentWork.findAll({
         attributes: [
           ['comment_id', 'commentId'],
+          ['works_id', 'worksId'],
           ['work_id', 'workId'],
           'kind'
         ],
@@ -351,6 +353,7 @@ class Service extends egg.Service {
           let id = item.commentId;
           let temp = hash[id] = hash[id] || [];
           temp.push({
+            worksId: item.worksId,
             workId: item.workId,
             kind: item.kind,
           });
