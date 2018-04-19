@@ -314,21 +314,19 @@ class Service extends egg.Service {
       service.work.infoListPlusFull(workIdList, kind, uid)
     ]);
     let worksHash = {};
-    worksList.forEach((item, i) => {
+    worksList.forEach((item) => {
       if(item) {
         worksHash[item.id] = item;
       }
     });
-    workList.forEach((item) => {
+    return workList.map((item, i) => {
       if(item) {
         item.author = service.works.firstAuthor(item.author);
+        let worksId = worksIdList[i];
+        let copy = Object.assign({}, worksHash[worksId] || {});
+        copy.work = item;
+        return copy;
       }
-    });
-    return workList.map((item, i) => {
-      let worksId = worksIdList[i];
-      let copy = Object.assign({}, worksHash[worksId] || {});
-      copy.work = item;
-      return copy;
     });
   }
 
