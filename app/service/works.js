@@ -298,25 +298,25 @@ class Service extends egg.Service {
     let hash = {};
     videoList.forEach((item) => {
       if(item) {
-        item.author = service.works.firstAuthor(item.author);
+        item.author = this.firstAuthor(item.author);
         hash[item.id] = item;
       }
     });
     audioList.forEach((item) => {
       if(item) {
-        item.author = service.works.firstAuthor(item.author);
+        item.author = this.firstAuthor(item.author);
         hash[item.id] = item;
       }
     });
     imageList.forEach((item) => {
       if(item) {
-        item.author = service.works.firstAuthor(item.author);
+        item.author = this.firstAuthor(item.author);
         hash[item.id] = item;
       }
     });
     textList.forEach((item) => {
       if(item) {
-        item.author = service.works.firstAuthor(item.author);
+        item.author = this.firstAuthor(item.author);
         hash[item.id] = item;
       }
     });
