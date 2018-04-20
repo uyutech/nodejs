@@ -18,7 +18,7 @@ class Controller extends egg.Controller {
       app.model.banner.findAll({
         attributes: [
           'title',
-          'pic',
+          'url',
           ['target_id', 'targetId'],
           'type'
         ],

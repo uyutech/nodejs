@@ -24,7 +24,7 @@ class Service extends egg.Service {
     res = await app.model.findBanner.findAll({
       attributes: [
         'title',
-        'pic',
+        'url',
         ['target_id', 'targetId'],
         'type'
       ],

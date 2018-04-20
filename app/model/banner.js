@@ -18,8 +18,8 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    pic: {
-      type: Sequelize.TEXT,
+    url: {
+      type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
     },

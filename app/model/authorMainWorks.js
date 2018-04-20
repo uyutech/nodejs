@@ -17,12 +17,17 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      comment: '1大作品，2音乐专辑，3相册',
+    },
     works_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
     weight: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
     },
@@ -44,9 +49,13 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'author_id_works_id_weight',
+        name: 'author_id_works_id',
         unique: true,
-        fields: ['author_id', 'works_id', 'weight'],
+        fields: ['author_id', 'works_id'],
+      },
+      {
+        name: 'author_id_type_weight',
+        fields: ['author_id', 'type', 'weight'],
       }
     ],
     comment: '作者主打作品列表',

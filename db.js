@@ -369,6 +369,7 @@ async function dealAuthorMainWorks(pool) {
       author_id: item.AuthorID,
       works_id: item.WorksID,
       weight: item.sort,
+      type: 1,
       is_delete: false,
       create_time: item.CreateTime,
       update_time: item.CreateTime,

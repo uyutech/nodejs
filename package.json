@@ -10,7 +10,7 @@
     "anima-querystring": "~2.0.0",
     "anima-yocto-ajax": "~2.0.4",
     "bignumber.js": "~4.1.0",
-    "egg": "~2.6.0",
+    "egg": "~2.7.1",
     "egg-redis": "~2.0.0",
     "egg-scripts": "~2.1.0",
     "egg-view-migi": "~1.1.0",
