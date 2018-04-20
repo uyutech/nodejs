@@ -73,7 +73,7 @@ class Controller extends egg.Controller {
     if(!id) {
       return;
     }
-    let res = await service.author.commentList(id, uid, offset, LIMIT);
+    let res = await service.author.dynamicList(id, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -87,7 +87,7 @@ class Controller extends egg.Controller {
     if(!id) {
       return;
     }
-    let res = await service.author.dynamicList(id, uid, offset, LIMIT);
+    let res = await service.author.commentList(id, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
