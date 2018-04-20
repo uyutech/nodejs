@@ -474,9 +474,15 @@ class Service extends egg.Service {
    * @returns Object{ count:int, state:boolean }
    */
   async follow(id, uid, state) {
-    if(!id || !uid || id === uid) {
+    if(!id || !uid) {
       return {
         success: false,
+      };
+    }
+    if(id === uid) {
+      return {
+        success: false,
+        message: '不能关注自己哦~',
       };
     }
     let now = await this.isFollow(id, uid);

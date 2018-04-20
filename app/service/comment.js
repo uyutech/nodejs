@@ -469,11 +469,11 @@ class Service extends egg.Service {
     }
     const { service } = this;
     let id = data.id;
-    let hash = {};
     let worksIdList = [];
     let workIdList = [];
     let authorIdList = [];
     let userIdList = [];
+    let hash = {};
     let matches = data.content.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/g);
     if(matches) {
       matches.forEach((item) => {
@@ -502,6 +502,19 @@ class Service extends egg.Service {
         }
       });
     }
+    hash = {};
+    let nameList = [];
+    matches = data.content.match(/#[^#\n\s]+?#/g);
+    if(matches) {
+      matches.forEach((item) => {
+        let name = item.slice(1, -1);
+        if(hash[name]) {
+          return;
+        }
+        hash[name] = true;
+        nameList.push(name);
+      });
+    }
     let [
       { quote, authorHash, userHash },
       [ likeCount, isLike ],
@@ -513,7 +526,8 @@ class Service extends egg.Service {
       worksList,
       workList,
       authorList,
-      userList
+      userList,
+      tagCircleList
     ] = await Promise.all([
       this.quoteAndPerson(data, uid),
       this.operateRelation(id, uid, 1),
@@ -525,7 +539,8 @@ class Service extends egg.Service {
       service.works.infoList(worksIdList),
       service.work.infoList(workIdList),
       service.author.infoList(authorIdList),
-      service.user.infoList(userIdList)
+      service.user.infoList(userIdList),
+      service.tag.circleIdListByName(nameList, 1)
     ]);
     if(data.isAuthor) {
       let author = authorHash[data.aid];
@@ -556,6 +571,7 @@ class Service extends egg.Service {
     data.media = media;
     data.work = work;
     let refHash = data.refHash = {};
+    let tagCircleHash = data.tagCircleHash = {};
     worksList.forEach((item) => {
       if(item) {
         refHash[item.id] = item;
@@ -571,9 +587,14 @@ class Service extends egg.Service {
         refHash[item.id] = item;
       }
     });
-    worksList.forEach((item) => {
+    userList.forEach((item) => {
       if(item) {
         refHash[item.id] = item;
+      }
+    });
+    tagCircleList.forEach((item, i) => {
+      if(item && item.length) {
+        tagCircleHash[nameList[i]] = item[0];
       }
     });
     return data;
@@ -688,7 +709,10 @@ class Service extends egg.Service {
     let authorIdList = [];
     let userIdList = [];
     let matchList = [];
+    let tagMatchList = [];
     let hash = {};
+    let nameList = [];
+    let tagHash = {};
     let idList = dataList.map((item, i) => {
       if(item) {
         let matches = item.content.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/g);
@@ -721,6 +745,19 @@ class Service extends egg.Service {
             }
           });
         }
+        tagMatchList[i] = [];
+        matches = item.content.match(/#[^#\n\s]+?#/g);
+        if(matches) {
+          matches.forEach((item) => {
+            let name = item.slice(1, -1);
+            tagMatchList[i].push(name);
+            if(tagHash[name]) {
+              return;
+            }
+            tagHash[name] = true;
+            nameList.push(name);
+          });
+        }
         return item.id;
       }
     });
@@ -735,7 +772,8 @@ class Service extends egg.Service {
       worksList,
       workList2,
       authorList,
-      userList
+      userList,
+      tagCircleList
     ] = await Promise.all([
       this.quoteAndPersonList(dataList, uid),
       this.operateRelationList(idList, uid, 1),
@@ -747,7 +785,8 @@ class Service extends egg.Service {
       service.works.infoList(worksIdList),
       service.work.infoList(workIdList),
       service.author.infoList(authorIdList),
-      service.user.infoList(userIdList)
+      service.user.infoList(userIdList),
+      service.tag.circleIdListByName(nameList, 1)
     ]);
     let allRefHash = {};
     worksList.forEach((item) => {
@@ -765,16 +804,26 @@ class Service extends egg.Service {
         allRefHash[item.id] = item;
       }
     });
-    worksList.forEach((item) => {
+    userList.forEach((item) => {
       if(item) {
-        allRefHash[item.id] = item;
+        refHash[item.id] = item;
+      }
+    });
+    let allTagCircleHash = {};
+    tagCircleList.forEach((item, i) => {
+      if(item && item.length) {
+        allTagCircleHash[nameList[i]] = item[0];
       }
     });
     dataList.forEach((item, i) => {
       if(item) {
         let refHash = item.refHash = {};
+        let tagCircleHash = item.tagCircleHash = {};
         matchList[i].forEach((id) => {
           refHash[id] = allRefHash[id];
+        });
+        tagMatchList[i].forEach((name) => {
+          tagCircleHash[name] = allTagCircleHash[name];
         });
         if(item.isAuthor) {
           let author = authorHash[item.aid];

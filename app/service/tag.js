@@ -105,6 +105,69 @@ class Service extends egg.Service {
   }
 
   /**
+   * 根据名字获取标签列表信息
+   * @param nameList:Array<int> 标签名字列表
+   * @returns Array<Object>
+   */
+  async infoListByName(nameList) {
+    if(!nameList) {
+      return;
+    }
+    if(!nameList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      nameList.map((name) => {
+        return app.redis.get('tagName_' + name);
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let name = nameList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('tagName_' + name, CACHE_TIME);
+      }
+      else if(name) {
+        if(!noCacheIdHash[name]) {
+          noCacheIdHash[name] = true;
+          noCacheIdList.push(name);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.tag.findAll({
+        attributes: [
+          'id',
+          'name'
+        ],
+        where: {
+          name: noCacheIdList,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let name = item.name;
+          hash[name] = item;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let name = nameList[i];
+        let temp = hash[name] || null;
+        cache[i] = temp;
+        app.redis.setex('tagName_' + name, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
+
+  /**
    * 根据名字获取id
    * @param name:String tag名
    * @returns int
@@ -430,7 +493,7 @@ class Service extends egg.Service {
    * @param type:int 类型，不传为所有
    * @returns Array<int>
    */
-  async circle(id, type) {
+  async circleId(id, type) {
     if(!id) {
       return;
     }
@@ -467,7 +530,7 @@ class Service extends egg.Service {
 
   /**
    * 获取标签列表对应的圈子id列表
-   * @param idList:int 标签id列表
+   * @param idList:Array<int> 标签id列表
    * @param type:int 类型，不传为所有
    * @returns Array<Array<int>>
    */
@@ -547,6 +610,37 @@ class Service extends egg.Service {
       });
     }
     return cache;
+  }
+
+  /**
+   * 获取标签对应的圈子id列表
+   * @param name:String 标签名
+   * @param type:int 类型，不传为所有
+   * @returns Array<int>
+   */
+  async circleIdByName(name, type) {
+    if(!name) {
+      return;
+    }
+    let id = await this.idByName(name);
+    return await this.circle(id, type);
+  }
+
+  /**
+   * 获取标签列表对应的圈子id列表
+   * @param nameList:Array<String> 标签名
+   * @param type:int 类型，不传为所有
+   * @returns Array<int>
+   */
+  async circleIdListByName(nameList, type) {
+    if(!nameList) {
+      return;
+    }
+    if(!nameList.length) {
+      return [];
+    }
+    let idList = await this.idListByName(nameList);
+    return await this.circleIdList(idList, type);
   }
 }
 
