@@ -24,8 +24,8 @@ class Controller extends egg.Controller {
       aliases,
       skill,
       outside,
-      mainWorks,
-      musicAlbum,
+      mainWorksList,
+      mainMusicAlbumList,
       workKindList,
       dynamicList,
       commentList
@@ -35,13 +35,13 @@ class Controller extends egg.Controller {
       service.author.aliases(id),
       service.author.skill(id),
       service.author.outside(id),
-      service.author.mainWorks(id, 0, LIMIT),
-      service.author.musicAlbum(id, 0, LIMIT),
+      service.author.mainWorksList(id, 1, 0, LIMIT),
+      service.author.mainWorksList(id, 2, 0, LIMIT),
       service.author.workKindList(id),
       service.author.dynamicList(id, uid, 0, LIMIT),
       service.author.commentList(id, uid, 0, LIMIT)
     ]);
-    mainWorks.limit = LIMIT;
+    mainWorksList.limit = LIMIT;
     let kindWorkList;
     if(workKindList.length) {
       kindWorkList = await service.author.kindWorkList(id, uid, workKindList[0].kind, 0, LIMIT);
@@ -55,8 +55,8 @@ class Controller extends egg.Controller {
       aliases,
       skill,
       outside,
-      mainWorks,
-      musicAlbum,
+      mainWorksList,
+      mainMusicAlbumList,
       workKindList,
       kindWorkList,
       dynamicList,

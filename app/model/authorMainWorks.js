@@ -54,8 +54,8 @@ module.exports = app => {
         fields: ['author_id', 'works_id'],
       },
       {
-        name: 'author_id_type_weight',
-        fields: ['author_id', 'type', 'weight'],
+        name: 'author_id_is_delete_type_weight',
+        fields: ['author_id', 'is_delete', 'type', 'weight'],
       }
     ],
     comment: '作者主打作品列表',

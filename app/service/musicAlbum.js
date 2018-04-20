@@ -140,8 +140,8 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据大作品id获取小作品集合基本信息
-   * @param id:int 大作品id
+   * 根据专辑id获取小作品集合基本信息
+   * @param id:int 专辑id
    * @returns Array<Object>
    */
   async collectionBase(id) {
@@ -149,7 +149,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'worksCollectionId_' + id;
+    let cacheKey = 'musicAlbumCollectionBase_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -173,6 +173,78 @@ class Service extends egg.Service {
     });
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 根据专辑id列表获取小作品集合基本信息
+   * @param idList:Array<int> 专辑id列表
+   * @returns Array<Array<Object>>
+   */
+  async collectionListBase(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== undefined && id !== null) {
+          return app.redis.get('musicAlbumCollectionBase_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+        app.redis.expire('musicAlbumCollectionBase_' + id, CACHE_TIME);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.musicAlbumWorkRelation.findAll({
+        attributes: [
+          ['album_id', 'albumId'],
+          ['works_id', 'worksId'],
+          ['work_id', 'workId'],
+          'kind'
+        ],
+        where: {
+          album_id: noCacheIdList,
+          is_delete: false,
+        },
+        order: [
+          ['weight', 'DESC'],
+          'kind'
+        ],
+        raw: true,
+      });
+      let hash = {};
+      res.forEach((item) => {
+        let id = item.albumId;
+        delete item.albumId;
+        let temp = hash[id] = hash[id] || [];
+        temp.push(item);
+      });
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || [];
+        cache[i] = temp;
+        app.redis.setex('musicAlbumCollectionBase_' + id, CACHE_TIME, JSON.stringify(temp));
+      });
+    }
+    return cache;
   }
 
   /**
@@ -263,6 +335,59 @@ class Service extends egg.Service {
       let work = hash[item.workId];
       copy.work = work;
       return copy;
+    });
+  }
+
+  /**
+   * 根据大作品id获取小作品集合作者信息
+   * @param id:int 大作品id列表
+   * @returns Array<Object>
+   */
+  async collectionAuthor(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let res = await this.collectionBase(id);
+    let idList = res.map((item) => {
+      return item.workId;
+    });
+    return await service.work.authorList(idList);
+  }
+
+  /**
+   * 根据大作品id列表获取小作品集合作者信息
+   * @param idList:int 大作品id列表
+   * @returns Array<Array<Object>>
+   */
+  async collectionListAuthor(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let res = await this.collectionListBase(idList);
+    let workIdList = [];
+    let workIdHash = {};
+    res.forEach((arr) => {
+      arr.forEach((item) => {
+        if(!workIdHash[item.workId]) {
+          workIdHash[item.workId] = true;
+          workIdList.push(item.workId);
+        }
+      });
+    });
+    let authorList = await service.work.authorList(workIdList);
+    let hash = {};
+    workIdList.forEach((item, i) => {
+      hash[item] = authorList[i];
+    });
+    return res.map((arr) => {
+      return arr.map((item) => {
+        return hash[item.workId];
+      });
     });
   }
 
@@ -609,6 +734,93 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取大作品信息和全部作者信息
+   * @param id:int 大作品id
+   * @returns Object
+   */
+  async infoPlusAllAuthor(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let [
+      [info, professionSort],
+      author,
+      collectionAuthor
+    ] = await Promise.all([
+      this.infoAndProfessionSort(id),
+      this.author(id),
+      this.collectionAuthor(id)
+    ]);
+    collectionAuthor.forEach((item) => {
+      author = author.concat(item);
+    });
+    author = service.works.reorderAuthor(author, professionSort);
+    info.author = author;
+    return info;
+  }
+
+  /**
+   * 获取大作品信息和全部作者信息
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusAllAuthor(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let [
+      [infoList, professionSortList],
+      authorList,
+      collectionAuthorList
+    ] = await Promise.all([
+      this.infoListAndProfessionSort(idList),
+      this.authorList(idList),
+      this.collectionListAuthor(idList)
+    ]);
+    collectionAuthorList.forEach((arr, i) => {
+      arr.forEach((item) => {
+        authorList[i] = authorList[i].concat(item);
+      });
+    });
+    infoList.forEach((item, i) => {
+      if(item) {
+        item.author = service.works.reorderAuthor(authorList[i], professionSortList[i]);
+      }
+    });
+    return infoList;
+  }
+
+  /**
+   * 获取专辑信息和统计数字信息
+   * @param id:int 专辑id列表
+   * @returns Object
+   */
+  async infoPlusCount(id) {
+    if(!id) {
+      return;
+    }
+    let [
+      info,
+      popular,
+      commentCount
+    ] = await Promise.all([
+      this.info(id),
+      service.works.numCount(id, 1),
+      this.commentCount(id)
+    ]);
+    if(info) {
+      info.popular = popular;
+      info.commentCount = commentCount;
+    }
+    return info;
+  }
+
+  /**
    * 获取专辑信息和统计数字信息
    * @param idList:Array<int> 专辑id列表
    * @returns Array<Object>
@@ -631,8 +843,67 @@ class Service extends egg.Service {
       service.works.commentCountList(idList)
     ]);
     list.forEach((item, i) => {
-      item.popular = popularList[i];
-      item.commentCount = commentCountList[i];
+      if(item) {
+        item.popular = popularList[i];
+        item.commentCount = commentCountList[i];
+      }
+    });
+    return list;
+  }
+
+  /**
+   * 获取大作品信息、统计数字和全部作者信息
+   * @param id:int 大作品id列表
+   * @returns Object
+   */
+  async infoPlusFull(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let [
+      info,
+      popular,
+      commentCount
+    ] = await Promise.all([
+      this.infoPlusAllAuthor(id),
+      service.works.numCount(id, 1),
+      service.works.commentCount(id)
+    ]);
+    if(info) {
+      info.popular = popular;
+      info.commentCount = commentCount;
+    }
+    return info;
+  }
+
+  /**
+   * 获取大作品信息、统计数字和全部作者信息列表
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusFull(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let [
+      list,
+      popularList,
+      commentCountList
+    ] = await Promise.all([
+      this.infoListPlusAllAuthor(idList),
+      service.works.numCountList(idList, 1),
+      service.works.commentCountList(idList)
+    ]);
+    list.forEach((item, i) => {
+      if(item) {
+        item.popular = popularList[i];
+        item.commentCount = commentCountList[i];
+      }
     });
     return list;
   }

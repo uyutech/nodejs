@@ -152,7 +152,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'worksCollectionId_' + id;
+    let cacheKey = 'worksCollectionBase_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
@@ -1011,6 +1011,33 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取大作品信息和作者信息列表
+   * @param idList:int 大作品id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusAuthor(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    let [
+      [infoList, professionSortList],
+      authorList
+    ] = await Promise.all([
+      this.infoListAndProfessionSort(idList),
+      this.authorList(idList)
+    ]);
+    infoList.forEach((item, i) => {
+      if(item) {
+        item.author = this.reorderAuthor(authorList[i], professionSortList[i]);
+      }
+    });
+    return infoList;
+  }
+
+  /**
    * 获取大作品信息和全部作者信息
    * @param id:int 大作品id
    * @returns Object
@@ -1072,6 +1099,31 @@ class Service extends egg.Service {
 
   /**
    * 获取大作品信息和统计数字信息
+   * @param id:int 大作品id列表
+   * @returns Object
+   */
+  async infoPlusCount(id) {
+    if(!id) {
+      return;
+    }
+    let [
+      info,
+      popular,
+      commentCount
+    ] = await Promise.all([
+      this.info(id),
+      this.numCount(id, 1),
+      this.commentCount(id)
+    ]);
+    if(info) {
+      info.popular = popular;
+      info.commentCount = commentCount;
+    }
+    return info;
+  }
+
+  /**
+   * 获取大作品信息和统计数字信息列表
    * @param idList:Array<int> 大作品id列表
    * @returns Array<Object>
    */
@@ -1102,6 +1154,31 @@ class Service extends egg.Service {
 
   /**
    * 获取大作品信息、统计数字和全部作者信息
+   * @param id:int 大作品id列表
+   * @returns Object
+   */
+  async infoPlusFull(id) {
+    if(!id) {
+      return;
+    }
+    let [
+      info,
+      popular,
+      commentCount
+    ] = await Promise.all([
+      this.infoPlusAllAuthor(id),
+      this.numCount(id, 1),
+      this.commentCount(id)
+    ]);
+    if(info) {
+      info.popular = popular;
+      info.commentCount = commentCount;
+    }
+    return info;
+  }
+
+  /**
+   * 获取大作品信息、统计数字和全部作者信息列表
    * @param idList:Array<int> 大作品id列表
    * @returns Array<Object>
    */

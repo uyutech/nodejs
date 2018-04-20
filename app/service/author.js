@@ -609,105 +609,22 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取作者主打大作品id列表
-   * @param id:int 作者id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Array<Object> 主打大作品id列表
-   */
-  async mainWorksIdList(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'authorMainWorksIdList_' + id;
-    let res;
-    if(offset === 0) {
-      res = await app.redis.get(cacheKey);
-      if(res) {
-        app.redis.expire(cacheKey, CACHE_TIME);
-        return JSON.parse(res);
-      }
-    }
-    res = await app.model.authorMainWorks.findAll({
-      attributes: [
-        ['works_id', 'worksId']
-      ],
-      where: {
-        author_id: id,
-        is_delete: false,
-      },
-      offset: offset,
-      limit: limit,
-      order: [
-        ['weight', 'DESC'],
-      ],
-      raw: true,
-    });
-    if(res.length) {
-      res = res.map((item) => {
-        return item.worksId;
-      });
-      if(offset === 0) {
-        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-      }
-    }
-    return res;
-  }
-  async mainWorksCount(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'authorMainWorksSize_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
-      return JSON.parse(res);
-    }
-    res = await app.model.authorMainWorks.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        author_id: id,
-        is_delete: false,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
-    return res;
-  }
-
-  /**
    * 获取作者参与大作品信息列表
    * @param id:int 作者id
+   * @param type:int 类型
    * @param offset:int 分页开始
    * @param limit:int 分页数量
    * @returns Array<Object> 大作品信息列表
    */
-  async mainWorks(id, offset, limit) {
-    if(!id) {
+  async mainWorksList(id, type, offset, limit) {
+    if(!id || !type) {
       return;
     }
     // 先取得作者所有主打大作品列表id
-    let [idList, count] = await Promise.all([
-      this.mainWorksIdList(id, offset, limit),
-      this.mainWorksCount(id)
+    let [data, count] = await Promise.all([
+      this.mainWorksData(id, type, offset, limit),
+      this.mainWorksCount(id, type)
     ]);
-    // 根据id获取信息
-    let data = await this.worksListByIdList(id, idList);
     return {
       count,
       data,
@@ -715,21 +632,65 @@ class Service extends egg.Service {
   }
 
   /**
-   * 根据作者id和大作品id列表获取大作品信息及作者在此大作品中的优先显示职种
+   * 获取作者主打大作品列表
    * @param id:int 作者id
-   * @param worksIdList:Array<int> 大作品id列表
-   * @returns Array<Object>
+   * @param type:int 类型
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object> 主打大作品id列表
    */
-  async worksListByIdList(id, worksIdList) {
-    if(!id || !worksIdList) {
+  async mainWorksData(id, type, offset, limit) {
+    if(!id || !type) {
       return;
     }
-    if(!worksIdList.length) {
-      return [];
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
     }
-    const { service } = this;
-    // 获取大作品信息、相关作者信息
-    let worksList = await service.works.infoListPlusFull(worksIdList);
+    const { app, service } = this;
+    let cacheKey = 'authorMainWorksList_' + id + '_' + type;
+    let res;
+    if(offset === 0) {
+      res = await app.redis.get(cacheKey);
+      if(res) {
+        app.redis.expire(cacheKey, CACHE_TIME);
+        res = JSON.parse(res);
+      }
+    }
+    if(!res) {
+      res = await app.model.authorMainWorks.findAll({
+        attributes: [
+          ['works_id', 'worksId']
+        ],
+        where: {
+          author_id: id,
+          is_delete: false,
+          type,
+        },
+        offset: offset,
+        limit: limit,
+        order: [
+          ['weight', 'DESC'],
+        ],
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.worksId;
+      });
+      if(offset === 0) {
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      }
+    }
+    let worksList = [];
+    switch(type) {
+      case 1:
+        worksList = await service.works.infoListPlusFull(res);
+        break;
+      case 2:
+        worksList = await service.musicAlbum.infoListPlusFull(res);
+        break;
+    }
     worksList.forEach((item) => {
       if(item) {
         let author = item.author;
@@ -756,93 +717,30 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取作者的专辑信息id列表
+   * 主打作品数字统计
    * @param id:int 作者id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Array<int> 专辑信息id列表
+   * @param type:int 类型
+   * @returns int
    */
-  async musicAlbumIdList(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
+  async mainWorksCount(id, type) {
+    if(!id || !type) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'authorMusicAlbumIdList_' + id;
-    let res;
-    if(offset === 0) {
-      res = await app.redis.get(cacheKey);
-      if(res) {
-        app.redis.expire(cacheKey, CACHE_TIME);
-        return JSON.parse(res);
-      }
-    }
-    res = await app.model.musicAlbumAuthorRelation.findAll({
-      attributes: [
-        ['album_id', 'albumId']
-      ],
-      where: {
-        author_id: id,
-        is_delete: false,
-      },
-      offset: offset,
-      limit: limit,
-      raw: true,
-    });
-    let idList = res.map((item) => {
-      return item.albumId;
-    });
-    if(offset === 0) {
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(idList));
-    }
-    return idList;
-  }
-
-  /**
-   * 获取作者的专辑信息列表
-   * @param id:int 作者id
-   * @param offset:int 分页开始
-   * @param limit:int 分页数量
-   * @returns Array<Object> 专辑信息列表
-   */
-  async musicAlbum(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    const { service } = this;
-    // 先取得作者所有参与专辑列表id
-    let [idList, count] = await Promise.all([
-      this.musicAlbumIdList(id, offset, limit),
-      this.musicAlbumCount(id)
-    ]);
-    let data = await service.musicAlbum.infoListPlusCount(idList);
-    return {
-      count,
-      data,
-    };
-  }
-  async musicAlbumCount(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'authorMusicAlbumSize_' + id;
+    let cacheKey = 'authorMainWorksSize_' + id + '_' + type;
     let res = await app.redis.get(cacheKey);
     if(res) {
       app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
-    res = await app.model.musicAlbumAuthorRelation.findOne({
+    res = await app.model.authorMainWorks.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
       where: {
         author_id: id,
         is_delete: false,
+        type,
       },
       raw: true,
     });
