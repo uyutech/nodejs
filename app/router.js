@@ -376,6 +376,8 @@ module.exports = app => {
   app.post('/h5/my2/favorPostList', app.middlewares.needLoginJson(), 'h52.my.favorPostList');
   app.post('/h5/my2/relation', app.middlewares.needLoginJson(), 'h52.my.relation');
   app.post('/h5/my2/message', app.middlewares.needLoginJson(), 'h52.my.message');
+  app.post('/h5/my2/sts', app.middlewares.needLoginJson(), 'h52.my.sts');
+  app.post('/h5/my2/headUrl', app.middlewares.needLoginJson(), 'h52.my.headUrl');
   app.post('/h5/my2/nickname', app.middlewares.needLoginJson(), 'h52.my.nickname');
   app.post('/h5/my2/sign', app.middlewares.needLoginJson(), 'h52.my.sign');
   app.post('/h5/my2/settle', app.middlewares.needLoginJson(), 'h52.my.settle');

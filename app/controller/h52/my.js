@@ -5,6 +5,11 @@
 'use strict';
 
 const egg = require('egg');
+const OSS = require('ali-oss');
+const moment = require('moment');
+const crypto = require('crypto');
+const accessKeyId = 'LTAIzEfyjluscyEu';
+const accessKeySecret = 'g33q7QDYf843NqwoqHblIqap9NmU3D';
 
 const LIMIT = 10;
 const PERSON_LIMIT = 30;
@@ -92,6 +97,76 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON(list);
   }
 
+  async headUrl() {
+    const { app, ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    if(!body.value) {
+      return;
+    }
+    await app.model.user.update({
+      head_url: body.value,
+      update_time: new Date(),
+    }, {
+      where: {
+        id: uid,
+      },
+      raw: true,
+    });
+    service.user.clearInfoCache(uid);
+    ctx.body = ctx.helper.okJSON();
+  }
+
+  async sts() {
+    const { ctx } = this;
+    let body = ctx.request.body;
+    let name = body.name;
+    if(!name) {
+      return;
+    }
+    // 检查是否已上传
+    let client = new OSS({
+      region: 'oss-cn-shanghai',
+      accessKeyId: 'LTAIbZSVA2e931EB',
+      accessKeySecret: '5v756TGc1Gv3gkg4rhzoe0OYyLe8Xc',
+      bucket: 'circling-assets',
+    });
+    let check = await client.list({
+      prefix: 'pic/' + name,
+    });
+    if(check.res && check.res.status === 200) {
+      let objects = check.objects;
+      if(objects && objects.length) {
+        return ctx.body = ctx.helper.okJSON({
+          exist: true,
+        });
+      }
+    }
+    let expire = Date.now() + 1000 * 60 * 5;
+    let expiration = moment(expire).local();
+    let host = 'https://circling-assets.oss-cn-shanghai.aliyuncs.com';
+    let condition = ['content-length-range', 0, 10485760];
+    let dir = '';
+    let start = ['starts-with', accessKeySecret, dir];
+    let conditions = [condition, start];
+    let policy = JSON.stringify({
+      expiration,
+      conditions,
+    });
+    let base64_policy = new Buffer(policy).toString('base64');
+    let hmac = crypto.createHmac('sha1', accessKeySecret);
+    let signature = hmac.update(base64_policy).digest('base64');
+    ctx.body = ctx.helper.okJSON({
+      accessKeyId,
+      host,
+      expire,
+      policy: base64_policy,
+      signature,
+      dir,
+      prefix: 'pic/',
+    });
+  }
+
   async nickname() {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
@@ -101,6 +176,7 @@ class Controller extends egg.Controller {
     }
     await app.model.user.update({
       nickname: body.value,
+      update_time: new Date(),
     }, {
       where: {
         id: uid,
@@ -120,6 +196,7 @@ class Controller extends egg.Controller {
     }
     await app.model.user.update({
       sign: body.value,
+      update_time: new Date(),
     }, {
       where: {
         id: uid,
