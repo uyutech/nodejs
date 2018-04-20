@@ -22,7 +22,7 @@ class Controller extends egg.Controller {
       service.imageAlbum.imageList(id, uid, 0, LIMIT),
       service.imageAlbum.commentList(id, uid, 0, LIMIT)
     ]);
-    if(info.state === 3) {
+    if(!info || info.state === 3) {
       return;
     }
     imageList.limit = LIMIT;

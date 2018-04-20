@@ -836,9 +836,12 @@ class Service extends egg.Service {
    */
   async infoAndProfessionSort(id) {
     if(!id) {
-      return;
+      return [];
     }
     let info = await this.info(id);
+    if(!info) {
+      return [];
+    }
     let professionSort = await this.typeProfessionSort(info.type);
     return [info, professionSort];
   }
@@ -850,7 +853,7 @@ class Service extends egg.Service {
    */
   async infoListAndProfessionSort(idList) {
     if(!idList) {
-      return;
+      return [];
     }
     if(!idList.length) {
       return [[], []];
@@ -1005,6 +1008,9 @@ class Service extends egg.Service {
       this.infoAndProfessionSort(id),
       this.author(id)
     ]);
+    if(!info) {
+      return;
+    }
     author = this.reorderAuthor(author, professionSort);
     info.author = author;
     return info;
@@ -1055,6 +1061,9 @@ class Service extends egg.Service {
       this.author(id),
       this.collectionAuthor(id)
     ]);
+    if(!info) {
+      return;
+    }
     collectionAuthor.forEach((item) => {
       author = author.concat(item);
     });

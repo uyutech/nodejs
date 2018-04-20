@@ -251,7 +251,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-    }
+    }console.log(res);
     let videoIdList = [];
     let videoIdHash = {};
     let audioIdList = [];
@@ -290,7 +290,10 @@ class Service extends egg.Service {
     });
     return res.map((item) => {
       if(item) {
-        return hash[item.workId];
+        return {
+          id: item.worksId,
+          work: hash[item.workId],
+        };
       }
     });
   }
@@ -410,7 +413,10 @@ class Service extends egg.Service {
       if(arr) {
         return arr.map((item) => {
           if(item) {
-            return hash[item.workId];
+            return {
+              id: item.worksId,
+              work: hash[item.workId],
+            };
           }
         });
       }

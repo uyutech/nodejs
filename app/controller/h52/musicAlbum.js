@@ -22,7 +22,7 @@ class Controller extends egg.Controller {
       service.musicAlbum.collectionFull(id, uid),
       service.musicAlbum.commentList(id, uid, 0, LIMIT)
     ]);
-    if(info.state === 3) {
+    if(!info || info.state === 3) {
       return;
     }
     commentList.limit = LIMIT;
