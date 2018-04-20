@@ -754,14 +754,14 @@ class Controller extends egg.Controller {
                   target_id: ws,
                   works_id: worksId,
                   work_id: workId,
-                  type: 2,
+                  type: 3,
                 }, {
                   where: {
                     author_id: w,
                     target_id: ws,
                     works_id: worksId,
                     work_id: workId,
-                    type: 2,
+                    type: 3,
                   },
                 }));
                 query.push(app.model.authorCooperation.upsert({
@@ -769,14 +769,14 @@ class Controller extends egg.Controller {
                   target_id: w,
                   works_id: worksId,
                   work_id: workId,
-                  type: 3,
+                  type: 2,
                 }, {
                   where: {
                     author_id: ws,
                     target_id: w,
                     works_id: worksId,
                     work_id: workId,
-                    type: 3,
+                    type: 2,
                   },
                 }));
               });
