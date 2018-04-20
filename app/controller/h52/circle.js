@@ -42,7 +42,7 @@ class Controller extends egg.Controller {
       return;
     }
     let offset = parseInt(body.offset) || 0;
-    let res = await service.circle.postList(circleId, uid, offset, LIMIT);
+    let res = await service.circle.postList(id, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
