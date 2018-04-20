@@ -199,7 +199,7 @@ module.exports = app => {
   app.post('/h5/my/shieldCircle', app.middlewares.needLoginJson(), 'h5.my.shieldCircle');
   app.post('/h5/my/identity', app.middlewares.needLoginJson(), 'h5.my.identity');
   app.get('/h5/my/identity', app.middlewares.needLoginJson(), 'h5.my.identity');
-  app.post('/h5/my/sts', 'h5.my.sts');
+  app.post('/h5/my/sts', app.middlewares.needLoginJson(), 'h5.my.sts');
 
   app.post('/h5/works/index', 'h5.works.index');
   app.post('/h5/works/commentList', 'h5.works.commentList');
