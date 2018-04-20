@@ -29,7 +29,8 @@ class Service extends egg.Service {
     res = await app.model.skill.findOne({
       attributes: [
         'id',
-        'name'
+        'name',
+        'code'
       ],
       where: {
         id,
@@ -81,7 +82,8 @@ class Service extends egg.Service {
       let res = await app.model.skill.findAll({
         attributes: [
           'id',
-          'name'
+          'name',
+          'code'
         ],
         where: {
           id: noCacheIdList,

@@ -229,6 +229,7 @@ class Service extends egg.Service {
         return {
           id: item.skillId,
           name: skillList[i].name,
+          code: skillList[i].code,
           point: item.point,
         };
       }
@@ -1529,6 +1530,120 @@ class Service extends egg.Service {
     return {
       success: true,
     }
+  }
+
+  /**
+   * 获取作者合作关系
+   * @param id:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Array<Object>
+   */
+  async cooperationList(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.cooperationData(id, offset, limit),
+      this.cooperationCount(id)
+    ]);
+    return {
+      data,
+      count,
+    };
+  }
+
+  async cooperationData(id, offset, limit) {
+    if(!id) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'authorCooperation_' + id;
+    let res;
+    if(offset === 0) {
+      res = await app.redis.get(cacheKey);
+      if(res) {
+        app.redis.expire(cacheKey, CACHE_TIME);
+        res = JSON.parse(res);
+      }
+    }
+    if(!res) {
+      res = await app.model.authorCooperation.findAll({
+        attributes: [
+          ['target_id', 'targetId'],
+          Sequelize.literal('COUNT(DISTINCT works_id) AS num')
+        ],
+        where: {
+          author_id: id,
+          is_delete: false,
+        },
+        group: [
+          'target_id'
+        ],
+        order: [
+          Sequelize.literal('num DESC')
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      if(offset === 0) {
+        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      }
+    }
+    let idList = res.map((item) => {
+      return item.targetId;
+    });
+    let authorList = await this.infoList(idList);
+    return authorList.map((item, i) => {
+      if(item) {
+        return {
+          id: item.id,
+          name: item.name,
+          headUrl: item.headUrl,
+          isSettle: item.isSettle,
+          count: res[i].num,
+        };
+      }
+    });
+  }
+
+  async cooperationCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'authorCooperationCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      app.redis.expire(cacheKey, CACHE_TIME);
+      return JSON.parse(res);
+    }
+    let sql = squel.select()
+      .from(
+        squel.select()
+          .from('author_cooperation')
+          .field('COUNT(DISTINCT works_id)')
+          .where('author_id=?', id)
+          .where('is_delete=false')
+          .group('target_id')
+      , 'num')
+      .field('count(*)', 'num')
+      .toString();
+    res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+    if(res.length) {
+      res = res[0].num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    return res;
   }
 }
 

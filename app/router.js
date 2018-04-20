@@ -307,7 +307,10 @@ module.exports = app => {
 
   app.post('/d/api2/post/comment', 'api2.post.comment');
 
-  app.get('/count/authorSkill', app.middlewares.needLoginJson(), 'count.authorSkill');
+  app.get('/count/authorSkill/:id', app.middlewares.needLoginJson(), 'count.authorSkill');
+  app.get('/count/allAuthorSkill', app.middlewares.needLoginJson(), 'count.allAuthorSkill');
+  app.get('/count/authorCooperation/:id', app.middlewares.needLoginJson(), 'count.authorCooperation');
+  app.get('/count/allAuthorCooperation', app.middlewares.needLoginJson(), 'count.allAuthorCooperation');
 
   app.post('/h5/works2/index', 'h52.works.index');
   app.post('/h5/works2/commentList', 'h52.works.commentList');

@@ -18,6 +18,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    code: {
+      type: Sequelize.STRING(32),
+      allowNull: false,
+      defaultValue: '',
+    },
   }, {
     indexes: [
       {

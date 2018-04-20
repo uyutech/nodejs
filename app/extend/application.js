@@ -19,6 +19,8 @@ const authorCommentRelation = require('../model/authorCommentRelation');
 const authorOutside = require('../model/authorOutside');
 const authorAlias = require('../model/authorAlias');
 const authorDynamic = require('../model/authorDynamic');
+const authorSkillRelation = require('../model/authorSkillRelation');
+const authorCooperation = require('../model/authorCooperation');
 const circleType = require('../model/circleType');
 const circle = require('../model/circle');
 const circleTagRelation = require('../model/circleTagRelation');
@@ -30,7 +32,6 @@ const commentPoint = require('../model/commentPoint');
 const profession = require('../model/profession');
 const professionSkillRelation = require('../model/professionSkillRelation');
 const skill = require('../model/skill');
-const authorSkillRelation = require('../model/authorSkillRelation');
 const tag = require('../model/tag');
 const tagCommentRelation = require('../model/tagCommentRelation');
 const user = require('../model/user');
@@ -214,6 +215,8 @@ module.exports = {
         authorOutside: authorOutside(this),
         authorAlias: authorAlias(this),
         authorDynamic: authorDynamic(this),
+        authorSkillRelation: authorSkillRelation(this),
+        authorCooperation: authorCooperation(this),
         circleType: circleType(this),
         circle: circle(this),
         circleTagRelation: circleTagRelation(this),
@@ -225,7 +228,6 @@ module.exports = {
         profession: profession(this),
         professionSkillRelation: professionSkillRelation(this),
         skill: skill(this),
-        authorSkillRelation: authorSkillRelation(this),
         tag: tag(this),
         tagCommentRelation: tagCommentRelation(this),
         user: user(this),

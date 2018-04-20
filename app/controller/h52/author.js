@@ -26,6 +26,7 @@ class Controller extends egg.Controller {
       outside,
       mainWorksList,
       mainMusicAlbumList,
+      cooperationList,
       workKindList,
       dynamicList,
       commentList
@@ -37,6 +38,7 @@ class Controller extends egg.Controller {
       service.author.outside(id),
       service.author.mainWorksList(id, 1, 0, LIMIT),
       service.author.mainWorksList(id, 2, 0, LIMIT),
+      service.author.cooperationList(id, 0, LIMIT),
       service.author.workKindList(id),
       service.author.dynamicList(id, uid, 0, LIMIT),
       service.author.commentList(id, uid, 0, LIMIT)
@@ -57,6 +59,7 @@ class Controller extends egg.Controller {
       outside,
       mainWorksList,
       mainMusicAlbumList,
+      cooperationList,
       workKindList,
       kindWorkList,
       dynamicList,

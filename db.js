@@ -161,6 +161,7 @@ const CommentPoint = require('./app/model/commentPoint')({ sequelizeCircling: se
 const skill = require('./app/model/skill')({ sequelizeCircling: sequelize, Sequelize });
 const professionSkillRelation = require('./app/model/professionSkillRelation')({ sequelizeCircling: sequelize, Sequelize });
 const authorSkillRelation = require('./app/model/authorSkillRelation')({ sequelizeCircling: sequelize, Sequelize });
+const authorCooperation = require('./app/model/authorCooperation')({ sequelizeCircling: sequelize, Sequelize });
 
 const Product = require('./app/model/product')({ sequelizeMall: sequelizeMall, Sequelize });
 const Express = require('./app/model/express')({ sequelizeMall: sequelizeMall, Sequelize });
@@ -194,6 +195,7 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
     await skill.sync();
     await professionSkillRelation.sync();
     await authorSkillRelation.sync();
+    await authorCooperation.sync();
 
     await userReport.sync();
     await userVisit.sync();
