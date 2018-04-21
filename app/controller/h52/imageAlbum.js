@@ -43,7 +43,7 @@ class Controller extends egg.Controller {
     if(!id) {
       return;
     }
-    let res = service.imageAlbum.imageList(id, uid, offset, LIMIT);
+    let res = await service.imageAlbum.imageList(id, uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
