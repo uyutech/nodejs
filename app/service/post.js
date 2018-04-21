@@ -332,7 +332,7 @@ class Service extends egg.Service {
         query = query.concat(data.image.map((item) => {
           return app.model.commentMedia.create({
             comment_id: create.id,
-            kind: 0,
+            kind: 3,
             url: item.url,
             width: item.width,
             height: item.height,
