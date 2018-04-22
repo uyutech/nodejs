@@ -60,7 +60,9 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let content = body.content;
-    if(!body.id || !body.type) {
+    let id = parseInt(body.id);
+    let type = parseInt(body.type);
+    if(!id || !type) {
       return;
     }
     if(!content || content.length < 3) {
@@ -73,31 +75,31 @@ class Controller extends egg.Controller {
         message: '字数不能多于2048个字哦~',
       });
     }
-    let rid = body.id;
-    let pid = body.pid;
+    let rid = id;
+    let pid = parseInt(body.pid);
     // 回复作品
-    if(body.type === '2') {
+    if(type === 2) {
       rid = await service.works.commentId(rid);
       if(!rid) {
         return ctx.body = ctx.helper.errorJSON();
       }
     }
     // 回复作者
-    else if(body.type === '1') {
+    else if(type === 1) {
       rid = await service.author.commentId(rid);
       if(!rid) {
         return ctx.body = ctx.helper.errorJSON();
       }
     }
     // 回复画圈
-    else if(body.type === '3') {
+    else if(type === 3) {
     }
     else {
       return ctx.body = ctx.helper.errorJSON();
     }
     pid = pid || rid;
     await service.comment.replyCount(rid);
-    let res = await service.comment.add(uid, rid, pid, content, body.authorId);
+    let res = await service.comment.add(uid, rid, pid, content, parseInt(body.authorId));
     if(!res) {
       return ctx.body = ctx.helper.errorJSON();
     }

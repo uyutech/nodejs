@@ -52,7 +52,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 1,
-      comment: '0正常，1红名单，2黑名单，3假账号',
+      comment: '1正常，2假账号',
     },
     create_time: {
       type: Sequelize.DATE,

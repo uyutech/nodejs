@@ -714,7 +714,7 @@ class Service extends egg.Service {
         work_id: id,
       },
       raw: true,
-    });console.log(222,res);
+    });
     res = !!res;
     app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
     return res;

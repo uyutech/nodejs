@@ -7,10 +7,17 @@
 const config = require('./config/config.default');
 const sql = require('mssql');
 const Sequelize = require('sequelize');
+let circlingUser = 'root';
+let circlingPass = '87351984@';
+let host = 'localhost';
+
+circlingUser = 'uyutech';
+circlingPass = 'uyuTech2017';
+host = 'rm-uf6qe904j4997hpen7o.mysql.rds.aliyuncs.com';
 // const sequelize = new Sequelize(config.database.circling.name, config.database.circling.username, config.database.circling.password, {
 //   host: config.database.circling.host,
-const sequelize = new Sequelize('circling', 'root', '87351984@', {
-  host: 'localhost',
+const sequelize = new Sequelize('circling', circlingUser, circlingPass, {
+  host: host,
   dialect: 'mysql',
   pool: {
     max: 5,
@@ -33,8 +40,8 @@ const sequelize = new Sequelize('circling', 'root', '87351984@', {
   timezone: '+08:00',
   // logging: null,
 });
-const sequelizeMall = new Sequelize('mall', 'root', '87351984@', {
-  host: 'localhost',
+const sequelizeMall = new Sequelize('mall', circlingUser, circlingPass, {
+  host: host,
   dialect: 'mysql',
   pool: {
     max: 5,
@@ -57,8 +64,8 @@ const sequelizeMall = new Sequelize('mall', 'root', '87351984@', {
   timezone: '+08:00',
   // logging: null,
 });
-const sequelizeRecommend = new Sequelize('recommend', 'root', '87351984@', {
-  host: 'localhost',
+const sequelizeRecommend = new Sequelize('recommend', circlingUser, circlingPass, {
+  host: host,
   dialect: 'mysql',
   pool: {
     max: 5,
@@ -81,7 +88,7 @@ const sequelizeRecommend = new Sequelize('recommend', 'root', '87351984@', {
   timezone: '+08:00',
   // logging: null,
 });
-const sequelizeStats = new Sequelize('stats', 'root', '87351984@', {
+const sequelizeStats = new Sequelize('stats', circlingUser, circlingPass, {
   host: 'localhost',
   dialect: 'mysql',
   pool: {
@@ -181,43 +188,43 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
   try {
     const pool = await sql.connect({
       user: 'sa',
-      password: 'sa123#@',
-      server: '192.168.0.103',
-      // password: 'zhuanq2017#!',
-      // server: '101.132.140.109',
+      // password: 'sa123#@',
+      // server: '192.168.0.103',
+      password: 'zhuanq2017#!',
+      server: '101.132.140.109',
       database: 'CirclingDB',
     });
-    await findList.sync();
-    await findTag.sync();
-    await findKind.sync();
-    await findBanner.sync();
-    await banner.sync();
-    await skill.sync();
-    await professionSkillRelation.sync();
-    await authorSkillRelation.sync();
-    await authorCooperation.sync();
+    // await findList.sync();
+    // await findTag.sync();
+    // await findKind.sync();
+    // await findBanner.sync();
+    // await banner.sync();
+    // await skill.sync();
+    // await professionSkillRelation.sync();
+    // await authorSkillRelation.sync();
+    // await authorCooperation.sync();
 
-    await userReport.sync();
-    await userVisit.sync();
+    // await userReport.sync();
+    // await userVisit.sync();
 
-    await dealAuthor(pool);
-    await dealAuthorMainWorks(pool);
-    await dealWork(pool);
-    await dealWorks(pool);
-    await dealWorksWork(pool);
-    await dealWorkAuthorProfession(pool);
-    await dealCircle(pool);
-    await dealUser(pool);
-    await dealUserPlus(pool);
-    await dealUserCircle(pool);
-    await dealComment(pool);
-    // await dealCircleComment(pool);
-    await dealUserWork(pool);
-    await dealUserPost(pool);
-    await dealCommentMedia(pool);
-    await dealAccount(pool);
-    await dealMessage(pool);
-    await dealMall(pool);
+    // await dealAuthor(pool);
+    // await dealAuthorMainWorks(pool);
+    // await dealWork(pool);
+    // await dealWorks(pool);
+    // await dealWorksWork(pool);
+    // await dealWorkAuthorProfession(pool);
+    // await dealCircle(pool);
+    // await dealUser(pool);
+    // await dealUserPlus(pool);
+    // await dealUserCircle(pool);
+    // await dealComment(pool);
+    await dealCircleComment(pool);
+    // await dealUserWork(pool);
+    // await dealUserPost(pool);
+    // await dealCommentMedia(pool);
+    // await dealAccount(pool);
+    // await dealMessage(pool);
+    // await dealMall(pool);
     // await dealAuthorDynamic(pool);
     // await modifyPostComment();
 
@@ -241,7 +248,8 @@ async function dealAuthor(pool) {
   await Author.sync();
   await AuthorAlias.sync();
   await AuthorOutside.sync();
-  let last = 2017000000005795;
+  let last = 2017000000008124;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Authors_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -363,7 +371,8 @@ async function dealAuthor(pool) {
 async function dealAuthorMainWorks(pool) {
   console.log('------- dealAuthorMainWorks --------');
   await AuthorMainWorks.sync();
-  let last = 296;
+  let last = 674;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Authors_WorksList WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -400,7 +409,7 @@ async function dealWork(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 2016000000008449;
+  last = 2016000000011391;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -484,7 +493,7 @@ async function dealWork(pool) {
       });
     }
   }
-  last = 2016000000008375;
+  last = 351;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Audio WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -498,7 +507,7 @@ async function dealWork(pool) {
       },
     });
   }
-  last = 2016000000008355;
+  last = 81;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Video WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -513,7 +522,7 @@ async function dealWork(pool) {
       },
     });
   }
-  last = 2016000000008310;
+  last = 58;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Pic WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -527,7 +536,7 @@ async function dealWork(pool) {
       },
     });
   }
-  last = 2016000000008366;
+  last = 558;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Text WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -560,7 +569,7 @@ async function dealWorks(pool) {
       name: item.TypeName,
     });
   }
-  last = 2015000000003600;
+  last = 2015000000005155;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -625,23 +634,38 @@ async function dealWorks(pool) {
   result = await pool.request().query(`SELECT * FROM dbo.Works_TimeLine WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    let work = await Work.findOne({
-      attributes: ['id'],
-      where: {
-        work_id: item.WorkItemsID,
-      },
-    });
-    if(work) {
-      await WorksTimeline.create({
-        works_id: item.WorksID,
-        work_id: work.id,
-        date: item.LinDate,
-        describe: item.Describe || '',
-        is_delete: item.ISDel,
-        create_time: item.CreateTime,
-        update_time: item.CreateTime,
+    let workId = 0;
+    if(item.WorkItemsID) {
+      let work = await Work.findOne({
+        attributes: ['id', 'kind'],
+        where: {
+          id: item.WorkItemsID,
+        },
       });
+      if(work) {
+        if(work.kind === 1) {
+          workId = workId.toString().replace(/^2016/, 2020);
+        }
+        else if(work.kind === 3) {
+          workId = workId.toString().replace(/^2016/, 2021);
+        }
+        else if(work.kind === 4) {
+          workId = workId.toString().replace(/^2016/, 2022);
+        }
+        else {
+          workId = work.id;
+        }
+      }
     }
+    await WorksTimeline.create({
+      works_id: item.WorksID,
+      work_id: workId,
+      date: item.LinDate,
+      describe: item.Describe || '',
+      is_delete: item.ISDel,
+      create_time: item.CreateTime,
+      update_time: item.CreateTime,
+    });
   }
 }
 
@@ -652,7 +676,7 @@ async function dealWorksWork(pool) {
   await ImageAlbumWorkRelation.sync();
   await WorksTypeProfessionSort.sync();
   await WorkTypeProfessionSort.sync();
-  let last = 1699;
+  let last = 2258;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_WorksItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -734,7 +758,13 @@ async function dealWorksWork(pool) {
     }
   }
   return;
-  result = await MusicAlbumWorkRelation.findAll({});
+  result = await MusicAlbumWorkRelation.findAll({
+    attributes: [
+      'id',
+      'work_id',
+      'kind',
+    ],
+  });
   for(let i = 0; i < result.length; i++) {
     let item = result[i];
     let temp = await WorksWorkRelation.findOne({
@@ -761,10 +791,9 @@ async function dealWorkAuthorProfession(pool) {
   await Profession.sync();
   await WorkAuthorRelation.sync();
   await WorksAuthorRelation.sync();
-  // await WorksAuthorProfessionRelation.sync();
   await MusicAlbumAuthorRelation.sync();
   await ImageAlbumAuthorRelation.sync();
-  let last = 61;
+  let last = 63;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Enum_AuthorType WHERE ID>${last};`);
   let hash = {};
@@ -776,7 +805,7 @@ async function dealWorkAuthorProfession(pool) {
       create_time: item.CreateTime,
     });
   }
-  last = 5464;
+  last = 7119;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -816,49 +845,9 @@ async function dealWorkAuthorProfession(pool) {
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
-    // let worksWork = await WorksWorkRelation.findOne({
-    //   attributes: ['works_id'],
-    //   where: {
-    //     work_id,
-    //     kind: work.kind,
-    //   },
-    // });
-    // if(!worksWork) {
-    //   let imageWork = await ImageAlbumWorkRelation.findOne({
-    //     attributes: ['album_id'],
-    //     where: {
-    //       work_id,
-    //       kind: work.kind,
-    //     },
-    //   });
-    //   if(!imageWork) {
-    //     continue;
-    //   }
-    //   await ImageAlbumAuthorRelation.create({
-    //     album_id: imageWork.album_id,
-    //     work_id,
-    //     kind: work.kind,
-    //     author_id: item.AuthorID,
-    //     profession_id: item.Enum_AuthorTypeID,
-    //     is_delete: false,
-    //     create_time: item.CreateTime,
-    //     update_time: item.CreateTime,
-    //   });
-    //   continue;
-    // }
-    // await WorksAuthorProfessionRelation.create({
-    //   works_id: worksWork.works_id,
-    //   work_id,
-    //   kind: work.kind,
-    //   author_id: item.AuthorID,
-    //   profession_id: item.Enum_AuthorTypeID,
-    //   is_delete: false,
-    //   create_time: item.CreateTime,
-    //   update_time: item.CreateTime,
-    // });
   }
   hash = {};
-  last = 4131;
+  last = 5682;
   // last = 0;
   let special = {
     51: true,
@@ -927,8 +916,9 @@ async function dealUserPlus(pool) {
   console.log('------- dealUserPlus --------');
   await UserAddress.sync();
   await CommentPoint.sync();
-  let last = 2018000000043048;
+  let last = 2018000000050070;
   // last = 0;
+  // 需重跑计算更新圈币
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Profile WHERE ProfileID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1013,7 +1003,7 @@ async function dealCircle(pool) {
     }
   }
   let tagOldIdHash = {};
-  last = 2021000000008340;
+  last = 2021000000009073;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Tag_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1041,7 +1031,7 @@ async function dealCircle(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 291033;
+  last = 322373;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Tag_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1063,30 +1053,34 @@ async function dealUser(pool) {
   await User.sync();
   await UserAuthorRelation.sync();
   await UserPersonRelation.sync();
-  let last = 2018000000043048;
+  let last = 2018000000050064;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    if(!item.User_NickName || item.User_Pwd === '2') {
-      continue;
+    if(!item.User_NickName) {
+      item.User_NickName = '圈友' + item.ID.toString().replace(/^20180+/, '');
+    }
+    let state = 1;
+    if(item.User_Pwd == 2 || item.User_Pwd == 3) {
+      state = 2;
     }
     await User.create({
       id: item.ID,
-      // author_id: item.CurrentAuthorID || 0,
       is_delete : item.ISDel ? 0 : 1,
-      state: 0,
+      state,
       reg_state: item.User_Reg_Stat || 0,
       nickname: item.User_NickName || '',
       sex: item.User_Sex || 0,
       head_url: item.User_Head_Url || '',
       sign: item.Sign || '',
-      // password: item.User_Pwd || '',
       coins: 0,
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
   }
-  last = 73;
+  last = 110;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Users_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1100,7 +1094,7 @@ async function dealUser(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 5698;
+  last = 6141;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_User WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1114,7 +1108,7 @@ async function dealUser(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 31853;
+  last = 38422;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1133,8 +1127,8 @@ async function dealUser(pool) {
 async function dealUserCircle(pool) {
   console.log('------- dealUserCircle --------');
   await UserCircleRelation.sync();
-  let last = 131208;
-  // last = 0;
+  let last = 153072;
+  last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_Circling WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1155,7 +1149,8 @@ async function dealComment(pool) {
   await AuthorCommentRelation.sync();
   await WorksCommentRelation.sync();
   await Comment.sync();
-  let last = 440051;
+  let last = 469544;
+  // last = 0;
   let hash = {};
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1179,9 +1174,13 @@ async function dealComment(pool) {
     }
     // 作者主页虚拟留言
     else if(item.RootID === -2) {
-      await AuthorCommentRelation.create({
+      await AuthorCommentRelation.upsert({
         author_id: item.CurrentAuthorID,
         comment_id: item.ID,
+      }, {
+        where: {
+          author_id: item.CurrentAuthorID,
+        },
       });
       await Comment.create({
         id: item.ID,
@@ -1253,9 +1252,13 @@ async function dealComment(pool) {
     }
     // 作品主页虚拟留言
     else if(item.RootID === -4) {
-      await WorksCommentRelation.create({
+      await WorksCommentRelation.upsert({
         works_id: item.Content,
         comment_id: item.ID,
+      }, {
+        where: {
+          works_id: item.Content,
+        }
       });
       await Comment.create({
         id: item.ID,
@@ -1306,6 +1309,8 @@ async function dealCircleComment(pool) {
     hash[item.tag_id] = hash[item.tag_id] || [];
     hash[item.tag_id].push(item.circle_id);
   });
+  let last = 0;
+  last = 0;
   res = await TagCommentRelation.findAll({
     attributes: [
       'tag_id',
@@ -1313,6 +1318,9 @@ async function dealCircleComment(pool) {
       'is_comment_delete'
     ],
     where: {
+      id: {
+        $gt: last
+      },
       is_delete: false,
     },
     raw: true,
@@ -1345,7 +1353,7 @@ async function dealUserWork(pool) {
   let exist = {};
   let workHash = {};
   let last = 19019;
-  // last = 0;
+  last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_WorkItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1571,14 +1579,14 @@ async function dealUserPost(pool) {
   await UserCommentRelation.sync();
   let hash = {};
   let last = 3967;
-  // last = 0;
+  last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_CollectionList WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     hash[item.ID] = item.UID;
   }
   last = 8609;
-  // last = 0;
+  last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_Post WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1598,7 +1606,7 @@ async function dealUserPost(pool) {
     }
   }
   last = 1348457;
-  // last = 0;
+  last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Behavior WHERE ID>${last} AND BehaviorNumber=231;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1617,7 +1625,7 @@ async function dealCommentMedia(pool) {
   console.log('------- dealCommentMedia --------');
   await CommentMedia.sync();
   await CommentWork.sync();
-  let last = 72119;
+  let last = 78663;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Media WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1676,7 +1684,7 @@ async function dealAccount(pool) {
   console.log('------- dealAccount --------');
   await UserAccount.sync();
   await UserOauth.sync();
-  let last = 17635;
+  let last = 18956;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Open_Account WHERE ID>${last} AND ISDel=0;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1721,7 +1729,7 @@ async function dealMessage(pool) {
   console.log('------- dealMessage --------');
   await Message.sync();
   let last = 276335;
-  // last = 0;
+  last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Notify WHERE ID>${last} AND type=2;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1737,7 +1745,7 @@ async function dealMessage(pool) {
     });
   }
   last = 283423;
-  // last = 0;
+  last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Notify WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1758,7 +1766,7 @@ async function dealMall(pool) {
   await Prize.sync();
   await Express.sync();
   await PrizeExpressRelation.sync();
-  let last = 15;
+  let last = 17;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Mall_Product WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1775,7 +1783,7 @@ async function dealMall(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 607;
+  last = 694;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Mall_Order WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1793,7 +1801,7 @@ async function dealMall(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 1081;
+  last = 1130;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Mall_Cart WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1902,13 +1910,13 @@ async function modifyAuthorComment() {
   }
 }
 async function modifyPostComment() {
-  let last = 440051;
-  // last = 0;
+  let last = 469544;
+  last = 0;
   // TODO: 这里包含了上面2部分，应该只需要处理一次即可
   let sql = `SELECT
     *
     FROM comment
-    WHERE id>${last} AND parent_id=0 AND root_id=0`;
+    WHERE id>${last} AND root_id=0 AND parent_id=0`;
   let res = await sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
   // 遍历每个根评论
   for(let i = 0, len = res.length; i < len; i++) {

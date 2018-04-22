@@ -251,7 +251,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-    }console.log(res);
+    }
     let videoIdList = [];
     let videoIdHash = {};
     let audioIdList = [];
@@ -1684,8 +1684,7 @@ class Service extends egg.Service {
       update_time: now,
     });
     let res = await this.info(create.id);
-    res = await this.plusFull(res, uid);
-    return res;
+    return this.plusFull(res, uid);
   }
 
   /**
