@@ -17,10 +17,17 @@ class Controller extends egg.Controller {
     if(!tag) {
       return;
     }
-    let tagId = await service.tag.idByName(tag.trim());
-    let postList = await service.tag.postList(tagId, uid, 0, LIMIT);
+    let id = await service.tag.idByName(tag.trim());
+    if(!id) {
+      return;
+    }
+    let postList = await service.tag.postList(id, uid, 0, LIMIT);
+    if(!postList) {
+      return;
+    }
     postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
+      id,
       postList,
     });
   }
@@ -35,9 +42,12 @@ class Controller extends egg.Controller {
     }
     let offset = parseInt(body.offset) || 0;
     let tagId = await service.tag.idByName(tag.trim());
-    let postList = await service.tag.postList(tagId, uid, offset, LIMIT);
-    postList.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(postList);
+    let res = await service.tag.postList(tagId, uid, offset, LIMIT);
+    if(!res) {
+      return;
+    }
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

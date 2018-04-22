@@ -15,6 +15,9 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let res = await service.mall.allProduct();
+    if(!res) {
+      return;
+    }
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -23,6 +26,9 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let res = await service.mall.prize(uid);
+    if(!res) {
+      return;
+    }
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -48,6 +54,9 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let res = await service.mall.express(uid);
+    if(!res) {
+      return;
+    }
     ctx.body = ctx.helper.okJSON(res);
   }
 

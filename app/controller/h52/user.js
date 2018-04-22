@@ -25,6 +25,9 @@ class Controller extends egg.Controller {
       service.user.isFans(id, uid),
       service.user.postList(id, uid, 0, LIMIT)
     ]);
+    if(!info) {
+      return;
+    }
     delete info.coins;
     postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
@@ -47,6 +50,9 @@ class Controller extends egg.Controller {
     }
     let offset = parseInt(body.offset) || 0;
     let res = await service.user.postList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

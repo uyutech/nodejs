@@ -43,6 +43,9 @@ class Controller extends egg.Controller {
       service.author.dynamicList(id, uid, 0, LIMIT),
       service.author.commentList(id, uid, 0, LIMIT)
     ]);
+    if(!info) {
+      return;
+    }
     mainWorksList.limit = LIMIT;
     let kindWorkList;
     if(workKindList.length) {
@@ -77,6 +80,9 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.author.dynamicList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -91,6 +97,9 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.author.commentList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -105,9 +114,12 @@ class Controller extends egg.Controller {
     if(!id || !kind) {
       return;
     }
-    let kindWorkList = await service.author.kindWorkList(id, uid, kind, offset, LIMIT);
-    kindWorkList.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(kindWorkList);
+    let res = await service.author.kindWorkList(id, uid, kind, offset, LIMIT);
+    if(!res) {
+      return;
+    }
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 
   async follow() {
@@ -148,6 +160,9 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let res = await service.author.all(0, ALL_LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = ALL_LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

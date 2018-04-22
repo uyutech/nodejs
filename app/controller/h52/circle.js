@@ -24,6 +24,9 @@ class Controller extends egg.Controller {
       service.circle.fansCount(id),
       service.circle.postList(id, uid, 0, LIMIT)
     ]);
+    if(!info) {
+      return;
+    }
     postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       info,
@@ -43,6 +46,9 @@ class Controller extends egg.Controller {
     }
     let offset = parseInt(body.offset) || 0;
     let res = await service.circle.postList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -53,6 +59,9 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let offset = parseInt(body.offset) || 0;
     let res = await service.circle.all(offset, ALL_LIMIT);
+    if(!res) {
+      return;
+    }
     ctx.body = ctx.helper.okJSON(res);
   }
 

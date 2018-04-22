@@ -790,17 +790,17 @@ class Service extends egg.Service {
     // 取得种类列表下对应的职种id列表
     let professionIdList = await this.workKindListProfessionId(id, kindList);
     let professionIdHash = {};
-    let pid = [];
+    let pIdList = [];
     professionIdList.forEach((list) => {
       list.forEach((id) => {
         if(!professionIdHash[id]) {
           professionIdHash[id] = true;
-          pid.push(id);
+          pIdList.push(id);
         }
       });
     });
     // 根据去重的职种id列表获取职种信息列表
-    let professionList = await service.profession.infoList(pid);
+    let professionList = await service.profession.infoList(pIdList);
     let professionHash = {};
     professionList.forEach((item) => {
       professionHash[item.id] = item;

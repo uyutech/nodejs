@@ -24,6 +24,9 @@ class Controller extends egg.Controller {
       service.user.followPersonCount(uid),
       service.user.fansCount(uid)
     ]);
+    if(!user) {
+      return;
+    }
     author = author.map((item) => {
       return {
         id: item.id,
@@ -69,6 +72,9 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let offset = parseInt(body.offset) || 0;
     let res = await service.user.postList(uid, uid, offset, LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

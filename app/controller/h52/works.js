@@ -43,6 +43,9 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.works.commentList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

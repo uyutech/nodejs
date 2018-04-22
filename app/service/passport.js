@@ -202,7 +202,7 @@ class Service extends egg.Service {
       let id = last.id + Math.floor(Math.random() * 5) + 1;
       let create = await app.model.user.create({
         id,
-        nickname: '转圈' + id,
+        nickname: '圈友' + id,
       }, {
         transaction,
         raw: true,
@@ -405,7 +405,7 @@ class Service extends egg.Service {
         let id = last.id + Math.floor(Math.random() * 5) + 1;
         await app.model.user.create({
           id,
-          nickname: '转圈' + name,
+          nickname: '圈友' + id,
           headUrl,
         }, {
           transaction,

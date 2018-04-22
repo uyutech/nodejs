@@ -49,6 +49,9 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let offset = parseInt(body.offset) || 0;
     let res = await service.circle.all(offset, LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -77,6 +80,9 @@ class Controller extends egg.Controller {
     }
     else {
       res = await service.post.all(uid, offset, LIMIT);
+    }
+    if(!res) {
+      return;
     }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);

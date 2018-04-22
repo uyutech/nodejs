@@ -218,8 +218,8 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
     // await dealUserPlus(pool);
     // await dealUserCircle(pool);
     // await dealComment(pool);
-    await dealCircleComment(pool);
-    // await dealUserWork(pool);
+    // await dealCircleComment(pool);
+    await dealUserWork(pool);
     // await dealUserPost(pool);
     // await dealCommentMedia(pool);
     // await dealAccount(pool);
@@ -1309,8 +1309,8 @@ async function dealCircleComment(pool) {
     hash[item.tag_id] = hash[item.tag_id] || [];
     hash[item.tag_id].push(item.circle_id);
   });
-  let last = 0;
-  last = 0;
+  let last = 363880;
+  // last = 0;
   res = await TagCommentRelation.findAll({
     attributes: [
       'tag_id',
@@ -1352,8 +1352,8 @@ async function dealUserWork(pool) {
   let worksIdHash = {};
   let exist = {};
   let workHash = {};
-  let last = 19019;
-  last = 0;
+  let last = 21628;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_WorkItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1383,7 +1383,7 @@ async function dealUserWork(pool) {
       continue;
     }
     let worksId = worksIdHash[item.ItemsID];
-    if(!worksId) {
+    if(!worksId && worksId !== 0) {
       if(work.kind === 3) {
         let rel = await ImageAlbumWorkRelation.findOne({
           attributes: ['album_id'],
@@ -1479,9 +1479,9 @@ async function dealUserWork(pool) {
     }
   }
   hash = {};
-  last = 507890;
-  // last = 0;
-  result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${last} AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
+  last = 1087275;
+  last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${900000} AND ID<=1000000 AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     let key = item.UID + ',' + item.WorkitemsID;
@@ -1526,7 +1526,7 @@ async function dealUserWork(pool) {
         continue;
       }
       let worksId = worksIdHash[ItemsID];
-      if(!worksId) {
+      if(!worksId && worksId !== 0) {
         if(work.kind === 3) {
           let rel = await ImageAlbumWorkRelation.findOne({
             attributes: ['album_id'],
@@ -1560,7 +1560,7 @@ async function dealUserWork(pool) {
           }
         }
       }
-      await UserWorkRelation.create({
+      await UserWorkRelation.upsert({
         user_id: uid,
         work_id: work.id,
         works_id: worksId,
@@ -1569,6 +1569,12 @@ async function dealUserWork(pool) {
         // is_delete: false,
         create_time: createTime,
         // update_time: createTime,
+      }, {
+        where: {
+          user_id: uid,
+          work_id: work.id,
+          type: 1,
+        }
       });
     }
   }

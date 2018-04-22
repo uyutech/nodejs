@@ -324,12 +324,6 @@ module.exports = app => {
             message: '昵称长度需要在2~8个字之间哦~',
           };
         }
-        if(nickName.indexOf('转圈') === 0) {
-          return ctx.body = {
-            success: false,
-            message: '昵称不能以"转圈"开头哦！',
-          };
-        }
         let scan = yield ctx.service.green.textScan(nickName);
         if(scan.data.code === 200 && scan.data.data[0].code === 200) {
           let suggestion = scan.data.data[0].results[0].suggestion;

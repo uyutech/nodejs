@@ -988,11 +988,11 @@ class Service extends egg.Service {
     let res = await app.model.comment.findAll({
       attributes: [
         'id',
-        ['user_id', 'uid'],
-        ['author_id', 'aid'],
+        ['user_id', 'userId'],
+        ['author_id', 'authorId'],
         'content',
-        ['parent_id', 'pid'],
-        ['root_id', 'rid'],
+        ['parent_id', 'parentId'],
+        ['root_id', 'rootId'],
         ['create_time', 'createTime']
       ],
       where: {
@@ -1409,11 +1409,11 @@ class Service extends egg.Service {
     let res = await app.model.comment.findAll({
       attributes: [
         'id',
-        ['user_id', 'uid'],
-        ['author_id', 'aid'],
+        ['user_id', 'userId'],
+        ['author_id', 'authorId'],
         'content',
-        ['parent_id', 'pid'],
-        ['root_id', 'rid'],
+        ['parent_id', 'parentId'],
+        ['root_id', 'rootId'],
         ['create_time', 'createTime']
       ],
       where: {
@@ -1528,11 +1528,11 @@ class Service extends egg.Service {
     let res = await app.model.comment.findAll({
       attributes: [
         'id',
-        ['user_id', 'uid'],
-        ['author_id', 'aid'],
+        ['user_id', 'userId'],
+        ['author_id', 'authorId'],
         'content',
-        ['parent_id', 'pid'],
-        ['root_id', 'rid'],
+        ['parent_id', 'parentId'],
+        ['root_id', 'rootId'],
         ['create_time', 'createTime']
       ],
       where: {

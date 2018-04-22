@@ -21,6 +21,9 @@ class Controller extends egg.Controller {
       service.post.info(id, uid),
       service.post.commentList(id, uid, 0, LIMIT)
     ]);
+    if(!info) {
+      return;
+    }
     commentList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       info,
@@ -37,6 +40,9 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.post.commentList(id, uid, body.offset || 0, LIMIT);
+    if(!res) {
+      return;
+    }
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

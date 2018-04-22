@@ -30,11 +30,11 @@ class Service extends egg.Service {
     res = await app.model.comment.findOne({
       attributes: [
         'id',
-        ['user_id', 'uid'],
-        ['author_id', 'aid'],
+        ['user_id', 'userId'],
+        ['author_id', 'authorId'],
         'content',
-        ['parent_id', 'pid'],
-        ['root_id', 'rid'],
+        ['parent_id', 'parentId'],
+        ['root_id', 'rootId'],
         ['create_time', 'createTime']
       ],
       where: {
@@ -86,11 +86,11 @@ class Service extends egg.Service {
       let res = await app.model.comment.findAll({
         attributes: [
           'id',
-          ['user_id', 'uid'],
-          ['author_id', 'aid'],
+          ['user_id', 'userId'],
+          ['author_id', 'authorId'],
           'content',
-          ['parent_id', 'pid'],
-          ['root_id', 'rid'],
+          ['parent_id', 'parentId'],
+          ['root_id', 'rootId'],
           ['create_time', 'createTime']
         ],
         where: {
@@ -227,7 +227,7 @@ class Service extends egg.Service {
    * @param id:int 言论id
    * @returns Array<Object>
    */
-  async work(id) {
+  async work(id, uid) {
     if(!id) {
       return;
     }
@@ -256,6 +256,8 @@ class Service extends egg.Service {
     let videoIdHash = {};
     let audioIdList = [];
     let audioIdHash = {};
+    let worksIdList = [];
+    let worksIdHash = {};
     res.forEach((item) => {
       let id = item.workId;
       if(item.kind === 1) {
@@ -270,10 +272,16 @@ class Service extends egg.Service {
           audioIdList.push(id);
         }
       }
+      let worksId = item.worksId;
+      if(!worksIdHash[worksId]) {
+        worksIdHash[worksId] = true;
+        worksIdList.push(worksId);
+      }
     });
-    let [videoList, audioList] = await Promise.all([
+    let [videoList, audioList, worksList] = await Promise.all([
       service.work.infoListPlusFull(videoIdList, 1),
-      service.work.infoListPlusFull(audioIdList, 2)
+      service.work.infoListPlusFull(audioIdList, 2),
+      service.works.infoListPlusFull(worksIdList, uid)
     ]);
     let hash = {};
     videoList.forEach((item) => {
@@ -288,12 +296,21 @@ class Service extends egg.Service {
         hash[item.id] = item;
       }
     });
+    worksList.forEach((item) => {
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+        hash[item.id] = item;
+      }
+    });
     return res.map((item) => {
       if(item) {
-        return {
-          id: item.worksId,
-          work: hash[item.workId],
-        };
+        let works = hash[item.worksId];
+        let work = hash[item.workId];
+        if(works && work) {
+          let copy = Object.assign({}, works);
+          copy.work = work;
+          return copy;
+        }
       }
     });
   }
@@ -373,6 +390,8 @@ class Service extends egg.Service {
     let videoIdHash = {};
     let audioIdList = [];
     let audioIdHash = {};
+    let worksIdList = [];
+    let worksIdHash = {};
     cache.forEach((arr) => {
       if(arr) {
         arr.forEach((item) => {
@@ -389,12 +408,18 @@ class Service extends egg.Service {
               audioIdList.push(id);
             }
           }
+          let worksId = item.worksId;
+          if(!worksIdHash[worksId]) {
+            worksIdHash[worksId] = true;
+            worksIdList.push(worksId);
+          }
         });
       }
     });
-    let [videoList, audioList] = await Promise.all([
+    let [videoList, audioList, worksList] = await Promise.all([
       service.work.infoListPlusFull(videoIdList, 1, uid),
-      service.work.infoListPlusFull(audioIdList, 2, uid)
+      service.work.infoListPlusFull(audioIdList, 2, uid),
+      service.works.infoListPlusFull(worksIdList, uid)
     ]);
     let hash = {};
     videoList.forEach((item) => {
@@ -409,14 +434,23 @@ class Service extends egg.Service {
         hash[item.id] = item;
       }
     });
+    worksList.forEach((item) => {
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+        hash[item.id] = item;
+      }
+    });
     return cache.map((arr) => {
       if(arr) {
         return arr.map((item) => {
           if(item) {
-            return {
-              id: item.worksId,
-              work: hash[item.workId],
-            };
+            let works = hash[item.worksId];
+            let work = hash[item.workId];
+            if(works && work) {
+              let copy = Object.assign({}, works);
+              copy.work = work;
+              return copy;
+            }
           }
         });
       }
@@ -442,20 +476,20 @@ class Service extends egg.Service {
       this.operateRelation(data.id, uid, 1)
     ]);
     if(data.isAuthor) {
-      let author = authorHash[data.aid];
+      let author = authorHash[data.authorId];
       if(author) {
         data.name = author.name;
         data.headUrl = author.headUrl;
       }
     }
     else {
-      let user = userHash[data.uid];
+      let user = userHash[data.userId];
       if(user) {
         data.nickname = user.nickname;
         data.headUrl = user.headUrl;
       }
     }
-    if(data.rid !== data.pid && data.rid !== 0 && quote) {
+    if(data.rootId !== data.parentId && data.rootId !== 0 && quote) {
       data.quote = quote;
     }
     data.likeCount = likeCount || 0;
@@ -541,7 +575,7 @@ class Service extends egg.Service {
       this.replyCount(id),
       this.circle(id),
       this.media(id),
-      this.work(id),
+      this.work(id, uid),
       service.works.infoList(worksIdList),
       service.work.infoList(workIdList),
       service.author.infoList(authorIdList),
@@ -549,20 +583,20 @@ class Service extends egg.Service {
       service.tag.circleIdListByName(nameList, 1)
     ]);
     if(data.isAuthor) {
-      let author = authorHash[data.aid];
+      let author = authorHash[data.authorId];
       if(author) {
         data.name = author.name;
         data.headUrl = author.headUrl;
       }
     }
     else {
-      let user = userHash[data.uid];
+      let user = userHash[data.userId];
       if(user) {
         data.nickname = user.nickname;
         data.headUrl = user.headUrl;
       }
     }
-    if(data.rid !== data.pid && data.rid !== 0 && quote) {
+    if(data.rootId !== data.parentId && data.rootId !== 0 && quote) {
       data.quote = quote;
     }
     data.likeCount = likeCount || 0;
@@ -622,41 +656,41 @@ class Service extends egg.Service {
     let authorIdList = [];
     let authorIdHash = {};
     let quoteId;
-    data.isOwn = data.uid === uid;
-    if(data.aid) {
-      if(!authorIdHash[data.aid]) {
-        authorIdHash[data.aid] = true;
-        authorIdList.push(data.aid);
+    data.isOwn = data.userId === uid;
+    if(data.authorId) {
+      if(!authorIdHash[data.authorId]) {
+        authorIdHash[data.authorId] = true;
+        authorIdList.push(data.authorId);
       }
-      delete data.uid;
+      delete data.userId;
       data.isAuthor = true;
     }
-    else if(data.uid) {
-      if(!userIdHash[data.uid]) {
-        userIdHash[data.uid] = true;
-        userIdList.push(data.uid);
+    else if(data.userId) {
+      if(!userIdHash[data.userId]) {
+        userIdHash[data.userId] = true;
+        userIdList.push(data.userId);
       }
-      delete data.aid;
+      delete data.authorId;
     }
-    if(data.rid !== data.pid && data.rid !== 0) {
-      quoteId = data.pid;
+    if(data.rootId !== data.parentId && data.rootId !== 0) {
+      quoteId = data.parentId;
     }
     let quote = await this.info(quoteId);
     if(quote) {
-      if(quote.aid) {
-        if(!authorIdHash[quote.aid]) {
-          authorIdHash[quote.aid] = true;
-          authorIdList.push(quote.aid);
+      if(quote.authorId) {
+        if(!authorIdHash[quote.authorId]) {
+          authorIdHash[quote.authorId] = true;
+          authorIdList.push(quote.authorId);
         }
-        delete quote.uid;
+        delete quote.userId;
         quote.isAuthor = true;
       }
       else {
-        if(!userIdHash[quote.uid]) {
-          userIdHash[quote.uid] = true;
-          userIdList.push(quote.uid);
+        if(!userIdHash[quote.userId]) {
+          userIdHash[quote.userId] = true;
+          userIdList.push(quote.userId);
         }
-        delete quote.aid;
+        delete quote.authorId;
       }
       if(quote.content.length > 60) {
         quote.slice = true;
@@ -681,12 +715,12 @@ class Service extends egg.Service {
     });
     if(quote) {
       if(quote.isAuthor) {
-        quote.name = authorHash[quote.aid].name;
-        quote.headUrl = authorHash[quote.aid].headUrl;
+        quote.name = authorHash[quote.authorId].name;
+        quote.headUrl = authorHash[quote.authorId].headUrl;
       }
       else {
-        quote.nickname = userHash[quote.uid].nickname;
-        quote.headUrl = userHash[quote.uid].headUrl;
+        quote.nickname = userHash[quote.userId].nickname;
+        quote.headUrl = userHash[quote.userId].headUrl;
       }
     }
     return {
@@ -787,7 +821,7 @@ class Service extends egg.Service {
       this.replyCountList(idList),
       this.circleList(idList),
       this.mediaList(idList),
-      this.workList(idList),
+      this.workList(idList, uid),
       service.works.infoList(worksIdList),
       service.work.infoList(workIdList),
       service.author.infoList(authorIdList),
@@ -832,21 +866,21 @@ class Service extends egg.Service {
           tagCircleHash[name] = allTagCircleHash[name];
         });
         if(item.isAuthor) {
-          let author = authorHash[item.aid];
+          let author = authorHash[item.authorId];
           if(author) {
             item.name = author.name;
             item.headUrl = author.headUrl;
           }
         }
         else {
-          let user = userHash[item.uid];
+          let user = userHash[item.userId];
           if(user) {
             item.nickname = user.nickname;
             item.headUrl = user.headUrl;
           }
         }
-        if(item.rid !== item.pid && item.rid !== 0 && quoteHash[item.pid]) {
-          item.quote = quoteHash[item.pid];
+        if(item.rootId !== item.parentId && item.rootId !== 0 && quoteHash[item.parentId]) {
+          item.quote = quoteHash[item.parentId];
         }
         if(likeCountList) {
           item.likeCount = likeCountList[i] || 0;
@@ -903,21 +937,21 @@ class Service extends egg.Service {
     dataList.forEach((item, i) => {
       if(item) {
         if(item.isAuthor) {
-          let author = authorHash[item.aid];
+          let author = authorHash[item.authorId];
           if(author) {
             item.name = author.name;
             item.headUrl = author.headUrl;
           }
         }
         else {
-          let user = userHash[item.uid];
+          let user = userHash[item.userId];
           if(user) {
             item.nickname = user.nickname;
             item.headUrl = user.headUrl;
           }
         }
-        if(item.rid !== item.pid && item.rid !== 0 && quoteHash[item.pid]) {
-          item.quote = quoteHash[item.pid];
+        if(item.rootId !== item.parentId && item.rootId !== 0 && quoteHash[item.parentId]) {
+          item.quote = quoteHash[item.parentId];
         }
         if(likeCountList) {
           item.likeCount = likeCountList[i] || 0;
@@ -949,24 +983,24 @@ class Service extends egg.Service {
     let quoteIdHash = {};
     dataList.forEach((item) => {
       if(item) {
-        item.isOwn = item.uid === uid;
-        if(item.aid) {
-          if(!authorIdHash[item.aid]) {
-            authorIdHash[item.aid] = true;
-            authorIdList.push(item.aid);
+        item.isOwn = item.userId === uid;
+        if(item.authorId) {
+          if(!authorIdHash[item.authorId]) {
+            authorIdHash[item.authorId] = true;
+            authorIdList.push(item.authorId);
           }
-          delete item.uid;
+          delete item.userId;
           item.isAuthor = true;
         }
-        else if(item.uid) {
-          if(!userIdHash[item.uid]) {
-            userIdHash[item.uid] = true;
-            userIdList.push(item.uid);
+        else if(item.userId) {
+          if(!userIdHash[item.userId]) {
+            userIdHash[item.userId] = true;
+            userIdList.push(item.userId);
           }
-          delete item.aid;
+          delete item.authorId;
         }
-        if(item.rid !== item.pid && item.rid !== 0 && !quoteIdHash[item.pid]) {
-          quoteIdList.push(item.pid);
+        if(item.rootId !== item.parentId && item.rootId !== 0 && !quoteIdHash[item.parentId]) {
+          quoteIdList.push(item.parentId);
         }
       }
     });
@@ -974,20 +1008,20 @@ class Service extends egg.Service {
     let quoteHash = {};
     quoteList.forEach((item) => {
       if(item) {
-        if(item.aid) {
-          if(!authorIdHash[item.aid]) {
-            authorIdHash[item.aid] = true;
-            authorIdList.push(item.aid);
+        if(item.authorId) {
+          if(!authorIdHash[item.authorId]) {
+            authorIdHash[item.authorId] = true;
+            authorIdList.push(item.authorId);
           }
-          delete item.uid;
+          delete item.userId;
           item.isAuthor = true;
         }
         else {
-          if(!userIdHash[item.uid]) {
-            userIdHash[item.uid] = true;
-            userIdList.push(item.uid);
+          if(!userIdHash[item.userId]) {
+            userIdHash[item.userId] = true;
+            userIdList.push(item.userId);
           }
-          delete item.aid;
+          delete item.authorId;
         }
         quoteHash[item.id] = item;
         if(item.content.length > 60) {
@@ -1015,12 +1049,12 @@ class Service extends egg.Service {
     quoteList.forEach((item) => {
       if(item) {
         if(item.isAuthor) {
-          item.name = authorHash[item.aid].name;
-          item.headUrl = authorHash[item.aid].headUrl;
+          item.name = authorHash[item.authorId].name;
+          item.headUrl = authorHash[item.authorId].headUrl;
         }
         else {
-          item.nickname = userHash[item.uid].nickname;
-          item.headUrl = userHash[item.uid].headUrl;
+          item.nickname = userHash[item.userId].nickname;
+          item.headUrl = userHash[item.userId].headUrl;
         }
       }
     });
@@ -1654,13 +1688,13 @@ class Service extends egg.Service {
   /**
    * 添加回复
    * @param uid:int 用户id
-   * @param rid:int 根id
-   * @param pid:int 父id
+   * @param rootId:int 根id
+   * @param parentId:int 父id
    * @param content:int 内容
    * @param authorId:Object 作者id
    */
-  async add(uid, rid, pid, content, authorId) {
-    if(!uid || !rid || !pid) {
+  async add(uid, rootId, parentId, content, authorId) {
+    if(!uid || !rootId || !parentId) {
       return;
     }
     const { app, service } = this;
@@ -1678,8 +1712,8 @@ class Service extends egg.Service {
       is_delete: false,
       review: 0,
       state: 0,
-      parent_id: pid,
-      root_id: rid,
+      parent_id: parentId,
+      root_id: rootId,
       create_time: now,
       update_time: now,
     });
@@ -1757,7 +1791,7 @@ class Service extends egg.Service {
     const { app } = this;
     let exist = await app.model.comment.findOne({
       attributes: [
-        ['user_id', 'uid'],
+        ['user_id', 'userId'],
         ['is_delete', 'isDelete']
       ],
       where: {
@@ -1777,7 +1811,7 @@ class Service extends egg.Service {
         message: '已经删除过了，无需重复删除~',
       };
     }
-    if(exist.uid !== uid) {
+    if(exist.userId !== uid) {
       return {
         success: false,
         message: '没有权限~',
