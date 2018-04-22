@@ -39,7 +39,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     }
     if(res) {
       let type = await service.worksType.info(res.type);
@@ -111,7 +111,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('imageAlbumInfo_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('imageAlbumInfo_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     let typeIdList = [];
@@ -125,7 +125,9 @@ class Service extends egg.Service {
     let typeList = await service.worksType.infoList(typeIdList);
     let typeHash = {};
     typeList.forEach((item) => {
-      typeHash[item.id] = item;
+      if(item) {
+        typeHash[item.id] = item;
+      }
     });
     cache.forEach((item) => {
       if(item) {
@@ -162,7 +164,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     }
     let authorIdList = [];
     let authorIdHash = {};
@@ -275,7 +277,7 @@ class Service extends egg.Service {
         let item = hash[id] || [];
         if(item) {
           cache[i] = item;
-          app.redis.setex('imageAlbumAuthor_' + id, app.redis.time, JSON.stringify(item));
+          app.redis.setex('imageAlbumAuthor_' + id, app.config.redis.time, JSON.stringify(item));
         }
       });
     }
@@ -331,40 +333,6 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取专辑的评论id
-   * @param id:int 专辑id
-   * @returns int
-   */
-  async commentId(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'imageAlbumComment_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      return JSON.parse(res);
-    }
-    res = await app.model.worksCommentRelation.findOne({
-      attributes: [
-        ['comment_id', 'commentId']
-      ],
-      where: {
-        works_id: id,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.commentId;
-      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
-    }
-    else {
-      return;
-    }
-    return res;
-  }
-
-  /**
    * 获取评论全部信息
    * @param id:int 作品id
    * @param uid:int 用户id
@@ -377,7 +345,7 @@ class Service extends egg.Service {
       return;
     }
     const { service } = this;
-    let commentId = await this.commentId(id);
+    let commentId = await service.works.commentId(id);
     return await service.post.commentList(commentId, uid, offset, limit);
   }
 
@@ -483,7 +451,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.redis.time, res);
+    app.redis.setex(cacheKey, app.config.redis.time, res);
     return res;
   }
 
@@ -582,6 +550,32 @@ class Service extends egg.Service {
 
   /**
    * 获取专辑信息和统计数字信息
+   * @param id:int 专辑id列表
+   * @returns Object
+   */
+  async infoPlusCount(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let [
+      info,
+      popular,
+      commentCount
+    ] = await Promise.all([
+      this.info(id),
+      service.works.numCount(id, 1),
+      service.works.commentCount(id)
+    ]);
+    if(info) {
+      info.popular = popular;
+      info.commentCount = commentCount;
+    }
+    return info;
+  }
+
+  /**
+   * 获取专辑信息和统计数字信息
    * @param idList:Array<int> 专辑id列表
    * @returns Array<Object>
    */
@@ -603,8 +597,10 @@ class Service extends egg.Service {
       service.works.commentCountList(idList)
     ]);
     list.forEach((item, i) => {
-      item.popular = popularList[i];
-      item.commentCount = commentCountList[i];
+      if(item) {
+        item.popular = popularList[i];
+        item.commentCount = commentCountList[i];
+      }
     });
     return list;
   }

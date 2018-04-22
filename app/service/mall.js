@@ -29,7 +29,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -95,7 +95,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('product_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('product_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -126,7 +126,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     }
     let idList = res.map((item) => {
       return item.productId;
@@ -276,7 +276,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     }
     let idList = res.map((item) => {
       return item.productId;

@@ -66,7 +66,7 @@ class Service extends egg.Service {
     let cacheKey = 'userWorkRelation_' + uid + '_' + workId + '_' + type;
     if(state) {
       await Promise.all([
-        app.redis.setex(cacheKey, app.redis.time, 'true'),
+        app.redis.setex(cacheKey, app.config.redis.time, 'true'),
         app.model.userWorkRelation.create({
           user_id: uid,
           works_id: worksId,
@@ -78,7 +78,7 @@ class Service extends egg.Service {
     }
     else {
       await Promise.all([
-        app.redis.setex(cacheKey, app.redis.time, 'false'),
+        app.redis.setex(cacheKey, app.config.redis.time, 'false'),
         app.model.userWorkRelation.destroy({
           where: {
             work_id: workId,
@@ -387,7 +387,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('video_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('video_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     let typeIdList = [];
@@ -473,7 +473,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('audio_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('audio_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     let typeIdList = [];
@@ -559,7 +559,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('image_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('image_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     let typeIdList = [];
@@ -643,7 +643,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('text_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('text_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     let typeIdList = [];
@@ -709,7 +709,7 @@ class Service extends egg.Service {
       raw: true,
     });
     res = !!res;
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -787,7 +787,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || false;
         cache[i] = temp;
-        app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('userWorkRelation_' + uid + '_' + id + '_' + type, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -837,7 +837,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -920,7 +920,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || 0;
         cache[i] = temp;
-        app.redis.setex('workCount_' + id + '_' + type, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('workCount_' + id + '_' + type, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -952,7 +952,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1074,7 +1074,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || [];
         cache[i] = temp;
-        app.redis.setex('workAuthor_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('workAuthor_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -1199,7 +1199,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('workBelong_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('workBelong_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -1235,7 +1235,7 @@ class Service extends egg.Service {
       ],
       raw: true,
     });
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1304,7 +1304,7 @@ class Service extends egg.Service {
         let type = typeList[i];
         let temp = hash[type] || [];
         cache[i] = temp;
-        app.redis.setex('workTypeProfessionSort_' + type, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('workTypeProfessionSort_' + type, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -1342,7 +1342,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1406,7 +1406,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || 0;
         cache[i] = temp;
-        app.redis.setex('workNumCount_' + id + '_' + type, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('workNumCount_' + id + '_' + type, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;

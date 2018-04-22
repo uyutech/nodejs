@@ -14,7 +14,7 @@ module.exports = appInfo => {
     },
     redis: {
       time: 10,
-      shortTime: 1,
+      shortTime: 5,
       mediumTime: 30,
       longTime: 60,
     },

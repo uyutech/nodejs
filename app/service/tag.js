@@ -34,7 +34,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -94,7 +94,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('tag_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('tag_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -156,7 +156,7 @@ class Service extends egg.Service {
         let name = nameList[i];
         let temp = hash[name] || null;
         cache[i] = temp;
-        app.redis.setex('tagName_' + name, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('tagName_' + name, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -197,7 +197,7 @@ class Service extends egg.Service {
       });
       res = res.id;
     }
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -263,7 +263,7 @@ class Service extends egg.Service {
         let item = hash[name];
         if(item) {
           cache[i] = item;
-          app.redis.setex('tagNameId_' + name, app.redis.time, JSON.stringify(item));
+          app.redis.setex('tagNameId_' + name, app.config.redis.time, JSON.stringify(item));
         }
         else {
           createList.push(app.model.tag.create({
@@ -285,7 +285,7 @@ class Service extends egg.Service {
           let item = hash[name];
           if(item) {
             cache[i] = item;
-            app.redis.setex('tagNameId_' + name, app.redis.time, JSON.stringify(item));
+            app.redis.setex('tagNameId_' + name, app.config.redis.time, JSON.stringify(item));
           }
         }
       });
@@ -381,7 +381,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -441,7 +441,7 @@ class Service extends egg.Service {
         raw: true,
       });
       if(offset === 0) {
-        app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+        app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
       }
     }
     return res;
@@ -475,7 +475,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -515,7 +515,7 @@ class Service extends egg.Service {
     res = res.map((item) => {
       return item.tagId;
     });
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -596,7 +596,7 @@ class Service extends egg.Service {
         if(type) {
           cacheKey += '_' + type
         }
-        app.redis.setex(cacheKey, app.redis.time, JSON.stringify(item));
+        app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(item));
       });
     }
     return cache;

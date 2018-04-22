@@ -35,7 +35,7 @@ class Service extends egg.Service {
       ],
       raw: true,
     });
-    app.redis.setex(cacheKey, app.redis.mediumTime, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.mediumTime, JSON.stringify(res));
     return res;
   }
 
@@ -85,7 +85,7 @@ class Service extends egg.Service {
         limit,
         raw: true,
       });
-      app.redis.setex(cacheKey, app.redis.mediumTime, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.mediumTime, JSON.stringify(res));
     }
     let worksIdList = [];
     let worksIdHash = {};
@@ -233,7 +233,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.redis.mediumTime, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.mediumTime, JSON.stringify(res));
     return res;
   }
 
@@ -272,8 +272,27 @@ class Service extends egg.Service {
     if(res) {
       res = JSON.parse(res);
     }
+    else if(kind === 3) {
+      res = await app.model.imageAlbumWorkRelation.findAll({
+        attributes: [
+          ['album_id', 'albumId'],
+          ['work_id', 'workId']
+        ],
+        where: {
+          kind,
+          is_delete: false,
+        },
+        order: [
+          ['id', 'DESC']
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.mediumTime, JSON.stringify(res));
+    }
     else {
-      res = await app.model.findKind.findAll({
+      res = await app.model.worksWorkRelation.findAll({
         attributes: [
           ['works_id', 'worksId'],
           ['work_id', 'workId']
@@ -283,29 +302,34 @@ class Service extends egg.Service {
           is_delete: false,
         },
         order: [
-          ['weight', 'DESC'],
           ['id', 'DESC']
         ],
         offset,
         limit,
         raw: true,
       });
-      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.mediumTime, JSON.stringify(res));
     }
     let worksIdList = [];
     let worksIdHash = {};
+    let albumIdList = [];
+    let albumIdHash = {};
     let workIdList = [];
     let workIdHash = {};
     res.forEach((item) => {
       if(!worksIdHash[item.worksId]) {
         worksIdList.push(item.worksId);
       }
+      if(!albumIdHash[item.albumId]) {
+        albumIdList.push(item.albumId);
+      }
       if(!workIdHash[item.workId]) {
         workIdList.push(item.workId);
       }
     });
-    let [worksList, workList] = await Promise.all([
+    let [worksList, albumList, workList] = await Promise.all([
       service.works.infoListPlusCount(worksIdList),
+      service.imageAlbum.infoListPlusCount(albumIdList),
       service.work.infoListPlusFull(workIdList, kind, uid)
     ]);
     let worksHash = {};
@@ -314,13 +338,31 @@ class Service extends egg.Service {
         worksHash[item.id] = item;
       }
     });
+    let albumHash = {};
+    albumList.forEach((item) => {
+      if(item) {
+        albumHash[item.id] = item;
+      }
+    });
     return workList.map((item, i) => {
       if(item) {
         item.author = service.works.firstAuthor(item.author);
-        let worksId = worksIdList[i];
-        let copy = Object.assign({}, worksHash[worksId] || {});
-        copy.work = item;
-        return copy;
+        if(kind === 3) {
+          let album = albumHash[albumIdList[i]];
+          if(album) {
+            let copy = Object.assign({}, album);
+            copy.work = item;
+            return copy;
+          }
+        }
+        else {
+          let works = worksHash[worksIdList[i]];
+          if(works) {
+            let copy = Object.assign({}, works);
+            copy.work = item;
+            return copy;
+          }
+        }
       }
     });
   }
@@ -335,23 +377,37 @@ class Service extends egg.Service {
     if(res) {
       return JSON.parse(res);
     }
-    res = await app.model.findKind.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        kind,
-        is_delete: false,
-      },
-      raw: true,
-    });
+    if(kind === 3) {
+      res = await app.model.imageAlbumWorkRelation.findOne({
+        attributes: [
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          kind,
+          is_delete: false,
+        },
+        raw: true,
+      });
+    }
+    else {
+      res = await app.model.worksWorkRelation.findOne({
+        attributes: [
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          kind,
+          is_delete: false,
+        },
+        raw: true,
+      });
+    }
     if(res) {
       res = res.num || 0;
     }
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.mediumTime, JSON.stringify(res));
     return res;
   }
 }

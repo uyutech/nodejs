@@ -176,7 +176,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || 0;
         cache[i] = temp;
-        app.redis.setex('commentCount_' + id, app.redis.time, JSON.stringify(temp));
+        app.redis.setex('commentCount_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -238,7 +238,7 @@ class Service extends egg.Service {
         limit,
         raw: true,
       });
-      app.redis.setex(cacheKey, app.redis.shortTime, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.shortTime, JSON.stringify(res));
     }
     return await service.comment.plusListFull(res, uid);
   }
@@ -270,7 +270,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
