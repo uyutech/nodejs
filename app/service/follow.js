@@ -8,8 +8,6 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
 }
 

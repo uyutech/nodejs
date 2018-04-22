@@ -8,8 +8,6 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
   async banner(tag) {
     if(!tag) {
@@ -37,7 +35,7 @@ class Service extends egg.Service {
       ],
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.mediumTime, JSON.stringify(res));
     return res;
   }
 
@@ -66,8 +64,7 @@ class Service extends egg.Service {
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
-      app.redis.expire(cacheKey, CACHE_TIME);
-    }
+      }
     else {
       res = await app.model.findList.findAll({
         attributes: [
@@ -88,7 +85,7 @@ class Service extends egg.Service {
         limit,
         raw: true,
       });
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.mediumTime, JSON.stringify(res));
     }
     let worksIdList = [];
     let worksIdHash = {};
@@ -218,7 +215,6 @@ class Service extends egg.Service {
     let cacheKey = 'findCount_' + tag;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.findList.findOne({
@@ -237,7 +233,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.mediumTime, JSON.stringify(res));
     return res;
   }
 
@@ -274,7 +270,6 @@ class Service extends egg.Service {
     let cacheKey = 'findKind_' + kind + '_' + offset + '_' + limit;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       res = JSON.parse(res);
     }
     else {
@@ -295,7 +290,7 @@ class Service extends egg.Service {
         limit,
         raw: true,
       });
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     let worksIdList = [];
     let worksIdHash = {};
@@ -338,7 +333,6 @@ class Service extends egg.Service {
     let cacheKey = 'findKindCount_' + kind;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.findKind.findOne({
@@ -357,7 +351,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 }

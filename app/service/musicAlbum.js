@@ -8,8 +8,6 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
   /**
    * 根据专辑id获取专辑信息
@@ -24,7 +22,6 @@ class Service extends egg.Service {
     let cacheKey = 'musicAlbumInfo_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       res = JSON.parse(res);
     }
     else {
@@ -42,7 +39,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     if(res) {
       let type = await service.worksType.info(res.type);
@@ -80,8 +77,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('musicAlbumInfo_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdList.push(id);
@@ -115,7 +111,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('musicAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('musicAlbumInfo_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     let typeIdList = [];
@@ -152,7 +148,6 @@ class Service extends egg.Service {
     let cacheKey = 'musicAlbumCollectionBase_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.musicAlbumWorkRelation.findAll({
@@ -171,7 +166,7 @@ class Service extends egg.Service {
       ],
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -202,8 +197,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('musicAlbumCollectionBase_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -241,7 +235,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || [];
         cache[i] = temp;
-        app.redis.setex('musicAlbumCollectionBase_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('musicAlbumCollectionBase_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -405,8 +399,7 @@ class Service extends egg.Service {
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
-      app.redis.expire(cacheKey, CACHE_TIME);
-    }
+      }
     else {
       res = await app.model.musicAlbumAuthorRelation.findAll({
         attributes: [
@@ -419,7 +412,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     let authorIdList = [];
     let authorIdHash = {};
@@ -495,8 +488,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('musicAlbumAuthor_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -533,7 +525,7 @@ class Service extends egg.Service {
         let item = hash[id] || [];
         if(item) {
           cache[i] = item;
-          app.redis.setex('musicAlbumAuthor_' + id, CACHE_TIME, JSON.stringify(item));
+          app.redis.setex('musicAlbumAuthor_' + id, app.redis.time, JSON.stringify(item));
         }
       });
     }
@@ -601,7 +593,6 @@ class Service extends egg.Service {
     let cacheKey = 'musicAlbumComment_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.worksCommentRelation.findOne({
@@ -615,7 +606,7 @@ class Service extends egg.Service {
     });
     if(res) {
       res = res.commentId;
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     else {
       return;

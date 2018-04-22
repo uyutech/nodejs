@@ -7,8 +7,6 @@
 const egg = require('egg');
 const Sequelize = require('sequelize');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
   /**
    * 获取职种信息
@@ -23,7 +21,6 @@ class Service extends egg.Service {
     let cacheKey = 'profession_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.profession.findOne({
@@ -36,7 +33,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.longTime, JSON.stringify(res));
     return res;
   }
 
@@ -67,8 +64,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('profession_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -98,15 +94,11 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('profession_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('profession_' + id, app.redis.longTime, JSON.stringify(temp));
       });
     }
     return cache;
   }
-
-  async skill(id) {}
-
-  async skillList(idList) {}
 }
 
 module.exports = Service;

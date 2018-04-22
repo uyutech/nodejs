@@ -13,7 +13,10 @@ module.exports = appInfo => {
       domain: 'dev.circling.cc2',
     },
     redis: {
-      password: 'uyuTech123',
+      time: 10,
+      shortTime: 1,
+      mediumTime: 30,
+      longTime: 60,
     },
     database: {
       circling: {

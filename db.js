@@ -1352,7 +1352,7 @@ async function dealUserWork(pool) {
   let worksIdHash = {};
   let exist = {};
   let workHash = {};
-  let last = 21628;
+  let last = 21636;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_WorkItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1481,7 +1481,7 @@ async function dealUserWork(pool) {
   hash = {};
   last = 1087275;
   last = 0;
-  result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${900000} AND ID<=1000000 AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
+  result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${1000000} AND ID<=1100000 AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     let key = item.UID + ',' + item.WorkitemsID;

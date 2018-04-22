@@ -89,6 +89,10 @@ module.exports = appInfo => {
       password: 'uyuTech123',
       db: 0,
     },
+    time: 60,
+    shortTime: 10,
+    mediumTime: 300,
+    longTime: 600,
   };
 
   config.notfound = {

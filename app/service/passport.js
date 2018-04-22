@@ -20,8 +20,6 @@ let smsClient = new SMSClient({
   secretAccessKey: 'vSYTJwPai0Uqfh5ymVBcxROK3VOmmK',
 });
 
-const CACHE_TIME = 600;
-
 class Service extends egg.Service {
   /**
    * 校验用户名和密码
@@ -121,7 +119,7 @@ class Service extends egg.Service {
       code = code.slice(-6);
     }
     let cacheKey = 'registerCode_' + phone;
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(code));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(code));
     let res = await smsClient.sendSMS({
       PhoneNumbers: phone,
       SignName: '转圈Circling',
@@ -263,7 +261,7 @@ class Service extends egg.Service {
       code = code.slice(-6);
     }
     let cacheKey = 'resetCode_' + phone;
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(code));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(code));
     let res = await smsClient.sendSMS({
       PhoneNumbers: phone,
       SignName: '转圈Circling',
@@ -587,7 +585,7 @@ class Service extends egg.Service {
       code = code.slice(-6);
     }
     let cacheKey = 'bindCode_' + phone;
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(code));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(code));
     let res = await smsClient.sendSMS({
       PhoneNumbers: phone,
       SignName: '转圈Circling',

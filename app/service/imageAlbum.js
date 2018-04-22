@@ -8,8 +8,6 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
   /**
    * 根据专辑id获取专辑信息
@@ -24,7 +22,6 @@ class Service extends egg.Service {
     let cacheKey = 'imageAlbumInfo_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       res = JSON.parse(res);
     }
     else {
@@ -42,7 +39,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     if(res) {
       let type = await service.worksType.info(res.type);
@@ -80,8 +77,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('imageAlbumInfo_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdList.push(id);
@@ -115,7 +111,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('imageAlbumInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('imageAlbumInfo_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     let typeIdList = [];
@@ -153,8 +149,7 @@ class Service extends egg.Service {
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
-      app.redis.expire(cacheKey, CACHE_TIME);
-    }
+      }
     else {
       res = await app.model.imageAlbumAuthorRelation.findAll({
         attributes: [
@@ -167,7 +162,7 @@ class Service extends egg.Service {
         },
         raw: true,
       });
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     let authorIdList = [];
     let authorIdHash = {};
@@ -243,8 +238,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('imageAlbumAuthor_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -281,7 +275,7 @@ class Service extends egg.Service {
         let item = hash[id] || [];
         if(item) {
           cache[i] = item;
-          app.redis.setex('imageAlbumAuthor_' + id, CACHE_TIME, JSON.stringify(item));
+          app.redis.setex('imageAlbumAuthor_' + id, app.redis.time, JSON.stringify(item));
         }
       });
     }
@@ -349,7 +343,6 @@ class Service extends egg.Service {
     let cacheKey = 'imageAlbumComment_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.worksCommentRelation.findOne({
@@ -363,7 +356,7 @@ class Service extends egg.Service {
     });
     if(res) {
       res = res.commentId;
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     else {
       return;
@@ -471,7 +464,6 @@ class Service extends egg.Service {
     let cacheKey = 'imageAlbumCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.imageAlbumWorkRelation.findOne({
@@ -491,7 +483,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, res);
+    app.redis.setex(cacheKey, app.redis.time, res);
     return res;
   }
 

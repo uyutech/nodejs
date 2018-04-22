@@ -9,8 +9,6 @@ const Sequelize = require('sequelize');
 const squel = require('squel');
 const Spark = require('spark-md5');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
   /**
    * 获取用户信息
@@ -25,7 +23,6 @@ class Service extends egg.Service {
     let cacheKey = 'userInfo_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.user.findOne({
@@ -45,7 +42,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -74,8 +71,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('userInfo_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -112,7 +108,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('userInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('userInfo_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -132,8 +128,7 @@ class Service extends egg.Service {
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
-      app.redis.expire(cacheKey, CACHE_TIME);
-    }
+      }
     else {
       res = await app.model.userAuthorRelation.findAll({
         attributes: [
@@ -150,7 +145,7 @@ class Service extends egg.Service {
         ],
         raw: true,
       });
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     let idList = res.map((item) => {
       return item.id;
@@ -190,7 +185,6 @@ class Service extends egg.Service {
     let cacheKey = 'followPersonBase_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userPersonRelation.findAll({
@@ -204,7 +198,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -221,7 +215,6 @@ class Service extends egg.Service {
     let cacheKey = 'friendId_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     let sql = squel.select()
@@ -359,7 +352,6 @@ class Service extends egg.Service {
     let cacheKey = 'userFollowPersonCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userPersonRelation.findOne({
@@ -378,7 +370,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -395,7 +387,6 @@ class Service extends egg.Service {
     let cacheKey = 'userFollowCircleCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userPersonRelation.findOne({
@@ -414,7 +405,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -435,7 +426,6 @@ class Service extends egg.Service {
     let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_1';
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userPersonRelation.findOne({
@@ -446,7 +436,7 @@ class Service extends egg.Service {
       },
     });
     res = !!res;
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -512,7 +502,7 @@ class Service extends egg.Service {
     let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_1';
     if(state) {
       await Promise.all([
-        app.redis.setex(cacheKey, CACHE_TIME, 'true'),
+        app.redis.setex(cacheKey, app.redis.time, 'true'),
         app.model.userPersonRelation.upsert({
           user_id: uid,
           target_id: id,
@@ -527,7 +517,7 @@ class Service extends egg.Service {
     }
     else {
       await Promise.all([
-        app.redis.setex(cacheKey, CACHE_TIME, 'false'),
+        app.redis.setex(cacheKey, app.redis.time, 'false'),
         app.model.userPersonRelation.destroy({
           where: {
             user_id: uid,
@@ -635,7 +625,6 @@ class Service extends egg.Service {
     let cacheKey = 'userFollowUserCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userPersonRelation.findOne({
@@ -654,7 +643,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -735,7 +724,6 @@ class Service extends egg.Service {
     let cacheKey = 'userFansCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userPersonRelation.findOne({
@@ -754,7 +742,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -815,7 +803,6 @@ class Service extends egg.Service {
     let cacheKey = 'userFriendCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     let sql = squel.select()
@@ -837,7 +824,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -920,7 +907,6 @@ class Service extends egg.Service {
     let cacheKey = 'userFollowAuthorCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userPersonRelation.findOne({
@@ -939,7 +925,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1020,7 +1006,6 @@ class Service extends egg.Service {
     let cacheKey = 'userPostCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.comment.findOne({
@@ -1040,7 +1025,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1147,7 +1132,6 @@ class Service extends egg.Service {
     let cacheKey = 'favorCount_' + id + '_' + kind;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userWorkRelation.findOne({
@@ -1166,7 +1150,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1331,7 +1315,6 @@ class Service extends egg.Service {
     let cacheKey = 'userCircleCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userCircleRelation.findOne({
@@ -1351,7 +1334,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1454,7 +1437,6 @@ class Service extends egg.Service {
     let cacheKey = 'userFollowPostCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      // app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.comment.findOne({
@@ -1565,7 +1547,6 @@ class Service extends egg.Service {
     let cacheKey = 'friendPostCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      // app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.comment.findOne({
@@ -1648,7 +1629,7 @@ class Service extends egg.Service {
         return item.id;
       });
       if(offset === 0) {
-        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+        app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
       }
     }
     return res;
@@ -1682,7 +1663,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1848,7 +1829,6 @@ class Service extends egg.Service {
     let cacheKey = 'address_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userAddress.findAll({
@@ -1864,7 +1844,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 

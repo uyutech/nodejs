@@ -8,8 +8,6 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
   /**
    * 根据id获取画圈信息
@@ -145,8 +143,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('commentCount_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -179,7 +176,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || 0;
         cache[i] = temp;
-        app.redis.setex('commentCount_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('commentCount_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -214,27 +211,35 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let res = await app.model.comment.findAll({
-      attributes: [
-        'id',
-        ['user_id', 'userId'],
-        ['author_id', 'authorId'],
-        'content',
-        ['parent_id', 'parentId'],
-        ['root_id', 'rootId'],
-        ['create_time', 'createTime']
-      ],
-      where: {
-        root_id: 0,
-        is_delete: false,
-      },
-      order: [
-        ['id', 'DESC']
-      ],
-      offset,
-      limit,
-      raw: true,
-    });
+    let cacheKey = 'allPost';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.comment.findAll({
+        attributes: [
+          'id',
+          ['user_id', 'userId'],
+          ['author_id', 'authorId'],
+          'content',
+          ['parent_id', 'parentId'],
+          ['root_id', 'rootId'],
+          ['create_time', 'createTime']
+        ],
+        where: {
+          root_id: 0,
+          is_delete: false,
+        },
+        order: [
+          ['id', 'DESC']
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.redis.shortTime, JSON.stringify(res));
+    }
     return await service.comment.plusListFull(res, uid);
   }
 
@@ -247,7 +252,6 @@ class Service extends egg.Service {
     let cacheKey = 'allPostCount';
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.comment.findOne({
@@ -266,7 +270,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -350,11 +354,6 @@ class Service extends egg.Service {
         }));
       }
       await Promise.all(query);
-      let cacheKey = 'allPostCount';
-      let expire = await app.redis.expire(cacheKey, CACHE_TIME);
-      if(expire) {
-        app.redis.incr(cacheKey);
-      }
     }
     let res = await service.comment.info(create.id);
     res = await service.comment.plusFull(res, uid);

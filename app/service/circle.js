@@ -8,8 +8,6 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
   /**
    * 根据id获取圈子信息
@@ -24,7 +22,6 @@ class Service extends egg.Service {
     let cacheKey = 'circleInfo_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       res = JSON.parse(res);
     }
     else {
@@ -75,8 +72,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('circleInfo_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -110,7 +106,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('circleInfo_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('circleInfo_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -187,7 +183,6 @@ class Service extends egg.Service {
     let cacheKey = 'circleCommentCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.circleCommentRelation.findOne({
@@ -206,7 +201,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -240,7 +235,6 @@ class Service extends egg.Service {
     let cacheKey = 'allCircle_' + offset + '_' + limit;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.circle.findAll({
@@ -257,7 +251,7 @@ class Service extends egg.Service {
     });
     // 只缓存第一页
     if(offset === 0) {
-      app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     }
     return res;
   }
@@ -271,7 +265,6 @@ class Service extends egg.Service {
     let cacheKey = 'allCircleCount';
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.circle.findOne({
@@ -289,7 +282,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -310,7 +303,6 @@ class Service extends egg.Service {
     let cacheKey = 'userCircleRelation_' + uid + '_' + id + '_1';
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userCircleRelation.findOne({
@@ -322,7 +314,7 @@ class Service extends egg.Service {
       raw: true,
     });
     res = !!res;
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -357,8 +349,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('userCircleRelation_' + uid + '_' + id + '_1', CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -389,7 +380,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || false;
         cache[i] = temp;
-        app.redis.setex('userCircleRelation_' + uid + '_' + id + '_1', CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('userCircleRelation_' + uid + '_' + id + '_1', app.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -408,7 +399,6 @@ class Service extends egg.Service {
     let cacheKey = 'circleFansCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userCircleRelation.findOne({
@@ -427,7 +417,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -448,7 +438,6 @@ class Service extends egg.Service {
     }
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     let where = {
@@ -469,7 +458,7 @@ class Service extends egg.Service {
     res = res.map((item) => {
       return item.tagId;
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -509,8 +498,7 @@ class Service extends egg.Service {
         if(type) {
           cacheKey += '_' + type;
         }
-        app.redis.expire(cacheKey, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -551,7 +539,7 @@ class Service extends egg.Service {
         if(type) {
           cacheKey += '_' + type;
         }
-        app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex(cacheKey, app.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -659,7 +647,7 @@ class Service extends egg.Service {
     let cacheKey = 'userCircleRelation_' + uid + '_' + id + '_1';
     if(state) {
       await Promise.all([
-        app.redis.setex(cacheKey, CACHE_TIME, 'true'),
+        app.redis.setex(cacheKey, app.redis.time, 'true'),
         app.model.userCircleRelation.upsert({
           user_id: uid,
           circle_id: id,
@@ -675,7 +663,7 @@ class Service extends egg.Service {
     }
     else {
       await Promise.all([
-        app.redis.setex(cacheKey, CACHE_TIME, 'false'),
+        app.redis.setex(cacheKey, app.redis.time, 'false'),
         app.model.userCircleRelation.destroy({
           where: {
             user_id: uid,

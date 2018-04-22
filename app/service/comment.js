@@ -8,8 +8,6 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
 
-const CACHE_TIME = 10;
-
 class Service extends egg.Service {
   /**
    * 根据言论id列取言论详情
@@ -24,7 +22,6 @@ class Service extends egg.Service {
     let cacheKey = 'comment_' + id;
     let res = await this.app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.comment.findOne({
@@ -43,7 +40,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -72,8 +69,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('comment_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -110,7 +106,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('comment_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('comment_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -129,7 +125,6 @@ class Service extends egg.Service {
     let cacheKey = 'commentMedia_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME)
       return JSON.parse(res);
     }
     res = await app.model.commentMedia.findAll({
@@ -147,7 +142,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -178,8 +173,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('commentMedia_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -216,7 +210,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let item = hash[id] || [];
         cache[i] = item;
-        app.redis.setex('commentMedia_' + id, CACHE_TIME, JSON.stringify(item));
+        app.redis.setex('commentMedia_' + id, app.redis.time, JSON.stringify(item));
       });
     }
     return cache;
@@ -235,7 +229,6 @@ class Service extends egg.Service {
     let cacheKey = 'commentWork_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       res = JSON.parse(res);
     }
     else {
@@ -343,8 +336,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('commentWork_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -383,7 +375,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || [];
         cache[i] = temp;
-        app.redis.setex('commentWork_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('commentWork_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     let videoIdList = [];
@@ -1122,7 +1114,6 @@ class Service extends egg.Service {
     let cacheKey = 'userCommentRelation_' + uid + '_' + id + '_' + type;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userCommentRelation.findOne({
@@ -1137,7 +1128,7 @@ class Service extends egg.Service {
       raw: true,
     });
     res = !!res;
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1170,8 +1161,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('userCommentRelation_' + uid + '_' + id + '_' + type, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -1203,7 +1193,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let item = hash[id] || false;
         cache[i] = item;
-        app.redis.setex('userCommentRelation_' + uid + '_' + id + '_' + type, CACHE_TIME, JSON.stringify(item));
+        app.redis.setex('userCommentRelation_' + uid + '_' + id + '_' + type, app.redis.time, JSON.stringify(item));
       });
     }
     return cache;
@@ -1223,7 +1213,6 @@ class Service extends egg.Service {
     let cacheKey = 'commentCount_' + id + '_' + type;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.userCommentRelation.findOne({
@@ -1237,7 +1226,7 @@ class Service extends egg.Service {
       raw: true,
     });
     res = res.num || 0;
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1267,8 +1256,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('commentCount_' + id + '_' + type, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -1301,7 +1289,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let num = hash[id] || 0;
         cache[i] = num;
-        app.redis.setex('commentCount_' + id + '_' + type, CACHE_TIME, JSON.stringify(num));
+        app.redis.setex('commentCount_' + id + '_' + type, app.redis.time, JSON.stringify(num));
       });
     }
     return cache;
@@ -1335,7 +1323,7 @@ class Service extends egg.Service {
     let cacheKey = 'userCommentRelation_' + uid + '_' + id + '_' + type;
     if(state) {
       await Promise.all([
-        app.redis.setex(cacheKey, CACHE_TIME, 'true'),
+        app.redis.setex(cacheKey, app.redis.time, 'true'),
         app.model.userCommentRelation.create({
           user_id: uid,
           comment_id: id,
@@ -1347,7 +1335,7 @@ class Service extends egg.Service {
     }
     else {
       await Promise.all([
-        app.redis.setex(cacheKey, CACHE_TIME, 'false'),
+        app.redis.setex(cacheKey, app.redis.time, 'false'),
         app.model.userCommentRelation.destroy({
           where: {
             user_id: uid,
@@ -1384,7 +1372,6 @@ class Service extends egg.Service {
     let cacheKey = 'commentReplyCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.comment.findOne({
@@ -1403,7 +1390,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
   
@@ -1434,8 +1421,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('commentReplyCount_' + id, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -1468,7 +1454,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || 0;
         cache[i] = temp;
-        app.redis.setex('commentReplyCount_' + id, CACHE_TIME, JSON.stringify(temp));
+        app.redis.setex('commentReplyCount_' + id, app.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -1488,7 +1474,6 @@ class Service extends egg.Service {
     let cacheKey = 'commentTag_' + id + '_' + type;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      app.redis.expire(cacheKey, CACHE_TIME);
       return JSON.parse(res);
     }
     res = await app.model.tagCommentRelation.findAll({
@@ -1505,7 +1490,7 @@ class Service extends egg.Service {
     res = res.map((item) => {
       return item.tagId;
     });
-    app.redis.setex(cacheKey, CACHE_TIME, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -1537,8 +1522,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        app.redis.expire('commentTag_' + id + '_' + type, CACHE_TIME);
-      }
+        }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
@@ -1572,7 +1556,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let item = hash[id] || [];
         cache[i] = item;
-        app.redis.setex('commentTag_' + id + '_' + type, CACHE_TIME, JSON.stringify(item));
+        app.redis.setex('commentTag_' + id + '_' + type, app.redis.time, JSON.stringify(item));
       });
     }
     return cache;
