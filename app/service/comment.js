@@ -438,7 +438,7 @@ class Service extends egg.Service {
       { quote, authorHash, userHash },
       [ likeCount, isLike ]
     ] = await Promise.all([
-      this.quoteAndPerson(data),
+      this.quoteAndPerson(data, uid),
       this.operateRelation(data.id, uid, 1)
     ]);
     if(data.isAuthor) {
@@ -897,7 +897,7 @@ class Service extends egg.Service {
       { quoteHash, authorHash, userHash },
       [ likeCountList, likeList ]
     ] = await Promise.all([
-      this.quoteAndPersonList(dataList),
+      this.quoteAndPersonList(dataList, uid),
       this.operateRelationList(idList, uid, 1)
     ]);
     dataList.forEach((item, i) => {
