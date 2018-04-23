@@ -137,6 +137,43 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取圈子下置顶的帖子
+   * @param id:int 圈子id
+   * @param uid:int 用户id
+   * @returns Array<Object>
+   */
+  async top(id, uid) {
+    if(!id) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'circleTop_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.circleTop.findAll({
+        attributes: [
+          ['comment_id', 'commentId']
+        ],
+        where: {
+          circle_id: id,
+        },
+        order: [
+          ['weight', 'DESC']
+        ],
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.mediumTime, JSON.stringify(res));
+    }
+    let idList = res.map((item) => {
+      return item.commentId;
+    });
+    return service.post.infoList(idList, uid);
+  }
+
+  /**
    * 获取圈子下的画圈
    * @param id:int 圈子id
    * @param uid:int 用户id

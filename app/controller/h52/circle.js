@@ -18,10 +18,11 @@ class Controller extends egg.Controller {
     if(!id) {
       return;
     }
-    let [info, isFollow, fansCount, postList] = await Promise.all([
+    let [info, isFollow, fansCount, top, postList] = await Promise.all([
       service.circle.info(id),
       service.circle.isFollow(id, uid),
       service.circle.fansCount(id),
+      service.circle.top(id, uid),
       service.circle.postList(id, uid, 0, LIMIT)
     ]);
     if(!info) {
@@ -32,6 +33,7 @@ class Controller extends egg.Controller {
       info,
       isFollow,
       fansCount,
+      top,
       postList,
     });
   }

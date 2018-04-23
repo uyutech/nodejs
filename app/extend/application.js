@@ -80,6 +80,7 @@ const findKind = require('../model/findKind');
 const findBanner = require('../model/findBanner');
 const banner = require('../model/banner');
 const circlingComment = require('../model/circlingComment');
+const circleTop = require('../model/circleTop');
 
 const userReport = require('../model/userReport');
 const userVisit = require('../model/userVisit');
@@ -278,6 +279,7 @@ module.exports = {
         findBanner: findBanner(this),
         banner: banner(this),
         circlingComment: circlingComment(this),
+        circleTop: circleTop(this),
 
         userReport: userReport(this),
         userVisit: userVisit(this),

@@ -1289,7 +1289,7 @@ class Service extends egg.Service {
         is_circle_delete: false,
       },
       order: [
-        ['update_time', 'DESC']
+        ['create_time', 'DESC']
       ],
       offset,
       limit,
