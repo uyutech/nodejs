@@ -219,8 +219,8 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
     // await dealUserCircle(pool);
     // await dealComment(pool);
     // await dealCircleComment(pool);
-    await dealUserWork(pool);
-    // await dealUserPost(pool);
+    // await dealUserWork(pool);
+    await dealUserPost(pool);
     // await dealCommentMedia(pool);
     // await dealAccount(pool);
     // await dealMessage(pool);
@@ -1479,9 +1479,9 @@ async function dealUserWork(pool) {
     }
   }
   hash = {};
-  last = 1087275;
-  last = 0;
-  result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${1000000} AND ID<=1100000 AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
+  last = 1087186;
+  // last = 0;
+  result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${last} AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     let key = item.UID + ',' + item.WorkitemsID;
@@ -1507,8 +1507,11 @@ async function dealUserWork(pool) {
           where: {
             id: ItemsID,
           },
+          raw: true,
         });
-        work = work.toJSON();
+        if(!work) {
+          continue;
+        }
         workHash[ItemsID] = work;
         switch(work.kind) {
           case 1:
@@ -1584,15 +1587,15 @@ async function dealUserPost(pool) {
   console.log('------- dealUserPost --------');
   await UserCommentRelation.sync();
   let hash = {};
-  let last = 3967;
+  let last = 4259;
   last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_CollectionList WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     hash[item.ID] = item.UID;
   }
-  last = 8609;
-  last = 0;
+  last = 9760;
+  // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_Post WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1611,20 +1614,34 @@ async function dealUserPost(pool) {
       console.error('no uid');
     }
   }
-  last = 1348457;
-  last = 0;
-  result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Behavior WHERE ID>${last} AND BehaviorNumber=231;`);
+  last = 1000000;
+  last = 900000;
+  let query = [];
+  result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Behavior WHERE ID>${last} AND ID<=${last+100000} AND BehaviorNumber=231;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await UserCommentRelation.create({
-      user_id: item.UID,
-      comment_id: item.CommentID,
-      create_time: item.CreateTime,
-      update_time: item.CreateTime,
-      type: 1,
-      is_delete: !!item.ISDel,
-    });
+    query.push(
+      UserCommentRelation.upsert({
+        user_id: item.UID,
+        comment_id: item.CommentID,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+        type: 1,
+        is_delete: !!item.ISDel,
+      }, {
+        where: {
+          user_id: item.UID,
+          comment_id: item.CommentID,
+          type: 1,
+        }
+      })
+    );
+    if(query.length > 1000) {
+      await Promise.all(query);
+      query = [];
+    }
   }
+  await Promise.all(query);
 }
 
 async function dealCommentMedia(pool) {
@@ -1735,11 +1752,12 @@ async function dealMessage(pool) {
   console.log('------- dealMessage --------');
   await Message.sync();
   let last = 276335;
-  last = 0;
-  let result = await pool.request().query(`SELECT * FROM dbo.Notify WHERE ID>${last} AND type=2;`);
+  last = 181000;
+  let query = [];
+  let result = await pool.request().query(`SELECT ID,CreateTime,CurrentAuthorID,ISDel,currenttargetid,sendUsers_InfoID,targetType,urlID FROM dbo.Notify WHERE ID>${last} AND ID<=${last + 10000} AND type=2;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await Message.create({
+    query.push(Message.upsert({
       id: item.ID,
       user_id: item.sendUsers_InfoID,
       author_id: item.CurrentAuthorID || 0,
@@ -1748,22 +1766,37 @@ async function dealMessage(pool) {
       type: item.targetType,
       comment_id: item.currenttargetid,
       ref_id: item.urlID,
-    });
+    }, {
+      where: {
+        id: item.ID,
+      },
+    }));
+    if(query > 100) {
+      await Promise.all(query);
+      query = [];
+    }
   }
+  await Promise.all(query);return;
+  query = [];
   last = 283423;
   last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Notify WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await Message.update({
+    query.push(Message.update({
       target_id: item.UID,
       is_read: !!item.isRead,
     }, {
       where: {
         id: item.NID,
       },
-    });
+    }));
+    if(query > 1000) {
+      await Promise.all(query);
+      query = [];
+    }
   }
+  await Promise.all(query);
 }
 
 async function dealMall(pool) {
@@ -1853,14 +1886,20 @@ async function dealAuthorDynamic(pool) {
     },
     raw: true,
   });
+  let query = [];
   for(let i = 0; i < res.length; i++) {
     let item = res[i];
-    await AuthorDynamic.create({
+    query.push(AuthorDynamic.create({
       author_id: item.author_id,
       target_id: item.id,
       type: 1,
-    });
+    }));
+    if(query.length > 1000) {
+      await Promise.all(query);
+      query = [];
+    }
   }
+  await Promise.all(query);
 }
 
 async function modifyWorksComment() {

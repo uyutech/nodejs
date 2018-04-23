@@ -19,6 +19,13 @@ class Controller extends egg.Controller {
       service.user.circleList(uid, 0, LIMIT),
       service.user.followPostList(uid, 0, LIMIT),
     ]);
+    circleList.data.forEach((item) => {
+      delete item.describe;
+      delete item.banner;
+      delete item.cover;
+      delete item.type;
+      delete item.typeName;
+    });
     personList.limit = LIMIT;
     circleList.limit = LIMIT;
     postList.limit = LIMIT;
@@ -29,7 +36,7 @@ class Controller extends egg.Controller {
     });
   }
 
-  async circle() {
+  async circleList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
@@ -45,6 +52,13 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let res = await service.user.followPostList(uid, body.offset || 0, LIMIT);
+    res.data.forEach((item) => {
+      delete item.describe;
+      delete item.banner;
+      delete item.cover;
+      delete item.type;
+      delete item.typeName;
+    });
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }

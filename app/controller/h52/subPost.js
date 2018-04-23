@@ -20,14 +20,20 @@ const HASH = {
 class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
+    let body = ctx.request.body;
     let uid = ctx.session.uid;
-    let circleList;
+    let circleId = parseInt(body.circleId);
+    let query = [];
     if(uid) {
-      circleList = await service.user.circleList(uid, 0, LIMIT);
+      query.push(service.user.circleList(uid, 0, LIMIT));
     }
     else {
-      circleList = await service.circle.all(0, LIMIT);
+      query.push(service.circle.all(0, LIMIT));
     }
+    if(circleId) {
+      query.push(service.circle.info(circleId));
+    }
+    let [circleList, circle] = await Promise.all(query);
     let idList = [];
     circleList.data.forEach((item) => {
       delete item.describe;
@@ -37,11 +43,22 @@ class Controller extends egg.Controller {
       delete item.typeName;
       idList.push(item.id);
     });
+    if(circle) {
+      idList.push(circle.id);
+    }
     let tagList = await service.circle.tagList(idList, 2);
     circleList.limit = LIMIT;
     circleList.data.forEach((item, i) => {
       item.tag = tagList[i];
     });
+    if(circle) {
+      delete circle.describe;
+      delete circle.banner;
+      delete circle.cover;
+      delete circle.type;
+      delete circle.typeName;
+      circle.tag = tagList[tagList.length - 1];
+    }
 
     const activity = [
       {
@@ -66,8 +83,33 @@ class Controller extends egg.Controller {
     ];
     ctx.body = ctx.helper.okJSON({
       circleList,
+      circle,
       activity,
     });
+  }
+
+  async circleList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = body.offset || 0;
+    offset = parseInt(offset) || 0;
+    let circleList = await service.user.circleList(uid, offset, LIMIT);
+    let idList = [];
+    circleList.data.forEach((item) => {
+      delete item.describe;
+      delete item.banner;
+      delete item.cover;
+      delete item.type;
+      delete item.typeName;
+      idList.push(item.id);
+    });
+    let tagList = await service.circle.tagList(idList, 2);
+    circleList.limit = LIMIT;
+    circleList.data.forEach((item, i) => {
+      item.tag = tagList[i];
+    });
+    ctx.body = ctx.helper.okJSON(circleList);
   }
 
   async sub() {

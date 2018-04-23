@@ -597,8 +597,8 @@ class Service extends egg.Service {
       let temp = [];
       let tagIdList = list[i];
       tagIdList.forEach((item) => {
-        if(hash[item.id]) {
-          temp.push(hash[item.id]);
+        if(hash[item]) {
+          temp.push(hash[item]);
         }
       });
       return temp;
