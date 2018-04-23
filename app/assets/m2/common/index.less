@@ -1,0 +1,320 @@
+/**
+ * Created by army on 2017/3/19.
+ */
+
+@import './var';
+@import '../component/mlogin/index';
+@import '../component/message/index';
+
+*,
+:after,
+:before{
+  -webkit-tap-highlight-color:transparent;
+  -webkit-overflow-scrolling:touch;
+}
+
+blockquote,
+body,
+dd,
+div,
+dl,
+dt,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+legend,
+li,
+ol,
+p,
+td,
+textarea,
+th,
+ul,
+pre{
+  margin:0;
+  padding:0;
+}
+
+*::-webkit-scrollbar{
+  display:none;
+}
+
+table{
+  border-collapse:collapse;
+  border-spacing:0;
+}
+
+fieldset,
+img{
+  border:0;
+}
+
+li{
+  list-style:none;
+}
+
+caption,
+th{
+  text-align:left;
+}
+
+q:after,
+q:before{
+  content:"";
+}
+
+input[type="password"]{
+  ime-mode:disabled;
+}
+
+:focus{
+  outline:0;
+}
+
+html{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  font-size:100px;
+}
+
+body{
+  display:flex;
+  flex-direction:column;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  width:100%;
+  min-height:100%;
+  background:#FFF;
+  &.no-scroll{
+    position:fixed;
+    overflow:hidden;
+  }
+}
+
+a,
+img{
+  -webkit-touch-callout:none;
+}
+
+body,
+button,
+input,
+select,
+textarea,
+pre{
+  font-size:12px;
+  line-height:1.5;
+  font-family:// System Font            // https://www.webkit.org/blog/3709/using-the-system-font-in-web-content/
+    -apple-system, // OSX ^10.11 & iOS ^9  San Francisco & 苹方
+    BlinkMacSystemFont,
+      // English First
+    "Helvetica Neue", // OSX
+    "Arial", // Win "Helvetica"
+      //" Segoe UI",            // Win ^8
+
+      // Chinese Fallback
+    "PingFang SC", // OSX ^10.11 & iOS ^9  苹方（华康信凭黑）
+    "Hiragino Sans GB", // OSX ^10.6            冬青黑体
+    "STHeiti", // OSX <10.6  & iOS <9  华文黑体
+    "Microsoft YaHei", // Win                  微软雅黑
+    "Microsoft JhengHei", // Win                  微软正黑
+    "Source Han Sans SC", // SourceHan - begin    思源黑体
+    "Noto Sans CJK SC",
+    "Source Han Sans CN",
+    "Noto Sans SC",
+    "Source Han Sans TC",
+    "Noto Sans CJK TC", // SourceHan - end
+    "WenQuanYi Micro Hei", // Linux                文泉驿微米黑
+    SimSun, // Win old              中易宋体
+    sans-serif; // System Fallback
+}
+
+body, button, input, select, textarea{
+  color:@mainTextColor;
+}
+
+input, button{
+  cursor:pointer;
+  -webkit-appearance:none;
+}
+
+input{
+  line-height:normal;
+}
+
+a{
+  color:@mainLinkColor;
+  text-decoration:none;
+  &:active{
+    color:@mainHoverColor;
+    text-decoration:underline;
+  }
+}
+
+.fn-clear:after{
+  visibility:hidden;
+  display:block;
+  font-size:0;
+  content:" ";
+  clear:both;
+  height:0;
+}
+
+.fn-hide{
+  display:none !important;
+}
+
+.fn-hidden{
+  visibility:hidden !important;
+}
+
+.fn-zero{
+  height:0 !important;
+  overflow:hidden !important;
+}
+
+.fn-placeholder{
+  margin:0.15rem;
+  &:before{
+    display:block;
+    margin-bottom:0.1rem;
+    height:0.2rem;
+    background:@placeholderColor;
+    border-radius:0.05rem;
+    content:' ';
+  }
+  &:after{
+    display:block;
+    width:50%;
+    height:0.2rem;
+    background:@placeholderColor;
+    border-radius:0.05rem;
+    content:' ';
+  }
+}
+.fn-placeholder-circle{
+  margin:0.15rem;
+  width:1rem;
+  height:1rem;
+  background:@placeholderColor;
+  border-radius:100%;
+}
+.fn-placeholder-circles{
+  margin:0.15rem;
+  &:before,&:after{
+    display:inline-block;
+    margin-right:0.1rem;
+    width:1rem;
+    height:1rem;
+    background:@placeholderColor;
+    border-radius:100%;
+    content:' ';
+  }
+}
+.fn-placeholder-square{
+  margin:0.15rem;
+  width:1rem;
+  height:1rem;
+  background:@placeholderColor;
+  border-radius:0.1rem;
+}
+.fn-placeholder-squares{
+  margin:0.15rem;
+  &:before,&:after{
+    display:inline-block;
+    margin-right:0.1rem;
+    width:1rem;
+    height:1rem;
+    background:@placeholderColor;
+    border-radius:0.1rem;
+    content:' ';
+  }
+}
+.fn-placeholder-roundlet{
+  margin:0.15rem;
+  width:0.6rem;
+  height:0.6rem;
+  background:@placeholderColor;
+  border-radius:100%;
+}
+.fn-placeholder-roundlets{
+  margin:0.15rem;
+  &:before,&:after{
+    display:inline-block;
+    margin-right:0.1rem;
+    width:0.6rem;
+    height:0.6rem;
+    background:@placeholderColor;
+    border-radius:100%;
+    content:' ';
+  }
+}
+.fn-placeholder-tag{
+  margin:0.15rem;
+  width:0.5rem;
+  height:0.24rem;
+  background:@placeholderColor;
+  border-radius:0.24rem;
+}
+.fn-placeholder-tags{
+  margin:0.15rem;
+  &:before,&:after{
+    display:inline-block;
+    margin-right:0.1rem;
+    width:0.5rem;
+    height:0.24rem;
+    background:@placeholderColor;
+    border-radius:0.24rem;
+    content:' ';
+  }
+}
+.fn-placeholder-pic{
+  margin:0.15rem;
+  padding-top:56.25%;
+  background:rgba(0,0,0,0.05);
+  border-radius:0.05rem;
+}
+
+.cp-message{
+  margin:0.1rem;
+  background:#EDF3F7;
+  color:@mainTextColor;
+  font-size:0.14rem;
+  text-align:center;
+  line-height:0.3rem;
+  border-radius:0.3rem;
+}
+
+.g-top{
+  position:fixed;
+  right:0.1rem;
+  bottom:0.1rem;
+  display:none;
+  width:0.48rem;
+  height:0.48rem;
+  background:url(top.png) no-repeat center;
+  background-size:contain;
+  z-index:900;
+  &.show{
+    display:block;
+  }
+}
+
+#page{
+  flex:1;
+}
+
+@media screen and (min-device-width:414px){
+  html{
+    font-size:110px;
+  }
+}

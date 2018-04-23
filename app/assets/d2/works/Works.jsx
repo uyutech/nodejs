@@ -100,10 +100,13 @@ class Works extends migi.Component {
           <li class="cur">简介</li>
         </ul>
         <div class="box box-fn-top-left">
-          <Author ref="author" list={ self.props.author }/>
+          <Author ref="author" list={ self.props.info.author }/>
           <Text ref="text" list={ self.textList }/>
           <Image ref="image" list={ self.imgList }/>
         </div>
+      </div>
+      <div class="qr">
+        <img src="//zhuanquan.xin/img/09447d7b0b2272a4a3a9cec86fc16ab0.png"/>
       </div>
     </div>;
   }

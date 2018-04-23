@@ -294,66 +294,12 @@ class Audio extends migi.Component {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
-    let self = this;
-    if(vd.element.classList.contains('loading')) {
-      return;
-    }
-    vd.element.classList.add('loading');
-    let item = self.list[self.index || 0];
-    net.postJSON('/api2/works/like', {
-      worksId: self.props.worksId,
-      workId: item.id,
-      is: !vd.element.classList.contains('liked')
-    }, function(res) {
-      if(res.success) {
-        let data = res.data;
-        item.isLiked = data;
-        self.fnLike = null;
-      }
-      else if(res.code === 1000) {
-        migi.eventBus.emit('NEED_LOGIN');
-      }
-      else {
-        alert(res.message || util.ERROR_MESSAGE);
-      }
-      vd.element.classList.remove('loading');
-    }, function(res) {
-      alert(res.message || util.ERROR_MESSAGE);
-      vd.element.classList.remove('loading');
-    });
   }
   clickFavor(e, vd) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
-    let self = this;
-    if(vd.element.classList.contains('loading')) {
-      return;
-    }
-    vd.element.classList.add('loading');
-    let item = self.list[self.index || 0];
-    net.postJSON('/api2/works/favor', {
-      worksId: self.props.worksId,
-      workId: item.id,
-      is: !vd.element.classList.contains('favored')
-    }, function(res) {
-      if(res.success) {
-        let data = res.data;
-        item.isFavored = data;
-        self.fnFavor = null;
-      }
-      else if(res.code === 1000) {
-        migi.eventBus.emit('NEED_LOGIN');
-      }
-      else {
-        alert(res.message || util.ERROR_MESSAGE);
-      }
-      $vd.removeClass('loading');
-    }, function(res) {
-      alert(res.message || util.ERROR_MESSAGE);
-      $vd.removeClass('loading');
-    });
   }
   clickDownload(e) {
     if(!$CONFIG.isLogin) {

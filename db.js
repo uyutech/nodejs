@@ -166,6 +166,7 @@ const skill = require('./app/model/skill')({ sequelizeCircling: sequelize, Seque
 const professionSkillRelation = require('./app/model/professionSkillRelation')({ sequelizeCircling: sequelize, Sequelize });
 const authorSkillRelation = require('./app/model/authorSkillRelation')({ sequelizeCircling: sequelize, Sequelize });
 const authorCooperation = require('./app/model/authorCooperation')({ sequelizeCircling: sequelize, Sequelize });
+const workWorkRelation = require('./app/model/workWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
 
 const Product = require('./app/model/product')({ sequelizeMall: sequelizeMall, Sequelize });
 const Express = require('./app/model/express')({ sequelizeMall: sequelizeMall, Sequelize });
@@ -227,6 +228,7 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
     // await dealMessage(pool);
     // await dealMall(pool);
     // await dealAuthorDynamic(pool);
+    // await dealWorkWork(pool);
     // await modifyPostComment();
 
     // await temp(pool);
@@ -1914,6 +1916,65 @@ async function dealAuthorDynamic(pool) {
     }
   }
   await Promise.all(query);
+}
+
+async function dealWorkWork(pool) {
+  console.log('------- dealWorkWork --------');
+  await workWorkRelation.sync();
+  let last = 537;
+  // last = 0;
+  let result = await pool.request().query(`SELECT * FROM dbo.WorkToWork WHERE ID>${last};`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let work = await Work.findOne({
+      attributes: ['kind'],
+      where: {
+        id: item.ItemsID,
+      },
+      raw: true,
+    });
+    let target = await Work.findOne({
+      attributes: ['kind'],
+      where: {
+        id: item.ToItemsID,
+      },
+      raw: true,
+    });
+    if(!work || !target) {
+      continue;
+    }
+    let workId = item.ItemsID;
+    let targetId = item.ToItemsID;
+    if(work.kind === 1) {
+      workId = workId.toString().replace(/^2016/, 2020);
+    }
+    else if(work.kind === 3) {
+      workId = workId.toString().replace(/^2016/, 2021);
+    }
+    else if(work.kind === 4) {
+      workId = workId.toString().replace(/^2016/, 2022);
+    }
+    if(targetId.kind === 1) {
+      targetId = targetId.toString().replace(/^2016/, 2020);
+    }
+    else if(targetId.kind === 3) {
+      targetId = targetId.toString().replace(/^2016/, 2021);
+    }
+    else if(targetId.kind === 4) {
+      targetId = targetId.toString().replace(/^2016/, 2022);
+    }
+    await workWorkRelation.upsert({
+      work_id: workId,
+      target_id: targetId,
+      type: item.Describe,
+    }, {
+      where: {
+        work_id: workId,
+        target_id: targetId,
+        type: item.Describe,
+      }
+    });
+  }
 }
 
 async function modifyWorksComment() {

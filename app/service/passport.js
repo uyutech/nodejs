@@ -198,7 +198,7 @@ class Service extends egg.Service {
         raw: true,
       });
       let id = last.id + Math.floor(Math.random() * 5) + 1;
-      let create = await app.model.user.create({
+      await app.model.user.create({
         id,
         nickname: '圈友' + id,
       }, {
@@ -210,14 +210,14 @@ class Service extends egg.Service {
         name: phone,
         password: md5,
         type: 1,
-        user_id: create.id,
+        user_id: id,
       }, {
         transaction,
       });
       await transaction.commit();
       return {
         success: true,
-        data: create.id ,
+        data: id ,
       };
     } catch(e) {
       await transaction.rollback();

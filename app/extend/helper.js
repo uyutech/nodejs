@@ -135,7 +135,6 @@ let helper = {
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
       <title>${title}</title>
-      <script>if(parent && parent !== window && parent.setTitle) { parent.setTitle("${title}") }</script>
       <link rel="icon" href="//zhuanquan.xin/img/526ac77cd8f453867cb378b4d22cffda.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>
@@ -161,7 +160,7 @@ let helper = {
             : ''}
           <li>
           ${session.uid
-            ? (session.authorId && session.isPublic ? session.authorName : session.uname)
+            ? (session.uname)
             : '<a href="/login" class="login">登录</a>'}
           </li>
         </ul>

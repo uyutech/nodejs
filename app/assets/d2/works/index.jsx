@@ -13,6 +13,5 @@ let works = migi.preExist(
          workId={ $CONFIG.workId }
          info={ $CONFIG.info }
          collection={ $CONFIG.collection }
-         author={ $CONFIG.author }
          commentList={ $CONFIG.commentList }/>
 );

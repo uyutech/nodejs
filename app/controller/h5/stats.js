@@ -5,7 +5,6 @@
 'use strict';
 
 const egg = require('egg');
-const Sequelize = require('sequelize');
 
 class Controller extends egg.Controller {
   async visit() {

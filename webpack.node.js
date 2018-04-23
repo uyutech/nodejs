@@ -50,8 +50,7 @@ module.exports = {
     dmall_wait: './app/view/d/mall/wait.jsx',
 
     dworks2: './app/view/d2/works.jsx',
-    dauthor2: './app/view/d2/author.jsx',
-    dpost2: './app/view/d2/post.jsx',
+    mworks2: './app/view/m2/works.jsx',
   },
   output: {
     path: __dirname + '/app/view',

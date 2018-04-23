@@ -15,6 +15,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
       comment: '0个人，1组合，2团体，3虚拟',
     },
     name: {

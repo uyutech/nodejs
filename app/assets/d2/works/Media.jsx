@@ -12,15 +12,15 @@ class Media extends migi.Component {
   constructor(...data) {
     super(...data);
   }
-  switchType(klass) {
+  switchType(kind) {
     let self = this;
     let audio = self.ref.audio;
     let video = self.ref.video;
-    if(klass === 2) {
+    if(kind === 2) {
       video && video.pause().hide();
       audio.show();
     }
-    else if(klass === 1) {
+    else if(kind === 1) {
       audio && audio.pause().hide();
       video.show();
     }

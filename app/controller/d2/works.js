@@ -12,26 +12,25 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let worksId = ctx.params.worksId;
+    let worksId = parseInt(ctx.params.worksId);
+    let workId = parseInt(ctx.params.workId);
     if(!worksId) {
       return;
     }
-    let [[info, professionSort], author, [collection, collectionAuthor], commentList] = await Promise.all([
-      service.works.infoAndProfessionSort(worksId),
-      service.works.author(worksId),
-      service.works.collectionAndAuthor(worksId, uid),
+    let [info, collection, commentList] = await Promise.all([
+      service.works.infoPlusAllAuthor(worksId),
+      service.works.collectionFull(worksId, uid),
       service.works.commentList(worksId, uid, 0, LIMIT)
     ]);
+    if(!info || info.state === 3) {
+      return;
+    }
     commentList.limit = LIMIT;
-    collectionAuthor.forEach((item) => {
-      author = author.concat(item);
-    });
-    author = service.works.reorderAuthor(author, professionSort);
     await ctx.render('dworks2', {
       worksId,
+      workId,
       info,
       collection,
-      author,
       commentList,
     });
   }
