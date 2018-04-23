@@ -180,6 +180,7 @@ const findTag = require('./app/model/findTag')({ sequelizeRecommend: sequelizeRe
 const findKind = require('./app/model/findKind')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
 const findBanner = require('./app/model/findBanner')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
 const banner = require('./app/model/banner')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
+const circlingComment = require('./app/model/circlingComment')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
 
 const userReport = require('./app/model/userReport')({ sequelizeStats: sequelizeStats, Sequelize });
 const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeStats, Sequelize });
@@ -203,6 +204,7 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
     // await professionSkillRelation.sync();
     // await authorSkillRelation.sync();
     // await authorCooperation.sync();
+    await circlingComment.sync();
 
     // await userReport.sync();
     // await userVisit.sync();
@@ -223,7 +225,7 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
     // await dealUserPost(pool);
     // await dealCommentMedia(pool);
     // await dealAccount(pool);
-    await dealMessage(pool);
+    // await dealMessage(pool);
     // await dealMall(pool);
     // await dealAuthorDynamic(pool);
     // await modifyPostComment();
@@ -1751,7 +1753,7 @@ async function dealAccount(pool) {
 async function dealMessage(pool) {
   console.log('------- dealMessage --------');
   await Message.sync();
-  let last = 290195;
+  let last = 290199;
   // last = 290194;
   let query = [];
   let result = await pool.request().query(`SELECT ID,CreateTime,CurrentAuthorID,ISDel,currenttargetid,sendUsers_InfoID,targetType,urlID FROM dbo.Notify WHERE ID>${last} AND ID<=${last + 10000} AND type=2;`);
@@ -1778,8 +1780,8 @@ async function dealMessage(pool) {
   }
   await Promise.all(query);
   query = [];
-  last = 287000;
-  last = 210000;
+  last = 297287;
+  // last = 260000;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Notify WHERE ID>${last} AND ID<=${last + 50000};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];

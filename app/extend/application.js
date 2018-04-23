@@ -79,6 +79,7 @@ const findTag = require('../model/findTag');
 const findKind = require('../model/findKind');
 const findBanner = require('../model/findBanner');
 const banner = require('../model/banner');
+const circlingComment = require('../model/circlingComment');
 
 const userReport = require('../model/userReport');
 const userVisit = require('../model/userVisit');
@@ -276,6 +277,7 @@ module.exports = {
         findKind: findKind(this),
         findBanner: findBanner(this),
         banner: banner(this),
+        circlingComment: circlingComment(this),
 
         userReport: userReport(this),
         userVisit: userVisit(this),

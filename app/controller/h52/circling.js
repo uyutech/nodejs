@@ -14,7 +14,7 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
-    let [bannerList, circleList, postList] = await Promise.all([
+    let [bannerList, recommendComment, circleList, postList] = await Promise.all([
       app.model.banner.findAll({
         attributes: [
           'title',
@@ -30,6 +30,7 @@ class Controller extends egg.Controller {
           ['weight', 'DESC']
         ]
       }),
+      service.circling.recommendComment(0, 3),
       service.circle.all(0, LIMIT),
       service.post.all(uid, 0, LIMIT)
     ]);
@@ -39,6 +40,7 @@ class Controller extends egg.Controller {
     postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       bannerList,
+      recommendComment,
       circleList,
       postList,
     });
