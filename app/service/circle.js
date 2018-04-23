@@ -30,6 +30,7 @@ class Service extends egg.Service {
           'id',
           'name',
           'describe',
+          'cover',
           'banner',
           'type'
         ],
@@ -38,12 +39,15 @@ class Service extends egg.Service {
         },
         raw: true,
       });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     }
     if(!res) {
       return;
     }
     let type = await service.circleType.info(res.type);
-    res.typeName = type.name;
+    if(type) {
+      res.typeName = type.name;
+    }
     return res;
   }
 
@@ -59,10 +63,12 @@ class Service extends egg.Service {
     if(!idList.length) {
       return [];
     }
-    const { app } = this;
+    const { app, service } = this;
     let cache = await Promise.all(
       idList.map((id) => {
-        return app.redis.get('circleInfo_' + id);
+        if(id !== undefined && id !== null) {
+          return app.redis.get('circleInfo_' + id);
+        }
       })
     );
     let noCacheIdList = [];
@@ -82,26 +88,24 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
-      let sql = squel.select()
-        .from('circle')
-        .from('circle_type')
-        .field('circle.id')
-        .field('circle.name')
-        .field('circle.describe')
-        .field('circle.banner')
-        .field('circle.cover')
-        .field('circle.type')
-        .field('circle_type.name', 'typeName')
-        .where('circle.id IN ?', noCacheIdList)
-        .where('circle.type=circle_type.id')
-        .toString();
-      let res = await app.sequelizeCircling.query(sql, { type: Sequelize.QueryTypes.SELECT });
+      let res = await app.model.circle.findAll({
+        attributes: [
+          'id',
+          'name',
+          'describe',
+          'cover',
+          'banner',
+          'type'
+        ],
+        where: {
+          id: noCacheIdList,
+        },
+        raw: true,
+      });
       let hash = {};
-      if(res.length) {
-        res.forEach((item) => {
-          hash[item.id] = item;
-        });
-      }
+      res.forEach((item) => {
+        hash[item.id] = item;
+      });
       noCacheIndexList.forEach((i) => {
         let id = idList[i];
         let temp = hash[id] || null;
@@ -109,6 +113,26 @@ class Service extends egg.Service {
         app.redis.setex('circleInfo_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
+    let typeIdList = [];
+    let typeIdHash = {};
+    cache.forEach((item) => {
+      if(item && item.type && !typeIdHash[item.type]) {
+        typeIdHash[item.type] = true;
+        typeIdList.push(item.type);
+      }
+    });
+    let typeList = await service.circleType.infoList(typeIdList);
+    let typeHash = {};
+    typeList.forEach((item) => {
+      if(item) {
+        typeHash[item.id] = item;
+      }
+    });
+    cache.forEach((item) => {
+      if(item && item.type && typeHash[item.type]) {
+        item.typeName = typeHash[item.type].name;
+      }
+    });
     return cache;
   }
 
@@ -180,7 +204,7 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'circleCommentCount_' + id;
+    let cacheKey = 'circlePostCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       return JSON.parse(res);
@@ -203,6 +227,71 @@ class Service extends egg.Service {
     }
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 获取圈子列表下画圈数量
+   * @param idList:int 圈子id列表
+   * @returns Array<int>
+   */
+  async postCountList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== undefined && id !== null) {
+          return app.redis.get('circlePostCount_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.circleCommentRelation.findAll({
+        attributes: [
+          ['circle_id', 'circleId'],
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          circle_id: noCacheIdList,
+          is_comment_delete: false,
+        },
+        group: 'circle_id',
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          hash[item.circleId] = item.num;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || 0;
+        cache[i] = temp;
+        app.redis.setex('circlePostCount_' + id, app.config.redis.time, JSON.stringify(temp));
+      });
+    }
+    return cache;
   }
 
   /**
@@ -235,24 +324,41 @@ class Service extends egg.Service {
     let cacheKey = 'allCircle_' + offset + '_' + limit;
     let res = await app.redis.get(cacheKey);
     if(res) {
-      return JSON.parse(res);
+      res = JSON.parse(res);
     }
-    res = await app.model.circle.findAll({
-      attributes: [
-        'id',
-        'name'
-      ],
-      where: {
-        is_delete: false,
-      },
-      offset,
-      limit,
-      raw: true,
+    else {
+      res = await app.model.circle.findAll({
+        attributes: [
+          'id',
+          'name',
+          'describe',
+          'cover',
+          'banner',
+          'type'
+        ],
+        where: {
+          is_delete: false,
+        },
+        offset,
+        limit,
+        raw: true,
+      });
+      // 只缓存第一页
+      if(offset === 0) {
+        app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+      }
+    }
+    let idList = res.map((item) => {
+      return item.id;
     });
-    // 只缓存第一页
-    if(offset === 0) {
-      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
-    }
+    let [fansCountList, postCountList] = await Promise.all([
+      this.fansCountList(idList),
+      this.postCountList(idList)
+    ]);
+    res.forEach((item, i) => {
+      item.fansCount = fansCountList[i];
+      item.postCount = postCountList[i];
+    });
     return res;
   }
 
@@ -283,6 +389,96 @@ class Service extends egg.Service {
       res = 0;
     }
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 按热度（人数）获取圈子列表
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async popularList(offset, limit) {
+    let [data, count] = await Promise.all([
+      this.popularData(offset, limit),
+      this.popularCount()
+    ]);
+    return { data, count };
+  }
+
+  async popularData(offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'popularCircle_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.userCircleRelation.findAll({
+        attributes: [
+          ['circle_id', 'circleId'],
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          type: 1,
+          is_circle_delete: false,
+        },
+        group: 'circle_id',
+        order: [
+          Sequelize.literal('num DESC')
+        ],
+        offset,
+        limit,
+        raw: true
+      });
+      app.redis.setex(cacheKey, app.config.redis.longTime, JSON.stringify(res));
+    }
+    let idList = res.map((item) => {
+      return item.circleId;
+    });
+    let [infoList, fansCountList, postCountList] = await Promise.all([
+      this.infoList(idList),
+      this.fansCountList(idList),
+      this.postCountList(idList)
+    ]);
+    infoList.forEach((item, i) => {
+      if(item) {
+        item.fansCount = fansCountList[i];
+        item.postCount = postCountList[i];
+      }
+    });
+    return infoList;
+  }
+
+  async popularCount() {
+    const { app } = this;
+    let cacheKey = 'popularCircleCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.userCircleRelation.findOne({
+      attributes: [
+        Sequelize.literal('COUNT(DISTINCT circle_id) AS num')
+      ],
+      where: {
+        type: 1,
+        is_circle_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.longTime, JSON.stringify(res));
     return res;
   }
 
@@ -388,7 +584,7 @@ class Service extends egg.Service {
 
   /**
    * 获得粉丝数量
-   * @param id:int 用户id
+   * @param id:int 圈子id
    * @returns int
    */
   async fansCount(id) {
@@ -419,6 +615,72 @@ class Service extends egg.Service {
     }
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 获得粉丝数量
+   * @param idList:int 圈子id列表
+   * @returns Array<int>
+   */
+
+  async fansCountList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== undefined && id !== null) {
+          return app.redis.get('circleFansCount_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.userCircleRelation.findAll({
+        attributes: [
+          ['circle_id', 'circleId'],
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          circle_id: noCacheIdList,
+          type: 1,
+        },
+        group: 'circle_id',
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          hash[item.circleId] = item.num;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || 0;
+        cache[i] = temp;
+        app.redis.setex('circleFansCount_' + id, app.config.redis.time, JSON.stringify(temp));
+      });
+    }
+    return cache;
   }
 
   /**

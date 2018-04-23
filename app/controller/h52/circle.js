@@ -62,6 +62,20 @@ class Controller extends egg.Controller {
     if(!res) {
       return;
     }
+    res.limit = ALL_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async popularList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.circle.popularList(offset, ALL_LIMIT);
+    if(!res) {
+      return;
+    }
+    res.limit = ALL_LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
 

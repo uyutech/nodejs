@@ -45,7 +45,7 @@ class Controller extends egg.Controller {
     });
   }
 
-  async relation() {
+  async relationList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let [friendList, followUserList, fansList, followAuthorList] = await Promise.all([
@@ -213,7 +213,7 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON();
   }
 
-  async message() {
+  async messageList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;

@@ -53,8 +53,12 @@ module.exports = app => {
         fields: ['user_id', 'type', 'is_circle_delete', 'update_time']
       },
       {
-        name: 'circle_id_type',
-        fields: ['circle_id', 'type']
+        name: 'circle_id_type_is_circle_delete',
+        fields: ['circle_id', 'type', 'is_circle_delete']
+      },
+      {
+        name: 'type_is_circle_delete_circle_id',
+        fields: ['type', 'is_circle_delete', 'circle_id']
       }
     ],
     comment: '用户和圈子关联信息',

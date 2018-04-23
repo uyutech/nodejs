@@ -32,11 +32,11 @@ class Service extends egg.Service {
         'content',
         ['parent_id', 'parentId'],
         ['root_id', 'rootId'],
-        ['create_time', 'createTime']
+        ['create_time', 'createTime'],
+        ['is_delete', 'isDelete']
       ],
       where: {
         id,
-        is_delete: false,
       },
       raw: true,
     });
@@ -87,11 +87,11 @@ class Service extends egg.Service {
           'content',
           ['parent_id', 'parentId'],
           ['root_id', 'rootId'],
-          ['create_time', 'createTime']
+          ['create_time', 'createTime'],
+          ['is_delete', 'isDelete']
         ],
         where: {
           id: idList,
-          is_delete: false,
         },
         raw: true,
       });
@@ -706,6 +706,9 @@ class Service extends egg.Service {
       }
     });
     if(quote) {
+      if(quote.isDelete) {
+        delete quote.content;
+      }
       if(quote.isAuthor) {
         quote.name = authorHash[quote.authorId].name;
         quote.headUrl = authorHash[quote.authorId].headUrl;
@@ -992,6 +995,7 @@ class Service extends egg.Service {
           delete item.authorId;
         }
         if(item.rootId !== item.parentId && item.rootId !== 0 && !quoteIdHash[item.parentId]) {
+          quoteIdHash[item.parentId] = true;
           quoteIdList.push(item.parentId);
         }
       }
@@ -1040,6 +1044,9 @@ class Service extends egg.Service {
     });
     quoteList.forEach((item) => {
       if(item) {
+        if(item.isDelete) {
+          delete item.content;
+        }
         if(item.isAuthor) {
           item.name = authorHash[item.authorId].name;
           item.headUrl = authorHash[item.authorId].headUrl;

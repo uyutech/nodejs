@@ -340,6 +340,7 @@ module.exports = app => {
   app.post('/h5/circle2/index', 'h52.circle.index');
   app.post('/h5/circle2/postList', 'h52.circle.postList');
   app.post('/h5/circle2/all', 'h52.circle.all');
+  app.post('/h5/circle2/popularList', 'h52.circle.popularList');
   app.post('/h5/circle2/follow', app.middlewares.needLoginJson(), 'h52.circle.follow');
   app.post('/h5/circle2/unFollow', app.middlewares.needLoginJson(), 'h52.circle.unFollow');
   app.post('/h5/circle2/block', app.middlewares.needLoginJson(), 'h52.circle.block');
@@ -375,8 +376,8 @@ module.exports = app => {
   app.post('/h5/my2/postList', app.middlewares.needLoginJson(), 'h52.my.postList');
   app.post('/h5/my2/favorList', app.middlewares.needLoginJson(), 'h52.my.favorList');
   app.post('/h5/my2/favorPostList', app.middlewares.needLoginJson(), 'h52.my.favorPostList');
-  app.post('/h5/my2/relation', app.middlewares.needLoginJson(), 'h52.my.relation');
-  app.post('/h5/my2/message', app.middlewares.needLoginJson(), 'h52.my.message');
+  app.post('/h5/my2/relationList', app.middlewares.needLoginJson(), 'h52.my.relationList');
+  app.post('/h5/my2/messageList', app.middlewares.needLoginJson(), 'h52.my.messageList');
   app.post('/h5/my2/sts', app.middlewares.needLoginJson(), 'h52.my.sts');
   app.post('/h5/my2/headUrl', app.middlewares.needLoginJson(), 'h52.my.headUrl');
   app.post('/h5/my2/nickname', app.middlewares.needLoginJson(), 'h52.my.nickname');
