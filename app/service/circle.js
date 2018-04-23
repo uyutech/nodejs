@@ -914,7 +914,7 @@ class Service extends egg.Service {
           user_id: uid,
           circle_id: id,
           type: 1,
-          update_time: new Date(),
+          create_time: new Date(),
         }, {
           where: {
             user_id: uid,
@@ -985,7 +985,7 @@ class Service extends egg.Service {
       user_id: uid,
       circle_id: id,
       type: 2,
-      update_time: new Date(),
+      create_time: new Date(),
     }, {
       where: {
         user_id: uid,

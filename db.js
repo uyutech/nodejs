@@ -14,8 +14,6 @@ let host = 'localhost';
 circlingUser = 'uyutech';
 circlingPass = 'uyuTech2017';
 host = 'rm-uf6qe904j4997hpen7o.mysql.rds.aliyuncs.com';
-// const sequelize = new Sequelize(config.database.circling.name, config.database.circling.username, config.database.circling.password, {
-//   host: config.database.circling.host,
 const sequelize = new Sequelize('circling', circlingUser, circlingPass, {
   host: host,
   dialect: 'mysql',
@@ -121,7 +119,6 @@ const Profession = require('./app/model/profession')({ sequelizeCircling: sequel
 // const WorksAuthorProfessionRelation = require('./app/model/worksAuthorProfessionRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleType = require('./app/model/circleType')({ sequelizeCircling: sequelize, Sequelize });
 const Circle = require('./app/model/circle')({ sequelizeCircling: sequelize, Sequelize });
-const CircleTop = require('./app/model/circleTop')({ sequelizeCircling: sequelize, Sequelize });
 const Tag = require('./app/model/tag')({ sequelizeCircling: sequelize, Sequelize });
 const TagCommentRelation = require('./app/model/tagCommentRelation')({ sequelizeCircling: sequelize, Sequelize });
 const CircleTagRelation = require('./app/model/circleTagRelation')({ sequelizeCircling: sequelize, Sequelize });
@@ -181,6 +178,7 @@ const findKind = require('./app/model/findKind')({ sequelizeRecommend: sequelize
 const findBanner = require('./app/model/findBanner')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
 const banner = require('./app/model/banner')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
 const circlingComment = require('./app/model/circlingComment')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
+const circleTop = require('./app/model/circleTop')({ sequelizeRecommend: sequelizeRecommend, Sequelize });
 
 const userReport = require('./app/model/userReport')({ sequelizeStats: sequelizeStats, Sequelize });
 const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeStats, Sequelize });
@@ -204,7 +202,8 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
     // await professionSkillRelation.sync();
     // await authorSkillRelation.sync();
     // await authorCooperation.sync();
-    await circlingComment.sync();
+    // await circlingComment.sync();
+    // await circleTop.sync();
 
     // await userReport.sync();
     // await userVisit.sync();
@@ -238,6 +237,8 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
 // WHERE comment_id IN (SELECT id as comment_id FROM comment WHERE is_delete=true);`, { type: Sequelize.QueryTypes.UPDATE });
 //     await sequelize.query(`UPDATE user_circle_relation SET is_circle_delete=TRUE WHERE circle_id IN(
 // SELECT id as circle_id FROM circle WHERE is_delete=TRUE);`, { type: Sequelize.QueryTypes.UPDATE });
+//     await sequelize.query(`UPDATE user_comment_relation SET is_comment_delete=TRUE
+// WHERE comment_id IN (SELECT id as comment_id FROM comment WHERE is_delete=true);`, { type: Sequelize.QueryTypes.UPDATE });
 
     console.log('======== END ========');
   } catch (err) {
@@ -805,6 +806,7 @@ async function dealWorkAuthorProfession(pool) {
       id: item.ID,
       name: item.AuthorTypeName,
       create_time: item.CreateTime,
+      update_time: item.CreateTime,
     });
   }
   last = 7119;
@@ -844,6 +846,7 @@ async function dealWorkAuthorProfession(pool) {
       author_id: item.AuthorID,
       kind: work.kind,
       profession_id: item.Enum_AuthorTypeID,
+      tag: item.Remark || '',
       create_time: item.CreateTime,
       update_time: item.CreateTime,
     });
@@ -972,7 +975,7 @@ async function dealCircle(pool) {
     });
   }
   await Circle.sync();
-  await CircleTop.sync();
+  await circleTop.sync();
   await Tag.sync();
   await CircleTagRelation.sync();
   await TagCommentRelation.sync();
@@ -995,10 +998,11 @@ async function dealCircle(pool) {
     if(item.TopPost) {
       let top = item.TopPost.split(',');
       for(let j = 0; j < top.length; j++) {
-        await CircleTop.create({
+        await circleTop.create({
           circle_id: item.ID,
           comment_id: top[j],
           weight: 0,
+          create_tiem: item.CreateTime,
           update_time: item.CreateTime,
         });
       }
@@ -1151,7 +1155,7 @@ async function dealComment(pool) {
   await AuthorCommentRelation.sync();
   await WorksCommentRelation.sync();
   await Comment.sync();
-  let last = 469544;
+  let last = 469545;
   // last = 0;
   let hash = {};
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
@@ -2007,49 +2011,37 @@ async function modifyPostComment() {
 }
 
 async function temp(pool) {
-  let res = await WorkNum.findAll({
-    attributes: [
-      'work_id',
-      'num'
-    ],
-  });
-  for(let i = 0; i < res.length; i++) {
-    let item = res[i];
-    if(/^2020/.test(item.work_id)) {
-      await Video.update({
-        views: item.num,
-      }, {
-        where: {
-          id: item.work_id,
-        },
-      });
+  let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE Remark!='';`);
+  for(let i = 0, len = result.recordset.length; i < len; i++) {
+    let item = result.recordset[i];
+    let work = await Work.findOne({
+      attributes: ['id', 'kind'],
+      where: {
+        id: item.WorksItemID,
+      },
+    });
+    if(!work) {
+      continue;
     }
-    else if(/^2021/.test(item.work_id)) {
-      await Image.update({
-        views: item.num,
-      }, {
-        where: {
-          id: item.work_id,
-        },
-      });
+    let work_id;
+    if(work.kind === 1) {
+      work_id = work.id.toString().replace(/^2016/,  2020);
     }
-    else if(/^2022/.test(item.work_id)) {
-      await Text.update({
-        views: item.num,
-      }, {
-        where: {
-          id: item.work_id,
-        },
-      });
+    else if(work.kind === 2) {
+      work_id = work.id;
     }
-    else {
-      await Audio.update({
-        views: item.num,
-      }, {
-        where: {
-          id: item.works_id,
-        },
-      });
+    else if(work.kind === 3) {
+      work_id = work.id.toString().replace(/^2016/,  2021);
     }
+    else if(work.kind === 4) {
+      work_id = work.id.toString().replace(/^2016/,  2022);
+    }
+    await WorkAuthorRelation.update({
+      tag: item.Remark || '',
+    }, {
+      where: {
+        work_id,
+      }
+    });
   }
 }

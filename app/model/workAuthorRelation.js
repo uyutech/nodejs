@@ -31,6 +31,11 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
+    tag: {
+      type: Sequelize.STRING(32),
+      allowNull: false,
+      defaultValue: '',
+    },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,

@@ -5,8 +5,8 @@
 'use strict';
 
 module.exports = app => {
-  const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('circle_top', {
+  const { sequelizeRecommend, Sequelize } = app;
+  return sequelizeRecommend.define('circle_top', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -25,11 +25,6 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
     },
   }, {
     indexes: [
