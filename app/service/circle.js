@@ -380,10 +380,7 @@ class Service extends egg.Service {
         limit,
         raw: true,
       });
-      // 只缓存第一页
-      if(offset === 0) {
-        app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
-      }
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     }
     let idList = res.map((item) => {
       return item.id;

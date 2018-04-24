@@ -253,7 +253,7 @@ async function dealAuthor(pool) {
   await Author.sync();
   await AuthorAlias.sync();
   await AuthorOutside.sync();
-  let last = 2017000000008124;
+  let last = 2017000000008345;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Authors_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -265,7 +265,7 @@ async function dealAuthor(pool) {
       fans_name: item.FansName || '',
       fans_circle_name: item.FansCirclingName || '',
       head_url: item.Head_url || '',
-      is_settled: !!item.ISSettled,
+      is_settle: !!item.ISSettled,
       sign: item.Sign || '',
       state: item.ISDel ? 1 : 0,
       create_time: item.CreateTime,
@@ -275,7 +275,7 @@ async function dealAuthor(pool) {
       await AuthorAlias.create({
         author_id: item.ID,
         alias: item.AuthorAliasName,
-        is_settled: false,
+        is_settle: false,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
       });
@@ -414,14 +414,18 @@ async function dealWork(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 2016000000011391;
+  last = 2016000000011867;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    await Work.create({
+    await Work.upsert({
       id: item.ID,
       kind: item.BigType,
+    }, {
+      where: {
+        id: item.ID,
+      },
     });
     let workId = item.ID;
     if(item.BigType === 1) {
@@ -433,14 +437,19 @@ async function dealWork(pool) {
     else if(item.BigType === 4) {
       workId = workId.toString().replace(/^2016/, 2022);
     }
-    await WorkNum.create({
+    await WorkNum.upsert({
       work_id: workId,
       type: 1,
       num: item.PlayCountRaw || 0,
       update_time: item.CreateTime,
+    }, {
+      where: {
+        work_id: workId,
+        type: 1,
+      }
     });
     if(item.BigType === 2) {
-      await Audio.create({
+      await Audio.upsert({
         id: workId,
         work_id: item.ID,
         type: item.ItemType,
@@ -452,10 +461,14 @@ async function dealWork(pool) {
         cover: '',
         url: item.FileUrl || '',
         lrc: '',
+      }, {
+        where: {
+          id: workId,
+        },
       });
     }
     else if(item.BigType === 1) {
-      await Video.create({
+      await Video.upsert({
         id: workId,
         work_id: item.ID,
         type: item.ItemType,
@@ -468,10 +481,14 @@ async function dealWork(pool) {
         duration: 0,
         cover: '',
         url: item.FileUrl || '',
+      }, {
+        where: {
+          id: workId,
+        },
       });
     }
     else if(item.BigType === 3) {
-      await Image.create({
+      await Image.upsert({
         id: workId,
         work_id: item.ID,
         type: item.ItemType,
@@ -483,10 +500,14 @@ async function dealWork(pool) {
         height: 0,
         time: 0,
         url: item.FileUrl || '',
+      }, {
+        where: {
+          id: workId,
+        },
       });
     }
     else if(item.BigType === 4) {
-      await Text.create({
+      await Text.upsert({
         id: workId,
         work_id: item.ID,
         type: item.ItemType,
@@ -495,10 +516,14 @@ async function dealWork(pool) {
         create_time: item.CreateTime,
         update_time: item.CreateTime,
         content: '',
+      }, {
+        where: {
+          id: workId,
+        },
       });
     }
   }
-  last = 351;
+  last = 352;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Audio WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -512,7 +537,7 @@ async function dealWork(pool) {
       },
     });
   }
-  last = 81;
+  last = 131;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Video WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -541,7 +566,7 @@ async function dealWork(pool) {
       },
     });
   }
-  last = 558;
+  last = 738;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Items_Text WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -574,7 +599,7 @@ async function dealWorks(pool) {
       name: item.TypeName,
     });
   }
-  last = 2015000000005155;
+  last = 2015000000005518;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Works_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -681,7 +706,7 @@ async function dealWorksWork(pool) {
   await ImageAlbumWorkRelation.sync();
   await WorksTypeProfessionSort.sync();
   await WorkTypeProfessionSort.sync();
-  let last = 2258;
+  let last = 2344;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_WorksItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -762,7 +787,7 @@ async function dealWorksWork(pool) {
       });
     }
   }
-  return;
+  // return;
   result = await MusicAlbumWorkRelation.findAll({
     attributes: [
       'id',
@@ -811,7 +836,7 @@ async function dealWorkAuthorProfession(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 7119;
+  last = 7273;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -854,7 +879,7 @@ async function dealWorkAuthorProfession(pool) {
     });
   }
   hash = {};
-  last = 5682;
+  last = 5843;
   // last = 0;
   let special = {
     51: true,
@@ -923,9 +948,8 @@ async function dealUserPlus(pool) {
   console.log('------- dealUserPlus --------');
   await UserAddress.sync();
   await CommentPoint.sync();
-  let last = 2018000000050070;
+  let last = 2018000000050530;
   // last = 0;
-  // 需重跑计算更新圈币
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Profile WHERE ProfileID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -937,10 +961,14 @@ async function dealUserPlus(pool) {
       },
     });
     if(item.CommentIntegral || item.Buff != 1) {
-      await CommentPoint.create({
+      await CommentPoint.upsert({
         user_id: item.ProfileID,
         point: item.CommentIntegral,
         buff: item.Buff,
+      }, {
+        where: {
+          user_id: item.ProfileID,
+        }
       });
     }
     if(item.OrderName && item.OrderAddress && item.OrderPhone) {
@@ -1011,7 +1039,7 @@ async function dealCircle(pool) {
     }
   }
   let tagOldIdHash = {};
-  last = 2021000000009073;
+  last = 2021000000009109;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Tag_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1039,13 +1067,25 @@ async function dealCircle(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 322373;
+  last = 323451;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Tag_Comment WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
+    let tag_id = tagOldIdHash[item.TagID];
+    if(!tag_id) {
+      let tag = await Tag.findOne({
+        attributes: [
+          'id'
+        ],
+        where: {
+          temp_id: item.TagID,
+        },
+      });
+      tag_id = tag.id;
+    }
     await TagCommentRelation.create({
-      tag_id: tagOldIdHash[item.TagID],
+      tag_id,
       comment_id: item.CommentID,
       type: 2,
       is_delete: !!item.ISDel,
@@ -1061,7 +1101,7 @@ async function dealUser(pool) {
   await User.sync();
   await UserAuthorRelation.sync();
   await UserPersonRelation.sync();
-  let last = 2018000000050064;
+  let last = 2018000000050530;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Info WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1075,7 +1115,7 @@ async function dealUser(pool) {
     }
     await User.create({
       id: item.ID,
-      is_delete : item.ISDel ? 0 : 1,
+      is_delete: !!item.ISDel,
       state,
       reg_state: item.User_Reg_Stat || 0,
       nickname: item.User_NickName || '',
@@ -1087,7 +1127,7 @@ async function dealUser(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 110;
+  last = 112;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_Users_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1102,7 +1142,7 @@ async function dealUser(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 6141;
+  last = 6166;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_User WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1116,7 +1156,7 @@ async function dealUser(pool) {
       update_time: item.CreateTime,
     });
   }
-  last = 38422;
+  last = 38806;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_Author WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1135,8 +1175,8 @@ async function dealUser(pool) {
 async function dealUserCircle(pool) {
   console.log('------- dealUserCircle --------');
   await UserCircleRelation.sync();
-  let last = 153072;
-  last = 0;
+  let last = 154454;
+  // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Follow_Circling WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
@@ -1157,7 +1197,7 @@ async function dealComment(pool) {
   await AuthorCommentRelation.sync();
   await WorksCommentRelation.sync();
   await Comment.sync();
-  let last = 469545;
+  let last = 471001;
   // last = 0;
   let hash = {};
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment WHERE ID>${last};`);
@@ -1317,7 +1357,7 @@ async function dealCircleComment(pool) {
     hash[item.tag_id] = hash[item.tag_id] || [];
     hash[item.tag_id].push(item.circle_id);
   });
-  let last = 363880;
+  let last = 365417;
   // last = 0;
   res = await TagCommentRelation.findAll({
     attributes: [
@@ -1343,10 +1383,14 @@ async function dealCircleComment(pool) {
         continue;
       }
       hash2[key] = true;
-      await CircleCommentRelation.create({
+      await CircleCommentRelation.upsert({
         circle_id: circleId[j],
         comment_id: item.comment_id,
         is_comment_delete: item.is_comment_delete,
+        tag_id: item.tag_id,
+      }, {
+        circle_id: circleId[j],
+        comment_id: item.comment_id,
         tag_id: item.tag_id,
       });
     }
@@ -1360,7 +1404,7 @@ async function dealUserWork(pool) {
   let worksIdHash = {};
   let exist = {};
   let workHash = {};
-  let last = 21636;
+  let last = 21675;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_WorkItems WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1487,7 +1531,7 @@ async function dealUserWork(pool) {
     }
   }
   hash = {};
-  last = 1087186;
+  last = 1087462;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Users_WorksItems_Behavior WHERE ID>${last} AND (BehaviorNumber=131 OR BehaviorNumber=130);`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1602,28 +1646,34 @@ async function dealUserPost(pool) {
     let item = result.recordset[i];
     hash[item.ID] = item.UID;
   }
-  last = 9762;
+  last = 9802;
   // last = 0;
   result = await pool.request().query(`SELECT * FROM dbo.Concern_UserCollection_Post WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
     let uid = hash[item.CollectionID];
     if(uid) {
-      await UserCommentRelation.create({
+      await UserCommentRelation.upsert({
         user_id: uid,
         comment_id: item.CommentID,
         create_time: item.CreateTime,
         update_time: item.CreateTime,
         type: 2,
         is_delete: !!item.ISDel,
+      }, {
+        where: {
+          user_id: uid,
+          comment_id: item.CommentID,
+          type: 2,
+        },
       });
     }
     else {
       console.error('no uid');
     }
   }
-  last = 1370769;
-  last = 1370769;
+  last = 1371970;
+  // last = 0;
   let query = [];
   result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Behavior WHERE ID>${last} AND ID<=${last+100000} AND BehaviorNumber=231;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1656,7 +1706,7 @@ async function dealCommentMedia(pool) {
   console.log('------- dealCommentMedia --------');
   await CommentMedia.sync();
   await CommentWork.sync();
-  let last = 78663;
+  let last = 79413;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Comment_Media WHERE ID>${last};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1715,7 +1765,7 @@ async function dealAccount(pool) {
   console.log('------- dealAccount --------');
   await UserAccount.sync();
   await UserOauth.sync();
-  let last = 18956;
+  let last = 19033;
   // last = 0;
   let result = await pool.request().query(`SELECT * FROM dbo.Users_Open_Account WHERE ID>${last} AND ISDel=0;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -1759,7 +1809,7 @@ async function dealAccount(pool) {
 async function dealMessage(pool) {
   console.log('------- dealMessage --------');
   await Message.sync();
-  let last = 290199;
+  let last = 290528;
   // last = 290194;
   let query = [];
   let result = await pool.request().query(`SELECT ID,CreateTime,CurrentAuthorID,ISDel,currenttargetid,sendUsers_InfoID,targetType,urlID FROM dbo.Notify WHERE ID>${last} AND ID<=${last + 10000} AND type=2;`);
@@ -1786,7 +1836,7 @@ async function dealMessage(pool) {
   }
   await Promise.all(query);
   query = [];
-  last = 297287;
+  last = 297616;
   // last = 260000;
   result = await pool.request().query(`SELECT * FROM dbo.Users_Notify WHERE ID>${last} AND ID<=${last + 50000};`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
@@ -2030,9 +2080,8 @@ async function modifyAuthorComment() {
   }
 }
 async function modifyPostComment() {
-  let last = 469544;
-  last = 0;
-  // TODO: 这里包含了上面2部分，应该只需要处理一次即可
+  let last = 471001;
+  // last = 0;
   let sql = `SELECT
     *
     FROM comment

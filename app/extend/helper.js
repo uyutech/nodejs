@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?223';
+    return '/public' + url + '?224';
   },
   okJSON(data) {
     return {
@@ -193,7 +193,7 @@ let helper = {
   },
   getMTopNav: function() {
     let ua = this.ctx.request.header['user-agent'];
-    let url = 'https://circling.net.cn/android/circling-0.6.4.apk';
+    let url = 'https://circling.net.cn/android/circling-0.6.6.apk';
     if(/(iPhone|iPod|ios)/i.test(ua)) {
       url = 'https://itunes.apple.com/cn/app/id1331367220';
     }

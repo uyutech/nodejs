@@ -51,10 +51,6 @@ module.exports = app => {
         postList = res.postList.data.data;
       }
       let bannerList = [{
-        url: '/post.html?postID=433837',
-        title: '古风歌评活动',
-        cover: '//zhuanquan.xyz/temp/8c8345d884b9d342a268baa833d1f42a.jpg-750__80',
-      }, {
         url: '/post.html?postID=430048',
         title: '今时古梦',
         cover: '//zhuanquan.xyz/temp/a88c2f9f35fc8b77fd93a5d3745dfe34.jpg-750__80',
@@ -62,14 +58,6 @@ module.exports = app => {
         url: '/post.html?postID=426586',
         title: '圈访谈',
         cover: '//zhuanquan.xyz/temp/d0cbdfb5b30a949ca97081ebf6e2490f.jpg-750__80',
-      }, {
-        url: '/user.html?userID=2018000000027260',
-        title: '圈友你很皮',
-        cover: '//zhuanquan.xyz/temp/b9637f5c3c56713a2d0d3e3aa838eba3.jpg-750__80',
-      }, {
-        url: '/post.html?postID=421610',
-        title: '每天画个圈，玩转每个圈',
-        cover: '//zhuanquan.xyz/temp/b6f1796d3bc4af108d87fc36e318124a.jpg-750__80',
       }];
       ctx.body = ctx.helper.okJSON({
         bannerList,

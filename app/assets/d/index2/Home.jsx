@@ -17,7 +17,7 @@ class Home extends migi.Component {
           <div class="qr">
             <img src="//zhuanquan.xin/img/9b9cf29c6971b05194fa5b335343d24c.png"/>
             <a href="https://itunes.apple.com/cn/app/id1331367220" class="ios" target="_blank">IPhone版</a>
-            <a href="https://circling.net.cn/android/circling-0.6.4.apk" class="android" target="_blank">Android版</a>
+            <a href="https://circling.net.cn/android/circling-0.6.6.apk" class="android" target="_blank">Android版</a>
           </div>
         </div>
       </div>

@@ -550,7 +550,6 @@ class Service extends egg.Service {
         ],
         where: {
           works_id: id,
-          is_delete: false,
         },
         raw: true,
       });

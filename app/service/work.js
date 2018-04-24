@@ -5,7 +5,7 @@
 'use strict';
 
 const egg = require('egg');
-const Sequelize = require('Sequelize');
+const Sequelize = require('sequelize');
 const squel = require('squel');
 
 class Service extends egg.Service {

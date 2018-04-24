@@ -15,7 +15,16 @@ class Controller extends egg.Controller {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
     let [bannerList, recommendComment, circleList, postList] = await Promise.all([
-      app.model.banner.findAll({
+      app.redis.get('banner'),
+      service.circling.recommendComment(0, 3),
+      service.circle.all(0, LIMIT),
+      service.post.all(uid, 0, LIMIT)
+    ]);
+    if(bannerList) {
+      bannerList = JSON.parse(bannerList);
+    }
+    else {
+      bannerList = await app.model.banner.findAll({
         attributes: [
           'title',
           'url',
@@ -28,12 +37,11 @@ class Controller extends egg.Controller {
         },
         order: [
           ['weight', 'DESC']
-        ]
-      }),
-      service.circling.recommendComment(0, 3),
-      service.circle.all(0, LIMIT),
-      service.post.all(uid, 0, LIMIT)
-    ]);
+        ],
+        raw: true,
+      });
+      app.redis.setex('banner', app.config.redis.longTime, JSON.stringify(bannerList));
+    }
     if(circleList) {
       circleList.limit = LIMIT;
     }

@@ -38,7 +38,6 @@ class Service extends egg.Service {
       ],
       where: {
         id,
-        is_delete: false,
       },
       raw: true,
     });
@@ -93,7 +92,6 @@ class Service extends egg.Service {
         ],
         where: {
           id: noCacheIdList,
-          is_delete: false,
         },
         raw: true,
       });

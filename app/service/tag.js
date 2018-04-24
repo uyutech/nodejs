@@ -204,20 +204,21 @@ class Service extends egg.Service {
   /**
    * 根据名字列表获取id列表
    * @param nameList:String tag名列表
+   * @param create:boolean 空是否创建
    * @returns Array<int>
    */
-  async idListByName(nameList) {
+  async idListByName(nameList, create) {
     if(!nameList) {
       return;
     }
     if(!nameList.length) {
       return [];
     }
-    const { app } = this;
+    const { app, ctx } = this;
     let cache = await Promise.all(
       nameList.map((item) => {
         if(item) {
-          return app.redis.get('tagNameId_' + item);
+          return app.redis.get('tagNameId_' + item.toLowerCase());
         }
       })
     );
@@ -228,8 +229,9 @@ class Service extends egg.Service {
       let name = nameList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        }
+      }
       else if(name) {
+        name = name.toLowerCase();
         if(!noCacheIdHash[name]) {
           noCacheIdHash[name] = true;
           noCacheIdList.push(name);
@@ -250,22 +252,18 @@ class Service extends egg.Service {
       });
       let hash = {};
       let createList = [];
-      if(res.length) {
-        res.forEach((item) => {
-          if(item) {
-            let name = item.name;
-            hash[name] = item.id;
-          }
-        });
-      }
+      res.forEach((item) => {
+        let name = item.name.toLowerCase();
+        hash[name] = item.id;
+      });
       noCacheIndexList.forEach((i) => {
-        let name = nameList[i];
+        let name = nameList[i].toLowerCase();
         let item = hash[name];
         if(item) {
           cache[i] = item;
           app.redis.setex('tagNameId_' + name, app.config.redis.time, JSON.stringify(item));
         }
-        else {
+        else if(name) {
           createList.push(app.model.tag.create({
             name,
           }, {
@@ -273,7 +271,7 @@ class Service extends egg.Service {
           }));
         }
       });
-      if(createList.length) {
+      if(create && createList.length) {
         let temp = await Promise.all(createList);
         temp.forEach((item) => {
           hash[item.name] = item.id;
@@ -281,7 +279,7 @@ class Service extends egg.Service {
       }
       noCacheIndexList.forEach((i) => {
         if(!cache[i]) {
-          let name = nameList[i];
+          let name = nameList[i].toLowerCase();
           let item = hash[name];
           if(item) {
             cache[i] = item;
@@ -551,11 +549,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        let cacheKey = 'tagCircle_' + id;
-        if(type) {
-          cacheKey += '_' + type
-        }
-        }
+      }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;

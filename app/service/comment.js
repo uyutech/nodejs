@@ -710,10 +710,12 @@ class Service extends egg.Service {
         delete quote.content;
       }
       if(quote.isAuthor) {
-        quote.name = authorHash[quote.authorId].name;
-        quote.headUrl = authorHash[quote.authorId].headUrl;
+        if(authorHash[quote.authorId]) {
+          quote.name = authorHash[quote.authorId].name;
+          quote.headUrl = authorHash[quote.authorId].headUrl;
+        }
       }
-      else {
+      else if(userHash[quote.userId]) {
         quote.nickname = userHash[quote.userId].nickname;
         quote.headUrl = userHash[quote.userId].headUrl;
       }
@@ -1048,10 +1050,12 @@ class Service extends egg.Service {
           delete item.content;
         }
         if(item.isAuthor) {
-          item.name = authorHash[item.authorId].name;
-          item.headUrl = authorHash[item.authorId].headUrl;
+          if(authorHash[item.authorId]) {
+            item.name = authorHash[item.authorId].name;
+            item.headUrl = authorHash[item.authorId].headUrl;
+          }
         }
-        else {
+        else if(userHash[item.userId]) {
           item.nickname = userHash[item.userId].nickname;
           item.headUrl = userHash[item.userId].headUrl;
         }

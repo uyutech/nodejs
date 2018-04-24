@@ -162,7 +162,7 @@ class Controller extends egg.Controller {
     // 获取选择的圈子直接对应的话题id列表，以及手写话题的id列表
     let [tagList, inputTagIdList, check] = await Promise.all([
       service.circle.tagIdList(circleId, 1),
-      service.tag.idListByName(tagNameList),
+      service.tag.idListByName(tagNameList, true),
       service.works.checkWork(worksId, workId)
     ]);
     let chooseTagIdList = [];

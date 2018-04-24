@@ -211,7 +211,7 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'allPost';
+    let cacheKey = 'allPost_' + offset + '_' + limit;
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
