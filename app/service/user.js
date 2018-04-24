@@ -1722,15 +1722,31 @@ class Service extends egg.Service {
       limit,
       raw: true,
     });
+    let replyIdList = [];
     let idList = res.map((item) => {
+      if(item.type === 4) {
+        replyIdList.push(item.refId);
+      }
       return item.commentId;
     });
-    let infoList = await service.comment.infoList(idList);
+    let [infoList, postList] = await Promise.all([
+      service.comment.infoList(idList),
+      service.comment.infoList(replyIdList)
+    ]);
     infoList = await service.comment.plusList(infoList);
+    let postHash = {};
+    postList.forEach((item) => {
+      if(item) {
+        postHash[item.id] = item;
+      }
+    });
     res.forEach((item, i) => {
       let comment = infoList[i];
       if(comment) {
         item.comment = comment;
+        if(item.type === 4) {
+          comment.quote = postHash[item.refId];
+        }
       }
       delete item.commentId;
     });
@@ -1783,7 +1799,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, 30, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.shortTime, JSON.stringify(res));
     return res;
   }
 

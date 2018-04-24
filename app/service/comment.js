@@ -684,10 +684,14 @@ class Service extends egg.Service {
         }
         delete quote.authorId;
       }
-      if(quote.content.length > 60) {
+      if(quote.isDelete) {
+        delete quote.content;
+      }
+      else if(quote.content.length > 60) {
         quote.slice = true;
         quote.content = quote.content.slice(0, 60) + '...';
       }
+      delete quote.isDelete;
     }
     let [userList, authorList] = await Promise.all([
       service.user.infoList(userIdList),
@@ -706,9 +710,6 @@ class Service extends egg.Service {
       }
     });
     if(quote) {
-      if(quote.isDelete) {
-        delete quote.content;
-      }
       if(quote.isAuthor) {
         if(authorHash[quote.authorId]) {
           quote.name = authorHash[quote.authorId].name;
@@ -1022,10 +1023,14 @@ class Service extends egg.Service {
           delete item.authorId;
         }
         quoteHash[item.id] = item;
-        if(item.content.length > 60) {
+        if(item.isDelete) {
+          delete item.content;
+        }
+        else if(item.content.length > 60) {
           item.slice = true;
           item.content = item.content.slice(0, 60) + '...';
         }
+        delete item.isDelete;
       }
     });
     let [userList, authorList] = await Promise.all([
@@ -1046,9 +1051,6 @@ class Service extends egg.Service {
     });
     quoteList.forEach((item) => {
       if(item) {
-        if(item.isDelete) {
-          delete item.content;
-        }
         if(item.isAuthor) {
           if(authorHash[item.authorId]) {
             item.name = authorHash[item.authorId].name;
@@ -1833,6 +1835,11 @@ class Service extends egg.Service {
         is_comment_delete: true,
         update_time: now,
       }, {
+        where: {
+          comment_id: id,
+        },
+      }),
+      app.model.message.destroy({
         where: {
           comment_id: id,
         },

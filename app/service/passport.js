@@ -44,7 +44,7 @@ class Service extends egg.Service {
       where: {
         name: phone,
         update_time: {
-          $gt: new Date('2018-04-10')
+          $gt: new Date('2018-04-24')
         },
       },
       raw: true,
