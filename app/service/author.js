@@ -923,108 +923,6 @@ class Service extends egg.Service {
   }
 
   /**
-   * 获取作者在小作品中的职种列表
-   * @param id:int 作者id
-   * @param workId:int 作品id
-   * @returns Array<int>
-   */
-  async workProfessionIdList(id, workId) {
-    if(!id || !workId) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'authorWorkProfessionIdList_' + id + '_' + workId;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      return JSON.parse(res);
-    }
-    res = await app.model.workAuthorRelation.findAll({
-      attributes: [
-        ['profession_id', 'professionId']
-      ],
-      where: {
-        author_id: id,
-        work_id: workId,
-        is_delete: false,
-      },
-      raw: true,
-    });
-    res = res.map((item) => {
-      return item.professionId;
-    });
-    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
-    return res;
-  }
-
-  /**
-   * 获取作者在小作品列表中的职种
-   * @param id:int 作者id
-   * @param workIdList:Array<int> 作品id列表
-   * @returns Array<Array<int>>
-   */
-  async workListProfessionIdList(id, workIdList) {
-    if(!id || !workIdList) {
-      return;
-    }
-    if(!workIdList.length) {
-      return [];
-    }
-    const { app } = this;
-    let cache = await Promise.all(
-      workIdList.map((workId) => {
-        if(workId !== null && workId !== undefined) {
-          return app.redis.get('authorWorkProfessionIdList_' + id + '_' + workId);
-        }
-      })
-    );
-    let noCacheIdList = [];
-    let noCacheIdHash = {};
-    let noCacheIndexList = [];
-    cache.forEach((item, i) => {
-      let workId = workIdList[i];
-      if(item) {
-        cache[i] = JSON.parse(item);
-        }
-      else if(workId !== null && workId !== undefined) {
-        if(!noCacheIdHash[workId]) {
-          noCacheIdHash[workId] = true;
-          noCacheIdList.push(workId);
-        }
-        noCacheIndexList.push(i);
-      }
-    });
-    if(noCacheIdList.length) {
-      let res = await app.model.workAuthorRelation.findAll({
-        attributes: [
-          ['work_id', 'workId'],
-          ['profession_id', 'professionId']
-        ],
-        where: {
-          author_id: id,
-          work_id: noCacheIdList,
-          is_delete: false,
-        },
-        raw: true,
-      });
-      let hash = {};
-      if(res.length) {
-        res.forEach((item) => {
-          let id = item.workId;
-          let temp = hash[id] = hash[id] || [];
-          temp.push(item.professionId);
-        });
-      }
-      noCacheIndexList.forEach((i) => {
-        let workId = workIdList[i];
-        let temp = hash[workId] || [];
-        cache[i] = temp;
-        app.redis.setex('authorWorkProfessionIdList_' + id + '_' + workId, app.config.redis.time, JSON.stringify(temp));
-      });
-    }
-    return cache;
-  }
-
-  /**
    * 获取作者参与小作品种类的大作品列表和分页数据
    * @param id:int 作者id
    * @param uid:int 用户id
@@ -1090,14 +988,16 @@ class Service extends egg.Service {
           });
         });
         item.profession = professionList;
-        delete item.author;
+        item.author = service.works.firstAuthor(item.author);
       }
     });
     return workList.map((item, i) => {
-      let worksId = worksIdList[i];
-      let copy = Object.assign({}, worksHash[worksId] || {});
-      copy.work = item;
-      return copy;
+      if(item) {
+        let worksId = worksIdList[i];
+        let copy = Object.assign({}, worksHash[worksId] || {});
+        copy.work = item;
+        return copy;
+      }
     });
   }
 

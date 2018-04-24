@@ -311,7 +311,9 @@ class Service extends egg.Service {
     });
     let authorHash = {};
     authorList.forEach((item) => {
-      authorHash[item.id] = item;
+      if(item) {
+        authorHash[item.id] = item;
+      }
     });
     return res.map((item) => {
       let temp = {
@@ -782,8 +784,10 @@ class Service extends egg.Service {
     idList = idList.slice(offset, limit);
     let res = await this.infoList(idList);
     res.forEach((item) => {
-      delete item.sign;
-      delete item.coins;
+      if(item) {
+        delete item.sign;
+        delete item.coins;
+      }
     });
     return res;
   }
@@ -884,10 +888,12 @@ class Service extends egg.Service {
     });
     res = await service.author.infoList(idList);
     res.forEach((item) => {
-      delete item.sign;
-      delete item.fansName;
-      delete item.fansCircleName;
-      delete item.isSettle;
+      if(item) {
+        delete item.sign;
+        delete item.fansName;
+        delete item.fansCircleName;
+        delete item.isSettle;
+      }
     });
     return res;
   }
@@ -1795,6 +1801,41 @@ class Service extends egg.Service {
       ],
       where: {
         target_id: id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取未读消息数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async unreadMessageCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'messageUnreadCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.message.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        target_id: id,
+        is_read: false,
       },
       raw: true,
     });

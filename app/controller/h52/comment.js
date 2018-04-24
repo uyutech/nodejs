@@ -94,6 +94,15 @@ class Controller extends egg.Controller {
     // 回复画圈
     else if(type === 3) {
     }
+    // 回复评论
+    else if(type === 4) {
+      let target = await service.comment.info(id);
+      if(!target) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+      rid = target.rootId;
+      pid = target.id;
+    }
     else {
       return ctx.body = ctx.helper.errorJSON();
     }

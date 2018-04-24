@@ -223,6 +223,13 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON(res);
   }
 
+  async unreadMessageCount() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let res = await service.user.unreadMessageCount(uid);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
   async settle() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
