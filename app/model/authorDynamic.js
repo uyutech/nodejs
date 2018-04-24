@@ -54,8 +54,12 @@ module.exports = app => {
         fields: ['author_id', 'type', 'target_id'],
       },
       {
-        name: 'author_id_create_time',
-        fields: ['author_id', 'create_time'],
+        name: 'author_id_is_delete_is_target_delete_create_time',
+        fields: ['author_id', 'is_delete', 'is_target_delete',  'create_time'],
+      },
+      {
+        name: 'target_id',
+        fields: ['target_id']
       }
     ],
     comment: '作者动态',

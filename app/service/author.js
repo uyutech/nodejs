@@ -1296,6 +1296,7 @@ class Service extends egg.Service {
         where: {
           author_id: id,
           is_delete: false,
+          is_target_delete: false,
         },
         order: [
           ['create_time', 'DESC']
@@ -1331,6 +1332,7 @@ class Service extends egg.Service {
       where: {
         author_id: id,
         is_delete: false,
+        is_target_delete: false,
       },
       raw: true,
     });
