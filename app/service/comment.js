@@ -1841,6 +1841,7 @@ class Service extends egg.Service {
       }),
       app.model.message.destroy({
         where: {
+          user_id: uid,
           comment_id: id,
         },
       })

@@ -140,37 +140,19 @@ class Controller extends egg.Controller {
       }
     }
     else if(body.type === '3') {
-      if(pid !== rid) {
-        let comment = await service.comment.info(pid);
-        if(comment.userId !== uid) {
-          app.model.message.create({
-            user_id: uid,
-            author_id: body.authorId || 0,
-            is_author: !!body.authorId,
-            target_id: comment.userId,
-            type: 3,
-            ref_id: rid,
-            comment_id: res.id,
-            create_time: new Date(),
-            update_time: new Date(),
-          });
-        }
-      }
-      else {
-        let post = await service.post.info(rid);
-        if(post.userId !== uid) {
-          app.model.message.create({
-            user_id: uid,
-            author_id: body.authorId || 0,
-            is_author: !!body.authorId,
-            target_id: post.userId,
-            type: 4,
-            ref_id: rid,
-            comment_id: res.id,
-            create_time: new Date(),
-            update_time: new Date(),
-          });
-        }
+      let comment = await service.comment.info(pid);
+      if(comment.userId !== uid) {
+        app.model.message.create({
+          user_id: uid,
+          author_id: body.authorId || 0,
+          is_author: !!body.authorId,
+          target_id: comment.userId,
+          type: pid !== rid ? 3 : 4,
+          ref_id: rid,
+          comment_id: res.id,
+          create_time: new Date(),
+          update_time: new Date(),
+        });
       }
     }
     app.redis.incr('commentReplyCount_' + rid);

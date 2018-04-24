@@ -1737,6 +1737,11 @@ class Service extends egg.Service {
     let postHash = {};
     postList.forEach((item) => {
       if(item) {
+        if(item.content.length > 60) {
+          item.slice = true;
+          item.content = item.content.slice(0, 60) + '...';
+        }
+        delete item.isDelete;
         postHash[item.id] = item;
       }
     });

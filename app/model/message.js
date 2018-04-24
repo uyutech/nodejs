@@ -67,6 +67,10 @@ module.exports = app => {
       {
         name: 'target_id_is_read',
         fields: ['target_id', 'is_read'],
+      },
+      {
+        name: 'user_id_comment_id',
+        fields: ['user_id', 'comment_id'],
       }
     ],
     comment: '消息列表',
