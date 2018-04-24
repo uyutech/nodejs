@@ -843,7 +843,7 @@ class Service extends egg.Service {
     });
     userList.forEach((item) => {
       if(item) {
-        refHash[item.id] = item;
+        allRefHash[item.id] = item;
       }
     });
     let allTagCircleHash = {};
