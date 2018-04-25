@@ -1078,6 +1078,7 @@ class Service extends egg.Service {
       where: {
         user_id: id,
         kind,
+        type: 2,
       },
       order: [
         ['work_id', 'DESC']
@@ -1218,7 +1219,7 @@ class Service extends egg.Service {
     let idList = res.map((item) => {
       return item.commentId;
     });
-    return await service.post.infoList(idList);
+    return await service.post.infoList(idList, id);
   }
 
   /**
