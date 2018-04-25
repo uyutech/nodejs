@@ -8,11 +8,12 @@ module.exports = app => {
   app.post('/oauth/session', 'oauth.session');
 
   app.get('/d', 'd.index.newIndex');
+  app.get('/d/works/:worksId', 'd2.works.index');
+  app.get('/d/works/:worksId/:workId', 'd2.works.index');
 
   app.get('/m', 'm.index.newIndex');
   app.get('/m/works/:worksId', 'm2.works.index');
   app.get('/m/works/:worksId/:workId', 'm2.works.index');
-
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
 
@@ -22,11 +23,7 @@ module.exports = app => {
   app.get('/h5/index', 'h5.index.index');
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
-
   app.get('/h5/stats/visit', 'h5.stats.visit');
-
-  app.get('/d/works/:worksId', 'd2.works.index');
-  app.get('/d/works/:worksId/:workId', 'd2.works.index');
 
   app.get('/count/authorSkill/:id', app.middlewares.needLoginJson(), 'count.authorSkill');
   app.get('/count/allAuthorSkill', app.middlewares.needLoginJson(), 'count.allAuthorSkill');

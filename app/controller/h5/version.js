@@ -14,11 +14,11 @@ module.exports = app => {
         ctx.app.redis.get(urlCacheKey)
       ];
       if(!version) {
-        version = 106;
+        version = 108;
         yield ctx.app.redis.set(versionCacheKey, version);
       }
       if(!url) {
-        url = 'https://circling.net.cn/h5/h5-0.6.32.zip';
+        url = 'https://circling.net.cn/h5/h5-0.6.34.zip';
         yield ctx.app.redis.set(urlCacheKey, url);
       }
       ctx.body = {

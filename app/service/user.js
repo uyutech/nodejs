@@ -1683,10 +1683,13 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
+    const { app } = this;
     let [data, count] = await Promise.all([
       this.messageData(id, offset, limit),
       this.messageCount(id)
     ]);
+    let cacheKey = 'messageUnreadCount_' + id;
+    app.redis.del(cacheKey);
     return {
       data,
       count,
