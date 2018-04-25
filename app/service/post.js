@@ -356,6 +356,13 @@ class Service extends egg.Service {
       await Promise.all(query);
     }
     let res = await service.comment.info(create.id);
+    if(data.authorId) {
+      app.model.authorDynamic.create({
+        author_id: data.authorId,
+        target_id: create.id,
+        type: 1,
+      });
+    }
     res = await service.comment.plusFull(res, uid);
     return res;
   }
