@@ -1847,7 +1847,7 @@ class Service extends egg.Service {
       }),
       app.model.authorDynamic.destroy({
         where: {
-          comment_id: id,
+          target_id: id,
           type: 1,
         },
       })

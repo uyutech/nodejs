@@ -22,11 +22,6 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    is_author: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     target_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,

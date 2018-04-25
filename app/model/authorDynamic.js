@@ -58,8 +58,8 @@ module.exports = app => {
         fields: ['author_id', 'is_delete', 'is_target_delete',  'create_time'],
       },
       {
-        name: 'target_id',
-        fields: ['target_id']
+        name: 'target_id_type',
+        fields: ['target_id', 'type']
       }
     ],
     comment: '作者动态',

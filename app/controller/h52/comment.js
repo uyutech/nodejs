@@ -119,10 +119,9 @@ class Controller extends egg.Controller {
           app.model.message.create({
             user_id: uid,
             author_id: body.authorId || 0,
-            is_author: !!body.authorId,
-            target_id: comment.uid,
+            target_id: comment.userId,
             type: 2,
-            ref_id: rid,
+            ref_id: id,
             comment_id: res.id,
             create_time: new Date(),
             update_time: new Date(),
@@ -137,10 +136,9 @@ class Controller extends egg.Controller {
           app.model.message.create({
             user_id: uid,
             author_id: body.authorId || 0,
-            is_author: !!body.authorId,
-            target_id: comment.uid,
+            target_id: comment.userId,
             type: 1,
-            ref_id: rid,
+            ref_id: id,
             comment_id: res.id,
             create_time: new Date(),
             update_time: new Date(),
@@ -154,7 +152,6 @@ class Controller extends egg.Controller {
         app.model.message.create({
           user_id: uid,
           author_id: body.authorId || 0,
-          is_author: !!body.authorId,
           target_id: comment.userId,
           type: pid !== rid ? 3 : 4,
           ref_id: rid,
