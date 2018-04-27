@@ -19,16 +19,16 @@ module.exports = app => {
       comment: '0个人，1组合，2团体，3虚拟',
     },
     name: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(64),
       allowNull: false,
     },
     fans_name: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(64),
       allowNull: false,
       defaultValue: '',
     },
     fans_circle_name: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(64),
       allowNull: false,
       defaultValue: '',
     },

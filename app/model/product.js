@@ -14,7 +14,7 @@ module.exports = app => {
       allowNull: false,
     },
     name: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(128),
       allowNull: false,
     },
     cover: {
@@ -23,7 +23,7 @@ module.exports = app => {
       defaultValue: '',
     },
     describe: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
       defaultValue: '',
     },

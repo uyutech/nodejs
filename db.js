@@ -2121,37 +2121,34 @@ async function modifyPostComment() {
 }
 
 async function temp(pool) {
-  let result = await pool.request().query(`SELECT * FROM dbo.Concern_Works_Items_Author WHERE Remark!='';`);
+  let result = await pool.request().query(`SELECT * FROM dbo.Users_Info;`);
   for(let i = 0, len = result.recordset.length; i < len; i++) {
     let item = result.recordset[i];
-    let work = await Work.findOne({
-      attributes: ['id', 'kind'],
-      where: {
-        id: item.WorksItemID,
-      },
-    });
-    if(!work) {
+    if(!item.User_Pwd || !item.User_Phone) {
       continue;
     }
-    let work_id;
-    if(work.kind === 1) {
-      work_id = work.id.toString().replace(/^2016/,  2020);
+    if(item.User_Pwd.length !== 32) {
+      continue;
     }
-    else if(work.kind === 2) {
-      work_id = work.id;
-    }
-    else if(work.kind === 3) {
-      work_id = work.id.toString().replace(/^2016/,  2021);
-    }
-    else if(work.kind === 4) {
-      work_id = work.id.toString().replace(/^2016/,  2022);
-    }
-    await WorkAuthorRelation.update({
-      tag: item.Remark || '',
-    }, {
+    let id = item.ID;
+    let account = await UserAccount.findOne({
+      attributes: [
+        'id'
+      ],
       where: {
-        work_id,
-      }
+        user_id: id,
+      },
+      raw: true,
     });
+    if(!account) {
+      await UserAccount.create({
+        name: item.User_Phone,
+        password: item.User_Pwd,
+        type: 1,
+        user_id: id,
+        create_time: item.CreateTime,
+        update_time: item.CreateTime,
+      });
+    }
   }
 }

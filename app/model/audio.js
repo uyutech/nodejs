@@ -13,7 +13,7 @@ module.exports = app => {
       allowNull: false,
     },
     title: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(128),
       allowNull: false,
       defaultValue: '',
     },
