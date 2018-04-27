@@ -55,7 +55,13 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '1已完成，2未完成公开，3未完成保密',
+      comment: '0未知，1已完成，2未完成公开，3未完成保密',
+    },
+    review: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0未知，1审核中，2违规，3通过',
     },
     create_time: {
       type: Sequelize.DATE,

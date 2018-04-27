@@ -288,7 +288,7 @@ class Video extends migi.Component {
   }
   render() {
     return <div class={ 'video' + (this.visible ? '' : ' fn-hide')
-      + (this.list[this.index || 0].url ? '' : ' empty') }>
+      + (this.list[this.index || 0] && this.list[this.index || 0].url ? '' : ' empty') }>
       <ul class={ 'type fn-clear' + ((this.index, this.list || []).length === 1 ? ' single' : '') }
           onClick={ this.clickType }>
       {
@@ -298,7 +298,7 @@ class Video extends migi.Component {
         }.bind(this))
       }
       </ul>
-      <h3 ref="title">{ this.list[this.index || 0].title }</h3>
+      <h3 ref="title">{ this.list[this.index || 0] && this.list[this.index || 0].title }</h3>
       <div class={ 'c' + ( this.isPlaying ? ' playing' : '') }
            ref="c">
         <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') }

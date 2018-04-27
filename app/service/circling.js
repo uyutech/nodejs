@@ -21,7 +21,7 @@ const TYPE_NAME = {
 class Service extends egg.Service {
   async recommendComment(offset, limit) {
     const { app, service } = this;
-    let cacheKey = 'circlingRecommentComment';
+    let cacheKey = 'circlingRecommendComment';
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);

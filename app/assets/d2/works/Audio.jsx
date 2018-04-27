@@ -314,7 +314,7 @@ class Audio extends migi.Component {
   }
   render() {
     return <div class={ 'audio' + (this.visible ? '' : ' fn-hide')
-      + (this.list[this.index || 0].url ? '' : ' empty') }>
+      + (this.list[this.index || 0] && this.list[this.index || 0].url ? '' : ' empty') }>
       <ul class={ 'type fn-clear' + ((this.index, this.list || []).length === 1 ? ' single' : '') }
           onClick={ this.clickType }>
         {
@@ -324,7 +324,7 @@ class Audio extends migi.Component {
           }.bind(this))
         }
       </ul>
-      <h3>{ this.list[this.index || 0].title }</h3>
+      <h3>{ this.list[this.index || 0] && this.list[this.index || 0].title }</h3>
       <div class="c">
         <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
           <div class={ 'roll' + (!this.lrcMode && this.list[this.index || 0].formatLrc.data ? '' : ' fn-hide') }>

@@ -68,6 +68,9 @@ const userCircleRelation = require('../model/userCircleRelation');
 const userAccount = require('../model/userAccount');
 const userOauth = require('../model/userOauth');
 const message = require('../model/message');
+const userCreateWorks = require('../model/userCreateWorks');
+const userUploadWork = require('../model/userUploadWork');
+const workWorkRelation = require('../model/workWorkRelation');
 
 const product = require('../model/product');
 const prize = require('../model/prize');
@@ -262,11 +265,13 @@ module.exports = {
         imageAlbum: imageAlbum(this),
         imageAlbumWorkRelation: imageAlbumWorkRelation(this),
         imageAlbumAuthorRelation: imageAlbumAuthorRelation(this),
-
         userCircleRelation: userCircleRelation(this),
         userAccount: userAccount(this),
         userOauth: userOauth(this),
         message: message(this),
+        userCreateWorks: userCreateWorks(this),
+        userUploadWork: userUploadWork(this),
+        workWorkRelation: workWorkRelation(this),
 
         product: product(this),
         prize: prize(this),

@@ -184,40 +184,41 @@ class Service extends egg.Service {
       };
     }
     app.redis.del(cacheKey);
+    let md5 = Spark.hash(pw + 'uyuTech');
+    let last = await app.model.user.findOne({
+      attributes: [
+        'id'
+      ],
+      order: [
+        ['id', 'DESC']
+      ],
+      limit: 1,
+      raw: true,
+    });
     let transaction = await app.sequelizeCircling.transaction();
     try {
-      let last = await app.model.user.findOne({
-        transaction,
-        attributes: [
-          'id'
-        ],
-        order: [
-          ['id', 'DESC']
-        ],
-        limit: 1,
-        raw: true,
-      });
-      let id = last.id + Math.floor(Math.random() * 5) + 1;
-      await app.model.user.create({
-        id,
-        nickname: '圈友' + id,
-      }, {
-        transaction,
-        raw: true,
-      });
-      let md5 = Spark.hash(pw + 'uyuTech');
-      await app.model.userAccount.create({
-        name: phone,
-        password: md5,
-        type: 1,
-        user_id: id,
-      }, {
-        transaction,
-      });
+      let id = last.id + Math.floor(Math.random() * 3) + 1;
+      await Promise.all([
+        app.model.user.create({
+          id,
+          nickname: '圈友' + id,
+        }, {
+          transaction,
+          raw: true,
+        }),
+        app.model.userAccount.create({
+          name: phone,
+          password: md5,
+          type: 1,
+          user_id: id,
+        }, {
+          transaction,
+        })
+      ]);
       await transaction.commit();
       return {
         success: true,
-        data: id ,
+        data: id,
       };
     } catch(e) {
       await transaction.rollback();
@@ -400,7 +401,7 @@ class Service extends egg.Service {
           limit: 1,
           raw: true,
         });
-        let id = last.id + Math.floor(Math.random() * 5) + 1;
+        let id = last.id + Math.floor(Math.random() * 3) + 1;
         await app.model.user.create({
           id,
           nickname: '圈友' + id,

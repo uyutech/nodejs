@@ -38,7 +38,7 @@ let net = {
     if(typeof error !== 'function') {
       timeout = error;
       error = function() {};
-    }console.log(url);
+    }
     return $.AJAX(url, data, success, error, 'POST', timeout);
   },
 };

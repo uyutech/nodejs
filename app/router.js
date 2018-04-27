@@ -144,10 +144,12 @@ module.exports = app => {
   app.post('/h5/mall2/applyExpress', app.middlewares.needLoginJson(), 'h52.mall.applyExpress');
   app.post('/h5/mall2/cancelExpress', app.middlewares.needLoginJson(), 'h52.mall.cancelExpress');
 
-  app.post('/inner/profession/all', 'inner.profession.all');
-  app.post('/inner/skill/all', 'inner.skill.all');
-  app.post('/inner/works/typeAll', 'inner.works.typeAll');
-  app.post('/inner/work/typeAll', 'inner.work.typeAll');
-  app.post('/inner/author/find', 'inner.author.find');
-  app.post('/inner/author/create', 'inner.author.create');
+  app.post('/private/profession/all', 'private.profession.all');
+  app.post('/private/skill/all', 'private.skill.all');
+  app.post('/private/works/typeAll', 'private.works.typeAll');
+  app.post('/private/works/stateAll', 'private.works.stateAll');
+  app.post('/private/works/create', 'private.works.create');
+  app.post('/private/work/typeAll', 'private.work.typeAll');
+  app.post('/private/author/find', 'private.author.find');
+  app.post('/private/author/create', 'private.author.create');
 };

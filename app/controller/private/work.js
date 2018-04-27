@@ -8,13 +8,13 @@ const egg = require('egg');
 
 class Controller extends egg.Controller {
   async typeAll() {
-    const { app } = this;
-    let cacheKey = 'worksTypeAll';
+    const { app, ctx } = this;
+    let cacheKey = 'workTypeAll';
     let res = await app.redis.get(cacheKey);
     if(res) {
-      return JSON.parse(res);
+      return ctx.body = ctx.helper.okJSON(JSON.parse(res));
     }
-    res = await app.model.worksType.findAll({
+    res = await app.model.workType.findAll({
       attributes: [
         'id',
         'name'
@@ -22,11 +22,7 @@ class Controller extends egg.Controller {
       raw: true,
     });
     app.redis.setex(cacheKey, app.config.redis.longTime, JSON.stringify(res));
-    return res;
-  }
-
-  async add() {
-    const { app } = this;
+    ctx.body = ctx.helper.okJSON(JSON.parse(res));
   }
 }
 

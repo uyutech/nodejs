@@ -12,7 +12,7 @@ class Controller extends egg.Controller {
     let cacheKey = 'skillAll';
     let res = await app.redis.get(cacheKey);
     if(res) {
-      return JSON.parse(res);
+      return ctx.body = ctx.helper.okJSON(JSON.parse(res));
     }
     res = await app.model.skill.findAll({
       attributes: [
@@ -22,7 +22,7 @@ class Controller extends egg.Controller {
       raw: true,
     });
     app.redis.setex(cacheKey, app.config.redis.longTime, JSON.stringify(res));
-    return res;
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

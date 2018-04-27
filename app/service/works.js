@@ -318,7 +318,9 @@ class Service extends egg.Service {
     });
     return res.map((item) => {
       let temp = hash[item.workId];
-      temp.tag = item.tag;
+      if(item) {
+        temp.tag = item.tag;
+      }
       return temp;
     });
   }
@@ -335,7 +337,9 @@ class Service extends egg.Service {
     const { service } = this;
     let res = await this.collectionBase(id);
     let idList = res.map((item) => {
-      return item.workId;
+      if(item) {
+        return item.workId;
+      }
     });
     return await service.work.authorList(idList);
   }
@@ -577,22 +581,28 @@ class Service extends egg.Service {
     ]);
     let authorHash = {};
     authorList.forEach((item) => {
-      authorHash[item.id] = item;
+      if(item) {
+        authorHash[item.id] = item;
+      }
     });
     let professionHash = {};
     professionList.forEach((item) => {
-      professionHash[item.id] = item;
+      if(item) {
+        professionHash[item.id] = item;
+      }
     });
     res.forEach((item) => {
-      let authorInfo = authorHash[item.id];
-      if(authorInfo) {
-        item.headUrl = authorInfo.headUrl;
-        item.name = authorInfo.name;
-        item.isSettle = authorInfo.isSettle;
-      }
-      let professionInfo = professionHash[item.professionId];
-      if(professionInfo) {
-        item.professionName = professionInfo.name;
+      if(item) {
+        let authorInfo = authorHash[item.id];
+        if(authorInfo) {
+          item.headUrl = authorInfo.headUrl;
+          item.name = authorInfo.name;
+          item.isSettle = authorInfo.isSettle;
+        }
+        let professionInfo = professionHash[item.professionId];
+        if(professionInfo) {
+          item.professionName = professionInfo.name;
+        }
       }
     });
     return res;
@@ -690,23 +700,29 @@ class Service extends egg.Service {
     ]);
     let authorHash = {};
     authorList.forEach((item) => {
-      authorHash[item.id] = item;
+      if(item) {
+        authorHash[item.id] = item;
+      }
     });
     let professionHash = {};
     professionList.forEach((item) => {
-      professionHash[item.id] = item;
+      if(item) {
+        professionHash[item.id] = item;
+      }
     });
     cache.forEach((list) => {
       list.forEach((item) => {
-        let authorInfo = authorHash[item.id];
-        if(authorInfo) {
-          item.headUrl = authorInfo.headUrl;
-          item.name = authorInfo.name;
-          item.isSettle = authorInfo.isSettle;
-        }
-        let professionInfo = professionHash[item.professionId];
-        if(professionInfo) {
-          item.professionName = professionInfo.name;
+        if(item) {
+          let authorInfo = authorHash[item.id];
+          if(authorInfo) {
+            item.headUrl = authorInfo.headUrl;
+            item.name = authorInfo.name;
+            item.isSettle = authorInfo.isSettle;
+          }
+          let professionInfo = professionHash[item.professionId];
+          if(professionInfo) {
+            item.professionName = professionInfo.name;
+          }
         }
       });
     });

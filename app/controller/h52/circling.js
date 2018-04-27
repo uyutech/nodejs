@@ -16,7 +16,7 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let [bannerList, recommendComment, circleList, postList] = await Promise.all([
       app.redis.get('banner'),
-      service.circling.recommendComment(0, 3),
+      service.circling.recommendComment(0, 100),
       service.circle.all(0, LIMIT),
       service.post.all(uid, 0, LIMIT)
     ]);
@@ -46,9 +46,16 @@ class Controller extends egg.Controller {
       circleList.limit = LIMIT;
     }
     postList.limit = LIMIT;
+    let list = [];
+    for(let i = 0; i < 3; i++) {
+      if(recommendComment.length) {
+        let rand = Math.floor(Math.random() * recommendComment.length);
+        list.push(recommendComment.splice(rand, 1)[0]);
+      }
+    }
     ctx.body = ctx.helper.okJSON({
       bannerList,
-      recommendComment,
+      recommendComment: list,
       circleList,
       postList,
     });

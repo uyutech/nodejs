@@ -23,7 +23,7 @@ class Controller extends egg.Controller {
   }
 
   async create() {
-    const { app } = this;
+    const { app, ctx } = this;
     let body = ctx.request.body;
     let name = (body.name || '').trim();
     let type = parseInt(body.type) || 0;
@@ -43,7 +43,7 @@ class Controller extends egg.Controller {
         limit: 1,
         raw: true,
       });
-      let id = last.id + Math.floor(Math.random() * 5) + 1;
+      let id = last.id + Math.floor(Math.random() * 3) + 1;
       await app.model.author.create({
         id,
         name,
