@@ -411,11 +411,14 @@ class Service extends egg.Service {
     });
     let workList = await service.work.infoListPlusFull(workIdList, 3, uid);
     return workList.map((item, i) => {
-      let copy = {
-        id: worksIdList[i],
-      };
-      copy.work = item;
-      return copy;
+      if(item) {
+        let copy = {
+          id: worksIdList[i],
+        };
+        copy.work = item;
+        item.author = service.works.firstAuthor(item.author);
+        return copy;
+      }
     });
   }
 
