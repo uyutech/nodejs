@@ -294,7 +294,6 @@ class Service extends egg.Service {
     let create = await app.model.comment.create({
       user_id: uid,
       author_id: data.authorId || 0,
-      is_author: !!data.authorId,
       content: data.content,
       is_delete: false,
       review: 0,

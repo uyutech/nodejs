@@ -467,7 +467,7 @@ class Service extends egg.Service {
       this.quoteAndPerson(data, uid),
       this.operateRelation(data.id, uid, 1)
     ]);
-    if(data.isAuthor) {
+    if(data.authorId) {
       let author = authorHash[data.authorId];
       if(author) {
         data.name = author.name;
@@ -574,7 +574,7 @@ class Service extends egg.Service {
       service.user.infoList(userIdList),
       service.tag.circleIdListByName(nameList, 1)
     ]);
-    if(data.isAuthor) {
+    if(data.authorId) {
       let author = authorHash[data.authorId];
       if(author) {
         data.name = author.name;
@@ -655,7 +655,6 @@ class Service extends egg.Service {
         authorIdList.push(data.authorId);
       }
       delete data.userId;
-      data.isAuthor = true;
     }
     else if(data.userId) {
       if(!userIdHash[data.userId]) {
@@ -675,7 +674,6 @@ class Service extends egg.Service {
           authorIdList.push(quote.authorId);
         }
         delete quote.userId;
-        quote.isAuthor = true;
       }
       else {
         if(!userIdHash[quote.userId]) {
@@ -710,7 +708,7 @@ class Service extends egg.Service {
       }
     });
     if(quote) {
-      if(quote.isAuthor) {
+      if(quote.authorId) {
         if(authorHash[quote.authorId]) {
           quote.name = authorHash[quote.authorId].name;
           quote.headUrl = authorHash[quote.authorId].headUrl;
@@ -863,7 +861,7 @@ class Service extends egg.Service {
         tagMatchList[i].forEach((name) => {
           tagCircleHash[name] = allTagCircleHash[name];
         });
-        if(item.isAuthor) {
+        if(item.authorId) {
           let author = authorHash[item.authorId];
           if(author) {
             item.name = author.name;
@@ -934,7 +932,7 @@ class Service extends egg.Service {
     ]);
     dataList.forEach((item, i) => {
       if(item) {
-        if(item.isAuthor) {
+        if(item.authorId) {
           let author = authorHash[item.authorId];
           if(author) {
             item.name = author.name;
@@ -988,7 +986,6 @@ class Service extends egg.Service {
             authorIdList.push(item.authorId);
           }
           delete item.userId;
-          item.isAuthor = true;
         }
         else if(item.userId) {
           if(!userIdHash[item.userId]) {
@@ -1013,7 +1010,6 @@ class Service extends egg.Service {
             authorIdList.push(item.authorId);
           }
           delete item.userId;
-          item.isAuthor = true;
         }
         else {
           if(!userIdHash[item.userId]) {
@@ -1051,7 +1047,7 @@ class Service extends egg.Service {
     });
     quoteList.forEach((item) => {
       if(item) {
-        if(item.isAuthor) {
+        if(item.authorId) {
           if(authorHash[item.authorId]) {
             item.name = authorHash[item.authorId].name;
             item.headUrl = authorHash[item.authorId].headUrl;
