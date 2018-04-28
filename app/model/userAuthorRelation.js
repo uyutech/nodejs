@@ -24,12 +24,18 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0关联作者，1关注作者',
+      comment: '1主账号，2成员，3编辑',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    settle: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0默认，1公开入住，2马甲入住，3放弃入住',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -44,11 +50,13 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'user_id_author_id',
         unique: true,
         fields: ['user_id', 'author_id'],
       },
       {
-        fields: ['author_id'],
+        name: 'author_id_type',
+        fields: ['author_id', 'type'],
       }
     ],
     comment: '用户对应作者关系',

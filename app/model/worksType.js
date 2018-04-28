@@ -13,35 +13,17 @@ module.exports = app => {
       autoIncrement: true,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-    },
     name: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
   }, {
     indexes: [
       {
+        name: 'name',
         unique: true,
-        fields: ['type'],
+        fields: ['name'],
       }
     ],
     comment: '大作品类型',

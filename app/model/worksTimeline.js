@@ -31,7 +31,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -49,6 +49,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'works_id_date',
         fields: ['works_id', 'date'],
       }
     ],

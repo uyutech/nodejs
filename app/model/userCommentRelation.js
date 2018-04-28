@@ -10,6 +10,7 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
     user_id: {
@@ -23,9 +24,9 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0点赞留言，1收藏留言',
+      comment: '1点赞留言，2收藏留言，3屏蔽留言',
     },
-    is_deleted: {
+    is_comment_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -35,16 +36,20 @@ module.exports = app => {
       allowNull: false,
       defaultValue: Sequelize.NOW,
     },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
   }, {
     indexes: [
       {
+        name: 'user_id_comment_id_type',
         unique: true,
-        fields: ['user_id', 'comment_id'],
+        fields: ['user_id', 'comment_id', 'type'],
+      },
+      {
+        name: 'user_id_type_is_comment_delete_create_time',
+        fields: ['user_id', 'type', 'is_comment_delete', 'create_time']
+      },
+      {
+        name: 'comment_id_type',
+        fields: ['comment_id', 'type']
       }
     ],
     comment: '用户与留言关联信息',

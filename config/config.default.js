@@ -15,7 +15,7 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['report', 'd2m', 'm2d', 'message', 'jsConfig', 'crossDomain'];
+  config.middleware = ['d2m', 'm2d', 'crossDomain', 'jsConfig', 'report'];
   config.d2m = {
     match: '/d',
   };
@@ -56,7 +56,15 @@ module.exports = appInfo => {
     },
   };
   config.crossDomain = {
-    match: '/h5',
+    match: function(ctx) {
+      if(ctx.request.path.startsWith('/h5/')) {
+        return true;
+      }
+      if(ctx.request.path.startsWith('/h52/')) {
+        return true;
+      }
+      return false;
+    },
   };
 
   config.view = {
@@ -81,6 +89,10 @@ module.exports = appInfo => {
       password: 'uyuTech123',
       db: 0,
     },
+    time: 60,
+    shortTime: 10,
+    mediumTime: 300,
+    longTime: 600,
   };
 
   config.notfound = {
@@ -102,6 +114,9 @@ module.exports = appInfo => {
         if(ctx.request.path.startsWith('/h5')) {
           return true;
         }
+        if(ctx.request.path.startsWith('/h52')) {
+          return true;
+        }
         if(ctx.request.path.startsWith('/mns')) {
           return true;
         }
@@ -114,6 +129,24 @@ module.exports = appInfo => {
   };
 
   config.database = {
+    circling: {
+      name: 'circling',
+      username: 'uyutech',
+      password: 'uyuTech2017',
+      host: 'rm-uf6qe904j4997hpen.mysql.rds.aliyuncs.com',
+    },
+    mall: {
+      name: 'mall',
+      username: 'uyutech',
+      password: 'uyuTech2017',
+      host: 'rm-uf6qe904j4997hpen.mysql.rds.aliyuncs.com',
+    },
+    recommend: {
+      name: 'recommend',
+      username: 'uyutech',
+      password: 'uyuTech2017',
+      host: 'rm-uf6qe904j4997hpen.mysql.rds.aliyuncs.com',
+    },
     stats: {
       name: 'stats',
       username: 'uyutech',

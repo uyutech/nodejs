@@ -17,11 +17,6 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
@@ -30,6 +25,12 @@ module.exports = app => {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: '',
+      comment: '1百度，2bili，35sing，4huaban，5lofter，6poco，7网易，8微博，9zcool',
+    },
+    is_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -44,6 +45,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'author_id_type',
         unique: true,
         fields: ['author_id', 'type'],
       }

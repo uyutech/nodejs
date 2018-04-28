@@ -13,38 +13,11 @@ module.exports = app => {
       autoIncrement: true,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-    },
     name: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
-    },
-    category: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-    },
-    category_name: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    describe: {
-      type: Sequelize.STRING(32),
-      allowNull: false,
-      defaultValue: '',
-    },
-    code: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-    },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
+      comment: '职业如演奏、作曲等',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -59,8 +32,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'name',
         unique: true,
-        fields: ['type', 'category'],
+        fields: ['name'],
       }
     ],
     comment: '职种信息',

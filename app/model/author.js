@@ -15,19 +15,20 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
+      defaultValue: 0,
       comment: '0个人，1组合，2团体，3虚拟',
     },
     name: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING(64),
       allowNull: false,
     },
     fans_name: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING(64),
       allowNull: false,
       defaultValue: '',
     },
     fans_circle_name: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING(64),
       allowNull: false,
       defaultValue: '',
     },
@@ -36,7 +37,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_settled: {
+    is_settle: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -46,8 +47,8 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
+    is_delete: {
+      type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: false,
     },
@@ -64,6 +65,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'name',
         fields: ['name'],
       }
     ],

@@ -13,17 +13,17 @@ module.exports = app => {
       allowNull: false,
     },
     title: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING(128),
       allowNull: false,
       defaultValue: '',
     },
     sub_title: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING(128),
       allowNull: false,
       defaultValue: '',
     },
     describe: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
       defaultValue: '',
     },
@@ -31,12 +31,22 @@ module.exports = app => {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
+    cover: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
+    },
+    popular: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    is_authorize: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
-    is_authorize: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -44,19 +54,14 @@ module.exports = app => {
     state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      defaultValue: 1,
-      comment: '0取消，1正常，2未完成公开，3未完成保密',
+      defaultValue: 0,
+      comment: '0未知，1已完成，2未完成公开，3未完成保密',
     },
-    cover: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: '',
-    },
-    template: {
+    review: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '',
+      comment: '0未知，1审核中，2违规，3通过',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -71,6 +76,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'title',
         fields: ['title'],
       }
     ],

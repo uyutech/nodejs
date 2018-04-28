@@ -13,46 +13,14 @@ module.exports = app => {
       autoIncrement: true,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-    },
     name: {
       type: Sequelize.STRING(32),
+      unique: true,
       allowNull: false,
       defaultValue: '',
     },
-    category: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-      comment: '0图片，1音频，2视频，3文本',
-    },
-    code: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-    },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
   }, {
     indexes: [
-      {
-        unique: true,
-        fields: ['type', 'category'],
-      }
     ],
     comment: '小作品类型',
   });

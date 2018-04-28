@@ -50,6 +50,9 @@ module.exports = {
     dmall: './app/assets/d/mall/index.jsx',
     dmall_new: './app/assets/d/mall/new/index.jsx',
     dmall_wait: './app/assets/d/mall/wait/index.jsx',
+
+    dworks2: './app/assets/d2/works/index.jsx',
+    mworks2: './app/assets/m2/works/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

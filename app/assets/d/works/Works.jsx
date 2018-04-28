@@ -279,7 +279,6 @@ class Works extends migi.Component {
               ? <li class={ 'audio' + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
               : ''
           }
-          {/*<li class="link" rel="link">站外链接</li>*/}
         </ul>
         <Media ref="media"
                worksID={ self.worksID }

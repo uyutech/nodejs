@@ -10,14 +10,19 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
     name: {
-      type: Sequelize.STRING(32),
+      type: Sequelize.STRING(128),
       allowNull: false,
-      unique: true,
     },
-    is_deleted: {
+    temp_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -35,6 +40,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'name',
         unique: true,
         fields: ['name'],
       }

@@ -10,6 +10,7 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
     circle_id: {
@@ -20,26 +21,33 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
+    is_comment_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
-    create_time: {
-      type: Sequelize.DATE,
+    tag_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
     },
   }, {
     indexes: [
       {
+        name: 'circle_id_comment_id_tag_id',
         unique: true,
-        fields: ['circle_id', 'comment_id'],
+        fields: ['circle_id', 'comment_id', 'tag_id'],
+      },
+      {
+        name: 'circle_id_is_comment_delete_comment_id',
+        fields: ['circle_id', 'is_comment_delete', 'comment_id'],
+      },
+      {
+        name: 'tag_id_comment_id',
+        fields: ['tag_id', 'comment_id'],
+      },
+      {
+        name: 'comment_id',
+        fields: ['comment_id'],
       }
     ],
     comment: '圈子留言关联信息',

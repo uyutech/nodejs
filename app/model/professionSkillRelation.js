@@ -21,10 +21,10 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
+    point: {
+      type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: 1,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -39,6 +39,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'profession_id_skill_id',
         unique: true,
         fields: ['profession_id', 'skill_id'],
       }

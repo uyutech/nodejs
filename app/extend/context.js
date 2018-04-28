@@ -5,13 +5,22 @@
 'use strict';
 
 const uuidv4 = require('uuid/v4');
-const TRACE_ID = Symbol('Context#traceID');
+const TRACE_ID = Symbol('Context#tranceId');
 
 module.exports = {
-  get traceID() {
+  get tranceId() {
     if(!this[TRACE_ID]) {
       this[TRACE_ID] = uuidv4().replace(/-/g, '');
     }
     return this[TRACE_ID];
+  },
+  get Sequelize() {
+    return this.app.Sequelize;
+  },
+  get sequelize() {
+    return this.app.sequelize;
+  },
+  get model() {
+    return this.app.model;
   },
 };

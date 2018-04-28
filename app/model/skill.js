@@ -13,35 +13,22 @@ module.exports = app => {
       autoIncrement: true,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.SMALLINT.UNSIGNED,
-      allowNull: false,
-    },
     name: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
     },
-    is_deleted: {
-      type: Sequelize.BOOLEAN,
+    code: {
+      type: Sequelize.STRING(32),
       allowNull: false,
-      defaultValue: false,
-    },
-    create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
+      defaultValue: '',
     },
   }, {
     indexes: [
       {
+        name: 'name',
         unique: true,
-        fields: ['type'],
+        fields: ['name'],
       }
     ],
     comment: '技能信息',

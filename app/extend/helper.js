@@ -20,6 +20,12 @@ let helper = {
     };
   },
   errorJSON(data) {
+    if(typeof data === 'string') {
+      data = {
+        message: data,
+      };
+    }
+    data = data || {};
     return {
       success: false,
       code: data.code,
@@ -27,12 +33,19 @@ let helper = {
       data: data.data,
     };
   },
+  loginJSON() {
+    return {
+      success: false,
+      code: 1000,
+      message: '请先登录',
+    };
+  },
   async postServiceJSON(url, data) {
     if(url.indexOf('//') === -1) {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
-    url += 'traceID=' + this.ctx.traceID || '';
+    url += 'tranceId=' + this.ctx.tranceId || '';
     let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
@@ -52,6 +65,7 @@ let helper = {
       temp = 2018000000000000 + temp;
       data.CurrentUid = temp.toString().slice(0, 16);
     }
+    let end;
     try {
       res = await this.ctx.curl(url, {
         method: 'POST',
@@ -61,12 +75,12 @@ let helper = {
       });
     }
     catch(e) {
-      let end = Date.now();
-      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+      end = Date.now();
+      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
       throw new Error(e);
     }
-    let end = Date.now();
-    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+    end = Date.now();
+    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
     return res;
   },
   * postServiceJSON2(url, data) {
@@ -74,7 +88,7 @@ let helper = {
       url = 'http://172.19.118.93/' + url.replace(/^\//, '');
     }
     url += url.indexOf('?') > -1 ? '&' : '?';
-    url += 'traceID=' + this.ctx.traceID || '';
+    url += 'tranceId=' + this.ctx.tranceId || '';
     let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
     let ip = this.ctx.request.header['x-real-ip'];
     let start = Date.now();
@@ -94,6 +108,7 @@ let helper = {
       temp = 2018000000000000 + temp;
       data.CurrentUid = temp.toString().slice(0, 16);
     }
+    let end;
     try {
       res = yield this.ctx.curl(url, {
         method: 'POST',
@@ -103,12 +118,12 @@ let helper = {
       });
     }
     catch(e) {
-      let end = Date.now();
-      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+      end = Date.now();
+      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
       throw new Error(e);
     }
-    let end = Date.now();
-    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.traceID, end - start, url);
+    end = Date.now();
+    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
     return res;
   },
   autoSsl: function(url) {
@@ -120,7 +135,6 @@ let helper = {
     return `<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
       <meta charset="UTF-8"/>
       <title>${title}</title>
-      <script>if(parent && parent !== window && parent.setTitle) { parent.setTitle("${title}") }</script>
       <link rel="icon" href="//zhuanquan.xin/img/526ac77cd8f453867cb378b4d22cffda.png" type="image/x-icon">
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
       <meta name="renderer" content="webkit"/>
@@ -146,7 +160,7 @@ let helper = {
             : ''}
           <li>
           ${session.uid
-            ? (session.authorId && session.isPublic ? session.authorName : session.uname)
+            ? (session.uname)
             : '<a href="/login" class="login">登录</a>'}
           </li>
           ${session.uid ? '<li class="out">退出</li>' : ''}
@@ -180,7 +194,7 @@ let helper = {
   },
   getMTopNav: function() {
     let ua = this.ctx.request.header['user-agent'];
-    let url = 'https://circling.net.cn/android/circling-0.6.4.apk';
+    let url = 'https://circling.net.cn/android/circling-0.6.6.apk';
     if(/(iPhone|iPod|ios)/i.test(ua)) {
       url = 'https://itunes.apple.com/cn/app/id1331367220';
     }

@@ -23,7 +23,6 @@ class Upload extends migi.Component {
         let spark = new Spark.ArrayBuffer();
         spark.append(fileReader.result);
         let md5 = spark.end();
-        console.log(md5);
       };
       fileReader.readAsArrayBuffer(file);
     }

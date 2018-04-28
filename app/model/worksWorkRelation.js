@@ -8,7 +8,7 @@ module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('works_work_relation', {
     id: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
@@ -21,7 +21,12 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
+    kind: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      comment: '1视频，2音频，3图片，4文字',
+    },
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -31,7 +36,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
-    describe: {
+    tag: {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
@@ -49,11 +54,13 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'works_id_work_id',
         unique: true,
         fields: ['works_id', 'work_id'],
       },
       {
-        fields: ['work_id'],
+        name: 'work_id_weight',
+        fields: ['work_id', 'weight'],
       }
     ],
     comment: '大作品小作品关系',

@@ -6,36 +6,38 @@
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('user_works_work_relation', {
+  return sequelizeCircling.define('user_work_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
     user_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    works_id: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    kind: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '1视频，2音频，3图片，4文字',
+    },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0点赞作品，1收藏作品',
-    },
-    state: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
+      comment: '1点赞作品，2收藏作品',
     },
     create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,
@@ -43,10 +45,15 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'work_id_type_user_id',
         unique: true,
-        fields: ['user_id', 'work_id'],
+        fields: ['work_id', 'type', 'user_id'],
+      },
+      {
+        name: 'user_id_type_kind',
+        fields: ['user_id', 'type', 'kind']
       }
     ],
-    comment: '用户与小作品关联信息',
+    comment: '用户与作品关联信息',
   });
 };

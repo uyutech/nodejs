@@ -18,7 +18,10 @@ class Controller extends egg.Controller {
     let replyData = {};
 
     let res = await Promise.all([
-      ctx.service.post.index(postID),
+      ctx.helper.postServiceJSON2('api/circling/GetPostDetailes', {
+        uid,
+        CommentID: postID,
+      }),
       ctx.helper.postServiceJSON('api/Users_Comment/GetToPostMessage_List', {
         uid,
         PostID: postID,
@@ -35,11 +38,9 @@ class Controller extends egg.Controller {
     if(res[1].data.success) {
       replyData = res[1].data.data;
     }
-    let reference = await ctx.service.post.reference(postData.Content);
     ctx.body = ctx.helper.okJSON({
       postData,
       replyData,
-      reference,
     });
   }
   * like(ctx) {

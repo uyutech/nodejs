@@ -10,6 +10,7 @@ module.exports = app => {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
       allowNull: false,
     },
     circle_id: {
@@ -20,7 +21,13 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
-    is_deleted: {
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '1直属，2活动引导，3从属',
+    },
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -38,8 +45,13 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'circle_id_tag_id',
         unique: true,
         fields: ['circle_id', 'tag_id'],
+      },
+      {
+        name: 'tag_id',
+        fields: ['tag_id'],
       }
     ],
     comment: '圈子和标签关联信息',

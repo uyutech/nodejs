@@ -17,7 +17,10 @@ module.exports = app => {
       let worksDetail = {};
       let commentData = {};
       let res = yield {
-        worksDetail: ctx.service.works.index(worksID),
+        worksDetail: ctx.helper.postServiceJSON2('api/works/GetWorkDetails', {
+          uid,
+          WorksID: worksID,
+        }),
         commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToWorkMessage_List', {
           uid,
           WorkID: worksID,
@@ -26,8 +29,8 @@ module.exports = app => {
           Take: 30,
         }),
       };
-      if(res.worksDetail) {
-        worksDetail = res.worksDetail;
+      if(res.worksDetail.data.success) {
+        worksDetail = res.worksDetail.data.data;
       }
       if(res.commentData.data.success) {
         commentData = res.commentData.data.data;

@@ -18,7 +18,7 @@ module.exports = app => {
       unique: true,
     },
     describe: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
       defaultValue: '',
     },
@@ -32,10 +32,16 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_deleted: {
+    is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0普通，1作者粉丝圈，2IP圈，3作品类型圈（音乐、美图等），4职种圈（演唱、演奏等）',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -50,6 +56,7 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'name',
         unique: true,
         fields: ['name'],
       }

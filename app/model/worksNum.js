@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2018/1/27.
+ * Created by army8735 on 2018/4/17.
  */
 
 'use strict';
@@ -8,7 +8,7 @@ module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
   return sequelizeCircling.define('works_num', {
     id: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
@@ -20,7 +20,8 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '0评论数，1浏览数，2播放数，3点赞数，4收藏数，5流行热度',
+      defaultValue: 1,
+      comment: '1热度',
     },
     num: {
       type: Sequelize.INTEGER.UNSIGNED,
@@ -35,13 +36,11 @@ module.exports = app => {
   }, {
     indexes: [
       {
+        name: 'works_id_type',
         unique: true,
-        fields: ['works_id', 'type'],
-      },
-      {
-        fields: ['type', 'num'],
+        fields: ['works_id' ,'type'],
       }
     ],
-    comment: '大作品相关数字汇总',
+    comment: '大作品数字信息',
   });
 };

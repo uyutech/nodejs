@@ -12,20 +12,14 @@ module.exports = app => {
       primaryKey: true,
       allowNull: false,
     },
-    state: {
-      type: Sequelize.TINYINT.UNSIGNED,
-      allowNull: false,
-      defaultValue: 1,
-      comment: '0删除，1正常，2红名单，3黑名单',
-    },
     reg_state: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '0初始化，1披马甲改名字，2-9填名字，10作者公开或选关注，11选关注作者，99普通完成，100作者完成',
+      comment: '10改用户名，11选关注圈子，12选关注人，99完成',
     },
-    name: {
-      type: Sequelize.STRING(32),
+    nickname: {
+      type: Sequelize.STRING,
       allowNull: false,
     },
     sex: {
@@ -44,15 +38,21 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    password: {
-      type: Sequelize.CHAR(32),
-      allowNull: false,
-      defaultValue: '',
-    },
     coins: {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
+    },
+    is_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    state: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 1,
+      comment: '1正常，2假账号',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -67,7 +67,9 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        fields: ['name'],
+        name: 'nickname',
+        unique: true,
+        fields: ['nickname'],
       }
     ],
     comment: '用户基本信息',
