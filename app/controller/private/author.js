@@ -13,11 +13,12 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let keyword = body.keyword;
-    if(!keyword) {
+    let name = (body.name || '').trim();
+    let offset = parseInt(body.offset) || 0;
+    if(!name) {
       return;
     }
-    let res = await service.author.listByName(keyword, 0, LIMIT);
+    let res = await service.author.listByName(name, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -30,36 +31,27 @@ class Controller extends egg.Controller {
     if(!name) {
       return ctx.body = ctx.helper.errorJSON('作者名不能为空');
     }
-    let transaction = await app.sequelizeCircling.transaction();
-    try {
-      let last = await app.model.author.findOne({
-        transaction,
-        attributes: [
-          'id'
-        ],
-        order: [
-          ['id', 'DESC']
-        ],
-        limit: 1,
-        raw: true,
-      });
-      let id = last.id + Math.floor(Math.random() * 3) + 1;
-      await app.model.author.create({
-        id,
-        name,
-        type,
-      }, {
-        transaction,
-        raw: true,
-      });
-      await transaction.commit();
-      return ctx.body = ctx.helper.okJSON({
-        data: id,
-      });
-    } catch(e) {
-      await transaction.rollback();
-      return ctx.body = ctx.helper.errorJSON(e.toString());
-    }
+    let last = await app.model.author.findOne({
+      attributes: [
+        'id'
+      ],
+      order: [
+        ['id', 'DESC']
+      ],
+      limit: 1,
+      raw: true,
+    });
+    let id = last.id + Math.floor(Math.random() * 3) + 1;
+    let create = await app.model.author.create({
+      id,
+      name,
+      type,
+    }, {
+      raw: true,
+    });
+    ctx.body = ctx.helper.okJSON({
+      data: create,
+    });
   }
 }
 

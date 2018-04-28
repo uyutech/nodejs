@@ -68,7 +68,7 @@ class Controller extends egg.Controller {
     }
     let banner = [];
     let list = {};
-    let kindList;
+    let kindList = {};
     if(kind) {
       if(offset) {
         kindList = await service.find.kindList(kind, uid, offset, LIMIT);
@@ -88,6 +88,7 @@ class Controller extends egg.Controller {
       ]);
     }
     list.limit = LIMIT;
+    kindList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       banner,
       list,

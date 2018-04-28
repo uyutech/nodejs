@@ -123,6 +123,9 @@ module.exports = appInfo => {
         if(ctx.request.path.startsWith('/oauth/session')) {
           return true;
         }
+        if(ctx.request.path.startsWith('/private')) {
+          return true;
+        }
         return false;
       },
     },
