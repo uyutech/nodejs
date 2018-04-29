@@ -11,12 +11,11 @@ const LIMIT = 30;
 class Controller extends egg.Controller {
   async find() {
     const { ctx, service } = this;
-    let uid = ctx.session.uid;
     let body = ctx.request.body;
     let name = (body.name || '').trim();
     let offset = parseInt(body.offset) || 0;
     if(!name) {
-      return;
+      return ctx.body = ctx.helper.errorJSON('作者名不能为空');
     }
     let res = await service.author.listByName(name, offset, LIMIT);
     res.limit = LIMIT;

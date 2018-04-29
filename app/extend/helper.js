@@ -40,92 +40,6 @@ let helper = {
       message: '请先登录',
     };
   },
-  async postServiceJSON(url, data) {
-    if(url.indexOf('//') === -1) {
-      url = 'http://172.19.118.93/' + url.replace(/^\//, '');
-    }
-    url += url.indexOf('?') > -1 ? '&' : '?';
-    url += 'tranceId=' + this.ctx.tranceId || '';
-    let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
-    let ip = this.ctx.request.header['x-real-ip'];
-    let start = Date.now();
-    let res;
-    if(data && data.uid && data.uid.toString().length !== 16) {
-      let temp = parseInt(data.uid);
-      temp = 2018000000000000 + temp;
-      data.uid = temp.toString().slice(0, 16);
-    }
-    if(data && data.currentuid && data.currentuid.toString().length !== 16) {
-      let temp = parseInt(data.currentuid);
-      temp = 2018000000000000 + temp;
-      data.currentuid = temp.toString().slice(0, 16);
-    }
-    if(data && data.CurrentUid && data.CurrentUid.toString().length !== 16) {
-      let temp = parseInt(data.CurrentUid);
-      temp = 2018000000000000 + temp;
-      data.CurrentUid = temp.toString().slice(0, 16);
-    }
-    let end;
-    try {
-      res = await this.ctx.curl(url, {
-        method: 'POST',
-        data,
-        dataType: 'json',
-        gzip: true,
-      });
-    }
-    catch(e) {
-      end = Date.now();
-      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
-      throw new Error(e);
-    }
-    end = Date.now();
-    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
-    return res;
-  },
-  * postServiceJSON2(url, data) {
-    if(url.indexOf('//') === -1) {
-      url = 'http://172.19.118.93/' + url.replace(/^\//, '');
-    }
-    url += url.indexOf('?') > -1 ? '&' : '?';
-    url += 'tranceId=' + this.ctx.tranceId || '';
-    let uid = this.ctx.session ? this.ctx.session.uid || '-' : '-';
-    let ip = this.ctx.request.header['x-real-ip'];
-    let start = Date.now();
-    let res;
-    if(data && data.uid && data.uid.toString().length !== 16) {
-      let temp = parseInt(data.uid);
-      temp = 2018000000000000 + temp;
-      data.uid = temp.toString().slice(0, 16);
-    }
-    if(data && data.currentuid && data.currentuid.toString().length !== 16) {
-      let temp = parseInt(data.currentuid);
-      temp = 2018000000000000 + temp;
-      data.currentuid = temp.toString().slice(0, 16);
-    }
-    if(data && data.CurrentUid && data.CurrentUid.toString().length !== 16) {
-      let temp = parseInt(data.CurrentUid);
-      temp = 2018000000000000 + temp;
-      data.CurrentUid = temp.toString().slice(0, 16);
-    }
-    let end;
-    try {
-      res = yield this.ctx.curl(url, {
-        method: 'POST',
-        data,
-        dataType: 'json',
-        gzip: true,
-      });
-    }
-    catch(e) {
-      end = Date.now();
-      this.ctx.getLogger('serviceLogger').error('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
-      throw new Error(e);
-    }
-    end = Date.now();
-    this.ctx.getLogger('serviceLogger').info('[%s/%s/%s/%sms POST %s]', uid, ip, this.ctx.tranceId, end - start, url);
-    return res;
-  },
   autoSsl: function(url) {
     return (url || '').replace(/^https?:\/\//i, '//');
   },
@@ -160,7 +74,7 @@ let helper = {
             : ''}
           <li>
           ${session.uid
-            ? (session.uname)
+            ? (session.nickname)
             : '<a href="/login" class="login">登录</a>'}
           </li>
           ${session.uid ? '<li class="out">退出</li>' : ''}
@@ -241,13 +155,7 @@ let helper = {
     }
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(R8232, '&#8232;');
   },
-  weiboAppKey: '2345825162',
-  weiboAppSecret: '262e0bd1f13a614636ad5c748db20f15',
-  weiboRedirect: 'https://circling.cc/oauth/login',
   $CONFIG: 'var $CONFIG = {};',
-  rhymeAppKey: '4139489763',
-  rhymeAppSecret: '1152af67bb15530c50d91728f86c43df',
-  rhymeRedirect: 'http://rhymesland.com/oauth/rhymeLogin',
 };
 
 module.exports = helper;

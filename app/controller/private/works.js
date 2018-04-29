@@ -48,15 +48,26 @@ class Controller extends egg.Controller {
   }
 
   async create() {
-    const { app, ctx } = this;
+    const { app, ctx, service } = this;
     let body = ctx.request.body;
     let userId = body.userId;
-    let works = JSON.parse(body.works);
-    let videoList = JSON.parse(body.videoList);
-    let audioList = JSON.parse(body.audioList);
-    let imageList = JSON.parse(body.imageList);
-    let textList = JSON.parse(body.textList);
-    let workRelationList = JSON.parse(body.workRelationList);
+    let works;
+    let videoList;
+    let audioList;
+    let imageList;
+    let textList;
+    let workRelationList;
+    try {
+      works = JSON.parse(body.works);
+      videoList = JSON.parse(body.videoList);
+      audioList = JSON.parse(body.audioList);
+      imageList = JSON.parse(body.imageList);
+      textList = JSON.parse(body.textList);
+      workRelationList = JSON.parse(body.workRelationList);
+    }
+    catch(e) {
+      return ctx.body = ctx.helper.errorJSON(e.toString());
+    }
     let idHash = {};
     let videoIdList = [];
     let audioIdList = [];
@@ -343,12 +354,12 @@ class Controller extends egg.Controller {
         }
       }
     }
-    let authorList = await app.model.author.infoList(authorIdList);
+    let authorList = await service.author.infoList(authorIdList);
     for(let i = 0, len = authorIdList.length; i < len; i++) {
-      if(authorIdList[i].id !== authorList[i].id) {
+      if(authorIdList[i] !== authorList[i].id) {
         return ctx.body = ctx.helper.errorJSON({
           code: 2300,
-          message: 'author.id不匹配' + authorIdList[i].id,
+          message: 'author.id不匹配：' + authorIdList[i] + ', ' + authorList[i].id,
         });
       }
     }
@@ -439,7 +450,7 @@ class Controller extends egg.Controller {
       if(Array.isArray(audioList)) {
         let id = last[2].id;
         for(let i = 0, len = audioList.length; i < len; i++) {
-          let item = videoList[i];
+          let item = audioList[i];
           workList.push(item);
           kindList.push(2);
           id += Math.floor(Math.random() * 3) + 1;
@@ -464,7 +475,7 @@ class Controller extends egg.Controller {
       if(Array.isArray(imageList)) {
         let id = last[3].id;
         for(let i = 0, len = imageList.length; i < len; i++) {
-          let item = videoList[i];
+          let item = imageList[i];
           workList.push(item);
           kindList.push(3);
           id += Math.floor(Math.random() * 3) + 1;
@@ -488,7 +499,7 @@ class Controller extends egg.Controller {
       if(Array.isArray(textList)) {
         let id = last[4].id;
         for(let i = 0, len = textList.length; i < len; i++) {
-          let item = videoList[i];
+          let item = textList[i];
           workList.push(item);
           kindList.push(4);
           id += Math.floor(Math.random() * 3) + 1;
@@ -525,7 +536,25 @@ class Controller extends egg.Controller {
         transaction,
         raw: true,
       }));
-      let createList = await Promise.all(query);console.log(createList);
+      query.push(app.model.worksNum.create({
+        works_id: id,
+        type: 1,
+      }, {
+        transaction,
+        raw: true,
+      }));
+      query.push(app.model.comment.create({
+        content: id,
+        user_id: 2018000000008222,
+        is_delete: true,
+        review: 3,
+        root_id: 0,
+        parent_id: 0,
+      }, {
+        transaction,
+        raw: true,
+      }));
+      let createList = await Promise.all(query);
       query = [];
       workList.forEach((item, i) => {
         let create = createList[i];
@@ -549,7 +578,15 @@ class Controller extends egg.Controller {
           works_id: id,
           work_id: create.id,
           weight: item.weight,
+          kind: kindList[i],
           tag: item.tag,
+        }, {
+          transaction,
+          raw: true,
+        }));
+        query.push(app.model.workNum.create({
+          work_id: create.id,
+          type: 1,
         }, {
           transaction,
           raw: true,
@@ -580,6 +617,13 @@ class Controller extends egg.Controller {
           }));
         });
       }
+      query.push(app.model.worksCommentRelation.create({
+        works_id: id,
+        comment_id: createList[createList.length - 1].id,
+      }, {
+        transaction,
+        raw: true,
+      }));
       query.push(app.model.userCreateWorks.create({
         user_id: userId,
         works_id: id,
@@ -605,16 +649,11 @@ class Controller extends egg.Controller {
       }
       await Promise.all(query);
       await transaction.commit();
-      return {
-        success: true,
-        data: id,
-      };
+      return ctx.body = ctx.helper.okJSON(id);
     }
     catch(e) {
       await transaction.rollback();
-      return {
-        success: false,
-      };
+      return ctx.body = ctx.helper.errorJSON(e.toString());
     }
   }
 }

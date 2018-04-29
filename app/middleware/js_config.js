@@ -11,17 +11,7 @@ module.exports = () => {
       helper.$CONFIG += `
   $CONFIG.isLogin = true;
   $CONFIG.uid = '${ctx.session.uid}';
-  $CONFIG.uname = '${ctx.session.uname}';
-  $CONFIG.head = '${ctx.session.head}';
-  // $CONFIG.messageNum = ${ctx.session.messageNum || 0}`;
-      if(ctx.session.authorId) {
-        helper.$CONFIG += `
-  $CONFIG.isAuthor = true;
-  $CONFIG.authorId = '${ctx.session.authorId}';
-  $CONFIG.authorName = '${ctx.session.authorName}';
-  $CONFIG.authorHead = '${ctx.session.authorHead}';
-  $CONFIG.isPublic = ${!!ctx.session.isPublic};`;
-      }
+  $CONFIG.nickname = '${ctx.session.nickname}';`;
     }
     await next();
   };

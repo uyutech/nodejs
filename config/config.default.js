@@ -10,7 +10,7 @@ module.exports = appInfo => {
 
   config.session = {
     key: 'sessionid',
-    maxAge: 15 * 24 * 3600 * 1000,
+    maxAge: 7 * 24 * 3600 * 1000,
     domain: 'circling.cc',
   };
 
@@ -156,6 +156,12 @@ module.exports = appInfo => {
       password: 'uyuTech2017',
       host: 'rm-uf6j2h04az726ui85.mysql.rds.aliyuncs.com',
     },
+  };
+
+  config.weibo = {
+    appKey: '2345825162',
+    appSecret: '262e0bd1f13a614636ad5c748db20f15',
+    redirect: 'https://circling.cc/oauth/login',
   };
 
   return config;

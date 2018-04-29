@@ -386,7 +386,7 @@ class Service extends egg.Service {
         };
       }
       weibo = weibo.data;
-      let name = weibo.screen_name || weibo.name;
+      // let name = weibo.screen_name || weibo.name;
       let headUrl = weibo.avatar_hd || weibo.avatar_large || weibo.profile_image_url;
       let transaction = await app.sequelizeCircling.transaction();
       try {

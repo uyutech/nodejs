@@ -36,11 +36,6 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    popular: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      allowNull: false,
-      defaultValue: 0,
-    },
     is_authorize: {
       type: Sequelize.BOOLEAN,
       allowNull: false,

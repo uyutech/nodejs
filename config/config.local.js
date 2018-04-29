@@ -10,9 +10,14 @@ module.exports = appInfo => {
     hotDeploy: true,
     session: {
       key: 'sessionid',
-      domain: 'dev.circling.cc2',
+      domain: 'circling.cc2',
     },
     redis: {
+      client: {
+        port: 6379,
+        host: '127.0.0.1',
+        db: 0,
+      },
       time: 10,
       shortTime: 5,
       mediumTime: 30,
@@ -43,6 +48,11 @@ module.exports = appInfo => {
         password: '87351984@',
         host: 'localhost',
       },
+    },
+    weibo: {
+      appKey: '1987340303',
+      appSecret: 'ae82c745736d8dc78230d96388790b22',
+      redirect: 'http://dev.circling.cc2/oauth/login',
     },
   };
 };

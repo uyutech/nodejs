@@ -53,6 +53,7 @@ class Controller extends egg.Controller {
         list.push(recommendComment.splice(rand, 1)[0]);
       }
     }
+    list = await service.comment.plusListFull(list, uid);
     ctx.body = ctx.helper.okJSON({
       bannerList,
       recommendComment: list,

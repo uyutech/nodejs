@@ -5,7 +5,6 @@ module.exports = app => {
   app.get('/home/qr', 'error.qr');
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
-  app.post('/oauth/session', 'oauth.session');
 
   app.get('/d', 'd.index.newIndex');
   app.get('/d/works/:worksId', 'd2.works.index');
@@ -152,4 +151,7 @@ module.exports = app => {
   app.post('/private/work/typeAll', 'private.work.typeAll');
   app.post('/private/author/find', 'private.author.find');
   app.post('/private/author/create', 'private.author.create');
+  app.post('/private/user/find', 'private.user.find');
+  app.post('/private/user/increaseCoins', 'private.user.increaseCoins');
+  app.post('/private/account', 'private.account.session');
 };
