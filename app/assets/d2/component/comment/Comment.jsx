@@ -28,22 +28,22 @@ class Comment extends migi.Component {
   }
   genComment(item) {
     return <li id={ 'comment_' + item.id }
-               class={ 'item' + (item.isAuthor ? ' author' : '') }>
+               class={ 'item' + (item.authorId ? ' author' : '') }>
       <div class="t fn-clear">
         <div class="profile fn-clear">
-          <a class="pic"
-             href={ item.isAuthor
-               ? '/author/' + item.aid
-               : '/user/' + item.uid }>
+          <div class="pic"
+             href={ item.authorId
+               ? '/author/' + item.authorId
+               : '/user/' + item.userId }>
             <img class="pic"
-                 src={ util.autoSsl(util.img60_60_80(item.headUrl
-                   || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png')) }/>
-          </a>
+                 src={ util.img(item.headUrl, 60, 60, 80)
+                   || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
+          </div>
           <div class="txt">
-            <a class="name"
-               href={ item.isAuthor
-                 ? '/author/' + item.aid
-                 : '/user/' + item.uid }>{ item.isAuthor ? item.name : item.nickname }</a>
+            <div class="name"
+               href={ item.authorId
+                 ? '/author/' + item.authorId
+                 : '/user/' + item.userId }>{ item.authorId ? item.name : item.nickname }</div>
             <small class="time" rel={ 1 }>{ util.formatDate(item.createTime) }</small>
           </div>
         </div>
@@ -52,7 +52,7 @@ class Comment extends migi.Component {
         {
           item.quote
             ? <div class="quote">
-                <span>回复@{ item.quote.isAuthor ? item.quote.name : item.quote.nickname }：</span>
+                <span>回复@{ item.quote.authorId ? item.quote.name : item.quote.nickname }：</span>
                 <p>{ item.quote.content }</p>
               </div>
             : ''

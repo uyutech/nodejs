@@ -10,48 +10,22 @@ export default function(data) {
   migi.resetUid();
 
   let isLogin = !!data.ctx.session.uid;
-  let worksID = data.worksID;
-  let workID = data.workID;
-  let tag = data.tag;
-  let worksDetail = data.worksDetail;
-  let commentData = data.commentData;
-  let labelList = data.labelList;
+  let worksId = parseInt(data.worksId);
+  let workId = data.workId;
+  let info = data.info;
+  let collection = data.collection;
+  let commentList = data.commentList;
 
-  // 完成公开1，未完成公开2，未完成保密3
-  if(worksDetail.WorkState === 3) {
-    return `<!DOCTYPE html>
-<html>
-<head>
-  ${data.helper.getMHead()}
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/mworks.css')}"/>
-</head>
-<body>
-<div id="page"><h1 class="private">此作品尚未完成公开</h1></div>
-${data.helper.getMTopNav()}
-${data.helper.getMBotNav()}
-<script>
-  ${data.helper.$CONFIG}
-</script>
-<script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
-${data.helper.getStat()}
-</body>
-</html>`;
-  }
-
-  let works = migi.preRender(<Works
-    isLogin={ isLogin }
-    worksID={ worksID }
-    workID={ workID }
-    tag={ tag }
-    worksDetail={ worksDetail }
-    labelList={ labelList }
-    commentData={ commentData }/>);
-
+  let works = migi.preRender(
+    <Works worksId={ worksId }
+           workId={ workId }
+           info={ info }
+           collection={ collection }
+           commentList={ commentList }/>);
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getMHead({ title: worksDetail.Title })}
+  ${data.helper.getMHead({ title: info.title })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mworks.css')}"/>
 </head>
@@ -61,12 +35,11 @@ ${data.helper.getMTopNav()}
 ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.worksID = ${data.helper.stringify(worksID)};
-  $CONFIG.workID = ${data.helper.stringify(workID)};
-  $CONFIG.tag = ${data.helper.stringify(tag)};
-  $CONFIG.worksDetail = ${data.helper.stringify(worksDetail)};
-  $CONFIG.labelList = ${data.helper.stringify(labelList)};
-  $CONFIG.commentData = ${data.helper.stringify(commentData)};
+  $CONFIG.worksId = ${data.helper.stringify(worksId)};
+  $CONFIG.workId = ${data.helper.stringify(workId)};
+  $CONFIG.info = ${data.helper.stringify(info)};
+  $CONFIG.collection = ${data.helper.stringify(collection)};
+  $CONFIG.commentList = ${data.helper.stringify(commentList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/mworks.js')}" defer="defer"></script>

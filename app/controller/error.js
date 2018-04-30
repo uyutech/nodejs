@@ -4,15 +4,18 @@
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * c404(ctx) {
-      yield ctx.render('404.html');
-    }
-    * qr(ctx) {
-      ctx.redirect('http://circling.cc');
-      // yield ctx.render('404.html');
-    }
+const egg = require('egg');
+
+class Controller extends egg.Controller {
+  async c404() {
+    const { ctx } = this;
+    await ctx.render('404.html');
   }
-  return Controller;
-};
+
+  async qr() {
+    const { ctx } = this;
+    await ctx.redirect('http://circling.cc');
+  }
+}
+
+module.exports = Controller;

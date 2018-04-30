@@ -1,336 +1,108 @@
 /**
- * Created by army8735 on 2017/9/21.
+ * Created by army8735 on 2018/1/29.
  */
+
+
+'use strict';
 
 import Title from './Title.jsx';
 import Media from './Media.jsx';
-import itemTemplate from './itemTemplate';
+import Comments from './Comments.jsx';
 import Author from './Author.jsx';
 import Text from './Text.jsx';
-import Lyric from './Lyric.jsx';
-import Poster from './Poster.jsx';
-import Timeline from './Timeline.jsx';
-import InspComment from './InspComment.jsx';
-import WorkComment from './WorkComment.jsx';
-import PhotoAlbum from './PhotoAlbum.jsx';
-import ImageView from './ImageView.jsx';
-import WorksTypeEnum from './WorksTypeEnum';
-import LyricsParser from './LyricsParser.jsx';
-import PlayList from './PlayList.jsx';
-import MusicAlbum from './MusicAlbum.jsx';
-import Describe from './Describe.jsx';
-
-let first;
+import Image from './Image.jsx';
 
 class Works extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    self.worksID = self.props.worksID;
-    self.workID = self.props.workID;
-    self.worksType = self.props.worksDetail.WorkType;
-    self.setWorks(self.props.worksDetail.Works_Items || []);
-    self.on(migi.Event.DOM, function() {
-      let workComment = self.ref.workComment;
-      if(self.worksType === WorksTypeEnum.TYPE.originMusic) {
-        let media = self.ref.media;
-        media.on('switchTo', function(data) {
-          workComment.workID = data.ItemID;
-        });
-      }
-      else if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
-        let musicAlbum = self.ref.musicAlbum;
-        let cover = musicAlbum.ref.cover;
-        let $type = $(self.ref.type.element);
-        cover.on('start', function() {
-          musicAlbum.start();
-          $type.find('.cover').removeClass('cur');
-          $type.find('.player').addClass('cur');
-        });
-        migi.eventBus.on('chooseMusic', function() {
-          $type.find('.cover').removeClass('cur');
-          $type.find('.player').addClass('cur');
-        });
-      }
-    });
+    self.worksId = self.props.worksId;
+    self.workId = self.props.workId;
+    self.setData(self.props.collection);
   }
-  @bind worksID
-  @bind workID
-  @bind worksType
-  @bind isManager
-  setWorks(works) {
+  // @bind worksId
+  // @bind workId
+  @bind kind
+  setData(collection) {
     let self = this;
-    let workList = [];
-    let authorList = self.props.worksDetail.Works_Author || [];
-    if([5, 6, 18].indexOf(self.worksType) > -1) {
-      works.forEach(function(item) {
-        let type = itemTemplate.workType(item.ItemType).bigType;
-        if(type === 'audio') {
-          let l = {};
-          if(LyricsParser.isLyrics(item.lrc)) {
-            l.is = true;
-            l.txt = LyricsParser.getTxt(item.lrc);
-            l.data = LyricsParser.parse(item.lrc);
+    self.videoList = [];
+    self.audioList = [];
+    self.imgList = [];
+    self.textList = [];
+    let first;
+    collection.forEach(function(item) {
+      switch(item.kind) {
+        case 1:
+          if(!first) {
+            first = true;
+            self.kind = 1;
           }
-          else {
-            l.is = false;
-            l.txt = item.lrc;
+          self.videoList.push(item);
+          break;
+        case 2:
+          if(!first) {
+            first = true;
+            self.kind = 2;
           }
-          item.formatLyrics = l;
-          workList.push(item);
-        }
-        else if(type === 'video') {
-          workList.push(item);
-        }
-      });
-      self.workList = workList;
-      return;
-    }
-    else if([11, 12].indexOf(self.worksType) > -1) {
-      return;
-    }
-    let workHash = {};
-    works.forEach(function(item) {
-      // 将每个小作品根据小类型映射到大类型上，再归类
-      let type = itemTemplate.workType(item.ItemType);
-      let bigType = type.bigType;
-      let name = type.display || type.name;
-      if(bigType) {
-        workHash[bigType] = workHash[bigType] || {
-          name,
-          value: [],
-        };
-        workHash[bigType].value.push(item);
-        authorList = authorList.concat(item.Works_Item_Author);
+          self.audioList.push(item);
+          break;
+        case 3:
+          self.imgList.push(item);
+          break;
+        case 4:
+          self.textList.push(item);
+          break;
       }
     });
-    Object.keys(workHash).forEach(function(k) {
-      workList.push({
-        bigType: k,
-        name: workHash[k].name,
-        value: workHash[k].value,
-      });
-    });
-
-    workList.forEach(function(item) {
-      if(item.bigType === 'audio') {
-        self.audioData = item.value;
-      }
-      else if(item.bigType === 'video') {
-        self.videoData = item.value;
-      }
-      else if(item.bigType === 'text') {
-        self.textData = item;
-      }
-      else if(item.bigType === 'poster') {
-        self.posterData = item;
-      }
-      else if(item.bigType === 'lyric') {
-        self.lyricData = item;
-      }
-    });
-
-    if(self.workID) {
-      if(self.videoData) {
-        self.videoData.forEach(function(item) {
-          if(item.ItemID.toString() === self.workID) {
-            first = 'video';
-          }
-        });
-      }
-      if(self.audioData) {
-        self.audioData.forEach(function(item) {
-          if(item.ItemID.toString() === self.workID) {
-            first = 'audio';
-          }
-        });
-      }
-    }
-    else {
-      if(self.videoData) {
-        first = 'video';
-        self.workID = self.videoData[0].ItemID;
-      }
-      else if(self.audioData) {
-        first = 'audio';
-        self.workID = self.audioData[0].ItemID;
-      }
-    }
   }
   clickType(e, vd, tvd) {
     let self = this;
-    let $li = $(tvd.element);
-    if(!$li.hasClass('cur')) {
-      $(vd.element).find('.cur').removeClass('cur');
-      $li.addClass('cur');
-      let type = tvd.props.rel;
-      if(self.worksType === WorksTypeEnum.TYPE.musicAlbum) {
-        self.ref.musicAlbum.switchType(type);
-      }
-      else {
-        self.ref.media.switchType(type);
-      }
+    if(tvd.props.rel === self.kind) {
+      return;
     }
+    self.kind = tvd.props.rel;
+    self.ref.media.switchType(self.kind);
   }
   render() {
     let self = this;
-    if([5, 6, 18].indexOf(self.worksType) > -1) {
-      return <div class={ 'works fn-clear t' + self.worksType }>
-        <Title ref="title" worksType={ self.worksType }
-               detail={ self.props.worksDetail }/>
-        {
-          self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
-            ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
-            : ''
-        }
-        <div class="main">
-          <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
-            <li class="cover cur" rel="cover">封面</li>
-            <li class="player" rel="player">播放</li>
-          </ul>
-          <MusicAlbum ref="musicAlbum"
-                      worksID={ self.worksID }
-                      workID={ self.workID }
-                      cover={ self.props.worksDetail.cover_Pic }
-                      workList={ self.workList }/>
-          <div class="box">
-            <Describe title="专辑简介" data={ self.props.worksDetail.Describe }/>
-            <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
-            {
-              self.props.worksDetail.WorksAuthorComment
-                ? <InspComment ref="inspComment"
-                               commentData={ self.props.worksDetail.WorksAuthorComment }/>
-                : ''
-            }
-          </div>
-        </div>
-        <div class="side">
-          <ul class="sel fn-clear" ref="sel">
-            <li class="cur">曲目</li>
-          </ul>
-          <div class="box box-fn-top-left">
-            <PlayList ref="playList" cover={ self.props.worksDetail.cover_Pic }
-                      workList={ self.workList } worksID={ self.worksID } workID={ self.workID }/>
-          </div>
-          <WorkComment ref="workComment"
-                       isLogin={ self.props.isLogin }
-                       worksID={ self.worksID }
-                       workID={ self.workID }
-                       originTo={ self.props.worksDetail.Title }
-                       commentData={ self.props.commentData }/>
-        </div>
-        <div class="qr">
-          <img src="//zhuanquan.xin/img/09447d7b0b2272a4a3a9cec86fc16ab0.png"/>
-        </div>
-      </div>;
-    }
-    if([11, 12].indexOf(self.worksType) > -1) {
-      return <div class={ 'works fn-clear t' + self.worksType }>
-        <Title ref="title" worksType={ self.worksType }
-               detail={ self.props.worksDetail }/>
-        <div class="main">
-          <PhotoAlbum worksID={ self.worksID } labelList={ self.props.labelList }/>
-        </div>
-        <div class="side">
-          <div class="box">
-            <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
-            {
-              self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
-                ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
-                : ''
-            }
-            {
-              self.textData && self.textData.value && self.textData.value.length
-                ? <Text datas={ self.textData }/>
-                : ''
-            }
-            {
-              self.props.worksDetail.WorksAuthorComment
-                ? <InspComment ref="inspComment"
-                               commentData={ self.props.worksDetail.WorksAuthorComment }/>
-                : ''
-            }
-          </div>
-          <WorkComment ref="workComment"
-                       isLogin={ self.props.isLogin }
-                       worksID={ self.worksID }
-                       workID={ self.workID }
-                       originTo={ self.props.worksDetail.Title }
-                       commentData={ self.props.commentData }/>
-        </div>
-        <ImageView ref="imageView"/>
-        <div class="qr">
-          <img src="//zhuanquan.xin/img/09447d7b0b2272a4a3a9cec86fc16ab0.png"/>
-        </div>
-      </div>;
-    }
-    return <div class={ 'works fn-clear t' + self.worksType }>
-      <Title ref="title" worksType={ self.worksType }
-             detail={ self.props.worksDetail }/>
+    return <div class="works fn-clear">
+      <Title ref="title"
+             info={ self.props.info }/>
       <div class="main">
-        <ul class="type fn-clear" ref="type" onClick={ { li: this.clickType } }>
+        <ul class="type fn-clear"
+            ref="type"
+            onClick={ { li: self.clickType } }>
           {
-            self.videoData
-              ? <li class={ 'video' + (first ==='video' ? ' cur' : '') } rel="video">视频</li>
+            self.videoList.length
+              ? <li class={ 'video' + (self.kind === 1 ? ' cur' : '') }
+                    rel={ 1 }>视频</li>
               : ''
           }
           {
-            self.audioData
-              ? <li class={ 'audio' + (first === 'audio' ? ' cur' : '') } rel="audio">音频</li>
+            self.audioList.length
+              ? <li class={ 'audio' + (self.kind === 2 ? ' cur' : '') }
+                    rel={ 2 }>音频</li>
               : ''
           }
         </ul>
         <Media ref="media"
-               worksID={ self.worksID }
-               workID={ self.workID }
-               cover={ self.props.worksDetail.cover_Pic }
-               audioData={ self.audioData }
-               videoData={ self.videoData }
-               first={ first }/>
-        <WorkComment ref="workComment"
-                     isLogin={ self.props.isLogin }
-                     worksID={ self.worksID }
-                     workID={ self.workID }
-                     originTo={ self.props.worksDetail.Title }
-                     commentData={ self.props.commentData }/>
+               worksId={ self.worksId }
+               cover={ self.props.info.cover }
+               kind={ self.kind }
+               videoList={ self.videoList }
+               audioList={ self.audioList }/>
+        <Comments ref="comments"
+                  worksId={ self.props.worksId }
+                  data={ self.props.commentList }/>
       </div>
       <div class="side">
         <ul class="sel fn-clear" ref="sel">
           <li class="cur">简介</li>
         </ul>
         <div class="box box-fn-top-left">
-          {
-            self.props.worksDetail.Describe
-              ? <Describe title="简介" data={ self.props.worksDetail.Describe }/>
-              : ''
-          }
-          <Author list={ self.props.worksDetail.GroupAuthorTypeHash }/>
-          {
-            self.props.worksDetail.WorkTimeLine && self.props.worksDetail.WorkTimeLine.length
-              ? <Timeline datas={ self.props.worksDetail.WorkTimeLine }/>
-              : ''
-          }
-          {
-            self.textData && self.textData.value && self.textData.value.length
-              ? <Text datas={ self.textData }/>
-              : ''
-          }
-          {
-            self.lyricData && self.lyricData.value && self.lyricData.value.length
-              ? <Lyric datas={ self.lyricData }/>
-              : ''
-          }
-          {
-            self.props.worksDetail.WorksAuthorComment
-              ? <InspComment ref="inspComment"
-                             commentData={ self.props.worksDetail.WorksAuthorComment }/>
-              : ''
-          }
-          {
-            self.posterData
-              ? <Poster datas={ self.posterData }/>
-              : ''
-          }
+          <Author ref="author" list={ self.props.info.author }/>
+          <Text ref="text" list={ self.textList }/>
+          <Image ref="image" list={ self.imgList }/>
         </div>
       </div>
       <div class="qr">

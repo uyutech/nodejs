@@ -4,53 +4,36 @@
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * index(ctx) {
-      let uid = ctx.session.uid;
-      let worksID = ctx.params.worksID;
-      if(!worksID) {
-        return;
-      }
-      let tag = ctx.query.tag;
-      let workID = ctx.params.workID;
-      let worksDetail = {};
-      let commentData = {};
-      let res = yield {
-        worksDetail: ctx.service.works.index(worksID),
-        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToWorkMessage_List', {
-          uid,
-          WorkID: worksID,
-          WorksID: worksID,
-          Skip: 0,
-          Take: 30,
-        }),
-      };
-      if(res.worksDetail) {
-        worksDetail = res.worksDetail;
-      }
-      if(res.commentData.data.success) {
-        commentData = res.commentData.data.data;
-      }
-      let labelList = [];
-      if(worksDetail.WorkType === 11) {
-        let res = yield ctx.helper.postServiceJSON2('api/works/GetPhotoInfo', {
-          uid,
-          WorksID: worksID,
-        });
-        if(res.data.success) {
-          labelList = res.data.data.TipsList || [];
-        }
-      }
-      yield ctx.render('mworks', {
-        worksID,
-        workID,
-        tag,
-        worksDetail,
-        commentData,
-        labelList,
-      });
+const egg = require('egg');
+
+const LIMIT = 10;
+
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let worksId = parseInt(ctx.params.worksId);
+    let workId = parseInt(ctx.params.workId);
+    if(!worksId) {
+      return;
     }
+    let [info, collection, commentList] = await Promise.all([
+      service.works.infoPlusAllAuthor(worksId),
+      service.works.collectionFull(worksId, uid),
+      service.works.commentList(worksId, uid, 0, LIMIT)
+    ]);
+    if(!info || info.state === 3) {
+      return;
+    }
+    commentList.limit = LIMIT;
+    await ctx.render('mworks', {
+      worksId,
+      workId,
+      info,
+      collection,
+      commentList,
+    });
   }
-  return Controller;
-};
+}
+
+module.exports = Controller;

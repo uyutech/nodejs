@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2017/10/10.
+ * Created by army8735 on 2018/3/26.
  */
 
 'use strict';
@@ -7,18 +7,20 @@
 class Text extends migi.Component {
   constructor(...data) {
     super(...data);
+    this.list = this.props.list;
   }
+  @bind list
   render() {
-    return <div class="mod mod-text">
-      <h5>{ this.props.datas.name }</h5>
-      <ul class="c">
+    return <ul class={ 'mod mod-text' + ((this.list && this.list.length ? '' : ' fn-hide')) }>
       {
-        (this.props.datas.value || []).map(function(item) {
-          return <li><pre>{ item.Text }</pre></li>;
+        (this.list || []).map(function(item) {
+          return <li>
+            <h5>{ item.typeName }</h5>
+            <pre>{ item.content }</pre>
+          </li>;
         })
       }
-      </ul>
-    </div>;
+    </ul>;
   }
 }
 

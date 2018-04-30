@@ -4,19 +4,12 @@
 
 'use strict';
 
-import TopNav from '../../assets/d/component/topnav/TopNav.jsx';
+import Home from '../../assets/d/index/Home.jsx';
 
 export default function(data) {
   migi.resetUid();
 
-  let isLogin = !!data.ctx.session.uid;
-  let isAuthor = !!data.ctx.session.authorID;
-  let userInfo = data.userInfo;
-  let authorInfo = data.authorInfo;
-  let messages = data.messages;
-
-  let topNav = migi.preRender(<TopNav userInfo={ userInfo }
-                                      isLogin={ isLogin } isAuthor={ isAuthor }/>);
+  let home = migi.preRender(<Home/>);
 
   return `<!DOCTYPE html>
 <html>
@@ -26,12 +19,11 @@ export default function(data) {
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dindex.css')}"/>
 </head>
 <body>
-${topNav}
+${home}
+${data.helper.getDTopNav({ pageId: 0 })}
+${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
-  $CONFIG.userInfo = ${data.helper.stringify(userInfo)};
-  $CONFIG.authorInfo = ${data.helper.stringify(authorInfo)};
-  $CONFIG.messages = ${data.helper.stringify(messages)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/dindex.js')}" defer="defer"></script>

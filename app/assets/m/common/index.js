@@ -7,8 +7,6 @@ import 'migi-es6-shim';
 import 'migi';
 import $ from 'anima-yocto-ajax';
 import env from './production';
-import net from './net';
-import util from './util';
 import './global.jsx';
 
 import './index.less';
@@ -77,6 +75,3 @@ window.requestAnimationFrame = function() {
 
 $.AJAX = env.ajax;
 window.$ = $;
-window.$net = net;
-window.$util = util;
-

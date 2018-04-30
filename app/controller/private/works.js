@@ -529,7 +529,7 @@ class Controller extends egg.Controller {
         cover: works.cover,
         is_authorize: works.isAuthorize,
         state: works.state,
-        review: 1,
+        review: works.review,
         create_time: now,
         update_time: now,
       }, {

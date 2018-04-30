@@ -4,14 +4,21 @@
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * loginOut(ctx) {
-      ctx.session = null;
-      ctx.body = {
-        success: true,
-      };
-    }
+const egg = require('egg');
+
+class Controller extends egg.Controller {
+  async loginOut() {
+    const { ctx } = this;
+    ctx.session = null;
+    ctx.body = {
+      success: true,
+    };
   }
-  return Controller;
-};
+
+  async qr() {
+    const { ctx } = this;
+    await ctx.redirect('http://circling.cc');
+  }
+}
+
+module.exports = Controller;

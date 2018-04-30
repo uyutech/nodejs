@@ -50,7 +50,7 @@ class Audio extends migi.Component {
       $(document).on('mouseup', self.vmouseup.bind(self));
     });
   }
-  @bind list = []
+  @bind list
   @bind index
   @bind isPlaying
   @bind hasStart

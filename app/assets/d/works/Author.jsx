@@ -1,9 +1,10 @@
 /**
- * Created by army8735 on 2017/9/21.
+ * Created by army8735 on 2018/3/27.
  */
 
+'use strict';
+
 import util from '../common/util';
-import authorTemplate from '../component/author/authorTemplate';
 
 class Author extends migi.Component {
   constructor(...data) {
@@ -11,36 +12,39 @@ class Author extends migi.Component {
     let self = this;
     self.list = self.props.list;
   }
-  @bind list = []
+  @bind list
   render() {
     return <div class="mod mod-author">
       <h5>作者</h5>
-      <div class="c">
-        {
-          (this.list || []).map(function(arr) {
-            return <ul>
-              {
-                (arr.AuthorTypeHashlist || []).map(function(item) {
-                  return <dl>
-                    <dt>{ item.Describe }</dt>
-                    {
-                      (item.AuthorInfo || []).map(function(author) {
+      <ul>
+      {
+        (this.list || []).map(function(arr) {
+          return <li>
+            {
+              (arr || []).map(function(item) {
+                return <dl>
+                  <dt>{ item.name }</dt>
+                  {
+                    (item.list || []).map(function(author) {
+                      if(author.isSettle) {
                         return <dd>
-                          <div href={ '/author/' + author.AuthorID }>
-                            <img src={ util.autoSsl(util.img48_48_80(author.Head_url)) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
-                            <span>{ author.AuthorName }</span>
-                          </div>
+                          <img src={util.img(author.headUrl, 48, 48, 80)
+                            || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png'}/>
+                          <span>{ author.name }</span>
                         </dd>;
-                      })
-                    }
-                  </dl>;
-                  return <li>{ item.Describe }</li>;
-                })
-              }
-            </ul>;
-          })
-        }
-      </div>
+                      }
+                      return <dd>
+                        <span>{ author.name }</span>
+                      </dd>;
+                    })
+                  }
+                </dl>;
+              })
+            }
+          </li>;
+        })
+      }
+      </ul>
     </div>;
   }
 }

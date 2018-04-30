@@ -5,23 +5,22 @@
 @import '../common/var';
 @import '../component/comment/index';
 @import '../component/page/index';
-//@import '../component/subcmt/index';
 @import './title';
-@import './timeline';
-@import './poster';
-@import './image';
-@import './author';
-@import './add-label';
-@import './comment';
-@import './photoalbum';
-@import './insp';
-@import './text';
 @import './media';
-@import './lyric';
-@import './imageview';
-@import './playlist';
-@import './musicalbum';
-@import './describe';
+@import './comment';
+@import './author';
+@import './text';
+@import './image';
+//@import './timeline';
+//@import './poster';
+//@import './add-label';
+//@import './photoalbum';
+//@import './insp';
+//@import './lyric';
+//@import './imageview';
+//@import './playlist';
+//@import './musicalbum';
+//@import './describe';
 
 .works{
   padding:0 0 0.2rem;
@@ -39,10 +38,10 @@
         float:left;
         padding:0 0.2rem 0 0.5rem;
         height:100%;
-        box-shadow:@tagShadow;
+        box-shadow:1px 1px 5px rgba(0, 0, 0, 0.2);
         border-top-left-radius:0.24rem;
         border-top-right-radius:0.24rem;
-        color:@secondTextColor;
+        color:#B1C0C9;
         line-height:0.48rem;
         font-size:0.12rem;
         cursor:pointer;
@@ -125,8 +124,8 @@
           text-decoration:underline;
         }
         &.cur{
-          background-color:@mainColor;
-          color:@mainTextColor;
+          background-color:#8BBDE1;
+          color:#2D4D67;
           cursor:default;
           font-size:0.14rem;
           text-decoration:none;
@@ -149,10 +148,10 @@
         float:left;
         padding:0 0.2rem;
         height:100%;
-        box-shadow:@tagShadow;
+        box-shadow:1px 1px 5px rgba(0, 0, 0, 0.2);
         border-top-left-radius:0.24rem;
         border-top-right-radius:0.24rem;
-        color:@secondTextColor;
+        color:#B1C0C9;
         line-height:0.48rem;
         cursor:pointer;
         font-size:0.12rem;
@@ -160,38 +159,13 @@
           text-decoration:underline;
         }
         &.cur{
-          background-color:@mainColor;
+          background-color:#8BBDE1;
           color:@mainTextColor;
           cursor:default;
           font-size:0.14rem;
           &:hover{
             text-decoration:none;
           }
-        }
-      }
-    }
-  }
-  &.t1{
-    > .side{
-      .box:first-of-type{
-        h5{
-          padding-top:0.06rem;
-          padding-bottom:0.05rem;
-        }
-      }
-    }
-  }
-  &.t5{
-    > .mod-timeline{
-      margin-bottom:0.2rem;
-    }
-  }
-  &.t11{
-    > .side{
-      > .info{
-        border-top-left-radius:0.1rem;
-        .mod:first-child h5{
-          border-top-left-radius:0.1rem;
         }
       }
     }
@@ -213,20 +187,16 @@
   h5{
     padding:0 0.2rem;
     line-height:0.24rem;
-    color:@thirdTextColor;
+    color:#FFF;
     font-size:0.12rem;
     font-weight:400;
-    background:@mainColor;
-  }
-  pre{
-    margin:0;
-    padding:0;
+    background:#8BBDE1;
   }
 }
 .box{
   margin-bottom:0.2rem;
   border-radius:0.1rem;
-  box-shadow:@boxShadow;
+  box-shadow:0 2px 3px rgba(0, 0, 0, 0.1);
   overflow:hidden;
   &.box-fn-top-left{
     border-top-left-radius:0;

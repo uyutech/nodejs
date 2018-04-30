@@ -6,15 +6,17 @@ module.exports = app => {
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
 
-  app.get('/d', 'd.index.newIndex');
-  app.get('/d/works/:worksId', 'd2.works.index');
-  app.get('/d/works/:worksId/:workId', 'd2.works.index');
+  app.get('/d', 'd.index.index');
+  app.get('/d/works/:worksId', 'd.works.index');
+  app.get('/d/works/:worksId/:workId', 'd.works.index');
 
-  app.get('/m', 'm.index.newIndex');
-  app.get('/m/works/:worksId', 'm2.works.index');
-  app.get('/m/works/:worksId/:workId', 'm2.works.index');
+  app.get('/m', 'm.index.index');
+  app.get('/m/works/:worksId', 'm.works.index');
+  app.get('/m/works/:worksId/:workId', 'm.works.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
+  app.post('/api/works/commentList', 'api.works.commentList');
+  app.post('/api/work/addViews', 'api.work.addViews');
 
   app.get('/api/count/index', 'api.count.index');
 

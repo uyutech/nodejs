@@ -12,29 +12,27 @@ class Video extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.datas) {
-      self.setData(self.props.datas);
-      if(self.props.workID) {
-        self.props.datas.forEach(function(item, i) {
-          if(item.ItemID.toString() === self.props.workID) {
-            self.index = i;
-          }
-        });
-      }
-      if(self.props.show) {
-        self.on(migi.Event.DOM, function() {
-          self.addMedia();
-        });
-      }
+    self.list = self.props.list || [];
+    self.visible = self.props.show;
+    if(self.props.show) {
+      self.first = true;
+      self.on(migi.Event.DOM, function() {
+        let uid = window.$CONFIG ? $CONFIG.uid : '';
+        let key = uid + 'volume';
+        self.volume = localStorage[key];
+        self.addMedia();
+      });
     }
   }
-  @bind datas = []
-  @bind index = 0
+  @bind list = []
+  @bind index
   @bind isPlaying
   @bind duration
   @bind canControl
+  @bind muted
   @bind fnFavor
   @bind fnLike
+  @bind visible
   get currentTime() {
     return this._currentTime || 0;
   }
@@ -42,18 +40,25 @@ class Video extends migi.Component {
   set currentTime(v) {
     this._currentTime = v;
   }
-  setData(datas) {
-    let self = this;
-    self.datas = datas;
-    return this;
+  get volume() {
+    return this._volume || 0.5;
+  }
+  @bind
+  set volume(v) {
+    this._volume = v;
+    migi.eventBus.emit('SET_VOLUME', v);
+    if(this.video) {
+      this.video.element.volume = v;
+    }
   }
   addMedia() {
     let video = <video ref="video"
+                       src={ this.list[this.index || 0].url }
                        poster="//zhuanquan.xin/img/blank.png"
-                       src={ this.datas[this.index].FileUrl }
                        onClick={ this.clickPlay.bind(this) }
                        onTimeupdate={ this.onTimeupdate.bind(this) }
                        onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
+                       onCanplaythrough={ this.onCanplaythrough.bind(this) }
                        onProgress={ this.onProgress.bind(this) }
                        onPause={ this.onPause.bind(this) }
                        onEnded={ this.onEnded.bind(this) }
@@ -65,26 +70,22 @@ class Video extends migi.Component {
     </video>;
     this.video = video;
     video.prependTo(this.ref.c.element);
-  }
-  switchTo(index) {
-    this.index = index;
-    if(!this.video) {
-      this.addMedia();
-    }
-    this.video.element.src = this.datas[this.index].FileUrl;
-    this.pause();
-    this.emit('switchTo', this.datas[this.index]);
+    this.volume = this.volume;
   }
   show() {
-    $(this.element).removeClass('fn-hide');
-    if(!this.video) {
-      this.addMedia();
+    let self = this;
+    if(!self.first) {
+      self.first = true;
+      let uid = window.$CONFIG ? $CONFIG.uid : '';
+      let key = uid + 'volume';
+      self.volume = localStorage[key];
+      self.addMedia();
     }
-    $(this.ref.fn.element).removeClass('fn-hidden');
-    return this;
+    self.visible = true;
+    return self;
   }
   hide() {
-    $(this.element).addClass('fn-hide');
+    this.visible = false;
     return this;
   }
   onTimeupdate(e) {
@@ -113,6 +114,11 @@ class Video extends migi.Component {
     this.canControl = true;
     this.onProgress(e);
   }
+  onCanplaythrough(e) {
+    this.duration = e.target.duration;
+    this.canControl = true;
+    this.onProgress(e);
+  }
   onPlaying(e) {
     this.duration = e.target.duration;
   }
@@ -123,9 +129,11 @@ class Video extends migi.Component {
     this.isPlaying = false;
   }
   play() {
-    this.video.element.play();
-    this.isPlaying = true;
-    net.postJSON('/api/works/addPlayCount', { workID: this.datas[this.index || 0].ItemID });
+    if(this.list[this.index || 0].url) {
+      this.video.element.play();
+      this.isPlaying = true;
+      net.postJSON('/api/works/addPlayCount', { workId: this.list[this.index || 0].id });
+    }
     return this;
   }
   pause() {
@@ -136,12 +144,32 @@ class Video extends migi.Component {
   clickType(e, vd, tvd) {
     if(this.index !== tvd.props.rel) {
       this.index = tvd.props.rel;
-      this.video.element.src = this.datas[this.index].FileUrl;
-      this.emit('switchTo', this.datas[this.index]);
+      this.video.element.src = this.list[this.index || 0].url;
+      this.pause();
+      this.emit('switchTo', this.list[this.index || 0]);
     }
   }
   clickStart(e) {
     this.play();
+  }
+  clickVolume(e) {
+    let cn = e.target.className;
+    if(cn !== 'p' && cn.indexOf('icon') === -1) {
+      let $volume = $(this.ref.volume.element);
+      let left = $volume.offset().left;
+      let x = e.pageX - left;
+      let percent = x / $volume.width();
+      this.volume = percent;
+    }
+  }
+  clickMute(e) {
+    this.muted = !this.muted;
+    if(this.muted) {
+      this.video.element.volume = 0;
+    }
+    else {
+      this.video.element.volume = this.volume;
+    }
   }
   clickScreen() {
     let video = this.video.element;
@@ -213,75 +241,11 @@ class Video extends migi.Component {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
-    let self = this;
-    let $vd = $(vd.element);
-    if(!$vd.hasClass('loading')) {
-      $vd.addClass('loading');
-      let data = self.datas[self.index];
-      net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
-        if(res.success) {
-          data.ISLike = res.data.State === 'likeWordsUser';
-          self.fnLike = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function () {
-        alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
-    }
   }
   clickFavor(e, vd) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
-    }
-    let self = this;
-    let $vd = $(vd.element);
-    let data = self.datas[self.index];
-    if($vd.hasClass('loading')) {
-      //
-    }
-    else if($vd.hasClass('has')) {
-      net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
-        if(res.success) {
-          data.ISFavor = false;
-          self.fnFavor = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function () {
-        alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
-    }
-    else {
-      net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
-        if(res.success) {
-          data.ISFavor = true;
-          self.fnFavor = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function () {
-        alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
     }
   }
   clickDownload(e) {
@@ -291,32 +255,47 @@ class Video extends migi.Component {
     }
   }
   clickShare() {
-    migi.eventBus.emit('SHARE', location.href);
+    let url = location.origin + '/works/' + this.props.worksId;
+    url += '/' + this.list[this.index || 0].id;
+    migi.eventBus.emit('SHARE', url);
   }
   render() {
-    return <div class={ 'video' + (this.props.show ? '' : ' fn-hide') + (this.datas[this.index || 0].FileUrl ? '' : ' empty') }>
-      <div class={ 'c' + ( this.isPlaying ? ' playing' : '') } ref="c">
-        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
+    return <div class={ 'video' + (this.visible ? '' : ' fn-hide')
+                  + (this.list[this.index || 0].url ? '' : ' empty') }>
+      <div class={ 'c' + ( this.isPlaying ? ' playing' : '') }
+           ref="c">
+        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') }
+           onClick={ this.clickStart }/>
       </div>
-      <div class="fn" ref="fn">
+      <div class={ 'fn' + (this.canControl ? ' can' : '') }
+           ref="fn">
         <div class="control">
           <small class="time">{ util.formatTime(this.currentTime * 1000) } / { util.formatTime(this.duration * 1000) }</small>
-          <b class="full" onClick={ this.clickScreen }/>
+          <b class="full"
+             onClick={ this.clickScreen }/>
         </div>
         <div class="bar">
-          <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
-          <div class="progress" ref="progress" onClick={ this.clickProgress }>
+          <b class={ 'play' + (this.isPlaying ? ' pause' : '') }
+             onClick={ this.clickPlay }/>
+          <div class="progress"
+               ref="progress"
+               onClick={ this.clickProgress }>
             <div class="load" ref="load"/>
             <b class="vol" ref="vol"/>
-            <b class="p" ref="p" onTouchStart={ this.touchStart } onTouchMove={ this.touchMove } onTouchEnd={ this.touchEnd }/>
+            <b class="p" ref="p" onMouseDown={ this.mousedown }/>
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.datas[this.index].ISLike || this.fnLike ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class={ 'like' + ((this.list[this.index || 0] || {}).isLiked || this.fnLike ? ' liked' : '') }
+              onClick={ this.clickLike }/>
+          <li class={ 'favor' + ((this.list[this.index || 0] || {}).isFavored || this.fnFavor ? ' favored' : '') }
+              onClick={ this.clickFavor }/>
           <li class="download">
-            <a href={ this.datas[this.index].FileUrl }
-               download={ (this.datas[this.index].ItemName || '') + (this.datas[this.index].FileUrl ? (/\.\w+$/.exec(this.datas[this.index].FileUrl)[0] || '') : '') }
+            <a href={ (this.list[this.index || 0] || {}).url || '#' }
+               download={ ((this.list[this.index || 0] || {}).name || '')
+               + ((this.list[this.index || 0] || {}).url
+                 ? (/\.\w+$/.exec(this.list[this.index || 0].url)[0] || '')
+                 : '') }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

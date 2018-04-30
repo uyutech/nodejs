@@ -1,84 +1,21 @@
 /**
- * Created by army8735 on 2017/9/11.
+ * Created by army8735 on 2017/12/3.
  */
 
-@import '../../d/common/var';
-@import '../../d/component/comment/index';
+@import '../common/var';
 @import './media';
-@import '../../d/works/author';
-@import '../../d/works/text';
-@import '../../d/works/image';
-@import './comment';
+@import './info';
+@import './select';
+@import './column';
+@import './author';
+@import './text';
+@import './poster';
+@import './comments';
 
 body{
-  padding-bottom:1rem;
+  padding-bottom:1.1rem;
 }
-.works{
-  > .sel{
-    position:relative;
-    display:flex;
-    margin-top:-0.3rem;
-    padding:1px 0 0 0.1rem;
-    height:0.3rem;
-    box-sizing:border-box;
-    text-align:center;
-    overflow:hidden;
-    li{
-      position:relative;
-      padding:0 0.2rem;
-      height:100%;
-      box-shadow:@tagShadow;
-      border-top-left-radius:0.16rem;
-      border-top-right-radius:0.16rem;
-      color:@secondTextColor;
-      background:rgba(255,255,255,0.7);
-      line-height:0.32rem;
-      cursor:pointer;
-      font-size:0.12rem;
-      &:first-child{
-        z-index:9;
-      }
-      &:nth-child(2) {
-        z-index:8;
-      }
-      &:nth-child(3) {
-        z-index:7;
-      }
-      &.cur{
-        background-color:@mainColor;
-        color:@mainTextColor;
-        cursor:default;
-        font-size:0.14rem;
-        z-index:10;
-      }
-    }
-    .state{
-      position:absolute;
-      top:0.02rem;
-      right:0.05rem;
-      display:block;
-      height:0.24rem;
-      line-height:0.24rem;
-      padding:0 0.1rem;
-      background:@mainColor;
-      border-radius:0.24rem;
-      color:@thirdTextColor;
-    }
-  }
-  &.t11 .sel{
-    margin-top:0.1rem;
-  }
-  h5{
-    padding:0 0.2rem;
-    line-height:0.24rem;
-    color:@thirdTextColor;
-    font-size:0.12rem;
-    font-weight:400;
-    background:@mainColor;
-  }
-  pre{
-    margin:0;
-  }
+#page > .works{
   .app{
     position:fixed;
     left:0;
@@ -160,17 +97,4 @@ body{
       font-size:0.14rem;
     }
   }
-}
-
-img.temp{
-  display:block;
-  position:absolute;
-  left:1000%;
-  top:-9999rem;
-  visibility:hidden;
-}
-
-h1.private{
-  text-align:center;
-  line-height:3;
 }

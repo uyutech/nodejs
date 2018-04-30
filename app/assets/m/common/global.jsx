@@ -1,11 +1,11 @@
 /**
- * Created by army8735 on 2017/9/18.
+ * Created by army8735 on 2017/11/28.
  */
 
-import net from '../../d/common/net';
-import MLogin from '../component/mlogin/MLogin.jsx';
-import Share from '../../d/component/share/Share.jsx';
+'use strict';
+
 import uuidv4 from 'uuid/v4';
+import MLogin from '../component/mlogin/MLogin.jsx';
 
 let mlogin;
 migi.eventBus.on('NEED_LOGIN', function() {
@@ -16,28 +16,6 @@ migi.eventBus.on('NEED_LOGIN', function() {
     );
   }
   mlogin.show();
-});
-
-let share;
-migi.eventBus.on('SHARE', function(url) {
-  if(!share) {
-    share = migi.render(
-      <Share/>,
-      document.body
-    );
-  }
-  share.url = url;
-  share.show();
-});
-
-let b = document.querySelector('#gTop b');
-let ul = document.querySelector('#gTop ul');
-b.addEventListener('click', function(e) {
-  e.stopPropagation();
-  ul.classList.remove('fn-hide');
-});
-document.body.addEventListener('click', function() {
-  ul.classList.add('fn-hide');
 });
 
 document.addEventListener('DOMContentLoaded', function() {

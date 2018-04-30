@@ -2,8 +2,7 @@
  * Created by army on 2017/5/20.
  */
 
-let $util;
-let util = $util = {
+let util = {
   isLogin: function() {
     return $.cookie('isLogin') === 'true';
   },
@@ -17,14 +16,14 @@ let util = $util = {
     url = url || '';
     url = url.trim();
     if(!/\/\/zhuanquan\./i.test(url)) {
-      return url;
+      return util.autoSsl(url);
     }
     url = url.replace(/\.(\w+)-\d*_\d*_\d*/, '.$1');
     if(w === undefined && h === undefined && q === undefined) {
       return url;
     }
     url += '-' + (w ? w : '') + '_' + (h ? h : '') + '_' + (q ? q : '');
-    return $util.autoSsl(url);
+    return util.autoSsl(url);
   },
   decode: function(str) {
     return str.replace(/&lt;/g, '<').replace(/&amp;/g, '&');
@@ -133,27 +132,6 @@ let util = $util = {
       window.scroll(0, v);
     }
     return document.documentElement.scrollTop || window.pageYOffset || window.scrollY || 0;
-  },
-  recordPlay(data, cb) {
-    jsBridge.setPreference('recordCur', data.id);
-    jsBridge.getPreference('record', function(res) {
-      res = jsBridge.android ? (res || []) : JSON.parse(res || '[]');
-      for(let i = 0, len = res.length; i < len; i++) {
-        if(res[i].id === data.id && res[i].worksId === data.worksId) {
-          res.splice(i, 1);
-          break;
-        }
-      }
-      res.unshift(data);
-      if(res.length > 20) {
-        res.splice(20);
-      }
-      jsBridge.setPreference('record', jsBridge.android ? res : JSON.stringify(res), function() {
-        if(cb) {
-          cb(res, data.id);
-        }
-      });
-    });
   },
 };
 

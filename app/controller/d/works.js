@@ -4,52 +4,36 @@
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * index(ctx) {
-      let uid = ctx.session.uid;
-      let worksID = ctx.params.worksID;
-      if(!worksID) {
-        return;
-      }
-      let workID = ctx.params.workID;
-      let worksDetail = {};
-      let commentData = {};
-      let res = yield {
-        worksDetail: ctx.helper.postServiceJSON2('api/works/GetWorkDetails', {
-          uid,
-          WorksID: worksID,
-        }),
-        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToWorkMessage_List', {
-          uid,
-          WorkID: worksID,
-          WorksID: worksID,
-        }),
-      };
-      if(res.worksDetail.data.success) {
-        worksDetail = res.worksDetail.data.data;
-      }
-      if(res.commentData.data.success) {
-        commentData = res.commentData.data.data;
-      }
-      let labelList = [];
-      if(worksDetail.WorkType === 11) {
-        let res = yield ctx.helper.postServiceJSON2('api/works/GetPhotoInfo', {
-          uid,
-          WorksID: worksID,
-        });
-        if(res.data.success) {
-          labelList = res.data.data.TipsList || [];
-        }
-      }
-      yield ctx.render('dworks', {
-        worksID,
-        workID,
-        worksDetail,
-        commentData,
-        labelList,
-      });
+const egg = require('egg');
+
+const LIMIT = 10;
+
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let worksId = parseInt(ctx.params.worksId);
+    let workId = parseInt(ctx.params.workId);
+    if(!worksId) {
+      return;
     }
+    let [info, collection, commentList] = await Promise.all([
+      service.works.infoPlusAllAuthor(worksId),
+      service.works.collectionFull(worksId, uid),
+      service.works.commentList(worksId, uid, 0, LIMIT)
+    ]);
+    if(!info || info.state === 3) {
+      return;
+    }
+    commentList.limit = LIMIT;
+    await ctx.render('dworks', {
+      worksId,
+      workId,
+      info,
+      collection,
+      commentList,
+    });
   }
-  return Controller;
-};
+}
+
+module.exports = Controller;

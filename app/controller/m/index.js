@@ -4,15 +4,14 @@
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * index(ctx) {
-      ctx.redirect('/find');
-    }
-    * newIndex(ctx) {
-      yield ctx.render('mindex', {
-      });
-    }
+const egg = require('egg');
+
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx } = this;
+    await ctx.render('mindex', {
+    });
   }
-  return Controller;
-};
+}
+
+module.exports = Controller;

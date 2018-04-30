@@ -4,7 +4,7 @@
 
 import util from '../../d/common/util';
 import net from '../../d/common/net';
-import LyricsParser from '../../d/works/LyricsParser.jsx';
+import lrcParser from '../../d2/works/lrcParser';
 
 let isStart;
 let offsetX;
@@ -13,32 +13,47 @@ class Audio extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    if(self.props.datas) {
-      self.setData(self.props.datas);
-      if(self.props.workID) {
-        self.props.datas.forEach(function(item, i) {
-          if(item.ItemID.toString() === self.props.workID) {
-            self.index = i;
-          }
+    self.list = self.props.list || [];
+    self.list.forEach(function(item) {
+      let l = {};
+      if(lrcParser.isLrc(item.lrc)) {
+        l.is = true;
+        l.data = lrcParser.parse(item.lrc);
+        let s = '';
+        l.data.forEach(function(item) {
+          s += item.txt + '\n';
         });
+        l.txt = s;
       }
-      if(self.props.show) {
-        self.on(migi.Event.DOM, function() {
-          self.addMedia();
-        });
+      else {
+        l.is = false;
+        l.txt = item.lrc;
       }
+      item.formatLrc = l;
+    });
+    self.visible = self.props.show;
+    if(self.props.show) {
+      self.first = true;
+      self.on(migi.Event.DOM, function() {
+        let uid = window.$CONFIG ? $CONFIG.uid : '';
+        let key = uid + 'volume';
+        self.volume = localStorage[key];
+        self.addMedia();
+      });
     }
   }
-  @bind datas = []
-  @bind index = 0
+  @bind list = []
+  @bind index
   @bind isPlaying
   @bind hasStart
-  @bind showLyricsMode
-  @bind lyricsIndex = 0
+  @bind lrcMode
+  @bind lrcIndex = 0
   @bind duration
   @bind canControl
-  @bind fnFavor
+  @bind muted
   @bind fnLike
+  @bind fnFavor
+  @bind visible
   get currentTime() {
     return this._currentTime || 0;
   }
@@ -46,28 +61,22 @@ class Audio extends migi.Component {
   set currentTime(v) {
     this._currentTime = v;
   }
-  setData(datas) {
-    let self = this;
-    self.datas = datas;
-    datas.forEach(function(item) {
-      let l = {};
-      if(LyricsParser.isLyrics(item.lrc)) {
-        l.is = true;
-        l.txt = LyricsParser.getTxt(item.lrc);
-        l.data = LyricsParser.parse(item.lrc);
-      }
-      else {
-        l.is = false;
-        l.txt = item.lrc;
-      }
-      item.formatLyrics = l;
-    });
-    return this;
+  get volume() {
+    return this._volume || 0.5;
+  }
+  @bind
+  set volume(v) {
+    this._volume = v;
+    migi.eventBus.emit('SET_VOLUME', v);
+    if(this.audio) {
+      this.audio.element.volume = v;
+    }
   }
   addMedia() {
-    let audio = <audio src={ this.datas[this.index].FileUrl }
+    let audio = <audio src={ this.list[this.index || 0].url }
                        onTimeupdate={ this.onTimeupdate.bind(this) }
                        onLoadedmetadata={ this.onLoadedmetadata.bind(this) }
+                       onCanplaythrough={ this.onCanplaythrough.bind(this) }
                        onPlaying={ this.onPlaying.bind(this) }
                        onPause={ this.onPause.bind(this) }
                        onEnded={ this.onEnded.bind(this) }
@@ -79,46 +88,42 @@ class Audio extends migi.Component {
     </audio>;
     this.audio = audio;
     audio.appendTo(this.element);
-  }
-  switchTo(index) {
-    this.index = index;
-    if(!this.audio) {
-      this.addMedia();
-    }
-    this.audio.element.src = this.datas[this.index].FileUrl;
-    this.pause();
-    this.emit('switchTo', this.datas[this.index]);
+    this.volume = this.volume;
   }
   show() {
-    $(this.element).removeClass('fn-hide');
-    if(!this.audio) {
-      this.addMedia();
+    let self = this;
+    if(!self.first) {
+      self.first = true;
+      let uid = window.$CONFIG ? $CONFIG.uid : '';
+      let key = uid + 'volume';
+      self.volume = localStorage[key];
+      self.addMedia();
     }
-    $(this.ref.fn.element).removeClass('fn-hidden');
-    return this;
+    self.visible = true;
+    return self;
   }
   hide() {
-    $(this.element).addClass('fn-hide');
+    this.visible = false;
     return this;
   }
   onTimeupdate(e) {
     let currentTime = this.currentTime = e.target.currentTime;
     this.duration = e.target.duration;
-    let item = this.datas[this.index];
-    let formatLyrics = item.formatLyrics;
-    let formatLyricsData = formatLyrics.data;
-    if(formatLyrics.is && formatLyricsData.length) {
-      let tempIndex = this.lyricsIndex;
-      for (let i = 0, len = formatLyricsData.length; i < len; i++) {
-        if(currentTime * 1000 >= formatLyricsData[i].timestamp) {
+    let item = this.list[this.index || 0];
+    let formatLrc = item.formatLrc;
+    let formatLrcData = formatLrc.data;
+    if(formatLrc.is && formatLrcData.length) {
+      let tempIndex = this.lrcIndex;
+      for (let i = 0, len = formatLrcData.length; i < len; i++) {
+        if(currentTime * 1000 >= formatLrcData[i].timestamp) {
           tempIndex = i;
         }
         else {
           break;
         }
       }
-      if(tempIndex !== this.lyricsIndex) {
-        this.lyricsIndex = tempIndex;
+      if(tempIndex !== this.lrcIndex) {
+        this.lrcIndex = tempIndex;
       }
     }
     let percent = currentTime / this.duration;
@@ -144,6 +149,11 @@ class Audio extends migi.Component {
     this.canControl = true;
     this.onProgress(e);
   }
+  onCanplaythrough(e) {
+    this.duration = e.target.duration;
+    this.canControl = true;
+    this.onProgress(e);
+  }
   onPlaying(e) {
     this.duration = e.target.duration;
   }
@@ -154,10 +164,12 @@ class Audio extends migi.Component {
     this.isPlaying = false;
   }
   play() {
-    this.audio.element.play();
-    this.isPlaying = true;
-    this.hasStart = true;
-    net.postJSON('/api/works/addPlayCount', { workID: this.datas[this.index || 0].ItemID });
+    if(this.list[this.index || 0].url) {
+      this.audio.element.play();
+      this.isPlaying = true;
+      this.hasStart = true;
+      net.postJSON('/api/works/addPlayCount', { workID: this.list[this.index || 0].id });
+    }
     return this;
   }
   pause() {
@@ -165,11 +177,19 @@ class Audio extends migi.Component {
     this.isPlaying = false;
     return this;
   }
-  altLyrics() {
-    this.showLyricsMode = !this.showLyricsMode;
+  clickType(e, vd, tvd) {
+    if(this.index !== tvd.props.rel) {
+      this.index = tvd.props.rel;
+      this.audio.element.src = this.list[this.index || 0].url;
+      this.pause();
+      this.emit('switchTo', this.list[this.index || 0]);
+      if(parent && parent !== window && parent.setHash) {
+        parent.setHash('/works/' + this.props.worksId + '/' + this.list[this.index].id, true);
+      }
+    }
   }
-  clickStart(e) {
-    this.play();
+  altLyrics() {
+    this.lrcMode = !this.lrcMode;
   }
   touchStart(e) {
     e.preventDefault();
@@ -194,6 +214,28 @@ class Audio extends migi.Component {
   }
   touchEnd(e) {
     isStart = false;
+  }
+  clickStart(e) {
+    this.play();
+  }
+  clickVolume(e) {
+    let cn = e.target.className;
+    if(cn !== 'p' && cn.indexOf('icon') === -1) {
+      let $volume = $(this.ref.volume.element);
+      let left = $volume.offset().left;
+      let x = e.pageX - left;
+      let percent = x / $volume.width();
+      this.volume = percent;
+    }
+  }
+  clickMute(e) {
+    this.muted = !this.muted;
+    if(this.muted) {
+      this.audio.element.volume = 0;
+    }
+    else {
+      this.audio.element.volume = this.volume;
+    }
   }
   clickProgress(e) {
     if(this.canControl && e.target.className !== 'p') {
@@ -224,75 +266,11 @@ class Audio extends migi.Component {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
-    let self = this;
-    let $vd = $(vd.element);
-    if(!$vd.hasClass('loading')) {
-      $vd.addClass('loading');
-      let data = self.datas[self.index];
-      net.postJSON('/api/works/likeWork', { workID: data.ItemID }, function (res) {
-        if(res.success) {
-          data.ISLike = res.data.State === 'likeWordsUser';
-          self.fnLike = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function () {
-        alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
-    }
   }
   clickFavor(e, vd) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
-    }
-    let self = this;
-    let $vd = $(vd.element);
-    let data = self.datas[self.index];
-    if($vd.hasClass('loading')) {
-      //
-    }
-    else if($vd.hasClass('has')) {
-      net.postJSON('/api/works/unFavorWork', { workID: data.ItemID }, function (res) {
-        if(res.success) {
-          data.ISFavor = false;
-          self.fnFavor = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function () {
-        alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
-    }
-    else {
-      net.postJSON('/api/works/favorWork', { workID: data.ItemID }, function (res) {
-        if(res.success) {
-          data.ISFavor = true;
-          self.fnFavor = null;
-        }
-        else if(res.code === 1000) {
-          migi.eventBus.emit('NEED_LOGIN');
-        }
-        else {
-          alert(res.message || util.ERROR_MESSAGE);
-        }
-        $vd.removeClass('loading');
-      }, function () {
-        alert(res.message || util.ERROR_MESSAGE);
-        $vd.removeClass('loading');
-      });
     }
   }
   clickDownload(e) {
@@ -302,46 +280,72 @@ class Audio extends migi.Component {
     }
   }
   clickShare() {
-    migi.eventBus.emit('SHARE', location.href);
+    let url = location.origin + '/works/' + this.props.worksId;
+    url += '/' + this.list[this.index || 0].id;
+    migi.eventBus.emit('SHARE', url);
   }
   render() {
-    return <div class={ 'audio' + (this.props.show ? '' : ' fn-hide') + (this.datas[this.index || 0].FileUrl ? '' : ' empty') }>
+    return <div class={ 'audio' + (this.visible ? '' : ' fn-hide')
+                  + (this.list[this.index || 0].url ? '' : ' empty') }>
       <div class="c">
         <div class={ 'lyrics' + (this.hasStart ? '' : ' fn-hidden') } ref="lyrics">
-          <div class={ 'roll' + (!this.showLyricsMode && this.datas[this.index].formatLyrics.data ? '' : ' fn-hide') }>
-            <div class="c" ref="lyricsRoll" style={ '-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>
+          <div class={ 'roll' + (!this.lrcMode && this.list[this.index || 0].formatLrc.data ? '' : ' fn-hide') }>
+            <div class="c" ref="lyricsRoll" style={ '-moz-transform:translateX(' + this.lrcIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lrcIndex * 20 + 'px);transform:translateY(-' + this.lrcIndex * 20 + 'px)' }>
               {
-                (this.datas[this.index].formatLyrics.data || []).map(function(item) {
+                (this.list[this.index || 0].formatLrc.data || []).map(function(item) {
                   return <pre>{ item.txt || ' ' }</pre>
                 })
               }
             </div>
           </div>
-          <div class={ 'line' + (this.showLyricsMode && this.datas[this.index].formatLyrics.txt ? '' : ' fn-hide') }>
-            <pre style={ '-webkit-transform:translateY(-' + this.lyricsIndex * 20 + 'px);transform:translateY(-' + this.lyricsIndex * 20 + 'px)' }>{ this.datas[this.index].formatLyrics.txt }</pre>
+          <div class={ 'line' + (this.lrcMode && this.list[this.index || 0].formatLrc.txt ? '' : ' fn-hide') }>
+            <pre style={ '-moz-transform:translateX(' + this.lrcIndex * 20 + 'px);-webkit-transform:translateY(-' + this.lrcIndex * 20 + 'px);transform:translateY(-' + this.lrcIndex * 20 + 'px)' }>{ this.list[this.index || 0].formatLrc.txt }</pre>
           </div>
         </div>
-        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') } onClick={ this.clickStart }/>
+        <b class={ 'start' + (this.isPlaying ? ' fn-hide' : '') }
+           onClick={ this.clickStart }/>
       </div>
-      <div class="fn" ref="fn">
+      <div class={ 'fn' + (this.canControl ? ' can' : '') }
+           ref="fn">
         <div class="control">
-          <b class={ 'lyrics' + (this.showLyricsMode ? '' : ' roll') } onClick={ this.altLyrics }/>
-          <small class="time">{ util.formatTime(this.currentTime * 1000) } / { util.formatTime(this.duration * 1000) }</small>
+          <b class={ 'lyrics' + (this.lrcMode ? '' : ' roll') }
+             onClick={ this.altLyrics }/>
+          <div class="volume"
+               ref="volume"
+               onClick={ this.clickVolume }>
+            <b class={ 'icon' + (this.muted ? ' muted' : '') }
+               onClick={ this.clickMute }/>
+            <b class="vol"
+               style={ 'width:' + this.volume * 100 + '%' }/>
+            <b class="p"
+               onMouseDown={ this.vmousedown }
+               style={ '-moz-transform:translateX(' + this.volume * 100 + '%);-webkit-transform:translateX(' + this.volume * 100 + '%);transform:translateX(' + this.volume * 100 + '%)' }/>
+          </div>
         </div>
         <div class="bar">
-          <b class={ 'play' + (this.isPlaying ? ' pause' : '') } onClick={ this.clickPlay }/>
-          <div class="progress" ref="progress" onClick={ this.clickProgress }>
+          <b class={ 'play' + (this.isPlaying ? ' pause' : '') }
+             onClick={ this.clickPlay }/>
+          <small class="time">{ util.formatTime(this.currentTime * 1000) }</small>
+          <small class="time end">{ util.formatTime(this.duration * 1000) }</small>
+          <div class="progress"
+               ref="progress"
+               onClick={ this.clickProgress }>
             <div class="load" ref="load"/>
             <b class="vol" ref="vol"/>
-            <b class="p" ref="p" onTouchStart={ this.touchStart } onTouchMove={ this.touchMove } onTouchEnd={ this.touchEnd }/>
+            <b class="p" ref="p" onMouseDown={ this.mousedown }/>
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.datas[this.index].ISLike || this.fnLike ? ' has' : '') } onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.datas[this.index].ISFavor || this.fnFavor ? ' has' : '') } onClick={ this.clickFavor }/>
+          <li class={ 'like' + ((this.list[this.index || 0] || {}).isLiked || this.fnLike ? ' liked' : '') }
+              onClick={ this.clickLike }/>
+          <li class={ 'favor' + ((this.list[this.index || 0] || {}).isFavored || this.fnFavor ? ' favored' : '') }
+              onClick={ this.clickFavor }/>
           <li class="download">
-            <a href={ this.datas[this.index].FileUrl }
-               download={ (this.datas[this.index].ItemName || '') + (this.datas[this.index].FileUrl ? (/\.\w+$/.exec(this.datas[this.index].FileUrl)[0] || '') : '') }
+            <a href={ (this.list[this.index || 0] || {}).url || '#' }
+               download={ ((this.list[this.index || 0] || {}).name || '')
+               + ((this.list[this.index || 0] || {}).url
+                 ? (/\.\w+$/.exec(this.list[this.index || 0].url)[0] || '')
+                 : '') }
                onClick={ this.clickDownload }/>
           </li>
           <li class="share" onClick={ this.clickShare }/>

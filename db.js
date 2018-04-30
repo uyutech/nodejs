@@ -11,9 +11,9 @@ let circlingUser = 'root';
 let circlingPass = '87351984@';
 let host = 'localhost';
 
-circlingUser = 'uyutech';
-circlingPass = 'uyuTech2017';
-host = 'rm-uf6qe904j4997hpen7o.mysql.rds.aliyuncs.com';
+// circlingUser = 'uyutech';
+// circlingPass = 'uyuTech2017';
+// host = 'rm-uf6qe904j4997hpen7o.mysql.rds.aliyuncs.com';
 const sequelize = new Sequelize('circling', circlingUser, circlingPass, {
   host: host,
   dialect: 'mysql',
@@ -87,7 +87,31 @@ const sequelizeRecommend = new Sequelize('recommend', circlingUser, circlingPass
   // logging: null,
 });
 const sequelizeStats = new Sequelize('stats', circlingUser, circlingPass, {
-  host: 'localhost',
+  host: host,
+  dialect: 'mysql',
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
+  dialectOptions: {
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
+  },
+  options: {
+    charset: 'utf8mb4',
+  },
+  define: {
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
+  },
+  timezone: '+08:00',
+  // logging: null,
+});
+const sequelizeStats2 = new Sequelize('stats', circlingUser, circlingPass, {
+  host: 'rm-uf6j2h04az726ui85uo.mysql.rds.aliyuncs.com',
   dialect: 'mysql',
   pool: {
     max: 5,
@@ -167,6 +191,8 @@ const professionSkillRelation = require('./app/model/professionSkillRelation')({
 const authorSkillRelation = require('./app/model/authorSkillRelation')({ sequelizeCircling: sequelize, Sequelize });
 const authorCooperation = require('./app/model/authorCooperation')({ sequelizeCircling: sequelize, Sequelize });
 const workWorkRelation = require('./app/model/workWorkRelation')({ sequelizeCircling: sequelize, Sequelize });
+const userUploadWork = require('./app/model/userUploadWork')({ sequelizeCircling: sequelize, Sequelize });
+const userCreateWorks = require('./app/model/userCreateWorks')({ sequelizeCircling: sequelize, Sequelize });
 
 const Product = require('./app/model/product')({ sequelizeMall: sequelizeMall, Sequelize });
 const Express = require('./app/model/express')({ sequelizeMall: sequelizeMall, Sequelize });
@@ -183,6 +209,7 @@ const circleTop = require('./app/model/circleTop')({ sequelizeRecommend: sequeli
 
 const userReport = require('./app/model/userReport')({ sequelizeStats: sequelizeStats, Sequelize });
 const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeStats, Sequelize });
+const userVisit2 = require('./app/model/userVisit')({ sequelizeStats: sequelizeStats2, Sequelize });
 
 (async () => {
   try {
@@ -208,6 +235,8 @@ const userVisit = require('./app/model/userVisit')({ sequelizeStats: sequelizeSt
 
     // await userReport.sync();
     // await userVisit.sync();
+    await userUploadWork.sync();
+    await userCreateWorks.sync();
 
     // await dealAuthor(pool);
     // await dealAuthorMainWorks(pool);
