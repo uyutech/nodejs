@@ -84,7 +84,7 @@ class Comments extends migi.Component {
     return <div class={ 'mod-comment' + (this.visible ? '' : ' fn-hide') }>
       <CommentBar ref="commentBar"/>
       <Comment ref="comment"
-               message="正在加载..."/>
+               message="下载APP查看更多..."/>
     </div>;
   }
 }

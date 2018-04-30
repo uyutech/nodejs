@@ -10,38 +10,36 @@ export default function(data) {
   migi.resetUid();
 
   let isLogin = !!data.ctx.session.uid;
-  let id = data.id;
-  let postData = data.postData;
-  let replyData = data.replyData;
+  let id = parseInt(data.id);
+  let info = data.info;
+  let commentList = data.commentList;
 
-  let post = migi.preRender(<Post
-    isLogin={ isLogin }
-    id={ id }
-    postData={ postData }
-    replyData={ replyData }/>);
+  let author = migi.preRender(
+    <Post id={ id }
+          info={ info }
+          commentList={ commentList }/>
+  );
 
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getDHead({
-    title: postData.Title,
-  })}
+  ${data.helper.getDHead({ title: '画圈详情' })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dpost.css')}"/>
 </head>
 <body>
-<div id="page">${post}</div>
-${data.helper.getDTopNav({ pageId: 7 })}
+<div id="page">${author}</div>
+${data.helper.getDTopNav({ pageId: 11 })}
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.id = ${data.helper.stringify(id)};
-  $CONFIG.postData = ${data.helper.stringify(postData)};
-  $CONFIG.replyData = ${data.helper.stringify(replyData)};
+  $CONFIG.info = ${data.helper.stringify(info)};
+  $CONFIG.commentList = ${data.helper.stringify(commentList)};
 </script>
+${data.helper.getStat()}
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/dpost.js')}" defer="defer"></script>
-${data.helper.getStat()}
 </body>
 </html>`;
 };

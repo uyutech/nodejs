@@ -38,4 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.removeChild(img);
   };
   document.body.appendChild(img);
+
+  let gTip = document.querySelector('#gTip');
+  document.querySelector('#gApp a').addEventListener('click', function() {
+    gTip.classList.remove('fn-hide');
+  });
+  gTip.addEventListener('click', function() {
+    gTip.classList.add('fn-hide');
+  });
 });

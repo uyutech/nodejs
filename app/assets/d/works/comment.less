@@ -4,12 +4,12 @@
 
 .mod-comment{
   padding-bottom:0.1rem;
-  box-shadow:@boxShadow;
+  box-shadow:0 2px 3px rgba(0, 0, 0, 0.1);
   h4{
     padding-left:0.4rem;
     height:0.36rem;
     line-height:0.36rem;
-    background:@mainColor url(comment.png) no-repeat 0.1rem center;
+    background:#8BBDE1 url(comment.png) no-repeat 0.1rem center;
     background-size:0.24rem auto;
     font-size:0.14rem;
     font-weight:400;
@@ -62,44 +62,6 @@
           padding-left:0.05rem;
           color:#58A2CE;
           font-size:0.12rem;
-        }
-      }
-    }
-    .type2{
-      position:absolute;
-      top:0.05rem;
-      right:0.1rem;
-      border-radius:0.24rem;
-      color:@thirdTextColor;
-      background:#B1C0C9;
-      &:before{
-        position:absolute;
-        left:0;
-        top:0;
-        width:0.44rem;
-        height:100%;
-        background:#F1F6F9;
-        border-radius:0.24rem;
-        content:' ';
-        transition:transform 0.2s;
-      }
-      &.alt:before{
-        transform:translateX(100%);
-      }
-      li{
-        position:relative;
-        float:left;
-        padding:0 0.1rem;
-        width:0.24rem;
-        height:0.24rem;
-        line-height:0.24rem;
-        border-radius:0.24rem;
-        font-size:0.12rem;
-        white-space:nowrap;
-        overflow:hidden;
-        cursor:pointer;
-        &.cur{
-          color:@mainTextColor;
         }
       }
     }

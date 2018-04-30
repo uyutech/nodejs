@@ -158,22 +158,6 @@ class Works extends migi.Component {
                 id={ self.worksId }
                 data={ self.commentList }
                 @visible={ self.curColumn === 2 }/>
-      <div class="app">
-        <div class="txt">
-          <div>
-            <h4>每天转个圈 玩转每个圈</h4>
-            <p>一个充满正能量的作品展示、创作平台~</p>
-          </div>
-          <a href={ this.url }
-             target="_blank"
-             onClick={ this.clickDownload }>下载</a>
-        </div>
-      </div>
-      <div class="tip fn-hide"
-           ref="tip"
-           onClick={ this.clickTip }>
-        <span>ios下载如果没有反应，请点击右上角，选择在safari浏览器中打开</span>
-      </div>
     </div>;
   }
 }

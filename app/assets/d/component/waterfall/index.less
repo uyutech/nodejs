@@ -1,0 +1,53 @@
+/**
+ * Created by army8735 on 2018/1/8.
+ */
+
+.cp-waterfall{
+  > .c{
+    display:flex;
+    margin:0.05rem;
+    > ul{
+      flex:1;
+      &:first-child{
+        margin-right:0.05rem;
+      }
+      > li{
+        margin-bottom:0.05rem;
+        border-radius:0.05rem;
+        box-shadow:0 0.01rem 0.04rem rgba(185, 217, 237, 0.5);
+        .pic{
+          display:block;
+          width:100%;
+          border-top-left-radius:0.05rem;
+          border-top-right-radius:0.05rem;
+        }
+        .txt{
+          display:flex;
+          align-items:center;
+          padding:0 0.1rem;
+          min-height:0.3rem;
+          .author{
+            flex:1;
+            font-size:0.11rem;
+            color:#636365;
+            &.profession{
+              color:#B6B6B6;
+            }
+          }
+          .like{
+            display:block;
+            padding-left:0.18rem;
+            height:0.16rem;
+            background:url(like.png) no-repeat 0 center;
+            background-size:contain;
+            font-weight:400;
+            color:#B6B6B6;
+            &.liked{
+              background-image:url(liked.png);
+            }
+          }
+        }
+      }
+    }
+  }
+}

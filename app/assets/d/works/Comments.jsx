@@ -45,7 +45,6 @@ class Comments extends migi.Component {
     ajax = net.postJSON('/api/works/commentList', { id: self.props.worksId , offset }, function(res) {
       if(res.success) {
         let data = res.data;
-        offset += data.limit;
         comment.setData(data.data);
       }
       else {
@@ -62,14 +61,8 @@ class Comments extends migi.Component {
     return <div class="mod mod-comment box">
       <h4>评论</h4>
       <div class="fn">
-        <ul class="type fn-clear"
-            onClick={ { li: this.switchType2 } }>
+        <ul class="type fn-clear">
           <li class="cur" rel="0">全部<small>{ this.props.data.count }</small></li>
-          {
-            this.props.isLogin
-              ? <li rel="1">我的</li>
-              : ''
-          }
         </ul>
       </div>
       <Page ref="page"

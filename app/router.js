@@ -9,14 +9,17 @@ module.exports = app => {
   app.get('/d', 'd.index.index');
   app.get('/d/works/:worksId', 'd.works.index');
   app.get('/d/works/:worksId/:workId', 'd.works.index');
+  app.get('/d/post/:id', 'd.post.index');
 
   app.get('/m', 'm.index.index');
   app.get('/m/works/:worksId', 'm.works.index');
   app.get('/m/works/:worksId/:workId', 'm.works.index');
+  app.get('/m/post/:id', 'm.post.index');
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
   app.post('/api/works/commentList', 'api.works.commentList');
   app.post('/api/work/addViews', 'api.work.addViews');
+  app.post('/api/post/commentList', 'api.post.commentList');
 
   app.get('/api/count/index', 'api.count.index');
 

@@ -16,7 +16,15 @@ class Comment extends migi.Component {
     let self = this;
     self.empty = self.props.empty;
     self.message = self.props.message;
-
+    if(self.props.data) {
+      if(!Array.isArray(self.props.data)) {
+        self.props.data = [self.props.data];
+      }
+      self.html = '';
+      self.props.data.forEach((item) => {
+        self.html += self.genItem(item) || '';
+      });
+    }
     self.on(migi.Event.DOM, function() {
       let $list = $(this.ref.list.element);
       $list.on('click', '.reply', function() {
@@ -42,7 +50,7 @@ class Comment extends migi.Component {
     if(!Array.isArray(data)) {
       data = [data];
     }
-    data.forEach(function(item) {
+    data.forEach((item) => {
       s += self.genItem(item) || '';
     });
     $(self.ref.list.element).html(s);
@@ -115,9 +123,6 @@ class Comment extends migi.Component {
                    rel={ item.createTime }>{ $util.formatDate(item.createTime) }</small>
           </div>
         </div>
-        <b class="fn"
-           rel={ id }
-           own={ item.isOwn }/>
       </div>
       <div class="wrap">
         {

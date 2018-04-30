@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?225';
+    return '/public' + url + '?226';
   },
   okJSON(data) {
     return {
@@ -130,11 +130,28 @@ let helper = {
     </ul>`;
   },
   getMBotNav: function() {
+    let ua = this.ctx.request.header['user-agent'];
+    let url = 'https://circling.net.cn/android/circling-0.6.6.apk';
+    if(/(iPhone|iPod|ios)/i.test(ua)) {
+      url = 'https://itunes.apple.com/cn/app/id1331367220';
+    }
     return `<div class="g-bot" id="gBot">
       <ul>
         <li><a href="https://weibo.com/u/6259241863">转圈官博</a></li>
       </ul>
       <p>© Uyutech all rights reserved © 杭州呦悠网络科技有限公司 保留所有权利</p>
+    </div>
+    <div class="g-app" id="gApp">
+      <div class="txt">
+        <div>
+          <h4>每天转个圈 玩转每个圈</h4>
+          <p>一个充满正能量的作品展示、创作平台~</p>
+        </div>
+        <a href="${url}" target="_blank">下载</a>
+      </div>
+    </div>
+    <div class="g-tip fn-hide" id="gTip">
+      <span>ios下载如果没有反应，请点击右上角，选择在safari浏览器中打开</span>
     </div>`;
   },
   getStat() {

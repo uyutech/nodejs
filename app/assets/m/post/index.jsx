@@ -8,8 +8,8 @@ import './index.less';
 
 import Post from './Post.jsx';
 
-let post = migi.preExist(<Post
-  postData={ $CONFIG.postData }
-  id={ $CONFIG.id }
-  replyData={ $CONFIG.replyData }
-  isLogin={ $CONFIG.isLogin }/>);
+let post = migi.preExist(
+  <Post id={ $CONFIG.id }
+        info={ $CONFIG.info }
+        commentList={ $CONFIG.commentList }/>
+);

@@ -22,6 +22,7 @@ export default function(data) {
            info={ info }
            collection={ collection }
            commentList={ commentList }/>);
+
   return `<!DOCTYPE html>
 <html>
 <head>

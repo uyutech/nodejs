@@ -10,20 +10,20 @@ export default function(data) {
   migi.resetUid();
 
   let isLogin = !!data.ctx.session.uid;
-  let id = data.id;
-  let postData = data.postData;
-  let replyData = data.replyData;
+  let id = parseInt(data.id);
+  let info = data.info;
+  let commentList = data.commentList;
 
-  let post = migi.preRender(<Post
-    isLogin={ isLogin }
-    id={ id }
-    postData={ postData }
-    replyData={ replyData }/>);
+  let post = migi.preRender(
+    <Post id={ id }
+          info={ info }
+          commentList={ commentList }/>
+  );
 
   return `<!DOCTYPE html>
 <html>
 <head>
-  ${data.helper.getMHead({ title: postData.Title })}
+  ${data.helper.getMHead({ title: '画圈详情' })}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mcommon.css')}"/>
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/mpost.css')}"/>
 </head>
@@ -34,8 +34,8 @@ ${data.helper.getMBotNav()}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.id = ${data.helper.stringify(id)};
-  $CONFIG.postData = ${data.helper.stringify(postData)};
-  $CONFIG.replyData = ${data.helper.stringify(replyData)};
+  $CONFIG.info = ${data.helper.stringify(info)};
+  $CONFIG.commentList = ${data.helper.stringify(commentList)};
 </script>
 <script src="${data.helper.getAssetUrl('/mcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/mpost.js')}" defer="defer"></script>
