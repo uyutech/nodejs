@@ -37,6 +37,12 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
+    review: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0未知，1审核中，2违规，3通过',
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,
