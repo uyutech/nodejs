@@ -454,6 +454,7 @@ class Service extends egg.Service {
           'title',
           'duration',
           'cover',
+          'lrc',
           'url',
           'type'
         ],

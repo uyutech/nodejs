@@ -439,6 +439,7 @@ class Controller extends egg.Controller {
             cover: item.cover,
             url: item.url,
             type: item.type,
+            review: item.review,
             create_time: now,
             update_time: now,
           }, {
@@ -464,6 +465,7 @@ class Controller extends egg.Controller {
             url: item.url,
             lrc: item.lrc,
             type: item.type,
+            review: item.review,
             create_time: now,
             update_time: now,
           }, {
@@ -488,6 +490,7 @@ class Controller extends egg.Controller {
             height: item.height,
             url: item.url,
             type: item.type,
+            review: item.review,
             create_time: now,
             update_time: now,
           }, {
@@ -510,6 +513,7 @@ class Controller extends egg.Controller {
             title: item.title,
             content: item.content,
             type: item.type,
+            review: item.review,
             create_time: now,
             update_time: now,
           }, {
