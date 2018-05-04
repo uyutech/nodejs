@@ -157,6 +157,10 @@ module.exports = app => {
   app.post('/private/works/typeAll', 'private.works.typeAll');
   app.post('/private/works/stateAll', 'private.works.stateAll');
   app.post('/private/works/create', 'private.works.create');
+  app.post('/private/works/like', 'private.works.like');
+  app.post('/private/works/unLike', 'private.works.unLike');
+  app.post('/private/works/favor', 'private.works.favor');
+  app.post('/private/works/unFavor', 'private.works.unFavor');
   app.post('/private/work/typeAll', 'private.work.typeAll');
   app.post('/private/author/find', 'private.author.find');
   app.post('/private/author/create', 'private.author.create');

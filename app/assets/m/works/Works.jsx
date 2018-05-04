@@ -85,7 +85,7 @@ class Works extends migi.Component {
   }
   setMedia(item) {
     let self = this;
-    item.worksId = self.id;
+    item.worksId = self.worksId;
     item.worksTitle = self.data.info.title;
     item.worksCover = self.data.info.cover;
     self.ref.media.setData(item || null);

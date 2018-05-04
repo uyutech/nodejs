@@ -40,7 +40,7 @@ class Media extends migi.Component {
   @bind isFavor
   @bind favorCount
   @bind isVideo
-  setData(data) {
+  setData(data) {console.log(data);
     let self = this;
     let old = self.data;
     let load = self.ref.load.element;

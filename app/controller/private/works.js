@@ -660,6 +660,58 @@ class Controller extends egg.Controller {
       return ctx.body = ctx.helper.errorJSON(e.toString());
     }
   }
+
+  async like() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let userId = parseInt(body.userId);
+    let id = parseInt(body.id) || 0;
+    let workId = parseInt(body.workId);
+    if(!workId || !userId) {
+      return;
+    }
+    let res = await service.work.like(id, workId, userId, true);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async unLike() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let userId = parseInt(body.userId);
+    let id = parseInt(body.id) || 0;
+    let workId = parseInt(body.workId);
+    if(!workId || !userId) {
+      return;
+    }
+    let res = await service.work.like(id, workId, userId, false);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async favor() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let userId = parseInt(body.userId);
+    let id = parseInt(body.id) || 0;
+    let workId = parseInt(body.workId);
+    if(!workId || !userId) {
+      return;
+    }
+    let res = await service.work.favor(id, workId, userId, true);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async unFavor() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let userId = parseInt(body.userId);
+    let id = parseInt(body.id) || 0;
+    let workId = parseInt(body.workId);
+    if(!workId || !userId) {
+      return;
+    }
+    let res = await service.work.favor(id, workId, userId, false);
+    ctx.body = ctx.helper.okJSON(res);
+  }
 }
 
 module.exports = Controller;

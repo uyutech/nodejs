@@ -300,7 +300,7 @@ class Audio extends migi.Component {
     let self = this;
     let obj = self.list[self.index || 0];
     let url = '/api/works/' + (obj.isLike ? 'unLike' : 'like');
-    net.postJSON(url, { id: self.props.id, workId: obj.id }, function(res) {
+    net.postJSON(url, { id: self.props.worksId, workId: obj.id }, function(res) {
       let data = res.data;
       obj.isLike = data.state;
       self.list = self.list;
@@ -314,7 +314,7 @@ class Audio extends migi.Component {
     let self = this;
     let obj = self.list[self.index || 0];
     let url = '/api/works/' + (obj.isFavor ? 'unFavor' : 'favor');
-    net.postJSON(url, { id: self.props.id, workId: obj.id }, function(res) {
+    net.postJSON(url, { id: self.props.worksId, workId: obj.id }, function(res) {
       let data = res.data;
       obj.isFavor = data.state;
       self.list = self.list;
