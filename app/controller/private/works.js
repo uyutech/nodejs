@@ -50,7 +50,7 @@ class Controller extends egg.Controller {
   async create() {
     const { app, ctx, service } = this;
     let body = ctx.request.body;
-    let userId = body.userId;
+    let userId = parseInt(body.userId);
     let works;
     let videoList;
     let audioList;

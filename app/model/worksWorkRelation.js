@@ -26,11 +26,6 @@ module.exports = app => {
       allowNull: false,
       comment: '1视频，2音频，3图片，4文字',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     weight: {
       type: Sequelize.SMALLINT.UNSIGNED,
       allowNull: false,
@@ -40,6 +35,21 @@ module.exports = app => {
       type: Sequelize.STRING(32),
       allowNull: false,
       defaultValue: '',
+    },
+    is_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    is_works_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    is_work_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     create_time: {
       type: Sequelize.DATE,
@@ -59,8 +69,8 @@ module.exports = app => {
         fields: ['works_id', 'work_id'],
       },
       {
-        name: 'work_id_weight',
-        fields: ['work_id', 'weight'],
+        name: 'work_id_is_works_delete',
+        fields: ['work_id', 'is_works_delete'],
       }
     ],
     comment: '大作品小作品关系',

@@ -41,6 +41,7 @@ class Media extends migi.Component {
       {
         self.props.audioList && self.props.audioList.length
           ? <Audio ref="audio"
+                   worksId={ self.props.worksId }
                    list={ self.props.audioList }
                    show={ self.props.kind === 2 } />
           : ''

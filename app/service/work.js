@@ -1187,6 +1187,7 @@ class Service extends egg.Service {
         where: {
           work_id: noCacheIdList,
           is_delete: false,
+          is_works_delete: false,
         },
         raw: true,
       });

@@ -39,8 +39,6 @@ class Video extends migi.Component {
   @bind duration
   @bind canControl
   @bind muted
-  @bind fnFavor
-  @bind fnLike
   @bind visible
   get currentTime() {
     return this._currentTime || 0;
@@ -268,17 +266,33 @@ class Video extends migi.Component {
   clickPlay(e) {
     this.isPlaying ? this.pause() : this.play();
   }
-  clickLike(e, vd) {
+  clickLike(e) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
+    let self = this;
+    let obj = self.list[self.index || 0];
+    let url = '/api/works/' + (obj.isLike ? 'unLike' : 'like');
+    net.postJSON(url, { id: self.props.id, workId: obj.id }, function(res) {
+      let data = res.data;
+      obj.isLike = data.state;
+      self.list = self.list;
+    });
   }
-  clickFavor(e, vd) {
+  clickFavor(e) {
     if(!$CONFIG.isLogin) {
       migi.eventBus.emit('NEED_LOGIN');
       return;
     }
+    let self = this;
+    let obj = self.list[self.index || 0];
+    let url = '/api/works/' + (obj.isFavor ? 'unFavor' : 'favor');
+    net.postJSON(url, { id: self.props.id, workId: obj.id }, function(res) {
+      let data = res.data;
+      obj.isFavor = data.state;
+      self.list = self.list;
+    });
   }
   clickDownload(e) {
     if(!$CONFIG.isLogin) {
@@ -340,9 +354,9 @@ class Video extends migi.Component {
           </div>
         </div>
         <ul class="btn">
-          <li class={ 'like' + (this.list[this.index || 0].isLiked || this.fnLike ? ' liked' : '') }
+          <li class={ 'like' + (this.list[this.index || 0].isLike ? ' liked' : '') }
               onClick={ this.clickLike }/>
-          <li class={ 'favor' + (this.list[this.index || 0].isFavored || this.fnFavor ? ' favored' : '') }
+          <li class={ 'favor' + (this.list[this.index || 0].isFavor ? ' favored' : '') }
               onClick={ this.clickFavor }/>
           <li class="download">
             <a href={ this.list[this.index || 0].url || '#' }

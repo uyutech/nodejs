@@ -164,6 +164,7 @@ class Service extends egg.Service {
       where: {
         works_id: id,
         is_delete: false,
+        is_work_delete: false,
       },
       order: [
         ['weight', 'DESC'],
@@ -222,6 +223,7 @@ class Service extends egg.Service {
         where: {
           works_id: noCacheIdList,
           is_delete: false,
+          is_work_delete: false,
         },
         order: [
           ['weight', 'DESC'],

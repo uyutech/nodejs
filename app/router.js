@@ -18,6 +18,10 @@ module.exports = app => {
 
   app.post('/api/login/loginOut', 'api.login.loginOut');
   app.post('/api/works/commentList', 'api.works.commentList');
+  app.post('/api/works/like', app.middlewares.needLoginJson(), 'api.works.like');
+  app.post('/api/works/unLike', app.middlewares.needLoginJson(), 'api.works.unLike');
+  app.post('/api/works/favor', app.middlewares.needLoginJson(), 'api.works.favor');
+  app.post('/api/works/unFavor', app.middlewares.needLoginJson(), 'api.works.unFavor');
   app.post('/api/work/addViews', 'api.work.addViews');
   app.post('/api/post/commentList', 'api.post.commentList');
 

@@ -324,8 +324,74 @@ class Media extends migi.Component {
     }
   }
   clickLike() {
+    let self = this;
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
+    if(!self.data) {
+      return;
+    }
+    if(loadingLike) {
+      return;
+    }
+    loadingLike = true;
+    let item = self.data;
+    let url = self.isLike ? 'unLike' : 'like';
+    ajaxLike = $net.postJSON('/api/works/' + url, {
+      workId: item.id, id: item.worksId,
+    }, function(res) {
+      if(res.success) {
+        let data = res.data;
+        self.isLike = item.isLike = data.state;
+        self.likeCount = item.likeCount = data.count;
+      }
+      else if(res.code === 1000) {
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+      else {
+        alert(res.message || $util.ERROR_MESSAGE);
+      }
+      loadingLike = false;
+    }, function(res) {
+      alert(res.message || $util.ERROR_MESSAGE);
+      loadingLike = false;
+    });
   }
   clickFavor() {
+    let self = this;
+    if(!$CONFIG.isLogin) {
+      migi.eventBus.emit('NEED_LOGIN');
+      return;
+    }
+    if(!self.data) {
+      return;
+    }
+    if(loadingFavor) {
+      return;
+    }
+    loadingFavor = true;
+    let item = self.data;
+    let url = self.isFavor ? 'unFavor' : 'favor';
+    ajaxFavor = $net.postJSON('/api/works/' + url, {
+      workId: item.id, id: item.worksId,
+    }, function(res) {
+      if(res.success) {
+        let data = res.data;
+        self.isFavor = item.isFavor = data.state;
+        self.favorCount = item.favorCount = data.count;
+      }
+      else if(res.code === 1000) {
+        migi.eventBus.emit('NEED_LOGIN');
+      }
+      else {
+        alert(res.message || $util.ERROR_MESSAGE);
+      }
+      loadingFavor = false;
+    }, function(res) {
+      alert(res.message || $util.ERROR_MESSAGE);
+      loadingFavor = false;
+    });
   }
   clickDownload() {
     let self = this;

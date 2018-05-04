@@ -319,6 +319,8 @@ class Controller extends egg.Controller {
       where: {
         works_id: worksIdList,
         is_delete: false,
+        is_works_delete: false,
+        is_work_delete: false,
       },
       raw: true,
     });
@@ -655,6 +657,8 @@ class Controller extends egg.Controller {
       where: {
         work_id: workIdList,
         is_delete: false,
+        is_works_delete: false,
+        is_work_delete: false,
       },
       raw: true,
     });
