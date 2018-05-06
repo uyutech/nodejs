@@ -26,17 +26,7 @@ module.exports = app => {
       allowNull: false,
       comment: '1不同版本，2歌词，3伴奏，视频，海报',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,

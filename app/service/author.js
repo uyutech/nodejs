@@ -763,7 +763,6 @@ class Service extends egg.Service {
         ],
         where: {
           author_id: id,
-          is_delete: false,
         },
         raw: true,
       });
@@ -850,7 +849,6 @@ class Service extends egg.Service {
         where: {
           author_id: id,
           kind: noCacheIdList,
-          is_delete: false,
         },
         raw: true,
       });
@@ -904,7 +902,6 @@ class Service extends egg.Service {
       where: {
         author_id: id,
         kind,
-        is_delete: false,
       },
       order: [
         ['work_id', 'DESC']
@@ -1024,7 +1021,6 @@ class Service extends egg.Service {
       where: {
         author_id: id,
         kind,
-        is_delete: false,
       },
       raw: true,
     });

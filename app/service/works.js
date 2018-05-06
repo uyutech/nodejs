@@ -163,7 +163,6 @@ class Service extends egg.Service {
       ],
       where: {
         works_id: id,
-        is_delete: false,
         is_work_delete: false,
       },
       order: [
@@ -222,7 +221,6 @@ class Service extends egg.Service {
         ],
         where: {
           works_id: noCacheIdList,
-          is_delete: false,
           is_work_delete: false,
         },
         order: [
@@ -1439,6 +1437,209 @@ class Service extends egg.Service {
           return true;
         }
       }
+    }
+  }
+
+  /**
+   * 修改作品
+   * @param id:int 作品id
+   * @param attributes:Object 作品属性
+   */
+  async update(id, attributes) {
+    if(!id) {
+      return {
+        success: false,
+      };
+    }
+    if(!attributes) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let attr = {};
+    let hash = {
+      title: 'title',
+      subTitle: 'sub_title',
+      describe: 'describe',
+      type: 'type',
+      cover: 'cover',
+      isAuthorize: 'is_authorize',
+      state: 'state',
+    };
+    Object.keys(attributes).forEach((key) => {
+      if(hash[key]) {
+        attr[hash[key]] = attributes[key];
+      }
+    });
+    attr.update_time = new Date();
+    await app.model.works.update(attr, {
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+    };
+  }
+
+  /**
+   * 删除作品
+   * @param id:int 作品id
+   */
+  async delete(id) {
+    if(!id) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let now = new Date();
+    let query = [
+      app.model.worksWorkRelation.update({
+        is_works_delete: true,
+        update_time: now,
+      }, {
+        where: {
+          works_id: id,
+          is_works_delete: false,
+        },
+      }),
+      app.model.works.update({
+        is_delete: true,
+        update_time: now,
+      }, {
+        where: {
+          id,
+          is_delete: false,
+        },
+      })
+    ];
+    await Promise.all(query);
+    return {
+      success: true,
+    };
+  }
+
+  /**
+   * 恢复删除作品
+   * @param id:int 作品id
+   */
+  async unDelete(id) {
+    if(!id) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let now = new Date();
+    let query = [
+      app.model.worksWorkRelation.update({
+        is_works_delete: false,
+        update_time: now,
+      }, {
+        where: {
+          works_id: id,
+          is_works_delete: true,
+        },
+      }),
+      app.model.works.update({
+        is_delete: false,
+        update_time: now,
+      }, {
+        where: {
+          id,
+          is_delete: true,
+        },
+      })
+    ];
+    await Promise.all(query);
+    return {
+      success: true,
+    };
+  }
+
+  /**
+   * 添加作者
+   * @param id:int 作品id
+   * @param authorList:Array<Object> 作者
+   */
+  async addAuthor(id, authorList) {
+    if(!id || !authorList) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    if(!Array.isArray(authorList)) {
+      authorList = [authorList];
+    }
+    let transaction = await app.sequelizeCircling.transaction();
+    let query = authorList.map((item) => {
+      return app.model.worksAuthorRelation.create({
+        works_id: id,
+        author_id: item.id,
+        profession_id: item.professionId,
+      }, {
+        transaction,
+        raw: true,
+      });
+    });
+    try {
+      await Promise.all(query);
+      await transaction.commit();
+      return {
+        success: true,
+      };
+    }
+    catch(e) {
+      await transaction.rollback();
+      return {
+        success: false,
+        message: e.toString(),
+      };
+    }
+  }
+
+  /**
+   * 删除作者
+   * @param id:int 作品id
+   * @param authorList:Array<Object> 作者
+   */
+  async removeAuthor(id, authorList) {
+    if(!id || !authorList) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    if(!Array.isArray(authorList)) {
+      authorList = [authorList];
+    }
+    let transaction = await app.sequelizeCircling.transaction();
+    let query = authorList.map((item) => {
+      return app.model.worksAuthorRelation.destroy({
+        where: {
+          works_id: id,
+          author_id: item.id,
+          profession_id: item.professionId,
+        },
+        transaction,
+      });
+    });
+    try {
+      await Promise.all(query);
+      await transaction.commit();
+      return {
+        success: true,
+      };
+    }
+    catch(e) {
+      await transaction.rollback();
+      return {
+        success: false,
+        message: e.toString(),
+      };
     }
   }
 }

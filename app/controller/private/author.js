@@ -41,16 +41,46 @@ class Controller extends egg.Controller {
       raw: true,
     });
     let id = last.id + Math.floor(Math.random() * 3) + 1;
-    let create = await app.model.author.create({
-      id,
-      name,
-      type,
-    }, {
-      raw: true,
-    });
-    ctx.body = ctx.helper.okJSON({
-      data: create,
-    });
+    let transaction = await app.sequelizeCircling.transaction();
+    try {
+      let query = [
+        app.model.author.create({
+          id,
+          name,
+          type,
+        }, {
+          transaction,
+          raw: true,
+        }),
+        app.model.comment.create({
+          content: id,
+          user_id: 2018000000008222,
+          is_delete: true,
+          review: 3,
+          root_id: 0,
+          parent_id: 0,
+        }, {
+          transaction,
+          raw: true,
+        })
+      ];
+      let createList = await Promise.all(query);
+      await app.model.authorCommentRelation.create({
+        author_id: id,
+        comment_id: createList[1].id,
+      }, {
+        transaction,
+        raw: true,
+      });
+      await transaction.commit();
+      ctx.body = ctx.helper.okJSON({
+        data: createList[0],
+      });
+    }
+    catch(e) {
+      await transaction.rollback();
+      return ctx.body = ctx.helper.errorJSON(e.toString());
+    }
   }
 }
 

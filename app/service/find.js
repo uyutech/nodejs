@@ -299,7 +299,6 @@ class Service extends egg.Service {
         ],
         where: {
           kind,
-          is_delete: false,
           is_works_delete: false,
           is_work_delete: false,
         },
@@ -398,7 +397,6 @@ class Service extends egg.Service {
         ],
         where: {
           kind,
-          is_delete: false,
           is_works_delete: false,
           is_work_delete: false,
         },

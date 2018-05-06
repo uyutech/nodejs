@@ -18,17 +18,15 @@ class Controller extends egg.Controller {
     if(!id) {
       return ctx.body = 'no author id';
     }
-    let where = {
-      author_id: id,
-      is_delete: false,
-    };
     let [ws, w, m, i] = await Promise.all([
       app.model.worksAuthorRelation.findAll({
         attributes: [
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],
-        where,
+        where: {
+          author_id: id,
+        },
         raw: true,
       }),
       app.model.workAuthorRelation.findAll({
@@ -36,7 +34,9 @@ class Controller extends egg.Controller {
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],
-        where,
+        where: {
+          author_id: id,
+        },
         raw: true,
       }),
       app.model.musicAlbumAuthorRelation.findAll({
@@ -44,7 +44,9 @@ class Controller extends egg.Controller {
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],
-        where,
+        where: {
+          author_id: id,
+        },
         raw: true,
       }),
       app.model.imageAlbumAuthorRelation.findAll({
@@ -52,7 +54,9 @@ class Controller extends egg.Controller {
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],
-        where,
+        where: {
+          author_id: id,
+        },
         raw: true,
       })
     ]);
@@ -150,16 +154,12 @@ class Controller extends egg.Controller {
     if(uid !== 2018000000000002) {
       return ctx.body = uid;
     }
-    let where = {
-      is_delete: false,
-    };
     let [ws, w, m, i] = await Promise.all([
       app.model.worksAuthorRelation.findAll({
         attributes: [
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],
-        where,
         raw: true,
       }),
       app.model.workAuthorRelation.findAll({
@@ -167,7 +167,6 @@ class Controller extends egg.Controller {
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],
-        where,
         raw: true,
       }),
       app.model.musicAlbumAuthorRelation.findAll({
@@ -175,7 +174,6 @@ class Controller extends egg.Controller {
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],
-        where,
         raw: true,
       }),
       app.model.imageAlbumAuthorRelation.findAll({
@@ -183,7 +181,6 @@ class Controller extends egg.Controller {
           ['author_id', 'authorId'],
           ['profession_id', 'professionId']
         ],
-        where,
         raw: true,
       })
     ]);
@@ -294,7 +291,6 @@ class Controller extends egg.Controller {
       ],
       where: {
         author_id: id,
-        is_delete: false,
       },
       raw: true,
     });
@@ -342,7 +338,6 @@ class Controller extends egg.Controller {
       ],
       where: {
         work_id: workIdList,
-        is_delete: false,
       },
       raw: true,
     });
@@ -434,7 +429,6 @@ class Controller extends egg.Controller {
       ],
       where: {
         author_id: id,
-        is_delete: false,
       },
       raw: true,
     });
@@ -454,7 +448,6 @@ class Controller extends egg.Controller {
         ],
         where: {
           work_id: workIdList,
-          is_delete: false,
         },
         raw: true,
       }),
@@ -499,7 +492,6 @@ class Controller extends egg.Controller {
       ],
       where: {
         works_id: worksIdList,
-        is_delete: false,
       },
       raw: true,
     });
@@ -615,9 +607,6 @@ class Controller extends egg.Controller {
           ['works_id', 'worksId'],
           ['author_id', 'authorId']
         ],
-        where: {
-          is_delete: false,
-        },
         raw: true,
       }),
       app.model.worksWorkRelation.findAll({
@@ -625,9 +614,6 @@ class Controller extends egg.Controller {
           ['works_id', 'worksId'],
           ['work_id', 'workId']
         ],
-        where: {
-          is_delete: false,
-        },
         raw: true,
       })
     ]);
@@ -656,9 +642,6 @@ class Controller extends egg.Controller {
       ],
       where: {
         work_id: workIdList,
-        is_delete: false,
-        is_works_delete: false,
-        is_work_delete: false,
       },
       raw: true,
     });

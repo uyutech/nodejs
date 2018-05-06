@@ -36,17 +36,7 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     create_time: {
-      type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    update_time: {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,

@@ -36,11 +36,6 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     is_works_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,

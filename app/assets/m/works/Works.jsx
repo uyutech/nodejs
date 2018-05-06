@@ -29,7 +29,9 @@ class Works extends migi.Component {
       self.url = /(iPhone|iPod|ios)/i.test(navigator.userAgent)
         ? 'https://itunes.apple.com/cn/app/id1331367220'
         : 'https://circling.net.cn/android/circling-0.6.6.apk';
-      self.setMedia(self.av);
+      if(self.av) {
+        self.setMedia(self.av);
+      }
     });
   }
   @bind kind
@@ -142,7 +144,7 @@ class Works extends migi.Component {
             data={ self.props.info }/>
       <Select ref="select"
               list={ self.avList }
-              id={ self.av.id }
+              id={ self.av && self.av.id }
               on-change={ self.change }/>
       <Column ref="column"
               list={ self.list }

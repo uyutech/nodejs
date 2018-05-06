@@ -949,7 +949,6 @@ class Service extends egg.Service {
       ],
       where: {
         work_id: id,
-        is_delete: false,
       },
       raw: true,
     });
@@ -1056,7 +1055,6 @@ class Service extends egg.Service {
         ],
         where: {
           work_id: noCacheIdList,
-          is_delete: false,
         },
         raw: true,
       });
@@ -1186,7 +1184,6 @@ class Service extends egg.Service {
         ],
         where: {
           work_id: noCacheIdList,
-          is_delete: false,
           is_works_delete: false,
         },
         raw: true,
@@ -1454,6 +1451,289 @@ class Service extends egg.Service {
       type: kind,
       user_id: uid,
     });
+  }
+
+  /**
+   * 修改作品
+   * @param id:int 作品id
+   * @param attributes:Object 作品属性
+   * @param kind:int 作品类型，可传空
+   */
+  async update(id, attributes, kind) {
+    if(!id) {
+      return {
+        success: false,
+      };
+    }
+    if(!attributes) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    if(!kind) {
+      kind = this.work.getKind(id);
+      if(!kind) {
+        return {
+          success: false,
+          message: 'id不合法',
+        };
+      }
+    }
+    let attr = {};
+    let hash = {
+      title: 'title',
+      describe: 'describe',
+      type: 'type',
+      cover: 'cover',
+      state: 'state',
+      width: 'width',
+      height: 'height',
+      duration: 'duration',
+      url: 'url',
+      lrc: 'lrc',
+      content: 'content',
+    };
+    Object.keys(attributes).forEach((key) => {
+      if(hash[key]) {
+        attr[hash[key]] = attributes[key];
+      }
+    });
+    attr.update_time = new Date();
+    let model;
+    switch(kind) {
+      case 1:
+        model = app.model.video;
+        break;
+      case 2:
+        model = app.model.audio;
+        break;
+      case 3:
+        model = app.model.image;
+        break;
+      case 4:
+        model = app.model.text;
+        break;
+    }
+    await model.update(attr, {
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+    };
+  }
+
+  /**
+   * 删除作品
+   * @param id:int 作品id
+   * @param kind:int 作品类型，可传空
+   */
+  async delete(id, kind) {
+    if(!id) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    if(!kind) {
+      kind = this.work.getKind(id);
+      if(!kind) {
+        return {
+          success: false,
+          message: 'id不合法',
+        };
+      }
+    }
+    let now = new Date();
+    let query = [
+      app.model.worksWorkRelation.update({
+        is_work_delete: true,
+        update_time: now,
+      }, {
+        where: {
+          work_id: id,
+          is_work_delete: false,
+        },
+      }),
+    ];
+    let model;
+    switch(kind) {
+      case 1:
+        model = app.model.video;
+        break;
+      case 2:
+        model = app.model.audio;
+        break;
+      case 3:
+        model = app.model.image;
+        break;
+      case 4:
+        model = app.model.text;
+        break;
+    }
+    query.push(model.update({
+      is_delete: true,
+      update_time: now,
+    }, {
+      where: {
+        id,
+        is_delete: false,
+      },
+    }));
+    await Promise.all(query);
+    return {
+      success: true,
+    };
+  }
+
+  /**
+   * 恢复删除作品
+   * @param id:int 作品id
+   * @param kind:int 作品类型，可传空
+   */
+  async unDelete(id, kind) {
+    if(!id) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    if(!kind) {
+      kind = this.work.getKind(id);
+      if(!kind) {
+        return {
+          success: false,
+          message: 'id不合法',
+        };
+      }
+    }
+    let now = new Date();
+    let query = [
+      app.model.worksWorkRelation.update({
+        is_work_delete: false,
+        update_time: now,
+      }, {
+        where: {
+          work_id: id,
+          is_work_delete: true,
+        },
+      }),
+    ];
+    let model;
+    switch(kind) {
+      case 1:
+        model = app.model.video;
+        break;
+      case 2:
+        model = app.model.audio;
+        break;
+      case 3:
+        model = app.model.image;
+        break;
+      case 4:
+        model = app.model.text;
+        break;
+    }
+    query.push(model.update({
+      is_delete: false,
+      update_time: now,
+    }, {
+      where: {
+        id,
+        is_delete: true,
+      },
+    }));
+    await Promise.all(query);
+    return {
+      success: true,
+    };
+  }
+
+  /**
+   * 添加作者
+   * @param id:int 作品id
+   * @param authorList:Array<Object> 作者
+   */
+  async addAuthor(id, authorList) {
+    if(!id || !authorList) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    if(!Array.isArray(authorList)) {
+      authorList = [authorList];
+    }
+    let transaction = await app.sequelizeCircling.transaction();
+    let query = authorList.map((item) => {
+      return app.model.workAuthorRelation.create({
+        work_id: id,
+        author_id: item.id,
+        profession_id: item.professionId,
+        tag: item.tag,
+      }, {
+        transaction,
+        raw: true,
+      });
+    });
+    try {
+      await Promise.all(query);
+      await transaction.commit();
+      return {
+        success: true,
+      };
+    }
+    catch(e) {
+      await transaction.rollback();
+      return {
+        success: false,
+        message: e.toString(),
+      };
+    }
+  }
+
+  /**
+   * 添加作者
+   * @param id:int 作品id
+   * @param authorList:Array<Object> 作者
+   */
+  async removeAuthor(id, authorList) {
+    if(!id || !authorList) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    if(!Array.isArray(authorList)) {
+      authorList = [authorList];
+    }
+    let transaction = await app.sequelizeCircling.transaction();
+    let query = authorList.map((item) => {
+      return app.model.workAuthorRelation.destroy({
+        where: {
+          works_id: id,
+          author_id: item.id,
+          profession_id: item.professionId,
+        },
+        transaction,
+      });
+    });
+    try {
+      await Promise.all(query);
+      await transaction.commit();
+      return {
+        success: true,
+      };
+    }
+    catch(e) {
+      await transaction.rollback();
+      return {
+        success: false,
+        message: e.toString(),
+      };
+    }
   }
 }
 

@@ -26,20 +26,20 @@ class Controller extends egg.Controller {
   }
 
   async update() {
-    const { app, ctx, service } = this;
+    const { ctx, service } = this;
     let body = ctx.request.body;
     let id = parseInt(body.id);
-    let userId = parseInt(body.userId);
-    if(!userId) {
-      return ctx.body = ctx.helper.errorJSON({
-        code: 3000,
-        message: '缺userId',
-      });
-    }
     if(!id) {
       return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    let attributes = JSON.parse(body.attributes);
+    if(!attributes) {
+      return ctx.body = ctx.helper.errorJSON({
         code: 3001,
-        message: '缺id',
+        message: '缺少attributes',
       });
     }
     let kind = service.work.getKind(id);
@@ -49,6 +49,135 @@ class Controller extends egg.Controller {
         message: 'id不合法',
       });
     }
+    return await service.work.update(id, attributes, kind);
+  }
+
+  async delete() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    let kind = service.work.getKind(id);
+    if(!kind) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    let res = await service.work.delete(id, kind);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async unDelete() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    let kind = service.work.getKind(id);
+    if(!kind) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    let res = await service.work.unDelete(id, kind);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async addAuthor() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    let authorList = JSON.parse(body.authorList);
+    if(!authorList) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3002,
+        message: '缺少authorList',
+      });
+    }
+    if(!Array.isArray(authorList)) {
+      authorList = [authorList];
+    }
+    for(let i = 0, len = authorList.length; i < len; i++) {
+      let item = authorList[i];
+      if(!item.id) {
+        return ctx.body = ctx.helper.errorJSON({
+          code: 2106,
+          message: '缺authorList.id',
+        });
+      }
+      if(!item.professionId) {
+        return ctx.body = ctx.helper.errorJSON({
+          code: 2107,
+          message: '缺authorList.professionId',
+        });
+      }
+    }
+    return await service.work.addAuthor(id, authorList);
+  }
+
+  async removeAuthor() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    let authorList = JSON.parse(body.authorList);
+    if(!authorList) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3002,
+        message: '缺少authorList',
+      });
+    }
+    if(!Array.isArray(authorList)) {
+      authorList = [authorList];
+    }
+    for(let i = 0, len = authorList.length; i < len; i++) {
+      let item = authorList[i];
+      if(!item.id) {
+        return ctx.body = ctx.helper.errorJSON({
+          code: 2106,
+          message: '缺authorList.id',
+        });
+      }
+      if(!item.professionId) {
+        return ctx.body = ctx.helper.errorJSON({
+          code: 2107,
+          message: '缺authorList.professionId',
+        });
+      }
+    }
+    return await service.work.removeAuthor(id, authorList);
   }
 }
 
