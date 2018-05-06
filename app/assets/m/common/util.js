@@ -2,6 +2,8 @@
  * Created by army on 2017/5/20.
  */
 
+import BigNumber from 'bignumber.js';
+
 let util = {
   isLogin: function() {
     return $.cookie('isLogin') === 'true';
@@ -135,4 +137,4 @@ let util = {
   },
 };
 
-module.exports = util;
+export default util;

@@ -174,6 +174,7 @@ module.exports = app => {
   app.post('/private/work/unDelete', 'private.work.unDelete');
   app.post('/private/work/addAuthor', 'private.work.addAuthor');
   app.post('/private/work/removeAuthor', 'private.work.removeAuthor');
+  app.post('/private/work/addViews', 'private.work.addViews');
   app.post('/private/author/find', 'private.author.find');
   app.post('/private/author/create', 'private.author.create');
   app.post('/private/user/find', 'private.user.find');

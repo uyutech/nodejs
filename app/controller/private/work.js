@@ -179,6 +179,17 @@ class Controller extends egg.Controller {
     }
     return await service.work.removeAuthor(id, authorList);
   }
+
+  async addViews() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    service.work.incrementViews(id);
+    ctx.body = ctx.helper.okJSON();
+  }
 }
 
 module.exports = Controller;
