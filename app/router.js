@@ -180,4 +180,8 @@ module.exports = app => {
   app.post('/private/user/find', 'private.user.find');
   app.post('/private/user/increaseCoins', 'private.user.increaseCoins');
   app.post('/private/account', 'private.account.session');
+  app.post('/private/comment/like', 'private.comment.like');
+  app.post('/private/comment/unLike', 'private.comment.unLike');
+  app.post('/private/comment/favor', 'private.comment.favor');
+  app.post('/private/comment/unFavor', 'private.comment.unFavor');
 };
