@@ -22,7 +22,7 @@ class Controller extends egg.Controller {
       service.works.collectionFull(worksId, uid),
       service.works.commentList(worksId, uid, 0, LIMIT)
     ]);
-    if(!info || info.state === 3) {
+    if(!info || info.isDelete || info.state === 3) {
       return;
     }
     commentList.limit = LIMIT;

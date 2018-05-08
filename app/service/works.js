@@ -33,7 +33,8 @@ class Service extends egg.Service {
           'state',
           'cover',
           'type',
-          ['is_authorize', 'isAuthorize']
+          ['is_authorize', 'isAuthorize'],
+          ['is_delete', 'isDelete']
         ],
         where: {
           id,
@@ -96,7 +97,8 @@ class Service extends egg.Service {
           'state',
           'cover',
           'type',
-          ['is_authorize', 'isAuthorize']
+          ['is_authorize', 'isAuthorize'],
+          ['is_delete', 'isDelete']
         ],
         where: {
           id: noCacheIdList,
