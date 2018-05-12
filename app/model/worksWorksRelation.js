@@ -1,19 +1,19 @@
 /**
- * Created by army8735 on 2018/4/23.
+ * Created by army8735 on 2018/5/12.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeCircling, Sequelize } = app;
-  return sequelizeCircling.define('work_work_relation', {
+  return sequelizeCircling.define('works_works_relation', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    work_id: {
+    works_id: {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
@@ -24,7 +24,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '1不同版本，2歌词，3伴奏，4视频，5海报',
+      comment: '1原作，2bgm，3视频素材，4原曲，5原唱',
     },
     create_time: {
       type: Sequelize.DATE,
@@ -34,15 +34,15 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'work_id_type_target_id',
+        name: 'works_id_type_target_id',
         unique: true,
-        fields: ['work_id', 'type', 'target_id'],
+        fields: ['works_id', 'type', 'target_id'],
       },
       {
         name: 'target_id_type',
         fields: ['target_id', 'type']
       }
     ],
-    comment: '小作品之间的关系',
+    comment: '大作品之间的关系',
   });
 };

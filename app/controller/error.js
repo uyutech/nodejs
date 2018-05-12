@@ -14,7 +14,12 @@ class Controller extends egg.Controller {
 
   async qr() {
     const { ctx } = this;
-    await ctx.redirect('http://circling.cc');
+    await ctx.redirect('https://circling.cc');
+  }
+
+  async jsgm() {
+    const { ctx } = this;
+    await ctx.redirect('https://mp.weixin.qq.com/s/IbXbhdum6qsx1B3A169LCA');
   }
 }
 
