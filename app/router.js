@@ -152,6 +152,121 @@ module.exports = app => {
   app.post('/h5/mall2/applyExpress', app.middlewares.needLoginJson(), 'h5.mall.applyExpress');
   app.post('/h5/mall2/cancelExpress', app.middlewares.needLoginJson(), 'h5.mall.cancelExpress');
 
+  // 老路径
+  app.post('/h5/works/index', 'h5.works.index');
+  app.post('/h5/works/commentList', 'h5.works.commentList');
+  app.post('/h5/works/like', app.middlewares.needLoginJson(), 'h5.works.like');
+  app.post('/h5/works/favor', app.middlewares.needLoginJson(), 'h5.works.favor');
+  app.post('/h5/works/unLike', app.middlewares.needLoginJson(), 'h5.works.unLike');
+  app.post('/h5/works/unFavor', app.middlewares.needLoginJson(), 'h5.works.unFavor');
+
+  app.post('/h5/work/addViews', 'h5.work.addViews');
+  app.post('/h5/work/report', 'h5.work.report');
+
+  app.post('/h5/musicAlbum/index', 'h5.musicAlbum.index');
+
+  app.post('/h5/imageAlbum/index', 'h5.imageAlbum.index');
+  app.post('/h5/imageAlbum/imageList', 'h5.imageAlbum.imageList');
+
+  app.post('/h5/author/index', 'h5.author.index');
+  app.post('/h5/author/dynamicList', 'h5.author.dynamicList');
+  app.post('/h5/author/commentList', 'h5.author.commentList');
+  app.post('/h5/author/kindWorkList', 'h5.author.kindWorkList');
+  app.post('/h5/author/follow', app.middlewares.needLoginJson(), 'h5.author.follow');
+  app.post('/h5/author/unFollow', app.middlewares.needLoginJson(), 'h5.author.unFollow');
+  app.post('/h5/author/all', 'h5.author.all');
+  app.post('/h5/author/report', 'h5.author.report');
+  app.post('/h5/author/black', app.middlewares.needLoginJson(), 'h5.author.black');
+
+  app.post('/h5/circle/index', 'h5.circle.index');
+  app.post('/h5/circle/postList', 'h5.circle.postList');
+  app.post('/h5/circle/all', 'h5.circle.all');
+  app.post('/h5/circle/popularList', 'h5.circle.popularList');
+  app.post('/h5/circle/follow', app.middlewares.needLoginJson(), 'h5.circle.follow');
+  app.post('/h5/circle/unFollow', app.middlewares.needLoginJson(), 'h5.circle.unFollow');
+  app.post('/h5/circle/block', app.middlewares.needLoginJson(), 'h5.circle.block');
+
+  app.post('/h5/post/index', 'h5.post.index');
+  app.post('/h5/post/commentList', 'h5.post.commentList');
+
+  app.post('/h5/subPost/index', 'h5.subPost.index');
+  app.post('/h5/subPost/sub', app.middlewares.needLoginJson(), 'h5.subPost.sub');
+  app.post('/h5/subPost/circleList', app.middlewares.needLoginJson(), 'h5.subPost.circleList');
+
+  app.post('/h5/user/index', 'h5.user.index');
+  app.post('/h5/user/postList', 'h5.user.postList');
+  app.post('/h5/user/follow', app.middlewares.needLoginJson(), 'h5.user.follow');
+  app.post('/h5/user/unFollow', app.middlewares.needLoginJson(), 'h5.user.unFollow');
+  app.post('/h5/user/report', 'h5.user.report');
+  app.post('/h5/user/black', app.middlewares.needLoginJson(), 'h5.user.black');
+
+  app.post('/h5/find/index', 'h5.find.index');
+  app.post('/h5/find/tag', 'h5.find.tag');
+
+  app.post('/h5/circling/index', 'h5.circling.index');
+  app.post('/h5/circling/circleList', 'h5.circling.circleList');
+  app.post('/h5/circling/postList', 'h5.circling.postList');
+
+  app.post('/h5/follow/index', app.middlewares.needLoginJson(), 'h5.follow.index');
+  app.post('/h5/follow/circleList', app.middlewares.needLoginJson(), 'h5.follow.circleList');
+  app.post('/h5/follow/postList', app.middlewares.needLoginJson(), 'h5.follow.postList');
+  app.post('/h5/follow/friendPostList', app.middlewares.needLoginJson(), 'h5.follow.friendPostList');
+
+  app.post('/h5/my/index', app.middlewares.needLoginJson(), 'h5.my.index');
+  app.post('/h5/my/postList', app.middlewares.needLoginJson(), 'h5.my.postList');
+  app.post('/h5/my/favorList', app.middlewares.needLoginJson(), 'h5.my.favorList');
+  app.post('/h5/my/favorPostList', app.middlewares.needLoginJson(), 'h5.my.favorPostList');
+  app.post('/h5/my/relationList', app.middlewares.needLoginJson(), 'h5.my.relationList');
+  app.post('/h5/my/messageList', app.middlewares.needLoginJson(), 'h5.my.messageList');
+  app.post('/h5/my/unreadMessageCount', app.middlewares.needLoginJson(), 'h5.my.unreadMessageCount');
+  app.post('/h5/my/sts', app.middlewares.needLoginJson(), 'h5.my.sts');
+  app.post('/h5/my/headUrl', app.middlewares.needLoginJson(), 'h5.my.headUrl');
+  app.post('/h5/my/nickname', app.middlewares.needLoginJson(), 'h5.my.nickname');
+  app.post('/h5/my/sign', app.middlewares.needLoginJson(), 'h5.my.sign');
+  app.post('/h5/my/settle', app.middlewares.needLoginJson(), 'h5.my.settle');
+  app.post('/h5/my/guideNameAndSex', app.middlewares.needLoginJson(), 'h5.my.guideNameAndSex');
+  app.post('/h5/my/guideCircle', app.middlewares.needLoginJson(), 'h5.my.guideCircle');
+  app.post('/h5/my/guideAuthor', app.middlewares.needLoginJson(), 'h5.my.guideAuthor');
+  app.post('/h5/my/address', app.middlewares.needLoginJson(), 'h5.my.address');
+  app.post('/h5/my/updateAddressName', app.middlewares.needLoginJson(), 'h5.my.updateAddressName');
+  app.post('/h5/my/updateAddressPhone', app.middlewares.needLoginJson(), 'h5.my.updateAddressPhone');
+  app.post('/h5/my/updateAddress', app.middlewares.needLoginJson(), 'h5.my.updateAddress');
+
+  app.post('/h5/comment/like', app.middlewares.needLoginJson(), 'h5.comment.like');
+  app.post('/h5/comment/unLike', app.middlewares.needLoginJson(), 'h5.comment.unLike');
+  app.post('/h5/comment/favor', app.middlewares.needLoginJson(), 'h5.comment.favor');
+  app.post('/h5/comment/unFavor', app.middlewares.needLoginJson(), 'h5.comment.unFavor');
+  app.post('/h5/comment/sub', app.middlewares.needLoginJson(), 'h5.comment.sub');
+  app.post('/h5/comment/report', 'h5.comment.report');
+  app.post('/h5/comment/block', app.middlewares.needLoginJson(), 'h5.comment.block');
+  app.post('/h5/comment/del', app.middlewares.needLoginJson(), 'h5.comment.del');
+
+  app.post('/h5/tag/index', 'h5.tag.index');
+  app.post('/h5/tag/postList', 'h5.tag.postList');
+
+  app.post('/h5/search/author', 'h5.search.author');
+  app.post('/h5/search/user', 'h5.search.user');
+  app.post('/h5/search/works', 'h5.search.works');
+  app.post('/h5/search/tag', 'h5.search.tag');
+
+  app.post('/h5/passport/login', 'h5.passport.login');
+  app.post('/h5/passport/loginWeibo', 'h5.passport.loginWeibo');
+  app.post('/h5/passport/bindList', app.middlewares.needLoginJson(), 'h5.passport.bindList');
+  app.post('/h5/passport/bindWeibo', app.middlewares.needLoginJson(), 'h5.passport.bindWeibo');
+  app.post('/h5/passport/bindCode', app.middlewares.needLoginJson(), 'h5.passport.bindCode');
+  app.post('/h5/passport/bindPhone', app.middlewares.needLoginJson(), 'h5.passport.bindPhone');
+  app.post('/h5/passport/registerCode', 'h5.passport.registerCode');
+  app.post('/h5/passport/register', 'h5.passport.register');
+  app.post('/h5/passport/resetCode', 'h5.passport.resetCode');
+  app.post('/h5/passport/reset', 'h5.passport.reset');
+  app.post('/h5/passport/loginOut', app.middlewares.needLoginJson(), 'h5.passport.loginOut');
+
+  app.post('/h5/mall/index', 'h5.mall.index');
+  app.post('/h5/mall/prize', app.middlewares.needLoginJson(), 'h5.mall.prize');
+  app.post('/h5/mall/express', app.middlewares.needLoginJson(), 'h5.mall.express');
+  app.post('/h5/mall/applyExpress', app.middlewares.needLoginJson(), 'h5.mall.applyExpress');
+  app.post('/h5/mall/cancelExpress', app.middlewares.needLoginJson(), 'h5.mall.cancelExpress');
+
   app.post('/private/profession/all', 'private.profession.all');
   app.post('/private/skill/all', 'private.skill.all');
   app.post('/private/works/typeAll', 'private.works.typeAll');

@@ -393,11 +393,10 @@ class Media extends migi.Component {
       loadingFavor = false;
     });
   }
-  clickDownload() {
-    let self = this;
-    if(!$util.isLogin()) {
+  clickDownload(e) {
+    if(!$CONFIG.isLogin) {
+      e.preventDefault();
       migi.eventBus.emit('NEED_LOGIN');
-      return;
     }
   }
   clickShare() {
@@ -485,6 +484,13 @@ class Media extends migi.Component {
         <li onClick={ this.clickFavor }>
           <b class={ 'favor' + (this.isFavor ? ' favored' : '') }/>
           <span>{ this.favorCount || '收藏' }</span>
+        </li>
+        <li>
+          <a href={ this.data && this.data.url || '#' }
+             onClick={ this.clickDownload }>
+            <b class="download"/>
+            <span>下载</span>
+          </a>
         </li>
         <li onClick={ this.clickShare }>
           <b class="share"/>
