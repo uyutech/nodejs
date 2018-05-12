@@ -162,6 +162,8 @@ module.exports = app => {
 
   app.post('/h5/work/addViews', 'h5.work.addViews');
   app.post('/h5/work/report', 'h5.work.report');
+  app.post('/h5/work/updateSize', 'h5.work.updateSize');
+  app.post('/h5/work/updateDuration', 'h5.work.updateDuration');
 
   app.post('/h5/musicAlbum/index', 'h5.musicAlbum.index');
 

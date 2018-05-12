@@ -219,6 +219,7 @@ class Service extends egg.Service {
   /**
    * 获取言论下附带的作品
    * @param id:int 言论id
+   * @param uid:int 用户id
    * @returns Array<Object>
    */
   async work(id, uid) {
@@ -249,6 +250,8 @@ class Service extends egg.Service {
     let videoIdHash = {};
     let audioIdList = [];
     let audioIdHash = {};
+    let imageIdList = [];
+    let imageIdHash = {};
     let worksIdList = [];
     let worksIdHash = {};
     res.forEach((item) => {
@@ -265,15 +268,22 @@ class Service extends egg.Service {
           audioIdList.push(id);
         }
       }
+      else if(item.kind === 3) {
+        if(!imageIdHash[id]) {
+          imageIdHash[id] = true;
+          imageIdList.push(id);
+        }
+      }
       let worksId = item.worksId;
       if(!worksIdHash[worksId]) {
         worksIdHash[worksId] = true;
         worksIdList.push(worksId);
       }
     });
-    let [videoList, audioList, worksList] = await Promise.all([
+    let [videoList, audioList, imageList, worksList] = await Promise.all([
       service.work.infoListPlusFull(videoIdList, 1),
       service.work.infoListPlusFull(audioIdList, 2),
+      service.work.infoListPlusFull(imageIdList, 3),
       service.works.infoListPlusFull(worksIdList, uid)
     ]);
     let hash = {};
@@ -289,6 +299,12 @@ class Service extends egg.Service {
         hash[item.id] = item;
       }
     });
+    imageList.forEach((item) => {
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+        hash[item.id] = item;
+      }
+    });
     worksList.forEach((item) => {
       if(item) {
         item.author = service.works.firstAuthor(item.author);
@@ -299,8 +315,8 @@ class Service extends egg.Service {
       if(item) {
         let works = hash[item.worksId];
         let work = hash[item.workId];
-        if(works && work) {
-          let copy = Object.assign({}, works);
+        if(work) {
+          let copy = Object.assign({}, works || {});
           copy.work = work;
           return copy;
         }
@@ -382,6 +398,8 @@ class Service extends egg.Service {
     let videoIdHash = {};
     let audioIdList = [];
     let audioIdHash = {};
+    let imageIdList = [];
+    let imageIdHash = {};
     let worksIdList = [];
     let worksIdHash = {};
     cache.forEach((arr) => {
@@ -400,6 +418,12 @@ class Service extends egg.Service {
               audioIdList.push(id);
             }
           }
+          else if(item.kind === 3) {
+            if(!imageIdHash[id]) {
+              imageIdHash[id] = true;
+              imageIdList.push(id);
+            }
+          }
           let worksId = item.worksId;
           if(!worksIdHash[worksId]) {
             worksIdHash[worksId] = true;
@@ -408,9 +432,10 @@ class Service extends egg.Service {
         });
       }
     });
-    let [videoList, audioList, worksList] = await Promise.all([
+    let [videoList, audioList, imageList, worksList] = await Promise.all([
       service.work.infoListPlusFull(videoIdList, 1, uid),
       service.work.infoListPlusFull(audioIdList, 2, uid),
+      service.work.infoListPlusFull(imageIdList, 3),
       service.works.infoListPlusFull(worksIdList, uid)
     ]);
     let hash = {};
@@ -421,6 +446,12 @@ class Service extends egg.Service {
       }
     });
     audioList.forEach((item) => {
+      if(item) {
+        item.author = service.works.firstAuthor(item.author);
+        hash[item.id] = item;
+      }
+    });
+    imageList.forEach((item) => {
       if(item) {
         item.author = service.works.firstAuthor(item.author);
         hash[item.id] = item;
@@ -438,8 +469,8 @@ class Service extends egg.Service {
           if(item) {
             let works = hash[item.worksId];
             let work = hash[item.workId];
-            if(works && work) {
-              let copy = Object.assign({}, works);
+            if(work) {
+              let copy = Object.assign({}, works || {});
               copy.work = work;
               return copy;
             }

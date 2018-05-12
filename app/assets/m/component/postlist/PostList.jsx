@@ -212,12 +212,18 @@ class PostList extends migi.Component {
     }
     self.exist[id] = true;
     let len = item.content.length;
-    let html = len > MAX_LEN ? (item.content.slice(0, MAX_LEN) + '...') : item.content;
-    html = this.encode(html, item.refHash, item.tagCircleHash);
-    if(len > MAX_LEN) {
-      html += '<span class="placeholder"></span><span class="more">查看全文</span>';
-      let full = this.encode(item.content, item.refHash, item.tagCircleHash) + '<span class="placeholder"></span><span class="less fn-hide">收起全文</span>';
-      html = `<p class="snap">${html}</p><p class="full fn-hide">${full}</p>`;
+    let html;
+    if(self.props.single) {
+      html = this.encode(item.content, item.refHash, item.tagCircleHash);
+    }
+    else {
+      html = len > MAX_LEN ? (item.content.slice(0, MAX_LEN) + '...') : item.content;
+      html = this.encode(html, item.refHash, item.tagCircleHash);
+      if(len > MAX_LEN) {
+        html += '<span class="placeholder"></span><span class="more">查看全文</span>';
+        let full = this.encode(item.content, item.refHash, item.tagCircleHash) + '<span class="placeholder"></span><span class="less fn-hide">收起全文</span>';
+        html = `<p class="snap">${html}</p><p class="full fn-hide">${full}</p>`;
+      }
     }
     let peopleUrl = item.authorId
       ? '/author.html?id=' + item.authorId
@@ -227,11 +233,16 @@ class PostList extends migi.Component {
     let audioList = [];
     let imageList = [];
     item.work.forEach((item) => {
-      if(item.work.kind === 1) {
-        videoList.push(item);
-      }
-      else if(item.work.kind === 2) {
-        audioList.push(item);
+      if(item) {
+        if(item.work.kind === 1) {
+          videoList.push(item);
+        }
+        else if(item.work.kind === 2) {
+          audioList.push(item);
+        }
+        else if(item.work.kind === 3) {
+          imageList.push(item);
+        }
       }
     });
     item.media.forEach((item) => {
@@ -279,6 +290,34 @@ class PostList extends migi.Component {
       <div class="wrap">
         <div class="con"
              dangerouslySetInnerHTML={ html }/>
+        {
+          imageList.length
+            ? <ul class="image">
+              {
+                imageList.map(function(item, i) {
+                  if(item.work) {
+                    return <li>
+                      <img src={ self.props.single
+                        ? $util.img(item.work.url, 750, 0, 80)
+                        : $util.img(item.work.url, 220, 220, 80)}
+                           i={ i }
+                           w={ item.work.width }
+                           h={ item.work.height }/>
+                    </li>;
+                  }
+                  return <li>
+                    <img src={ self.props.single
+                      ? $util.img(item.url, 750, 0, 80)
+                      : $util.img(item.url, 200, 200, 80)}
+                         i={ i }
+                         w={ item.width }
+                         h={ item.height }/>
+                  </li>;
+                })
+              }
+            </ul>
+            : ''
+        }
         {
           videoList.length
             ? <ul class="video">
@@ -352,24 +391,6 @@ class PostList extends migi.Component {
                          href={ url }>{ item.work.title }</a>
                       <p class="author">{ author.join(' ') }</p>
                     </div>
-                  </li>;
-                })
-              }
-              </ul>
-            : ''
-        }
-        {
-          imageList.length
-            ? <ul class="image">
-              {
-                imageList.map(function(item, i) {
-                  return <li>
-                    <img src={ self.props.single
-                      ? $util.img(item.url, 750, 0, 80)
-                      : $util.img(item.url, 200, 200, 80)}
-                         i={ i }
-                         w={ item.width }
-                         h={ item.height }/>
                   </li>;
                 })
               }
