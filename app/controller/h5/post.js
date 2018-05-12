@@ -1,175 +1,50 @@
 /**
- * Created by army8735 on 2017/12/4.
+ * Created by army8735 on 2018/4/2.
  */
 
 'use strict';
 
 const egg = require('egg');
 
+const LIMIT = 10;
+
 class Controller extends egg.Controller {
-  async index(ctx) {
+  async index() {
+    const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let postID = body.postID;
-    if(!postID) {
+    let id = parseInt(body.id);
+    if(!id) {
       return;
     }
-    let postData = {};
-    let replyData = {};
-
-    let res = await Promise.all([
-      ctx.helper.postServiceJSON2('api/circling/GetPostDetailes', {
-        uid,
-        CommentID: postID,
-      }),
-      ctx.helper.postServiceJSON('api/Users_Comment/GetToPostMessage_List', {
-        uid,
-        PostID: postID,
-        Skip: 0,
-        Take: 30,
-        sortType: 0,
-        currentCount: 0,
-        myComment: 0,
-      })
+    let [info, commentList] = await Promise.all([
+      service.post.info(id, uid),
+      service.post.commentList(id, uid, 0, LIMIT)
     ]);
-    if(res[0]) {
-      postData = res[0];
+    if(!info) {
+      return;
     }
-    if(res[1].data.success) {
-      replyData = res[1].data.data;
-    }
+    commentList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
-      postData,
-      replyData,
+      info,
+      commentList,
     });
   }
-  * like(ctx) {
+
+  async commentList() {
+    const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
-      uid,
-      CommentID: body.postID,
-    });
-    ctx.body = res.data;
-  }
-  * favor(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/circling/AddCollection', {
-      uid,
-      CommentID: body.postID,
-    });
-    ctx.body = res.data;
-  }
-  * unFavor(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveCollection', {
-      uid,
-      CommentID: body.postID,
-    });
-    ctx.body = res.data;
-  }
-  * del(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    ctx.logger.info('postID %s', body.postID);
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
-      uid,
-      CommentID: body.postID,
-    });
-    ctx.body = res.data;
-  }
-  * commentList(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToPostMessage_List', {
-      uid,
-      PostID: body.postID,
-      Skip: body.skip,
-      Take: body.take,
-      SortType: body.sortType,
-      MyComment: body.myComment,
-      CurrentCount: body.currentCount,
-    });
-    ctx.body = res.data;
-  }
-  * addComment(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let content = (body.content || '').trim();
-    if(content.length < 3 || content.length > 2048) {
-      return ctx.body = {
-        success: false,
-      };
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
     }
-    ctx.logger.info('postID %s parentID %s rootID %s', body.postID, body.rootID, body.parentID);
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPostComment', {
-      uid,
-      ParentID: body.parentID,
-      RootID: body.rootID,
-      SendContent: content,
-      PostID: body.postID,
-    });
-    ctx.body = res.data;
-  }
-  * likeComment(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
-      uid,
-      CommentID: body.commentID,
-    });
-    ctx.body = res.data;
-  }
-  * delComment(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    ctx.logger.info('commentID %s', body.commentID);
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
-      uid,
-      CommentID: body.commentID,
-    });
-    ctx.body = res.data;
-  }
-  * subCommentList(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetTocomment_T_List', {
-      uid,
-      RootID: body.rootID,
-      Skip: body.skip,
-      Take: body.take,
-    });
-    ctx.body = res.data;
-  }
-  * recommend(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddRecommend', {
-      uid,
-      CommentID: body.postId,
-      recommend: body.value,
-    });
-    ctx.body = res.data;
-  }
-  * unRecommend(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DecreaseRecommend', {
-      uid,
-      CommentID: body.postId,
-    });
-    ctx.body = res.data;
-  }
-  * clean(ctx) {
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/ClearComment', {
-      uid,
-      CommentID: body.postId,
-    });
-    ctx.body = res.data;
+    let res = await service.post.commentList(id, uid, body.offset || 0, LIMIT);
+    if(!res) {
+      return;
+    }
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

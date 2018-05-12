@@ -1,305 +1,200 @@
 /**
- * Created by army8735 on 2017/12/3.
+ * Created by army8735 on 2018/3/29.
  */
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * index(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let authorID = body.authorID;
-      if(!authorID) {
-        return;
-      }
-      let authorDetail = {};
-      let homeDetail = {};
-      let album = {};
-      let commentData = {};
-      let hotPlayList = {};
-      let hotPicList = {};
-      let res = yield {
-        authorDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorDetails', {
-          uid,
-          AuthorID: authorID,
-        }),
-        homeDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorHomePage', {
-          AuthorID: authorID,
-        }),
-        album: ctx.helper.postServiceJSON2('api/author/GetAuthoralbum_List', {
-          AuthorID: authorID,
-          Skip: 0,
-          Take: 10,
-        }),
-        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
-          uid,
-          AuthorID: authorID,
-          Skip: 0,
-          Take: 30,
-          SortType: 0,
-          MyComment: 0,
-          CurrentCount: 0,
-        }),
-        hotPlayList: ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
-          uid,
-          Skip: 0,
-          Take: 30,
-          AuthorID: authorID,
-        }),
-        hotPicList: ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
-          uid,
-          Skip: 0,
-          Take: 10,
-          AuthorID: authorID,
-        }),
-      };
-      if(res.authorDetail.data.success) {
-        authorDetail = res.authorDetail.data.data;
-      }
-      if(res.homeDetail.data.success) {
-        homeDetail = res.homeDetail.data.data;
-      }
-      if(res.album.data.success) {
-        album = res.album.data.data;
-      }
-      if(res.commentData.data.success) {
-        commentData = res.commentData.data.data;
-      }
-      if(res.hotPlayList.data.success) {
-        hotPlayList = res.hotPlayList.data.data;
-      }
-      if(res.hotPicList.data.success) {
-        hotPicList = res.hotPicList.data.data;
-      }
-      ctx.body = ctx.helper.okJSON({
-        authorDetail,
-        homeDetail,
-        album,
-        commentData,
-        hotPlayList,
-        hotPicList,
-      });
+const egg = require('egg');
+
+const LIMIT = 10;
+const ALL_LIMIT = 40;
+
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
     }
-    * newIndex(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let authorID = body.authorID;
-      if(!authorID) {
-        return;
-      }
-      let authorDetail = {};
-      let homeDetail = {};
-      let album = {};
-      let commentData = {};
-      let dynamic = {};
-      let type = [];
-      let res = yield {
-        authorDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorDetails', {
-          uid,
-          AuthorID: authorID,
-        }),
-        homeDetail: ctx.helper.postServiceJSON2('api/author/GetAuthorHomePage', {
-          AuthorID: authorID,
-        }),
-        album: ctx.helper.postServiceJSON2('api/author/GetAuthoralbum_List', {
-          AuthorID: authorID,
-          Skip: 0,
-          Take: 10,
-        }),
-        commentData: ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
-          uid,
-          AuthorID: authorID,
-          Skip: 0,
-          Take: 30,
-          SortType: 0,
-          MyComment: 0,
-          CurrentCount: 0,
-        }),
-        dynamic: ctx.helper.postServiceJSON2('api/author/GetAuthorDynamic', {
-          uid,
-          Skip: 0,
-          Take: 10,
-          AuthorID: authorID,
-        }),
-        type: ctx.helper.postServiceJSON2('api/author/GetItemsTypeByAuthorID', {
-          uid,
-          AuthorID: authorID,
-        }),
-      };
-      if(res.authorDetail.data.success) {
-        authorDetail = res.authorDetail.data.data;
-      }
-      if(res.homeDetail.data.success) {
-        homeDetail = res.homeDetail.data.data;
-      }
-      if(res.album.data.success) {
-        album = res.album.data.data;
-      }
-      if(res.commentData.data.success) {
-        commentData = res.commentData.data.data;
-      }
-      if(res.dynamic.data.success) {
-        dynamic = res.dynamic.data.data;
-      }
-      if(res.type.data.success) {
-        type = res.type.data.data;
-      }
-      let itemList = {};
-      if(type.length) {
-        let first = type[0];
-        let res = yield ctx.helper.postServiceJSON2('api/author/GetItemsByGroupID', {
-          uid,
-          AuthorID: authorID,
-          GroupID: first.GroupID,
-          skip: 0,
-          take: 10,
-        });
-        if(res.data.success) {
-          itemList = res.data.data;
-        }
-      }
-      ctx.body = ctx.helper.okJSON({
-        authorDetail,
-        homeDetail,
-        album,
-        commentData,
-        dynamic,
-        type,
-        itemList,
-      });
+    let [
+      info,
+      isFollow,
+      aliases,
+      skill,
+      outside,
+      mainWorksList,
+      mainMusicAlbumList,
+      cooperationList,
+      workKindList,
+      dynamicList,
+      commentList
+    ] = await Promise.all([
+      service.author.infoPlusFans(id),
+      service.author.isFollow(id, uid),
+      service.author.aliases(id),
+      service.author.skill(id),
+      service.author.outside(id),
+      service.author.mainWorksList(id, 1, 0, LIMIT),
+      service.author.mainWorksList(id, 2, 0, LIMIT),
+      service.author.cooperationList(id, 0, LIMIT),
+      service.author.workKindList(id),
+      service.author.dynamicList(id, uid, 0, LIMIT),
+      service.author.commentList(id, uid, 0, LIMIT)
+    ]);
+    if(!info) {
+      return;
     }
-    * itemList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/author/GetItemsByGroupID', {
-        uid,
-        AuthorID: body.authorId,
-        GroupID: body.groupId,
-        skip: body.skip || 0,
-        take: body.take || 10,
-        sort: body.sort,
-        ItemsTypeID: body.typeId,
-      });
-      ctx.body = res.data;
+    mainWorksList.limit = LIMIT;
+    let kindWorkList;
+    if(workKindList.length) {
+      kindWorkList = await service.author.kindWorkList(id, uid, workKindList[0].kind, 0, LIMIT);
+      kindWorkList.limit = LIMIT;
     }
-    * dynamic(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let authorId = body.authorId;
-      let res = yield ctx.helper.postServiceJSON2('api/author/GetAuthorDynamic', {
-        uid,
-        AuthorID: authorId,
-        Skip: body.skip || 0,
-        Take: body.take || 10,
-      });
-      ctx.body = res.data;
+    dynamicList.limit = LIMIT;
+    commentList.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON({
+      info,
+      isFollow,
+      aliases,
+      skill,
+      outside,
+      mainWorksList,
+      mainMusicAlbumList,
+      cooperationList,
+      workKindList,
+      kindWorkList,
+      dynamicList,
+      commentList,
+    });
+  }
+
+  async dynamicList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let offset = parseInt(body.offset) || 0;
+    if(!id) {
+      return;
     }
-    * follow(ctx) {
-      let uid = ctx.session.uid;
-      let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.postServiceJSON2('api/author/SaveAuthorToUser', {
-        uid,
-        Author: authorID,
-      });
-      ctx.body = res.data;
+    let res = await service.author.dynamicList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
     }
-    * unFollow(ctx) {
-      let uid = ctx.session.uid;
-      let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.postServiceJSON2('api/author/RemoveAuthorToUser', {
-        uid,
-        Author: authorID,
-      });
-      ctx.body = res.data;
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async commentList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let offset = parseInt(body.offset) || 0;
+    if(!id) {
+      return;
     }
-    * addComment(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let content = (body.content || '').trim();
-      if(content.length < 3 || content.length > 2048) {
-        return ctx.body = {
-          success: false,
-        };
-      }
-      ctx.logger.info('authorID %s parentID %s rootID %s', body.authorID, body.rootID, body.parentID);
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddAuthorComment', {
-        uid,
-        ParentID: body.parentID,
-        RootID: body.rootID,
-        SendContent: content,
-        AuthorID: body.authorID,
-      });
-      ctx.body = res.data;
+    let res = await service.author.commentList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
     }
-    * likeComment(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
-        uid,
-        CommentID: body.commentID,
-      });
-      ctx.body = res.data;
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async kindWorkList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let kind = parseInt(body.kind);
+    let offset = parseInt(body.offset) || 0;
+    if(!id || !kind) {
+      return;
     }
-    * delComment(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      ctx.logger.info('commentID %s', body.commentID);
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
-        uid,
-        CommentID: body.commentID,
-      });
-      ctx.body = res.data;
+    let res = await service.author.kindWorkList(id, uid, kind, offset, LIMIT);
+    if(!res) {
+      return;
     }
-    * subCommentList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetTocomment_T_List', {
-        uid,
-        RootID: body.rootID,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async follow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
     }
-    * commentList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
-        uid,
-        AuthorID: body.authorID,
-        Skip: body.skip,
-        Take: body.take,
-        SortType: body.sortType,
-        MyComment: body.myComment,
-        CurrentCount: body.currentCount,
-      });
-      ctx.body = res.data;
+    let res = await service.author.follow(id, uid, true);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
     }
-    // TODO: delete
-    * maList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
-        uid,
-        AuthorID: body.authorID,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
-    // TODO: delete
-    * picList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
-        uid,
-        AuthorID: body.authorID,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
     }
   }
-  return Controller;
-};
+
+  async unFollow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.author.follow(id, uid, false);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+  }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async all() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let res = await service.author.all(0, ALL_LIMIT);
+    if(!res) {
+      return;
+    }
+    res.limit = ALL_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async report() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let uid = ctx.session.uid;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    await service.author.report(id, uid);
+    ctx.body = ctx.helper.okJSON();
+  }
+
+  async black() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.author.black(id, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+}
+
+module.exports = Controller;

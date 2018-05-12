@@ -1,133 +1,110 @@
 /**
- * Created by army8735 on 2017/12/3.
+ * Created by army8735 on 2018/4/6.
  */
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * index(ctx) {
-      let uid = ctx.session.uid;
-      let hotCircleList = {};
-      let postList = {};
-      let top1 = {};
-      let top2 = {};
-      let res = yield {
-        hotCircleList: ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
-          uid,
-          Skip: 0,
-          Take: 10,
-        }),
-        top1: ctx.helper.postServiceJSON2('api/find/GetPostByRecommend', {
-          Min: 1,
-          Max: 99,
-          uid,
-          Skip: 0,
-          take: 3,
-        }),
-        // top2: ctx.helper.postServiceJSON2('api/find/GetPostByRecommend', {
-        //   Min: 0,
-        //   Max: 3,
-        //   uid,
-        //   Skip: 0,
-        //   take: 1,
-        // }),
-        postList: ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
-          uid,
-          Skip: 0,
-          Take: 10,
-        }),
-      };
-      if(res.hotCircleList.data.success) {
-        hotCircleList = res.hotCircleList.data.data;
-      }
-      if(res.top1.data.success) {
-        top1 = res.top1.data.data;
-      }
-      // if(res.top2.data.success) {
-      //   top2 = res.top2.data.data;
-      // }
-      if(res.postList.data.success) {
-        postList = res.postList.data.data;
-      }
-      let bannerList = [{
-        url: '/post.html?postID=430048',
-        title: '今时古梦',
-        cover: '//zhuanquan.xyz/temp/a88c2f9f35fc8b77fd93a5d3745dfe34.jpg-750__80',
-      }, {
-        url: '/post.html?postID=426586',
-        title: '圈访谈',
-        cover: '//zhuanquan.xyz/temp/d0cbdfb5b30a949ca97081ebf6e2490f.jpg-750__80',
-      }];
-      ctx.body = ctx.helper.okJSON({
-        bannerList,
-        hotCircleList,
-        postList,
-        circleTake: 10,
-        take: 10,
-        top1,
-        top2,
-      });
+const egg = require('egg');
+const Sequelize = require('sequelize');
+const squel = require('squel');
+
+const LIMIT = 10;
+
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx, app, service } = this;
+    let uid = ctx.session.uid;
+    let [bannerList, recommendComment, circleList, postList] = await Promise.all([
+      app.redis.get('banner'),
+      service.circling.recommendComment(0, 100),
+      service.circle.all(0, LIMIT),
+      service.post.all(uid, 0, LIMIT)
+    ]);
+    if(bannerList) {
+      bannerList = JSON.parse(bannerList);
     }
-    * circleList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let skip = body.skip || 0;
-      let take = body.take || 10;
-      let res = yield ctx.helper.postServiceJSON2('api/find/GetCirclingInfo', {
-        uid,
-        Skip: skip,
-        Take: take,
+    else {
+      bannerList = await app.model.banner.findAll({
+        attributes: [
+          'title',
+          'url',
+          ['target_id', 'targetId'],
+          'type'
+        ],
+        where: {
+          position: 1,
+          is_delete: false,
+        },
+        order: [
+          ['weight', 'DESC']
+        ],
+        raw: true,
       });
-      ctx.body = res.data;
+      app.redis.setex('banner', app.config.redis.longTime, JSON.stringify(bannerList));
     }
-    * postList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let circleId = body.circleId;
-      let postList = {};
-      let skip = body.skip;
-      let take = body.take;
-      let top1 = {};
-      if(skip === '0') {
-        let res = yield {
-          top1: ctx.helper.postServiceJSON2('api/find/GetPostByRecommend', {
-            Min: 1,
-            Max: 99,
-            uid,
-            Skip: 0,
-            take: 3,
-          }),
-          postList: ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
-            uid,
-            Skip: skip,
-            Take: take,
-            CirclingID: circleId,
-          }),
-        };
-        if(!circleId && res.top1.data.success) {
-          top1 = res.top1.data.data;
-        }
-        if(res.postList.data.success) {
-          postList = res.postList.data.data;
-        }
-      }
-      else {
-        let res = yield ctx.helper.postServiceJSON2('api/find/GetPostByCirclingIDS', {
-          uid,
-          Skip: skip,
-          Take: take,
-          CirclingID: circleId,
-        });
-        if(res.data.success) {
-          postList = res.data.data;
-        }
-      }
-      ctx.body = ctx.helper.okJSON({
-        postList,
-        top1,
-      });
+    if(circleList) {
+      circleList.limit = LIMIT;
     }
+    postList.limit = LIMIT;
+    let list = [];
+    for(let i = 0; i < 3; i++) {
+      if(recommendComment.length) {
+        let rand = Math.floor(Math.random() * recommendComment.length);
+        list.push(recommendComment.splice(rand, 1)[0]);
+      }
+    }
+    list = await service.comment.plusListFull(list, uid);
+    ctx.body = ctx.helper.okJSON({
+      bannerList,
+      recommendComment: list,
+      circleList,
+      postList,
+    });
   }
-  return Controller;
-};
+
+  async circleList() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.circle.all(offset, LIMIT);
+    if(!res) {
+      return;
+    }
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async postList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let circleId = (body.circleId || '').split(',');
+    let offset = parseInt(body.offset) || 0;
+    let res;
+    if(circleId.length && circleId[0]) {
+      let query = await Promise.all(
+        circleId.map((id) => {
+          return service.circle.postList(id, uid, offset, LIMIT);
+        })
+      );
+      res = {
+        data: [],
+        count: 0,
+      };
+      query.forEach((item) => {
+        res.data = res.data.concat(item.data);
+        res.count += item.count;
+      });
+    }
+    else {
+      res = await service.post.all(uid, offset, LIMIT);
+    }
+    if(!res) {
+      return;
+    }
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+}
+
+module.exports = Controller;

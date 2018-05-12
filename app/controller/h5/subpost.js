@@ -1,12 +1,13 @@
 /**
- * Created by army8735 on 2017/12/3.
+ * Created by army8735 on 2018/4/8.
  */
 
 'use strict';
 
-let tags = require('../../tags');
+const egg = require('egg');
 
-let hash = {
+const LIMIT = 10;
+const HASH = {
   '1': '一',
   '2': '二',
   '3': '三',
@@ -16,493 +17,203 @@ let hash = {
   '0': '天'
 };
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * index(ctx) {
-      let activityLabel = [
-        {
-          TagName: '古风歌词注',
-          value: '#古风歌词注#',
-        },
-        {
-          TagName: '今时古梦',
-          value: '#今时古梦#',
-        },
-        {
-          TagName: '圈访谈',
-          value: '#圈访谈#',
-        },
-        {
-          TagName: '异志杂谈',
-          value: '#异志杂谈#',
-        },
-        {
-          TagName: '日记',
-          value: '#日记# ' + (new Date().getMonth() + 1) + '月' + new Date().getDate() + '日 星期' + hash[new Date().getDay()] + '\n',
-        },
-        {
-          TagName: '陪转圈一起长大',
-        }
-      ];
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let circleID = body.circleID;
-      let circleDetail = {};
-      let myCircleList = [];
-      let tagList = [];
-      let res = yield {
-        circleDetail: circleID ? ctx.helper.postServiceJSON2('api/circling/GetCirclingDetails', {
-          uid,
-          circlingID: circleID,
-        }) : null,
-        myCircleList: ctx.helper.postServiceJSON2('api/Circling/GetAddPostCircling', {
-          uid,
-          Skip: 0,
-          Take: 20,
-        }),
-        tagList: circleID ? ctx.helper.postServiceJSON2('api/circling/GetActivityTag', {
-          uid,
-          CirclingIDList: circleID,
-        }) : null,
-      };
-      if(res.circleDetail && res.circleDetail.data.success) {
-        circleDetail = res.circleDetail.data.data;
-      }
-      if(res.myCircleList.data.success) {
-        myCircleList = res.myCircleList.data.data.data;
-      }
-      if(res.tagList && res.tagList.data.success) {
-        tagList = res.tagList.data.data;
-      }
-      ctx.body = ctx.helper.okJSON({
-        activityLabel,
-        circleDetail,
-        myCircleList,
-        tagList,
-        isPublic: ctx.session.isPublic,
-        authorId: ctx.session.authorID,
-        authorName: ctx.session.authorName,
-        authorHead: ctx.session.authorHead,
-        uname: ctx.session.uname,
-        head: ctx.session.head,
-      });
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let uid = ctx.session.uid;
+    let circleId = parseInt(body.circleId);
+    let query = [];
+    if(uid) {
+      query.push(service.user.circleList(uid, 0, LIMIT));
     }
-    * tag(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let circleID = body.circleID;
-      if(!circleID) {
-        return;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/circling/GetActivityTag', {
-        uid,
-        CirclingIDList: circleID,
-      });
-      ctx.body = res.data;
+    else {
+      query.push(service.circle.all(0, LIMIT));
     }
-    * moreTag(ctx) {
-      ctx.body = ctx.helper.okJSON({
-        tags,
-      });
+    if(circleId) {
+      query.push(service.circle.info(circleId));
     }
-    * list(ctx) {
-      let activityLabel = {
-        '0': [
-          {
-            name: '日记',
-            value: '#日记# ' + (new Date().getMonth() + 1) + '月' + new Date().getDate() + '日 星期' + hash[new Date().getDay()] + '\n'
-          },
-          {
-            name: '岁慕天寒',
-            value: '#岁慕天寒#'
-          },
-          {
-            value: '陪转圈一起长大',
-            name: '#陪转圈一起长大#',
-          }
-        ],
-        '2019000000000037': [
-          {
-            name: '印象深刻的动漫',
-            value: '#印象深刻的动漫#'
-          },
-          {
-            name: '最爱的动漫人物',
-            value: '#最爱的动漫人物#'
-          }
-        ],
-        '2019000000000007': [
-          {
-            name: '我喜欢的CV',
-            value: '#我喜欢的CV#'
-          },
-          {
-            name: '最想被念出来的书',
-            value: '#最想被念出来的书#'
-          }
-        ],
-        '2019000000000041': [
-          {
-            name: '正在玩的游戏',
-            value: '#正在玩的游戏#'
-          },
-          {
-            name: '沉迷过的游戏',
-            value: '#沉迷过的游戏#'
-          },
-          {
-            name: '记忆中的第一款游戏',
-            value: '#记忆中的第一款游戏#'
-          }
+    let [circleList, circle] = await Promise.all(query);
+    let idList = [];
+    circleList.data.forEach((item) => {
+      delete item.describe;
+      delete item.banner;
+      delete item.cover;
+      delete item.type;
+      delete item.typeName;
+      idList.push(item.id);
+    });
+    if(circle) {
+      idList.push(circle.id);
+    }
+    let tagList = await service.circle.tagList(idList, 2);
+    circleList.limit = LIMIT;
+    circleList.data.forEach((item, i) => {
+      item.tag = tagList[i];
+    });
+    if(circle) {
+      delete circle.describe;
+      delete circle.banner;
+      delete circle.cover;
+      delete circle.type;
+      delete circle.typeName;
+      circle.tag = tagList[tagList.length - 1];
+    }
 
-        ],
-        '2019000000000032': [
-          {
-            name: '每日练字打卡',
-            value: [
-              {
-                key: 'Day 1',
-                value:'#每日练字打卡# #31天画圈挑战# Day1 #我在转圈上听的第一首歌#'
-              },
-              {
-                key: 'Day 2',
-                value: '#每日练字打卡# #31天画圈挑战# Day2 #你的名字#'
-              },
-              {
-                key: 'Day 3',
-                value: '#每日练字打卡# #31天画圈挑战# Day3 #手写诗词歌赋飞花令# 主题：#花#'
-              },
-              {
-                key: 'Day 4',
-                value: '#每日练字打卡# #31天画圈挑战#  Day4  #我喜爱的CV#'
-              },
-              {
-                key: 'Day 5',
-                value: '#每日练字打卡# #31天画圈挑战#  Day5  #国漫崛起#'
-              },
-              {
-                key: 'Day 6',
-                value: '#每日练字打卡# #31天画圈挑战#  Day6  #网文推荐#'
-              },
-              {
-                key: 'Day 7',
-                value: '#每日练字打卡# #31天画圈挑战#  Day7  #手抄古风歌词飞花令# 主题：#雪#'
-              },
-              {
-                key: 'Day 8',
-                value: '#每日练字打卡# #31天画圈挑战#  Day8  #手写诗词歌赋飞花令# 主题：#茶#'
-              },
-              {
-                key: 'Day 9',
-                value: '#每日练字打卡# #31天画圈挑战#  Day9  #手抄古风歌词飞花令# 主题：#酒#'
-              },
-              {
-                key: 'Day 10',
-                value: '#每日练字打卡# #31天画圈挑战#  Day10  #难忘的漫展#'
-              },
-              {
-                key: 'Day 11',
-                value: '#每日练字打卡# #31天画圈挑战#  Day11  #我的家乡#'
-              },
-              {
-                key: 'Day 12',
-                value: '#每日练字打卡# #31天画圈挑战# Day 12 #我喜爱的二次元商品# #买买买#'
-              },
-              {
-                key: 'Day 13',
-                value: '#每日练字打卡# #31天画圈挑战# Day 13 #爱我中华# #手写诗词歌赋#'
-              },
-              {
-                key: 'Day 14',
-                value: '#每日练字打卡# #31天画圈挑战# Day 14 #我喜欢的古装影视剧#'
-              },
-              {
-                key: 'Day 15',
-                value: '#每日练字打卡# #31天画圈挑战# Day 15 #我喜欢的书法碑帖#'
-              },
-              {
-                key: 'Day 16',
-                value: '#每日练字打卡# #31天画圈挑战# Day 16 #我喜欢的一篇古文#'
-              },
-              {
-                key: 'Day 17',
-                value: '#每日练字打卡# #31天画圈挑战# Day 17 #我的博物馆书画展之旅#'
-              },
-              {
-                key: 'Day 18',
-                value: '#每日练字打卡# #31天画圈挑战# Day 18 #手写诗词歌赋飞花令# #寒#'
-              },
-              {
-                key: 'Day 19',
-                value: '#每日练字打卡# #31天画圈挑战# Day 19 #我喜欢的纪录片#'
-              },
-              {
-                key: 'Day 20',
-                value: '#每日练字打卡# #31天画圈挑战# Day 20 #那些美哭我的戏腔#'
-              },
-              {
-                key: 'Day 21',
-                value: '#每日练字打卡# #31天画圈挑战# Day 21 #中医与中草药# #手写诗词歌赋#'
-              },
-              {
-                key: 'Day 22',
-                value: '#每日练字打卡# #31天画圈挑战# Day 22 #冬至# #手抄诗词歌赋#'
-              },
-              {
-                key: 'Day 23',
-                value: '#每日练字打卡# #31天画圈挑战# Day 23 #禁忌之恋#'
-              },
-              {
-                key: 'Day 24',
-                value: '#每日练字打卡# #31天画圈挑战# Day 24 #那些年渣过的游戏#'
-              },
-              {
-                key: 'Day 25',
-                value: '#每日练字打卡# #31天画圈挑战# Day 25 #千古情诗#'
-              },
-              {
-                key: 'Day 26',
-                value: '#每日练字打卡# #31天画圈挑战# Day 26 #武侠世界#'
-              },
-              {
-                key: 'Day 27',
-                value: '#每日练字打卡# #31天画圈挑战# Day 27 #风流人物# #手抄诗词歌赋#'
-              },
-              {
-                key: 'Day 28',
-                value: '#每日练字打卡# #31天画圈挑战# Day 28 #中国古典文学名著# #印象深刻的书#'
-              },
-              {
-                key: 'Day 29',
-                value: '#每日练字打卡# #31天画圈挑战# Day 29 #中国古典文学名著# #佛教典籍#'
-              },
-              {
-                key: 'Day 30',
-                value: '#每日练字打卡# #31天画圈挑战# Day 30 #我的2017# #年终总结#'
-              },
-              {
-                key: 'Day 31',
-                value: '#每日练字打卡# #31天画圈挑战# Day 31 #展望2018# #来年计划#'
-              }
-            ]
-          },
-          {
-            name: '个人书法展',
-            value: '#个人书法展#',
-          }
-        ],
-        '2019000000000072': [
-          {
-            name: '汉服种草活动',
-            value: '#汉服种草活动#'
-          },
-          {
-            name: '传统文化之美',
-            value: '#传统文化之美#'
-          }
-        ],
-        '2019000000000001': [
-          {
-            name: '每日荐歌',
-            value: [
-              {
-                key: 'Day 1',
-                value: '#每日荐歌# #31天画圈挑战# Day1 #一首让我入坑的歌#'
-              },
-              {
-                key: 'Day 2',
-                value: '#31天画圈挑战# #每日荐歌# Day2 #一首让你少女心爆棚甜到掉牙的歌#'
-              },
-              {
-                key: 'Day 3',
-                value: '#每日荐歌# #31天画圈挑战# Day3 #那首歌曾戳中我的泪点#'
-              },
-              {
-                key: 'Day 4',
-                value: '#每日荐歌# #31天画圈挑战# Day4 #我喜欢的CV#唱的歌'
-              },
-              {
-                key: 'Day 5',
-                value: '#每日荐歌# #31天画圈挑战# Day5 #那首歌真的超逗的#'
-              },
-              {
-                key: 'Day 6',
-                value: '#每日荐歌# #31天画圈挑战# Day6 #播放列表No.3#'
-              },
-              {
-                key: 'Day 7',
-                value: '#每日荐歌# #31天画圈挑战# Day7 #一首带雪字的歌#'
-              },
-              {
-                key: 'Day 8',
-                value: '#每日荐歌# #31天画圈挑战# Day8 #那首歌带我到想去的地方#'
-              },
-              {
-                key: 'Day 9',
-                value: '#每日荐歌# #31天画圈挑战# Day9 #我想去听TA的演唱会#'
-              },
-              {
-                key: 'Day 10',
-                value: '#每日荐歌# #31天画圈挑战# Day10 #那首歌叫我起床#'
-              },
-              {
-                key: 'Day 11',
-                value: '#每日荐歌# #31天画圈挑战# Day11 #教练我想学那件乐器！#'
-              },
-              {
-                key: 'Day 12',
-                value: '#每日荐歌# #31天画圈挑战# Day12 #那些让我惊叹的超高音#'
-              },
-              {
-                key: 'Day 13',
-                value: '#每日荐歌# #31天画圈挑战# Day13 #一首带给我正能量的歌#'
-              },
-              {
-                key: 'Day 14',
-                value: '#每日荐歌# #31天画圈挑战# Day14 #如耳语般苏到迷幻的低音#'
-              },
-              {
-                key: 'Day 15',
-                value: '#每日荐歌# #31天画圈挑战# Day15 #我想学习的那项技能#'
-              },
-              {
-                key: 'Day 16',
-                value: '#每日荐歌# #31天画圈挑战# Day16 #如果去KTV，我想和TA一起唱#'
-              },
-              {
-                key: 'Day 17',
-                value: '#每日荐歌# #31天画圈挑战# Day17 #秒点红心的歌#'
-              },
-              {
-                key: 'Day 18',
-                value: '#每日荐歌# #31天画圈挑战# Day18 #最喜欢的影视剧主题曲#'
-              },
-              {
-                key: 'Day 19',
-                value: '#每日荐歌# #31天画圈挑战# Day19 #想在自己婚礼上播放的歌#'
-              },
-              {
-                key: 'Day 20',
-                value: '#每日荐歌# #31天画圈挑战# Day20 #一首歌猜出你的家乡#'
-              },
-              {
-                key: 'Day 21',
-                value: '#每日荐歌# #31天画圈挑战# Day21 #一首适合冬天的歌#'
-              },
-              {
-                key: 'Day 22',
-                value: '#每日荐歌# #31天画圈挑战# Day22 #最喜欢的合唱曲目#'
-              },
-              {
-                key: 'Day 23',
-                value: '#每日荐歌# #31天画圈挑战# Day23 #适合运动时听的音乐#'
-              },
-              {
-                key: 'Day 24',
-                value: '#每日荐歌# #31天画圈挑战# Day24 #伤心时候治愈我心灵的歌#'
-              },
-              {
-                key: 'Day 25',
-                value: '#每日荐歌# #31天画圈挑战# Day25 #圣诞节听什么歌?#'
-              },
-              {
-                key: 'Day 26',
-                value: '#每日荐歌# #31天画圈挑战# Day26 #写作业时喜欢听什么歌？?#'
-              },
-              {
-                key: 'Day 27',
-                value: '#每日荐歌# #31天画圈挑战# Day27 #一首歌描述你最喜欢的人#'
-              },
-              {
-                key: 'Day 28',
-                value: '#每日荐歌# #31天画圈挑战# Day28 #一首歌勾起我的回忆#'
-              },
-              {
-                key: 'Day 29',
-                value: '#每日荐歌# #31天画圈挑战# Day29 #一首节奏感超棒的歌#'
-              },
-              {
-                key: 'Day 30',
-                value: '#每日荐歌# #31天画圈挑战# Day30 #一首让我毛骨悚然的歌#'
-              },
-              {
-                key: 'Day 31',
-                value: '#每日荐歌# #31天画圈挑战# Day31 #许一个新年愿望吧#'
-              }
-            ]
-          },
-          {
-            name: '记忆里的歌',
-            value: '#记忆里的歌#'
-          },
-          {
-            name: '那些年追过的歌手',
-            value: '#那些年追过的歌手#'
-          }
-        ],
-        '2019000000000020': [
-          {
-            name: '印象深刻的书',
-            value: '#印象深刻的书#'
-          },
-          {
-            name: '喜爱的诗词作者',
-            value: '#喜爱的诗词作者#'
-          }
-        ],
-        '2019000000000015': [
-          {
-            name: '手机摄影大赛',
-            value: '#手机摄影大赛#'
-          },
-          {
-            name: '每日美食打卡',
-            value: '#每日美食打卡#'
-          },
-          {
-            name: '每周最美味推荐',
-            value: '#每周最美味推荐#'
-          }
-        ],
-        '2019000000000171': [
-          {
-            name: '异世同人图',
-            value: '#异世同人图#'
-          },
-          {
-            name: '异世同人文',
-            value: '#异世同人文#'
-          }
-        ]
-      };
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let circleID = body.circleID;
-      let circleDetail = {};
-      let myCircleList = [];
-      let res = yield {
-        circleDetail: circleID ? ctx.helper.postServiceJSON2('api/circling/GetCirclingDetails', {
-          uid,
-          circlingID: circleID,
-        }) : null,
-        myCircleList: ctx.helper.postServiceJSON2('api/Circling/GetAddPostCircling', {
-          uid,
-          Skip: 0,
-          Take: 10,
-        }),
-      };
-      if(res.circleDetail && res.circleDetail.data.success) {
-        circleDetail = res.circleDetail.data.data;
+    const activity = [
+      {
+        name: '古风歌词注',
+      },
+      {
+        name: '今时古梦',
+      },
+      {
+        name: '圈访谈',
+      },
+      {
+        name: '异志杂谈',
+      },
+      {
+        name: '日记',
+        value: '#日记# ' + (new Date().getMonth() + 1) + '月' + new Date().getDate() + '日 星期' + HASH[new Date().getDay()] + '\n',
+      },
+      {
+        name: '陪转圈一起长大',
       }
-      if(res.myCircleList.data.success) {
-        myCircleList = res.myCircleList.data.data.data;
-      }
-      ctx.body = ctx.helper.okJSON({
-        activityLabel,
-        circleDetail,
-        myCircleList,
+    ];
+    ctx.body = ctx.helper.okJSON({
+      circleList,
+      circle,
+      activity,
+    });
+  }
+
+  async circleList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = body.offset || 0;
+    offset = parseInt(offset) || 0;
+    let circleList = await service.user.circleList(uid, offset, LIMIT);
+    let idList = [];
+    circleList.data.forEach((item) => {
+      delete item.describe;
+      delete item.banner;
+      delete item.cover;
+      delete item.type;
+      delete item.typeName;
+      idList.push(item.id);
+    });
+    let tagList = await service.circle.tagList(idList, 2);
+    circleList.limit = LIMIT;
+    circleList.data.forEach((item, i) => {
+      item.tag = tagList[i];
+    });
+    ctx.body = ctx.helper.okJSON(circleList);
+  }
+
+  async sub() {
+    const { ctx, app, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let content = body.content;
+    let image = body.image;
+    let circleId = body.circleId;
+    let worksId = parseInt(body.worksId);
+    let workId = parseInt(body.workId);
+    if(!content || content.length < 3) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '字数不能少于3个字哦~',
       });
+    }
+    if(content.length > 4096) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '字数不能多于4096个字哦~',
+      });
+    }
+    if(!circleId) {
+      circleId = '2019000000000000';
+    }
+    circleId = circleId.split(',');
+    circleId = circleId.map((item) => {
+      return parseInt(item);
+    }).filter((item) => {
+      return item;
+    });
+    if(!circleId.length || circleId.length > 3) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '最多只能选择3个圈子哦~',
+      });
+    }
+    if(image) {
+      image = JSON.parse(image);
+    }
+    let match = content.match(/#([^#\n\s]+?)#/g);
+    let tagNameList = [];
+    let tagNameHash = {};
+    if(match && match.length) {
+      match.forEach((item) => {
+        if(!tagNameHash[item]) {
+          tagNameHash[item] = true;
+          tagNameList.push(item.slice(1, -1));
+        }
+      });
+    }
+    // 获取选择的圈子直接对应的话题id列表，以及手写话题的id列表
+    let [tagList, inputTagIdList, check] = await Promise.all([
+      service.circle.tagIdList(circleId, 1),
+      service.tag.idListByName(tagNameList, true),
+      service.works.checkWork(worksId, workId)
+    ]);
+    let chooseTagIdList = [];
+    let chooseTagHash = {};
+    let tagIdList = [];
+    let tagIdHash = {};
+    tagList.map((item) => {
+      if(item) {
+        item.forEach(function(id) {
+          if(!chooseTagHash[id]) {
+            chooseTagHash[id] = true;
+            chooseTagIdList.push(id);
+          }
+          if(!tagIdHash[id]) {
+            tagIdHash[id] = true;
+            tagIdList.push(id);
+          }
+        });
+      }
+    });
+    inputTagIdList.map((id) => {
+      if(!tagIdHash[id]) {
+        tagIdHash[id] = true;
+        tagIdList.push(id);
+      }
+    });
+    let [circleIdList, res] = await Promise.all([
+      service.tag.circleIdList(tagIdList),
+      service.post.add(uid, {
+        content,
+        chooseTagIdList,
+        inputTagIdList,
+        image,
+        authorId: body.authorId,
+        worksId: check? worksId: null,
+        workId: check? workId: null,
+      })
+    ]);
+    circleIdList.forEach((arr, i) => {
+      arr.forEach((id) => {
+        app.model.circleCommentRelation.create({
+          circle_id: id,
+          comment_id: res.id,
+          tag_id: tagIdList[i],
+        })
+      });
+    });
+    if(res) {
+      ctx.body = ctx.helper.okJSON(res);
     }
   }
-  return Controller;
-};
+}
+
+module.exports = Controller;

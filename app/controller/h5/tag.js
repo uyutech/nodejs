@@ -1,22 +1,54 @@
 /**
- * Created by army8735 on 2017/12/24.
+ * Created by army8735 on 2018/4/10.
  */
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * list(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/Circling/GetTagPostList', {
-        uid,
-        TagName: body.tag,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
+const egg = require('egg');
+
+const LIMIT = 10;
+
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let tag = body.tag;
+    if(!tag) {
+      return;
     }
+    let id = await service.tag.idByName(tag.trim());
+    if(!id) {
+      return;
+    }
+    let postList = await service.tag.postList(id, uid, 0, LIMIT);
+    if(!postList) {
+      return;
+    }
+    postList.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON({
+      id,
+      postList,
+    });
   }
-  return Controller;
-};
+
+  async postList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let tag = body.tag;
+    if(!tag) {
+      return;
+    }
+    let offset = parseInt(body.offset) || 0;
+    let tagId = await service.tag.idByName(tag.trim());
+    let res = await service.tag.postList(tagId, uid, offset, LIMIT);
+    if(!res) {
+      return;
+    }
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+}
+
+module.exports = Controller;

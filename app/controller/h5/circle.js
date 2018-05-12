@@ -1,147 +1,136 @@
 /**
- * Created by army8735 on 2017/12/3.
+ * Created by army8735 on 2018/4/2.
  */
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * index(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let circleID = body.circleID;
-      if(!circleID) {
-        return;
-      }
-      let circleDetail = {};
-      let postList = {};
-      let res = yield {
-        circleDetail: ctx.helper.postServiceJSON2('api/circling/GetCirclingDetails', {
-          uid,
-          circlingID: circleID,
-        }),
-        postList: ctx.helper.postServiceJSON2('api/circling/GetPostList', {
-          uid,
-          circlingID: circleID,
-          Skip: 0,
-          Take: 10,
-        }),
-      };
-      if(res.circleDetail.data.success) {
-        circleDetail = res.circleDetail.data.data;
-      }
-      if(res.postList.data.success) {
-        postList = res.postList.data.data;
-      }
-      ctx.body = ctx.helper.okJSON({
-        circleDetail,
-        postList,
-      });
+const egg = require('egg');
+
+const LIMIT = 10;
+const ALL_LIMIT = 30;
+
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
     }
-    * postList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let circleID = body.circleID;
-      let skip = body.skip;
-      let take = body.take;
-      let res = yield ctx.helper.postServiceJSON2('api/circling/GetPostList', {
-        uid,
-        circlingID: circleID,
-        Skip: skip,
-        Take: take,
-      });
-      ctx.body = res.data;
+    let [info, isFollow, fansCount, top, postList] = await Promise.all([
+      service.circle.info(id),
+      service.circle.isFollow(id, uid),
+      service.circle.fansCount(id),
+      service.circle.top(id, uid),
+      service.circle.postList(id, uid, 0, LIMIT)
+    ]);
+    if(!info) {
+      return;
     }
-    * join(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let circleID = body.circleID;
-      let state = body.state;
-      if(state === 'true') {
-        let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveUserFollowCircling', {
-          uid,
-          circlingID: circleID,
-        });
-        ctx.body = res.data;
-      }
-      else {
-        let res = yield ctx.helper.postServiceJSON2('api/circling/SaveUserFollowCircling', {
-          uid,
-          circlingID: circleID,
-        });
-        ctx.body = res.data;
-      }
+    postList.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON({
+      info,
+      isFollow,
+      fansCount,
+      top,
+      postList,
+    });
+  }
+
+  async postList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
     }
-    * post(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let circleID = body.circleID || '2019000000000000';
-      let ids = circleID.split(',');
-      if(ids.length > 3) {
-        return ctx.body = {
-          success: false,
-          message: '最多只能选择3个圈子哦~',
-        };
-      }
-      let content = (body.content || '').trim();
-      let imgs = body.imgs;
-      let widths = body.widths;
-      let heights = body.heights;
-      let workId = body.workId;
-      if(!Array.isArray(widths)) {
-        widths = [];
-      }
-      if(!Array.isArray(heights)) {
-        heights = [];
-      }
-      if(content.length < 3 || content.length > 4096) {
-        return {
-          success: false,
-        };
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPost', {
-        uid,
-        CirclingIDList: circleID,
-        SendContent: content,
-        RootID: -3,
-        ImageList: imgs
-          ? JSON.stringify(imgs.map(function(item, i) {
-            return {
-              FileUrl: item,
-              Width: widths[i] || 0,
-              Height: heights[i] || 0,
-            }
-          }).slice(0, 10))
-          : '',
-        ItemsID: workId,
-      });
-      let data = res.data;
-      ctx.body = data;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.circle.postList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
     }
-    * shield(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      if(!body.circleID) {
-        return;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/circling/AddShieldCircling', {
-        uid,
-        CirclingID: body.circleID,
-      });
-      ctx.body = res.data;
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async all() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.circle.all(offset, ALL_LIMIT);
+    if(!res) {
+      return;
     }
-    * unShield(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      if(!body.circleID) {
-        return;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/circling/RemoveShieldCircling', {
-        uid,
-        CirclingID: body.circleID,
-      });
-      ctx.body = res.data;
+    res.limit = ALL_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async popularList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.circle.popularList(offset, ALL_LIMIT);
+    if(!res) {
+      return;
+    }
+    res.limit = ALL_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async follow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.circle.follow(id, uid, true);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
     }
   }
-  return Controller;
-};
+
+  async unFollow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.circle.follow(id, uid, false);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async block() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.circle.block(id, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+}
+
+module.exports = Controller;

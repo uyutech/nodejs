@@ -1,113 +1,130 @@
 /**
- * Created by army8735 on 2017/12/4.
+ * Created by army8735 on 2018/4/3.
  */
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * index(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let userID = body.userID;
-      if(!userID) {
-        return;
-      }
-      let userInfo = {};
-      let userPost = {};
-      let followState = uid ? 0 : 2;
-      let res = yield {
-        userInfo: ctx.helper.postServiceJSON2('api/users/GetUserInfo', {
-          uid: userID,
-        }),
-        userPost: ctx.helper.postServiceJSON2('api/users/User_Post_List', {
-          uid: userID,
-          currentUid: uid,
-          Skip: 0,
-          Take: 10,
-        }),
-        followState: ctx.helper.postServiceJSON2('api/users/User_FollowState', {
-          uid,
-          toUid: userID,
-        }),
-      };
-      if(res.userInfo.data.success) {
-        userInfo = res.userInfo.data.data;
-      }
-      if(res.userPost.data.success) {
-        userPost = res.userPost.data.data;
-      }
-      if(uid && uid.toString() !== userID && res.followState.data.success) {
-        followState = res.followState.data.data.FollowState;
-      }
-      ctx.body = ctx.helper.okJSON({
-        userInfo,
-        userPost,
-        followState,
-      });
+const egg = require('egg');
+
+const LIMIT = 10;
+
+class Controller extends egg.Controller {
+  async index() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
     }
-    * postList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      if(!body.userID) {
-        return;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/users/User_Post_List', {
-        uid: body.userID,
-        Skip: body.skip,
-        Take: body.take,
-        currentuid: uid,
-      });
-      ctx.body = res.data;
+    let [info, followPersonCount, fansCount, isFollow, isFans, postList] = await Promise.all([
+      service.user.info(id),
+      service.user.followPersonCount(id),
+      service.user.fansCount(id),
+      service.user.isFollow(id, uid),
+      service.user.isFans(id, uid),
+      service.user.postList(id, uid, 0, LIMIT)
+    ]);
+    if(!info) {
+      return;
     }
-    * follow(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      if(!body.userID) {
-        return;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/users/AddFollowUser', {
-        uid,
-        toUid: body.userID,
-      });
-      ctx.body = res.data;
+    delete info.coins;
+    postList.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON({
+      info,
+      followPersonCount,
+      fansCount,
+      isFollow,
+      isFans,
+      postList,
+    });
+  }
+
+  async postList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
     }
-    * unFollow(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      if(!body.userID) {
-        return;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/users/RemoveFollowUser', {
-        uid,
-        toUid: body.userID,
-      });
-      ctx.body = res.data;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.postList(id, uid, offset, LIMIT);
+    if(!res) {
+      return;
     }
-    * shield(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      if(!body.userId) {
-        return;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/users/AddShieldUser', {
-        uid,
-        toUid: body.userId,
-      });
-      ctx.body = res.data;
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async follow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
     }
-    * unShield(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      if(!body.userId) {
-        return;
-      }
-      let res = yield ctx.helper.postServiceJSON2('api/users/RemoShieldUser', {
-        uid,
-        toUid: body.userId,
-      });
-      ctx.body = res.data;
+    if(uid === id) {
+      ctx.body = ctx.helper.errorJSON('不能关注自己');
+    }
+    let res = await service.user.follow(id, uid, true);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
     }
   }
-  return Controller;
-};
+
+  async unFollow() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    if(uid === id) {
+      ctx.body = ctx.helper.errorJSON('不能关注自己');
+    }
+    let res = await service.user.follow(id, uid, false);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async report() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let uid = ctx.session.uid;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    await service.user.report(id, uid);
+    ctx.body = ctx.helper.okJSON();
+  }
+
+  async black() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.user.black(id, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+}
+
+module.exports = Controller;

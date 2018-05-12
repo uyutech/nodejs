@@ -1,74 +1,215 @@
 /**
- * Created by army8735 on 2017/12/5.
+ * Created by army8735 on 2018/4/7.
  */
 
 'use strict';
 
-const TYPE = {
-  POST: '1',
-  AUTHOR: '2',
-  WORKS: '3',
-};
+const egg = require('egg');
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * sub(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let id = body.id;
-      let type = body.type;
-      if(!id || !type) {
-        return ctx.body = {
-          success: false,
-        };
-      }
-      let content = (body.content || '').trim();
-      if(content.length < 3 || content.length > 2048) {
-        return ctx.body = {
-          success: false,
-        };
-      }
-      let cid = body.cid || -1;
-      let rid = body.rid || -1;
-      let res;
-      switch(type) {
-        case TYPE.POST:
-          ctx.logger.info('postID %s cid %s rid %s', id, cid, rid);
-          res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddPostComment', {
-            uid,
-            ParentID: cid,
-            RootID: rid,
-            SendContent: content,
-            PostID: id,
-          });
-          ctx.body = res.data;
-          break;
-        case TYPE.AUTHOR:
-          ctx.logger.info('authorID %s cid %s rid %s', id, cid, rid);
-          res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddAuthorComment', {
-            uid,
-            ParentID: cid,
-            RootID: rid,
-            SendContent: content,
-            AuthorID: id,
-          });
-          ctx.body = res.data;
-          break;
-        case TYPE.WORKS:
-          ctx.logger.info('worksID %s cid %s rid %s', id, cid, rid);
-          res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddWorksComment', {
-            uid,
-            ParentID: cid,
-            RootID: rid,
-            SendContent: content,
-            WorksID: id,
-            subWorkID: body.sid,
-            BarrageTime: body.barrageTime,
-          });
-          ctx.body = res.data;
-          break;
+class Controller extends egg.Controller {
+  async like() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.comment.operate(id, uid, 1, true);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async unLike() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.comment.operate(id, uid, 1, false);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async favor() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.comment.operate(id, uid, 2, true);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async unFavor() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.comment.operate(id, uid, 2, false);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async sub() {
+    const { ctx, service, app } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let content = body.content;
+    let id = parseInt(body.id);
+    let type = parseInt(body.type);
+    if(!id || !type) {
+      return;
+    }
+    if(!content || content.length < 3) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '字数不能少于3个字哦~',
+      });
+    }
+    if(content.length > 2048) {
+      return ctx.body = ctx.helper.errorJSON({
+        message: '字数不能多于2048个字哦~',
+      });
+    }
+    let rid = id;
+    let pid = parseInt(body.pid);
+    // 回复作品
+    if(type === 2) {
+      rid = await service.works.commentId(rid);
+      if(!rid) {
+        return ctx.body = ctx.helper.errorJSON();
       }
     }
+    // 回复作者
+    else if(type === 1) {
+      rid = await service.author.commentId(rid);
+      if(!rid) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+    }
+    // 回复画圈
+    else if(type === 3) {
+    }
+    // 回复评论
+    else if(type === 4) {
+      let target = await service.comment.info(id);
+      if(!target) {
+        return ctx.body = ctx.helper.errorJSON();
+      }
+      rid = target.rootId;
+      pid = target.id;
+    }
+    else {
+      return ctx.body = ctx.helper.errorJSON();
+    }
+    pid = pid || rid;
+    await service.comment.replyCount(rid);
+    let res = await service.comment.add(uid, rid, pid, content, parseInt(body.authorId));
+    if(!res) {
+      return ctx.body = ctx.helper.errorJSON();
+    }
+    if(body.type === '2') {
+      if(body.pid) {
+        let comment = await service.comment.info(body.pid);
+        if(comment.uid !== uid) {
+          app.model.message.create({
+            user_id: uid,
+            author_id: body.authorId || 0,
+            target_id: comment.userId,
+            type: 2,
+            ref_id: id,
+            comment_id: res.id,
+            create_time: new Date(),
+            update_time: new Date(),
+          });
+        }
+      }
+    }
+    else if(body.type === '1') {
+      if(body.pid) {
+        let comment = await service.comment.info(body.pid);
+        if(comment.uid !== uid) {
+          app.model.message.create({
+            user_id: uid,
+            author_id: body.authorId || 0,
+            target_id: comment.userId,
+            type: 1,
+            ref_id: id,
+            comment_id: res.id,
+            create_time: new Date(),
+            update_time: new Date(),
+          });
+        }
+      }
+    }
+    else if(body.type === '3') {
+      let comment = await service.comment.info(pid);
+      if(comment.userId !== uid) {
+        app.model.message.create({
+          user_id: uid,
+          author_id: body.authorId || 0,
+          target_id: comment.userId,
+          type: pid !== rid ? 3 : 4,
+          ref_id: rid,
+          comment_id: res.id,
+          create_time: new Date(),
+          update_time: new Date(),
+        });
+      }
+    }
+    app.redis.incr('commentReplyCount_' + rid);
+    ctx.body = ctx.helper.okJSON(res);
   }
-  return Controller;
-};
+
+  async report() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    await service.comment.report(id, uid);
+    ctx.body = ctx.helper.okJSON();
+  }
+
+  async block() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.comment.block(id, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async del() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.comment.del(id, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+}
+
+module.exports = Controller;
