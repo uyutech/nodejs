@@ -28,7 +28,7 @@ class Works extends migi.Component {
     self.on(migi.Event.DOM, function() {
       self.url = /(iPhone|iPod|ios)/i.test(navigator.userAgent)
         ? 'https://itunes.apple.com/cn/app/id1331367220'
-        : 'https://circling.net.cn/android/circling-0.6.6.apk';
+        : 'https://circling.net.cn/android/circling-0.7.0.apk';
       if(self.av) {
         self.setMedia(self.av);
       }
