@@ -1625,12 +1625,15 @@ class Service extends egg.Service {
       });
     });
     let res = await service.circle.infoList(list);
-    return res.map((item) => {
+    return res.filter((item) => {
+      return item && !item.isDelete;
+    }).map((item) => {
       return {
         id: item.id,
         name: item.name,
+        type: item.type,
       };
-    });
+    }).slice(0, 3);
   }
 
   /**
@@ -1673,10 +1676,13 @@ class Service extends egg.Service {
     let res = await service.circle.infoList(list2);
     let circleHash = {};
     list2.forEach((id, i) => {
-      circleHash[id] = {
-        id,
-        name: res[i].name,
-      };
+      if(!res[i].isDelete) {
+        circleHash[id] = {
+          id,
+          name: res[i].name,
+          type: res[i].type,
+        };
+      }
     });
     let tagCircleHash = {};
     list.forEach((tagId, i) => {
@@ -1686,7 +1692,9 @@ class Service extends egg.Service {
         circleIdList[i].forEach((circleId) => {
           if(!hash[circleId]) {
             hash[circleId] = true;
-            temp.push(circleHash[circleId]);
+            if(circleHash[circleId]) {
+              temp.push(circleHash[circleId]);
+            }
           }
         });
       }
@@ -1704,7 +1712,7 @@ class Service extends egg.Service {
             }
           });
         });
-        return temp;
+        return temp.slice(0, 3);
       }
     });
   }

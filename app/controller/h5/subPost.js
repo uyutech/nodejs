@@ -36,12 +36,15 @@ class Controller extends egg.Controller {
     let [circleList, circle] = await Promise.all(query);
     let idList = [];
     circleList.data.forEach((item) => {
-      delete item.describe;
-      delete item.banner;
-      delete item.cover;
-      delete item.type;
-      delete item.typeName;
-      idList.push(item.id);
+      if(!item.isDelete) {
+        delete item.describe;
+        delete item.banner;
+        delete item.cover;
+        delete item.type;
+        delete item.typeName;
+        delete item.isDelete;
+        idList.push(item.id);
+      }
     });
     if(circle) {
       idList.push(circle.id);

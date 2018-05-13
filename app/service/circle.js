@@ -32,7 +32,8 @@ class Service extends egg.Service {
           'describe',
           'cover',
           'banner',
-          'type'
+          'type',
+          ['is_delete', 'isDelete']
         ],
         where: {
           id,
@@ -95,7 +96,8 @@ class Service extends egg.Service {
           'describe',
           'cover',
           'banner',
-          'type'
+          'type',
+          ['is_delete', 'isDelete']
         ],
         where: {
           id: noCacheIdList,
