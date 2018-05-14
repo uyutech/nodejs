@@ -49,6 +49,8 @@ module.exports = {
     // dmall: './app/assets/d/mall/index.jsx',
     // dmall_new: './app/assets/d/mall/new/index.jsx',
     // dmall_wait: './app/assets/d/mall/wait/index.jsx',
+    rcommon: './app/assets/rhyme/common/index.js',
+    rsingle: './app/assets/rhyme/single/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

@@ -7,6 +7,7 @@ module.exports = app => {
   app.get('/home/qr/jsgm', 'error.jsgm');
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
+  app.get('/rhymes', 'rhyme.index');
 
   app.get('/d', 'd.index.index');
   app.get('/d/works/:worksId', 'd.works.index');
