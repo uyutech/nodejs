@@ -11,7 +11,7 @@ let helper = {
     if(url.indexOf('//') > -1) {
       return url;
     }
-    return '/public' + url + '?235';
+    return '/public' + url + '?236';
   },
   okJSON(data) {
     return {
@@ -65,7 +65,7 @@ let helper = {
     let session = this.ctx.session || {};
     return `<div class="g-top" id="gTop">
       <div class="c">
-        <span class="logo">转圈，一个有爱的智能社区~</span>
+        <a href="/" class="logo">转圈，一个有爱的智能社区~</a>
         <ul>
           <li><a href="/"
                  class="${pageId === 0 ? 'cur' : ''}">首页</a></li>

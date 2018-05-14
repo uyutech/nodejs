@@ -1753,7 +1753,6 @@ class Service extends egg.Service {
     }
     res = await app.model.workWorkRelation.findAll({
       attributes: [
-        ['work_id', 'workId'],
         ['target_id', 'targetId'],
         'type'
       ],
@@ -1818,6 +1817,7 @@ class Service extends egg.Service {
       if(res.length) {
         res.forEach((item) => {
           let id = item.workId;
+          delete item.workId;
           hash[id] = item;
         });
       }
@@ -1829,6 +1829,58 @@ class Service extends egg.Service {
       });
     }
     return cache;
+  }
+
+  /**
+   * 添加关系
+   * @param id:int 小作品id
+   * @param targetId:int 小作品id
+   * @param type:int 类型
+   * @returns bool
+   */
+  async addRelation(id, targetId, type) {
+    if(!id || !targetId || !type) {
+      return {
+        success: false,
+        message: '缺少参数',
+      }
+    }
+    const { app } = this;
+    let res = await app.model.workWorkRelation.create({
+      work_id: id,
+      target_id: targetId,
+      type,
+    }, {
+      raw: true,
+    });
+    return {
+      success: true,
+      data: res,
+    };
+  }
+
+  /**
+   *
+   */
+  async removeRelation(id, targetId, type) {
+    if(!id || !targetId || !type) {
+      return {
+        success: false,
+        message: '缺少参数',
+      }
+    }
+    const { app } = this;
+    let res = await app.model.workWorkRelation.destroy({
+      where: {
+        work_id: id,
+        target_id: targetId,
+        type,
+      },
+    });
+    return {
+      success: true,
+      data: res,
+    };
   }
 }
 

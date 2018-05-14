@@ -185,7 +185,10 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let id = parseInt(body.id);
     if(!id) {
-      return;
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
     }
     await service.work.incrementViews(id);
     ctx.body = ctx.helper.okJSON();
@@ -196,10 +199,79 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let id = parseInt(body.id);
     if(!id) {
-      return;
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
     }
     let res = await service.work.relation(id);
     ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async addRelation() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let targetId = parseInt(body.targetId);
+    let type = parseInt(body.type);
+    if(!id) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    if(!targetId) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3003,
+        message: 'targetId不合法',
+      });
+    }
+    if(!type) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3004,
+        message: 'type不合法',
+      });
+    }
+    let res = await service.work.addRelation(id, targetId, type);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
+  async removeRelation() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let targetId = parseInt(body.targetId);
+    let type = parseInt(body.type);
+    if(!id) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    if(!targetId) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3003,
+        message: 'targetId不合法',
+      });
+    }
+    if(!type) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3004,
+        message: 'type不合法',
+      });
+    }
+    let res = await service.work.removeRelation(id, targetId, type);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
   }
 }
 
