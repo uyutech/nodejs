@@ -262,11 +262,13 @@ class Service extends egg.Service {
     }
     const { service } = this;
     let res = await this.collectionBase(id);
+    let workIdList = [];
     let videoIdList = [];
     let audioIdList = [];
     let imageIdList = [];
     let textIdList = [];
     res.forEach((item) => {
+      workIdList.push(item.workId);
       switch(item.kind) {
         case 1:
           videoIdList.push(item.workId);
@@ -287,11 +289,13 @@ class Service extends egg.Service {
       audioList,
       imageList,
       textList,
+      workRelationList
     ] = await Promise.all([
       service.work.infoListPlusFull(videoIdList, 1, uid),
       service.work.infoListPlusFull(audioIdList, 2, uid),
       service.work.infoListPlusFull(imageIdList, 3, uid),
-      service.work.infoListPlusFull(textIdList, 4, uid)
+      service.work.infoListPlusFull(textIdList, 4, uid),
+      service.work.relationList(workIdList)
     ]);
     let hash = {};
     videoList.forEach((item) => {
@@ -316,6 +320,13 @@ class Service extends egg.Service {
       if(item) {
         item.author = this.firstAuthor(item.author);
         hash[item.id] = item;
+      }
+    });
+    workRelationList.forEach((item, i) => {
+      let id = workIdList[i];
+      let work = hash[id];
+      if(work) {
+        work.relation = item;
       }
     });
     return res.map((item) => {

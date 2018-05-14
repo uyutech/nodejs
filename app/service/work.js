@@ -1735,6 +1735,101 @@ class Service extends egg.Service {
       };
     }
   }
+
+  /**
+   * 获取小作品的关系
+   * @param id:int 小作品id
+   * @returns Array<Object>
+   */
+  async relation(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'workRelation_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.workWorkRelation.findAll({
+      attributes: [
+        ['work_id', 'workId'],
+        ['target_id', 'targetId'],
+        'type'
+      ],
+      where: {
+        work_id: id,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取小作品列表的关系
+   * @param idList:Array<int>
+   * @returns Array<Array<Object>>
+   */
+  async relationList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('workRelation_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.workWorkRelation.findAll({
+        attributes: [
+          ['work_id', 'workId'],
+          ['target_id', 'targetId'],
+          'type'
+        ],
+        where: {
+          work_id: noCacheIdList,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.workId;
+          hash[id] = item;
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || [];
+        cache[i] = temp;
+        app.redis.setex('workRelation_' + id, app.config.redis.time, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
 }
 
 module.exports = Service;

@@ -286,6 +286,7 @@ module.exports = app => {
   app.post('/private/works/unDelete', 'private.works.unDelete');
   app.post('/private/works/addAuthor', 'private.works.addAuthor');
   app.post('/private/works/removeAuthor', 'private.works.removeAuthor');
+  app.post('/private/works/info', 'private.works.info');
   app.post('/private/work/typeAll', 'private.work.typeAll');
   app.post('/private/work/update', 'private.work.update');
   app.post('/private/work/delete', 'private.work.delete');
@@ -293,6 +294,7 @@ module.exports = app => {
   app.post('/private/work/addAuthor', 'private.work.addAuthor');
   app.post('/private/work/removeAuthor', 'private.work.removeAuthor');
   app.post('/private/work/addViews', 'private.work.addViews');
+  app.post('/private/work/relation', 'private.work.relation');
   app.post('/private/author/find', 'private.author.find');
   app.post('/private/author/create', 'private.author.create');
   app.post('/private/user/find', 'private.user.find');

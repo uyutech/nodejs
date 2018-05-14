@@ -1328,6 +1328,26 @@ class Controller extends egg.Controller {
     }
     return await service.works.removeAuthor(id, authorList);
   }
+
+  async info() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return ctx.body = ctx.helper.errorJSON({
+        code: 3000,
+        message: 'id不合法',
+      });
+    }
+    let [info, collection] = await Promise.all([
+      service.works.infoPlusAllAuthor(id),
+      service.works.collectionFull(id),
+    ]);
+    ctx.body = ctx.helper.okJSON({
+      info,
+      collection,
+    });
+  }
 }
 
 module.exports = Controller;

@@ -187,8 +187,19 @@ class Controller extends egg.Controller {
     if(!id) {
       return;
     }
-    service.work.incrementViews(id);
+    await service.work.incrementViews(id);
     ctx.body = ctx.helper.okJSON();
+  }
+
+  async relation() {
+    const { ctx, service } = this;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.work.relation(id);
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 

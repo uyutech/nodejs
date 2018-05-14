@@ -312,8 +312,8 @@ class Video extends migi.Component {
           onClick={ this.clickType }>
       {
         (this.index, this.list || []).map(function(item, index) {
-          return <li class={ this.index === index ? 'cur' : '' }
-                     rel={ index }>{ item.tips || item.typeName }</li>;
+          return <li class={ (this.index === undefined ? index === 0 : this.index === index) ? 'cur' : '' }
+                     rel={ index }>{ item.tag || item.typeName }</li>;
         }.bind(this))
       }
       </ul>
