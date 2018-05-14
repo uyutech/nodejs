@@ -1523,7 +1523,6 @@ class Service extends egg.Service {
       where: {
         comment_id: id,
         type,
-        is_delete: false,
       },
       raw: true,
     });
@@ -1580,7 +1579,6 @@ class Service extends egg.Service {
         where: {
           comment_id: noCacheIdList,
           type,
-          is_delete: false,
         },
         raw: true,
       });

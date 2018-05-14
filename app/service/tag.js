@@ -334,9 +334,11 @@ class Service extends egg.Service {
       ],
       where: {
         tag_id: id,
-        is_delete: false,
         is_comment_delete: false,
       },
+      order: [
+        ['id', 'DESC']
+      ],
       offset,
       limit,
       raw: true,
@@ -368,7 +370,6 @@ class Service extends egg.Service {
       ],
       where: {
         tag_id: id,
-        is_delete: false,
         is_comment_delete: false,
       },
       raw: true,
