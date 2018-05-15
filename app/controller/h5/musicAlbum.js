@@ -19,7 +19,7 @@ class Controller extends egg.Controller {
     }
     let [info, collection, commentList] = await Promise.all([
       service.musicAlbum.infoPlusAllAuthor(id),
-      service.musicAlbum.collectionFull(id, uid),
+      service.musicAlbum.collectionFull(id, uid, true),
       service.musicAlbum.commentList(id, uid, 0, LIMIT)
     ]);
     if(!info || info.state === 3) {

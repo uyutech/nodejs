@@ -33,6 +33,7 @@ class Service extends egg.Service {
           'state',
           'cover',
           'type',
+          'describe',
           ['is_authorize', 'isAuthorize'],
           ['is_delete', 'isDelete']
         ],
@@ -254,9 +255,10 @@ class Service extends egg.Service {
    * 根据大作品id获取小作品集合信息
    * @param id:int 大作品id
    * @param uid:int 用户id
+   * @param showFirstAuthor:bool 是否只显示第一行作者
    * @returns Array<Object>
    */
-  async collectionFull(id, uid) {
+  async collectionFull(id, uid, showFirstAuthor) {
     if(!id) {
       return;
     }
@@ -300,25 +302,33 @@ class Service extends egg.Service {
     let hash = {};
     videoList.forEach((item) => {
       if(item) {
-        item.author = this.firstAuthor(item.author);
+        if(showFirstAuthor) {
+          item.author = this.firstAuthor(item.author);
+        }
         hash[item.id] = item;
       }
     });
     audioList.forEach((item) => {
       if(item) {
-        item.author = this.firstAuthor(item.author);
+        if(showFirstAuthor) {
+          item.author = this.firstAuthor(item.author);
+        }
         hash[item.id] = item;
       }
     });
     imageList.forEach((item) => {
       if(item) {
-        item.author = this.firstAuthor(item.author);
+        if(showFirstAuthor) {
+          item.author = this.firstAuthor(item.author);
+        }
         hash[item.id] = item;
       }
     });
     textList.forEach((item) => {
       if(item) {
-        item.author = this.firstAuthor(item.author);
+        if(showFirstAuthor) {
+          item.author = this.firstAuthor(item.author);
+        }
         hash[item.id] = item;
       }
     });
@@ -946,6 +956,7 @@ class Service extends egg.Service {
               name: author.name,
               headUrl: author.headUrl,
               isSettle: author.isSettle,
+              tag: author.tag,
             };
           }),
         });
@@ -968,6 +979,7 @@ class Service extends egg.Service {
             name: author.name,
             headUrl: author.headUrl,
             isSettle: author.isSettle,
+            tag: author.tag,
           };
         }),
       });

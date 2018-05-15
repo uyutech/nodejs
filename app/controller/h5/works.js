@@ -19,7 +19,7 @@ class Controller extends egg.Controller {
     }
     let [info, collection, commentList] = await Promise.all([
       service.works.infoPlusAllAuthor(id),
-      service.works.collectionFull(id, uid),
+      service.works.collectionFull(id, uid, true),
       service.works.commentList(id, uid, 0, LIMIT)
     ]);
     if(!info || info.isDelete || info.state === 3) {

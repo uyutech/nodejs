@@ -24,6 +24,31 @@ class Controller extends egg.Controller {
       url,
       search,
       first,
+    }, {
+      raw: true,
+    });
+    ctx.body = {
+      success: true,
+    };
+  }
+
+  async action() {
+    const { app, ctx } = this;
+    let uid = ctx.session.uid || 0;
+    let actionId = parseInt(ctx.query.actionId) || 0;
+    let uuid = ctx.query.uuid || '';
+    let param = ctx.query.param;
+    if(param === 'undefined') {
+      param = null;
+    }
+    param = JSON.parse(param || 'null');
+    await app.model.userAction.create({
+      action_id: actionId,
+      uuid,
+      uid,
+      param,
+    }, {
+      raw: true,
     });
     ctx.body = {
       success: true,

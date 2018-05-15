@@ -87,6 +87,8 @@ const circleTop = require('../model/circleTop');
 
 const userReport = require('../model/userReport');
 const userVisit = require('../model/userVisit');
+const userAction = require('../model/userAction');
+const userActionType = require('../model/userActionType');
 
 module.exports = {
   get Sequelize() {
@@ -288,6 +290,8 @@ module.exports = {
 
         userReport: userReport(this),
         userVisit: userVisit(this),
+        userAction: userAction(this),
+        userActionType: userActionType(this),
       };
     }
     return this[MODEL];

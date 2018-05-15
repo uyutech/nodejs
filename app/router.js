@@ -33,6 +33,7 @@ module.exports = app => {
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
   app.get('/h5/stats/visit', 'h5.stats.visit');
+  app.get('/h5/stats/action', 'h5.stats.action');
 
   app.get('/count/authorSkill/:id', app.middlewares.needLoginJson(), 'count.authorSkill');
   app.get('/count/allAuthorSkill', app.middlewares.needLoginJson(), 'count.allAuthorSkill');

@@ -945,7 +945,8 @@ class Service extends egg.Service {
     res = await app.model.workAuthorRelation.findAll({
       attributes: [
         ['author_id', 'id'],
-        ['profession_id', 'professionId']
+        ['profession_id', 'professionId'],
+        'tag'
       ],
       where: {
         work_id: id,
@@ -1001,6 +1002,7 @@ class Service extends egg.Service {
         item.name = author.name;
         item.headUrl = author.headUrl;
         item.isSettle = author.isSettle;
+        item.tag = author.tag;
       }
       let profession = professionHash[item.professionId];
       if(profession) {
@@ -1051,7 +1053,8 @@ class Service extends egg.Service {
         attributes: [
           ['work_id', 'workId'],
           ['author_id', 'authorId'],
-          ['profession_id', 'professionId']
+          ['profession_id', 'professionId'],
+          'tag'
         ],
         where: {
           work_id: noCacheIdList,
@@ -1066,6 +1069,7 @@ class Service extends egg.Service {
           temp.push({
             id: item.authorId,
             professionId: item.professionId,
+            tag: item.tag,
           });
         });
       }
@@ -1818,7 +1822,8 @@ class Service extends egg.Service {
         res.forEach((item) => {
           let id = item.workId;
           delete item.workId;
-          hash[id] = item;
+          let temp = hash[id] = hash[id] || [];
+          temp.push(item);
         });
       }
       noCacheIndexList.forEach((i) => {
@@ -1860,7 +1865,11 @@ class Service extends egg.Service {
   }
 
   /**
-   *
+   * 删除关系
+   * @param id:int 小作品id
+   * @param targetId:int 小作品id
+   * @param type:int 类型
+   * @returns bool
    */
   async removeRelation(id, targetId, type) {
     if(!id || !targetId || !type) {
