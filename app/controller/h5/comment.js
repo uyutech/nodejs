@@ -94,15 +94,6 @@ class Controller extends egg.Controller {
     // 回复画圈
     else if(type === 3) {
     }
-    // 回复评论
-    else if(type === 4) {
-      let target = await service.comment.info(id);
-      if(!target) {
-        return ctx.body = ctx.helper.errorJSON();
-      }
-      rid = target.rootId;
-      pid = target.id;
-    }
     else {
       return ctx.body = ctx.helper.errorJSON();
     }
@@ -112,7 +103,7 @@ class Controller extends egg.Controller {
     if(!res) {
       return ctx.body = ctx.helper.errorJSON();
     }
-    if(body.type === '2') {
+    if(type === 2) {
       if(body.pid) {
         let comment = await service.comment.info(body.pid);
         if(comment.uid !== uid) {
@@ -129,7 +120,7 @@ class Controller extends egg.Controller {
         }
       }
     }
-    else if(body.type === '1') {
+    else if(type === 1) {
       if(body.pid) {
         let comment = await service.comment.info(body.pid);
         if(comment.uid !== uid) {
@@ -146,7 +137,7 @@ class Controller extends egg.Controller {
         }
       }
     }
-    else if(body.type === '3') {
+    else if(type === 3) {
       let comment = await service.comment.info(pid);
       if(comment.userId !== uid) {
         app.model.message.create({

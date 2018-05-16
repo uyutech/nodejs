@@ -35,7 +35,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '1回复了作者页留言，2回复了作品页留言，3回复画圈留言，4回复画圈',
+      comment: '1回复作者页留言，2回复作品页留言，3回复画圈页留言，4画圈页留言，5作品页留言，6作者页留言',
     },
     ref_id: {
       type: Sequelize.BIGINT.UNSIGNED,

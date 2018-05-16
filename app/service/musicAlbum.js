@@ -426,7 +426,7 @@ class Service extends egg.Service {
       }
       res = await app.model.musicAlbumAuthorRelation.findAll({
         attributes: [
-          ['author_id', 'authorId'],
+          ['author_id', 'id'],
           ['profession_id', 'professionId'],
           'tag',
           'type'
@@ -444,7 +444,7 @@ class Service extends egg.Service {
     let professionIdList = [];
     let professionIdHash = {};
     res.forEach((item) => {
-      let authorId = item.authorId;
+      let authorId = item.id;
       if(!authorIdHash[authorId]) {
         authorIdHash[authorId] = true;
         authorIdList.push(authorId);
@@ -472,7 +472,7 @@ class Service extends egg.Service {
       }
     });
     res.forEach((item) => {
-      let authorInfo = authorHash[item.authorId];
+      let authorInfo = authorHash[item.id];
       if(authorInfo) {
         item.headUrl = authorInfo.headUrl;
         item.name = authorInfo.name;
@@ -518,7 +518,7 @@ class Service extends egg.Service {
       let id = idList[i];
       if(item) {
         cache[i] = JSON.parse(item);
-        }
+      }
       else if(id !== null && id !== undefined) {
         if(!noCacheIdHash[id]) {
           noCacheIdHash[id] = true;
