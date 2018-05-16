@@ -180,6 +180,18 @@ class Controller extends egg.Controller {
     if(!body.value) {
       return;
     }
+    let exist = await app.model.user.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        nickname: body.value,
+      },
+      raw: true,
+    });
+    if(exist) {
+      return ctx.body = ctx.helper.errorJSON('这个昵称已经存在，换一个吧~');
+    }
     await app.model.user.update({
       nickname: body.value,
       update_time: new Date(),

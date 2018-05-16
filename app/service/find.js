@@ -301,6 +301,8 @@ class Service extends egg.Service {
           kind,
           is_works_delete: false,
           is_work_delete: false,
+          works_review: 3,
+          work_review: 3,
         },
         order: [
           ['id', 'DESC']
@@ -399,6 +401,8 @@ class Service extends egg.Service {
           kind,
           is_works_delete: false,
           is_work_delete: false,
+          works_review: 3,
+          work_review: 3,
         },
         raw: true,
       });
