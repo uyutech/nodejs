@@ -32,7 +32,8 @@ class Service extends egg.Service {
           ['sub_title', 'subTitle'],
           'state',
           'cover',
-          'type'
+          'type',
+          ['is_delete', 'isDelete']
         ],
         where: {
           id,
@@ -93,7 +94,8 @@ class Service extends egg.Service {
           ['sub_title', 'subTitle'],
           'state',
           'cover',
-          'type'
+          'type',
+          ['is_delete', 'isDelete']
         ],
         where: {
           id: noCacheIdList,
@@ -140,28 +142,40 @@ class Service extends egg.Service {
   /**
    * 获取作品作者列表
    * @param id:int 作品id
+   * @param type:int 类型
    * @returns Array<Object>
    */
-  async author(id) {
+  async author(id, type) {
     if(!id) {
       return;
     }
     const { app, service } = this;
     let cacheKey = 'imageAlbumAuthor_' + id;
+    if(type) {
+      cacheKey += '_' + type;
+    }
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
-      }
+    }
     else {
+      let where ={
+        album_id: id,
+      };
+      if(type) {
+        where.type = type;
+      }
       res = await app.model.imageAlbumAuthorRelation.findAll({
         attributes: [
           ['author_id', 'authorId'],
-          ['profession_id', 'professionId']
+          ['profession_id', 'professionId'],
+          'tag',
+          'type'
         ],
-        where: {
-          album_id: id,
-          is_delete: false,
-        },
+        where,
+        order: [
+          'type'
+        ],
         raw: true,
       });
       app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
@@ -216,9 +230,10 @@ class Service extends egg.Service {
   /**
    * 获取专辑id列表的作者列表
    * @param idList:Array<int> 专辑id列表
+   * @param type:int 类型
    * @returns Array:<Array<Object>>
    */
-  async authorList(idList) {
+  async authorList(idList, type) {
     if(!idList) {
       return;
     }
@@ -229,7 +244,11 @@ class Service extends egg.Service {
     let cache = await Promise.all(
       idList.map((id) => {
         if(id !== null && id !== undefined) {
-          return app.redis.get('imageAlbumAuthor_' + id);
+          let cacheKey = 'imageAlbumAuthor_' + id;
+          if(type) {
+            cacheKey += '_' + type;
+          }
+          return app.redis.get(cacheKey);
         }
       })
     );
@@ -250,15 +269,24 @@ class Service extends egg.Service {
       }
     });
     if(noCacheIdList.length) {
+      let where = {
+        album_id: noCacheIdList,
+      };
+      if(type) {
+        where.type = type;
+      }
       let res = await app.model.imageAlbumAuthorRelation.findAll({
         attributes: [
           ['album_id', 'albumId'],
           ['author_id', 'authorId'],
-          ['profession_id', 'professionId']
+          ['profession_id', 'professionId'],
+          'type',
+          'tag'
         ],
-        where: {
-          album_id: noCacheIdList,
-        },
+        where,
+        order: [
+          'type'
+        ],
         raw: true,
       });
       let hash = {};
@@ -269,16 +297,20 @@ class Service extends egg.Service {
           temp.push({
             id: item.authorId,
             professionId: item.professionId,
+            tag: item.tag,
+            type: item.type,
           });
         });
       }
       noCacheIndexList.forEach((i) => {
         let id = idList[i];
         let item = hash[id] || [];
-        if(item) {
-          cache[i] = item;
-          app.redis.setex('imageAlbumAuthor_' + id, app.config.redis.time, JSON.stringify(item));
+        cache[i] = item;
+        let cacheKey = 'imageAlbumAuthor_' + id;
+        if(type) {
+          cacheKey += '_' + type;
         }
+        app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(item));
       });
     }
     let authorIdList = [];
@@ -519,10 +551,9 @@ class Service extends egg.Service {
     const { service } = this;
     let [[info, professionSort], author] = await Promise.all([
       this.infoAndProfessionSort(id),
-      this.author(id),
+      this.author(id, 1),
     ]);
-    author = service.works.reorderAuthor(author, professionSort);
-    info.author = author;
+    info.author = service.works.reorderAuthor(author, professionSort);
     return info;
   }
 
@@ -541,7 +572,56 @@ class Service extends egg.Service {
     const { service } = this;
     let [[infoList, professionSortList], authorList] = await Promise.all([
       this.infoListAndProfessionSort(idList),
-      this.authorList(idList),
+      this.authorList(idList, 1),
+    ]);
+    infoList.forEach((item, i) => {
+      if(item) {
+        item.author = service.works.reorderAuthor(authorList[i], professionSortList[i]);
+      }
+    });
+    return infoList;
+  }
+
+  /**
+   * 获取大作品信息和全部作者信息
+   * @param id:int 大作品id
+   * @returns Object
+   */
+  async infoPlusAllAuthor(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let [
+      [info, professionSort],
+      author
+    ] = await Promise.all([
+      this.infoAndProfessionSort(id),
+      this.author(id)
+    ]);
+    info.author = service.works.reorderAuthor(author, professionSort);
+    return info;
+  }
+
+  /**
+   * 获取大作品信息和全部作者信息
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<Object>
+   */
+  async infoListPlusAllAuthor(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let [
+      [infoList, professionSortList],
+      authorList
+    ] = await Promise.all([
+      this.infoListAndProfessionSort(idList),
+      this.authorList(idList)
     ]);
     infoList.forEach((item, i) => {
       if(item) {

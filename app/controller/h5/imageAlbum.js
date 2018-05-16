@@ -18,11 +18,11 @@ class Controller extends egg.Controller {
       return;
     }
     let [info, imageList, commentList] = await Promise.all([
-      service.imageAlbum.infoPlusAuthor(id),
+      service.imageAlbum.infoPlusAllAuthor(id),
       service.imageAlbum.imageList(id, uid, 0, LIMIT),
       service.imageAlbum.commentList(id, uid, 0, LIMIT)
     ]);
-    if(!info || info.state === 3) {
+    if(!info || info.isDelete || info.state === 3) {
       return;
     }
     imageList.limit = LIMIT;

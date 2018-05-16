@@ -581,8 +581,9 @@ class Controller extends egg.Controller {
             works_id: id,
             author_id: author.id,
             profession_id: author.professionId,
+            type: author.type,
+            tag: author.tag,
             create_time: now,
-            update_time: now,
           }, {
             transaction,
             raw: true,

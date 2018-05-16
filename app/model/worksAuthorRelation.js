@@ -25,6 +25,17 @@ module.exports = app => {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '1大作品直属，2小作品同步',
+    },
+    tag: {
+      type: Sequelize.STRING(32),
+      allowNull: false,
+      defaultValue: '',
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,
