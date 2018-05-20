@@ -42,6 +42,7 @@ module.exports = {
     // dupload: './app/assets/d/upload/index.jsx',
     // dguide: './app/assets/d/guide/index.jsx',
     dpost: './app/assets/d/post/index.jsx',
+    cindex: './app/assets/cms/index/index.jsx',
     // dcircle: './app/assets/d/circle/index.jsx',
     // duser: './app/assets/d/user/index.jsx',
     // dcircling: './app/assets/d/circling/index.jsx',

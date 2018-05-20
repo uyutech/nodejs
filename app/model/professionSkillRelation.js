@@ -42,6 +42,10 @@ module.exports = app => {
         name: 'profession_id_skill_id',
         unique: true,
         fields: ['profession_id', 'skill_id'],
+      },
+      {
+        name: 'skill_id',
+        fields: ['skill_id'],
       }
     ],
     comment: '职种对应技能关系',

@@ -11,6 +11,7 @@ const SEQUELIZE_CIRCLING = Symbol('Application#sequelizeCircling');
 const SEQUELIZE_MALL = Symbol('Application#sequelizeMall');
 const SEQUELIZE_RECOMMEND = Symbol('Application#sequelizeRecommend');
 const SEQUELIZE_STATS = Symbol('Application#sequelizeStats');
+const SEQUELIZE_CMS = Symbol('Application#sequelizeCms');
 const MODEL = Symbol('Application#Model');
 
 const author = require('../model/author');
@@ -71,6 +72,7 @@ const message = require('../model/message');
 const userCreateWorks = require('../model/userCreateWorks');
 const userUploadWork = require('../model/userUploadWork');
 const workWorkRelation = require('../model/workWorkRelation');
+const authorSkillWorks = require('../model/authorSkillWorks');
 
 const product = require('../model/product');
 const prize = require('../model/prize');
@@ -89,6 +91,8 @@ const userReport = require('../model/userReport');
 const userVisit = require('../model/userVisit');
 const userAction = require('../model/userAction');
 const userActionType = require('../model/userActionType');
+
+const cmsAccount = require('../model/cmsAccount');
 
 module.exports = {
   get Sequelize() {
@@ -213,6 +217,35 @@ module.exports = {
     }
     return this[SEQUELIZE_STATS];
   },
+  get sequelizeCms() {
+    if(!this[SEQUELIZE_CMS]) {
+      let database = this.config.database;
+      this[SEQUELIZE_CMS] = new Sequelize(database.cms.name, database.cms.username, database.cms.password, {
+        host: database.cms.host,
+        dialect: 'mysql',
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000,
+        },
+        dialectOptions: {
+          charset: 'utf8mb4',
+          collate: 'utf8mb4_unicode_ci'
+        },
+        options: {
+          charset: 'utf8mb4',
+        },
+        define: {
+          timestamps: false,
+          underscored: true,
+          freezeTableName: true,
+        },
+        timezone: '+08:00',
+      });
+    }
+    return this[SEQUELIZE_CMS];
+  },
   get model() {
     if(!this[MODEL]) {
       this[MODEL] = {
@@ -274,6 +307,7 @@ module.exports = {
         userCreateWorks: userCreateWorks(this),
         userUploadWork: userUploadWork(this),
         workWorkRelation: workWorkRelation(this),
+        authorSkillWorks: authorSkillWorks(this),
 
         product: product(this),
         prize: prize(this),
@@ -292,6 +326,8 @@ module.exports = {
         userVisit: userVisit(this),
         userAction: userAction(this),
         userActionType: userActionType(this),
+
+        cmsAccount: cmsAccount(this),
       };
     }
     return this[MODEL];

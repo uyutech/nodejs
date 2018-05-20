@@ -8,6 +8,7 @@ const egg = require('egg');
 
 const LIMIT = 10;
 const ALL_LIMIT = 40;
+const SKILL_LIMIT = 6;
 
 class Controller extends egg.Controller {
   async index() {
@@ -22,10 +23,8 @@ class Controller extends egg.Controller {
       info,
       isFollow,
       aliases,
-      skill,
       outside,
-      mainWorksList,
-      mainMusicAlbumList,
+      skillWorks,
       cooperationList,
       workKindList,
       dynamicList,
@@ -34,10 +33,8 @@ class Controller extends egg.Controller {
       service.author.infoPlusFans(id),
       service.author.isFollow(id, uid),
       service.author.aliases(id),
-      service.author.skill(id),
       service.author.outside(id),
-      service.author.mainWorksList(id, 1, 0, LIMIT),
-      service.author.mainWorksList(id, 2, 0, LIMIT),
+      service.author.allSkillWorks(id, 6),
       service.author.cooperationList(id, 0, LIMIT),
       service.author.workKindList(id),
       service.author.dynamicList(id, uid, 0, LIMIT),
@@ -46,7 +43,11 @@ class Controller extends egg.Controller {
     if(!info) {
       return;
     }
-    mainWorksList.limit = LIMIT;
+    skillWorks.forEach((item) => {
+      if(item) {
+        item.limit = SKILL_LIMIT;
+      }
+    });
     let kindWorkList;
     if(workKindList.length) {
       kindWorkList = await service.author.kindWorkList(id, uid, workKindList[0].kind, 0, LIMIT);
@@ -58,16 +59,29 @@ class Controller extends egg.Controller {
       info,
       isFollow,
       aliases,
-      skill,
       outside,
-      mainWorksList,
-      mainMusicAlbumList,
+      skillWorks,
       cooperationList,
       workKindList,
       kindWorkList,
       dynamicList,
       commentList,
     });
+  }
+
+  async skillWorks() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let skillId = parseInt(body.skillId);
+    let offset = parseInt(body.offset) || 0;
+    if(!id || !skillId) {
+      return;
+    }
+    let worksList = await service.author.skillWorks(id, skillId, offset, SKILL_LIMIT);
+    worksList.limit = SKILL_LIMIT;
+    ctx.body = ctx.helper.okJSON(worksList);
   }
 
   async dynamicList() {

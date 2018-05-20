@@ -1436,7 +1436,7 @@ class Service extends egg.Service {
     if(offset < 0 || limit < 1) {
       return;
     }
-    const { app, service } = this;
+    const { app  } = this;
     let cacheKey = 'authorCooperation_' + id;
     let res;
     if(offset === 0) {
@@ -1517,6 +1517,242 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
+
+  /**
+   * 获取作者的所有技能作品列表
+   * @param id:int 作者id
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async allSkillWorks(id, limit) {
+    if(!id) {
+      return;
+    }
+    limit = parseInt(limit) || 1;
+    if(limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'authorAllSkillWorks_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.authorSkillWorks.findAll({
+        attributes: [
+          Sequelize.literal('DISTINCT skill_id AS skillId'),
+        ],
+        where: {
+          author_id: id,
+        },
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.skillId;
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let query = res.map((item) => {
+      return this.skillWorks(id, item, 0, limit);
+    });
+    query.push(service.skill.infoList(res));
+    let ret = await Promise.all(query);
+    let infoList = ret.pop();
+    let hash = {};
+    infoList.forEach((item) => {
+      hash[item.id] = item;
+    });
+    return ret.map((item, i) => {
+      item.info = hash[res[i]];
+      return item;
+    });
+  }
+
+  /**
+   * 获取作者的技能作品列表翻页
+   * @param id:int 作者id
+   * @param skillId:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async skillWorks(id, skillId, offset, limit) {
+    if(!id || !skillId) {
+      return;
+    }
+    let [data, count] = await Promise.all([
+      this.skillWorksData(id, skillId, offset, limit),
+      this.skillWorksCount(id, skillId)
+    ]);
+    return {
+      data,
+      count,
+    };
+  }
+
+  /**
+   * 获取作者的技能作品列表
+   * @param id:int 作者id
+   * @param skillId:int 作者id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Array<Object>
+   */
+  async skillWorksData(id, skillId, offset, limit) {
+    if(!id || !skillId) {
+      return;
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'authorSkillWorks_' + id + '_' + skillId + '_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.authorSkillWorks.findAll({
+        attributes: [
+          Sequelize.literal('DISTINCT works_id AS worksId')
+        ],
+        where: {
+          author_id: id,
+          skill_id: skillId,
+        },
+        order: [
+          ['works_id', 'DESC']
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.worksId;
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    return service.works.infoListPlusCount(res);
+  }
+
+  /**
+   * 获取作者的技能作品统计
+   * @param id:int 作者id
+   * @param skillId:int 作者id
+   * @returns Array<Object>
+   */
+  async skillWorksCount(id, skillId) {
+    if(!id || !skillId) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'authorSkillWorksCount_' + id + '_' + skillId;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.authorSkillWorks.findOne({
+      attributes: [
+        Sequelize.literal('COUNT(DISTINCT works_id) AS num')
+      ],
+      where: {
+        author_id: id,
+        skill_id: skillId,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  // /**
+  //  * 获取作者在作品中的职种列表
+  //  * @param id:int 作者id
+  //  * @returns Array<int>
+  //  */
+  // async professionIdCount(id) {
+  //   if(!id) {
+  //     return;
+  //   }
+  //   const { app } = this;
+  //   let cacheKey = 'authorProfession_' + id;
+  //   let res = await app.redis.get(cacheKey);
+  //   if(res) {
+  //     return JSON.parse(res);
+  //   }
+  //   res = await app.model.worksAuthorRelation.findAll({
+  //     attributes: [
+  //       [Sequelize.fn('COUNT', '*'), 'num'],
+  //       ['profession_id', 'professionId']
+  //     ],
+  //     where: {
+  //       author_id: id,
+  //     },
+  //     group: [
+  //       'profession_id'
+  //     ],
+  //     raw: true,
+  //   });
+  //   app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+  //   return res;
+  // }
+  //
+  // /**
+  //  * 获取作者某些职种的作品
+  //  * @param id:int 作者id
+  //  * @param professionIdList:Array<int> 职种id列表
+  //  * @param offset:int 分页开始
+  //  * @param limit:int 分页尺寸
+  //  * @returns Array<int>
+  //  */
+  // async worksIdListByProfessionList(id, professionIdList, offset, limit) {
+  //   if(!id || !professionIdList) {
+  //     return;
+  //   }
+  //   if(!professionIdList.length) {
+  //     return [];
+  //   }
+  //   offset = parseInt(offset) || 0;
+  //   limit = parseInt(limit) || 1;
+  //   if(offset < 0 || limit < 1) {
+  //     return;
+  //   }
+  //   const { app } = this;
+  //   let cacheKey = 'authorWorksListByProfessionList_' + id + '_' + professionIdList.join(',');
+  //   let res = await app.redis.get(cacheKey);
+  //   if(res) {
+  //     return JSON.parse(res);
+  //   }
+  //   res = await app.model.worksAuthorRelation.findAll({
+  //     attributes: [
+  //       ['works_id', 'worksId']
+  //     ],
+  //     where: {
+  //       author_id: id,
+  //       profession_id: professionIdList,
+  //     },
+  //     order: [
+  //       ['id', 'DESC']
+  //     ],
+  //     offset,
+  //     limit,
+  //     raw: true,
+  //   });
+  //   res = res.map((item) => {
+  //     return item.worksId;
+  //   });
+  //   app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+  //   return res;
+  // }
 }
 
 module.exports = Service;

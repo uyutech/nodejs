@@ -48,6 +48,12 @@ module.exports = appInfo => {
         password: '87351984@',
         host: 'localhost',
       },
+      cms: {
+        name: 'cms',
+        username: 'root',
+        password: '87351984@',
+        host: 'localhost',
+      },
     },
     weibo: {
       appKey: '1987340303',

@@ -15,36 +15,14 @@ module.exports = appInfo => {
   };
 
   // add your config here
-  config.middleware = ['d2m', 'm2d', 'crossDomain', 'jsConfig', 'report'];
+  config.middleware = ['d2m', 'm2d', 'crossDomain', 'jsConfig', 'report', 'cmsAccount'];
   config.d2m = {
     match: '/d',
   };
   config.m2d = {
     match: '/m',
   };
-  config.message = {
-    match: function(ctx) {
-      if(ctx.request.path.startsWith('/m/')) {
-        return true;
-      }
-      if(ctx.request.path.startsWith('/d/')) {
-        return true;
-      }
-      return false;
-    },
-  };
   config.jsConfig = {
-    match: function(ctx) {
-      if(ctx.request.path.startsWith('/m/')) {
-        return true;
-      }
-      if(ctx.request.path.startsWith('/d/')) {
-        return true;
-      }
-      return false;
-    },
-  };
-  config.migiReset = {
     match: function(ctx) {
       if(ctx.request.path.startsWith('/m/')) {
         return true;
@@ -65,6 +43,9 @@ module.exports = appInfo => {
       }
       return false;
     },
+  };
+  config.cmsAccount = {
+    match: '/cms',
   };
 
   config.view = {
@@ -155,6 +136,12 @@ module.exports = appInfo => {
       username: 'uyutech',
       password: 'uyuTech2017',
       host: 'rm-uf6j2h04az726ui85.mysql.rds.aliyuncs.com',
+    },
+    cms: {
+      name: 'cms',
+      username: 'uyutech',
+      password: 'uyuTech2017',
+      host: 'rm-uf6qe904j4997hpen.mysql.rds.aliyuncs.com',
     },
   };
 

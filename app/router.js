@@ -30,15 +30,14 @@ module.exports = app => {
 
   app.get('/api/count/index', 'api.count.index');
 
+  app.get('/cms/index', 'cms.index');
+  app.post('/cms/authorSkillWorks', 'cms.authorSkillWorks');
+  app.post('/cms/allAuthor', 'cms.allAuthor');
+
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
   app.get('/h5/stats/visit', 'h5.stats.visit');
   app.get('/h5/stats/action', 'h5.stats.action');
-
-  app.get('/count/authorSkill/:id', app.middlewares.needLoginJson(), 'count.authorSkill');
-  app.get('/count/allAuthorSkill', app.middlewares.needLoginJson(), 'count.allAuthorSkill');
-  app.get('/count/authorCooperation/:id', app.middlewares.needLoginJson(), 'count.authorCooperation');
-  app.get('/count/allAuthorCooperation', app.middlewares.needLoginJson(), 'count.allAuthorCooperation');
 
   app.post('/h5/works2/index', 'h5.works.index');
   app.post('/h5/works2/commentList', 'h5.works.commentList');
@@ -173,6 +172,7 @@ module.exports = app => {
   app.post('/h5/imageAlbum/imageList', 'h5.imageAlbum.imageList');
 
   app.post('/h5/author/index', 'h5.author.index');
+  app.post('/h5/author/skillWorks', 'h5.author.skillWorks');
   app.post('/h5/author/dynamicList', 'h5.author.dynamicList');
   app.post('/h5/author/commentList', 'h5.author.commentList');
   app.post('/h5/author/kindWorkList', 'h5.author.kindWorkList');

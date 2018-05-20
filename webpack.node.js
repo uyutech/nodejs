@@ -40,6 +40,7 @@ module.exports = {
     // dupload: './app/view/d/upload.jsx',
     // dguide: './app/view/d/guide.jsx',
     dpost: './app/view/d/post.jsx',
+    cindex: './app/view/cms/index.jsx',
     // dcircle: './app/view/d/circle.jsx',
     // duser: './app/view/d/user.jsx',
     // dcircling: './app/view/d/circling.jsx',

@@ -1,10 +1,10 @@
 /**
- * Created by army8735 on 2018/3/10.
+ * Created by army8735 on 2018/5/20.
  */
 
 'use strict';
 
-import Home from '../../assets/d/index2/Home.jsx';
+import Home from '../../assets/cms/index/Home.jsx';
 
 export default function(data) {
   migi.resetUid();
@@ -16,7 +16,7 @@ export default function(data) {
 <head>
   ${data.helper.getDHead()}
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/dcommon.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/dindex2.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/cindex.css')}"/>
 </head>
 <body>
 ${home}
@@ -26,7 +26,7 @@ ${data.helper.getDBotNav()}
   ${data.helper.$CONFIG}
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
-<script src="${data.helper.getAssetUrl('/dindex2.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/cindex.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;
