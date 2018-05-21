@@ -1674,85 +1674,103 @@ class Service extends egg.Service {
     return res;
   }
 
-  // /**
-  //  * 获取作者在作品中的职种列表
-  //  * @param id:int 作者id
-  //  * @returns Array<int>
-  //  */
-  // async professionIdCount(id) {
-  //   if(!id) {
-  //     return;
-  //   }
-  //   const { app } = this;
-  //   let cacheKey = 'authorProfession_' + id;
-  //   let res = await app.redis.get(cacheKey);
-  //   if(res) {
-  //     return JSON.parse(res);
-  //   }
-  //   res = await app.model.worksAuthorRelation.findAll({
-  //     attributes: [
-  //       [Sequelize.fn('COUNT', '*'), 'num'],
-  //       ['profession_id', 'professionId']
-  //     ],
-  //     where: {
-  //       author_id: id,
-  //     },
-  //     group: [
-  //       'profession_id'
-  //     ],
-  //     raw: true,
-  //   });
-  //   app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
-  //   return res;
-  // }
-  //
-  // /**
-  //  * 获取作者某些职种的作品
-  //  * @param id:int 作者id
-  //  * @param professionIdList:Array<int> 职种id列表
-  //  * @param offset:int 分页开始
-  //  * @param limit:int 分页尺寸
-  //  * @returns Array<int>
-  //  */
-  // async worksIdListByProfessionList(id, professionIdList, offset, limit) {
-  //   if(!id || !professionIdList) {
-  //     return;
-  //   }
-  //   if(!professionIdList.length) {
-  //     return [];
-  //   }
-  //   offset = parseInt(offset) || 0;
-  //   limit = parseInt(limit) || 1;
-  //   if(offset < 0 || limit < 1) {
-  //     return;
-  //   }
-  //   const { app } = this;
-  //   let cacheKey = 'authorWorksListByProfessionList_' + id + '_' + professionIdList.join(',');
-  //   let res = await app.redis.get(cacheKey);
-  //   if(res) {
-  //     return JSON.parse(res);
-  //   }
-  //   res = await app.model.worksAuthorRelation.findAll({
-  //     attributes: [
-  //       ['works_id', 'worksId']
-  //     ],
-  //     where: {
-  //       author_id: id,
-  //       profession_id: professionIdList,
-  //     },
-  //     order: [
-  //       ['id', 'DESC']
-  //     ],
-  //     offset,
-  //     limit,
-  //     raw: true,
-  //   });
-  //   res = res.map((item) => {
-  //     return item.worksId;
-  //   });
-  //   app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
-  //   return res;
-  // }
+  /**
+   * 获取关联的用户
+   * @param id:int 作者id
+   * @returns Array<Object>
+   */
+  async user(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'authorUser_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.userAuthorRelation.findAll({
+      attributes: [
+        ['user_id', 'userId'],
+        'type'
+      ],
+      where: {
+        author_id: id,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取关联的用户
+   * @param idList:Array<int> 作者id
+   * @returns Array<Array<Object>>
+   */
+  async userList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('authorUser_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.userAuthorRelation.findAll({
+        attributes: [
+          ['author_id', 'authorId'],
+          ['user_id', 'userId'],
+          'type'
+        ],
+        where: {
+          author_id: noCacheIdList,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let id = item.authorId;
+          let temp = hash[id] = hash[id] || [];
+          temp.push({
+            userId: item.userId,
+            type: item.type,
+          });
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || [];
+        cache[i] = temp;
+        app.redis.setex('authorUser_' + id, app.config.redis.time, JSON.stringify(temp));
+      });
+    }
+    return cache;
+  }
 }
 
 module.exports = Service;

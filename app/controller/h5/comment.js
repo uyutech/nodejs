@@ -77,16 +77,16 @@ class Controller extends egg.Controller {
     }
     let rid = id;
     let pid = parseInt(body.pid);
-    // 回复作品
-    if(type === 2) {
-      rid = await service.works.commentId(rid);
+    // 回复作者
+    if(type === 1) {
+      rid = await service.author.commentId(rid);
       if(!rid) {
         return ctx.body = ctx.helper.errorJSON();
       }
     }
-    // 回复作者
-    else if(type === 1) {
-      rid = await service.author.commentId(rid);
+    // 回复作品
+    else if(type === 2) {
+      rid = await service.works.commentId(rid);
       if(!rid) {
         return ctx.body = ctx.helper.errorJSON();
       }
@@ -97,59 +97,101 @@ class Controller extends egg.Controller {
     else {
       return ctx.body = ctx.helper.errorJSON();
     }
-    pid = pid || rid;
+    let authorId = parseInt(body.authorId) || 0;
     await service.comment.replyCount(rid);
-    let res = await service.comment.add(uid, rid, pid, content, parseInt(body.authorId));
+    let res = await service.comment.add(uid, rid, pid || rid, content, authorId);
     if(!res) {
       return ctx.body = ctx.helper.errorJSON();
     }
-    if(type === 2) {
-      if(body.pid) {
-        let comment = await service.comment.info(body.pid);
-        if(comment.uid !== uid) {
+    if(type === 1) {
+      let user = await service.author.user(id);
+      for(let i = 0; i < user.length; i++) {
+        if(user[i].userId !== uid) {
           app.model.message.create({
             user_id: uid,
-            author_id: body.authorId || 0,
-            target_id: comment.userId,
-            type: 2,
+            author_id: authorId,
+            target_id: user[i].userId,
+            type: 6,
             ref_id: id,
             comment_id: res.id,
-            create_time: new Date(),
-            update_time: new Date(),
           });
         }
       }
-    }
-    else if(type === 1) {
-      if(body.pid) {
-        let comment = await service.comment.info(body.pid);
-        if(comment.uid !== uid) {
+      if(pid && pid !== rid) {
+        let comment = await service.comment.info(pid);
+        if(comment.userId !== uid) {
           app.model.message.create({
             user_id: uid,
-            author_id: body.authorId || 0,
+            author_id: authorId,
             target_id: comment.userId,
             type: 1,
             ref_id: id,
             comment_id: res.id,
-            create_time: new Date(),
-            update_time: new Date(),
+          });
+        }
+      }
+    }
+    else if(type === 2) {
+      let author = await service.works.author(id);
+      let idList = author.filter((item) => {
+        return item.isSettle;
+      }).map((item) => {
+        return item.id;
+      });
+      let userList = await service.author.userList(idList);
+      for(let i = 0; i < userList.length; i++) {
+        let user = userList[i];
+        for(let j = 0; j < user.length; j++) {
+          if(user[j].userId !== uid) {
+            app.model.message.create({
+              user_id: uid,
+              author_id: authorId,
+              target_id: user[j].userId,
+              type: 5,
+              ref_id: id,
+              comment_id: res.id,
+            });
+          }
+        }
+      }
+      if(pid && pid !== rid) {
+        let comment = await service.comment.info(pid);
+        if(comment.userId !== uid) {
+          app.model.message.create({
+            user_id: uid,
+            author_id: authorId,
+            target_id: comment.userId,
+            type: 2,
+            ref_id: id,
+            comment_id: res.id,
           });
         }
       }
     }
     else if(type === 3) {
-      let comment = await service.comment.info(pid);
-      if(comment.userId !== uid) {
+      let post = await service.comment.info(rid);
+      if(post.userId !== uid) {
         app.model.message.create({
           user_id: uid,
-          author_id: body.authorId || 0,
-          target_id: comment.userId,
-          type: pid !== rid ? 3 : 4,
+          author_id: authorId,
+          target_id: post.userId,
+          type: 4,
           ref_id: rid,
           comment_id: res.id,
-          create_time: new Date(),
-          update_time: new Date(),
         });
+      }
+      if(pid && pid !== rid) {
+        let comment = await service.comment.info(pid);
+        if(comment.userId !== uid) {
+          app.model.message.create({
+            user_id: uid,
+            author_id: authorId,
+            target_id: comment.userId,
+            type: 3,
+            ref_id: rid,
+            comment_id: res.id,
+          });
+        }
       }
     }
     app.redis.incr('commentReplyCount_' + rid);
