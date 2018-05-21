@@ -5,6 +5,7 @@
 'use strict';
 
 const egg = require('egg');
+const Sequelize = require('sequelize');
 
 const LIMIT = 30;
 
@@ -30,13 +31,14 @@ class Controller extends egg.Controller {
     if(!uid || uid < 0 || !coins || coins < 0) {
       return ctx.body = ctx.helper.errorJSON('参数不正确');
     }
-    await app.model.user.update({
+    let res = await app.model.user.update({
       coins: Sequelize.literal('coins+' + coins),
     }, {
       where: {
-        user_id: uid,
+        id: uid,
       },
     });
+    ctx.body = ctx.helper.okJSON(res);
   }
 }
 
