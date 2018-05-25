@@ -166,8 +166,10 @@ class Service extends egg.Service {
       return;
     }
     const { app } = this;
-    let cacheKey = 'userInfo_' + id;
-    await app.redis.del(cacheKey);
+    await Promise.all([
+      app.redis.del('userInfo_' + id),
+      app.redis.del('userAuthor_' + id)
+    ]);
   }
 
   /**
@@ -2095,12 +2097,11 @@ class Service extends egg.Service {
     else {
       key = uid + '' + id;
     }
-    const { service } = this;
     let [data, count, userInfo, targetInfo] = await Promise.all([
       this.dialogListData(key, offset, limit),
       this.dialogListCount(key),
-      service.user.info(uid),
-      service.user.info(id)
+      this.info(uid),
+      this.info(id)
     ]);
     data.forEach((item) => {
       if(item.userId === uid) {
@@ -2182,7 +2183,7 @@ class Service extends egg.Service {
    * 更新用户的作者入住状态
    * @param id:int 用户id
    * @param authorId:int 作者id
-   * @param settle:int 入住状态
+   * @param settle:int 入住状态，1公开 2马甲 3放弃
    * @returns Object
    */
   async updateAuthorSettle(id, authorId, settle) {
@@ -2194,15 +2195,36 @@ class Service extends egg.Service {
     if(!check) {
       return;
     }
-    return await app.model.userAuthorRelation.update({
-      settle,
-    }, {
-      where: {
-        user_id: id,
-        author_id: authorId,
-      },
-      raw: true,
-    });
+    let now = new Date();
+    let query = [
+      app.model.userAuthorRelation.update({
+        settle,
+        update_time: now,
+      }, {
+        where: {
+          user_id: id,
+          author_id: authorId,
+        },
+        raw: true,
+      }),
+      app.model.author.update({
+        is_settle: true,
+      })
+    ];
+    if(settle !== 3) {
+      query.push(
+        app.model.author.update({
+          is_settle: true,
+          update_time: now,
+        }, {
+          where: {
+            id: authorId,
+            is_settle: false,
+          },
+        })
+      );
+    }
+    return await Promise.all(query);
   }
 
   /**

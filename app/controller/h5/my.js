@@ -288,6 +288,7 @@ class Controller extends egg.Controller {
       return;
     }
     let res = await service.user.updateAuthorSettle(uid, body.authorId, type);
+    service.user.clearInfoCache(uid);
     if(res) {
       ctx.body = ctx.helper.okJSON(res);
     }
