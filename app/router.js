@@ -33,6 +33,8 @@ module.exports = app => {
   app.get('/cms/index', 'cms.index');
   app.post('/cms/authorSkillWorks', 'cms.authorSkillWorks');
   app.post('/cms/allAuthor', 'cms.allAuthor');
+  app.post('/cms/sendLetter', 'cms.sendLetter');
+  app.post('/cms/allUser', 'cms.allUser');
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
@@ -103,7 +105,7 @@ module.exports = app => {
   app.post('/h5/my2/favorList', app.middlewares.needLoginJson(), 'h5.my.favorList');
   app.post('/h5/my2/favorPostList', app.middlewares.needLoginJson(), 'h5.my.favorPostList');
   app.post('/h5/my2/relationList', app.middlewares.needLoginJson(), 'h5.my.relationList');
-  app.post('/h5/my2/messageList', app.middlewares.needLoginJson(), 'h5.my.messageList');
+  app.post('/h5/my2/messageList', app.middlewares.needLoginJson(), 'h5.my.commentList');
   app.post('/h5/my2/unreadMessageCount', app.middlewares.needLoginJson(), 'h5.my.unreadMessageCount');
   app.post('/h5/my2/sts', app.middlewares.needLoginJson(), 'h5.my.sts');
   app.post('/h5/my2/headUrl', app.middlewares.needLoginJson(), 'h5.my.headUrl');
@@ -221,7 +223,12 @@ module.exports = app => {
   app.post('/h5/my/favorList', app.middlewares.needLoginJson(), 'h5.my.favorList');
   app.post('/h5/my/favorPostList', app.middlewares.needLoginJson(), 'h5.my.favorPostList');
   app.post('/h5/my/relationList', app.middlewares.needLoginJson(), 'h5.my.relationList');
-  app.post('/h5/my/messageList', app.middlewares.needLoginJson(), 'h5.my.messageList');
+  // TODO: del
+  app.post('/h5/my/messageList', app.middlewares.needLoginJson(), 'h5.my.commentList');
+  app.post('/h5/my/commentList', app.middlewares.needLoginJson(), 'h5.my.commentList');
+  app.post('/h5/my/recentLetter', app.middlewares.needLoginJson(), 'h5.my.recentLetter');
+  app.post('/h5/my/letterList', app.middlewares.needLoginJson(), 'h5.my.letterList');
+  app.post('/h5/my/dialogList', app.middlewares.needLoginJson(), 'h5.my.dialogList');
   app.post('/h5/my/unreadMessageCount', app.middlewares.needLoginJson(), 'h5.my.unreadMessageCount');
   app.post('/h5/my/sts', app.middlewares.needLoginJson(), 'h5.my.sts');
   app.post('/h5/my/headUrl', app.middlewares.needLoginJson(), 'h5.my.headUrl');

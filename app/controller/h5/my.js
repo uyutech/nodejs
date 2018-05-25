@@ -225,7 +225,7 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON();
   }
 
-  async messageList() {
+  async commentList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
@@ -239,6 +239,40 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let res = await service.user.unreadMessageCount(uid);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async letterList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.letterList(uid, offset, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async recentLetter() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.recentLetter(uid, offset, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async dialogList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    let offset = parseInt(body.offset) || 0;
+    if(!id) {
+      return;
+    }
+    let res = await service.user.dialogList(uid, id, offset, LIMIT);
+    res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
 

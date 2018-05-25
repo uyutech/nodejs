@@ -73,6 +73,8 @@ const userCreateWorks = require('../model/userCreateWorks');
 const userUploadWork = require('../model/userUploadWork');
 const workWorkRelation = require('../model/workWorkRelation');
 const authorSkillWorks = require('../model/authorSkillWorks');
+const letter = require('../model/letter');
+const letterRecent = require('../model/letterRecent');
 
 const product = require('../model/product');
 const prize = require('../model/prize');
@@ -308,6 +310,8 @@ module.exports = {
         userUploadWork: userUploadWork(this),
         workWorkRelation: workWorkRelation(this),
         authorSkillWorks: authorSkillWorks(this),
+        letter: letter(this),
+        letterRecent: letterRecent(this),
 
         product: product(this),
         prize: prize(this),
