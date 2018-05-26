@@ -177,15 +177,19 @@ class Controller extends egg.Controller {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    if(!body.value) {
+    let nickname = (body.value || '').trim();
+    if(!nickname) {
       return;
+    }
+    if(nickname.length < 2 || nickname.length > 8) {
+      return ctx.body = ctx.helper.errorJSON('昵称长度需要在2~8个字之间哦~');
     }
     let exist = await app.model.user.findOne({
       attributes: [
         'id'
       ],
       where: {
-        nickname: body.value,
+        nickname,
       },
       raw: true,
     });
@@ -193,7 +197,7 @@ class Controller extends egg.Controller {
       return ctx.body = ctx.helper.errorJSON('这个昵称已经存在，换一个吧~');
     }
     await app.model.user.update({
-      nickname: body.value,
+      nickname,
       update_time: new Date(),
     }, {
       where: {
@@ -298,18 +302,31 @@ class Controller extends egg.Controller {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    if(!body.nickname) {
+    let nickname = (body.nickname || '').trim();
+    if(!nickname) {
       return;
     }
-    if(body.nickname.length < 2 || body.nickname.length > 8) {
+    if(nickname.length < 2 || nickname.length > 8) {
       return ctx.body = ctx.helper.errorJSON('昵称长度需要在2~8个字之间哦~');
     }
     let sex = parseInt(body.sex) || 0;
     if(sex < 0 || sex > 3) {
       return;
     }
+    let exist = await app.model.user.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        nickname: nickname,
+      },
+      raw: true,
+    });
+    if(exist) {
+      ctx.body = ctx.helper.errorJSON('这个昵称已经存在，换一个吧~');
+    }
     let res = await app.model.user.update({
-      nickname: body.nickname,
+      nickname,
       sex,
       reg_state: 11,
     }, {
