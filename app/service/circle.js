@@ -941,10 +941,22 @@ class Service extends egg.Service {
         };
       }
     }
-    // 更新内存中用户对作者关系的状态，同时入库
+    // 查找等价直属tag，同时关注
+    let tag = await app.model.circleTagRelation.findOne({
+      attributes: [
+        ['tag_id', 'tagId']
+      ],
+      where: {
+        circle_id: id,
+        type: 1,
+      },
+      raw: true,
+    });
+    // 更新内存中用户对圈子关系的状态，同时入库
     let cacheKey = 'userCircleRelation_' + uid + '_' + id + '_1';
+    let query;
     if(state) {
-      await Promise.all([
+      query = [
         app.redis.setex(cacheKey, app.config.redis.time, 'true'),
         app.model.userCircleRelation.upsert({
           user_id: uid,
@@ -956,11 +968,25 @@ class Service extends egg.Service {
             user_id: uid,
             circle_id: id,
           },
-        })
-      ]);
+        }),
+      ];
+      if(tag) {
+        query.push(
+          app.model.userTagRelation.upsert({
+            user_id: uid,
+            tag_id: tag.tagId,
+            type: 1,
+          }, {
+            where: {
+              user_id: uid,
+              tag_id: tag.tagId,
+            }
+          })
+        );
+      }
     }
     else {
-      await Promise.all([
+      query = [
         app.redis.setex(cacheKey, app.config.redis.time, 'false'),
         app.model.userCircleRelation.destroy({
           where: {
@@ -969,8 +995,20 @@ class Service extends egg.Service {
             type: 1,
           },
         })
-      ]);
+      ];
+      if(tag) {
+        query.push(
+          app.model.userTagRelation.destroy({
+            where: {
+              user_id: uid,
+              tag_id: tag.tagId,
+              type: 1,
+            },
+          })
+        );
+      }
     }
+    await Promise.all(query);
     // 更新计数
     cacheKey = 'circleFansCount_' + id;
     if(state) {
@@ -1017,17 +1055,44 @@ class Service extends egg.Service {
         message: '已经屏蔽过无需重复屏蔽',
       };
     }
-    await app.model.userCircleRelation.upsert({
-      user_id: uid,
-      circle_id: id,
-      type: 2,
-      create_time: new Date(),
-    }, {
+    // 查找等价直属tag，同时屏蔽
+    let tag = await app.model.circleTagRelation.findOne({
+      attributes: [
+        ['tag_id', 'tagId']
+      ],
       where: {
+        circle_id: id,
+        type: 1,
+      }
+    });
+    let query = [
+      app.model.userCircleRelation.upsert({
         user_id: uid,
         circle_id: id,
-      },
-    });
+        type: 2,
+        create_time: new Date(),
+      }, {
+        where: {
+          user_id: uid,
+          circle_id: id,
+        },
+      })
+    ];
+    if(tag) {
+      query.push(
+        app.model.userTagRelation.upsert({
+          user_id: uid,
+          tag_id: tag.tagId,
+          type: 2,
+        }, {
+          where: {
+            user_id: uid,
+            tag_id: tag.tagId,
+          }
+        })
+      );
+    }
+    await Promise.all(query);
     app.redis.del('userCircleRelation_' + uid + '_' + id + '_1');
     await app.redis.decr('circleFansCount_' + id);
     return {

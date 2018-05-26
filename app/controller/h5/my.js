@@ -345,6 +345,19 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let idList = body.ids.split(',');
     if(idList) {
+      let tagList = await app.model.circleTagRelation.findAll({
+        attributes: [
+          ['tag_id', 'tagId']
+        ],
+        where: {
+          circle_id: idList,
+          type: 1,
+        },
+        raw: true,
+      });
+      let tagIdList = tagList.map((item) => {
+        return item.tagId;
+      });
       let query = idList.map((id) => {
         return app.model.userCircleRelation.upsert({
           user_id: uid,
@@ -352,10 +365,24 @@ class Controller extends egg.Controller {
           type: 1,
         }, {
           where: {
+            user_id: uid,
             circle_id: id,
           },
           raw: true,
         })
+      });
+      tagIdList.forEach((id) => {
+        app.model.userTagRelation.upsert({
+          user_id: uid,
+          tag_id: id,
+          type: 1,
+        }, {
+          where: {
+            user_id: uid,
+            tag_id: id,
+          },
+          raw: true,
+        });
       });
       await query;
     }
@@ -365,7 +392,6 @@ class Controller extends egg.Controller {
       where: {
         id: uid,
       },
-      raw: true,
     });
     service.user.clearInfoCache(uid);
     ctx.body = ctx.helper.okJSON();

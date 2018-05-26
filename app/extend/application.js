@@ -75,6 +75,7 @@ const workWorkRelation = require('../model/workWorkRelation');
 const authorSkillWorks = require('../model/authorSkillWorks');
 const letter = require('../model/letter');
 const letterRecent = require('../model/letterRecent');
+const userTagRelation = require('../model/userTagRelation');
 
 const product = require('../model/product');
 const prize = require('../model/prize');
@@ -312,6 +313,7 @@ module.exports = {
         authorSkillWorks: authorSkillWorks(this),
         letter: letter(this),
         letterRecent: letterRecent(this),
+        userTagRelation: userTagRelation(this),
 
         product: product(this),
         prize: prize(this),
