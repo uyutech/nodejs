@@ -318,12 +318,12 @@ class Controller extends egg.Controller {
         'id'
       ],
       where: {
-        nickname: nickname,
+        nickname,
       },
       raw: true,
     });
     if(exist) {
-      ctx.body = ctx.helper.errorJSON('这个昵称已经存在，换一个吧~');
+      return ctx.body = ctx.helper.errorJSON('这个昵称已经存在，换一个吧~');
     }
     let res = await app.model.user.update({
       nickname,
