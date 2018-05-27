@@ -879,12 +879,14 @@ class Service extends egg.Service {
     let tagIdList = [];
     let tagIdHash = {};
     list.forEach((arr) => {
-      arr.forEach((item) => {
-        if(!tagIdHash[item]) {
-          tagIdHash[item] = true;
-          tagIdList.push(item);
-        }
-      });
+      if(arr) {
+        arr.forEach((item) => {
+          if(!tagIdHash[item]) {
+            tagIdHash[item] = true;
+            tagIdList.push(item);
+          }
+        });
+      }
     });
     let infoList = await service.tag.infoList(tagIdList);
     let hash = {};
@@ -894,11 +896,13 @@ class Service extends egg.Service {
     return idList.map((id, i) => {
       let temp = [];
       let tagIdList = list[i];
-      tagIdList.forEach((item) => {
-        if(hash[item]) {
-          temp.push(hash[item]);
-        }
-      });
+      if(tagIdList) {
+        tagIdList.forEach((item) => {
+          if(hash[item]) {
+            temp.push(hash[item]);
+          }
+        });
+      }
       return temp;
     });
   }

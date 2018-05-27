@@ -45,6 +45,9 @@ class Controller extends egg.Controller {
         delete item.isDelete;
         idList.push(item.id);
       }
+      else {
+        idList.push(null);
+      }
     });
     if(circle) {
       idList.push(circle.id);
