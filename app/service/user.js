@@ -2205,10 +2205,6 @@ class Service extends egg.Service {
           user_id: id,
           author_id: authorId,
         },
-        raw: true,
-      }),
-      app.model.author.update({
-        is_settle: true,
       })
     ];
     if(settle !== 3) {
