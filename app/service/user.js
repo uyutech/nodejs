@@ -1735,15 +1735,28 @@ class Service extends egg.Service {
       raw: true,
     });
     let replyIdList = [];
+    let replyIdHash = {};
+    let worksIdList = [];
+    let worksIdHash = {};
     let idList = res.map((item) => {
       if(item.type === 4) {
-        replyIdList.push(item.refId);
+        if(!replyIdHash[item.refId]) {
+          replyIdHash[item.refId] = true;
+          replyIdList.push(item.refId);
+        }
+      }
+      else if(item.type === 2 || item.type === 5) {
+        if(!worksIdHash[item.refId]) {
+          worksIdHash[item.refId] = true;
+          worksIdList.push(item.refId);
+        }
       }
       return item.commentId;
     });
-    let [infoList, postList] = await Promise.all([
+    let [infoList, postList, worksList] = await Promise.all([
       service.comment.infoList(idList),
-      service.comment.infoList(replyIdList)
+      service.comment.infoList(replyIdList),
+      service.works.infoList(worksIdList)
     ]);
     infoList = await service.comment.plusList(infoList);
     let postHash = {};
@@ -1757,6 +1770,12 @@ class Service extends egg.Service {
         postHash[item.id] = item;
       }
     });
+    let worksHash = {};
+    worksList.forEach((item) => {
+      if(item) {
+        worksHash[item.id] = item;
+      }
+    });
     res.forEach((item, i) => {
       let comment = infoList[i];
       if(comment) {
@@ -1764,6 +1783,9 @@ class Service extends egg.Service {
         if(item.type === 4) {
           comment.quote = postHash[item.refId];
         }
+      }
+      if(item.type === 2 || item.type === 5) {
+        item.works = worksHash[item.refId];
       }
       delete item.commentId;
     });
