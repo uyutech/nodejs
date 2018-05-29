@@ -1728,7 +1728,7 @@ class Service extends egg.Service {
       },
       order: [
         'is_read',
-        ['id', 'DESC']
+        ['create_time', 'DESC']
       ],
       offset,
       limit,

@@ -61,7 +61,7 @@ module.exports = app => {
     indexes: [
       {
         name: 'target_id_is_read',
-        fields: ['target_id', 'is_read'],
+        fields: ['target_id', 'is_read', 'create_time'],
       },
       {
         name: 'user_id_comment_id',
