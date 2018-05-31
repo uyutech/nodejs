@@ -40,7 +40,6 @@ class Controller extends egg.Controller {
     if(!id) {
       return;
     }
-    return ctx.body = ctx.helper.errorJSON('');
     let res = await service.mall.applyExpress(id, uid);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res);
