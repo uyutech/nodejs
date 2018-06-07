@@ -263,7 +263,7 @@ class Service extends egg.Service {
    * @returns Array<Object>
    */
   async infoListPlusCount(idList, kind, uid) {
-    if(!idList || !kind) {
+    if(!idList) {
       return;
     }
     if(!idList.length) {

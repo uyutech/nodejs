@@ -30,7 +30,7 @@ module.exports = app => {
     position: {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
-      comment: '展示位置',
+      comment: '1转圈顶部，2新版推荐顶部',
     },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,

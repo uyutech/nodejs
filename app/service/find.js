@@ -64,7 +64,7 @@ class Service extends egg.Service {
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
-      }
+    }
     else {
       res = await app.model.findList.findAll({
         attributes: [

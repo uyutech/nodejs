@@ -243,6 +243,9 @@ class Service extends egg.Service {
           comment_id: id,
           is_delete: false,
         },
+        order: [
+          'kind'
+        ],
         raw: true,
       });
     }
@@ -316,7 +319,9 @@ class Service extends egg.Service {
         let works = hash[item.worksId];
         let work = hash[item.workId];
         if(work) {
-          let copy = Object.assign({}, works || {});
+          let copy = Object.assign({}, works || {
+            id: item.worksId,
+          });
           copy.work = work;
           return copy;
         }
@@ -373,6 +378,9 @@ class Service extends egg.Service {
           comment_id: noCacheIdList,
           is_delete: false,
         },
+        order: [
+          'kind'
+        ],
         raw: true,
       });
       let hash = {};
@@ -470,7 +478,9 @@ class Service extends egg.Service {
             let works = hash[item.worksId];
             let work = hash[item.workId];
             if(work) {
-              let copy = Object.assign({}, works || {});
+              let copy = Object.assign({}, works || {
+                id: item.worksId,
+              });
               copy.work = work;
               return copy;
             }
@@ -1286,7 +1296,9 @@ class Service extends egg.Service {
     const { app } = this;
     let cache = await Promise.all(
       idList.map((id) => {
-        return app.redis.get('commentCount_' + id + '_' + type);
+        if(id !== null && id !== undefined) {
+          return app.redis.get('commentCount_' + id + '_' + type);
+        }
       })
     );
     let noCacheIdList = [];
@@ -1506,7 +1518,7 @@ class Service extends egg.Service {
    * @param type:int 类型
    * @returns Array<int>
    */
-  async tag(id, type) {
+  async tagId(id, type) {
     if(!id || !type) {
       return;
     }
@@ -1539,7 +1551,7 @@ class Service extends egg.Service {
    * @param type:int 类型
    * @returns Array<Array<int>>
    */
-  async tagList(idList, type) {
+  async tagIdList(idList, type) {
     if(!idList || !type) {
       return;
     }
@@ -1610,7 +1622,7 @@ class Service extends egg.Service {
       return;
     }
     const { service } = this;
-    let tagIdList = await this.tag(id, 1);
+    let tagIdList = await this.tagId(id, 1);
     let circleIdList = await service.tag.circleIdList(tagIdList, 1);
     let list = [];
     let hash = {};
@@ -1631,7 +1643,7 @@ class Service extends egg.Service {
         name: item.name,
         type: item.type,
       };
-    }).slice(0, 3);
+    });
   }
 
   /**
@@ -1647,7 +1659,7 @@ class Service extends egg.Service {
       return [];
     }
     const { service } = this;
-    let tagIdList = await this.tagList(idList, 1);
+    let tagIdList = await this.tagIdList(idList, 1);
     let list = [];
     let hash = {};
     tagIdList.forEach((arr) => {
@@ -1710,7 +1722,7 @@ class Service extends egg.Service {
             }
           });
         });
-        return temp.slice(0, 3);
+        return temp;
       }
     });
   }

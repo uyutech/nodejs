@@ -1211,6 +1211,7 @@ class Service extends egg.Service {
       ],
       where: {
         is_delete: false,
+        is_settle: true,
       },
       offset,
       limit,
