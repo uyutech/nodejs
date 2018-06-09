@@ -48,6 +48,10 @@ class Controller extends egg.Controller {
       ]);
       list.limit = LIMIT;
     }
+    banner.unshift({
+      link: 'https://show.bilibili.com/platform/detail.html?id=12757&from=pc',
+      url: '//zhuanquan.xin/img/80ee3e9751dfdf071235a69b82e400cd.jpg',
+    });
     ctx.body = ctx.helper.okJSON({
       tag,
       banner,
