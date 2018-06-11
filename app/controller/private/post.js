@@ -48,6 +48,9 @@ class Controller extends egg.Controller {
     }
     if(image) {
       image = JSON.parse(image);
+      if(!Array.isArray(image)) {
+        image = [image];
+      }
     }
     if(tag) {
       tag = JSON.parse(tag);
@@ -95,7 +98,7 @@ class Controller extends egg.Controller {
     });
     let [circleIdList, res] = await Promise.all([
       service.tag.circleIdList(tagIdList),
-      service.post.add(uid, {
+      service.post.add(userId, {
         content,
         chooseTagIdList,
         inputTagIdList,
@@ -120,7 +123,7 @@ class Controller extends egg.Controller {
           app.model.tagCommentRelation.create({
             tag_id: item.id,
             comment_id: res.id,
-            type: item.type || 0,
+            type: item.type,
           });
         });
       }
@@ -128,7 +131,7 @@ class Controller extends egg.Controller {
         app.model.tagCommentRelation.create({
           tag_id: tag.id,
           comment_id: res.id,
-          type: tag.type || 0,
+          type: tag.type,
         });
       }
     }
