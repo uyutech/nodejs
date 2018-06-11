@@ -40,7 +40,7 @@ class Controller extends egg.Controller {
         ],
         raw: true,
       });
-      app.redis.setex('banner', app.config.redis.longTime, JSON.stringify(bannerList));
+      app.redis.setex('banner', app.config.redis.time, JSON.stringify(bannerList));
     }
     if(circleList) {
       circleList.limit = LIMIT;
@@ -105,6 +105,52 @@ class Controller extends egg.Controller {
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
+
+  // async index2() {
+  //   const { ctx, app, service } = this;
+  //   let uid = ctx.session.uid;
+  //   let [bannerList, postList] = await Promise.all([
+  //     app.redis.get('banner'),
+  //     service.circling.post(uid, 0, LIMIT)
+  //   ]);
+  //   if(bannerList) {
+  //     bannerList = JSON.parse(bannerList);
+  //   }
+  //   else {
+  //     bannerList = await app.model.banner.findAll({
+  //       attributes: [
+  //         'title',
+  //         'url',
+  //         ['target_id', 'targetId'],
+  //         'type'
+  //       ],
+  //       where: {
+  //         position: 1,
+  //         is_delete: false,
+  //       },
+  //       order: [
+  //         ['weight', 'DESC']
+  //       ],
+  //       raw: true,
+  //     });
+  //     app.redis.setex('banner', app.config.redis.time, JSON.stringify(bannerList));
+  //   }
+  //   postList.limit = LIMIT;
+  //   ctx.body = ctx.helper.okJSON({
+  //     bannerList,
+  //     postList,
+  //   });
+  // }
+  //
+  // async postList2() {
+  //   const { ctx, service } = this;
+  //   let uid = ctx.session.uid;
+  //   let body = ctx.request.body;
+  //   let offset = parseInt(body.offset) || 0;
+  //   let res = await service.circling.post(uid, offset, LIMIT);
+  //   res.limit = LIMIT;
+  //   ctx.body = ctx.helper.okJSON(res);
+  // }
 }
 
 module.exports = Controller;

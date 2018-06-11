@@ -989,6 +989,7 @@ class Service extends egg.Service {
       ],
       where: {
         user_id: id,
+        author_id: 0,
         root_id: 0,
         is_delete: false,
       },
@@ -1020,6 +1021,7 @@ class Service extends egg.Service {
       ],
       where: {
         user_id: id,
+        author_id: 0,
         root_id: 0,
         is_delete: false,
       },

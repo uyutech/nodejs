@@ -21,6 +21,12 @@ module.exports = app => {
       type: Sequelize.BIGINT.UNSIGNED,
       allowNull: false,
     },
+    ref: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 1,
+      comment: '1主动操作，2系统推测',
+    },
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,

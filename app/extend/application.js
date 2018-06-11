@@ -76,6 +76,12 @@ const authorSkillWorks = require('../model/authorSkillWorks');
 const letter = require('../model/letter');
 const letterRecent = require('../model/letterRecent');
 const userTagRelation = require('../model/userTagRelation');
+// const content = require('../model/content');
+// const userContentRelation = require('../model/userContentRelation');
+// const userContentRecord = require('../model/userContentRecord');
+// const circlingPost = require('../model/circlingPost');
+const guideTag = require('../model/guideTag');
+const postTag = require('../model/postTag');
 
 const product = require('../model/product');
 const prize = require('../model/prize');
@@ -314,6 +320,12 @@ module.exports = {
         letter: letter(this),
         letterRecent: letterRecent(this),
         userTagRelation: userTagRelation(this),
+        // content: content(this),
+        // userContentRelation: userContentRelation(this),
+        // userContentRecord: userContentRecord(this),
+        // circlingPost: circlingPost(this),
+        guideTag: guideTag(this),
+        postTag: postTag(this),
 
         product: product(this),
         prize: prize(this),

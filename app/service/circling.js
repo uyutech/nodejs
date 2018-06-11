@@ -56,6 +56,95 @@ class Service extends egg.Service {
     });
     return infoList;
   }
+
+  /**
+   * 获取推荐内容
+   * @param uid
+   * @param offset
+   * @param limit
+   * @returns Object{ data: Array<Object>, count: int }
+   */
+  async post(uid, offset, limit) {
+    let [data, count] = await Promise.all([
+      this.postData(uid, offset, limit),
+      this.postCount()
+    ]);
+    return {
+      data,
+      count,
+    };
+  }
+
+  async postData(uid, offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'circlingPost_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.circlingPost.findAll({
+        attributes: [
+          ['comment_id', 'commentId'],
+          'tag'
+        ],
+        where: {
+          is_delete: false,
+        },
+        order: [
+          'weight'
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let idList = [];
+    let tagHash = {};
+    res.forEach((item) => {
+      idList.push(item.commentId);
+      if(item.tag) {
+        tagHash[item.commentId] = item.tag;
+      }
+    });
+    let postList = await service.post.infoList(idList);
+    postList.forEach((item) => {
+      item.tag = tagHash[item.id];
+    });
+    return postList;
+  }
+
+  async postCount() {
+    const { app } = this;
+    let cacheKey = 'circlingPostCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.circlingPost.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
 }
 
 module.exports = Service;

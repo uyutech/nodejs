@@ -322,7 +322,7 @@ class Controller extends egg.Controller {
       },
       raw: true,
     });
-    if(exist) {
+    if(exist && exist.id !== uid) {
       return ctx.body = ctx.helper.errorJSON('这个昵称已经存在，换一个吧~');
     }
     let res = await app.model.user.update({
@@ -369,12 +369,13 @@ class Controller extends egg.Controller {
             circle_id: id,
           },
           raw: true,
-        })
+        });
       });
       tagIdList.forEach((id) => {
         app.model.userTagRelation.upsert({
           user_id: uid,
           tag_id: id,
+          ref: 1,
           type: 1,
         }, {
           where: {

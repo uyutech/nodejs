@@ -98,6 +98,7 @@ class Service extends egg.Service {
           'state',
           'cover',
           'type',
+          'describe',
           ['is_authorize', 'isAuthorize'],
           ['is_delete', 'isDelete']
         ],
@@ -404,6 +405,155 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取大作品下小作品列表包含统计数字
+   * @param id:int 大作品id
+   * @param uid:int 用户id
+   * @returns Array<Object>
+   */
+  async collectionCount(id, uid) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let res = await this.collectionBase(id);
+    let videoIdList = [];
+    let audioIdList = [];
+    let imageIdList = [];
+    let textIdList = [];
+    res.forEach((item) => {
+      switch(item.kind) {
+        case 1:
+          videoIdList.push(item.workId);
+          break;
+        case 2:
+          audioIdList.push(item.workId);
+          break;
+        case 3:
+          imageIdList.push(item.workId);
+          break;
+        case 4:
+          textIdList.push(item.workId);
+          break;
+      }
+    });
+    let [
+      videoList,
+      audioList,
+      imageList,
+      textList
+    ] = await Promise.all([
+      service.work.infoListPlusCount(videoIdList, 1, uid),
+      service.work.infoListPlusCount(audioIdList, 2, uid),
+      service.work.infoListPlusCount(imageIdList, 3, uid),
+      service.work.infoListPlusCount(textIdList, 4, uid)
+    ]);
+    let hash = {};
+    videoList.forEach((item) => {
+      if(item) {
+        hash[item.id] = item;
+      }
+    });
+    audioList.forEach((item) => {
+      if(item) {
+        hash[item.id] = item;
+      }
+    });
+    imageList.forEach((item) => {
+      if(item) {
+        hash[item.id] = item;
+      }
+    });
+    textList.forEach((item) => {
+      if(item) {
+        hash[item.id] = item;
+      }
+    });
+    return res.map((item) => {
+      return hash[item.workId];
+    });
+  }
+
+  /**
+   * 获取大作品列表下小作品列表包含统计数字
+   * @param idList:int 大作品id列表
+   * @param uid:int 用户id
+   * @returns Array<Array<Object>>
+   */
+  async collectionListCount(idList, uid) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let res = await this.collectionListBase(idList);
+    let videoIdList = [];
+    let audioIdList = [];
+    let imageIdList = [];
+    let textIdList = [];
+    let hash = {};
+    res.forEach((list) => {
+      (list || []).forEach((item) => {
+        if(!hash[item.workId]) {
+          hash[item.workId] = true;
+          switch(item.kind) {
+            case 1:
+              videoIdList.push(item.workId);
+              break;
+            case 2:
+              audioIdList.push(item.workId);
+              break;
+            case 3:
+              imageIdList.push(item.workId);
+              break;
+            case 4:
+              textIdList.push(item.workId);
+              break;
+          }
+        }
+      });
+    });
+    let [
+      videoList,
+      audioList,
+      imageList,
+      textList
+    ] = await Promise.all([
+      service.work.infoListPlusCount(videoIdList, 1, uid),
+      service.work.infoListPlusCount(audioIdList, 2, uid),
+      service.work.infoListPlusCount(imageIdList, 3, uid),
+      service.work.infoListPlusCount(textIdList, 4, uid)
+    ]);
+    hash = {};
+    videoList.forEach((item) => {
+      if(item) {
+        hash[item.id] = item;
+      }
+    });
+    audioList.forEach((item) => {
+      if(item) {
+        hash[item.id] = item;
+      }
+    });
+    imageList.forEach((item) => {
+      if(item) {
+        hash[item.id] = item;
+      }
+    });
+    textList.forEach((item) => {
+      if(item) {
+        hash[item.id] = item;
+      }
+    });
+    return res.map((list) => {
+      return (list || []).map((item) => {
+        return hash[item.workId];
+      });
+    });
+  }
+
+  /**
    * 获取作品的评论id
    * @param id:int 作品id
    * @returns int
@@ -499,6 +649,103 @@ class Service extends egg.Service {
       });
     }
     return cache;
+  }
+
+  /**
+   * 获取大作品对应言论的标签
+   * id:int 大作品id
+   * @returns Array<Object>
+   */
+  async tag(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let commentId = await this.commentId(id);
+    if(!commentId) {
+      return [];
+    }
+    let tagId = await service.comment.tagId(commentId, 1);
+    return await service.tag.infoList(tagId);
+  }
+
+  /**
+   * 获取大作品列表对应言论的标签
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<Array<Object>>
+   */
+  async tagList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let commentIdList = await this.commentIdList(idList);
+    let tagId = await service.comment.tagIdList(commentIdList, 1);
+    let tagIdList = [];
+    let tagIdHash = {};
+    tagId.forEach((list) => {
+      if(list) {
+        list.forEach((id) => {
+          if(!tagIdHash[id]) {
+            tagIdHash[id] = true;
+            tagIdList.push(id);
+          }
+        });
+      }
+    });
+    let tagList = await service.tag.infoList(tagIdList);
+    let tagHash = {};
+    tagList.forEach((item) => {
+      tagHash[item.id] = item;
+    });
+    return tagId.map((list) => {
+      if(list) {
+        let temp = [];
+        list.forEach((id) => {
+          if(tagHash[id]) {
+            temp.push(tagHash[id]);
+          }
+        });
+        return temp;
+      }
+    });
+  }
+
+  /**
+   * 获取大作品对应言论的圈子
+   * id:int 大作品id
+   * @returns Array<Object>
+   */
+  async circle(id) {
+    if(!id) {
+      return;
+    }
+    const { service } = this;
+    let commentId = await this.commentId(id);
+    if(!commentId) {
+      return [];
+    }
+    return await service.comment.circle(commentId);
+  }
+
+  /**
+   * 获取大作品列表对应言论的圈子
+   * @param idList:Array<int> 大作品id列表
+   * @returns Array<Array<Object>>
+   */
+  async circleList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let commentIdList = await this.commentIdList(idList);
+    return service.comment.circleList(commentIdList);
   }
 
   /**

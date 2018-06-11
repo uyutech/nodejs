@@ -25,7 +25,7 @@ module.exports = app => {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
-      comment: '1直接选择，2内容输入',
+      comment: '1直接选择，2内容输入，3其它',
     },
     is_comment_delete: {
       type: Sequelize.BOOLEAN,

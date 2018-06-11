@@ -94,6 +94,51 @@ class Controller extends egg.Controller {
     });
   }
 
+  async index2() {
+    const { app, ctx, service } = this;
+    let body = ctx.request.body;
+    let uid = ctx.session.uid;
+    let circleList = await (uid ? service.user.circleList(uid, 0, LIMIT) : service.circle.all(0, LIMIT));
+    circleList = circleList.data.filter((item) => {
+      return !item.isDelete;
+    });
+    let circleIdList = circleList.map((item) => {
+      return item.id;
+    });
+    circleIdList.push(0);
+    let postTagList = await app.model.postTag.findAll({
+      attributes: [
+        ['circle_id', 'circleId'],
+        'name',
+        'describe'
+      ],
+      where: {
+        circle_id: circleIdList,
+      },
+      raw: true,
+    });
+    let postTagHash = {};
+    postTagList.forEach((item) => {
+      let temp = postTagHash[item.circleId] = postTagHash[item.circleId] || [];
+      temp.push({
+        name: item.name,
+        describe: item.describe,
+      });
+    });
+    circleList.forEach((item) => {
+      item.tag = postTagHash[item.id];
+    });
+    let activity = postTagHash[0] || [];
+    activity.push({
+      name: '日记',
+      value: '#日记# ' + (new Date().getMonth() + 1) + '月' + new Date().getDate() + '日 星期' + HASH[new Date().getDay()] + '\n',
+    });
+    ctx.body = ctx.helper.okJSON({
+      circleList,
+      activity,
+    });
+  }
+
   async circleList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;

@@ -979,6 +979,7 @@ class Service extends egg.Service {
           app.model.userTagRelation.upsert({
             user_id: uid,
             tag_id: tag.tagId,
+            ref: 1,
             type: 1,
           }, {
             where: {
@@ -1087,6 +1088,7 @@ class Service extends egg.Service {
         app.model.userTagRelation.upsert({
           user_id: uid,
           tag_id: tag.tagId,
+          ref: 1,
           type: 2,
         }, {
           where: {
