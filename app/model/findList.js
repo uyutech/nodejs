@@ -57,6 +57,10 @@ module.exports = app => {
       {
         name: 'tag_weight_is_delete',
         fields: ['tag', 'weight', 'is_delete'],
+      },
+      {
+        name: 'type',
+        fields: ['type'],
       }
     ],
     comment: '推荐内容',

@@ -1105,6 +1105,100 @@ class Service extends egg.Service {
       success: true,
     };
   }
+
+  /**
+   * 获取关注圈子的内容
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns {Promise<void>}
+   */
+  async followPost(uid, offset, limit) {
+    if(!uid) {
+      return;
+    }
+    const { service } = this;
+    let circleList = await service.user.circleList(uid, 0, 500);
+    let idList = circleList.data.map((item) => {
+      return item.id;
+    });
+    let [data, count] = await Promise.all([
+      this.followPostData(idList, uid, offset, limit),
+      this.followPostCount(idList)
+    ]);
+    return {
+      data,
+      count,
+    };
+  }
+
+  async followPostData(idList, uid, offset, limit) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let res = await app.model.circleCommentRelation.findAll({
+      attributes: [
+        ['comment_id', 'commentId']
+      ],
+      where: {
+        circle_id: idList,
+        is_comment_delete: false,
+      },
+      order: [
+        ['comment_id', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    let commentIdList = res.map((item) => {
+      return item.commentId;
+    });
+    let postList = await service.post.infoList(commentIdList, uid);
+    return postList;
+  }
+
+  async followPostCount(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cacheKey = 'circleListPostCount_' + idList.join('_');
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.circleCommentRelation.findOne({
+      attributes: [
+        Sequelize.literal('COUNT(DISTINCT comment_id) AS num')
+      ],
+      where: {
+        circle_id: idList,
+        is_comment_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
 }
 
 module.exports = Service;

@@ -39,6 +39,10 @@ module.exports = app => {
         name: 'works_id_type',
         unique: true,
         fields: ['works_id' ,'type'],
+      },
+      {
+        name: 'type_num',
+        fields: ['type', 'num'],
       }
     ],
     comment: '大作品数字信息',

@@ -73,6 +73,10 @@ module.exports = app => {
       {
         name: 'title',
         fields: ['title'],
+      },
+      {
+        name: 'is_delete_state',
+        fields: ['is_delete', 'state'],
       }
     ],
     comment: '大作品基本信息',

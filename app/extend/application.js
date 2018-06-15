@@ -79,7 +79,7 @@ const userTagRelation = require('../model/userTagRelation');
 // const content = require('../model/content');
 // const userContentRelation = require('../model/userContentRelation');
 // const userContentRecord = require('../model/userContentRecord');
-// const circlingPost = require('../model/circlingPost');
+const circlingPost = require('../model/circlingPost');
 const guideTag = require('../model/guideTag');
 const postTag = require('../model/postTag');
 
@@ -323,7 +323,7 @@ module.exports = {
         // content: content(this),
         // userContentRelation: userContentRelation(this),
         // userContentRecord: userContentRecord(this),
-        // circlingPost: circlingPost(this),
+        circlingPost: circlingPost(this),
         guideTag: guideTag(this),
         postTag: postTag(this),
 

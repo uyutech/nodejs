@@ -102,10 +102,10 @@ module.exports = app => {
   app.post('/h5/find/tag', 'h5.find.tag');
 
   app.post('/h5/circling/index', 'h5.circling.index');
-  // app.post('/h5/circling/index2', 'h5.circling.index2');
+  app.post('/h5/circling/index2', 'h5.circling.index2');
   app.post('/h5/circling/circleList', 'h5.circling.circleList');
   app.post('/h5/circling/postList', 'h5.circling.postList');
-  // app.post('/h5/circling/postList2', 'h5.circling.postList2');
+  app.post('/h5/circling/postList2', 'h5.circling.postList2');
 
   app.post('/h5/follow/index', app.middlewares.needLoginJson(), 'h5.follow.index');
   app.post('/h5/follow/circleList', app.middlewares.needLoginJson(), 'h5.follow.circleList');
@@ -213,4 +213,6 @@ module.exports = app => {
   app.post('/private/comment/unFavor', 'private.comment.unFavor');
   app.post('/private/tag/create', 'private.tag.create');
   app.post('/private/post/create', 'private.post.create');
+  app.post('/private/recommend/createCirclingPost', 'private.recommend.createCirclingPost');
+  app.post('/private/recommend/deleteCirclingPost', 'private.recommend.deleteCirclingPost');
 };

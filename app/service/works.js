@@ -350,6 +350,110 @@ class Service extends egg.Service {
   }
 
   /**
+   * 根据大作品id列表获取小作品集合信息列表
+   * @param idList:Array<int> 大作品id列表
+   * @param uid:int 用户id
+   * @param showFirstAuthor:bool 是否只显示第一行作者
+   * @returns Array<Array<Object>>
+   */
+  async collectionListFull(idList, uid, showFirstAuthor) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { service } = this;
+    let res = await this.collectionListBase(idList);
+    let workIdList = [];
+    let videoIdList = [];
+    let audioIdList = [];
+    let imageIdList = [];
+    let textIdList = [];
+    res.forEach((arr) => {
+      arr.forEach((item) => {
+        workIdList.push(item.workId);
+        switch(item.kind) {
+          case 1:
+            videoIdList.push(item.workId);
+            break;
+          case 2:
+            audioIdList.push(item.workId);
+            break;
+          case 3:
+            imageIdList.push(item.workId);
+            break;
+          case 4:
+            textIdList.push(item.workId);
+            break;
+        }
+      });
+    });
+    let [
+      videoList,
+      audioList,
+      imageList,
+      textList,
+      workRelationList
+    ] = await Promise.all([
+      service.work.infoListPlusFull(videoIdList, 1, uid),
+      service.work.infoListPlusFull(audioIdList, 2, uid),
+      service.work.infoListPlusFull(imageIdList, 3, uid),
+      service.work.infoListPlusFull(textIdList, 4, uid),
+      service.work.relationList(workIdList)
+    ]);
+    let hash = {};
+    videoList.forEach((item) => {
+      if(item) {
+        if(showFirstAuthor) {
+          item.author = this.firstAuthor(item.author);
+        }
+        hash[item.id] = item;
+      }
+    });
+    audioList.forEach((item) => {
+      if(item) {
+        if(showFirstAuthor) {
+          item.author = this.firstAuthor(item.author);
+        }
+        hash[item.id] = item;
+      }
+    });
+    imageList.forEach((item) => {
+      if(item) {
+        if(showFirstAuthor) {
+          item.author = this.firstAuthor(item.author);
+        }
+        hash[item.id] = item;
+      }
+    });
+    textList.forEach((item) => {
+      if(item) {
+        if(showFirstAuthor) {
+          item.author = this.firstAuthor(item.author);
+        }
+        hash[item.id] = item;
+      }
+    });
+    workRelationList.forEach((item, i) => {
+      let id = workIdList[i];
+      let work = hash[id];
+      if(work) {
+        work.relation = item;
+      }
+    });
+    return res.map((arr) => {
+      return arr.map((item) => {
+        let temp = hash[item.workId];
+        if(item) {
+          temp.tag = item.tag;
+        }
+        return temp;
+      });
+    });
+  }
+
+  /**
    * 根据大作品id获取小作品集合作者信息
    * @param id:int 大作品id列表
    * @returns Array<Object>
@@ -1933,6 +2037,173 @@ class Service extends egg.Service {
         message: e.toString(),
       };
     }
+  }
+
+  /**
+   * 获取最新的大作品列表
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data: Array<Object> }
+   */
+  async newest(uid, offset, limit) {
+    let [data, count] = await Promise.all([
+      this.newestData(uid, offset, limit),
+      this.newestCount()
+    ]);
+    return { data, count };
+  }
+
+  async newestData(uid, offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'worksNewest_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.works.findAll({
+        attributes: [
+          'id'
+        ],
+        where: {
+          is_delete: false,
+          state: 1,
+        },
+        order: [
+          ['id', 'DESC']
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.id;
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let [works, collection] = await Promise.all([
+      this.infoListPlusFull(res),
+      this.collectionListFull(res, uid, true)
+    ]);
+    works.forEach((item, i) => {
+      if(item) {
+        // item.author = service.works.firstAuthor(item.author);
+        item.collection = collection[i];
+      }
+    });
+    return works;
+  }
+
+  async newestCount() {
+    const { app } = this;
+    let cacheKey = 'newestCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.works.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取最热的大作品列表
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data: Array<Object> }
+   */
+  async hottest(uid, offset, limit) {
+    let [data, count] = await Promise.all([
+      this.hottestData(uid, offset, limit),
+      this.hottestCount()
+    ]);
+    return { data, count };
+  }
+
+  async hottestData(uid, offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'worksHottest_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.worksNum.findAll({
+        attributes: [
+          ['works_id', 'worksId']
+        ],
+        order: [
+          ['num', 'DESC']
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.worksId;
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let [works, collection] = await Promise.all([
+      this.infoListPlusFull(res),
+      this.collectionListFull(res, uid, true)
+    ]);
+    works.forEach((item, i) => {
+      if(item) {
+        // item.author = service.works.firstAuthor(item.author);
+        item.collection = collection[i];
+      }
+    });
+    return works;
+  }
+
+  async hottestCount() {
+    const { app } = this;
+    let cacheKey = 'hottestCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.worksNum.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
   }
 }
 

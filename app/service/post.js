@@ -117,6 +117,42 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取画圈下留言数量
+   * @param id:int 画圈的id
+   * @returns int 留言数量
+   */
+  async commentCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'commentCount_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.comment.findOne({
+        attributes: [
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          root_id: id,
+          is_delete: false,
+        },
+        raw: true,
+      });
+      if(res) {
+        res = res.num || 0;
+      }
+      else {
+        res = 0;
+      }
+    }
+    return res;
+  }
+
+  /**
    * 获取画圈列表下留言数量列表
    * @param idList:Array<int> 画圈的id列表
    * @returns Array<int> 留言数量列表

@@ -59,9 +59,9 @@ class Service extends egg.Service {
 
   /**
    * 获取推荐内容
-   * @param uid
-   * @param offset
-   * @param limit
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
    * @returns Object{ data: Array<Object>, count: int }
    */
   async post(uid, offset, limit) {
