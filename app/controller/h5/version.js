@@ -16,11 +16,11 @@ class Controller extends egg.Controller {
       app.redis.get(urlCacheKey)
     ]);
     if(!version) {
-      version = 152;
+      version = 154;
       await app.redis.set(versionCacheKey, version);
     }
     if(!url) {
-      url = 'https://circling.net.cn/h5/h5-0.7.25.zip';
+      url = 'https://circling.net.cn/h5/h5-0.7.27.zip';
       await app.redis.set(urlCacheKey, url);
     }
     ctx.body = {

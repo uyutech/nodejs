@@ -157,13 +157,6 @@ class Controller extends egg.Controller {
       }
       return true;
     });
-    let list = [];
-    for(let i = 0; i < 3 && i < newest.length; i++) {
-      let rand = Math.floor(Math.random() * newest.length);
-      let item = newest.splice(rand, 1)[0];
-      list.push(item);
-    }
-    newest = list;
 
     hottest = hottest.data;
     hottest = hottest.filter((item) => {
@@ -179,16 +172,65 @@ class Controller extends egg.Controller {
       }
       return true;
     });
-    list = [];
-    for(let i = 0; i < 3 && i < hottest.length; i++) {
-      let rand = Math.floor(Math.random() * hottest.length);
-      let item = hottest.splice(rand, 1)[0];
-      list.push(item);
+
+    let works = [];
+    if(!uid || uid < 2018000000050817) {
+      for(let i = 0; i < 3; i++) {
+        if(!newest.length) {
+          break;
+        }
+        let rand = Math.floor(Math.random() * newest.length);
+        let item = newest.splice(rand, 1)[0];
+        works.push(item);
+      }
+      for(let i = 0; i < 1; i++) {
+        if(!hottest.length) {
+          break;
+        }
+        let rand = Math.floor(Math.random() * hottest.length);
+        let item = hottest.splice(rand, 1)[0];
+        works.push(item);
+      }
     }
-    hottest = list;
+    else if(uid % 2 === 1) {
+      for(let i = 0; i < 1; i++) {
+        if(!hottest.length) {
+          break;
+        }
+        let rand = Math.floor(Math.random() * hottest.length);
+        let item = hottest.splice(rand, 1)[0];
+        works.push(item);
+      }
+      for(let i = 0; i < 1; i++) {
+        if(!newest.length) {
+          break;
+        }
+        let rand = Math.floor(Math.random() * newest.length);
+        let item = newest.splice(rand, 1)[0];
+        works.push(item);
+      }
+    }
+    else {
+      for(let i = 0; i < 5; i++) {
+        if(!hottest.length) {
+          break;
+        }
+        let rand = Math.floor(Math.random() * hottest.length);
+        let item = hottest.splice(rand, 1)[0];
+        works.push(item);
+      }
+      for(let i = 0; i < 2; i++) {
+        if(!newest.length) {
+          break;
+        }
+        let rand = Math.floor(Math.random() * newest.length);
+        let item = newest.splice(rand, 1)[0];
+        works.push(item);
+      }
+    }
 
     postList.limit = LIMIT;
-    list = [];
+    let list = [];
     for(let i = 0; i < 3; i++) {
       if(recommendComment.length) {
         let rand = Math.floor(Math.random() * recommendComment.length);
@@ -199,8 +241,9 @@ class Controller extends egg.Controller {
 
     ctx.body = ctx.helper.okJSON({
       bannerList,
-      newest,
-      hottest,
+      newest: [],
+      hottest: [],
+      works,
       recommendComment: list,
       postList,
     });
