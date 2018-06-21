@@ -1880,6 +1880,70 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取未读提示数量
+   * @param id:int 用户id
+   * @returns int
+   */
+  async unreadNotifyCount(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'messageUnreadCount_' + id;
+    let cacheKey2 = 'letterUnreadCount_' + id;
+    let [res, res2] = await Promise.all([
+      app.redis.get(cacheKey),
+      app.redis.get(cacheKey2)
+    ]);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.message.findOne({
+        attributes: [
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          target_id: id,
+          is_read: false,
+        },
+        raw: true,
+      });
+      if(res) {
+        res = res.num || 0;
+      }
+      else {
+        res = 0;
+      }
+      app.redis.setex(cacheKey, app.config.redis.shortTime, JSON.stringify(res));
+    }
+    if(res2) {
+      res2 = JSON.parse(res2);
+    }
+    else {
+      res2 = await app.model.letter.findOne({
+        attributes: [
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          target_id: id,
+          is_delete: false,
+          is_read: false,
+        },
+        raw: true,
+      });
+      if(res2) {
+        res2 = res2.num || 0;
+      }
+      else {
+        res2 = 0;
+      }
+      app.redis.setex(cacheKey2, app.config.redis.shortTime, JSON.stringify(res2));
+    }
+    return res + res2;
+  }
+
+  /**
    * 获取未读消息数量
    * @param id:int 用户id
    * @param offset:int 分页开始
@@ -2023,12 +2087,12 @@ class Service extends egg.Service {
     let res = await app.model.letterRecent.findAll({
       attributes: [
         'id',
-        ['target_id', 'targetId'],
+        ['user_id', 'userId'],
         ['letter_id', 'letterId'],
         ['update_time', 'updateTime']
       ],
       where: {
-        user_id: id,
+        target_id: id,
       },
       order: [
         ['update_time', 'DESC']
@@ -2038,14 +2102,15 @@ class Service extends egg.Service {
       raw: true,
     });
     let userIdList = res.map((item) => {
-      return item.targetId;
+      return item.userId;
     });
     let letterIdList = res.map((item) => {
       return item.letterId;
     });
-    let [userList, letterList] = await Promise.all([
+    let [userList, letterList, countList] = await Promise.all([
       this.infoList(userIdList),
-      service.letter.infoList(letterIdList)
+      service.letter.infoList(letterIdList),
+      this.unReadLetterCountList(userIdList, id)
     ]);
     let userHash = {};
     userList.forEach((item) => {
@@ -2060,15 +2125,16 @@ class Service extends egg.Service {
     letterList.forEach((item) => {
       letterHash[item.id] = item;
     });
-    return res.map((item) => {
+    return res.map((item, i) => {
       let letter = letterHash[item.letterId];
       if(letter) {
         item.letter = letter;
       }
-      if(item.targetId === 2018000000008150) {
+      if(item.userId === 2018000000008150) {
         item.typeName = '系统消息';
       }
-      item.user = userHash[item.targetId];
+      item.user = userHash[item.userId];
+      item.count = countList[i];
       return item;
     });
   }
@@ -2100,6 +2166,78 @@ class Service extends egg.Service {
     }
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
+  }
+
+  /**
+   * 获取用户之间私信的未读数量
+   * @param id:int 发送者用户id
+   * @param uid:int 接收者用户id
+   * @returns int
+   */
+  async unReadLetterCount(id, uid) {
+    if(!id || !uid) {
+      return;
+    }
+    const { app } = this;
+    let res = await app.model.letter.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        target_id: uid,
+        is_delete: false,
+        is_read: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    return res;
+  }
+
+  /**
+   * 获取用户之间私信的未读数量
+   * @param idList:int 发送者用户id列表
+   * @param uid:int 接收者用户id
+   * @returns Array<int>
+   */
+  async unReadLetterCountList(idList, uid) {
+    if(!idList || !uid) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let res = await app.model.letter.findAll({
+      attributes: [
+        ['user_id', 'userId'],
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: idList,
+        target_id: uid,
+        is_delete: false,
+        is_read: false,
+      },
+      group: 'user_id',
+      raw: true,
+    });
+    let hash = {};
+    if(res.length) {
+      res.forEach((item) => {
+        let id = item.userId;
+        hash[id] = item.num;
+      });
+    }
+    return idList.map((item) => {
+      return hash[item] || 0;
+    });
   }
 
   /**

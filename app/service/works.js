@@ -371,7 +371,7 @@ class Service extends egg.Service {
     let imageIdList = [];
     let textIdList = [];
     res.forEach((arr) => {
-      arr.forEach((item) => {
+      (arr || []).forEach((item) => {
         workIdList.push(item.workId);
         switch(item.kind) {
           case 1:
@@ -2093,7 +2093,6 @@ class Service extends egg.Service {
     ]);
     works.forEach((item, i) => {
       if(item) {
-        // item.author = service.works.firstAuthor(item.author);
         item.collection = collection[i];
       }
     });

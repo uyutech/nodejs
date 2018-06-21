@@ -246,6 +246,13 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON(res);
   }
 
+  async unreadNotifyCount() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let res = await service.user.unreadNotifyCount(uid);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
   async letterList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
@@ -254,6 +261,20 @@ class Controller extends egg.Controller {
     let res = await service.user.letterList(uid, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async unreadMessageCountWithRecentLetter() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let [count, letter] = await Promise.all([
+      service.user.unreadMessageCount(uid),
+      service.user.recentLetter(uid, 0, LIMIT)
+    ]);
+    letter.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON({
+      count,
+      letter,
+    });
   }
 
   async recentLetter() {
@@ -277,6 +298,40 @@ class Controller extends egg.Controller {
     }
     let res = await service.user.dialogList(uid, id, offset, LIMIT);
     res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async readLetter() {
+    const { ctx, app } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let idList = body.idList;
+    if(!idList) {
+      return;
+    }
+    let now = new Date();
+    let res = await app.model.letter.update({
+      is_read: true,
+      update_time: now,
+    }, {
+      where: {
+        id: idList,
+        target_id: uid,
+      },
+    });
+    app.redis.del('letterUnreadCount_' + uid);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async unReadLetterCount() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = body.id;
+    if(!id) {
+      return;
+    }
+    let res = await service.user.unReadLetterCount(id, uid);
     ctx.body = ctx.helper.okJSON(res);
   }
 

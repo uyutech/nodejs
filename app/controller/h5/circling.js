@@ -109,10 +109,12 @@ class Controller extends egg.Controller {
   async index2() {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
-    let [bannerList, newest, hottest, recommendComment, postList] = await Promise.all([
+    let [bannerList, newest, hottest, recommendWorks, recommendPost, recommendComment, postList] = await Promise.all([
       app.redis.get('banner'),
       service.works.newest(uid, 0, 10),
-      service.works.hottest(uid, 0, 30),
+      service.works.hottest(uid, 0, 50),
+      service.recommend.works(uid, 0, 100),
+      service.recommend.post(uid, 0, 100),
       service.circling.recommendComment(0, 100),
       uid ? service.circle.followPost(uid, 0, LIMIT) : service.post.all(uid, 0, LIMIT)
     ]);
@@ -152,7 +154,7 @@ class Controller extends egg.Controller {
         return false;
       }
       let work = item.collection[0];
-      if(work.type !== 1 && work.type !== 2) {
+      if(work.kind !== 1 && work.kind !== 2) {
         return false;
       }
       return true;
@@ -173,7 +175,23 @@ class Controller extends egg.Controller {
       return true;
     });
 
+    recommendWorks = recommendWorks.data;
+    recommendWorks = recommendWorks.filter((item) => {
+      if(!item) {
+        return false;
+      }
+      if(!item.collection || !item.collection.length) {
+        return false;
+      }
+      let work = item.collection[0];
+      if(work.type !== 1 && work.type !== 2) {
+        return false;
+      }
+      return true;
+    });
+
     let works = [];
+    // uid不同a/b
     if(!uid || uid < 2018000000050817) {
       for(let i = 0; i < 3; i++) {
         if(!newest.length) {
@@ -229,22 +247,48 @@ class Controller extends egg.Controller {
       }
     }
 
-    postList.limit = LIMIT;
-    let list = [];
+    // for(let i = 0; i < 2; i++) {
+    //   if(!recommendWorks.length) {
+    //     break;
+    //   }
+    //   let rand = Math.floor(Math.random() * recommendWorks.length);
+    //   let item = recommendWorks.splice(rand, 1)[0];
+    //   works.push(item);
+    // }
+
+    let post = [];
+
+    recommendPost = recommendPost.data;
+    recommendPost = recommendPost.filter((item) => {
+      return item;
+    });
+    // for(let i = 0; i < 2; i++) {
+    //   if(!recommendPost.length) {
+    //     break;
+    //   }
+    //   let rand = Math.floor(Math.random() * recommendPost.length);
+    //   let item = recommendPost.splice(rand, 1)[0];
+    //   post.push(item);
+    // }
+
     for(let i = 0; i < 3; i++) {
       if(recommendComment.length) {
         let rand = Math.floor(Math.random() * recommendComment.length);
-        list.push(recommendComment.splice(rand, 1)[0]);
+        post.push(recommendComment.splice(rand, 1)[0]);
       }
     }
-    list = await service.comment.plusListFull(list, uid);
+    post = await service.comment.plusListFull(post, uid);
+
+    postList.limit = LIMIT;
 
     ctx.body = ctx.helper.okJSON({
       bannerList,
       newest: [],
       hottest: [],
-      works,
-      recommendComment: list,
+      works: [],
+      recommendWorks: works,
+      recommendPost: post,
+      recommendComment: [],
       postList,
     });
   }

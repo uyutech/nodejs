@@ -52,8 +52,12 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'key_is_delete',
-        fields: ['key', 'is_delete'],
+        name: 'key_is_delete_is_read',
+        fields: ['key', 'is_delete', 'is_read'],
+      },
+      {
+        name: 'user_id_target_id_is_delete_is_read',
+        fields: ['user_id', 'target_id', 'is_delete', 'is_read'],
       }
     ],
     comment: '私信基本信息',

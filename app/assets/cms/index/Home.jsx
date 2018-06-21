@@ -15,8 +15,8 @@ function authorSkillWorks(id, cb) {
   });
 }
 
-function sendLetter(idList, content, cb) {
-  net.postJSON('/cms/sendLetter', { idList, content }, function(res) {
+function sendLetter(senderId, idList, content, cb) {
+  net.postJSON('/cms/sendLetter', { senderId, idList, content }, function(res) {
     cb && cb(res);
   }, function(res) {
     cb && cb(res);
@@ -26,9 +26,11 @@ function sendLetter(idList, content, cb) {
 class Home extends migi.Component {
   constructor(...data) {
     super(...data);
+    this.senderId = 2018000000008150;
   }
   @bind message
   @bind authorId
+  @bind senderId
   @bind userId
   @bind letter
   authorSkillWorks(e) {
@@ -81,6 +83,11 @@ class Home extends migi.Component {
   sendLetter(e) {
     e.preventDefault();
     let self = this;
+    let senderId = self.senderId;
+    if(!/^2018\d{12}$/.test(senderId)) {
+      alert('发送id不合法：' + senderId);
+      return;
+    }
     let idList = (self.userId || '').trim().split(/\s+/);
     for(let i = 0; i < idList.length; i++) {
       if(!/^2018\d{12}$/.test(idList[i])) {
@@ -92,7 +99,7 @@ class Home extends migi.Component {
       alert('内容不合法：');
       return;
     }
-    sendLetter(idList, self.letter, function(res) {
+    sendLetter(senderId, idList, self.letter, function(res) {
       res = res || {};
       if(res.success) {
         alert('成功');
@@ -105,6 +112,11 @@ class Home extends migi.Component {
   sendLetter2All(e) {
     e.preventDefault();
     let self = this;
+    let senderId = self.senderId;
+    if(!/^2018\d{12}$/.test(senderId)) {
+      alert('发送id不合法：' + senderId);
+      return;
+    }
     if(!self.letter) {
       alert('内容不合法：');
       return;
@@ -127,7 +139,7 @@ class Home extends migi.Component {
       if(list.length) {
         self.message = '正在处理：' + (total - list.length) + '/' +  total;
         let idList = list.splice(0, 100);
-        sendLetter(idList, content, function() {
+        sendLetter(senderId, idList, content, function() {
           load(list, total, content);
         });
       }
@@ -151,6 +163,9 @@ class Home extends migi.Component {
       </form>
       <form onSubmit={ this.sendLetter }>
         <h3>向一些人发私信</h3>
+        <label>发送者id（2018000000008150为系统消息）：</label>
+        <input type="text" value={ this.senderId }/>
+        <br/>
         <textarea style="width:100%;height:200px;">{ this.letter }</textarea>
         <br/>
         <label>用户id（多人以空格隔开）：</label>

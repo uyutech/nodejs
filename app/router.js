@@ -92,12 +92,6 @@ module.exports = app => {
   app.post('/h5/user/report', 'h5.user.report');
   app.post('/h5/user/black', app.middlewares.needLoginJson(), 'h5.user.black');
 
-  // app.post('/h5/recommend/index', 'h5.recommend.index');
-  // app.post('/h5/recommend/list', 'h5.recommend.list');
-  // app.post('/h5/recommend/like', app.middlewares.needLoginJson(), 'h5.recommend.like');
-  // app.post('/h5/recommend/unLike', app.middlewares.needLoginJson(), 'h5.recommend.unLike');
-  // app.post('/h5/recommend/record', 'h5.recommend.record');
-
   app.post('/h5/find/index', 'h5.find.index');
   app.post('/h5/find/tag', 'h5.find.tag');
 
@@ -124,6 +118,10 @@ module.exports = app => {
   app.post('/h5/my/letterList', app.middlewares.needLoginJson(), 'h5.my.letterList');
   app.post('/h5/my/dialogList', app.middlewares.needLoginJson(), 'h5.my.dialogList');
   app.post('/h5/my/unreadMessageCount', app.middlewares.needLoginJson(), 'h5.my.unreadMessageCount');
+  app.post('/h5/my/unreadNotifyCount', app.middlewares.needLoginJson(), 'h5.my.unreadNotifyCount');
+  app.post('/h5/my/unreadMessageCountWithRecentLetter', app.middlewares.needLoginJson(), 'h5.my.unreadMessageCountWithRecentLetter');
+  app.post('/h5/my/unReadLetterCount', app.middlewares.needLoginJson(), 'h5.my.unReadLetterCount');
+  app.post('/h5/my/readLetter', app.middlewares.needLoginJson(), 'h5.my.readLetter');
   app.post('/h5/my/sts', app.middlewares.needLoginJson(), 'h5.my.sts');
   app.post('/h5/my/headUrl', app.middlewares.needLoginJson(), 'h5.my.headUrl');
   app.post('/h5/my/nickname', app.middlewares.needLoginJson(), 'h5.my.nickname');
@@ -213,6 +211,6 @@ module.exports = app => {
   app.post('/private/comment/unFavor', 'private.comment.unFavor');
   app.post('/private/tag/create', 'private.tag.create');
   app.post('/private/post/create', 'private.post.create');
-  app.post('/private/recommend/createCirclingPost', 'private.recommend.createCirclingPost');
-  app.post('/private/recommend/deleteCirclingPost', 'private.recommend.deleteCirclingPost');
+  app.post('/private/recommend/createContent', 'private.recommend.createContent');
+  app.post('/private/recommend/deleteContent', 'private.recommend.deleteContent');
 };

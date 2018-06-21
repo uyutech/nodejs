@@ -40,6 +40,10 @@ module.exports = app => {
       {
         name: 'user_id_update_time',
         fields: ['user_id', 'update_time'],
+      },
+      {
+        name: 'target_id_update_time',
+        fields: ['target_id', 'update_time'],
       }
     ],
     comment: '最近私信对话列表',

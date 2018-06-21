@@ -111,8 +111,12 @@ class Controller extends egg.Controller {
   async sendLetter() {
     const { ctx, app } = this;
     let body = ctx.request.body;
+    let senderId = body.senderId;
     let idList = body.idList;
     let content = body.content || '';
+    if(!/^2018\d{12}$/.test(senderId)) {
+      return ctx.body = ctx.helper.errorJSON('发送者id不合法：' + senderId);
+    }
     for(let i = 0; i < idList.length; i++) {
       if(!/^2018\d{12}$/.test(idList[i])) {
         return ctx.body = ctx.helper.errorJSON('用户id不合法：' + idList[i]);
@@ -121,17 +125,16 @@ class Controller extends egg.Controller {
     if(!content) {
       return ctx.body = ctx.helper.errorJSON('内容为空');
     }
-    const qId = 2018000000008150;
     let query = [];
     for(let i = 0; i < idList.length; i++) {
       let uid = parseInt(idList[i]);
-      if(uid === qId) {
+      if(uid === senderId) {
         continue;
       }
       query.push(app.model.letter.create({
-        user_id: qId,
+        user_id: senderId,
         target_id: uid,
-        key: qId < uid ? (qId + '' + uid) : (uid + '' + qId),
+        key: senderId < uid ? (senderId + '' + uid) : (uid + '' + senderId),
         content,
       }, {
         raw: true,
