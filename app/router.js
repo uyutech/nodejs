@@ -8,6 +8,8 @@ module.exports = app => {
   app.get('/oauth/weibo', 'oauth.weibo');
   app.get('/oauth/login', 'oauth.login');
   app.get('/rhymes', 'rhyme.index');
+  app.get('/rhymes/qr/index', 'rhyme.index');
+  app.get('/rhymes/qr/Index', 'rhyme.index');
 
   app.get('/d', 'd.index.index');
   app.get('/d/works/:worksId', 'd.works.index');
