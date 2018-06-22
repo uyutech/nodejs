@@ -71,7 +71,7 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let offset = parseInt(body.offset) || 0;
-    let res = await service.user.postList(uid, uid, offset, LIMIT);
+    let res = await service.user.postList(uid, uid, offset, LIMIT, true);
     if(!res) {
       return;
     }

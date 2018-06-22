@@ -941,9 +941,10 @@ class Service extends egg.Service {
    * @param uid:int 登录id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
+   * @param includeAuthor:boolean 是否包含作者身份
    * @returns Object{ count:int, data:Array<Object> }
    */
-  async postList(id, uid, offset, limit) {
+  async postList(id, uid, offset, limit, includeAuthor) {
     if(!id) {
       return;
     }
@@ -953,8 +954,8 @@ class Service extends egg.Service {
       return;
     }
     let [data, count] = await Promise.all([
-      this.postData(id, uid, offset, limit),
-      this.postCount(id)
+      this.postData(id, uid, offset, limit, includeAuthor),
+      this.postCount(id, includeAuthor)
     ]);
     return { data, count };
   }
@@ -965,9 +966,10 @@ class Service extends egg.Service {
    * @param uid:int 登录id
    * @param offset:int 分页开始
    * @param limit:int 分页数量
+   * @param includeAuthor:boolean 是否包含作者身份
    * @returns Array<Object>
    */
-  async postData(id, uid, offset, limit) {
+  async postData(id, uid, offset, limit, includeAuthor) {
     if(!id) {
       return;
     }
@@ -977,6 +979,14 @@ class Service extends egg.Service {
       return;
     }
     const { app, service } = this;
+    let where = {
+      user_id: id,
+      root_id: 0,
+      is_delete: false,
+    };
+    if(!includeAuthor) {
+      where.author_id = 0;
+    }
     let res = await app.model.comment.findAll({
       attributes: [
         'id',
@@ -987,12 +997,7 @@ class Service extends egg.Service {
         ['root_id', 'rootId'],
         ['create_time', 'createTime']
       ],
-      where: {
-        user_id: id,
-        author_id: 0,
-        root_id: 0,
-        is_delete: false,
-      },
+      where,
       order: [
         ['id', 'DESC']
       ],
@@ -1006,25 +1011,29 @@ class Service extends egg.Service {
   /**
    * 获取画圈数量
    * @param id:int 用户id
+   * @param includeAuthor:boolean 是否包含作者身份
    * @returns int
    */
-  async postCount(id) {
+  async postCount(id, includeAuthor) {
     const { app } = this;
     let cacheKey = 'userPostCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       return JSON.parse(res);
     }
+    let where = {
+      user_id: id,
+      root_id: 0,
+      is_delete: false,
+    };
+    if(!includeAuthor) {
+      where.author_id = 0;
+    }
     res = await app.model.comment.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
-      where: {
-        user_id: id,
-        author_id: 0,
-        root_id: 0,
-        is_delete: false,
-      },
+      where,
       raw: true,
     });
     if(res) {
@@ -2287,7 +2296,7 @@ class Service extends egg.Service {
     if(offset < 0 || limit < 1) {
       return;
     }
-    const { app } = this;
+    const { app, service } = this;
     let res = await app.model.letter.findAll({
       attributes: [
         'id',
@@ -2307,6 +2316,77 @@ class Service extends egg.Service {
       offset,
       limit,
       raw: true,
+    });
+    let worksIdList = [];
+    let workIdList = [];
+    let authorIdList = [];
+    let userIdList = [];
+    let matchList = [];
+    let hash = {};
+    res.forEach((item, i) => {
+      let matches = item.content.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/g);
+      matchList[i] = [];
+      if(matches) {
+        matches.forEach((item) => {
+          let match = item.match(/@\/(\w+)\/(\d+)\/?(\d+)?(\s|$)/);
+          if(match) {
+            let type = match[1];
+            let id = match[2];
+            matchList[i].push(id);
+            if(hash[id]) {
+              return;
+            }
+            hash[id] = true;
+            switch(type) {
+              case 'works':
+                worksIdList.push(id);
+                break;
+              case 'work':
+                workIdList.push(id);
+                break;
+              case 'author':
+                authorIdList.push(id);
+                break;
+              case 'user':
+                userIdList.push(id);
+                break;
+            }
+          }
+        });
+      }
+    });
+    let [worksList, workList, authorList, userList] = await Promise.all([
+      service.works.infoList(worksIdList),
+      service.work.infoList(workIdList),
+      service.author.infoList(authorIdList),
+      service.user.infoList(userIdList),
+    ]);
+    let allRefHash = {};
+    worksList.forEach((item) => {
+      if(item) {
+        allRefHash[item.id] = item;
+      }
+    });
+    workList.forEach((item) => {
+      if(item) {
+        allRefHash[item.id] = item;
+      }
+    });
+    authorList.forEach((item) => {
+      if(item) {
+        allRefHash[item.id] = item;
+      }
+    });
+    userList.forEach((item) => {
+      if(item) {
+        allRefHash[item.id] = item;
+      }
+    });
+    res.forEach((item, i) => {
+      let refHash = item.refHash = {};
+      matchList[i].forEach((id) => {
+        refHash[id] = allRefHash[id];
+      });
     });
     return res;
   }

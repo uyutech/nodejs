@@ -16,10 +16,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let keyword = body.keyword;
+    let offset = parseInt(body.offset) || 0;
     if(!keyword) {
       return;
     }
-    let res = await service.author.listByName(keyword, 0, LIMIT);
+    let res = await service.author.listByName(keyword, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -29,10 +30,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let keyword = body.keyword;
+    let offset = parseInt(body.offset) || 0;
     if(!keyword) {
       return;
     }
-    let res = await service.user.listByName(keyword, 0, LIMIT);
+    let res = await service.user.listByName(keyword, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -42,10 +44,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let keyword = body.keyword;
+    let offset = parseInt(body.offset) || 0;
     if(!keyword) {
       return;
     }
-    let res = await service.works.listByName(keyword, 0, LIMIT);
+    let res = await service.works.listByName(keyword, offset, LIMIT);
     res.limit = LIMIT;
     ctx.body = ctx.helper.okJSON(res);
   }
@@ -55,10 +58,11 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let keyword = body.keyword;
+    let offset = parseInt(body.offset) || 0;
     if(!keyword) {
       return;
     }
-    let res = await service.tag.listByName(keyword, 0, LIMIT_TAG);
+    let res = await service.tag.listByName(keyword, offset, LIMIT_TAG);
     res.limit = LIMIT_TAG;
     ctx.body = ctx.helper.okJSON(res);
   }
