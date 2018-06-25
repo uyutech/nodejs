@@ -9,7 +9,17 @@ import Home from '../../assets/cms/index/Home.jsx';
 export default function(data) {
   migi.resetUid();
 
-  let home = migi.preRender(<Home/>);
+  let worksNum = data.worksNum;
+  let worksLimit = data.worksLimit;
+  let postNum = data.postNum;
+  let postLimit = data.postLimit;
+
+  let home = migi.preRender(
+    <Home worksNum={ worksNum }
+          worksLimit={ worksLimit }
+          postNum={ postNum }
+          postLimit={ postLimit }/>
+  );
 
   return `<!DOCTYPE html>
 <html>
@@ -24,6 +34,10 @@ ${data.helper.getDTopNav({ pageId: 0 })}
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}
+  $CONFIG.worksNum = ${data.helper.stringify(worksNum)};
+  $CONFIG.worksLimit = ${data.helper.stringify(worksLimit)};
+  $CONFIG.postNum = ${data.helper.stringify(postNum)};
+  $CONFIG.postLimit = ${data.helper.stringify(postLimit)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/cindex.js')}" defer="defer"></script>

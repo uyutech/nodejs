@@ -23,7 +23,7 @@ class Author extends migi.Component {
                     (item.list || []).map(function(author) {
                       if(author.isSettle) {
                         return <dd>
-                          <img src={ $util.img(author.headUrl, 48, 48, 80) || '/src/common/head.png' }/>
+                          <img src={ $util.img(author.headUrl, 48, 48, 80) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
                           <span>{ author.name }</span>
                         </dd>;
                       }

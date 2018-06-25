@@ -110,7 +110,7 @@ class Comment extends migi.Component {
           <div class="pic"
              title={ item.authorId ? item.name : item.nickname }>
             <img class="pic"
-                 src={ $util.img(item.headUrl, 60, 60, 80) || '/src/common/head.png' }/>
+                 src={ $util.img(item.headUrl, 60, 60, 80) || '//zhuanquan.xin/head/8fd9055b7f033087e6337e37c8959d3e.png' }/>
           </div>
           <div class="txt">
             <div class="name"

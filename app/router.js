@@ -37,6 +37,7 @@ module.exports = app => {
   app.post('/cms/allAuthor', 'cms.allAuthor');
   app.post('/cms/sendLetter', 'cms.sendLetter');
   app.post('/cms/allUser', 'cms.allUser');
+  app.post('/cms/setRecommend', 'cms.setRecommend');
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
@@ -102,6 +103,7 @@ module.exports = app => {
   app.post('/h5/circling/circleList', 'h5.circling.circleList');
   app.post('/h5/circling/postList', 'h5.circling.postList');
   app.post('/h5/circling/postList2', 'h5.circling.postList2');
+  app.post('/h5/circling/read', app.middlewares.needLoginJson(), 'h5.circling.read');
 
   app.post('/h5/follow/index', app.middlewares.needLoginJson(), 'h5.follow.index');
   app.post('/h5/follow/circleList', app.middlewares.needLoginJson(), 'h5.follow.circleList');

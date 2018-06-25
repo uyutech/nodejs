@@ -75,6 +75,11 @@ module.exports = app => {
       {
         name: 'type_is_delete_weight_create_time',
         fields: ['type', 'is_delete', 'weight', 'create_time']
+      },
+      {
+        name: 'target_id',
+        unique: true,
+        fields: ['target_id'],
       }
     ],
     comment: '推荐画圈',

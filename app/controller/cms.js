@@ -9,8 +9,35 @@ const Sequelize = require('sequelize');
 
 class Controller extends egg.Controller {
   async index() {
-    const { ctx } = this;
-    await ctx.render('cindex');
+    const { ctx, app } = this;
+    let [worksNum, worksLimit, postNum, postLimit] = await Promise.all([
+      app.redis.get('recommendWorksNum'),
+      app.redis.get('recommendWorksLimit'),
+      app.redis.get('recommendPostNum'),
+      app.redis.get('recommendPostLimit')
+    ]);
+    if(worksNum) {
+      worksNum = JSON.parse(worksNum);
+    }
+    worksNum = worksNum || 2;
+    if(worksLimit) {
+      worksLimit = JSON.parse(worksLimit);
+    }
+    worksLimit = worksLimit || 100;
+    if(postNum) {
+      postNum = JSON.parse(postNum);
+    }
+    postNum = postNum || 2;
+    if(postLimit) {
+      postLimit = JSON.parse(postLimit);
+    }
+    postLimit = postLimit || 100;
+    await ctx.render('cindex', {
+      worksNum,
+      worksLimit,
+      postNum,
+      postLimit,
+    });
   }
 
   async authorSkillWorks() {
@@ -169,6 +196,25 @@ class Controller extends egg.Controller {
       }));
     }
     res = await Promise.all(query);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async setRecommend() {
+    const { ctx, app } = this;
+    let body = ctx.request.body;
+    let worksNum = parseInt(body.worksNum);
+    let worksLimit = parseInt(body.worksLimit);
+    let postNum = parseInt(body.postNum);
+    let postLimit = parseInt(body.postLimit);
+    if(!worksNum || !worksLimit || !postNum || !postLimit) {
+      return;
+    }
+    let res = await Promise.all([
+      app.redis.set('recommendWorksNum', worksNum),
+      app.redis.set('recommendWorksLimit', worksLimit),
+      app.redis.set('recommendPostNum', postNum),
+      app.redis.set('recommendPostLimit', postLimit)
+    ]);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

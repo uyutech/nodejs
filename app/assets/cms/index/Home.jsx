@@ -27,12 +27,20 @@ class Home extends migi.Component {
   constructor(...data) {
     super(...data);
     this.senderId = 2018000000008150;
+    this.worksNum = this.props.worksNum;
+    this.worksLimit = this.props.worksLimit;
+    this.postNum = this.props.postNum;
+    this.postLimit = this.props.postLimit;
   }
   @bind message
   @bind authorId
   @bind senderId
   @bind userId
   @bind letter
+  @bind worksNum
+  @bind worksLimit
+  @bind postNum
+  @bind postLimit
   authorSkillWorks(e) {
     e.preventDefault();
     let self = this;
@@ -148,6 +156,23 @@ class Home extends migi.Component {
       }
     }
   }
+  setRecommend(e) {
+    e.preventDefault();
+    let worksNum = this.worksNum;
+    let worksLimit = this.worksLimit;
+    let postNum = this.postNum;
+    let postLimit = this.postLimit;
+    net.postJSON('/cms/setRecommend', { worksNum, worksLimit, postNum, postLimit }, function(res) {
+      if(res.success) {
+        alert('成功');
+      }
+      else {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+    });
+  }
   render() {
     return <div class="home">
       <p class="message">{ this.message }</p>
@@ -174,6 +199,18 @@ class Home extends migi.Component {
       </form>
       <form onSubmit={ this.sendLetter2All }>
         <h3>向所有人发私信</h3>
+        <input type="submit"/>
+      </form>
+      <form onSubmit={ this.setRecommend }>
+        <h3>设置推荐数量</h3>
+        <label>作品推荐个数：</label>
+        <input type="text" value={ this.worksNum }/>
+        <label>作品从多少个里面选：</label>
+        <input type="text" value={ this.worksLimit }/>
+        <label>画圈推荐个数：</label>
+        <input type="text" value={ this.postNum }/>
+        <label>画圈从多少个里面选：</label>
+        <input type="text" value={ this.postLimit }/>
         <input type="submit"/>
       </form>
     </div>;
