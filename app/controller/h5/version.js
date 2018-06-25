@@ -16,7 +16,7 @@ class Controller extends egg.Controller {
       app.redis.get(urlCacheKey)
     ]);
     if(!version) {
-      version = 161;
+      version = 162;
       await app.redis.set(versionCacheKey, version);
     }
     if(!url) {

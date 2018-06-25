@@ -10,11 +10,12 @@ const Sequelize = require('sequelize');
 class Controller extends egg.Controller {
   async index() {
     const { ctx, app } = this;
-    let [worksNum, worksLimit, postNum, postLimit] = await Promise.all([
+    let [worksNum, worksLimit, postNum, postLimit, circlingTypeIsAllPost] = await Promise.all([
       app.redis.get('recommendWorksNum'),
       app.redis.get('recommendWorksLimit'),
       app.redis.get('recommendPostNum'),
-      app.redis.get('recommendPostLimit')
+      app.redis.get('recommendPostLimit'),
+      app.redis.get('circlingTypeIsAllPost')
     ]);
     if(worksNum) {
       worksNum = JSON.parse(worksNum);
@@ -32,11 +33,16 @@ class Controller extends egg.Controller {
       postLimit = JSON.parse(postLimit);
     }
     postLimit = postLimit || 100;
+    if(circlingTypeIsAllPost) {
+      circlingTypeIsAllPost = JSON.parse(circlingTypeIsAllPost);
+    }
+    circlingTypeIsAllPost = !!circlingTypeIsAllPost;
     await ctx.render('cindex', {
       worksNum,
       worksLimit,
       postNum,
       postLimit,
+      circlingTypeIsAllPost,
     });
   }
 
@@ -215,6 +221,14 @@ class Controller extends egg.Controller {
       app.redis.set('recommendPostNum', postNum),
       app.redis.set('recommendPostLimit', postLimit)
     ]);
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async setCirclingType() {
+    const { ctx, app } = this;
+    let body = ctx.request.body;
+    let circlingTypeIsAllPost = body.circlingTypeIsAllPost === 'true';
+    let res = await app.redis.set('circlingTypeIsAllPost', circlingTypeIsAllPost);
     ctx.body = ctx.helper.okJSON(res);
   }
 }

@@ -31,6 +31,7 @@ class Home extends migi.Component {
     this.worksLimit = this.props.worksLimit;
     this.postNum = this.props.postNum;
     this.postLimit = this.props.postLimit;
+    this.circlingTypeIsAllPost = this.props.circlingTypeIsAllPost;
   }
   @bind message
   @bind authorId
@@ -41,6 +42,7 @@ class Home extends migi.Component {
   @bind worksLimit
   @bind postNum
   @bind postLimit
+  @bind circlingTypeIsAllPost
   authorSkillWorks(e) {
     e.preventDefault();
     let self = this;
@@ -173,6 +175,17 @@ class Home extends migi.Component {
       alert(res.message || util.ERROR_MESSAGE);
     });
   }
+  setCirclingType(e, vd) {
+    e.preventDefault();
+    this.circlingTypeIsAllPost = vd.props.value;
+    net.postJSON('/cms/setCirclingType', { circlingTypeIsAllPost: this.circlingTypeIsAllPost }, function(res) {
+      if(!res.success) {
+        alert(res.message || util.ERROR_MESSAGE);
+      }
+    }, function(res) {
+      alert(res.message || util.ERROR_MESSAGE);
+    });
+  }
   render() {
     return <div class="home">
       <p class="message">{ this.message }</p>
@@ -212,6 +225,19 @@ class Home extends migi.Component {
         <label>画圈从多少个里面选：</label>
         <input type="text" value={ this.postLimit }/>
         <input type="submit"/>
+      </form>
+      <form onSubmit={ this.setCirlingType }>
+        <h3>设置转圈显示来源</h3>
+        <label>全部：</label>
+        <input type="radio" name="circlingTypeIsAllPost"
+               checked={ this.circlingTypeIsAllPost }
+               value={ true }
+               onChange={ this.setCirclingType }/>
+        <label>关注：</label>
+        <input type="radio" name="circlingTypeIsAllPost"
+               checked={ !this.circlingTypeIsAllPost }
+               value={ false }
+               onChange={ this.setCirclingType }/>
       </form>
     </div>;
   }

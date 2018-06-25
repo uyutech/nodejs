@@ -109,11 +109,13 @@ class Controller extends egg.Controller {
   async index2() {
     const { ctx, app, service } = this;
     let uid = ctx.session.uid;
+    let circlingTypeIsAllPost = await app.redis.get('circlingTypeIsAllPost');
+    circlingTypeIsAllPost = circlingTypeIsAllPost === 'true';
     let [bannerList, recommendWorks, recommendPost, postList] = await Promise.all([
       app.redis.get('banner'),
       service.recommend.works(uid),
       service.recommend.post(uid),
-      uid ? service.circle.followPost(uid, 0, LIMIT) : service.post.all(uid, 0, LIMIT)
+      uid && !circlingTypeIsAllPost ? service.circle.followPost(uid, 0, LIMIT) : service.post.all(uid, 0, LIMIT)
     ]);
     if(bannerList) {
       bannerList = JSON.parse(bannerList);

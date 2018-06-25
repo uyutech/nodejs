@@ -12,5 +12,6 @@ let home = migi.preExist(
   <Home worksNum={ $CONFIG.worksNum }
         worksLimit={ $CONFIG.worksLimit }
         postNum={ $CONFIG.postNum }
-        postLimit={ $CONFIG.postLimit }/>
+        postLimit={ $CONFIG.postLimit }
+        circlingTypeIsAllPost={ $CONFIG.circlingTypeIsAllPost }/>
 );

@@ -13,12 +13,14 @@ export default function(data) {
   let worksLimit = data.worksLimit;
   let postNum = data.postNum;
   let postLimit = data.postLimit;
+  let circlingTypeIsAllPost = data.circlingTypeIsAllPost;
 
   let home = migi.preRender(
     <Home worksNum={ worksNum }
           worksLimit={ worksLimit }
           postNum={ postNum }
-          postLimit={ postLimit }/>
+          postLimit={ postLimit }
+          circlingTypeIsAllPost={ circlingTypeIsAllPost }/>
   );
 
   return `<!DOCTYPE html>
@@ -38,6 +40,7 @@ ${data.helper.getDBotNav()}
   $CONFIG.worksLimit = ${data.helper.stringify(worksLimit)};
   $CONFIG.postNum = ${data.helper.stringify(postNum)};
   $CONFIG.postLimit = ${data.helper.stringify(postLimit)};
+  $CONFIG.circlingTypeIsAllPost = ${data.helper.stringify(circlingTypeIsAllPost)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/cindex.js')}" defer="defer"></script>

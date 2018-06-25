@@ -38,6 +38,7 @@ module.exports = app => {
   app.post('/cms/sendLetter', 'cms.sendLetter');
   app.post('/cms/allUser', 'cms.allUser');
   app.post('/cms/setRecommend', 'cms.setRecommend');
+  app.post('/cms/setCirclingType', 'cms.setCirclingType');
 
   app.get('/h5/version', 'h5.version.index');
   app.post('/h5/version', 'h5.version.index');
