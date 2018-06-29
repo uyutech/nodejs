@@ -28,6 +28,11 @@ class Service extends egg.Service {
       res = await app.model.content.findAll({
         attributes: [
           'id',
+          'title',
+          'cover',
+          'describe',
+          'label',
+          'tag',
           ['target_id', 'targetId']
         ],
         where: {
@@ -82,6 +87,8 @@ class Service extends egg.Service {
     allNew.splice(limit);
     let worksIdList = [];
     let contentList = [];
+    let tagIdList = [];
+    let tagIdHash = {};
     for(let i = 0; i < num; i++) {
       if(!allNew.length) {
         break;
@@ -90,15 +97,37 @@ class Service extends egg.Service {
       let item = allNew.splice(rand, 1)[0];
       worksIdList.push(item.targetId);
       contentList.push(item);
+      if(item.tag) {
+        item.tag.forEach((tag) => {
+          if(!tagIdHash[tag]) {
+            tagIdHash[tag] = true;
+            tagIdList.push(tag);
+          }
+        });
+      }
     }
-    let [works, collection] = await Promise.all([
+    let [works, collection, tagList] = await Promise.all([
       service.works.infoListPlusFull(worksIdList),
-      service.works.collectionListFull(worksIdList, uid, true)
+      service.works.collectionListFull(worksIdList, uid, true),
+      service.tag.infoList(tagIdList)
     ]);
+    let tagHash = {};
+    tagList.forEach((item) => {
+      tagHash[item.id] = item;
+    });
     works.forEach((item, i) => {
       if(item) {
         item.contentId = contentList[i].id;
+        item.title = contentList[i].title || item.title;
+        item.cover = contentList[i].cover || item.cover;
+        item.label = contentList[i].label;
+        item.describe = contentList[i].describe || item.describe;
         item.collection = collection[i];
+        if(contentList[i].tag) {
+          item.tag = contentList[i].tag.map((id) => {
+            return tagHash[id];
+          });
+        }
       }
     });
     return works;
