@@ -55,7 +55,97 @@ let HASH = {
     skip: 0,
     authorId: window.JIEMENG_ID,
     state: window.FOLLOW.FOLLOW_JIEMENG,
-  }
+  },
+  'sanwu': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/sanwu_a.png`,
+    w: 400,
+    h: 600,
+    n: 180
+  },
+  'ajie': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/ajie_a.png`,
+    w: 400,
+    h: 600,
+    n: 150
+  },
+  'yueqianchen': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/yueqianchen_a.png`,
+    w: 400,
+    h: 600,
+    n: 149
+  },
+  'litterzy': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/litterzy_a.png`,
+    w: 400,
+    h: 600,
+    n: 150
+  },
+  'vagary': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/vagary_a.png`,
+    w: 400,
+    h: 600,
+    n: 150
+  },
+  'ace': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/ace_a.png`,
+    w: 400,
+    h: 600,
+    n: 150
+  },
+  'paigu': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/paigu_a.png`,
+    w: 400,
+    h: 600,
+    n: 240
+  },
+  'tazi': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/tazi_a.png`,
+    w: 400,
+    h: 600,
+    n: 150
+  },
+  'amuro': {
+    skip: 0,
+    authorId: window.MUHAN_ID,
+    state: window.FOLLOW.FOLLOW_MUHAN,
+    // img: `//192.168.0.7/muhan_a.png`,
+    img: `//zhuanquan.xyz/rhymesland/amuro_a.png`,
+    w: 400,
+    h: 600,
+    n: 150
+  },
 };
 let index = 0;
 let showAnimate;
