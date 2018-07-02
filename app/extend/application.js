@@ -12,6 +12,7 @@ const SEQUELIZE_MALL = Symbol('Application#sequelizeMall');
 const SEQUELIZE_RECOMMEND = Symbol('Application#sequelizeRecommend');
 const SEQUELIZE_STATS = Symbol('Application#sequelizeStats');
 const SEQUELIZE_CMS = Symbol('Application#sequelizeCms');
+const SEQUELIZE_ACTIVITY = Symbol('Application#sequelizeActivity');
 const MODEL = Symbol('Application#Model');
 
 const author = require('../model/author');
@@ -101,6 +102,9 @@ const userAction = require('../model/userAction');
 const userActionType = require('../model/userActionType');
 
 const cmsAccount = require('../model/cmsAccount');
+
+const activity = require('../model/activity');
+const activityWorks = require('../model/activityWorks');
 
 module.exports = {
   get Sequelize() {
@@ -195,6 +199,35 @@ module.exports = {
       });
     }
     return this[SEQUELIZE_RECOMMEND];
+  },
+  get sequelizeActivity() {
+    if(!this[SEQUELIZE_ACTIVITY]) {
+      let database = this.config.database;
+      this[SEQUELIZE_ACTIVITY] = new Sequelize(database.activity.name, database.activity.username, database.activity.password, {
+        host: database.activity.host,
+        dialect: 'mysql',
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        },
+        dialectOptions: {
+          charset: 'utf8mb4',
+          collate: 'utf8mb4_unicode_ci'
+        },
+        options: {
+          charset: 'utf8mb4',
+        },
+        define: {
+          timestamps: false,
+          underscored: true,
+          freezeTableName: true,
+        },
+        timezone: '+08:00',
+      });
+    }
+    return this[SEQUELIZE_ACTIVITY];
   },
   get sequelizeStats() {
     if(!this[SEQUELIZE_STATS]) {
@@ -344,6 +377,9 @@ module.exports = {
         userActionType: userActionType(this),
 
         cmsAccount: cmsAccount(this),
+
+        activity: activity(this),
+        activityWorks: activityWorks(this),
       };
     }
     return this[MODEL];

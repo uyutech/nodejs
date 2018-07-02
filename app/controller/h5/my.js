@@ -5,7 +5,7 @@
 'use strict';
 
 const egg = require('egg');
-const OSS = require('ali-oss');
+const OSS = require('ali-oss').Wrapper;
 const moment = require('moment');
 const crypto = require('crypto');
 const accessKeyId = 'LTAIzEfyjluscyEu';
@@ -170,6 +170,110 @@ class Controller extends egg.Controller {
       signature,
       dir,
       prefix: 'pic/',
+    });
+  }
+
+  async stsAudio() {
+    const { ctx } = this;
+    let body = ctx.request.body;
+    let name = body.name;
+    if(!name) {
+      return;
+    }
+    // 检查是否已上传
+    let client = new OSS({
+      region: 'oss-cn-shanghai',
+      accessKeyId: 'LTAIbZSVA2e931EB',
+      accessKeySecret: '5v756TGc1Gv3gkg4rhzoe0OYyLe8Xc',
+      bucket: 'circling-av',
+    });
+    let check = await client.list({
+      prefix: 'audio/' + name,
+    });
+    if(check.res && check.res.status === 200) {
+      let objects = check.objects;
+      if(objects && objects.length) {
+        return ctx.body = ctx.helper.okJSON({
+          exist: true,
+        });
+      }
+    }
+    let expire = Date.now() + 1000 * 60 * 5;
+    let expiration = moment(expire).local();
+    let host = 'https://circling-av.oss-cn-shanghai.aliyuncs.com';
+    let condition = ['content-length-range', 0, 1024 * 1024 * 20];
+    let dir = '';
+    let accessKeyId = 'LTAINFF0PxsurnhN';
+    let accessKeySecret = '1XJ3okp5nNGMAHfzdVlSd2bFVXDcDr';
+    let start = ['starts-with', accessKeySecret, dir];
+    let conditions = [condition, start];
+    let policy = JSON.stringify({
+      expiration,
+      conditions,
+    });
+    let base64_policy = new Buffer(policy).toString('base64');
+    let hmac = crypto.createHmac('sha1', accessKeySecret);
+    let signature = hmac.update(base64_policy).digest('base64');
+    ctx.body = ctx.helper.okJSON({
+      accessKeyId,
+      host,
+      expire,
+      policy: base64_policy,
+      signature,
+      dir,
+      prefix: 'audio/',
+    });
+  }
+
+  async stsVideo() {
+    const { ctx } = this;
+    let body = ctx.request.body;
+    let name = body.name;
+    if(!name) {
+      return;
+    }
+    // 检查是否已上传
+    let client = new OSS({
+      region: 'oss-cn-shanghai',
+      accessKeyId: 'LTAIbZSVA2e931EB',
+      accessKeySecret: '5v756TGc1Gv3gkg4rhzoe0OYyLe8Xc',
+      bucket: 'circling-av',
+    });
+    let check = await client.list({
+      prefix: 'video/' + name,
+    });
+    if(check.res && check.res.status === 200) {
+      let objects = check.objects;
+      if(objects && objects.length) {
+        return ctx.body = ctx.helper.okJSON({
+          exist: true,
+        });
+      }
+    }
+    let expire = Date.now() + 1000 * 60 * 10;
+    let expiration = moment(expire).local();
+    let host = 'https://circling-av.oss-cn-shanghai.aliyuncs.com';
+    let condition = ['content-length-range', 0, 1024 * 1024 * 100];
+    let dir = '';
+    let accessKeyId = 'LTAIREhaN567xzy6';
+    let accessKeySecret = 'hYxyTHOG5tWePi3bO9x5jbxRJ7BYbb';
+    let start = ['starts-with', accessKeySecret, dir];
+    let conditions = [condition, start];
+    let policy = JSON.stringify({
+      expiration,
+      conditions,
+    });
+    let base64_policy = new Buffer(policy).toString('base64');
+    let hmac = crypto.createHmac('sha1', accessKeySecret);
+    let signature = hmac.update(base64_policy).digest('base64');
+    ctx.body = ctx.helper.okJSON({
+      accessKeyId,
+      host,
+      expire,
+      policy: base64_policy,
+      signature,
+      dir,
+      prefix: 'video/',
     });
   }
 

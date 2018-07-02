@@ -64,7 +64,7 @@ class BotNav extends migi.Component {
         <li class="geography"><a href="#geography" title="世界地理">世界地理</a></li>
         <li class="history"><a href="#history" title="历史故事">历史故事</a></li>
         <li class="logo">
-          <b class="cloud" ref="cloud"/>
+          <a href="#" class="cloud" ref="cloud" title="首页">首页</a>
         </li>
         <li class="legend"><a href="#legend" title="异闻传记">异闻传记</a></li>
         <li class="rhyme"><a href="#rhyme" title="浮世歌谣">浮世歌谣</a></li>

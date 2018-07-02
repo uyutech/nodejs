@@ -23,6 +23,7 @@ class Index extends migi.Component{
         </div>
       </div>
       <p class="copyright">All Rights Reserved 结梦谷 浙ICP备17029501号-1</p>
+      <a href="/ysjxy" class="ysjxy"/>
     </div>;
   }
 }

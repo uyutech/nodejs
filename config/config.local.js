@@ -54,6 +54,12 @@ module.exports = appInfo => {
         password: '87351984@',
         host: 'localhost',
       },
+      activity: {
+        name: 'activity',
+        username: 'root',
+        password: '87351984@',
+        host: 'localhost',
+      },
     },
     weibo: {
       appKey: '1987340303',

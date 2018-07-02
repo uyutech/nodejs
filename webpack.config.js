@@ -52,6 +52,8 @@ module.exports = {
     // dmall_wait: './app/assets/d/mall/wait/index.jsx',
     rcommon: './app/assets/rhyme/common/index.js',
     rsingle: './app/assets/rhyme/single/index.jsx',
+    ysjxy: './app/assets/rhyme/ysjxy/index.jsx',
+    ysjxy_upload: './app/assets/rhyme/upload/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',
@@ -88,8 +90,8 @@ module.exports = {
         use: extractLESS.extract(['css-loader', 'autoprefixer-loader', 'less-loader'])
       },
       {
-        test: /(\.jpg)|(\.jpeg)|(\.gif)|(\.png)$/,
-        use: 'url-loader?limit=10240&name=[path][name].[ext]'
+        test: /(\.jpg)|(\.jpeg)|(\.gif)|(\.png)|(\.ico)|(\.webp)$/,
+        use: 'url-loader?limit=1024&name=[hash].[ext]'
       },
       {
         test: /\.(html?)|(\.mp\d)$/,

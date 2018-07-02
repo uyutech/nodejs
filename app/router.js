@@ -10,11 +10,14 @@ module.exports = app => {
   app.get('/rhymes', 'rhyme.index');
   app.get('/rhymes/qr/index', 'rhyme.index');
   app.get('/rhymes/qr/Index', 'rhyme.index');
+  app.get('/rhymes/ysjxy', 'rhyme.ysjxy');
 
   app.get('/d', 'd.index.index');
   app.get('/d/works/:worksId', 'd.works.index');
   app.get('/d/works/:worksId/:workId', 'd.works.index');
   app.get('/d/post/:id', 'd.post.index');
+  app.get('/d/ysjxy', 'd.ysjxy.index');
+  // app.get('/d/ysjxy/upload', app.middlewares.needLoginJson(), 'd.ysjxy.upload');
 
   app.get('/m', 'm.index.index');
   app.get('/m/works/:worksId', 'm.works.index');
@@ -128,6 +131,7 @@ module.exports = app => {
   app.post('/h5/my/unReadLetterCount', app.middlewares.needLoginJson(), 'h5.my.unReadLetterCount');
   app.post('/h5/my/readLetter', app.middlewares.needLoginJson(), 'h5.my.readLetter');
   app.post('/h5/my/sts', app.middlewares.needLoginJson(), 'h5.my.sts');
+  app.post('/h5/my/stsAudio', app.middlewares.needLoginJson(), 'h5.my.stsAudio');
   app.post('/h5/my/headUrl', app.middlewares.needLoginJson(), 'h5.my.headUrl');
   app.post('/h5/my/nickname', app.middlewares.needLoginJson(), 'h5.my.nickname');
   app.post('/h5/my/sign', app.middlewares.needLoginJson(), 'h5.my.sign');

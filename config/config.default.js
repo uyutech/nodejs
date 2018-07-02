@@ -143,6 +143,12 @@ module.exports = appInfo => {
       password: 'uyuTech2017',
       host: 'rm-uf6qe904j4997hpen.mysql.rds.aliyuncs.com',
     },
+    activity: {
+      name: 'activity',
+      username: 'uyutech',
+      password: 'uyuTech2017',
+      host: 'rm-uf6qe904j4997hpen.mysql.rds.aliyuncs.com',
+    },
   };
 
   config.weibo = {

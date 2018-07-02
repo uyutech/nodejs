@@ -58,6 +58,25 @@ let util = {
     error = error || function() {};
     return util.ajax(url, data, success, error, 'post');
   },
+  autoSsl: function(url) {
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return url;
+    }
+    return (url || '').replace(/^https?:\/\//i, '//');
+  },
+  img: function(url, w, h, q) {
+    url = url || '';
+    url = url.trim();
+    if(!/\/\/zhuanquan\./i.test(url)) {
+      return util.autoSsl(url);
+    }
+    url = url.replace(/\.(\w+)-\d*_\d*_\d*/, '.$1');
+    if(w === undefined && h === undefined && q === undefined) {
+      return url;
+    }
+    url += '-' + (w ? w : '') + '_' + (h ? h : '') + '_' + (q ? q : '');
+    return util.autoSsl(url);
+  },
   sort,
   ERROR_MESSAGE: '人气大爆发，请稍后再试。'
 };

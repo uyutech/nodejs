@@ -49,6 +49,9 @@ module.exports = {
     // dmall_new: './app/view/d/mall/new.jsx',
     // dmall_wait: './app/view/d/mall/wait.jsx',
     rhyme: './app/view/rhyme.jsx',
+    ysjxy: './app/view/ysjxy.jsx',
+    ysjxy2: './app/view/ysjxy2.jsx',
+    upload: './app/view/upload.jsx',
   },
   output: {
     path: __dirname + '/app/view',
