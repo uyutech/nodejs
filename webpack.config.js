@@ -53,7 +53,10 @@ module.exports = {
     rcommon: './app/assets/rhyme/common/index.js',
     rsingle: './app/assets/rhyme/single/index.jsx',
     ysjxy: './app/assets/rhyme/ysjxy/index.jsx',
-    ysjxy_upload: './app/assets/rhyme/upload/index.jsx',
+    fc: './app/assets/rhyme/fc/index.jsx',
+    fc_single: './app/assets/rhyme/fc_single/index.jsx',
+    hh: './app/assets/rhyme/hh/index.jsx',
+    hh_single: './app/assets/rhyme/hh_single/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

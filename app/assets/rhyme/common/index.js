@@ -20,7 +20,7 @@ if(/iP(hone|od|ad)/.test(navigator.userAgent)) {
     document.documentElement.classList.add('hairlines');
   }
 }
-if(/Android/.test(navigator.userAgent)) {
+if(/Android|MZBrowser/.test(navigator.userAgent)) {
   IS_MOBILE = true;
   document.documentElement.classList.add('mobile');
 }

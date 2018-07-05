@@ -17,7 +17,25 @@ module.exports = app => {
   app.get('/d/works/:worksId/:workId', 'd.works.index');
   app.get('/d/post/:id', 'd.post.index');
   app.get('/d/ysjxy', 'd.ysjxy.index');
-  // app.get('/d/ysjxy/upload', app.middlewares.needLoginJson(), 'd.ysjxy.upload');
+  app.get('/m/ysjxy', 'd.ysjxy.index');
+  app.get('/d/ysjxy/fc', app.middlewares.needLogin(), 'd.ysjxy.fc');
+  app.get('/m/ysjxy/fc', app.middlewares.needLogin(), 'd.ysjxy.fc');
+  app.get('/d/ysjxy/fc/:id', 'd.ysjxy.fcSingle');
+  app.get('/m/ysjxy/fc/:id', 'd.ysjxy.fcSingle');
+  app.post('/d/ysjxy/fcUpload', app.middlewares.needLoginJson(), 'd.ysjxy.fcUpload');
+  app.post('/m/ysjxy/fcUpload', app.middlewares.needLoginJson(), 'd.ysjxy.fcUpload');
+  app.post('/d/ysjxy/vote', app.middlewares.needLoginJson(), 'd.ysjxy.vote');
+  app.post('/m/ysjxy/vote', app.middlewares.needLoginJson(), 'd.ysjxy.vote');
+  app.post('/d/ysjxy/fcList', 'd.ysjxy.fcList');
+  app.post('/m/ysjxy/fcList', 'd.ysjxy.fcList');
+  app.get('/d/ysjxy/hh', app.middlewares.needLogin(), 'd.ysjxy.hh');
+  app.get('/m/ysjxy/hh', app.middlewares.needLogin(), 'd.ysjxy.hh');
+  app.post('/d/ysjxy/hhUpload', app.middlewares.needLoginJson(), 'd.ysjxy.hhUpload');
+  app.post('/m/ysjxy/hhUpload', app.middlewares.needLoginJson(), 'd.ysjxy.hhUpload');
+  app.get('/d/ysjxy/hh/:id', 'd.ysjxy.hhSingle');
+  app.get('/m/ysjxy/hh/:id', 'd.ysjxy.hhSingle');
+  app.post('/d/ysjxy/hhList', 'd.ysjxy.hhList');
+  app.post('/m/ysjxy/hhList', 'd.ysjxy.hhList');
 
   app.get('/m', 'm.index.index');
   app.get('/m/works/:worksId', 'm.works.index');
@@ -132,6 +150,7 @@ module.exports = app => {
   app.post('/h5/my/readLetter', app.middlewares.needLoginJson(), 'h5.my.readLetter');
   app.post('/h5/my/sts', app.middlewares.needLoginJson(), 'h5.my.sts');
   app.post('/h5/my/stsAudio', app.middlewares.needLoginJson(), 'h5.my.stsAudio');
+  app.post('/h5/my/stsVideo', app.middlewares.needLoginJson(), 'h5.my.stsVideo');
   app.post('/h5/my/headUrl', app.middlewares.needLoginJson(), 'h5.my.headUrl');
   app.post('/h5/my/nickname', app.middlewares.needLoginJson(), 'h5.my.nickname');
   app.post('/h5/my/sign', app.middlewares.needLoginJson(), 'h5.my.sign');

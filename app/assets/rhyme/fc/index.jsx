@@ -6,9 +6,9 @@
 
 import './index.less';
 
-import Upload from './Upload.jsx';
+import Fc from './Fc.jsx';
 
-let upload = migi.preExist(
-  <Upload info={ $CONFIG.info }
+let fc = migi.preExist(
+  <Fc info={ $CONFIG.info }
           originWorks={ $CONFIG.originWorks }/>
 );

@@ -54,6 +54,7 @@ const worksType = require('../model/worksType');
 const worksTimeline = require('../model/worksTimeline');
 const workTypeProfessionSort = require('../model/workTypeProfessionSort');
 const worksWorkRelation = require('../model/worksWorkRelation');
+const worksWorksRelation = require('../model/worksWorksRelation');
 const worksCommentRelation = require('../model/worksCommentRelation');
 const worksRecommend = require('../model/worksRecommend');
 const workAuthorRelation = require('../model/workAuthorRelation');
@@ -105,6 +106,10 @@ const cmsAccount = require('../model/cmsAccount');
 
 const activity = require('../model/activity');
 const activityWorks = require('../model/activityWorks');
+const activityUpload = require('../model/activityUpload');
+const activityUploadHh = require('../model/activityUploadHh');
+const activityVote = require('../model/activityVote');
+const activityCharacter = require('../model/activityCharacter');
 
 module.exports = {
   get Sequelize() {
@@ -329,6 +334,7 @@ module.exports = {
         worksTimeline: worksTimeline(this),
         workTypeProfessionSort: workTypeProfessionSort(this),
         worksWorkRelation: worksWorkRelation(this),
+        worksWorksRelation: worksWorksRelation(this),
         worksCommentRelation: worksCommentRelation(this),
         worksRecommend: worksRecommend(this),
         workAuthorRelation: workAuthorRelation(this),
@@ -380,6 +386,10 @@ module.exports = {
 
         activity: activity(this),
         activityWorks: activityWorks(this),
+        activityUpload: activityUpload(this),
+        activityUploadHh: activityUploadHh(this),
+        activityVote: activityVote(this),
+        activityCharacter: activityCharacter(this),
       };
     }
     return this[MODEL];

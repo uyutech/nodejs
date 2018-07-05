@@ -15,11 +15,17 @@ class Controller extends egg.Controller {
 
   async ysjxy() {
     const { ctx, service } = this;
-    let { info, originWorks } = await service.activity.ysjxy();
-    await ctx.render('ysjxy', {
-      info,
-      originWorks,
-    });
+    ctx.redirect('https://circling.cc/ysjxy');
+    // let [ info, originWorks ] = await Promise.all([
+    //   service.activity.ysjxyInfo(),
+    //   service.activity.ysjxyOriginWorks()
+    // ]);
+    // await ctx.render('ysjxy', {
+    //   info,
+    //   originWorks,
+    //   fcList: { data: [], count: 0 },
+    //   hhList: { data: [], count: 0 },
+    // });
   }
 
   async upload() {

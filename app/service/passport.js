@@ -386,7 +386,7 @@ class Service extends egg.Service {
         };
       }
       weibo = weibo.data;
-      // let name = weibo.screen_name || weibo.name;
+      let name = weibo.screen_name || weibo.name;
       let headUrl = weibo.avatar_hd || weibo.avatar_large || weibo.profile_image_url;
       let transaction = await app.sequelizeCircling.transaction();
       try {
@@ -404,8 +404,8 @@ class Service extends egg.Service {
         let id = last.id + Math.floor(Math.random() * 3) + 1;
         await app.model.user.create({
           id,
-          nickname: '圈友' + id,
-          headUrl,
+          nickname: name + id,
+          head_url: headUrl,
         }, {
           transaction,
           raw: true,

@@ -151,7 +151,7 @@ class Controller extends egg.Controller {
     let expire = Date.now() + 1000 * 60 * 5;
     let expiration = moment(expire).local();
     let host = 'https://circling-assets.oss-cn-shanghai.aliyuncs.com';
-    let condition = ['content-length-range', 0, 10485760];
+    let condition = ['content-length-range', 0, 1024 * 1024 * 10];
     let dir = '';
     let start = ['starts-with', accessKeySecret, dir];
     let conditions = [condition, start];
@@ -255,8 +255,8 @@ class Controller extends egg.Controller {
     let host = 'https://circling-av.oss-cn-shanghai.aliyuncs.com';
     let condition = ['content-length-range', 0, 1024 * 1024 * 100];
     let dir = '';
-    let accessKeyId = 'LTAIREhaN567xzy6';
-    let accessKeySecret = 'hYxyTHOG5tWePi3bO9x5jbxRJ7BYbb';
+    let accessKeyId = 'LTAIN1j47nFOjGfQ';
+    let accessKeySecret = 'THSRNdDIXUyRi9fd1ZYGmtZpaGngEw';
     let start = ['starts-with', accessKeySecret, dir];
     let conditions = [condition, start];
     let policy = JSON.stringify({

@@ -11,10 +11,12 @@ export default function(data) {
 
   let info = data.info;
   let originWorks = data.originWorks;
+  let uploadList = data.uploadList;
 
   let home = migi.preRender(
     <Home info={ info }
-          originWorks={ originWorks }/>
+          originWorks={ originWorks }
+          uploadList={ uploadList }/>
   );
 
   return `<!DOCTYPE html>
@@ -30,6 +32,7 @@ ${home}
   ${data.helper.$CONFIG}
   $CONFIG.info = ${data.helper.stringify(info)};
   $CONFIG.originWorks = ${data.helper.stringify(originWorks)};
+  $CONFIG.uploadList = ${data.helper.stringify(uploadList)};
 </script>
 <script src="${data.helper.getAssetUrl('/dcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/ysjxy.js')}" defer="defer"></script>

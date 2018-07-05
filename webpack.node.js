@@ -51,7 +51,10 @@ module.exports = {
     rhyme: './app/view/rhyme.jsx',
     ysjxy: './app/view/ysjxy.jsx',
     ysjxy2: './app/view/ysjxy2.jsx',
-    upload: './app/view/upload.jsx',
+    fc: './app/view/fc.jsx',
+    fc_single: './app/view/fc_single.jsx',
+    hh: './app/view/hh.jsx',
+    hh_single: './app/view/hh_single.jsx',
   },
   output: {
     path: __dirname + '/app/view',

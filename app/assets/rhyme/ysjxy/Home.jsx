@@ -4,16 +4,28 @@
 
 'use strict';
 
-import $util from '../../rhyme/common/util';
+import $net from '../../d/common/net';
+import $util from '../../d/common/util';
+import Page from '../../d/component/page/Page.jsx';
+
+let ajax;
 
 class Home extends migi.Component {
   constructor(...data) {
     super(...data);
     this.index = 0;
     this.tab = 0;
+    this.fcList = this.props.fcList.data;
+    this.fcCount = this.props.fcList.count;
+    this.hhList = this.props.hhList.data;
+    this.hhCount = this.props.hhList.count;
+    this.tab2 = 0;
   }
   @bind index
   @bind tab
+  @bind fcList
+  @bind hhList
+  @bind tab2
   clickIndex(e, vd, tvd) {
     if(this.index === tvd.props.rel) {
       return;
@@ -25,6 +37,102 @@ class Home extends migi.Component {
       return;
     }
     this.tab = tvd.props.rel;
+  }
+  clickVote(e, vd, tvd) {
+    let el = tvd.element;
+    if(el.classList.contains('loading')) {
+      return;
+    }
+    if(el.classList.contains('voted')) {
+      return;
+    }
+    el.classList.add('loading');
+    let id = tvd.props.rel;
+    $net.postJSON('/ysjxy/vote', { id, type: 1 }, function(res) {
+      if(res.success) {
+        // el.classList.add('voted');
+        // el.classList.remove('vote');
+        // el.textContent = '已投';
+        tvd.parent.parent.find('.count strong').element.textContent = res.data.count;
+      }
+      else if(res.code === 1000) {
+        location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);
+      }
+      else {
+        alert(res.message || $util.ERROR_MESSAGE);
+      }
+      el.classList.remove('loading');
+    }, function(res) {
+      alert(res.message || $util.ERROR_MESSAGE);
+      el.classList.remove('loading');
+    });
+  }
+  clickVote2(e, vd, tvd) {
+    let el = tvd.element;
+    if(el.classList.contains('loading')) {
+      return;
+    }
+    if(el.classList.contains('voted')) {
+      return;
+    }
+    el.classList.add('loading');
+    let id = tvd.props.rel;
+    $net.postJSON('/ysjxy/vote', { id, type: 2 }, function(res) {
+      if(res.success) {
+        // el.classList.add('voted');
+        // el.classList.remove('vote');
+        // el.textContent = '已投';
+        tvd.parent.parent.find('.count strong').element.textContent = res.data.count;
+      }
+      else if(res.code === 1000) {
+        location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);
+      }
+      else {
+        alert(res.message || $util.ERROR_MESSAGE);
+      }
+      el.classList.remove('loading');
+    }, function(res) {
+      alert(res.message || $util.ERROR_MESSAGE);
+      el.classList.remove('loading');
+    });
+  }
+  clickTab2(e, vd, tvd) {
+    if(this.tab2 === tvd.props.rel) {
+      return;
+    }
+    this.tab2 = tvd.props.rel;
+  }
+  page(i) {
+    if(ajax) {
+      ajax.abort();
+    }
+    let self = this;
+    ajax = $net.postJSON('ysjxy/fcList', { offset: (i - 1) * 10 }, function(res) {
+      if(res.success) {
+        self.fcList = res.data.data;
+      }
+      else {
+        alert(res.message || $util.ERROR_MESSAGE);
+      }
+    }, function(res) {
+      alert(res.message || $util.ERROR_MESSAGE);
+    });
+  }
+  page2(i) {
+    if(ajax) {
+      ajax.abort();
+    }
+    let self = this;
+    ajax = $net.postJSON('ysjxy/hhList', { offset: (i - 1) * 10 }, function(res) {
+      if(res.success) {
+        self.hhList = res.data.data;
+      }
+      else {
+        alert(res.message || $util.ERROR_MESSAGE);
+      }
+    }, function(res) {
+      alert(res.message || $util.ERROR_MESSAGE);
+    });
   }
   render() {
     let info = this.props.info;
@@ -102,7 +210,7 @@ class Home extends migi.Component {
                   })
                 }
                 </ul>
-                <a href="#" class="upload">我要参赛</a>
+                <a href="/ysjxy/fc" class="upload" target="_blank">我要参赛</a>
               </div>
               <div class={ 'c' + (this.tab === 1 ? '' : ' fn-hide') }>
                 <h4>愿用一只平凡画笔，<br/>画一出绝伦的异世风情。</h4>
@@ -204,7 +312,7 @@ class Home extends migi.Component {
                     </a>
                   </li>
                 </ul>
-                <a href="#" class="upload">我要参赛</a>
+                <a href="/ysjxy/hh" class="upload" target="_blank">我要参赛</a>
               </div>
             </div>
           </div>
@@ -224,16 +332,16 @@ class Home extends migi.Component {
                 </thead>
                 <tbody>
                 <tr>
-                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize1-1.jpg"/></td>
-                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize2-1.jpg"/></td>
+                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize1-1.png"/></td>
+                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize2-1.png"/></td>
                 </tr>
                 <tr>
-                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize1-2.jpg"/></td>
-                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize2-2.jpg"/></td>
+                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize1-2.png"/></td>
+                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize2-2.png"/></td>
                 </tr>
                 <tr>
-                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize1-3.jpg"/></td>
-                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize2-3.jpg"/></td>
+                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize1-3.png"/></td>
+                  <td><img src="//zhuanquan.xin/rhymesland/ysjxy/prize2-3.png"/></td>
                 </tr>
                 <tr>
                   <td colspan="2"><img src="//zhuanquan.xin/rhymesland/ysjxy/prize0.jpg"/></td>
@@ -313,7 +421,98 @@ class Home extends migi.Component {
             </div>
           </div>
           <div class={ this.index === 2 ? '' : 'fn-hide'}>
-            <div class="wait"/>
+            <ul class="tab"
+                onClick={ { li: this.clickTab2 } }>
+              <li class={ 'fc' + (this.tab2 === 0 ? ' cur' : '') }
+                  rel={ 0 }>翻唱比赛</li>
+              <li class={ 'hh' + (this.tab2 === 1 ? ' cur' : '') }
+                  rel={ 1 }>绘画比赛</li>
+            </ul>
+            <div class={ this.tab2 === 0 ? '' : 'fn-hide' }>
+              <ul class="fc-list fn-clear"
+                  onClick={ { '.vote': this.clickVote } }>
+              {
+                this.fcList.map((item) => {
+                  let pic = item.user.headUrl;
+                  item.collection.forEach((item) => {
+                    if(item.kind === 3) {
+                      pic = item.url;
+                    }
+                  });
+                  return <li>
+                    <a class="pic"
+                       href={ '/works/' + item.works.id }
+                       target="_blank">
+                      <img src={ $util.img(pic, 480, 480, 80) }/>
+                      <span>No.{ item.id }</span>
+                    </a>
+                    <div class="txt">
+                      <a class="ti"
+                         href={ '/ysjxy/fc/' + item.id }
+                         target="_blank">{ item.works.title }</a>
+                      <p class="er">参赛者：<br/>{ item.user.nickname }</p>
+                      <p class="desc">{ item.works.describe }</p>
+                      <p class="count"><strong>{ item.voteCount }</strong>票</p>
+                      <div class="btn">
+                        <span class="vote"
+                              rel={ item.id }>投票</span>
+                        <a class="share"
+                           href={ 'http://service.weibo.com/share/share.php?url='
+                             + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                             + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                             + '&searchPic=false&style=number' }
+                           target="_blank">分享</a>
+                      </div>
+                    </div>
+                  </li>;
+                })
+              }
+              </ul>
+              <Page index={ 1 }
+                    total={ Math.ceil(this.fcCount / 10) }
+                    on-page={ this.page }/>
+            </div>
+            <div class={ this.tab2 === 1 ? '' : 'fn-hide' }>
+              <ul class="fc-list fn-clear"
+                  onClick={ { '.vote': this.clickVote2 } }>
+                {
+                  this.hhList.map((item) => {
+                    let pic = item.works.cover;
+                    item.collection.forEach((item) => {
+                      if(item.kind === 3) {
+                        pic = item.url;
+                      }
+                    });
+                    return <li>
+                      <a class="pic"
+                         href={ '/ysjxy/hh/' + item.id }
+                         target="_blank">
+                        <img src={ $util.img(pic, 480, 480, 80) }/>
+                        <span>No.{ item.id }</span>
+                      </a>
+                      <div class="txt">
+                        <p class="er">参赛者：<br/>{ item.user.nickname }</p>
+                        <p class="desc">{ item.works.describe }</p>
+                        <p class="count"><strong>{ item.voteCount }</strong>票</p>
+                        <div class="btn">
+                        <span class="vote"
+                              rel={ item.id }>投票</span>
+                          <a class="share"
+                             href={ 'http://service.weibo.com/share/share.php?url='
+                             + encodeURIComponent('https://circling.cc/ysjxy/hh/' + item.id)
+                             + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                             + '&searchPic=false&style=number' }
+                             target="_blank">分享</a>
+                        </div>
+                      </div>
+                    </li>;
+                  })
+                }
+              </ul>
+              <Page index={ 1 }
+                    total={ Math.ceil(this.hhCount / 10) }
+                    on-page={ this.page2 }/>
+            </div>
           </div>
           <div class={ this.index === 3 ? '' : 'fn-hide'}>
             <div class="wait"/>

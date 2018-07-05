@@ -2,6 +2,8 @@
  * Created by army8735 on 2018/6/29.
  */
 
+@import '../../d/component/page/index';
+
 .home{
   .banner{
     position:relative;
@@ -28,8 +30,6 @@
       margin:0.2rem 0;
       text-align:center;
       li{
-        //display:inline-block;
-        //margin:0 0.2rem;
         float:left;
         margin-right:0.1rem;
         width:2.4rem;
@@ -38,9 +38,6 @@
         cursor:pointer;
         white-space:nowrap;
         overflow:hidden;
-        &:last-child{
-          //margin-right:0;
-        }
         &.cur{
           cursor:default;
         }
@@ -101,44 +98,44 @@
         white-space:pre-wrap;
       }
     }
+    .tab{
+      border:0.02rem solid #c7a751;
+      border-bottom:none;
+      li{
+        display:inline-block;
+        width:50%;
+        font-size:0.32rem;
+        text-align:center;
+        height:0.54rem;
+        color:#c7a751;
+        cursor:pointer;
+        text-indent:9999rem;
+        white-space:nowrap;
+        overflow:hidden;
+        &.fc{
+          background:rgba(255,255,255,.3) url(fanchang-off.png) no-repeat center;
+          background-size:2.92rem auto;
+          &.cur{
+            cursor:default;
+            background-color:transparent;
+            background-image:url(fanchang-on.png);
+          }
+        }
+        &.hh{
+          background:rgba(255,255,255,.3) url(huihua-off.png) no-repeat center;
+          background-size:2.92rem auto;
+          &.cur{
+            cursor:default;
+            background-color:transparent;
+            background-image:url(huihua-on.png);
+          }
+        }
+      }
+    }
     .join{
       color:#882925;
       .title{
         background-image:url(join.png);
-      }
-      .tab{
-        border:0.02rem solid #c7a751;
-        border-bottom:none;
-        li{
-          display:inline-block;
-          width:50%;
-          font-size:0.32rem;
-          text-align:center;
-          height:0.54rem;
-          color:#c7a751;
-          cursor:pointer;
-          text-indent:9999rem;
-          white-space:nowrap;
-          overflow:hidden;
-          &.fc{
-            background:rgba(255,255,255,.3) url(fanchang-off.png) no-repeat center;
-            background-size:2.92rem auto;
-            &.cur{
-              cursor:default;
-              background-color:transparent;
-              background-image:url(fanchang-on.png);
-            }
-          }
-          &.hh{
-            background:rgba(255,255,255,.3) url(huihua-off.png) no-repeat center;
-            background-size:2.92rem auto;
-            &.cur{
-              cursor:default;
-              background-color:transparent;
-              background-image:url(huihua-on.png);
-            }
-          }
-        }
       }
       .c{
         padding:0.2rem;
@@ -208,9 +205,9 @@
         .upload{
           margin:0.3rem auto 0;
           display:block;
-          width:4.61rem;
+          width:2.94rem;
           height:0.69rem;
-          background:url(upload_time.png) no-repeat center;
+          background:url(upload.png) no-repeat center;
           background-size:contain;
           text-indent:9999rem;
           white-space:nowrap;
@@ -306,6 +303,123 @@
         font-size:0.14rem;
       }
     }
+    .fc-title{
+      font-size:0.2rem;
+      font-weight:400;
+    }
+    .fc-list{
+      //transform:translateX(0.1rem);
+      padding-left:0.1rem;
+      border:0.02rem solid #c7a751;
+      li{
+        float:left;
+        margin:0 0.2rem 0.2rem 0;
+        width:1.8rem;
+        border:1px solid #a5a5a5;
+        box-sizing:border-box;
+        border-radius:0.05rem;
+        overflow:hidden;
+        &:nth-child(5n + 1) {
+          clear:both;
+        }
+        &:nth-child(5n) {
+          margin-right:0;
+        }
+        .pic{
+          position:relative;
+          display:block;
+          img{
+            display:block;
+            width:1.8rem;
+            height:1.8rem;
+            object-fit:cover;
+          }
+          span{
+            position:absolute;
+            left:0;
+            bottom:0;
+            width:100%;
+            line-height:0.3rem;
+            background:rgba(51,102,153,.7);
+            color:#FFF;
+            font-size:0.16rem;
+            text-align:center;
+          }
+        }
+        .txt{
+          padding:0.05rem;
+          color:#977a48;
+          .ti{
+            font-size:0.16rem;
+            color:#882925;
+          }
+          .count{
+            text-align:center;
+            line-height:0.24rem;
+            strong{
+              margin-right:0.05rem;
+              color:#fe5952;
+              font-size:0.18rem;
+              font-weight:400;
+              line-height:0.24rem;
+            }
+          }
+          .desc{
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            height:0.24rem;
+          }
+          .er{
+            //white-space:nowrap;
+            //overflow:hidden;
+            //text-overflow:ellipsis;
+            //height:0.24rem;
+          }
+          .btn{
+            text-align:center;
+          }
+          .vote{
+            display:inline-block;
+            width:0.6rem;
+            height:0.3rem;
+            line-height:0.3rem;
+            color:#FFF;
+            background:#d982b8;
+            border-radius:0.05rem;
+            text-align:center;
+            font-size:0.14rem;
+            cursor:pointer;
+            &:hover{
+              background:#df93c2;
+            }
+          }
+          .voted{
+            display:inline-block;
+            width:0.6rem;
+            height:0.3rem;
+            line-height:0.3rem;
+            color:#FFF;
+            background:#7a8ac2;
+            border-radius:0.05rem;
+            text-align:center;
+            font-size:0.14rem;
+          }
+          .share{
+            display:inline-block;
+            margin-left:0.1rem;
+            width:0.6rem;
+            height:0.3rem;
+            line-height:0.3rem;
+            color:#FFF;
+            background:#7acac2;
+            border-radius:0.05rem;
+            text-align:center;
+            font-size:0.14rem;
+          }
+        }
+      }
+    }
     .wait{
       height:5rem;
       background:url(wait.png) no-repeat center;
@@ -363,13 +477,13 @@
           font-size:0.14rem;
         }
       }
-      .join{
-        .tab{
-          li{
-            height:0.27rem;
-            background-size:auto 0.27rem;
-          }
+      .tab{
+        li{
+          height:0.27rem;
+          background-size:auto 0.27rem;
         }
+      }
+      .join{
         .c{
           padding:0.1rem;
           h4{
@@ -442,6 +556,14 @@
         margin-bottom:0.2rem;
         p{
           padding:0.1rem;
+        }
+      }
+      .fc-list{
+        transform:translateX(0);
+        li{
+          float:none;
+          display:block;
+          margin:0 auto;
         }
       }
     }

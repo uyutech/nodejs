@@ -24,7 +24,7 @@ module.exports = app => {
     type: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
-      comment: '1原作，2bgm，3视频素材，4原曲，5原唱',
+      comment: '1原作',
     },
     create_time: {
       type: Sequelize.DATE,

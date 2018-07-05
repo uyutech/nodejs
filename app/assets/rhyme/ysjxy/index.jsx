@@ -10,5 +10,7 @@ import Home from './Home.jsx';
 
 let home = migi.preExist(
   <Home info={ $CONFIG.info }
-        originWorks={ $CONFIG.originWorks }/>
+        originWorks={ $CONFIG.originWorks }
+        fcList={ $CONFIG.fcList }
+        hhList={ $CONFIG.hhList }/>
 );

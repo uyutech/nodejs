@@ -1,24 +1,20 @@
 /**
- * Created by army8735 on 2018/6/29.
+ * Created by army8735 on 2018/6/30.
  */
 
 'use strict';
 
-import Home from '../assets/rhyme/ysjxy/Home.jsx';
+import Fc from '../assets/rhyme/fc/Fc.jsx';
 
 export default function(data) {
   migi.resetUid();
 
   let info = data.info;
   let originWorks = data.originWorks;
-  let fcList = data.fcList;
-  let hhList = data.hhList;
 
-  let home = migi.preRender(
-    <Home info={ info }
-          originWorks={ originWorks }
-          fcList={ fcList }
-          hhList={ hhList }/>
+  let fc = migi.preRender(
+    <Fc info={ info }
+        originWorks={ originWorks }/>
   );
 
   return `<!DOCTYPE html>
@@ -37,19 +33,17 @@ export default function(data) {
   <title>异世交响月</title>
   <link rel="icon" href="//zhuanquan.xin/img/ba2257a30816928629e0b47f9e6f7b38.png" type="image/x-icon">
   <link rel="stylesheet" href="${data.helper.getAssetUrl('/rcommon.css')}"/>
-  <link rel="stylesheet" href="${data.helper.getAssetUrl('/ysjxy.css')}"/>
+  <link rel="stylesheet" href="${data.helper.getAssetUrl('/fc.css')}"/>
 </head>
 <body>
-${home}
+<div id="page">${fc}</div>
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.info = ${data.helper.stringify(info)};
   $CONFIG.originWorks = ${data.helper.stringify(originWorks)};
-  $CONFIG.fcList = ${data.helper.stringify(fcList)};
-  $CONFIG.hhList = ${data.helper.stringify(hhList)};
 </script>
 <script src="${data.helper.getAssetUrl('/rcommon.js')}" defer="defer"></script>
-<script src="${data.helper.getAssetUrl('/ysjxy.js')}" defer="defer"></script>
+<script src="${data.helper.getAssetUrl('/fc.js')}" defer="defer"></script>
 ${data.helper.getStat()}
 </body>
 </html>`;
