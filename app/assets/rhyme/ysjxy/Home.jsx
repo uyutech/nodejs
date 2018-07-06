@@ -450,7 +450,7 @@ class Home extends migi.Component {
                       <a class="ti"
                          href={ '/ysjxy/fc/' + item.id }
                          target="_blank">{ item.works.title }</a>
-                      <p class="er">参赛者：<br/>{ item.user.nickname }</p>
+                      <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
                       <p class="desc">{ item.works.describe }</p>
                       <p class="count"><strong>{ item.voteCount }</strong>票</p>
                       <div class="btn">
@@ -491,7 +491,7 @@ class Home extends migi.Component {
                         <span>No.{ item.id }</span>
                       </a>
                       <div class="txt">
-                        <p class="er">参赛者：<br/>{ item.user.nickname }</p>
+                        <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
                         <p class="desc">{ item.works.describe }</p>
                         <p class="count"><strong>{ item.voteCount }</strong>票</p>
                         <div class="btn">
@@ -500,7 +500,7 @@ class Home extends migi.Component {
                           <a class="share"
                              href={ 'http://service.weibo.com/share/share.php?url='
                              + encodeURIComponent('https://circling.cc/ysjxy/hh/' + item.id)
-                             + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                             + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 绘画大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
                              + '&searchPic=false&style=number' }
                              target="_blank">分享</a>
                         </div>

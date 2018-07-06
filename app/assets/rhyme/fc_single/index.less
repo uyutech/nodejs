@@ -1,0 +1,152 @@
+/**
+ * Created by army8735 on 2018/7/4.
+ */
+
+.fc-single{
+  .banner{
+    position:relative;
+    padding-top:42.1875%;
+    background:url(//zhuanquan.xin/rhymesland/ysjxy/banner.jpg) no-repeat center;
+    background-size:contain;
+    &:after{
+      position:absolute;
+      left:0;
+      bottom:-0.1rem;
+      width:100%;
+      height:0.1rem;
+      background:#fdfaf5;
+      border-bottom:1px solid #e0ce9e;
+      box-sizing:border-box;
+      content:' ';
+    }
+  }
+  .con{
+    position:relative;
+    margin:0 auto;
+    width:10rem;
+    .index{
+      margin:0.2rem auto;
+      display:block;
+      width:2.92rem;
+      height:0.54rem;
+      text-indent:9999rem;
+      cursor:pointer;
+      white-space:nowrap;
+      overflow:hidden;
+      background:url(back.png) no-repeat center;
+      background-size:contain;
+    }
+    .single{
+      margin:0 auto;
+      width:1.8rem;
+      border:1px solid #a5a5a5;
+      box-sizing:border-box;
+      border-radius:0.05rem;
+      overflow:hidden;
+      .pic{
+        position:relative;
+        display:block;
+        img{
+          display:block;
+          width:1.8rem;
+          height:1.8rem;
+          object-fit:cover;
+        }
+        span{
+          position:absolute;
+          left:0;
+          bottom:0;
+          width:100%;
+          line-height:0.3rem;
+          background:rgba(51,102,153,.7);
+          color:#FFF;
+          font-size:0.16rem;
+          text-align:center;
+        }
+      }
+      .txt{
+        padding:0.05rem;
+        color:#977a48;
+        .ti{
+          font-size:0.16rem;
+          color:#882925;
+        }
+        .count{
+          text-align:center;
+          line-height:0.24rem;
+          strong{
+            margin-right:0.05rem;
+            color:#fe5952;
+            font-size:0.18rem;
+            font-weight:400;
+            line-height:0.24rem;
+          }
+        }
+        .btn{
+          text-align:center;
+        }
+        .vote{
+          display:inline-block;
+          width:0.6rem;
+          height:0.3rem;
+          line-height:0.3rem;
+          color:#FFF;
+          background:#d982b8;
+          border-radius:0.05rem;
+          text-align:center;
+          font-size:0.14rem;
+          cursor:pointer;
+          &:hover{
+            background:#df93c2;
+          }
+        }
+        .voted{
+          display:inline-block;
+          width:0.6rem;
+          height:0.3rem;
+          line-height:0.3rem;
+          color:#FFF;
+          background:#7a8ac2;
+          border-radius:0.05rem;
+          text-align:center;
+          font-size:0.14rem;
+        }
+        .share{
+          display:inline-block;
+          margin-left:0.1rem;
+          width:0.6rem;
+          height:0.3rem;
+          line-height:0.3rem;
+          color:#FFF;
+          background:#7acac2;
+          border-radius:0.05rem;
+          text-align:center;
+          font-size:0.14rem;
+        }
+      }
+    }
+  }
+  .logo{
+    display:block;
+    margin:0 auto;
+  }
+}
+
+.mobile{
+  .fc-single{
+    .banner{
+      padding-top:58.93%;
+      background-image:url(//zhuanquan.xin/rhymesland/ysjxy/banner_m.jpg);
+      &:after{
+        display:none;
+        content:'';
+      }
+    }
+    .con{
+      width:auto;
+    }
+  }
+  .logo{
+    width:100%;
+  }
+}
