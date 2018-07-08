@@ -29,6 +29,7 @@ class Title extends migi.Component {
         <h3>{ info.typeName }</h3>
         <h1 class={ info.title ? '' : 'empty' }>{ info.title || '待揭秘' }</h1>
         <h2 class={ info.subTitle ? '' : 'fn-hide' }>{ info.subTitle }</h2>
+        <p class="desc">{ info.describe }</p>
       </div>
       <div class="plus">
       {

@@ -167,6 +167,26 @@ class Controller extends egg.Controller {
         limit: 1,
         raw: true,
       }),
+      app.model.author.findOne({
+        attributes: [
+          'id'
+        ],
+        order: [
+          ['id', 'DESC']
+        ],
+        limit: 1,
+        raw: true,
+      }),
+      app.model.userAuthorRelation.findOne({
+        attributes: [
+          ['author_id', 'authorId']
+        ],
+        where: {
+          user_id: uid,
+          type: 1,
+        },
+        raw: true,
+      })
     ]);
     let transaction = await app.sequelizeCircling.transaction();
     let query = [];
@@ -247,14 +267,36 @@ class Controller extends egg.Controller {
           })
         );
       }
+      let authorId;
+      let createAuthor;
+      if(last[5]) {
+        authorId = last[5].authorId;
+      }
+      else {
+        createAuthor = true;
+        authorId = last[4].id;
+        authorId += Math.floor(Math.random() * 3) + 1;
+        query.push(
+          app.model.author.create({
+            id: authorId,
+            name: ctx.session.nickname,
+            is_settle: true,
+          }, {
+            transaction,
+            raw: true,
+          })
+        );
+      }
       let createList = await Promise.all(query);
-      query.push(app.model.worksNum.create({
-        works_id: id,
-        type: 1,
-      }, {
-        transaction,
-        raw: true,
-      }));
+      query.push(
+        app.model.worksNum.create({
+          works_id: id,
+          type: 1,
+        }, {
+          transaction,
+          raw: true,
+        })
+      );
       query.push(
         app.model.worksWorkRelation.create({
           works_id: id,
@@ -267,13 +309,15 @@ class Controller extends egg.Controller {
           raw: true,
         })
       );
-      query.push(app.model.worksCommentRelation.create({
-        works_id: id,
-        comment_id: createList[1].id,
-      }, {
-        transaction,
-        raw: true,
-      }));
+      query.push(
+        app.model.worksCommentRelation.create({
+          works_id: id,
+          comment_id: createList[1].id,
+        }, {
+          transaction,
+          raw: true,
+        })
+      );
       query.push(
         app.model.userCreateWorks.create({
           user_id: uid,
@@ -283,58 +327,70 @@ class Controller extends egg.Controller {
           raw: true,
         })
       );
-      query.push(app.model.userUploadWork.create({
-        user_id: uid,
-        work_id: audioId,
-        kind: 2,
-      }, {
-        transaction,
-        raw: true,
-      }));
-      query.push(app.model.workNum.create({
-        work_id: audioId,
-        type: 1,
-      }, {
-        transaction,
-        raw: true,
-      }));
-      if(imgUrl) {
-        query.push(app.model.workNum.create({
-          work_id: imgId,
-          type: 1,
-        }, {
-          transaction,
-          raw: true,
-        }));
-        app.model.worksWorkRelation.create({
-          works_id: id,
-          work_id: imgId,
-          kind: 3,
-          works_review: 1,
-          work_review: 1,
+      query.push(
+        app.model.userUploadWork.create({
+          user_id: uid,
+          work_id: audioId,
+          kind: 2,
         }, {
           transaction,
           raw: true,
         })
+      );
+      query.push(
+        app.model.workNum.create({
+          work_id: audioId,
+          type: 1,
+        }, {
+          transaction,
+          raw: true,
+        })
+      );
+      if(imgUrl) {
+        query.push(
+          app.model.workNum.create({
+            work_id: imgId,
+            type: 1,
+          }, {
+            transaction,
+            raw: true,
+          })
+        );
+        query.push(
+          app.model.worksWorkRelation.create({
+            works_id: id,
+            work_id: imgId,
+            kind: 3,
+            works_review: 1,
+            work_review: 1,
+          }, {
+            transaction,
+            raw: true,
+          })
+        );
       }
       if(videoUrl) {
-        query.push(app.model.workNum.create({
-          work_id: videoId,
-          type: 1,
-        }, {
-          transaction,
-          raw: true,
-        }));
-        app.model.worksWorkRelation.create({
-          works_id: id,
-          work_id: videoId,
-          kind: 1,
-          works_review: 1,
-          work_review: 1,
-        }, {
-          transaction,
-          raw: true,
-        })
+        query.push(
+          app.model.workNum.create({
+            work_id: videoId,
+            type: 1,
+          }, {
+            transaction,
+            raw: true,
+          })
+        );
+        query.push(
+          app.model.worksWorkRelation.create({
+            works_id: id,
+            work_id: videoId,
+            kind: 1,
+            works_review: 1,
+            work_review: 1,
+          }, {
+            transaction,
+            raw: true,
+          })
+        );
       }
       query.push(
         app.model.worksWorksRelation.create({
@@ -346,6 +402,41 @@ class Controller extends egg.Controller {
           raw: true,
         })
       );
+      query.push(
+        app.model.worksAuthorRelation.create({
+          works_id: id,
+          author_id: authorId,
+          profession_id: 1,
+          type: 2,
+        }, {
+          transaction,
+          raw: true,
+        })
+      );
+      query.push(
+        app.model.workAuthorRelation.create({
+          work_id: audioId,
+          author_id: authorId,
+          kind: 2,
+          profession_id: 1,
+        }, {
+          transaction,
+          raw: true,
+        })
+      );
+      if(createAuthor) {
+        query.push(
+          app.model.userAuthorRelation.create({
+            user_id: uid,
+            author_id: authorId,
+            type: 1,
+            settle: 1,
+          }, {
+            transaction,
+            raw: true,
+          })
+        );
+      }
       await Promise.all(query);
       await transaction.commit();
       let fc = await app.model.activityUpload.create({
@@ -415,17 +506,19 @@ class Controller extends egg.Controller {
           raw: true,
         })
       );
-      query.push(app.model.comment.create({
-        content: id,
-        user_id: 2018000000008222,
-        is_delete: true,
-        review: 3,
-        root_id: 0,
-        parent_id: 0,
-      }, {
-        transaction,
-        raw: true,
-      }));
+      query.push(
+        app.model.comment.create({
+          content: id,
+          user_id: 2018000000008222,
+          is_delete: true,
+          review: 3,
+          root_id: 0,
+          parent_id: 0,
+        }, {
+          transaction,
+          raw: true,
+        })
+      );
       let imgId = last[1].id;
       imgId += Math.floor(Math.random() * 3) + 1;
       query.push(
