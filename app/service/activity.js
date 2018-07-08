@@ -344,6 +344,7 @@ class Service extends egg.Service {
       where: {
         activity_id: 1,
         upload_id: id,
+        type,
       },
       raw: true,
     });
@@ -397,6 +398,7 @@ class Service extends egg.Service {
         where: {
           activity_id: 1,
           upload_id: noCacheIdList,
+          type,
         },
         group: 'uploadId',
         raw: true,
