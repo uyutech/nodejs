@@ -303,14 +303,27 @@
         font-size:0.14rem;
       }
     }
-    .fc-title{
-      font-size:0.2rem;
-      font-weight:400;
-    }
-    .fc-list{
-      //transform:translateX(0.1rem);
+    .sort{
       padding-left:0.1rem;
       border:0.02rem solid #c7a751;
+      border-top:none;
+      border-bottom:none;
+      li{
+        float:left;
+        font-size:0.3rem;
+        color:#977a48;
+        padding-left:0.1rem;
+        opacity:0.5;
+        &.cur{
+          color:#882925;
+          opacity:1;
+        }
+      }
+    }
+    .fc-list{
+      padding:0.1rem 0 0 0.1rem;
+      border:0.02rem solid #c7a751;
+      border-top:none;
       li{
         float:left;
         margin:0 0.2rem 0.2rem 0;

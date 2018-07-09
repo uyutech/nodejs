@@ -71,9 +71,9 @@ class Service extends egg.Service {
     return works;
   }
 
-  async ysjxyUpload(uid, offset, limit) {
+  async ysjxyUpload(uid, offset, limit, sort) {
     let [data, count] = await Promise.all([
-      this.ysjxyUploadData(uid, offset, limit),
+      this.ysjxyUploadData(uid, offset, limit, sort),
       this.ysjxyUploadCount()
     ]);
     return {
@@ -82,19 +82,25 @@ class Service extends egg.Service {
     };
   }
 
-  async ysjxyUploadData(uid, offset, limit) {
+  async ysjxyUploadData(uid, offset, limit, sort) {
     offset = parseInt(offset) || 0;
     limit = parseInt(limit) || 1;
     if(offset < 0 || limit < 1) {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'ysjxyUploadData_' + offset + '_' + limit;
+    let cacheKey = 'ysjxyUploadData_' + offset + '_' + limit + '_' + sort;
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
     }
     else {
+      let order = sort === 0 ? [
+        ['create_time', 'DESC']
+      ] : [
+        ['popular', 'DESC'],
+        ['create_time', 'DESC']
+      ];
       res = await app.model.activityUpload.findAll({
         attributes: [
           'id',
@@ -104,9 +110,7 @@ class Service extends egg.Service {
         where: {
           activity_id: 1,
         },
-        order: [
-          ['create_time', 'DESC']
-        ],
+        order,
         offset,
         limit,
         raw: true,
@@ -163,9 +167,9 @@ class Service extends egg.Service {
     return res;
   }
 
-  async ysjxyUploadHh(uid, offset, limit) {
+  async ysjxyUploadHh(uid, offset, limit, sort) {
     let [data, count] = await Promise.all([
-      this.ysjxyUploadHhData(uid, offset, limit),
+      this.ysjxyUploadHhData(uid, offset, limit, sort),
       this.ysjxyUploadHhCount()
     ]);
     return {
@@ -174,19 +178,25 @@ class Service extends egg.Service {
     };
   }
 
-  async ysjxyUploadHhData(uid, offset, limit) {
+  async ysjxyUploadHhData(uid, offset, limit, sort) {
     offset = parseInt(offset) || 0;
     limit = parseInt(limit) || 1;
     if(offset < 0 || limit < 1) {
       return;
     }
     const { app, service } = this;
-    let cacheKey = 'ysjxyUploadHhData_' + offset + '_' + limit;
+    let cacheKey = 'ysjxyUploadHhData_' + offset + '_' + limit + '_' + sort;
     let res = await app.redis.get(cacheKey);
     if(res) {
       res = JSON.parse(res);
     }
     else {
+      let order = sort === 0 ? [
+        ['create_time', 'DESC']
+      ] : [
+        ['popular', 'DESC'],
+        ['create_time', 'DESC']
+      ];
       res = await app.model.activityUploadHh.findAll({
         attributes: [
           'id',
@@ -196,9 +206,7 @@ class Service extends egg.Service {
         where: {
           activity_id: 1,
         },
-        order: [
-          ['create_time', 'DESC']
-        ],
+        order,
         offset,
         limit,
         raw: true,

@@ -13,8 +13,8 @@ class Controller extends egg.Controller {
     let [ info, originWorks, fcList, hhList ] = await Promise.all([
       service.activity.ysjxyInfo(),
       service.activity.ysjxyOriginWorks(),
-      service.activity.ysjxyUpload(uid, 0, 10),
-      service.activity.ysjxyUploadHh(uid, 0, 10)
+      service.activity.ysjxyUpload(uid, 0, 10, 0),
+      service.activity.ysjxyUploadHh(uid, 0, 10, 0)
     ]);
     await ctx.render('ysjxy', {
       info,
@@ -28,8 +28,9 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let offset = parseInt(body.offset);
-    let res = await service.activity.ysjxyUpload(uid, offset, 10);
+    let offset = parseInt(body.offset) || 0;
+    let sort = parseInt(body.sort) || 0;
+    let res = await service.activity.ysjxyUpload(uid, offset, 10, sort);
     ctx.body = ctx.helper.okJSON(res);
   }
 
@@ -37,13 +38,14 @@ class Controller extends egg.Controller {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
-    let offset = parseInt(body.offset);
-    let res = await service.activity.ysjxyUploadHh(uid, offset, 10);
+    let offset = parseInt(body.offset) || 0;
+    let sort = parseInt(body.sort) || 0;
+    let res = await service.activity.ysjxyUploadHh(uid, offset, 10, sort);
     ctx.body = ctx.helper.okJSON(res);
   }
 
   async vote() {
-    const { ctx, service } = this;
+    const { ctx, service, app } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let id = parseInt(body.id);
@@ -54,6 +56,25 @@ class Controller extends egg.Controller {
     let res = await service.activity.vote(id, type, uid);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);
+      let count = res.data.count;
+      if(type === 1) {
+        app.model.activityUpload.update({
+          popular: count,
+        }, {
+          where: {
+            id,
+          },
+        });
+      }
+      else if(type === 2) {
+        app.model.activityUploadHh.update({
+          popular: count,
+        }, {
+          where: {
+            id,
+          },
+        });
+      }
     }
     else {
       ctx.body = ctx.helper.errorJSON(res.message);

@@ -20,12 +20,16 @@ class Home extends migi.Component {
     this.hhList = this.props.hhList.data;
     this.hhCount = this.props.hhList.count;
     this.tab2 = 0;
+    this.fcSort = 0;
+    this.hhSort = 0;
   }
   @bind index
   @bind tab
   @bind fcList
   @bind hhList
   @bind tab2
+  @bind fcSort
+  @bind hhSort
   clickIndex(e, vd, tvd) {
     if(this.index === tvd.props.rel) {
       return;
@@ -107,7 +111,7 @@ class Home extends migi.Component {
       ajax.abort();
     }
     let self = this;
-    ajax = $net.postJSON('ysjxy/fcList', { offset: (i - 1) * 10 }, function(res) {
+    ajax = $net.postJSON('ysjxy/fcList', { offset: (i - 1) * 10, sort: self.fcSort }, function(res) {
       if(res.success) {
         self.fcList = res.data.data;
       }
@@ -123,7 +127,7 @@ class Home extends migi.Component {
       ajax.abort();
     }
     let self = this;
-    ajax = $net.postJSON('ysjxy/hhList', { offset: (i - 1) * 10 }, function(res) {
+    ajax = $net.postJSON('ysjxy/hhList', { offset: (i - 1) * 10, sort: self.hhSort }, function(res) {
       if(res.success) {
         self.hhList = res.data.data;
       }
@@ -133,6 +137,22 @@ class Home extends migi.Component {
     }, function(res) {
       alert(res.message || $util.ERROR_MESSAGE);
     });
+  }
+  clickFcSort(e, vd, tvd) {
+    if(this.fcSort === tvd.props.rel) {
+      return;
+    }
+    this.fcSort = tvd.props.rel;
+    this.ref.page.index = 1;
+    this.page(1);
+  }
+  clickHhSort(e, vd, tvd) {
+    if(this.hhSort === tvd.props.rel) {
+      return;
+    }
+    this.hhSort = tvd.props.rel;
+    this.ref.page2.index = 1;
+    this.page2(1);
   }
   render() {
     let info = this.props.info;
@@ -428,6 +448,20 @@ class Home extends migi.Component {
               <li class={ 'hh' + (this.tab2 === 1 ? ' cur' : '') }
                   rel={ 1 }>绘画比赛</li>
             </ul>
+            <ul class={ 'sort fn-clear' + (this.tab2 === 0 ? '' : ' fn-hide') }
+                onClick={ { li: this.clickFcSort } }>
+              <li class={ this.fcSort === 0 ? 'cur' : '' }
+                  rel={ 0 }>最新</li>
+              <li class={ this.fcSort === 1 ? 'cur' : '' }
+                  rel={ 1 }>最热</li>
+            </ul>
+            <ul class={ 'sort fn-clear' + (this.tab2 === 1 ? '' : ' fn-hide') }
+                onClick={ { li: this.clickHhSort } }>
+              <li class={ this.hhSort === 0 ? 'cur' : '' }
+                  rel={ 0 }>最新</li>
+              <li class={ this.hhSort === 1 ? 'cur' : '' }
+                  rel={ 1 }>最热</li>
+            </ul>
             <div class={ this.tab2 === 0 ? '' : 'fn-hide' }>
               <ul class="fc-list fn-clear"
                   onClick={ { '.vote': this.clickVote } }>
@@ -470,6 +504,7 @@ class Home extends migi.Component {
               </ul>
               <Page index={ 1 }
                     total={ Math.ceil(this.fcCount / 10) }
+                    ref="page"
                     on-page={ this.page }/>
             </div>
             <div class={ this.tab2 === 1 ? '' : 'fn-hide' }>
@@ -511,6 +546,7 @@ class Home extends migi.Component {
               </ul>
               <Page index={ 1 }
                     total={ Math.ceil(this.hhCount / 10) }
+                    ref="page2"
                     on-page={ this.page2 }/>
             </div>
           </div>

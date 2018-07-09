@@ -1121,11 +1121,15 @@ class Service extends egg.Service {
     ]);
     let authorHash = {};
     authorList.forEach((item) => {
-      authorHash[item.id] = item;
+      if(item) {
+        authorHash[item.id] = item;
+      }
     });
     let professionHash = {};
     professionList.forEach((item) => {
-      professionHash[item.id] = item;
+      if(item) {
+        professionHash[item.id] = item;
+      }
     });
     list.forEach((arr) => {
       arr.forEach((item) => {

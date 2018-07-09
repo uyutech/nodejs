@@ -34,6 +34,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: false,
     },
+    popular: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -58,6 +63,10 @@ module.exports = app => {
       {
         name: 'activity_id_create_time',
         fields: ['activity_id', 'create_time'],
+      },
+      {
+        name: 'activity_id_popular_create_time',
+        fields: ['activity_id', 'popular', 'create_time'],
       }
     ],
     comment: '活动上传翻唱作品信息',
