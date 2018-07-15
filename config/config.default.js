@@ -157,5 +157,7 @@ module.exports = appInfo => {
     redirect: 'https://circling.cc/oauth/login',
   };
 
+  config.host = 'https://circling.cc';
+
   return config;
 };

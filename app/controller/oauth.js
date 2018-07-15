@@ -10,7 +10,9 @@ class Controller extends egg.Controller {
   async weibo() {
     const { app, ctx } = this;
     let query = ctx.query;
-    ctx.session.goto = query.goto;
+    if(query.goto) {
+      ctx.session.goto = query.goto;
+    }
     let appKey = app.config.weibo.appKey;
     let redirect = app.config.weibo.redirect;
     ctx.redirect(`https://api.weibo.com/oauth2/authorize?client_id=${appKey}&response_type=code&redirect_uri=${redirect}`);

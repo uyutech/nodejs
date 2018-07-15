@@ -1,0 +1,250 @@
+/**
+ * Created by army8735 on 2018/7/10.
+ */
+
+*,
+:after,
+:before{
+  -webkit-tap-highlight-color:transparent;
+  -webkit-overflow-scrolling:touch;
+}
+
+blockquote,
+body,
+dd,
+div,
+dl,
+dt,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+legend,
+li,
+ol,
+p,
+td,
+textarea,
+th,
+ul{
+  margin:0;
+  padding:0;
+}
+
+table{
+  border-collapse:collapse;
+  border-spacing:0;
+}
+
+fieldset,
+img{
+  border:0;
+}
+
+li{
+  list-style:none;
+}
+
+caption,
+th{
+  text-align:left;
+}
+
+q:after,
+q:before{
+  content:"";
+}
+
+input:password, input[type="password"]{
+  ime-mode:disabled;
+}
+
+:focus{
+  outline:0;
+}
+
+html{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  font-size:100px;
+}
+
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  box-sizing:border-box;
+}
+
+a,
+img{
+  -webkit-touch-callout:none;
+}
+
+body,
+button,
+input,
+select,
+textarea{
+  font-size: 0.16rem;
+  line-height: 1.5;
+  color: #654328;
+  font-family:
+    // System Font            // https://www.webkit.org/blog/3709/using-the-system-font-in-web-content/
+    -apple-system,            // OSX ^10.11 & iOS ^9  San Francisco & 苹方
+
+      // English First
+    "Helvetica Neue",         // OSX
+    "Arial",                  // Win "Helvetica"
+      //" Segoe UI",            // Win ^8
+
+      // Chinese Fallback
+    "PingFang SC",            // OSX ^10.11 & iOS ^9  苹方（华康信凭黑）
+    "Hiragino Sans GB",       // OSX ^10.6            冬青黑体
+    "STHeiti",                // OSX <10.6  & iOS <9  华文黑体
+    "Microsoft YaHei",        // Win                  微软雅黑
+    "Microsoft JhengHei",     // Win                  微软正黑
+    "Source Han Sans SC",     // SourceHan - begin    思源黑体
+    "Noto Sans CJK SC",
+    "Source Han Sans CN",
+    "Noto Sans SC",
+    "Source Han Sans TC",
+    "Noto Sans CJK TC",       // SourceHan - end
+    "WenQuanYi Micro Hei",    // Linux                文泉驿微米黑
+    SimSun,                   // Win old              中易宋体
+    sans-serif;               // System Fallback
+}
+
+input{
+  line-height:normal;
+}
+
+a{
+  color:#654328;
+  text-decoration:none;
+}
+
+.fn-clear:after{
+  visibility:hidden;
+  display:block;
+  font-size:0;
+  content:" ";
+  clear:both;
+  height:0;
+}
+
+.fn-hide{
+  display:none !important;
+}
+
+.fn-hidden{
+  visibility:hidden !important;
+}
+
+.fn-zero{
+  height:0 !important;
+  overflow:hidden !important;
+}
+
+#page{
+  margin:0 auto;
+  width:10rem;
+}
+
+body{
+  padding-top:66%;
+  background:#ede0d0 url(//zhuanquan.xin/img/2fd599b1cc5138045799f83d9aa8959e.jpg) no-repeat center 0;
+  background-size:100% auto;
+}
+
+.mod-nav{
+  margin:0 auto;
+  width:10rem;
+  text-align:center;
+  a{
+    display:inline-block;
+    width:2.5rem;
+    height:1.04rem;
+    background:url(nav.png) no-repeat center;
+    background-size:contain;
+    text-align:center;
+    line-height:0.85rem;
+    color:#FFF;
+    font-size:0.24rem;
+    &.cur{
+      background-image:url(nav_cur.png);
+      cursor:default;
+    }
+  }
+}
+
+.mod-bot{
+  padding-top:1rem;
+  padding-bottom:50%;
+  width:100%;
+  background:url(//zhuanquan.xin/img/5dd199d340a7f05643c400bbdb7c2dc4.jpg) no-repeat center bottom;
+  background-size:100% auto;
+  text-align:center;
+  .title{
+    margin:0 auto 0.3rem;
+    width:1.85rem;
+    height:0.61rem;
+    line-height:0.6rem;
+    background:url(../home/button1.png) no-repeat center;
+    background-size:contain;
+    color:#FFF;
+    font-size:0.24rem;
+    text-align:center;
+    font-weight:400;
+    text-indent:-0.2rem;
+  }
+  .logo{
+    display:inline-block;
+    width:2.88rem;
+    height:1.56rem;
+    background:url(logo2.png) no-repeat center;
+    background-size:contain;
+  }
+  .logo2{
+    display:inline-block;
+    margin-left:1rem;
+    width:2.14rem;
+    height:1.07rem;
+    background:url(logo.png) no-repeat center;
+    background-size:contain;
+  }
+}
+
+@media screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 2), screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 3) {
+  body{
+    background-image:url(//zhuanquan.xin/img/2fd599b1cc5138045799f83d9aa8959e.jpg-750__80);
+  }
+  .mod-nav{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-around;
+    width:auto;
+    a{
+      flex-shrink:0;
+      width:1.6rem;
+      height:0.7rem;
+      font-size:0.18rem;
+      line-height:0.65rem;
+    }
+  }
+  .mod-bot{
+    background-image:url(//zhuanquan.xin/img/5dd199d340a7f05643c400bbdb7c2dc4.jpg-750__80);
+    .logo,.logo2{
+      display:block;
+      margin:0 auto;
+    }
+  }
+}

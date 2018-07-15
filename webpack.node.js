@@ -55,6 +55,12 @@ module.exports = {
     fc_single: './app/view/fc_single.jsx',
     hh: './app/view/hh.jsx',
     hh_single: './app/view/hh_single.jsx',
+    jsgm_home: './app/view/jsgm/home.jsx',
+    jsgm_detail: './app/view/jsgm/detail.jsx',
+    jsgm_works: './app/view/jsgm/works.jsx',
+    jsgm_prize: './app/view/jsgm/prize.jsx',
+    jsgm_join: './app/view/jsgm/join.jsx',
+    jsgm_single: './app/view/jsgm/single.jsx',
   },
   output: {
     path: __dirname + '/app/view',

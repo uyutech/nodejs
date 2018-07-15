@@ -110,6 +110,7 @@ const activityUpload = require('../model/activityUpload');
 const activityUploadHh = require('../model/activityUploadHh');
 const activityVote = require('../model/activityVote');
 const activityCharacter = require('../model/activityCharacter');
+const jsgm = require('../model/jsgm');
 
 module.exports = {
   get Sequelize() {
@@ -390,6 +391,7 @@ module.exports = {
         activityUploadHh: activityUploadHh(this),
         activityVote: activityVote(this),
         activityCharacter: activityCharacter(this),
+        jsgm: jsgm(this),
       };
     }
     return this[MODEL];

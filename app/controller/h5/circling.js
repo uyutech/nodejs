@@ -139,10 +139,6 @@ class Controller extends egg.Controller {
       });
       app.redis.setex('banner', app.config.redis.time, JSON.stringify(bannerList));
     }
-    bannerList.unshift({
-      link: 'https://show.bilibili.com/platform/detail.html?id=12757&from=pc',
-      url: '//zhuanquan.xin/img/80ee3e9751dfdf071235a69b82e400cd.jpg',
-    });
 
     postList.limit = LIMIT;
 

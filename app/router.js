@@ -37,6 +37,25 @@ module.exports = app => {
   app.post('/d/ysjxy/hhList', 'd.ysjxy.hhList');
   app.post('/m/ysjxy/hhList', 'd.ysjxy.hhList');
 
+  app.get('/d/jsgm', 'jsgm.index');
+  app.get('/m/jsgm', 'jsgm.index');
+  app.get('/d/jsgm/detail', 'jsgm.detail');
+  app.get('/m/jsgm/detail', 'jsgm.detail');
+  app.get('/d/jsgm/works', 'jsgm.works');
+  app.get('/m/jsgm/works', 'jsgm.works');
+  app.get('/d/jsgm/works/:id', 'jsgm.single');
+  app.get('/m/jsgm/works/:id', 'jsgm.single');
+  app.post('/d/jsgm/worksList', 'jsgm.worksList');
+  app.post('/m/jsgm/worksList', 'jsgm.worksList');
+  app.get('/d/jsgm/prize', 'jsgm.prize');
+  app.get('/m/jsgm/prize', 'jsgm.prize');
+  app.get('/d/jsgm/join', app.middlewares.needLogin(), 'jsgm.join');
+  app.get('/m/jsgm/join', app.middlewares.needLogin(), 'jsgm.join');
+  app.post('/d/jsgm/add', app.middlewares.needLoginJson(), 'jsgm.add');
+  app.post('/m/jsgm/add', app.middlewares.needLoginJson(), 'jsgm.add');
+  app.post('/d/jsgm/update', app.middlewares.needLoginJson(), 'jsgm.update');
+  app.post('/m/jsgm/update', app.middlewares.needLoginJson(), 'jsgm.update');
+
   app.get('/m', 'm.index.index');
   app.get('/m/works/:worksId', 'm.works.index');
   app.get('/m/works/:worksId/:workId', 'm.works.index');

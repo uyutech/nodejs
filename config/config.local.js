@@ -66,5 +66,6 @@ module.exports = appInfo => {
       appSecret: 'ae82c745736d8dc78230d96388790b22',
       redirect: 'http://dev.circling.cc2/oauth/login',
     },
+    host: 'http://dev.circling.cc2',
   };
 };

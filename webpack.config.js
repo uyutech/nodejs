@@ -57,6 +57,13 @@ module.exports = {
     fc_single: './app/assets/rhyme/fc_single/index.jsx',
     hh: './app/assets/rhyme/hh/index.jsx',
     hh_single: './app/assets/rhyme/hh_single/index.jsx',
+    jcommon: './app/assets/jsgm/common/index.js',
+    jsgm_home: './app/assets/jsgm/home/index.jsx',
+    jsgm_detail: './app/assets/jsgm/detail/index.jsx',
+    jsgm_works: './app/assets/jsgm/works/index.jsx',
+    jsgm_prize: './app/assets/jsgm/prize/index.jsx',
+    jsgm_join: './app/assets/jsgm/join/index.jsx',
+    jsgm_single: './app/assets/jsgm/single/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

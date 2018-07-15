@@ -1,0 +1,59 @@
+/**
+ * Created by army8735 on 2018/7/14.
+ */
+
+.single{
+  margin:0 auto;
+  width:10rem;
+  .line{
+    margin:0.2rem 0;
+    font-size:0.16rem;
+    label{
+      display:inline-block;
+      width:2rem;
+      text-align:right;
+    }
+    input,textarea{
+      padding:0 0.1rem;
+      width:7rem;
+      vertical-align:top;
+      border:1px solid #999;
+      background:#FFF;
+    }
+    input:read-only,textarea:read-only{
+      border-color:#CCC;
+      background:transparent;
+    }
+    input[type="text"]{
+      height:0.3rem;
+    }
+    textarea{
+      height:2rem;
+    }
+  }
+  .btn{
+    text-align:center;
+    button{
+      margin:0 0.1rem;
+    }
+  }
+}
+
+@media only screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 2), screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 3){
+  .single{
+    width:auto;
+    .line{
+      label{
+        display:block;
+        margin:0 0.1rem 0.05rem;
+        width:auto;
+        text-align:left;
+      }
+      input,textarea{
+        display:block;
+        margin:0 auto;
+        width:90%;
+      }
+    }
+  }
+}

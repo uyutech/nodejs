@@ -7,7 +7,12 @@
 module.exports = () => {
   return async function(ctx, next) {
     if(!ctx.session.uid) {
-      return ctx.redirect('/oauth/weibo');
+      let url = ctx.request.url;
+      if(url) {
+        url = url.replace(/^\/[dm]/, '');
+        url = encodeURIComponent(ctx.app.config.host + url);
+      }
+      return ctx.redirect('/oauth/weibo' + (url ? ('?goto=' + url) : ''));
     }
     await next();
   };

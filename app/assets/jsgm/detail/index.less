@@ -1,0 +1,91 @@
+/**
+ * Created by army8735 on 2018/7/10.
+ */
+
+.detail{
+  margin:0 auto;
+  width:10rem;
+  .ti{
+    margin:0.2rem auto;
+    width:2.96rem;
+    height:0.68rem;
+    line-height:0.8rem;
+    background:url(../home/button2.png) no-repeat center;
+    background-size:contain;
+    color:#FFF;
+    font-size:0.24rem;
+    text-align:center;
+    font-weight:400;
+    text-indent:-0.2rem;
+  }
+  .txt{
+    margin:0.2rem 0.5rem;
+    font-size:0.16rem;
+    line-height:2;
+  }
+  .time{
+    display:block;
+    margin:0 auto;
+    width:8.22rem;
+    height:1.07rem;
+  }
+  .prize{
+    transform:translateX(0.5rem);
+    li{
+      float:left;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      margin-right:0.5rem;
+      width:2.69rem;
+      height:3.23rem;
+      background:url(border.png) no-repeat center;
+      background-size:contain;
+      text-align:center;
+      line-height:2;
+      h4{
+        font-size:0.24rem;
+        font-weight:400;
+      }
+      small{
+        font-size:0.14rem;
+      }
+      p{
+        font-size:0.18rem;
+      }
+    }
+  }
+  .txt{
+    margin:0.2rem 0.5rem;
+    font-size:0.16rem;
+    line-height:2;
+  }
+  .rater{
+    padding-top:1rem;
+    background:url(../common/logo2.png) no-repeat center 0;
+    background-size:auto 0.9rem;
+    color:#FFF;
+    font-size:0.2rem;
+    text-align:center;
+  }
+}
+
+@media only screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 2), screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 3){
+  .detail{
+    width:auto;
+    .time{
+      width:100%;
+      height:auto;
+    }
+    .prize{
+      transform:none;
+      li{
+        float:none;
+        margin:0.2rem auto;
+      }
+    }
+    .txt{
+      margin:0.1rem;
+    }
+  }
+}

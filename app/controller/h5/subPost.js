@@ -98,7 +98,7 @@ class Controller extends egg.Controller {
     const { app, ctx, service } = this;
     let body = ctx.request.body;
     let uid = ctx.session.uid;
-    let circleList = await (uid ? service.user.circleList(uid, 0, LIMIT) : service.circle.all(0, LIMIT));
+    let circleList = await (uid ? service.user.circleList(uid, 0, 50) : service.circle.all(0, 50));
     circleList = circleList.data.filter((item) => {
       return !item.isDelete;
     });
@@ -146,19 +146,33 @@ class Controller extends egg.Controller {
     let offset = body.offset || 0;
     offset = parseInt(offset) || 0;
     let circleList = await service.user.circleList(uid, offset, LIMIT);
-    let idList = [];
-    circleList.data.forEach((item) => {
-      delete item.describe;
-      delete item.banner;
-      delete item.cover;
-      delete item.type;
-      delete item.typeName;
-      idList.push(item.id);
+    circleList = circleList.data.filter((item) => {
+      return !item.isDelete;
     });
-    let tagList = await service.circle.tagList(idList, 2);
-    circleList.limit = LIMIT;
-    circleList.data.forEach((item, i) => {
-      item.tag = tagList[i];
+    let circleIdList = circleList.map((item) => {
+      return item.id;
+    });
+    let postTagList = await app.model.postTag.findAll({
+      attributes: [
+        ['circle_id', 'circleId'],
+        'name',
+        'describe'
+      ],
+      where: {
+        circle_id: circleIdList,
+      },
+      raw: true,
+    });
+    let postTagHash = {};
+    postTagList.forEach((item) => {
+      let temp = postTagHash[item.circleId] = postTagHash[item.circleId] || [];
+      temp.push({
+        name: item.name,
+        describe: item.describe,
+      });
+    });
+    circleList.forEach((item) => {
+      item.tag = postTagHash[item.id];
     });
     ctx.body = ctx.helper.okJSON(circleList);
   }

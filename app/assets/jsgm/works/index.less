@@ -1,0 +1,90 @@
+/**
+ * Created by army8735 on 2018/7/10.
+ */
+
+@import '../../d/component/page/index';
+
+.works{
+  margin:0 auto;
+  width:10rem;
+  .wait{
+    display:block;
+    margin:0.2rem auto 0;
+    width:4.76rem;
+    height:4.76rem;
+  }
+  .list{
+    li{
+      float:left;
+      margin:0 0.2rem 0.2rem 0;
+      width:1.8rem;
+      border:1px solid #a5a5a5;
+      box-sizing:border-box;
+      border-radius:0.05rem;
+      overflow:hidden;
+      &:nth-child(5n + 1) {
+        clear:both;
+      }
+      &:nth-child(5n) {
+        margin-right:0;
+      }
+      .pic{
+        position:relative;
+        display:block;
+        img{
+          display:block;
+          width:100%;
+        }
+        span{
+          position:absolute;
+          left:0;
+          bottom:0;
+          width:100%;
+          line-height:0.3rem;
+          background:rgba(51,102,153,.7);
+          color:#FFF;
+          font-size:0.16rem;
+          text-align:center;
+        }
+      }
+      .txt{
+        padding:0.05rem;
+        color:#977A48;
+        p{
+          white-space:nowrap;
+          overflow:hidden;
+          text-overflow:ellipsis;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 2), screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 3){
+  .works{
+    width:auto;
+    .wait{
+      width:80%;
+      height:auto;
+    }
+    .list{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-around;
+      &:after{
+        display:none;
+      }
+      li{
+        float:none;
+        margin:0 0 0.2rem;
+        flex-shrink:0;
+      }
+    }
+    .cp-page{
+      font-size:0.12rem;
+      input{
+        font-size:0.12rem;
+      }
+    }
+  }
+}
