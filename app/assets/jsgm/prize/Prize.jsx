@@ -12,6 +12,7 @@ class Prize extends migi.Component {
   }
   render() {
     return <div class="prize">
+      <a name="head"/>
       <Nav index={ 3 }/>
       <img class="wait"
            src="//zhuanquan.xin/img/f65a43134bfaf972bff5e06f5c51982c.png"/>

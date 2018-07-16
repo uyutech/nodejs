@@ -80,6 +80,7 @@ class Single extends migi.Component {
   }
   render() {
     return <div class="single">
+      <a name="head"/>
       <Nav/>
       <div class="line">
         <label><b>*</b>投稿者作者名：</label>

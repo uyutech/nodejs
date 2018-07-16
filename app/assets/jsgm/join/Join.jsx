@@ -67,6 +67,7 @@ class Join extends migi.Component {
   }
   render() {
     return <div class="join">
+      <a name="head"/>
       <Nav/>
       <div class="line">
         <label><b>*</b>投稿者作者名：</label>

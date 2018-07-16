@@ -35,6 +35,7 @@ class Works extends migi.Component {
   }
   render() {
     return <div class="works">
+      <a name="head"/>
       <Nav index={ 2 }/>
       {
         this.list.count
@@ -46,7 +47,7 @@ class Works extends migi.Component {
       {
         this.list.data.map((item) => {
           return <li>
-            <a class="pic" href={ '/jsgm/works/' + item.id }>
+            <a class="pic" href={ '/jsgm/works/' + item.id + '#head' }>
               <img src={ $util.img(item.user.headUrl || '//zhuanquan.xin/img/blank.png', 480, 480, 80) }/>
               <span>No.{ item.id }</span>
             </a>

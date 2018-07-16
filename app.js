@@ -29,8 +29,5 @@ module.exports = app => {
         // app.logger.info('webpack watch: %s', !!status);
       });
     }
-    if(app.config.database) {
-
-    }
   });
 };

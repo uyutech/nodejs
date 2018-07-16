@@ -28,6 +28,7 @@ class Home extends migi.Component {
   }
   render() {
     return <div class="home">
+      <a name="head"/>
       <Nav index={ 0 }/>
       <div class="ad fn-clear">
         <div class="video">
@@ -46,7 +47,7 @@ class Home extends migi.Component {
             <p>扫一扫<br/>关注《今时古梦》</p>
             <img src="//zhuanquan.xin/img/9e1bfdea360d2bbb56b2fdff99390eb0.png"/>
           </div>
-          <a href="/jsgm/join" class="join">我要参赛</a>
+          <a href="/jsgm/join" class="join">点击参赛</a>
         </div>
       </div>
       <h3 class="ti">企划介绍</h3>
@@ -59,10 +60,10 @@ class Home extends migi.Component {
         诚邀热爱历史文化的各位词作加入我们，探索华夏千年文化、寻根中华古旧城池。<br/>
         不仅准备了千元现金大奖、丰厚礼包等你拿，更有机会与《今时古梦》创作组亲密合作！</p>
       <h3 class="ti">参赛方式</h3>
-      <p class="txt">◆ 准备参赛作品→登录活动官网→点击“我要参赛”→上传作品并填写相关信息→参赛成功。<br/>
-        ◆ 作品主题需与朝代或城市相关，历史文化、人物事件、风土人情等皆可。与主题不符的作品将视为无效作品。<br/>
+      <p class="txt">◆ 准备参赛作品→登录活动官网→点击“点击参赛”→上传作品并填写相关信息→参赛成功。<br/>
+        ◆ 作品需为一篇完整词作，主题需与朝代历史或城市文化相关，叙事、抒情、截取历史故事缩影、概述城市风土人情等皆可，风格不限。与主题不符的作品将视为无效作品。<br/>
         ◆ 为避免比赛中产生不必要的质疑和纠纷，请所有参赛选手保留作品初稿。</p>
-      <a href="/jsgm/join" class="join">我要参赛</a>
+      <a href="/jsgm/join" class="join">点击参赛</a>
     </div>;
   }
 }

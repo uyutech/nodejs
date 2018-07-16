@@ -13,6 +13,7 @@ class Detail extends migi.Component {
   }
   render() {
     return <div class="detail">
+      <a name="head"/>
       <Nav index={ 1 }/>
       <h3 class="ti">活动时间</h3>
       <img class="time" src="//zhuanquan.xin/img/acd8c39ddbda14274a6f94fc012c0111.png"/>
@@ -40,7 +41,7 @@ class Detail extends migi.Component {
           <p>1000元以内自选汉服一套</p>
         </li>
       </ul>
-      <p class="txt">※关于奖品“1000元以内自选汉服一套”<br/>
+      <p class="txt stxt">※关于奖品“1000元以内自选汉服一套”<br/>
         获奖者可自行选购商品，付款后提供订单详情，我们为你报销费用<br/>
         不限制商品数量，若商品总费用超出1000元，超出部分请自行支付<br/>
         本次活动不承担邮费部分</p>
