@@ -18,7 +18,7 @@ module.exports = app => {
       allowNull: false,
     },
     weight: {
-      type: Sequelize.SMALLINT.UNSIGNED,
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
       defaultValue: 0,
     },
