@@ -226,6 +226,197 @@ class Service extends egg.Service {
     });
     return postList;
   }
+
+  /**
+   * 获取全部预设圈子
+   * @returns Array<Object>
+   */
+  async guideCircle() {
+    const { app, service } = this;
+    let idList = await this.guideTag();
+    let query = await app.model.circleTagRelation.findAll({
+      attributes: [
+        ['circle_id', 'circleId']
+      ],
+      where: {
+        tag_id: idList,
+        type: 1,
+      },
+      raw: true,
+    });
+    let circleIdList = query.map((item) => {
+      return item.circleId;
+    });
+    let circleList = await service.circle.infoList(circleIdList);
+    circleList = circleList.filter((item) => {
+      return item && !item.isDelete;
+    });
+    return circleList;
+  }
+
+  /**
+   * 获取预设的tag
+   * @returns Array<int>
+   */
+  async guideTag() {
+    const { app } = this;
+    let cacheKey = 'guideTag';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.guideTag.findAll({
+        attributes: [
+          ['tag_id', 'tagId']
+        ],
+        where: {
+          is_delete: false,
+        },
+        order: [
+          ['weight', 'DESC']
+        ],
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    return res.map((item) => {
+      return item.tagId;
+    });
+  }
+
+  /**
+   * 预设圈子中且关注的圈子的推荐画圈
+   * @param uid
+   * @returns Array<Object>
+   */
+  async guideAndFollow(uid) {
+    const { app, service } = this;
+    let [guideCircleList, allPost] = await Promise.all([
+      this.guideCircle(),
+      this.allPost()
+    ]);
+    let guideCircleIdList = guideCircleList.map((item) => {
+      return item.id;
+    });
+    if(uid) {
+      let [query, query2] = await Promise.all([
+        app.model.userCircleRelation.findAll({
+          attributes: [
+            ['circle_id', 'circleId']
+          ],
+          where: {
+            user_id: uid,
+            circle_id: guideCircleIdList,
+            type: 1,
+          },
+          raw: true,
+        }),
+        app.model.circlingPostRead.findAll({
+          attributes: [
+            ['comment_id', 'commentId']
+          ],
+          where: {
+            user_id: uid,
+            comment_id: allPost,
+          },
+          raw: true,
+        })
+      ]);
+      let followIdList = query.map((item) => {
+        return item.circleId;
+      });
+      if(followIdList.length) {
+        guideCircleIdList = followIdList;
+      }
+      let readHash = {};
+      query2.forEach((item) => {
+        readHash[item.commentId] = true;
+      });
+      for(let i = allPost.length - 1; i >= 0; i--) {
+        if(readHash[allPost[i]]) {
+          allPost.splice(i, 1);
+        }
+      }
+    }
+    let postList = await service.post.infoList(allPost, uid);
+    let guideCircleIdHash = {};
+    guideCircleIdList.forEach((id) => {
+      guideCircleIdHash[id] = true;
+    });
+    let list = [];
+    let hash = {};
+    postList.forEach((item) => {
+      let circle = item.circle;
+      if(circle) {
+        for(let i = 0; i < circle.length; i++) {
+          let circleId = circle[i].id;
+          if(guideCircleIdHash[circleId]) {
+            if(!hash[circleId]) {
+              hash[circleId] = true;
+              list.push(item);
+              break;
+            }
+          }
+        }
+      }
+    });
+    return list;
+  }
+
+  /**
+   * 获取全部推荐的画圈
+   * @returns Array<Object>
+   */
+  async allPost() {
+    const { app } = this;
+    let cacheKey = 'recommendAllPost';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.circlingPost.findAll({
+      attributes: [
+        ['comment_id', 'commentId']
+      ],
+      where: {
+        is_delete: false,
+      },
+      order: [
+        ['weight', 'DESC'],
+        ['comment_id', 'DESC']
+      ],
+      raw: true,
+    });
+    res = res.map((item) => {
+      return item.commentId;
+    });
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 分页获取推荐画圈接口
+   * @param uid:int 用户id
+   * @param offset:int 分页开始
+   * @param limit:int 分页数量
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async allPostPage(uid, offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { service } = this;
+    let allPost = await this.allPost();
+    let some = allPost.slice(offset, offset + limit);
+    let postList = await service.post.infoList(some, uid);
+    return {
+      data: postList,
+      count: allPost.length,
+    };
+  }
 }
 
 module.exports = Service;

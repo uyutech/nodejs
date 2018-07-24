@@ -1,19 +1,19 @@
 /**
- * Created by army8735 on 2018/6/10.
+ * Created by army8735 on 2018/7/21.
  */
 
 'use strict';
 
 module.exports = app => {
   const { sequelizeRecommend, Sequelize } = app;
-  return sequelizeRecommend.define('guide_tag', {
+  return sequelizeRecommend.define('circling_post', {
     id: {
       type: Sequelize.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
-    tag_id: {
+    comment_id: {
       type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false,
     },
@@ -40,15 +40,15 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'tag_id',
+        name: 'comment_id',
         unique: true,
-        fields: ['tag_id']
+        fields: ['comment_id'],
       },
       {
-        name: 'is_delete_weight',
-        fields: ['is_delete', 'weight']
+        name: 'is_delete_weight_comment_id',
+        fields: ['is_delete', 'weight', 'comment_id'],
       }
     ],
-    comment: '引导圈子',
+    comment: '推荐画圈',
   });
 };

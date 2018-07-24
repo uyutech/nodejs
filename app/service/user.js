@@ -2498,6 +2498,60 @@ class Service extends egg.Service {
   }
 
   /**
+   * 添加地址
+   * @param id:int 用户id
+   * @param name:String 名字
+   * @param phone:String 手机
+   * @param address:String 地址
+   * @returns Object{ success: boolean, message:String, data: Object }
+   */
+  async addAddress(id, name, phone, address) {
+    if(!id || !name || !phone || !address) {
+      return {
+        success: false,
+        message: '信息不完整',
+      };
+    }
+    const { app } = this;
+    let exist = await app.model.userAddress.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        user_id: id,
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(exist) {
+      exist = exist.num || 0;
+    }
+    else {
+      exist = 0;
+    }
+    if(exist >= 10) {
+      return {
+        success: false,
+        message: '收货地址最多只能有10个！',
+      };
+    }
+    else {
+      let cacheKey = 'address_' + id;
+      let res = await app.model.userAddress.create({
+        user_id: id,
+        name,
+        phone,
+        address,
+        is_default: exist === 0,
+      }, {
+        raw: true,
+      });
+      app.redis.del(cacheKey);
+      return { success: true, data: res };
+    }
+  }
+
+  /**
    * 举报用户
    * @param id:int 用户id
    * @param uid:int 登录id

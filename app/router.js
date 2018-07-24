@@ -141,10 +141,13 @@ module.exports = app => {
 
   app.post('/h5/circling/index', 'h5.circling.index');
   app.post('/h5/circling/index2', 'h5.circling.index2');
+  app.post('/h5/circling/index3', 'h5.circling.index3');
   app.post('/h5/circling/circleList', 'h5.circling.circleList');
   app.post('/h5/circling/postList', 'h5.circling.postList');
   app.post('/h5/circling/postList2', 'h5.circling.postList2');
+  app.post('/h5/circling/postList3', 'h5.circling.postList3');
   app.post('/h5/circling/read', app.middlewares.needLoginJson(), 'h5.circling.read');
+  app.post('/h5/circling/read2', app.middlewares.needLoginJson(), 'h5.circling.read2');
 
   app.post('/h5/follow/index', app.middlewares.needLoginJson(), 'h5.follow.index');
   app.post('/h5/follow/circleList', app.middlewares.needLoginJson(), 'h5.follow.circleList');
@@ -178,6 +181,7 @@ module.exports = app => {
   app.post('/h5/my/guideCircle', app.middlewares.needLoginJson(), 'h5.my.guideCircle');
   app.post('/h5/my/guideAuthor', app.middlewares.needLoginJson(), 'h5.my.guideAuthor');
   app.post('/h5/my/address', app.middlewares.needLoginJson(), 'h5.my.address');
+  app.post('/h5/my/addAddress', app.middlewares.needLoginJson(), 'h5.my.addAddress');
   app.post('/h5/my/updateAddressName', app.middlewares.needLoginJson(), 'h5.my.updateAddressName');
   app.post('/h5/my/updateAddressPhone', app.middlewares.needLoginJson(), 'h5.my.updateAddressPhone');
   app.post('/h5/my/updateAddress', app.middlewares.needLoginJson(), 'h5.my.updateAddress');

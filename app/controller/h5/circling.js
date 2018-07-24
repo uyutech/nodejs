@@ -187,6 +187,83 @@ class Controller extends egg.Controller {
     let res = await Promise.all(query);
     ctx.body = ctx.helper.okJSON(res);
   }
+
+  async index3() {
+    const { app, ctx, service } = this;
+    let uid = ctx.session.uid;
+    let [bannerList, recommendPost, postList] = await Promise.all([
+      app.redis.get('banner'),
+      service.recommend.guideAndFollow(uid),
+      service.recommend.allPostPage(uid, 0, LIMIT)
+    ]);
+    if(bannerList) {
+      bannerList = JSON.parse(bannerList);
+    }
+    else {
+      bannerList = await app.model.banner.findAll({
+        attributes: [
+          'title',
+          'url',
+          ['target_id', 'targetId'],
+          'type'
+        ],
+        where: {
+          position: 1,
+          is_delete: false,
+        },
+        order: [
+          ['weight', 'DESC']
+        ],
+        raw: true,
+      });
+      app.redis.setex('banner', app.config.redis.time, JSON.stringify(bannerList));
+    }
+    postList.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON({
+      bannerList,
+      recommendPost,
+      postList,
+    });
+  }
+
+  async postList3() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.recommend.allPostPage(uid, offset, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async read2() {
+    const { ctx, app } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let idList = body.idList;
+    if(!uid || !idList || !Array.isArray(idList) || !idList.length) {
+      ctx.body = ctx.helper.okJSON();
+    }
+    let now = new Date();
+    let query = [];
+    idList.forEach((id) => {
+      query.push(
+        app.model.circlingPostRead.upsert({
+          user_id: uid,
+          comment_id: id,
+          create_time: now,
+        }, {
+          where: {
+            user_id: id,
+            comment_id: idList,
+          },
+          raw: true,
+        })
+      );
+    });
+    let res = await Promise.all(query);
+    ctx.body = ctx.helper.okJSON(res);
+  }
 }
 
 module.exports = Controller;

@@ -596,6 +596,25 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON(res);
   }
 
+  async addAddress() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let name = body.name;
+    let phone = body.phone;
+    let address = body.address;
+    if(!name || !phone || !address) {
+      return;
+    }
+    let res = await service.user.addAddress(uid, name, phone, address);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
   async updateAddressName() {
     const { ctx, app } = this;
     let uid = ctx.session.uid;

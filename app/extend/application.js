@@ -96,6 +96,8 @@ const findBanner = require('../model/findBanner');
 const banner = require('../model/banner');
 const circlingComment = require('../model/circlingComment');
 const circleTop = require('../model/circleTop');
+const circlingPost = require('../model/circlingPost');
+const circlingPostRead = require('../model/circlingPostRead');
 
 const userReport = require('../model/userReport');
 const userVisit = require('../model/userVisit');
@@ -377,6 +379,8 @@ module.exports = {
         banner: banner(this),
         circlingComment: circlingComment(this),
         circleTop: circleTop(this),
+        circlingPost: circlingPost(this),
+        circlingPostRead: circlingPostRead(this),
 
         userReport: userReport(this),
         userVisit: userVisit(this),
