@@ -22,6 +22,12 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
+    theme: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '1-音乐；2-传统文化；3-文学；4-美图；5-娱乐；6-生活；99-合作',
+    },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
@@ -45,8 +51,8 @@ module.exports = app => {
         fields: ['comment_id'],
       },
       {
-        name: 'is_delete_weight_comment_id',
-        fields: ['is_delete', 'weight', 'comment_id'],
+        name: 'is_delete_theme_weight_comment_id',
+        fields: ['is_delete', 'theme', 'weight', 'comment_id'],
       }
     ],
     comment: '推荐画圈',

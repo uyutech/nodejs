@@ -148,6 +148,7 @@ module.exports = app => {
   app.post('/h5/circling/postList3', 'h5.circling.postList3');
   app.post('/h5/circling/read', app.middlewares.needLoginJson(), 'h5.circling.read');
   app.post('/h5/circling/read2', app.middlewares.needLoginJson(), 'h5.circling.read2');
+  app.post('/h5/circling/all', 'h5.circling.all');
 
   app.post('/h5/follow/index', app.middlewares.needLoginJson(), 'h5.follow.index');
   app.post('/h5/follow/circleList', app.middlewares.needLoginJson(), 'h5.follow.circleList');

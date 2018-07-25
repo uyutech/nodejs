@@ -274,7 +274,7 @@ class Service extends egg.Service {
         limit,
         raw: true,
       });
-      app.redis.setex(cacheKey, app.config.redis.shortTime, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     }
     return await service.comment.plusListFull(res, uid);
   }

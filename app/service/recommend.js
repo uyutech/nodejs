@@ -233,7 +233,10 @@ class Service extends egg.Service {
    */
   async guideCircle() {
     const { app, service } = this;
-    let idList = await this.guideTag();
+    let guideTag = await this.guideTag();
+    let idList = guideTag.map((item) => {
+      return item.tagId;
+    });
     let query = await app.model.circleTagRelation.findAll({
       attributes: [
         ['circle_id', 'circleId']
@@ -263,105 +266,140 @@ class Service extends egg.Service {
     let cacheKey = 'guideTag';
     let res = await app.redis.get(cacheKey);
     if(res) {
-      res = JSON.parse(res);
+      return JSON.parse(res);
     }
-    else {
-      res = await app.model.guideTag.findAll({
-        attributes: [
-          ['tag_id', 'tagId']
-        ],
-        where: {
-          is_delete: false,
-        },
-        order: [
-          ['weight', 'DESC']
-        ],
-        raw: true,
-      });
-      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
-    }
-    return res.map((item) => {
-      return item.tagId;
+    res = await app.model.guideTag.findAll({
+      attributes: [
+        ['tag_id', 'tagId'],
+        'theme'
+      ],
+      where: {
+        is_delete: false,
+      },
+      order: [
+        ['weight', 'DESC']
+      ],
+      raw: true,
     });
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
   }
 
   /**
-   * 预设圈子中且关注的圈子的推荐画圈
+   * 预设圈子中按theme分组后未读且weight最高的一个画圈，优先关注的圈子
    * @param uid
    * @returns Array<Object>
    */
   async guideAndFollow(uid) {
     const { app, service } = this;
-    let [guideCircleList, allPost] = await Promise.all([
-      this.guideCircle(),
+    let [guideTag, allPost] = await Promise.all([
+      this.guideTag(),
       this.allPost()
     ]);
-    let guideCircleIdList = guideCircleList.map((item) => {
-      return item.id;
+    let tagThemeHash = {};
+    let tagIdList = guideTag.map((item) => {
+      tagThemeHash[item.tagId] = item.theme;
+      return item.tagId;
     });
-    if(uid) {
-      let [query, query2] = await Promise.all([
-        app.model.userCircleRelation.findAll({
-          attributes: [
-            ['circle_id', 'circleId']
-          ],
-          where: {
-            user_id: uid,
-            circle_id: guideCircleIdList,
-            type: 1,
-          },
-          raw: true,
-        }),
-        app.model.circlingPostRead.findAll({
-          attributes: [
-            ['comment_id', 'commentId']
-          ],
-          where: {
-            user_id: uid,
-            comment_id: allPost,
-          },
-          raw: true,
-        })
-      ]);
-      let followIdList = query.map((item) => {
-        return item.circleId;
-      });
-      if(followIdList.length) {
-        guideCircleIdList = followIdList;
+    let allPostIdList = allPost.map((item) => {
+      return item.commentId;
+    });
+    let circleIdList = await service.tag.circleIdList(tagIdList, 1);
+    let circleTagRelation = {};
+    let guideCircleIdList = [];
+    circleIdList.forEach((arr, i) => {
+      if(!arr || !arr.length) {
+        return;
       }
-      let readHash = {};
-      query2.forEach((item) => {
-        readHash[item.commentId] = true;
+      let tagId = tagIdList[i];
+      arr.forEach((circleId) => {
+        guideCircleIdList.push(circleId);
+        circleTagRelation[circleId] = tagId;
       });
-      for(let i = allPost.length - 1; i >= 0; i--) {
-        if(readHash[allPost[i]]) {
-          allPost.splice(i, 1);
-        }
+    });
+    let [query, query2] = await Promise.all([
+      app.model.userCircleRelation.findAll({
+        attributes: [
+          ['circle_id', 'circleId']
+        ],
+        where: {
+          user_id: uid,
+          circle_id: guideCircleIdList,
+          type: 1,
+        },
+        raw: true,
+      }),
+      app.model.circlingPostRead.findAll({
+        attributes: [
+          ['comment_id', 'commentId']
+        ],
+        where: {
+          user_id: uid,
+          comment_id: allPostIdList,
+        },
+        raw: true,
+      })
+    ]);
+    let followThemeHash = {};
+    query.forEach((item) => {
+      let tagId = circleTagRelation[item.circleId];
+      if(tagId) {
+        followThemeHash[tagThemeHash[tagId]] = true;
       }
-    }
-    let postList = await service.post.infoList(allPost, uid);
-    let guideCircleIdHash = {};
-    guideCircleIdList.forEach((id) => {
-      guideCircleIdHash[id] = true;
+    });
+    let readPostHash = {};
+    query2.forEach((item) => {
+      readPostHash[item.commentId] = true;
     });
     let list = [];
-    let hash = {};
-    postList.forEach((item) => {
-      let circle = item.circle;
-      if(circle) {
-        for(let i = 0; i < circle.length; i++) {
-          let circleId = circle[i].id;
-          if(guideCircleIdHash[circleId]) {
-            if(!hash[circleId]) {
-              hash[circleId] = true;
-              list.push(item);
-              break;
-            }
+    let list2 = [];
+    let exist = {};
+    allPost.forEach((item) => {
+      if(!readPostHash[item.commentId]) {
+        if(!exist[item.theme]) {
+          exist[item.theme] = true;
+          if(followThemeHash[item.theme]) {
+            list.push(item.commentId);
+          }
+          else {
+            list2.push(item.commentId);
           }
         }
       }
     });
-    return list;
+    let postList = await service.post.infoList(list.concat(list2), uid);
+    return postList;
+  }
+
+  /**
+   * 未登录用户随机显示每个theme里的一个weight>9000000的画圈
+   * @returns Array<Object>
+   */
+  async randomPost() {
+    const { app, service } = this;
+    let cacheKey = 'recommendRandomPost';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      let all = await this.allPost();
+      res = {};
+      all.forEach((item) => {
+        if(item.weight > 9000000) {
+          let arr = res[item.theme] = res[item.theme] || [];
+          arr.push(item.commentId);
+        }
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let idList = [];
+    for(let theme in res) {
+      let arr = res[theme];
+      let i = Math.floor(Math.random() * arr.length);
+      idList.push(arr[i]);
+    }
+    return await service.post.infoList(idList);
   }
 
   /**
@@ -370,26 +408,29 @@ class Service extends egg.Service {
    */
   async allPost() {
     const { app } = this;
-    let cacheKey = 'recommendAllPost';
+    let cacheKey = 'recommendAllPost2';
     let res = await app.redis.get(cacheKey);
     if(res) {
       return JSON.parse(res);
     }
     res = await app.model.circlingPost.findAll({
       attributes: [
-        ['comment_id', 'commentId']
+        ['comment_id', 'commentId'],
+        'theme',
+        'weight'
       ],
       where: {
         is_delete: false,
+        theme: {
+          $gt: 0,
+        },
       },
       order: [
+        ['theme', 'DESC'],
         ['weight', 'DESC'],
         ['comment_id', 'DESC']
       ],
       raw: true,
-    });
-    res = res.map((item) => {
-      return item.commentId;
     });
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
@@ -410,11 +451,14 @@ class Service extends egg.Service {
     }
     const { service } = this;
     let allPost = await this.allPost();
-    let some = allPost.slice(offset, offset + limit);
+    let idList = allPost.map((item) => {
+      return item.commentId;
+    });
+    let some = idList.slice(offset, offset + limit);
     let postList = await service.post.infoList(some, uid);
     return {
       data: postList,
-      count: allPost.length,
+      count: idList.length,
     };
   }
 }

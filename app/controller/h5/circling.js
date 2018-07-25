@@ -193,7 +193,7 @@ class Controller extends egg.Controller {
     let uid = ctx.session.uid;
     let [bannerList, recommendPost, postList] = await Promise.all([
       app.redis.get('banner'),
-      service.recommend.guideAndFollow(uid),
+      uid ? service.recommend.guideAndFollow(uid) : service.recommend.randomPost(),
       service.recommend.allPostPage(uid, 0, LIMIT)
     ]);
     if(bannerList) {
@@ -263,6 +263,19 @@ class Controller extends egg.Controller {
     });
     let res = await Promise.all(query);
     ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async all() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    if(offset < 0) {
+      offset = 0;
+    }
+    let postList = await service.post.all(uid, offset, LIMIT);
+    postList.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(postList);
   }
 }
 

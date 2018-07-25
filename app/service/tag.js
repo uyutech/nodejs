@@ -589,7 +589,7 @@ class Service extends egg.Service {
         cache[i] = item;
         let cacheKey = 'tagCircle_' + id;
         if(type) {
-          cacheKey += '_' + type
+          cacheKey += '_' + type;
         }
         app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(item));
       });
