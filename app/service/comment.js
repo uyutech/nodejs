@@ -1136,7 +1136,7 @@ class Service extends egg.Service {
    * @returns Array{ countList:Array, stateList:Array }
    */
   async operateRelationList(idList, uid, type) {
-    if(!idList || !idList.length || !uid || !type) {
+    if(!idList || !idList.length || !type) {
       return [];
     }
     let [countList, stateList] = await Promise.all([
