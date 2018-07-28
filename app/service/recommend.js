@@ -451,6 +451,9 @@ class Service extends egg.Service {
     }
     const { service } = this;
     let allPost = await this.allPost();
+    migi.sort(allPost, (a, b) => {
+      return a.commentId < b.commentId;
+    });
     let idList = allPost.map((item) => {
       return item.commentId;
     });
