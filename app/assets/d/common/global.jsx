@@ -7,6 +7,7 @@
 import uuidv4 from 'uuid/v4';
 import net from './net';
 import MLogin from '../component/mlogin/MLogin.jsx';
+import Post from '../component/post/Post.jsx';
 
 let mlogin;
 migi.eventBus.on('NEED_LOGIN', function() {
@@ -38,6 +39,15 @@ loginOut && loginOut.addEventListener('click', function(e) {
   });
 });
 
+let toPost = document.querySelector('#gTop .post');
+let post;
+toPost && toPost.addEventListener('click', function() {
+  if(!post) {
+    post = migi.render(<Post/>, document.body);
+  }
+  post.visible = true;
+});
+
 document.addEventListener('DOMContentLoaded', function() {
   let UUID = localStorage['UUID'];
   let first = !UUID;
@@ -58,4 +68,5 @@ document.addEventListener('DOMContentLoaded', function() {
     document.removeChild(img);
   };
   document.body.appendChild(img);
+  // migi.render(<Post visible={ true }/>, document.body);
 });

@@ -2,8 +2,6 @@
  * Created by army on 2017/3/19.
  */
 
-@import './var';
-
 *,
 :after,
 :before{
@@ -133,7 +131,7 @@ pre{
     sans-serif;               // System Fallback
 }
 body,button,input,select,textarea{
-  color:@mainTextColor;
+  color:#2D4D67;
 }
 
 input{
@@ -141,10 +139,10 @@ input{
 }
 
 a{
-  color:@mainLinkColor;
+  color:#234;
   text-decoration:none;
   &:hover{
-    color:@mainHoverColor;
+    color:#0AE;
     text-decoration:underline;
   }
 }
@@ -175,6 +173,7 @@ a{
 @import '../component/share/index';
 @import '../component/topnav2/index';
 @import '../component/botnav/index';
+@import '../component/post/index';
 
 #page{
   margin:0 auto;
@@ -205,7 +204,7 @@ a{
       position:absolute;
       top:0.18rem;
       right:0;
-      color:@mainLinkColor;
+      color:#234;
       li{
         float:left;
         width:0.6rem;

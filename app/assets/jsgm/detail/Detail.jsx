@@ -16,7 +16,7 @@ class Detail extends migi.Component {
       <a name="head"/>
       <Nav index={ 1 }/>
       <h3 class="ti">活动时间</h3>
-      <img class="time" src="//zhuanquan.xin/img/acd8c39ddbda14274a6f94fc012c0111.png"/>
+      <img class="time" src="//zhuanquan.xin/img/de6082a173ceb2946013214da9a6b992.png"/>
       <h3 class="ti">奖品设置</h3>
       <ul class="prize fn-clear">
         <li>
