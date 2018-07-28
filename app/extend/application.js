@@ -61,6 +61,8 @@ const workAuthorRelation = require('../model/workAuthorRelation');
 const worksAuthorRelation = require('../model/worksAuthorRelation');
 const worksTypeProfessionSort = require('../model/worksTypeProfessionSort');
 const worksNum = require('../model/worksNum');
+const workTypeProfessionRelation = require('../model/workTypeProfessionRelation');
+const worksTypeWorkTypeRelation = require('../model/worksTypeWorkTypeRelation');
 const musicAlbum = require('../model/musicAlbum');
 const musicAlbumWorkRelation = require('../model/musicAlbumWorkRelation');
 const musicAlbumAuthorRelation = require('../model/musicAlbumAuthorRelation');
@@ -344,6 +346,8 @@ module.exports = {
         worksAuthorRelation: worksAuthorRelation(this),
         worksTypeProfessionSort: worksTypeProfessionSort(this),
         worksNum: worksNum(this),
+        workTypeProfessionRelation: workTypeProfessionRelation(this),
+        worksTypeWorkTypeRelation: worksTypeWorkTypeRelation(this),
         musicAlbum: musicAlbum(this),
         musicAlbumWorkRelation: musicAlbumWorkRelation(this),
         musicAlbumAuthorRelation: musicAlbumAuthorRelation(this),

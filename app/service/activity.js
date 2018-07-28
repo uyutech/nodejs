@@ -28,6 +28,7 @@ class Service extends egg.Service {
       where: {
         id: 1,
       },
+      raw: true,
     });
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;

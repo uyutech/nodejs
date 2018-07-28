@@ -70,6 +70,8 @@ module.exports = app => {
   app.post('/api/work/addViews', 'api.work.addViews');
   app.post('/api/post/commentList', 'api.post.commentList');
 
+  app.post('/api/my/allIdentities', app.middlewares.needLoginJson(), 'api.my.allIdentities');
+
   app.get('/api/count/index', 'api.count.index');
 
   app.get('/cms/index', 'cms.index');
@@ -128,6 +130,10 @@ module.exports = app => {
   app.post('/h5/subPost/index2', 'h5.subPost.index2');
   app.post('/h5/subPost/sub', app.middlewares.needLoginJson(), 'h5.subPost.sub');
   app.post('/h5/subPost/circleList', app.middlewares.needLoginJson(), 'h5.subPost.circleList');
+
+  app.post('/h5/article/index', 'h5.article.index');
+  app.post('/h5/article/worksType', 'h5.article.worksType');
+  app.post('/h5/article/profession', 'h5.article.profession');
 
   app.post('/h5/user/index', 'h5.user.index');
   app.post('/h5/user/postList', 'h5.user.postList');

@@ -26,7 +26,8 @@ class Service extends egg.Service {
     res = await app.model.worksType.findOne({
       attributes: [
         'id',
-        'name'
+        'name',
+        'status'
       ],
       where: {
         id,
@@ -77,7 +78,8 @@ class Service extends egg.Service {
       let res = await app.model.worksType.findAll({
         attributes: [
           'id',
-          'name'
+          'name',
+          'status'
         ],
         where: {
           id: noCacheIdList,
@@ -98,6 +100,72 @@ class Service extends egg.Service {
       });
     }
     return cache;
+  }
+
+  /**
+   * 获取可约稿的大作品类型
+   * @returns Array<Object>
+   */
+  async allArticleType() {
+    const { app } = this;
+    let cacheKey = 'allArticle';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.worksType.findAll({
+      attributes: [
+        'id',
+        'name'
+      ],
+      where: {
+        status: true,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取worksType下对应的workType
+   * @returns Array<Object>
+   */
+  async includeWorkType(id) {
+    const { app, service } = this;
+    let cacheKey = 'includeWorkType_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.worksTypeWorkTypeRelation.findAll({
+        attributes: [
+          ['work_type', 'workType'],
+          'upload'
+        ],
+        where: {
+          works_type: id,
+        },
+        order: [
+          'upload'
+        ],
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let idList = res.map((item) => {
+      return item.workType;
+    });
+    let workTypeList = await service.workType.infoList(idList);
+    return workTypeList.map((item, i) => {
+      if(item) {
+        item.upload = res[i].upload;
+      }
+      return item;
+    }).filter((item) => {
+      return item;
+    });
   }
 }
 

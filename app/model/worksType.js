@@ -18,12 +18,22 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    status: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      comment: '是否开放上传约稿',
+    },
   }, {
     indexes: [
       {
         name: 'name',
         unique: true,
         fields: ['name'],
+      },
+      {
+        name: 'status',
+        fields: ['status'],
       }
     ],
     comment: '大作品类型',
