@@ -129,6 +129,7 @@ class Service extends egg.Service {
     }
     res = await app.model.commentMedia.findAll({
       attributes: [
+        'id',
         ['comment_id', 'commentId'],
         'kind',
         'url',
@@ -185,6 +186,7 @@ class Service extends egg.Service {
     if(noCacheIdList.length) {
       let res = await app.model.commentMedia.findAll({
         attributes: [
+          'id',
           ['comment_id', 'commentId'],
           'kind',
           'url',

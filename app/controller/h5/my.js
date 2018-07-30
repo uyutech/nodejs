@@ -253,7 +253,7 @@ class Controller extends egg.Controller {
     let expire = Date.now() + 1000 * 60 * 10;
     let expiration = moment(expire).local();
     let host = 'https://circling-av.oss-cn-shanghai.aliyuncs.com';
-    let condition = ['content-length-range', 0, 1024 * 1024 * 100];
+    let condition = ['content-length-range', 0, 1024 * 1024 * 200];
     let dir = '';
     let accessKeyId = 'LTAIN1j47nFOjGfQ';
     let accessKeySecret = 'THSRNdDIXUyRi9fd1ZYGmtZpaGngEw';

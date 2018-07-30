@@ -378,6 +378,26 @@ class Service extends egg.Service {
           });
         }));
       }
+      if(data.audioUrl) {
+        query = query.concat(
+          app.model.commentMedia.create({
+            comment_id: create.id,
+            kind: 2,
+            url: data.audioUrl,
+            update_time: now,
+          })
+        );
+      }
+      if(data.videoUrl) {
+        query = query.concat(
+          app.model.commentMedia.create({
+            comment_id: create.id,
+            kind: 1,
+            url: data.videoUrl,
+            update_time: now,
+          })
+        );
+      }
       if(data.worksId && data.workId) {
         query.push(app.model.commentWork.create({
           comment_id: create.id,

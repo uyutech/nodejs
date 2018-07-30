@@ -30,6 +30,10 @@ let useAuthor;
 let uploading;
 let imgNum = 0;
 let uuid = 0;
+let audioXhr;
+let videoXhr;
+let audioUrl;
+let videoUrl;
 
 class Post extends migi.Component {
   constructor(...data) {
@@ -87,6 +91,14 @@ class Post extends migi.Component {
   @bind list
   @bind sending
   @bind text
+  @bind uploadingAudio
+  @bind audioName
+  @bind audioProgress
+  @bind audioClose
+  @bind uploadingVideo
+  @bind videoName
+  @bind videoProgress
+  @bind videoClose
   close() {
     this.visible = false;
   }
@@ -304,9 +316,175 @@ class Post extends migi.Component {
       }
     }
   }
+  clickAudio(e) {
+    if(this.uploadingAudio || audioUrl) {
+      e.preventDefault();
+    }
+  }
+  changeAudio(e) {
+    if(this.uploadingAudio || audioUrl) {
+      e.preventDefault();
+      return;
+    }
+    let self = this;
+    let file = e.target.files[0];
+    let size = file.size;
+    if(size && size > 1024 * 1024 * 20) {
+      alert('文件不能超过20M！');
+      return;
+    }
+    self.audioProgress = 0;
+    self.uploadingAudio = true;
+    self.audioName = file.name;
+    let fileReader = new FileReader();
+    fileReader.onload = function() {
+      let spark = new SparkMd5.ArrayBuffer();
+      spark.append(fileReader.result);
+      let md5 = spark.end();
+      let name = md5 + '.mp3';
+      $net.postJSON('/h5/my/stsAudio', { name }, function(res) {
+        self.audioClose = true;
+        if(res.success) {
+          let data = res.data;
+          if(data.exist) {
+            self.uploadingAudio = false;
+            audioUrl = '//zhuanquan.net.cn/audio/' + name;
+            self.audioProgress = 1;
+            return;
+          }
+          let key = data.prefix + name;
+          let policy = data.policy;
+          let signature = data.signature;
+          let host = data.host;
+          let accessKeyId = data.accessKeyId;
+          let form = new FormData();
+          form.append('key', key);
+          form.append('OSSAccessKeyId', accessKeyId);
+          form.append('success_action_status', 200);
+          form.append('policy', policy);
+          form.append('signature', signature);
+          form.append('file', file);
+          audioXhr = new XMLHttpRequest();
+          audioXhr.open('post', host, true);
+          audioXhr.onload = function() {
+            if(audioXhr.status === 200) {
+              self.uploadingAudio = false;
+              audioUrl = '//zhuanquan.net.cn/audio/' + name;
+              self.audioProgress = 1;
+            }
+          };
+          audioXhr.upload.onprogress = function(e) {
+            self.audioProgress = e.loaded / e.total;
+          };
+          audioXhr.send(form);
+        }
+        else {
+          alert(res.message || $util.ERROR_MESSAGE);
+        }
+      }, function(res) {
+        alert(res.message || $util.ERROR_MESSAGE);
+        self.audioClose = true;
+      });
+    };
+    fileReader.readAsArrayBuffer(file);
+  }
+  closeAudio() {
+    audioUrl = null;
+    this.audioName = null;
+    this.audioProgress = 0;
+    this.ref.audio.element.value = '';
+    this.audioClose = false;
+    if(audioXhr) {
+      audioXhr.abort();
+      audioXhr = null;
+    }
+  }
+  clickVideo(e) {
+    if(this.uploadingVideo || videoUrl) {
+      e.preventDefault();
+    }
+  }
+  changeVideo(e) {
+    if(this.uploadingVideo || videoUrl) {
+      e.preventDefault();
+      return;
+    }
+    let self = this;
+    let file = e.target.files[0];
+    let size = file.size;
+    if(size && size > 1024 * 1024 * 200) {
+      alert('文件不能超过200M！');
+      return;
+    }
+    self.videoProgress = 0;
+    self.uploadingVideo = true;
+    self.videoName = file.name;
+    let fileReader = new FileReader();
+    fileReader.onload = function() {
+      let spark = new SparkMd5.ArrayBuffer();
+      spark.append(fileReader.result);
+      let md5 = spark.end();
+      let name = md5 + '.mp4';
+      $net.postJSON('/h5/my/stsVideo', { name }, function(res) {
+        self.videoClose = true;
+        if(res.success) {
+          let data = res.data;
+          if(data.exist) {
+            self.uploadingVideo = false;
+            videoUrl = '//zhuanquan.net.cn/video/' + name;
+            self.videoProgress = 1;
+            return;
+          }
+          let key = data.prefix + name;
+          let policy = data.policy;
+          let signature = data.signature;
+          let host = data.host;
+          let accessKeyId = data.accessKeyId;
+          let form = new FormData();
+          form.append('key', key);
+          form.append('OSSAccessKeyId', accessKeyId);
+          form.append('success_action_status', 200);
+          form.append('policy', policy);
+          form.append('signature', signature);
+          form.append('file', file);
+          videoXhr = new XMLHttpRequest();
+          videoXhr.open('post', host, true);
+          videoXhr.onload = function() {
+            if(videoXhr.status === 200) {
+              self.uploadingVideo = false;
+              videoUrl = '//zhuanquan.net.cn/video/' + name;
+              self.videoProgress = 1;
+            }
+          };
+          videoXhr.upload.onprogress = function(e) {
+            self.videoProgress = e.loaded / e.total;
+          };
+          videoXhr.send(form);
+        }
+        else {
+          alert(res.message || $util.ERROR_MESSAGE);
+        }
+      }, function(res) {
+        alert(res.message || $util.ERROR_MESSAGE);
+        self.videoClose = true;
+      });
+    };
+    fileReader.readAsArrayBuffer(file);
+  }
+  closeVideo() {
+    videoUrl = null;
+    this.videoName = null;
+    this.videoProgress = 0;
+    this.ref.video.element.value = '';
+    this.videoClose = false;
+    if(videoXhr) {
+      videoXhr.abort();
+      videoXhr = null;
+    }
+  }
   sub() {
     let self = this;
-    if(!self.sending && !self.invalid && !uploading) {
+    if(!self.sending && !self.invalid && !uploading && !self.uploadingAudio && !self.uploadingVideo) {
       let image = [];
       self.list.forEach(function(item) {
         if(item.state === STATE.LOADED) {
@@ -337,6 +515,8 @@ class Post extends migi.Component {
     $net.postJSON('/h5/subPost/sub', {
       content: self.text,
       image: JSON.stringify(image),
+      audioUrl,
+      videoUrl,
       authorId,
     }, function(res) {
       if(res.success) {
@@ -383,6 +563,20 @@ class Post extends migi.Component {
           })
         }
         </ul>
+        <div class="av">
+          <div class={ 'name' + (this.audioName ? '' : ' fn-hide') }>
+            <b class="p" style={ 'width:' + this.audioProgress * 100 + '%' }/>
+            <span>{ this.audioName }</span>
+          </div>
+          <b class={ 'close' + (this.audioClose ? '' : ' fn-hide') }
+             onClick={ this.closeAudio }/>
+          <div class={ 'name' + (this.videoName ? '' : ' fn-hide') }>
+            <b class="p v" style={ 'width:' + this.videoProgress * 100 + '%' }/>
+            <span>{ this.videoName }</span>
+          </div>
+          <b class={ 'close' + (this.videoClose ? '' : ' fn-hide') }
+             onClick={ this.closeVideo }/>
+        </div>
         <div class="f">
           <div class="pic">
             <input type="file"
@@ -391,7 +585,21 @@ class Post extends migi.Component {
                    onClick={ this.clickFile }
                    onChange={ this.change }/>
           </div>
-          <button disabled={ this.invalid || this.sending }
+          <div class="audio">
+            <input type="file"
+                   ref="audio"
+                   accept="audio/mpeg"
+                   onClick={ this.clickAudio }
+                   onChange={ this.changeAudio }/>
+          </div>
+          <div class="video">
+            <input type="file"
+                   ref="video"
+                   accept="video/mp4"
+                   onClick={ this.clickVideo }
+                   onChange={ this.changeVideo }/>
+          </div>
+          <button disabled={ this.invalid || this.sending || this.uploadingAudio || this.uploadingVideo }
                   onClick={ this.sub }>发布</button>
         </div>
       </div>

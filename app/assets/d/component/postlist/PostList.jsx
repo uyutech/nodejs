@@ -138,6 +138,33 @@ class PostList extends migi.Component {
         });
         migi.eventBus.emit('IMAGE_VIEW', list, index);
       });
+      $list.on('click', '.mv li', function() {
+        let $this = $(this);
+        let video = this.querySelector('video');
+        $this.addClass('start');
+        if($this.hasClass('play')) {
+          $this.removeClass('play');
+          video.pause();
+        }
+        else {
+          migi.eventBus.emit('PLAY_INLINE');
+          $this.addClass('play');
+          video.play();
+        }
+      });
+      $list.on('click', '.av li', function() {
+        let $this = $(this);
+        let audio = this.querySelector('audio');
+        if($this.hasClass('play')) {
+          $this.removeClass('play');
+          audio.pause();
+        }
+        else {
+          migi.eventBus.emit('PLAY_INLINE');
+          $this.addClass('play');
+          audio.play();
+        }
+      });
     });
   }
   @bind message
@@ -234,6 +261,8 @@ class PostList extends migi.Component {
     let videoList = [];
     let audioList = [];
     let imageList = [];
+    let mvList = [];
+    let maList = [];
     item.work.forEach((item) => {
       if(item) {
         if(item.work.kind === 1) {
@@ -249,6 +278,12 @@ class PostList extends migi.Component {
     });
     item.media.forEach((item) => {
       switch(item.kind) {
+        case 1:
+          mvList.push(item);
+          break;
+        case 2:
+          maList.push(item);
+          break;
         case 3:
           imageList.push(item);
           break;
@@ -397,6 +432,40 @@ class PostList extends migi.Component {
                 })
               }
               </ul>
+            : ''
+        }
+        {
+          mvList.length
+            ? <ul class="mv">
+              {
+                mvList.map((item) => {
+                  return <li>
+                    <video poster="//zhuanquan.xin/img/blank.png"
+                           src={ item.url }
+                           preload="none"
+                           playsinline="true"
+                           webkit-playsinline="true"/>
+                  </li>;
+                })
+              }
+            </ul>
+            : ''
+        }
+        {
+          maList.length
+            ? <ul class="av">
+              {
+                maList.map((item) => {
+                  return <li url={ item.url }
+                             rel={ item.id }>
+                    <audio src={ item.url }
+                           preload="none"/>
+                    <div class="pic"/>
+                    <div class="txt">音乐</div>
+                  </li>;
+                })
+              }
+            </ul>
             : ''
         }
       </div>

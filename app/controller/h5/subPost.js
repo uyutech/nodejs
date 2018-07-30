@@ -184,6 +184,8 @@ class Controller extends egg.Controller {
     let content = body.content;
     let image = body.image;
     let circleId = body.circleId;
+    let videoUrl = body.videoUrl;
+    let audioUrl = body.audioUrl;
     let worksId = parseInt(body.worksId);
     let workId = parseInt(body.workId);
     if(!content || content.length < 3) {
@@ -264,6 +266,8 @@ class Controller extends egg.Controller {
         authorId: body.authorId,
         worksId: check? worksId: null,
         workId: check? workId: null,
+        audioUrl,
+        videoUrl,
       })
     ]);
     circleIdList.forEach((arr, i) => {
