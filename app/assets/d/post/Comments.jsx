@@ -16,7 +16,7 @@ class Comments extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
-    let limit = self.props.data.limit;
+    let limit = self.props.data ? self.props.data.limit : 10;
     self.on(migi.Event.DOM, function() {
       let page = self.ref.page;
       let page2 = self.ref.page2;
@@ -58,17 +58,19 @@ class Comments extends migi.Component {
     });
   }
   render() {
+    let data = this.props.data || {};
+    let total = Math.ceil(data.count || 1 / data.limit || 1);
     return <div class="mod mod-comment box">
       <h4>评论</h4>
       <div class="fn">
         <ul class="type fn-clear">
-          <li class="cur" rel="0">全部<small>{ this.props.data.count }</small></li>
+          <li class="cur" rel="0">全部<small>{ data.count || 0 }</small></li>
         </ul>
       </div>
       <Page ref="page"
-            total={ Math.ceil(this.props.data.count / this.props.data.limit) }/>
+            total={ total }/>
       <Comment ref="comment"
-               data={ this.props.data.data }/>
+               data={ data.data || [] }/>
     </div>;
   }
 }

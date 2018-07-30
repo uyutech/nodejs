@@ -20,6 +20,17 @@ class Controller extends egg.Controller {
       service.post.info(id, uid),
       service.post.commentList(id, uid, 0, LIMIT)
     ]);
+    if(!info) {
+      return;
+    }
+    if(info.isDelete) {
+      return await ctx.render('dpost', {
+        id,
+        info: {
+          isDelete: true,
+        },
+      });
+    }
     commentList.limit = LIMIT;
     await ctx.render('dpost', {
       id,

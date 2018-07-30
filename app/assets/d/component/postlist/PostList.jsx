@@ -232,7 +232,7 @@ class PostList extends migi.Component {
   }
   genItem(item) {
     let self = this;
-    if(!item) {
+    if(!item || item.isDelete) {
       return;
     }
     let id = item.id;

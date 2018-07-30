@@ -24,6 +24,13 @@ class Controller extends egg.Controller {
     if(!info) {
       return;
     }
+    if(info.isDelete) {
+      return ctx.body = ctx.helper.okJSON({
+        info: {
+          isDelete: true,
+        },
+      });
+    }
     commentList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       info,

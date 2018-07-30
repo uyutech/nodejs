@@ -230,7 +230,10 @@ class Service extends egg.Service {
     res = res.map((item) => {
       return item.commentId;
     });
-    return service.post.infoList(res, uid);
+    let list = await service.post.infoList(res, uid);
+    return list.filter((item) => {
+      return !item.isDelete;
+    });
   }
 
   /**
