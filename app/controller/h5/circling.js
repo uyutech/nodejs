@@ -266,7 +266,7 @@ class Controller extends egg.Controller {
   }
 
   async all() {
-    const { ctx, service } = this;
+    const { app, ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let offset = parseInt(body.offset) || 0;
@@ -275,6 +275,32 @@ class Controller extends egg.Controller {
     }
     let postList = await service.post.all(uid, offset, LIMIT);
     postList.limit = LIMIT;
+    if(offset === 0) {
+      let bannerList = await app.redis.get('banner');
+      if(bannerList) {
+        bannerList = JSON.parse(bannerList);
+      }
+      else {
+        bannerList = await app.model.banner.findAll({
+          attributes: [
+            'title',
+            'url',
+            ['target_id', 'targetId'],
+            'type'
+          ],
+          where: {
+            position: 1,
+            is_delete: false,
+          },
+          order: [
+            ['weight', 'DESC']
+          ],
+          raw: true,
+        });
+        app.redis.setex('banner', app.config.redis.time, JSON.stringify(bannerList));
+      }
+      postList.bannerList = bannerList;
+    }
     ctx.body = ctx.helper.okJSON(postList);
   }
 }
