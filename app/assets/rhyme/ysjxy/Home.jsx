@@ -556,6 +556,10 @@ class Home extends migi.Component {
         </div>
       </div>
       <img class="logo" src="//zhuanquan.xin/rhymesland/ysjxy/logo.png"/>
+      <div class="qr">
+        <img src="//zhuanquan.xin/img/205481d2a8cdc3479c6d50856cf639a7.png"/>
+        <a href="https://circling.cc/post/494119" target="_blank"/>
+      </div>
     </div>;
   }
 }
