@@ -154,6 +154,9 @@ class Home extends migi.Component {
     this.ref.page2.index = 1;
     this.page2(1);
   }
+  closeQr() {
+    this.ref.qr.element.classList.add('fn-hide');
+  }
   render() {
     let info = this.props.info;
     let originWorks = this.props.originWorks;
@@ -556,9 +559,10 @@ class Home extends migi.Component {
         </div>
       </div>
       <img class="logo" src="//zhuanquan.xin/rhymesland/ysjxy/logo.png"/>
-      <div class="qr">
+      <div class="qr" ref="qr">
         <img src="//zhuanquan.xin/img/205481d2a8cdc3479c6d50856cf639a7.png"/>
         <a href="https://circling.cc/post/494119" target="_blank"/>
+        <span onClick={ this.closeQr }/>
       </div>
     </div>;
   }

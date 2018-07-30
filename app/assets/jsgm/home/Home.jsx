@@ -26,6 +26,9 @@ class Home extends migi.Component {
     }
     this.isPlaying = !this.isPlaying;
   }
+  closeQr() {
+    this.ref.qr.element.classList.add('fn-hide');
+  }
   render() {
     return <div class="home">
       <a name="head"/>
@@ -64,9 +67,10 @@ class Home extends migi.Component {
         ◆ 作品需为一篇完整词作，主题需与朝代历史或城市文化相关，叙事、抒情、截取历史故事缩影、概述城市风土人情等皆可，风格不限。与主题不符的作品将视为无效作品。<br/>
         ◆ 为避免比赛中产生不必要的质疑和纠纷，请所有参赛选手保留作品初稿。</p>
       <a href="/jsgm/join" class="join">点击参赛</a>
-      <div class="qr">
+      <div class="qr" ref="qr">
         <img src="//zhuanquan.xin/img/205481d2a8cdc3479c6d50856cf639a7.png"/>
         <a href="https://circling.cc/post/494119" target="_blank"/>
+        <span onClick={ this.closeQr }/>
       </div>
     </div>;
   }
