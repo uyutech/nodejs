@@ -106,7 +106,7 @@ class Works extends migi.Component {
         </div>
       </div>
       <div class="qr">
-        <img src="//zhuanquan.xin/img/09447d7b0b2272a4a3a9cec86fc16ab0.png"/>
+        <img src="//zhuanquan.xin/img/205481d2a8cdc3479c6d50856cf639a7.png"/>
       </div>
     </div>;
   }
