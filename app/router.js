@@ -61,7 +61,13 @@ module.exports = app => {
   app.get('/m/works/:worksId/:workId', 'm.works.index');
   app.get('/m/post/:id', 'm.post.index');
 
-  app.post('/api/login/loginOut', 'api.login.loginOut');
+  app.post('/api/passport/login', 'api.passport.login');
+  app.post('/api/passport/loginOut', 'api.passport.loginOut');
+  app.post('/api/passport/resetCode', 'api.passport.resetCode');
+  app.post('/api/passport/reset', 'api.passport.reset');
+  app.post('/api/passport/registerCode', 'api.passport.registerCode');
+  app.post('/api/passport/register', 'api.passport.register');
+
   app.post('/api/works/commentList', 'api.works.commentList');
   app.post('/api/works/like', app.middlewares.needLoginJson(), 'api.works.like');
   app.post('/api/works/unLike', app.middlewares.needLoginJson(), 'api.works.unLike');

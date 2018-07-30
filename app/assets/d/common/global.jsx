@@ -34,7 +34,7 @@ login && login.addEventListener('click', function(e) {
 let loginOut = document.querySelector('#gTop .out');
 loginOut && loginOut.addEventListener('click', function(e) {
   e.preventDefault();
-  net.postJSON('/api/login/loginOut', function() {
+  net.postJSON('/api/passport/loginOut', function() {
     location.reload(true);
   });
 });
