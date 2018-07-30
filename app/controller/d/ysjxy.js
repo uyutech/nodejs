@@ -309,6 +309,8 @@ class Controller extends egg.Controller {
         );
       }
       let createList = await Promise.all(query);
+      let commentId = createList[1].id;
+      query = [];
       query.push(
         app.model.worksNum.create({
           works_id: id,
@@ -333,7 +335,7 @@ class Controller extends egg.Controller {
       query.push(
         app.model.worksCommentRelation.create({
           works_id: id,
-          comment_id: createList[1].id,
+          comment_id: commentId,
         }, {
           transaction,
           raw: true,
@@ -457,8 +459,28 @@ class Controller extends egg.Controller {
             raw: true,
           })
         );
+        query.push(
+          app.model.comment.create({
+            content: authorId,
+            user_id: 2018000000008222,
+            is_delete: true,
+            review: 3,
+            root_id: 0,
+            parent_id: 0,
+          }, {
+            transaction,
+            raw: true,
+          })
+        );
       }
-      await Promise.all(query);
+      createList = await Promise.all(query);
+      await app.model.authorCommentRelation.create({
+        author_id: authorId,
+        comment_id: createList[1].id,
+      }, {
+        transaction,
+        raw: true,
+      });
       await transaction.commit();
       let fc = await app.model.activityUpload.create({
         activity_id: 1,
