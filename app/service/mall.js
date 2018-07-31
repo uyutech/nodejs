@@ -21,6 +21,7 @@ class Service extends egg.Service {
         'id',
         'name',
         'cover',
+        'describe',
         'price',
         'discount'
       ],
@@ -75,6 +76,7 @@ class Service extends egg.Service {
           'id',
           'name',
           'cover',
+          'describe',
           'price',
           'discount',
           ['is_delete', 'isDelete']
