@@ -10,9 +10,11 @@ export default function(data) {
   migi.resetUid();
 
   let character = data.character;
+  let disabled = data.disabled;
 
   let hh = migi.preRender(
-    <Hh character={ character }/>
+    <Hh character={ character }
+        disabled={ disabled }/>
   );
 
   return `<!DOCTYPE html>
@@ -38,6 +40,7 @@ export default function(data) {
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.character = ${data.helper.stringify(character)};
+  $CONFIG.disabled = ${data.helper.stringify(disabled)};
 </script>
 <script src="${data.helper.getAssetUrl('/rcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/hh.js')}" defer="defer"></script>

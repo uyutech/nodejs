@@ -18,11 +18,12 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [user, author, followPersonCount, fansCount] = await Promise.all([
+    let [user, author, followPersonCount, fansCount, checkIn] = await Promise.all([
       service.user.info(uid),
       service.user.author(uid),
       service.user.followPersonCount(uid),
-      service.user.fansCount(uid)
+      service.user.fansCount(uid),
+      service.user.checkInNum(uid)
     ]);
     if(!user) {
       return;
@@ -42,6 +43,7 @@ class Controller extends egg.Controller {
       author,
       followPersonCount,
       fansCount,
+      checkIn,
     });
   }
 
@@ -689,6 +691,18 @@ class Controller extends egg.Controller {
     });
     if(res.length) {
       ctx.body = ctx.helper.okJSON();
+    }
+  }
+
+  async checkIn() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let res = await service.user.checkIn(uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
     }
   }
 }

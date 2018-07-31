@@ -10,5 +10,6 @@ import Fc from './Fc.jsx';
 
 let fc = migi.preExist(
   <Fc info={ $CONFIG.info }
-          originWorks={ $CONFIG.originWorks }/>
+      originWorks={ $CONFIG.originWorks }
+      disabled={ $CONFIG.disabled }/>
 );

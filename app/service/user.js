@@ -8,6 +8,7 @@ const egg = require('egg');
 const Sequelize = require('sequelize');
 const squel = require('squel');
 const Spark = require('spark-md5');
+const moment = require('moment');
 
 class Service extends egg.Service {
   /**
@@ -2613,6 +2614,133 @@ class Service extends egg.Service {
     return {
       success: true,
     }
+  }
+
+  /**
+   * 每日签到
+   * id:int 用户id
+   * @returns Object{ success: boolean, message:String, data:Object }
+   */
+  async checkIn(id) {
+    if(!id) {
+      return { success: false, };
+    }
+    const { app } = this;
+    let exist = await app.model.userCheckIn.findOne({
+      attributes: [
+        'id',
+        'num',
+        ['last_date',' lastDate'],
+        'version'
+      ],
+      where: {
+        user_id: id,
+      },
+      raw: true,
+    });
+    if(exist) {
+      let lastDate = moment(exist.lastDate);
+      let now = moment();
+      let diff = now.diff(lastDate, 'days');
+      if(diff <= 0) {
+        return {
+          success: false,
+          message: '今天已经签到过啦~',
+        };
+      }
+      let num = diff === 1 ? exist.num + 1 : 1;
+      let res = await app.model.userCheckIn.update({
+        last_date: new Date(),
+        num,
+        version: exist.version + 1,
+      }, {
+        where: {
+          user_id: id,
+          version: exist.version,
+        },
+      });
+      // 乐观锁防止并发冲突
+      if(!res || res[0] !== 1) {
+        return {
+          success: false,
+        };
+      }
+      await Promise.all([
+        app.model.userCheckInRecord.create({
+          user_id: id,
+        }),
+        app.model.user.increment({
+          coins: 10,
+        }, {
+          where: {
+            id,
+          },
+        })
+      ]);
+      return {
+        success: true,
+        data: num,
+      };
+    }
+    else {
+      await Promise.all([
+        app.model.userCheckIn.create({
+          user_id: id,
+          num: 1,
+        }, {
+          raw: true,
+        }),
+        app.model.userCheckInRecord.create({
+          user_id: id,
+        }),
+        app.model.user.increment({
+          coins: 10,
+        }, {
+          where: {
+            id,
+          },
+        })
+      ]);
+      return {
+        success: true,
+        data: 1,
+      };
+    }
+  }
+
+  /**
+   * 连续每日签到天数
+   * id:int 用户id
+   * @returns int
+   */
+  async checkInNum(id) {
+    if(!id) {
+      return 0;
+    }
+    const { app } = this;
+    let res = await app.model.userCheckIn.findOne({
+      attributes: [
+        'num',
+        ['last_date', 'lastDate']
+      ],
+      where: {
+        user_id: id,
+      },
+      raw: true,
+    });
+    if(res) {
+      let lastDate = moment(res.lastDate);
+      let now = moment();
+      let diff = now.diff(lastDate, 'days');
+      return {
+        num: res.num || 0,
+        state: diff <= 0,
+      };
+    }
+    return {
+      num: 0,
+      state: false,
+    };
   }
 }
 

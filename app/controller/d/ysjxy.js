@@ -87,9 +87,11 @@ class Controller extends egg.Controller {
       service.activity.ysjxyInfo(),
       service.activity.ysjxyOriginWorks()
     ]);
+    let disabled = Date.now() >= new Date('2018-08-01').getTime();
     await ctx.render('fc', {
       info,
       originWorks,
+      disabled,
     });
   }
 
@@ -112,9 +114,11 @@ class Controller extends egg.Controller {
       service.activity.ysjxyInfo(),
       service.activity.character()
     ]);
+    let disabled = Date.now() >= new Date('2018-08-01').getTime();
     await ctx.render('hh', {
       info,
       character,
+      disabled,
     });
   }
 
@@ -133,6 +137,10 @@ class Controller extends egg.Controller {
 
   async fcUpload() {
     const { ctx, service, app } = this;
+    let disabled = Date.now() >= new Date('2018-08-01').getTime();
+    if(disabled) {
+      return;
+    }
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let originId = parseInt(body.originId);
@@ -500,6 +508,10 @@ class Controller extends egg.Controller {
 
   async hhUpload() {
     const { ctx, service, app } = this;
+    let disabled = Date.now() >= new Date('2018-08-01').getTime();
+    if(disabled) {
+      return;
+    }
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let title = body.title;

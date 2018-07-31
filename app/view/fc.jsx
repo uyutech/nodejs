@@ -11,10 +11,12 @@ export default function(data) {
 
   let info = data.info;
   let originWorks = data.originWorks;
+  let disabled = data.disabled;
 
   let fc = migi.preRender(
     <Fc info={ info }
-        originWorks={ originWorks }/>
+        originWorks={ originWorks }
+        disabled={ disabled }/>
   );
 
   return `<!DOCTYPE html>
@@ -41,6 +43,7 @@ export default function(data) {
   ${data.helper.$CONFIG}
   $CONFIG.info = ${data.helper.stringify(info)};
   $CONFIG.originWorks = ${data.helper.stringify(originWorks)};
+  $CONFIG.disabled = ${data.helper.stringify(disabled)};
 </script>
 <script src="${data.helper.getAssetUrl('/rcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/fc.js')}" defer="defer"></script>

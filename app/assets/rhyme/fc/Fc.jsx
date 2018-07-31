@@ -11,6 +11,7 @@ import $util from '../../d/common/util';
 class Upload extends migi.Component {
   constructor(...data) {
     super(...data);
+    this.disabled = this.props.disabled;
   }
   @bind originId
   @bind isUploadingAudio
@@ -24,6 +25,7 @@ class Upload extends migi.Component {
   @bind videoProgress
   @bind describe
   @bind uploading
+  @bind disabled
   changeOrigin(e, vd, tvd) {
     this.originId = tvd.props.value;
   }
@@ -361,6 +363,7 @@ class Upload extends migi.Component {
         <textarea>{ this.describe }</textarea>
       </div>
       <button class="sub"
+              disabled={ this.disabled }
               onClick={ this.submit }>提交</button>
     </div>;
   }

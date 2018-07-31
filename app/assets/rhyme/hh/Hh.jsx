@@ -12,6 +12,7 @@ class Hh extends migi.Component {
   constructor(...data) {
     super(...data);
     this.character = this.props.character;
+    this.disabled = this.props.disabled;
   }
   @bind character
   @bind characterId
@@ -20,6 +21,7 @@ class Hh extends migi.Component {
   @bind imgProgress
   @bind describe
   @bind uploading
+  @bind disabled
   changeCharacter(e, vd, tvd) {
     // this.characterId = tvd.props.value;
     let id = tvd.props.value;
@@ -207,6 +209,7 @@ class Hh extends migi.Component {
         <textarea>{ this.describe }</textarea>
       </div>
       <button class="sub"
+              disabled={ this.disabled }
               onClick={ this.submit }>提交</button>
     </div>;
   }

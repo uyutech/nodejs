@@ -198,6 +198,7 @@ module.exports = app => {
   app.post('/h5/my/updateAddressName', app.middlewares.needLoginJson(), 'h5.my.updateAddressName');
   app.post('/h5/my/updateAddressPhone', app.middlewares.needLoginJson(), 'h5.my.updateAddressPhone');
   app.post('/h5/my/updateAddress', app.middlewares.needLoginJson(), 'h5.my.updateAddress');
+  app.post('/h5/my/checkIn', app.middlewares.needLoginJson(), 'h5.my.checkIn');
 
   app.post('/h5/guide/tag', app.middlewares.needLoginJson(), 'h5.guide.tag');
   app.post('/h5/guide/followTag', app.middlewares.needLoginJson(), 'h5.guide.followTag');

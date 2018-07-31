@@ -9,5 +9,6 @@ import './index.less';
 import Hh from './Hh.jsx';
 
 let hh = migi.preExist(
-  <Hh character={ $CONFIG.character }/>
+  <Hh character={ $CONFIG.character }
+      disabled={ $CONFIG.disabled }/>
 );
