@@ -16,7 +16,7 @@
     "egg-view-migi": "~1.1.1",
     "egg-view-nunjucks": "~2.1.4",
     "fundebug-javascript": "^1.1.2",
-    "migi": "~5.1.0",
+    "migi": "~5.1.1",
     "migi-es6-shim": "~0.34.1",
     "moment": "~2.19.4",
     "mysql2": "^1.5.2",

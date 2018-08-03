@@ -12,7 +12,7 @@ const SKILL_LIMIT = 6;
 
 class Controller extends egg.Controller {
   async index() {
-    const { ctx, service } = this;
+    const { app, ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let id = parseInt(body.id);
@@ -54,7 +54,37 @@ class Controller extends egg.Controller {
       kindWorkList.limit = LIMIT;
     }
     dynamicList.limit = LIMIT;
-    commentList.limit = LIMIT;
+    if(commentList) {
+      commentList.limit = LIMIT;
+    }
+    else {
+      let transaction = await app.sequelizeCircling.transaction();
+      try {
+        let comment = await app.model.comment.create({
+          content: id,
+          user_id: 2018000000008222,
+          is_delete: true,
+          review: 3,
+          root_id: 0,
+          parent_id: 0,
+        }, {
+          transaction,
+          raw: true,
+        });
+        let commentId= comment.id;
+        await app.model.authorCommentRelation.create({
+          author_id: id,
+          comment_id: commentId,
+        }, {
+          transaction,
+          raw: true,
+        });
+        await transaction.commit();
+      }
+      catch(e) {
+        await transaction.rollback();
+      }
+    }
     ctx.body = ctx.helper.okJSON({
       info,
       isFollow,
