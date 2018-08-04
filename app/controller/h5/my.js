@@ -618,7 +618,7 @@ class Controller extends egg.Controller {
     }
     let res = await service.user.addAddress(uid, name, phone, address);
     if(res.success) {
-      ctx.body = ctx.helper.okJSON(res);
+      ctx.body = ctx.helper.okJSON(res.data);
     }
     else {
       ctx.body = ctx.helper.errorJSON(res.message);
