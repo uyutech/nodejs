@@ -198,6 +198,7 @@ module.exports = app => {
   app.post('/h5/my/updateAddressName', app.middlewares.needLoginJson(), 'h5.my.updateAddressName');
   app.post('/h5/my/updateAddressPhone', app.middlewares.needLoginJson(), 'h5.my.updateAddressPhone');
   app.post('/h5/my/updateAddress', app.middlewares.needLoginJson(), 'h5.my.updateAddress');
+  app.post('/h5/my/setDefaultAddress', app.middlewares.needLoginJson(), 'h5.my.setDefaultAddress');
   app.post('/h5/my/checkIn', app.middlewares.needLoginJson(), 'h5.my.checkIn');
 
   app.post('/h5/guide/tag', app.middlewares.needLoginJson(), 'h5.guide.tag');
@@ -236,7 +237,9 @@ module.exports = app => {
   app.post('/h5/mall/prize', app.middlewares.needLoginJson(), 'h5.mall.prize');
   app.post('/h5/mall/express', app.middlewares.needLoginJson(), 'h5.mall.express');
   app.post('/h5/mall/applyExpress', app.middlewares.needLoginJson(), 'h5.mall.applyExpress');
+  app.post('/h5/mall/applyExpressList', app.middlewares.needLoginJson(), 'h5.mall.applyExpressList');
   app.post('/h5/mall/cancelExpress', app.middlewares.needLoginJson(), 'h5.mall.cancelExpress');
+  app.post('/h5/mall/exchange', app.middlewares.needLoginJson(), 'h5.mall.exchange');
 
   app.post('/private/profession/all', 'private.profession.all');
   app.post('/private/skill/all', 'private.skill.all');

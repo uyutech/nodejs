@@ -594,8 +594,16 @@ class Controller extends egg.Controller {
   async address() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let res = await service.user.address(uid);
-    ctx.body = ctx.helper.okJSON(res);
+    let [address, defaultAddress] = await Promise.all([
+      service.user.address(uid),
+      service.user.defaultAddress(uid)
+    ]);
+    if(address) {
+      address.forEach((item) => {
+        item.isDefault = item.id === defaultAddress;
+      });
+    }
+    ctx.body = ctx.helper.okJSON(address);
   }
 
   async addAddress() {
@@ -692,6 +700,28 @@ class Controller extends egg.Controller {
     if(res.length) {
       ctx.body = ctx.helper.okJSON();
     }
+  }
+
+  async setDefaultAddress() {
+    const { ctx, app } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    await Promise.all([
+      app.model.user.update({
+        default_address: id,
+        update_time: new Date(),
+      }, {
+        where: {
+          id: uid,
+        },
+      }),
+      app.redis.del('defaultAddress_' + uid),
+    ]);
+    ctx.body = ctx.helper.okJSON();
   }
 
   async checkIn() {

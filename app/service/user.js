@@ -2486,7 +2486,8 @@ class Service extends egg.Service {
         'id',
         'name',
         'phone',
-        'address'
+        'address',
+        ['post_code', 'postCode']
       ],
       where: {
         user_id: id,
@@ -2494,6 +2495,74 @@ class Service extends egg.Service {
       },
       raw: true,
     });
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 获取用户的默认地址id
+   * @param id:int 用户id
+   * @returns int
+   */
+  async defaultAddress(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'defaultAddress_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.user.findOne({
+      attributes: [
+        ['default_address', 'defaultAddress']
+      ],
+      where: {
+        id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.defaultAddress || null;
+    }
+    else {
+      res = null;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
+   * 免邮次数
+   * @param id:int 用户id
+   * @returns int
+   */
+  async freePost(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'freePost_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.user.findOne({
+      attributes: [
+        ['free_post', 'freePost']
+      ],
+      where: {
+        id,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.freePost || 0;
+    }
+    else {
+      res = 0;
+    }
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }

@@ -37,6 +37,17 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 1,
     },
+    state: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      comment: '可兑换/即将上架',
+    },
+    amount: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,

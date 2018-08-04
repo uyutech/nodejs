@@ -23,7 +23,9 @@ class Service extends egg.Service {
         'cover',
         'describe',
         'price',
-        'discount'
+        'discount',
+        'state',
+        'amount'
       ],
       where: {
         is_delete: false,
@@ -35,8 +37,44 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取商品详情
+   * @param id:int 商品id列表
+   * @returns Array<int>
+   */
+  async product(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'product_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.product.findOne({
+      attributes: [
+        'id',
+        'name',
+        'cover',
+        'describe',
+        'price',
+        'discount',
+        ['is_delete', 'isDelete'],
+        'state',
+        'amount'
+      ],
+      where: {
+        id,
+      },
+      raw: true,
+    });
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
    * 获取商品列表详情
-   * @param idList:int 商品id列表
+   * @param idList:Array<int> 商品id列表
    * @returns Array<int>
    */
   async productList(idList) {
@@ -79,7 +117,9 @@ class Service extends egg.Service {
           'describe',
           'price',
           'discount',
-          ['is_delete', 'isDelete']
+          ['is_delete', 'isDelete'],
+          'state',
+          'amount'
         ],
         where: {
           id: noCacheIdList,
@@ -101,6 +141,19 @@ class Service extends egg.Service {
       });
     }
     return cache;
+  }
+
+  /**
+   * 清除商品缓存
+   * @param id:int 商品id
+   * @returns void
+   */
+  async clearProductCache(id) {
+    if(!id) {
+      return;
+    }
+    const { app } = this;
+    await app.redis.del('product_' + id);
   }
 
   /**
@@ -244,6 +297,153 @@ class Service extends egg.Service {
     }
     catch(e) {
       await transaction.rollback();
+      return {
+        success: false,
+      };
+    }
+  }
+
+  /**
+   * 申请奖品发货
+   * @param ids:Array<int> 奖品id
+   * @param uid:int 用户id
+   * @param addressId:int 地址id
+   * @returns boolean
+   */
+  async applyExpressList(ids, uid, addressId) {
+    if(!ids || !Array.isArray(ids) || !ids.length || !uid || !addressId) {
+      return {
+        success: false,
+      };
+    }
+    const { app } = this;
+    let address = await app.model.userAddress.findOne({
+      attributes: [
+        'id',
+        'name',
+        'phone',
+        'address'
+      ],
+      where: {
+        user_id: uid,
+        id: addressId,
+      },
+      raw: true,
+    });
+    if(!address) {
+      return {
+        success: false,
+        message: '地址不匹配~',
+      };
+    }
+    let res = await app.model.prize.findAll({
+      attributes: [
+        'id',
+        ['user_id', 'userId'],
+        ['product_id', 'productId'],
+        'state'
+      ],
+      where: {
+        id: ids,
+      },
+      raw: true,
+    });
+    for(let i = 0; i < res.length; i++) {
+      if(res[i].state === 2) {
+        return {
+          success: false,
+          message: '已申请过发货，无需重复申请~',
+        };
+      }
+      if(res[i].userId !== uid) {
+        return {
+          success: false,
+          message: '用户不匹配~',
+        };
+      }
+    }
+    let productIdList = res.map((item) => {
+      return item.productId;
+    });
+    let transaction = await app.sequelizeCircling.transaction();
+    let transactionMall = await app.sequelizeMall.transaction();
+    try {
+      let query = [
+        app.model.prize.update({
+          state: 2,
+        }, {
+          where: {
+            id: ids,
+            state: 1,
+          },
+          transaction: transactionMall,
+        })
+      ];
+      query.push(
+        app.model.user.decrement({
+          free_post: 1,
+        }, {
+          where: {
+            id: uid,
+            free_post: {
+              $gt: 0,
+            },
+          },
+          transaction,
+        })
+      );
+      productIdList.forEach((productId) => {
+        query.push(
+          app.model.express.create({
+            user_id: uid,
+            product_id: productId,
+            name: address.name,
+            phone: address.phone,
+            address: address.address,
+            state: 1,
+          }, {
+            raw: true,
+            transaction: transactionMall,
+          })
+        );
+      });
+      let res2 = await Promise.all(query);
+      let num = res2[0][0];
+      let num2 = res2[1][0][1];
+      if(num < ids.length || num2 !== 1) {
+        await transaction.rollback();
+        await transactionMall.rollback();
+        return {
+          success: false,
+          message: '商品圈币数据已更新，请重试~',
+        };
+      }
+      query = [];
+      res.forEach((item, i) => {
+        query.push(
+          app.model.prizeExpressRelation.create({
+            user_id: uid,
+            prize_id: item.id,
+            express_id: res2[i + 2].id,
+          }, {
+            raw: true,
+            transaction: transactionMall,
+          })
+        );
+      });
+      await Promise.all(query);
+      await transaction.commit();
+      await transactionMall.commit();
+      app.redis.del('prize_' + uid);
+      app.redis.del('freePost_' + uid);
+      app.redis.del('express_' + uid);
+      return {
+        success: true,
+      };
+    }
+    catch(e) {
+      await transaction.rollback();
+      await transactionMall.rollback();
       return {
         success: false,
       };

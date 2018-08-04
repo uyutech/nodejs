@@ -54,6 +54,16 @@ module.exports = app => {
       defaultValue: 1,
       comment: '1正常，2假账号',
     },
+    default_address: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    free_post: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,

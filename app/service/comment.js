@@ -10,7 +10,7 @@ const squel = require('squel');
 
 class Service extends egg.Service {
   /**
-   * 根据言论id列取言论详情
+   * 根据言论id取言论详情
    * @param id:int 言论id
    * @returns Object
    */

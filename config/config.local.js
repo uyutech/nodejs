@@ -18,9 +18,9 @@ module.exports = appInfo => {
         host: '127.0.0.1',
         db: 0,
       },
-      time: 10,
-      shortTime: 5,
-      mediumTime: 30,
+      time: 20,
+      shortTime: 10,
+      mediumTime: 40,
       longTime: 60,
     },
     database: {
