@@ -301,6 +301,9 @@ class Post extends migi.Component {
         };
         fileReader.readAsDataURL(file);
       }
+      else {
+        alert('图片最大不能超过10m！');
+      }
     }
   }
   clickImg(e, vd, tvd) {

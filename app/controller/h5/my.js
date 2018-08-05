@@ -68,6 +68,46 @@ class Controller extends egg.Controller {
     });
   }
 
+  async friendList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.friendList(uid, offset, PERSON_LIMIT);
+    res.limit = PERSON_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async followUserList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.followUserList(uid, offset, PERSON_LIMIT);
+    res.limit = PERSON_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async fansList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.fansList(uid, offset, PERSON_LIMIT);
+    res.limit = PERSON_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
+  async followAuthorList() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let offset = parseInt(body.offset) || 0;
+    let res = await service.user.followAuthorList(uid, offset, PERSON_LIMIT);
+    res.limit = PERSON_LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
+  }
+
   async postList() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;

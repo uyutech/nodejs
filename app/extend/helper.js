@@ -65,7 +65,7 @@ let helper = {
     let session = this.ctx.session || {};
     return `<div class="g-top" id="gTop">
       <div class="c">
-        <a href="/" class="logo">转圈，一个有爱的智能社区~</a>
+        <a href="/" class="logo">轻松交流，高效创作。</a>
         <ul>
           <li><a href="/"
                  class="${pageId === 0 ? 'cur' : ''}">首页</a></li>

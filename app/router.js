@@ -172,6 +172,10 @@ module.exports = app => {
   app.post('/h5/my/favorList', app.middlewares.needLoginJson(), 'h5.my.favorList');
   app.post('/h5/my/favorPostList', app.middlewares.needLoginJson(), 'h5.my.favorPostList');
   app.post('/h5/my/relationList', app.middlewares.needLoginJson(), 'h5.my.relationList');
+  app.post('/h5/my/friendList', app.middlewares.needLoginJson(), 'h5.my.friendList');
+  app.post('/h5/my/followUserList', app.middlewares.needLoginJson(), 'h5.my.followUserList');
+  app.post('/h5/my/fansList', app.middlewares.needLoginJson(), 'h5.my.fansList');
+  app.post('/h5/my/followAuthorList', app.middlewares.needLoginJson(), 'h5.my.followAuthorList');
   // TODO: del
   app.post('/h5/my/messageList', app.middlewares.needLoginJson(), 'h5.my.commentList');
   app.post('/h5/my/commentList', app.middlewares.needLoginJson(), 'h5.my.commentList');
