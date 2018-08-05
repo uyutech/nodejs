@@ -627,6 +627,77 @@ class Service extends egg.Service {
     let idList = await this.idListByName(nameList);
     return await this.circleIdList(idList, type);
   }
+
+  /**
+   * 获取全部话题
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async all(offset, limit) {
+    let [data, count] = await Promise.all([
+      this.allData(offset, limit),
+      this.allCount()
+    ]);
+    return { data, count };
+  }
+
+  async allData(offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'allTag_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.tag.findAll({
+      attributes: [
+        'id',
+        'name'
+      ],
+      where: {
+        is_delete: false,
+      },
+      order: [
+        ['create_time', 'DESC']
+      ],
+      offset,
+      limit,
+      raw: true,
+    });
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  async allCount() {
+    const { app } = this;
+    let cacheKey = 'allTagCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.author.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        is_delete: false,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
 }
 
 module.exports = Service;

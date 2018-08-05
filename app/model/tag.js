@@ -43,6 +43,10 @@ module.exports = app => {
         name: 'name',
         unique: true,
         fields: ['name'],
+      },
+      {
+        name: 'is_delete_create_time',
+        fields: ['is_delete', 'create_time'],
       }
     ],
     comment: '标签基本信息',

@@ -26,11 +26,6 @@ module.exports = app => {
       allowNull: false,
       comment: '1主账号，2成员，3编辑',
     },
-    is_delete: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     settle: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,
@@ -57,6 +52,10 @@ module.exports = app => {
       {
         name: 'author_id_type',
         fields: ['author_id', 'type'],
+      },
+      {
+        name: 'settle_type_create_time',
+        fields: ['settle', 'type', 'create_time'],
       }
     ],
     comment: '用户对应作者关系',

@@ -17,12 +17,16 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let keyword = body.keyword;
     let offset = parseInt(body.offset) || 0;
-    if(!keyword) {
-      return;
+    if(keyword) {
+      let res = await service.author.listByName(keyword, offset, LIMIT);
+      res.limit = LIMIT;
+      ctx.body = ctx.helper.okJSON(res);
     }
-    let res = await service.author.listByName(keyword, offset, LIMIT);
-    res.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(res);
+    else {
+      let res = await service.author.allSettle(offset, LIMIT);
+      res.limit = LIMIT;
+      ctx.body = ctx.helper.okJSON(res);
+    }
   }
 
   async user() {
@@ -45,12 +49,16 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let keyword = body.keyword;
     let offset = parseInt(body.offset) || 0;
-    if(!keyword) {
-      return;
+    if(keyword) {
+      let res = await service.works.listByName(keyword, offset, LIMIT);
+      res.limit = LIMIT;
+      ctx.body = ctx.helper.okJSON(res);
     }
-    let res = await service.works.listByName(keyword, offset, LIMIT);
-    res.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(res);
+    else {
+      let res = await service.works.newest(keyword, offset, LIMIT);
+      res.limit = LIMIT;
+      ctx.body = ctx.helper.okJSON(res);
+    }
   }
 
   async tag() {
@@ -59,12 +67,16 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let keyword = body.keyword;
     let offset = parseInt(body.offset) || 0;
-    if(!keyword) {
-      return;
+    if(keyword) {
+      let res = await service.tag.listByName(keyword, offset, LIMIT_TAG);
+      res.limit = LIMIT_TAG;
+      ctx.body = ctx.helper.okJSON(res);
     }
-    let res = await service.tag.listByName(keyword, offset, LIMIT_TAG);
-    res.limit = LIMIT_TAG;
-    ctx.body = ctx.helper.okJSON(res);
+    else {
+      let res = await service.tag.all(offset, LIMIT_TAG);
+      res.limit = LIMIT_TAG;
+      ctx.body = ctx.helper.okJSON(res);
+    }
   }
 }
 

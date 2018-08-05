@@ -1248,6 +1248,88 @@ class Service extends egg.Service {
   }
 
   /**
+   * 获取最新入驻作者
+   * @param offset:int 分页开始
+   * @param limit:int 分页尺寸
+   * @returns Object{ count:int, data:Array<Object> }
+   */
+  async allSettle(offset, limit) {
+    let [data, count] = await Promise.all([
+      this.allSettleData(offset, limit),
+      this.allSettleCount()
+    ]);
+    return { data, count };
+  }
+
+  async allSettleData(offset, limit) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app } = this;
+    let cacheKey = 'allSettleData_' + offset + '_' + limit;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.userAuthorRelation.findAll({
+        attributes: [
+          ['author_id', 'authorId']
+        ],
+        where: {
+          settle: {
+            $ne: 3,
+          },
+          type: 1,
+        },
+        order: [
+          ['create_time', 'DESC']
+        ],
+        offset,
+        limit,
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.authorId;
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let list = await this.infoList(res);
+    return list;
+  }
+
+  async allSettleCount() {
+    const { app } = this;
+    let cacheKey = 'allSettleCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.userAuthorRelation.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        settle: {
+          $ne: 3,
+        },
+        type: 1,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
+
+  /**
    * 获取作者动态
    * @param id:int 作者id
    * @param uid:int 用户id

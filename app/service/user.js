@@ -137,7 +137,6 @@ class Service extends egg.Service {
         ],
         where: {
           user_id: id,
-          is_delete: false,
         },
         order: [
           'type'
