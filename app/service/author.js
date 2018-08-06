@@ -1775,7 +1775,8 @@ class Service extends egg.Service {
     res = await app.model.userAuthorRelation.findAll({
       attributes: [
         ['user_id', 'userId'],
-        'type'
+        'type',
+        'settle'
       ],
       where: {
         author_id: id,

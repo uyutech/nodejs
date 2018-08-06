@@ -10,25 +10,83 @@ const LIMIT = 10;
 
 class Controller extends egg.Controller {
   async index() {
-    const { ctx, service } = this;
+    const { app, ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let id = parseInt(body.id);
     if(!id) {
       return;
     }
-    let [info, followPersonCount, fansCount, isFollow, isFans, postList] = await Promise.all([
+    let [info,
+      followPersonCount,
+      fansCount,
+      isFollow,
+      isFans,
+      author,
+      postList
+    ] = await Promise.all([
       service.user.info(id),
       service.user.followPersonCount(id),
       service.user.fansCount(id),
       service.user.isFollow(id, uid),
       service.user.isFans(id, uid),
-      service.user.postList(id, uid, 0, LIMIT)
+      service.user.author(id),
+      service.user.postList(id, uid, 0, LIMIT, true)
     ]);
     if(!info) {
       return;
     }
     delete info.coins;
+    let skillWorks;
+    let workKindList;
+    let commentList;
+    if(author && author.length && author[0].type === 1 && author[0].settle <= 1) {
+      let authorId = author[0].id;
+      [skillWorks, workKindList, commentList] = await Promise.all([
+        service.author.allSkillWorks(authorId, 6),
+        service.author.workKindList(authorId),
+        service.author.commentList(authorId, uid, 0, LIMIT)
+      ]);
+      if(workKindList && workKindList.length && workKindList[workKindList.length - 1].kind ===4) {
+        workKindList.pop();
+      }
+      if(commentList) {
+        commentList.limit = LIMIT;
+      }
+      else {
+        let transaction = await app.sequelizeCircling.transaction();
+        try {
+          let comment = await app.model.comment.create({
+            content: id,
+            user_id: 2018000000008222,
+            is_delete: true,
+            review: 3,
+            root_id: 0,
+            parent_id: 0,
+          }, {
+            transaction,
+            raw: true,
+          });
+          let commentId= comment.id;
+          await app.model.authorCommentRelation.create({
+            author_id: authorId,
+            comment_id: commentId,
+          }, {
+            transaction,
+            raw: true,
+          });
+          await transaction.commit();
+        }
+        catch(e) {
+          await transaction.rollback();
+        }
+        commentList = {
+          data: [],
+          count: 0,
+          limit: LIMIT,
+        };
+      }
+    }
     postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
       info,
@@ -36,7 +94,11 @@ class Controller extends egg.Controller {
       fansCount,
       isFollow,
       isFans,
+      workKindList,
       postList,
+      commentList,
+      skillWorks,
+      author,
     });
   }
 
@@ -49,7 +111,7 @@ class Controller extends egg.Controller {
       return;
     }
     let offset = parseInt(body.offset) || 0;
-    let res = await service.user.postList(id, uid, offset, LIMIT);
+    let res = await service.user.postList(id, uid, offset, LIMIT, true);
     if(!res) {
       return;
     }

@@ -52,6 +52,6 @@ module.exports = app => {
         fields: ['comment_id', 'type']
       }
     ],
-    comment: '用户与留言关联信息',
+    comment: '用户与留言操作关联信息',
   });
 };

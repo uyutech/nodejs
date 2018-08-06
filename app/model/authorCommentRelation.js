@@ -27,6 +27,11 @@ module.exports = app => {
         name: 'author_id',
         unique: true,
         fields: ['author_id'],
+      },
+      {
+        name: 'comment_id',
+        unique: true,
+        fields: ['comment_id'],
       }
     ],
     comment: '作品留言关联信息',

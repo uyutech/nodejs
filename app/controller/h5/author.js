@@ -24,6 +24,7 @@ class Controller extends egg.Controller {
       isFollow,
       aliases,
       outside,
+      user,
       skillWorks,
       cooperationList,
       workKindList,
@@ -34,6 +35,7 @@ class Controller extends egg.Controller {
       service.author.isFollow(id, uid),
       service.author.aliases(id),
       service.author.outside(id),
+      service.author.user(id),
       service.author.allSkillWorks(id, 6),
       service.author.cooperationList(id, 0, LIMIT),
       service.author.workKindList(id),
@@ -43,16 +45,14 @@ class Controller extends egg.Controller {
     if(!info) {
       return;
     }
+    if(workKindList && workKindList.length && workKindList[workKindList.length - 1].kind ===4) {
+      workKindList.pop();
+    }
     skillWorks.forEach((item) => {
       if(item) {
         item.limit = SKILL_LIMIT;
       }
     });
-    let kindWorkList;
-    if(workKindList.length) {
-      kindWorkList = await service.author.kindWorkList(id, uid, workKindList[0].kind, 0, LIMIT);
-      kindWorkList.limit = LIMIT;
-    }
     dynamicList.limit = LIMIT;
     if(commentList) {
       commentList.limit = LIMIT;
@@ -84,6 +84,11 @@ class Controller extends egg.Controller {
       catch(e) {
         await transaction.rollback();
       }
+      commentList = {
+        data: [],
+        count: 0,
+        limit: LIMIT,
+      };
     }
     ctx.body = ctx.helper.okJSON({
       info,
@@ -93,9 +98,9 @@ class Controller extends egg.Controller {
       skillWorks,
       cooperationList,
       workKindList,
-      kindWorkList,
       dynamicList,
       commentList,
+      user,
     });
   }
 
