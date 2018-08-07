@@ -176,11 +176,8 @@ module.exports = app => {
   app.post('/h5/my/followUserList', app.middlewares.needLoginJson(), 'h5.my.followUserList');
   app.post('/h5/my/fansList', app.middlewares.needLoginJson(), 'h5.my.fansList');
   app.post('/h5/my/followAuthorList', app.middlewares.needLoginJson(), 'h5.my.followAuthorList');
-  // TODO: del
-  app.post('/h5/my/messageList', app.middlewares.needLoginJson(), 'h5.my.commentList');
   app.post('/h5/my/commentList', app.middlewares.needLoginJson(), 'h5.my.commentList');
   app.post('/h5/my/recentLetter', app.middlewares.needLoginJson(), 'h5.my.recentLetter');
-  app.post('/h5/my/letterList', app.middlewares.needLoginJson(), 'h5.my.letterList');
   app.post('/h5/my/dialogList', app.middlewares.needLoginJson(), 'h5.my.dialogList');
   app.post('/h5/my/unreadMessageCount', app.middlewares.needLoginJson(), 'h5.my.unreadMessageCount');
   app.post('/h5/my/unreadNotifyCount', app.middlewares.needLoginJson(), 'h5.my.unreadNotifyCount');
@@ -244,6 +241,8 @@ module.exports = app => {
   app.post('/h5/mall/applyExpressList', app.middlewares.needLoginJson(), 'h5.mall.applyExpressList');
   app.post('/h5/mall/cancelExpress', app.middlewares.needLoginJson(), 'h5.mall.cancelExpress');
   app.post('/h5/mall/exchange', app.middlewares.needLoginJson(), 'h5.mall.exchange');
+
+  app.post('/h5/letter/sub', app.middlewares.needLoginJson(), 'h5.letter.sub');
 
   app.post('/private/profession/all', 'private.profession.all');
   app.post('/private/skill/all', 'private.skill.all');

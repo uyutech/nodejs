@@ -399,16 +399,6 @@ class Controller extends egg.Controller {
     ctx.body = ctx.helper.okJSON(res);
   }
 
-  async letterList() {
-    const { ctx, service } = this;
-    let uid = ctx.session.uid;
-    let body = ctx.request.body;
-    let offset = parseInt(body.offset) || 0;
-    let res = await service.user.letterList(uid, offset, LIMIT);
-    res.limit = LIMIT;
-    ctx.body = ctx.helper.okJSON(res);
-  }
-
   async unreadMessageCountWithRecentLetter() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;

@@ -431,11 +431,15 @@ class Service extends egg.Service {
       return JSON.parse(res);
     }
     res = await app.model.userPersonRelation.findOne({
+      attributes: [
+        'id'
+      ],
       where: {
         user_id: uid,
         type: 1,
         target_id: id,
       },
+      raw: true,
     });
     res = !!res;
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
@@ -456,6 +460,41 @@ class Service extends egg.Service {
       return false;
     }
     return await this.isFollow(uid, id);
+  }
+
+  /**
+   * 是否是黑名单
+   * @param id:int 用户id
+   * @param uid:int 当前登录用户id
+   * @returns boolean
+   */
+  async isBlock(id, uid) {
+    if(!id || id === uid) {
+      return;
+    }
+    if(!uid) {
+      return false;
+    }
+    const { app } = this;
+    let cacheKey = 'userPersonRelation_' + uid + '_' + id + '_2';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.userPersonRelation.findOne({
+      attributes: [
+        'id'
+      ],
+      where: {
+        user_id: uid,
+        type: 2,
+        target_id: id,
+      },
+      raw: true,
+    });
+    res = !!res;
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
   }
 
   /**
@@ -489,7 +528,7 @@ class Service extends egg.Service {
       };
     }
     state = !!state;
-    const { app, service } = this;
+    const { app } = this;
     // 不能超过最大关注数
     if(state) {
       let now = await this.followPersonCount(uid);
@@ -505,6 +544,7 @@ class Service extends egg.Service {
     if(state) {
       await Promise.all([
         app.redis.setex(cacheKey, app.config.redis.time, 'true'),
+        app.redis.del('userPersonRelation_' + uid + '_' + id + '_2'),
         app.model.userPersonRelation.upsert({
           user_id: uid,
           target_id: id,
@@ -1938,6 +1978,7 @@ class Service extends egg.Service {
           target_id: id,
           is_delete: false,
           is_read: false,
+          is_block: false,
         },
         raw: true,
       });
@@ -1950,116 +1991,6 @@ class Service extends egg.Service {
       app.redis.setex(cacheKey2, app.config.redis.shortTime, JSON.stringify(res2));
     }
     return res + res2;
-  }
-
-  /**
-   * 获取未读消息数量
-   * @param id:int 用户id
-   * @param offset:int 分页开始
-   * @param limit:int 分页尺寸
-   * @returns Object{ data: Array<Object>, count:int }
-   */
-  async letterList(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let [data, count] = await Promise.all([
-      this.letterData(id, offset, limit),
-      this.letterCount(id)
-    ]);
-    return {
-      data,
-      count,
-    };
-  }
-
-  async letterData(id, offset, limit) {
-    if(!id) {
-      return;
-    }
-    offset = parseInt(offset) || 0;
-    limit = parseInt(limit) || 1;
-    if(offset < 0 || limit < 1) {
-      return;
-    }
-    const { app, service } = this;
-    let res = await app.model.letter.findAll({
-      attributes: [
-        'id',
-        ['user_id', 'userId'],
-        ['is_read', 'isRead'],
-        'content',
-        ['create_time', 'createTime']
-      ],
-      where: {
-        target_id: id,
-        is_delete: false,
-      },
-      order: [
-        'is_read',
-        ['id', 'DESC']
-      ],
-      offset,
-      limit,
-      raw: true,
-    });
-    let userIdList = [];
-    let userIdHash = {};
-    res.forEach((item) => {
-      if(!userIdHash[item.userId]) {
-        userIdHash[item.userId] = true;
-        userIdList.push(item.userId);
-      }
-    });
-    let userInfoList = await service.user.infoList(userIdList);
-    let userInfoHash = {};
-    userInfoList.forEach((item) => {
-      userInfoHash[item.id] = {
-        id: item.id,
-        nickname: item.nickname,
-        headUrl: item.headUrl,
-        sign: item.sign,
-      };
-    });
-    return res.map((item) => {
-      if(item.userId === 2018000000008150) {
-        item.typeName = '系统消息';
-      }
-      item.user = userInfoHash[item.userId];
-      delete item.userId;
-      return item;
-    });
-  }
-
-  async letterCount(id) {
-    if(!id) {
-      return;
-    }
-    const { app } = this;
-    let cacheKey = 'letterCount_' + id;
-    let res = await app.redis.get(cacheKey);
-    if(res) {
-      return JSON.parse(res);
-    }
-    res = await app.model.letter.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        target_id: id,
-        is_delete: false,
-      },
-      raw: true,
-    });
-    if(res) {
-      res = res.num || 0;
-    }
-    else {
-      res = 0;
-    }
-    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
-    return res;
   }
 
   /**
@@ -2139,9 +2070,6 @@ class Service extends egg.Service {
       if(letter) {
         item.letter = letter;
       }
-      if(item.userId === 2018000000008150) {
-        item.typeName = '系统消息';
-      }
       item.user = userHash[item.userId];
       item.count = countList[i];
       return item;
@@ -2197,6 +2125,7 @@ class Service extends egg.Service {
         target_id: uid,
         is_delete: false,
         is_read: false,
+        is_block: false,
       },
       raw: true,
     });
@@ -2233,6 +2162,7 @@ class Service extends egg.Service {
         target_id: uid,
         is_delete: false,
         is_read: false,
+        is_block: false,
       },
       group: 'user_id',
       raw: true,
@@ -2269,8 +2199,8 @@ class Service extends egg.Service {
       key = uid + '' + id;
     }
     let [data, count, userInfo, targetInfo] = await Promise.all([
-      this.dialogListData(key, offset, limit),
-      this.dialogListCount(key),
+      this.dialogListData(key, uid, id, offset, limit),
+      this.dialogListCount(key, uid, id),
       this.info(uid),
       this.info(id)
     ]);
@@ -2287,7 +2217,7 @@ class Service extends egg.Service {
     };
   }
 
-  async dialogListData(key, offset, limit) {
+  async dialogListData(key, uid, id, offset, limit) {
     if(!key) {
       return;
     }
@@ -2303,12 +2233,22 @@ class Service extends egg.Service {
         ['user_id', 'userId'],
         ['target_id', 'targetId'],
         'content',
+        'type',
         ['is_read', 'isRead'],
         ['create_time', 'createTime']
       ],
       where: {
         key,
         is_delete: false,
+        $or: [
+          {
+            user_id: uid,
+          },
+          {
+            user_id: id,
+            is_block: false,
+          }
+        ],
       },
       order: [
         ['id', 'DESC']
@@ -2391,12 +2331,12 @@ class Service extends egg.Service {
     return res;
   }
 
-  async dialogListCount(key) {
+  async dialogListCount(key, uid, id) {
     if(!key) {
       return;
     }
     const { app } = this;
-    let cacheKey = 'dialogListCount_' + key;
+    let cacheKey = 'dialogListCount_' + key + '_' + uid;
     let res = await app.redis.get(cacheKey);
     if(res) {
       return JSON.parse(res);
@@ -2408,6 +2348,15 @@ class Service extends egg.Service {
       where: {
         key,
         is_delete: false,
+        $or: [
+          {
+            user_id: uid,
+          },
+          {
+            user_id: id,
+            is_block: false,
+          }
+        ],
       },
       raw: true,
     });

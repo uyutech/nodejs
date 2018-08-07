@@ -29,12 +29,23 @@ module.exports = app => {
       type: Sequelize.TEXT,
       allowNull: false,
     },
+    type: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '0普通私信，1系统消息',
+    },
     is_read: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
     is_delete: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    is_block: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: false,
@@ -52,12 +63,16 @@ module.exports = app => {
   }, {
     indexes: [
       {
-        name: 'key_is_delete_is_read',
-        fields: ['key', 'is_delete', 'is_read'],
+        name: 'key_is_delete_user_id_is_block',
+        fields: ['key', 'is_delete', 'user_id', 'is_block'],
       },
       {
-        name: 'user_id_target_id_is_delete_is_read',
-        fields: ['user_id', 'target_id', 'is_delete', 'is_read'],
+        name: 'target_id_is_delete_is_read_is_block',
+        fields: ['target_id', 'is_delete', 'is_read', 'is_block'],
+      },
+      {
+        name: 'user_id_target_id_is_delete_is_read_is_block',
+        fields: ['user_id', 'target_id', 'is_delete', 'is_read', 'is_block'],
       }
     ],
     comment: '私信基本信息',

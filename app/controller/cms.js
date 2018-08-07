@@ -169,6 +169,7 @@ class Controller extends egg.Controller {
         target_id: uid,
         key: senderId < uid ? (senderId + '' + uid) : (uid + '' + senderId),
         content,
+        type: 1,
       }, {
         raw: true,
       }));

@@ -28,6 +28,7 @@ class Service extends egg.Service {
       attributes: [
         'id',
         'content',
+        'type',
         ['user_id', 'userId'],
         ['target_id', 'targetId'],
         ['is_read', 'isRead'],
@@ -82,6 +83,7 @@ class Service extends egg.Service {
         attributes: [
           'id',
           'content',
+          'type',
           ['user_id', 'userId'],
           ['target_id', 'targetId'],
           ['is_read', 'isRead'],
