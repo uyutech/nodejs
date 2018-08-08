@@ -196,9 +196,9 @@ class Service extends egg.Service {
     return cache;
   }
 
-  async allSkill() {
+  async allSkills() {
     const { app } = this;
-    let cacheKey = 'allSkill';
+    let cacheKey = 'allSkills';
     let res = await app.redis.get(cacheKey);
     if(res) {
       return JSON.parse(res);

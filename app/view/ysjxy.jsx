@@ -13,12 +13,20 @@ export default function(data) {
   let originWorks = data.originWorks;
   let fcList = data.fcList;
   let hhList = data.hhList;
+  let fcPrize = data.fcPrize;
+  let hhPrize = data.hhPrize;
+  let fcPopular = data.fcPopular;
+  let hhPopular = data.hhPopular;
 
   let home = migi.preRender(
     <Home info={ info }
           originWorks={ originWorks }
           fcList={ fcList }
-          hhList={ hhList }/>
+          hhList={ hhList }
+          fcPrize={ fcPrize }
+          hhPrize={ hhPrize }
+          fcPopular={ fcPopular }
+          hhPopular={ hhPopular }/>
   );
 
   return `<!DOCTYPE html>
@@ -47,6 +55,10 @@ ${home}
   $CONFIG.originWorks = ${data.helper.stringify(originWorks)};
   $CONFIG.fcList = ${data.helper.stringify(fcList)};
   $CONFIG.hhList = ${data.helper.stringify(hhList)};
+  $CONFIG.fcPrize = ${data.helper.stringify(fcPrize)};
+  $CONFIG.hhPrize = ${data.helper.stringify(hhPrize)};
+  $CONFIG.fcPopular = ${data.helper.stringify(fcPopular)};
+  $CONFIG.hhPopular = ${data.helper.stringify(hhPopular)};
 </script>
 <script src="${data.helper.getAssetUrl('/rcommon.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/ysjxy.js')}" defer="defer"></script>

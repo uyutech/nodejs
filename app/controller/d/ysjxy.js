@@ -10,17 +10,25 @@ class Controller extends egg.Controller {
   async index() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [ info, originWorks, fcList, hhList ] = await Promise.all([
+    let [ info, originWorks, fcList, hhList, fcPrize, hhPrize, fcPopular, hhPopular ] = await Promise.all([
       service.activity.ysjxyInfo(),
       service.activity.ysjxyOriginWorks(),
       service.activity.ysjxyUpload(uid, 0, 10, 0),
-      service.activity.ysjxyUploadHh(uid, 0, 10, 0)
+      service.activity.ysjxyUploadHh(uid, 0, 10, 0),
+      service.activity.ysjxyFcPrize(),
+      service.activity.ysjxyHhPrize(),
+      service.activity.ysjxyFcPopular(),
+      service.activity.ysjxyHhPopular()
     ]);
     await ctx.render('ysjxy', {
       info,
       originWorks,
       fcList,
       hhList,
+      fcPrize,
+      hhPrize,
+      fcPopular,
+      hhPopular,
     });
   }
 
@@ -53,6 +61,7 @@ class Controller extends egg.Controller {
     if(!id || !type) {
       return;
     }
+    return ctx.body = ctx.helper.errorJSON('投票已结束');
     let res = await service.activity.vote(id, type, uid);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res.data);

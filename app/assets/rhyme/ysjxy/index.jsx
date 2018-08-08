@@ -12,5 +12,9 @@ let home = migi.preExist(
   <Home info={ $CONFIG.info }
         originWorks={ $CONFIG.originWorks }
         fcList={ $CONFIG.fcList }
-        hhList={ $CONFIG.hhList }/>
+        hhList={ $CONFIG.hhList }
+        fcPrize={ $CONFIG.fcPrize }
+        hhPrize={ $CONFIG.hhPrize }
+        fcPopular={ $CONFIG.fcPopular }
+        hhPopular={ $CONFIG.hhPopular }/>
 );

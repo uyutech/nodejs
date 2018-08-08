@@ -19,6 +19,10 @@ class Home extends migi.Component {
     this.fcCount = this.props.fcList.count;
     this.hhList = this.props.hhList.data;
     this.hhCount = this.props.hhList.count;
+    this.fcPrize = this.props.fcPrize || [];
+    this.hhPrize = this.props.hhPrize || [];
+    this.fcPopular = this.props.fcPopular || [];
+    this.hhPopular = this.props.hhPopular || [];
     this.tab2 = 0;
     this.fcSort = 0;
     this.hhSort = 0;
@@ -491,8 +495,6 @@ class Home extends migi.Component {
                       <p class="desc">{ item.works.describe }</p>
                       <p class="count"><strong>{ item.voteCount }</strong>票</p>
                       <div class="btn">
-                        <span class="vote"
-                              rel={ item.id }>投票</span>
                         <a class="share"
                            href={ 'http://service.weibo.com/share/share.php?url='
                              + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
@@ -554,7 +556,313 @@ class Home extends migi.Component {
             </div>
           </div>
           <div class={ this.index === 3 ? '' : 'fn-hide'}>
-            <div class="wait"/>
+            <h3 class="prize_title">翻唱获奖作品</h3>
+            <ul class="fc-list no-border fn-clear">
+            {
+              this.fcPrize.filter((item) => {
+                return item.prize === 1;
+              }).map((item) => {
+                let pic = item.user.headUrl;
+                item.collection.forEach((item) => {
+                  if(item.kind === 3) {
+                    pic = item.url;
+                  }
+                });
+                return <li>
+                  <a class="pic"
+                     href={ '/works/' + item.works.id }
+                     target="_blank">
+                    <img src={ $util.img(pic, 480, 480, 80) }/>
+                    <span>No.{ item.id }</span>
+                  </a>
+                  <div class="txt">
+                    <a class="ti"
+                       href={ '/ysjxy/fc/' + item.id }
+                       target="_blank">{ item.works.title }</a>
+                    <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                    <p class="desc">{ item.works.describe }</p>
+                    <p class="count"><strong>{ item.prize }</strong>等奖</p>
+                    <div class="btn">
+                      <a class="share"
+                         href={ 'http://service.weibo.com/share/share.php?url='
+                         + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                         + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                         + '&searchPic=false&style=number' }
+                         target="_blank">分享</a>
+                    </div>
+                  </div>
+                </li>;
+              })
+            }
+            </ul>
+            <ul class="fc-list no-border fn-clear">
+              {
+                this.fcPrize.filter((item) => {
+                  return item.prize === 2;
+                }).map((item) => {
+                  let pic = item.user.headUrl;
+                  item.collection.forEach((item) => {
+                    if(item.kind === 3) {
+                      pic = item.url;
+                    }
+                  });
+                  return <li>
+                    <a class="pic"
+                       href={ '/works/' + item.works.id }
+                       target="_blank">
+                      <img src={ $util.img(pic, 480, 480, 80) }/>
+                      <span>No.{ item.id }</span>
+                    </a>
+                    <div class="txt">
+                      <a class="ti"
+                         href={ '/ysjxy/fc/' + item.id }
+                         target="_blank">{ item.works.title }</a>
+                      <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                      <p class="desc">{ item.works.describe }</p>
+                      <p class="count"><strong>{ item.prize }</strong>等奖</p>
+                      <div class="btn">
+                        <a class="share"
+                           href={ 'http://service.weibo.com/share/share.php?url='
+                           + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                           + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                           + '&searchPic=false&style=number' }
+                           target="_blank">分享</a>
+                      </div>
+                    </div>
+                  </li>;
+                })
+              }
+            </ul>
+            <ul class="fc-list no-border fn-clear">
+              {
+                this.fcPrize.filter((item) => {
+                  return item.prize === 3;
+                }).map((item) => {
+                  let pic = item.user.headUrl;
+                  item.collection.forEach((item) => {
+                    if(item.kind === 3) {
+                      pic = item.url;
+                    }
+                  });
+                  return <li>
+                    <a class="pic"
+                       href={ '/works/' + item.works.id }
+                       target="_blank">
+                      <img src={ $util.img(pic, 480, 480, 80) }/>
+                      <span>No.{ item.id }</span>
+                    </a>
+                    <div class="txt">
+                      <a class="ti"
+                         href={ '/ysjxy/fc/' + item.id }
+                         target="_blank">{ item.works.title }</a>
+                      <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                      <p class="desc">{ item.works.describe }</p>
+                      <p class="count"><strong>{ item.prize }</strong>等奖</p>
+                      <div class="btn">
+                        <a class="share"
+                           href={ 'http://service.weibo.com/share/share.php?url='
+                           + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                           + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                           + '&searchPic=false&style=number' }
+                           target="_blank">分享</a>
+                      </div>
+                    </div>
+                  </li>;
+                })
+              }
+            </ul>
+            <h3 class="prize_title">绘画获奖作品</h3>
+            <ul class="fc-list no-border fn-clear">
+            {
+              this.hhPrize.filter((item) => {
+                return item.prize === 1;
+              }).map((item) => {
+                let pic = item.user.headUrl;
+                item.collection.forEach((item) => {
+                  if(item.kind === 3) {
+                    pic = item.url;
+                  }
+                });
+                return <li>
+                  <a class="pic"
+                     href={ '/ysjxy/hh/' + item.id }
+                     target="_blank">
+                    <img src={ $util.img(pic, 480, 480, 80) }/>
+                    <span>No.{ item.id }</span>
+                  </a>
+                  <div class="txt">
+                    <a class="ti"
+                       href={ '/ysjxy/fc/' + item.id }
+                       target="_blank">{ item.works.title }</a>
+                    <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                    <p class="desc">{ item.works.describe }</p>
+                    <p class="count"><strong>{ item.prize }</strong>等奖</p>
+                    <div class="btn">
+                      <a class="share"
+                         href={ 'http://service.weibo.com/share/share.php?url='
+                         + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                         + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                         + '&searchPic=false&style=number' }
+                         target="_blank">分享</a>
+                    </div>
+                  </div>
+                </li>;
+              })
+            }
+            </ul>
+            <ul class="fc-list no-border fn-clear">
+              {
+                this.hhPrize.filter((item) => {
+                  return item.prize === 2;
+                }).map((item) => {
+                  let pic = item.user.headUrl;
+                  item.collection.forEach((item) => {
+                    if(item.kind === 3) {
+                      pic = item.url;
+                    }
+                  });
+                  return <li>
+                    <a class="pic"
+                       href={ '/ysjxy/hh/' + item.id }
+                       target="_blank">
+                      <img src={ $util.img(pic, 480, 480, 80) }/>
+                      <span>No.{ item.id }</span>
+                    </a>
+                    <div class="txt">
+                      <a class="ti"
+                         href={ '/ysjxy/fc/' + item.id }
+                         target="_blank">{ item.works.title }</a>
+                      <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                      <p class="desc">{ item.works.describe }</p>
+                      <p class="count"><strong>{ item.prize }</strong>等奖</p>
+                      <div class="btn">
+                        <a class="share"
+                           href={ 'http://service.weibo.com/share/share.php?url='
+                           + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                           + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                           + '&searchPic=false&style=number' }
+                           target="_blank">分享</a>
+                      </div>
+                    </div>
+                  </li>;
+                })
+              }
+            </ul>
+            <ul class="fc-list no-border fn-clear">
+              {
+                this.hhPrize.filter((item) => {
+                  return item.prize === 3;
+                }).map((item) => {
+                  let pic = item.user.headUrl;
+                  item.collection.forEach((item) => {
+                    if(item.kind === 3) {
+                      pic = item.url;
+                    }
+                  });
+                  return <li>
+                    <a class="pic"
+                       href={ '/ysjxy/hh/' + item.id }
+                       target="_blank">
+                      <img src={ $util.img(pic, 480, 480, 80) }/>
+                      <span>No.{ item.id }</span>
+                    </a>
+                    <div class="txt">
+                      <a class="ti"
+                         href={ '/ysjxy/fc/' + item.id }
+                         target="_blank">{ item.works.title }</a>
+                      <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                      <p class="desc">{ item.works.describe }</p>
+                      <p class="count"><strong>{ item.prize }</strong>等奖</p>
+                      <div class="btn">
+                        <a class="share"
+                           href={ 'http://service.weibo.com/share/share.php?url='
+                           + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                           + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                           + '&searchPic=false&style=number' }
+                           target="_blank">分享</a>
+                      </div>
+                    </div>
+                  </li>;
+                })
+              }
+            </ul>
+            <h3 class="prize_title">翻唱人气奖作品</h3>
+            <ul class="fc-list no-border fn-clear">
+              {
+                this.fcPopular.map((item) => {
+                  let pic = item.user.headUrl;
+                  item.collection.forEach((item) => {
+                    if(item.kind === 3) {
+                      pic = item.url;
+                    }
+                  });
+                  return <li>
+                    <a class="pic"
+                       href={ '/works/' + item.works.id }
+                       target="_blank">
+                      <img src={ $util.img(pic, 480, 480, 80) }/>
+                      <span>No.{ item.id }</span>
+                    </a>
+                    <div class="txt">
+                      <a class="ti"
+                         href={ '/ysjxy/fc/' + item.id }
+                         target="_blank">{ item.works.title }</a>
+                      <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                      <p class="desc">{ item.works.describe }</p>
+                      <div class="btn">
+                        <a class="share"
+                           href={ 'http://service.weibo.com/share/share.php?url='
+                           + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                           + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                           + '&searchPic=false&style=number' }
+                           target="_blank">分享</a>
+                      </div>
+                    </div>
+                  </li>;
+                })
+              }
+            </ul>
+            <h3 class="prize_title">绘画人气奖作品</h3>
+            <ul class="fc-list no-border fn-clear">
+              {
+                this.hhPopular.map((item) => {
+                  let pic = item.user.headUrl;
+                  item.collection.forEach((item) => {
+                    if(item.kind === 3) {
+                      pic = item.url;
+                    }
+                  });
+                  return <li>
+                    <a class="pic"
+                       href={ '/ysjxy/hh/' + item.id }
+                       target="_blank">
+                      <img src={ $util.img(pic, 480, 480, 80) }/>
+                      <span>No.{ item.id }</span>
+                    </a>
+                    <div class="txt">
+                      <a class="ti"
+                         href={ '/ysjxy/fc/' + item.id }
+                         target="_blank">{ item.works.title }</a>
+                      <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                      <p class="desc">{ item.works.describe }</p>
+                      <div class="btn">
+                        <a class="share"
+                           href={ 'http://service.weibo.com/share/share.php?url='
+                           + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                           + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#异世谣# #异世交响月# 翻唱大赛好热闹，我也来凑个热闹！小伙伴们快来给我投票吧~ @异世谣  @结梦谷 ')
+                           + '&searchPic=false&style=number' }
+                           target="_blank">分享</a>
+                      </div>
+                    </div>
+                  </li>;
+                })
+              }
+            </ul>
+            <pre>请一二三等奖得主请微博私信@异世谣 你们要选择的礼物+收货地址。
+
+获得人气奖&前200参赛的小伙伴，你们的奖品经由本次活动的技术支持方转圈App送出。登录转圈App后，在“我的福利”中查看奖品——填写收货地址——点击“申请发货”。更加详细的信息，可登录转圈后查看私信。
+
+前方惊喜预警！转圈App还为所有参赛者送上500圈币，为所有投票者送出100圈币。感谢大家的参与和支持，快去圈商城兑换福利好物吧！</pre>
           </div>
         </div>
       </div>

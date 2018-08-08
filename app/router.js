@@ -204,6 +204,8 @@ module.exports = app => {
 
   app.post('/h5/guide/tag', app.middlewares.needLoginJson(), 'h5.guide.tag');
   app.post('/h5/guide/followTag', app.middlewares.needLoginJson(), 'h5.guide.followTag');
+  app.post('/h5/guide/settle', app.middlewares.needLoginJson(), 'h5.guide.settle');
+  app.post('/h5/guide/setSettle', app.middlewares.needLoginJson(), 'h5.guide.setSettle');
 
   app.post('/h5/comment/like', app.middlewares.needLoginJson(), 'h5.comment.like');
   app.post('/h5/comment/unLike', app.middlewares.needLoginJson(), 'h5.comment.unLike');

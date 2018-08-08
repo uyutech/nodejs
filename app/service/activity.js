@@ -553,6 +553,178 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
+
+  async ysjxyFcPrize() {
+    const { app, service } = this;
+    let cacheKey = 'ysjxyFcPrize';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.activityUpload.findAll({
+        attributes: [
+          'id',
+          ['works_id', 'worksId'],
+          ['user_id', 'userId'],
+          'prize'
+        ],
+        where: {
+          activity_id: 1,
+          prize: {
+            $gt: 0,
+          },
+        },
+        order: ['prize'],
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let worksIdList = res.map((item) => {
+      return item.worksId;
+    });
+    let userIdList = res.map((item) => {
+      return item.userId;
+    });
+    let [worksList, collectionList, userList] = await Promise.all([
+      service.works.infoListPlusCount(worksIdList),
+      service.works.collectionListFull(worksIdList),
+      service.user.infoList(userIdList)
+    ]);
+    res.forEach((item, i) => {
+      item.works = worksList[i];
+      item.user = userList[i];
+      item.collection = collectionList[i];
+    });
+    return res;
+  }
+
+  async ysjxyHhPrize() {
+    const { app, service } = this;
+    let cacheKey = 'ysjxyHhPrize';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.activityUploadHh.findAll({
+        attributes: [
+          'id',
+          ['works_id', 'worksId'],
+          ['user_id', 'userId'],
+          'prize'
+        ],
+        where: {
+          activity_id: 1,
+          prize: {
+            $gt: 0,
+          },
+        },
+        order: ['prize'],
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let worksIdList = res.map((item) => {
+      return item.worksId;
+    });
+    let userIdList = res.map((item) => {
+      return item.userId;
+    });
+    let [worksList, collectionList, userList] = await Promise.all([
+      service.works.infoListPlusCount(worksIdList),
+      service.works.collectionListFull(worksIdList),
+      service.user.infoList(userIdList)
+    ]);
+    res.forEach((item, i) => {
+      item.works = worksList[i];
+      item.user = userList[i];
+      item.collection = collectionList[i];
+    });
+    return res;
+  }
+
+  async ysjxyFcPopular() {
+    const { app, service } = this;
+    let cacheKey = 'ysjxyFcPopular';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.activityUpload.findAll({
+        attributes: [
+          'id',
+          ['works_id', 'worksId'],
+          ['user_id', 'userId']
+        ],
+        where: {
+          activity_id: 1,
+          is_prize: true,
+        },
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let worksIdList = res.map((item) => {
+      return item.worksId;
+    });
+    let userIdList = res.map((item) => {
+      return item.userId;
+    });
+    let [worksList, collectionList, userList] = await Promise.all([
+      service.works.infoListPlusCount(worksIdList),
+      service.works.collectionListFull(worksIdList),
+      service.user.infoList(userIdList)
+    ]);
+    res.forEach((item, i) => {
+      item.works = worksList[i];
+      item.user = userList[i];
+      item.collection = collectionList[i];
+    });
+    return res;
+  }
+
+  async ysjxyHhPopular() {
+    const { app, service } = this;
+    let cacheKey = 'ysjxyHhPopular';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.activityUploadHh.findAll({
+        attributes: [
+          'id',
+          ['works_id', 'worksId'],
+          ['user_id', 'userId']
+        ],
+        where: {
+          activity_id: 1,
+          is_prize: true,
+        },
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let worksIdList = res.map((item) => {
+      return item.worksId;
+    });
+    let userIdList = res.map((item) => {
+      return item.userId;
+    });
+    let [worksList, collectionList, userList] = await Promise.all([
+      service.works.infoListPlusCount(worksIdList),
+      service.works.collectionListFull(worksIdList),
+      service.user.infoList(userIdList)
+    ]);
+    res.forEach((item, i) => {
+      item.works = worksList[i];
+      item.user = userList[i];
+      item.collection = collectionList[i];
+    });
+    return res;
+  }
 }
 
 module.exports = Service;

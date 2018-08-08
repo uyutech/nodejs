@@ -35,6 +35,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: 0,
     },
+    prize: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      defaultValue: 0,
+    },
     create_time: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -55,6 +60,10 @@ module.exports = app => {
       {
         name: 'activity_id_is_prize_create_time',
         fields: ['activity_id', 'is_prize', 'create_time'],
+      },
+      {
+        name: 'activity_id_is_prize_create_time',
+        fields: ['activity_id', 'prize', 'create_time'],
       },
       {
         name: 'activity_id_create_time',

@@ -86,6 +86,150 @@ class Controller extends egg.Controller {
     service.user.clearInfoCache(uid);
     ctx.body = ctx.helper.okJSON();
   }
+
+  async settle() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let [allSkills, author] = await Promise.all([
+      service.skill.allSkills(),
+      service.user.author(uid, 1)
+    ]);
+    ctx.body = ctx.helper.okJSON({
+      allSkills,
+      author,
+    });
+  }
+
+  async setSettle() {
+    const { app, ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let skill = body.skill;
+    let name = body.name;
+    if(!Array.isArray(skill) || !name) {
+      return;
+    }
+    let author = await service.user.author(uid);
+    let authorId ;
+    if(!author || !author.length) {
+      let [check, last] = await Promise.all([
+        app.model.author.findOne({
+          attributes: [
+            'id'
+          ],
+          where: {
+            name,
+          },
+          raw: true,
+        }),
+        app.model.author.findOne({
+          attributes: [
+            'id'
+          ],
+          order: [
+            ['id', 'DESC']
+          ],
+          limit: 1,
+          raw: true,
+        }),
+      ]);
+      if(check) {
+        return ctx.body = ctx.helper.errorJSON('不能重名哦~');
+      }
+      authorId = last.id + Math.floor(Math.random() * 2) + 1;
+      let transaction = await app.sequelizeCircling.transaction();
+      try {
+        [author] = await Promise.all([
+          await app.model.author.create({
+            id: authorId,
+            name,
+            is_settle: true,
+          }, {
+            raw: true,
+            transaction,
+          }),
+          app.model.userAuthorRelation.upsert({
+            user_id: uid,
+            author_id: authorId,
+            type: 1,
+            settle: 1,
+          }, {
+            where: {
+              user_id: uid,
+              author_id: authorId,
+            },
+            transaction,
+          })
+        ]);
+        await transaction.commit();
+      }
+      catch(e) {
+        await transaction.rollback();
+        return ctx.body = ctx.helper.errorJSON(e.toString());
+      }
+    }
+    else {
+      author = author[0];
+      let check = await app.model.author.findOne({
+        attributes: [
+          'id'
+        ],
+        where: {
+          name,
+          id: {
+            $ne: authorId,
+          },
+        },
+        raw: true,
+      });
+      if(check) {
+        return ctx.body = ctx.helper.errorJSON('不能重名哦~');
+      }
+      authorId = author.id;
+    }
+    let query = skill.map((id) => {
+      return app.model.authorSkillRelation.upsert({
+        author_id: authorId,
+        skill_id: id,
+      }, {
+        where: {
+          author_id: authorId,
+          skill_id: id,
+          point: {
+            $gt: 0,
+          },
+          level: {
+            $gt: 0,
+          },
+        },
+      });
+    });
+    query.push(
+      app.model.user.update({
+        reg_state: 100,
+      }, {
+        where: {
+          id: uid,
+        },
+      }),
+      service.user.clearInfoCache(uid)
+    );
+    if(author.name !== name) {
+      query.push(
+        app.model.author.update({
+          name,
+        }, {
+          where: {
+            id: authorId,
+          },
+        })
+      )
+    }
+    let res = await Promise.all(query);
+    ctx.body = ctx.helper.okJSON({
+      authorId,
+    });
+  }
 }
 
 module.exports = Controller;
