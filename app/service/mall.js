@@ -308,9 +308,10 @@ class Service extends egg.Service {
    * @param ids:Array<int> 奖品id
    * @param uid:int 用户id
    * @param addressId:int 地址id
+   * @param message:String 留言说明
    * @returns boolean
    */
-  async applyExpressList(ids, uid, addressId) {
+  async applyExpressList(ids, uid, addressId, message) {
     if(!ids || !Array.isArray(ids) || !ids.length || !uid || !addressId) {
       return {
         success: false,
@@ -400,6 +401,7 @@ class Service extends egg.Service {
             name: address.name,
             phone: address.phone,
             address: address.address,
+            message,
             state: 1,
           }, {
             raw: true,

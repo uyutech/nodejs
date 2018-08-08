@@ -41,6 +41,11 @@ module.exports = app => {
       allowNull: false,
       comment: '1未发货，2已发货，3已收货',
     },
+    message: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: '',
+    },
     is_delete: {
       type: Sequelize.BOOLEAN,
       allowNull: false,

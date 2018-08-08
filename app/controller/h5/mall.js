@@ -69,7 +69,8 @@ class Controller extends egg.Controller {
     let body = ctx.request.body;
     let ids = body.ids;
     let addressId = parseInt(body.addressId);
-    let res = await service.mall.applyExpressList(ids, uid, addressId);
+    let message = body.message;
+    let res = await service.mall.applyExpressList(ids, uid, addressId, message);
     if(res.success) {
       ctx.body = ctx.helper.okJSON(res);
     }

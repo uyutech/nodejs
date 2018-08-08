@@ -67,7 +67,7 @@ module.exports = app => {
         fields: ['activity_id', 'is_prize', 'create_time'],
       },
       {
-        name: 'activity_id_is_prize_create_time',
+        name: 'activity_id_prize_create_time',
         fields: ['activity_id', 'prize', 'create_time'],
       },
       {
