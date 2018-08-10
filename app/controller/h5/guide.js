@@ -90,13 +90,15 @@ class Controller extends egg.Controller {
   async settle() {
     const { ctx, service } = this;
     let uid = ctx.session.uid;
-    let [allSkills, author] = await Promise.all([
+    let [allSkills, author, user] = await Promise.all([
       service.skill.allSkills(),
-      service.user.author(uid, 1)
+      service.user.author(uid, 1),
+      service.user.info(uid)
     ]);
     ctx.body = ctx.helper.okJSON({
       allSkills,
       author,
+      user,
     });
   }
 
@@ -225,9 +227,14 @@ class Controller extends egg.Controller {
         })
       )
     }
-    let res = await Promise.all(query);
+    await Promise.all(query);
+    let [user, author2] = await Promise.all([
+      service.user.info(uid),
+      service.user.author(uid)
+    ]);
     ctx.body = ctx.helper.okJSON({
-      authorId,
+      user,
+      author: author2,
     });
   }
 }

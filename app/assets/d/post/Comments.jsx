@@ -59,7 +59,7 @@ class Comments extends migi.Component {
   }
   render() {
     let data = this.props.data || {};
-    let total = Math.ceil(data.count || 1 / data.limit || 1);
+    let total = Math.ceil(((data.count || 1) / data.limit) || 1);
     return <div class="mod mod-comment box">
       <h4>评论</h4>
       <div class="fn">

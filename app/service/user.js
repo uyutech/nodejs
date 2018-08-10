@@ -762,22 +762,26 @@ class Service extends egg.Service {
     if(!id) {
       return;
     }
-    const { app } = this;
+    const { app, service } = this;
     let cacheKey = 'userFansCount_' + id;
     let res = await app.redis.get(cacheKey);
     if(res) {
       return JSON.parse(res);
     }
-    res = await app.model.userPersonRelation.findOne({
-      attributes: [
-        [Sequelize.fn('COUNT', '*'), 'num']
-      ],
-      where: {
-        target_id: id,
-        type: 1,
-      },
-      raw: true,
-    });
+    let author;
+    [res, author] = await Promise.all([
+      app.model.userPersonRelation.findOne({
+        attributes: [
+          [Sequelize.fn('COUNT', '*'), 'num']
+        ],
+        where: {
+          target_id: id,
+          type: 1,
+        },
+        raw: true,
+      }),
+      this.author(id)
+    ]);
     if(res) {
       res = res.num || 0;
     }
@@ -785,6 +789,10 @@ class Service extends egg.Service {
       res = 0;
     }
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    if(author && author.length && author[0].type === 1 && author[0].settle <= 1) {
+      let authorFansCount = await service.author.fansCount(author[0].id);
+      res += authorFansCount;
+    }
     return res;
   }
 
