@@ -17,21 +17,20 @@ class Controller extends egg.Controller {
     if(!id) {
       return;
     }
+    let postList;
     let [info,
       followPersonCount,
       fansCount,
       isFollow,
       isFans,
-      author,
-      postList
+      author
     ] = await Promise.all([
       service.user.info(id),
       service.user.followPersonCount(id),
       service.user.fansCount(id),
       service.user.isFollow(id, uid),
       service.user.isFans(id, uid),
-      service.user.author(id),
-      service.user.postList(id, uid, 0, LIMIT, true)
+      service.user.author(id)
     ]);
     if(!info) {
       return;
@@ -42,10 +41,11 @@ class Controller extends egg.Controller {
     let commentList;
     if(author && author.length && author[0].type === 1 && author[0].settle <= 1) {
       let authorId = author[0].id;
-      [skillWorks, workKindList, commentList] = await Promise.all([
+      [skillWorks, workKindList, commentList, postList] = await Promise.all([
         service.author.allSkillWorks(authorId, 6),
         service.author.workKindList(authorId),
-        service.author.commentList(authorId, uid, 0, LIMIT)
+        service.author.commentList(authorId, uid, 0, LIMIT),
+        service.user.postList(id, uid, 0, LIMIT, true)
       ]);
       if(workKindList && workKindList.length && workKindList[workKindList.length - 1].kind ===4) {
         workKindList.pop();
@@ -86,6 +86,9 @@ class Controller extends egg.Controller {
           limit: LIMIT,
         };
       }
+    }
+    else {
+      postList = await service.user.postList(id, uid, 0, LIMIT);
     }
     postList.limit = LIMIT;
     ctx.body = ctx.helper.okJSON({
