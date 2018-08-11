@@ -102,6 +102,7 @@ const circlingComment = require('../model/circlingComment');
 const circleTop = require('../model/circleTop');
 const circlingPost = require('../model/circlingPost');
 const circlingPostRead = require('../model/circlingPostRead');
+const homeCircle = require('../model/homeCircle');
 
 const userReport = require('../model/userReport');
 const userVisit = require('../model/userVisit');
@@ -389,6 +390,7 @@ module.exports = {
         circleTop: circleTop(this),
         circlingPost: circlingPost(this),
         circlingPostRead: circlingPostRead(this),
+        homeCircle: homeCircle(this),
 
         userReport: userReport(this),
         userVisit: userVisit(this),

@@ -191,10 +191,11 @@ class Controller extends egg.Controller {
   async index3() {
     const { app, ctx, service } = this;
     let uid = ctx.session.uid;
-    let [bannerList, recommendPost, postList] = await Promise.all([
+    let [bannerList, recommendPost, postList, circleList] = await Promise.all([
       app.redis.get('banner'),
       uid ? service.recommend.guideAndFollow(uid) : service.recommend.randomPost(),
-      service.recommend.allPostPage(uid, 0, LIMIT)
+      service.recommend.allPostPage(uid, 0, LIMIT),
+      service.recommend.circle(uid)
     ]);
     if(bannerList) {
       bannerList = JSON.parse(bannerList);
@@ -223,6 +224,7 @@ class Controller extends egg.Controller {
       bannerList,
       recommendPost,
       postList,
+      circleList,
     });
   }
 

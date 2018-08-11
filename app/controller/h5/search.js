@@ -78,6 +78,24 @@ class Controller extends egg.Controller {
       ctx.body = ctx.helper.okJSON(res);
     }
   }
+
+  async circle() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let keyword = body.keyword;
+    let offset = parseInt(body.offset) || 0;
+    if(keyword) {
+      let res = await service.circle.listByName(keyword, offset, LIMIT_TAG);
+      res.limit = LIMIT_TAG;
+      ctx.body = ctx.helper.okJSON(res);
+    }
+    else {
+      let res = await service.circle.all(offset, LIMIT_TAG);
+      res.limit = LIMIT_TAG;
+      ctx.body = ctx.helper.okJSON(res);
+    }
+  }
 }
 
 module.exports = Controller;

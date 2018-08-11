@@ -464,6 +464,32 @@ class Service extends egg.Service {
       count: idList.length,
     };
   }
+
+  async circle(uid) {
+    const { app, service } = this;
+    let cacheKey = 'recommendCircle';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.homeCircle.findAll({
+        attributes: [
+          ['circle_id', 'circleId']
+        ],
+        order: [
+          ['weight', 'DESC']
+        ],
+        raw: true,
+      });
+      res = res.map((item) => {
+        return item.circleId;
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let list = await service.circle.infoList(res);
+    return list;
+  }
 }
 
 module.exports = Service;

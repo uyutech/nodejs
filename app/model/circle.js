@@ -59,6 +59,14 @@ module.exports = app => {
         name: 'name',
         unique: true,
         fields: ['name'],
+      },
+      {
+        name: 'name_type',
+        fields: ['name', 'type'],
+      },
+      {
+        name: 'type',
+        fields: ['type'],
       }
     ],
     comment: '圈子基本信息',

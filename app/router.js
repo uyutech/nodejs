@@ -223,6 +223,7 @@ module.exports = app => {
   app.post('/h5/search/user', 'h5.search.user');
   app.post('/h5/search/works', 'h5.search.works');
   app.post('/h5/search/tag', 'h5.search.tag');
+  app.post('/h5/search/circle', 'h5.search.circle');
 
   app.post('/h5/passport/login', 'h5.passport.login');
   app.post('/h5/passport/loginWeibo', 'h5.passport.loginWeibo');
