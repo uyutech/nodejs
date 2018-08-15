@@ -34,7 +34,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, app.config.redis.longTime, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -96,7 +96,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || null;
         cache[i] = temp;
-        app.redis.setex('worksType_' + id, app.config.redis.longTime, JSON.stringify(temp));
+        app.redis.setex('worksType_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -166,6 +166,100 @@ class Service extends egg.Service {
     }).filter((item) => {
       return item;
     });
+  }
+
+  /**
+   * 获取对应状态的list
+   * status: int
+   */
+  async status(n) {
+    const { app } = this;
+    let cacheKey = 'worksTypeStatus_' + n;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.worksType.findAll({
+        attributes: [
+          'id'
+        ],
+        where: {
+          status: n,
+        },
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let idList = res.map((item) => {
+      return item.id;
+    });
+    return this.infoList(idList);
+  }
+
+  /**
+   * 根据大作品类型列表获取小作品类型列表
+   * @param idList:Array<int>
+   * @returns Array<Array<Object>>
+   */
+  async workTypeList(idList) {
+    if(!idList) {
+      return;
+    }
+    if(!idList.length) {
+      return [];
+    }
+    const { app } = this;
+    let cache = await Promise.all(
+      idList.map((id) => {
+        if(id !== null && id !== undefined) {
+          return app.redis.get('worksTypeWorkTypeList_' + id);
+        }
+      })
+    );
+    let noCacheIdList = [];
+    let noCacheIdHash = {};
+    let noCacheIndexList = [];
+    cache.forEach((item, i) => {
+      let id = idList[i];
+      if(item) {
+        cache[i] = JSON.parse(item);
+      }
+      else if(id !== null && id !== undefined) {
+        if(!noCacheIdHash[id]) {
+          noCacheIdHash[id] = true;
+          noCacheIdList.push(id);
+        }
+        noCacheIndexList.push(i);
+      }
+    });
+    if(noCacheIdList.length) {
+      let res = await app.model.worksTypeWorkTypeRelation.findAll({
+        attributes: [
+          ['works_type', 'worksType'],
+          ['work_type', 'workType'],
+          'upload'
+        ],
+        where: {
+          works_type: noCacheIdList,
+        },
+        raw: true,
+      });
+      let hash = {};
+      if(res.length) {
+        res.forEach((item) => {
+          let temp = hash[item.worksType] = hash[item.worksType] || [];
+          temp.push(item);
+        });
+      }
+      noCacheIndexList.forEach((i) => {
+        let id = idList[i];
+        let temp = hash[id] || [];
+        cache[i] = temp;
+        app.redis.setex('worksTypeWorkTypeList_' + id, app.config.redis.time, JSON.stringify(temp));
+      });
+    }
+    return cache;
   }
 }
 

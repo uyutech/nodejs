@@ -32,7 +32,7 @@ export default function(data) {
 </head>
 <body>
 ${home}
-${data.helper.getDTopNav({ pageId: 0 })}
+${data.helper.getDTopNav({ pageId: 7 })}
 ${data.helper.getDBotNav()}
 <script>
   ${data.helper.$CONFIG}

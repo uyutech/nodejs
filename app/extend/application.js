@@ -87,6 +87,7 @@ const guideTag = require('../model/guideTag');
 const postTag = require('../model/postTag');
 const userCheckIn = require('../model/userCheckIn');
 const userCheckInRecord = require('../model/userCheckInRecord');
+const worksTypeProfessionRelation = require('../model/worksTypeProfessionRelation');
 
 const product = require('../model/product');
 const prize = require('../model/prize');
@@ -375,6 +376,7 @@ module.exports = {
         postTag: postTag(this),
         userCheckIn: userCheckIn(this),
         userCheckInRecord: userCheckInRecord(this),
+        worksTypeProfessionRelation: worksTypeProfessionRelation(this),
 
         product: product(this),
         prize: prize(this),

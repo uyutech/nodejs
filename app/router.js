@@ -16,6 +16,14 @@ module.exports = app => {
   app.get('/d/works/:worksId', 'd.works.index');
   app.get('/d/works/:worksId/:workId', 'd.works.index');
   app.get('/d/post/:id', 'd.post.index');
+  app.get('/d/upload', app.middlewares.needLogin(), 'd.upload.index');
+
+  app.get('/m', 'm.index.index');
+  app.get('/m/works/:worksId', 'm.works.index');
+  app.get('/m/works/:worksId/:workId', 'm.works.index');
+  app.get('/m/post/:id', 'm.post.index');
+  app.get('/m/upload', app.middlewares.needLogin(), 'd.upload.index');
+
   app.get('/d/ysjxy', 'd.ysjxy.index');
   app.get('/m/ysjxy', 'd.ysjxy.index');
   app.get('/d/ysjxy/fc', app.middlewares.needLogin(), 'd.ysjxy.fc');
@@ -56,10 +64,10 @@ module.exports = app => {
   app.post('/d/jsgm/update', app.middlewares.needLoginJson(), 'jsgm.update');
   app.post('/m/jsgm/update', app.middlewares.needLoginJson(), 'jsgm.update');
 
-  app.get('/m', 'm.index.index');
-  app.get('/m/works/:worksId', 'm.works.index');
-  app.get('/m/works/:worksId/:workId', 'm.works.index');
-  app.get('/m/post/:id', 'm.post.index');
+  app.get('/d/sczl', 'sczl.index');
+  app.get('/m/sczl', 'sczl.index');
+  app.get('/d/sczl/upload', 'sczl.upload');
+  app.get('/m/sczl/upload', 'sczl.upload');
 
   app.post('/api/passport/login', 'api.passport.login');
   app.post('/api/passport/loginOut', 'api.passport.loginOut');

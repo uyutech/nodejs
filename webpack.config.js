@@ -42,6 +42,7 @@ module.exports = {
     // dupload: './app/assets/d/upload/index.jsx',
     // dguide: './app/assets/d/guide/index.jsx',
     dpost: './app/assets/d/post/index.jsx',
+    dupload: './app/assets/d/upload/index.jsx',
     cindex: './app/assets/cms/index/index.jsx',
     // dcircle: './app/assets/d/circle/index.jsx',
     // duser: './app/assets/d/user/index.jsx',
@@ -64,6 +65,9 @@ module.exports = {
     jsgm_prize: './app/assets/jsgm/prize/index.jsx',
     jsgm_join: './app/assets/jsgm/join/index.jsx',
     jsgm_single: './app/assets/jsgm/single/index.jsx',
+    sczl_common: './app/assets/sczl/common/index.js',
+    sczl_home: './app/assets/sczl/home/index.jsx',
+    sczl_upload: './app/assets/sczl/upload/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

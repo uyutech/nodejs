@@ -1,0 +1,121 @@
+/**
+ * Created by army8735 on 2018/8/15.
+ */
+
+body{
+  padding-top:34%;
+  background:#ede0d0 url(//zhuanquan.xin/img/975c78f7c81a46261efc398051e14739.jpg) no-repeat center 0;
+  background-size:100% auto;
+}
+
+@media screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 2), screen and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 3) {
+  body{
+    background-image:url(//zhuanquan.xin/img/975c78f7c81a46261efc398051e14739.jpg-750__80);
+  }
+}
+
+.home{
+  margin:0.1rem auto;
+  width:10rem;
+  .c{
+    padding:0.2rem;
+    border:0.02rem solid #c7a751;
+  }
+  .tab{
+    li{
+      display:inline-block;
+      width:50%;
+      font-size:0.32rem;
+      text-align:center;
+      height:0.54rem;
+      color:#c7a751;
+      cursor:pointer;
+      &.cur{
+        color:#882925;
+        cursor:default;
+      }
+    }
+  }
+  h3{
+    margin:0.1rem 0;
+    font-size:0.2rem;
+    text-align:center;
+    color:#882925;
+  }
+  p{
+    text-indent:2em;
+  }
+  .origin{
+    margin:0.1rem 0;
+    li{
+      float:left;
+      position:relative;
+      margin-bottom:0.05rem;
+      padding-left:0.6rem;
+      width:4rem;
+      height:0.5rem;
+      background:rgba(255, 255, 255, 0.3);
+      border-radius:0.05rem;
+      &:nth-child(2n) {
+        margin-left:0.2rem;
+      }
+    }
+    .pic{
+      position:absolute;
+      left:0;
+      top:0;
+      width:0.5rem;
+      height:0.5rem;
+      img{
+        display:block;
+        width:100%;
+        height:100%;
+        border-radius:0.05rem;
+      }
+    }
+    .txt{
+      float:left;
+      h5{
+        margin-top:0.02rem;
+        font-size:0.16rem;
+        font-weight:400;
+      }
+      span{
+        margin-right:0.02rem;
+      }
+    }
+    .download{
+      float:right;
+      padding-right:0.2rem;
+      height:100%;
+      line-height:0.54rem;
+      a{
+        margin-left:0.1rem;
+        color:#882925;
+      }
+    }
+  }
+  .upload{
+    margin:0.3rem auto 0;
+    display:block;
+    width:2.94rem;
+    height:0.69rem;
+    background:url(../../rhyme/ysjxy/upload.png) no-repeat center;
+    background-size:contain;
+    text-indent:9999rem;
+    white-space:nowrap;
+    overflow:hidden;
+  }
+  .bot{
+    margin:0.1rem auto;
+    width:5rem;
+    .i1{
+      width:2rem;
+      vertical-align:middle;
+    }
+    .i2{
+      width:1rem;
+      vertical-align:middle;
+    }
+  }
+}

@@ -2,3 +2,94 @@
  * Created by army8735 on 2017/10/15.
  */
 
+#page > .upload{
+  padding-top:0.1rem;
+  .works-type{
+    margin:0.1rem 0;
+    li{
+      display:inline-block;
+      margin-right:0.1rem;
+      padding:0 0.05rem;
+      height:0.3rem;
+      line-height:0.3rem;
+      border:1px solid #EEE;
+      border-radius:0.05rem;
+      input{
+        margin-right:0.05rem;
+      }
+    }
+  }
+  .next{
+    margin:0 auto;
+    width:1.5rem;
+    height:0.5rem;
+    color:#FFF;
+    background:#409EFF;
+    border-radius:0.05rem;
+    border:none;
+    font-size:0.2rem;
+    cursor:pointer;
+    &:disabled{
+      background:#999;
+      color:#CCC;
+      cursor:wait;
+    }
+  }
+  .con{
+    position:relative;
+    font-size:0.14rem;
+    .line{
+      margin-bottom:0.1rem;
+    }
+    label{
+      display:inline-block;
+      margin-right:0.1rem;
+      width:1rem;
+      text-align:right;
+    }
+    .required:before{
+      margin-right:0.05rem;
+      color:#F33;
+      content:'*';
+    }
+    input[type="text"]{
+      padding:0 0.05rem;
+      width:3rem;
+      height:0.3rem;
+      border:1px solid #EEE;
+      border-radius:0.05rem;
+    }
+    textarea{
+      padding:0.03rem 0.05rem;
+      width:6rem;
+      height:1.1rem;
+      border:1px solid #EEE;
+      border-radius:0.05rem;
+      resize:none;
+      vertical-align:top;
+    }
+    .poster{
+      position:absolute;
+      top:0;
+      right:0;
+      width:1.6rem;
+      height:1.6rem;
+      line-height:1.6rem;
+      text-align:center;
+      border:1px dashed #EEE;
+      border-radius:0.05rem;
+      overflow:hidden;
+      &:before{
+        content:'点击上传作品封面';
+      }
+      input{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+        opacity:0;
+      }
+    }
+  }
+}

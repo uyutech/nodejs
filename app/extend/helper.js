@@ -70,7 +70,11 @@ let helper = {
           <li><a href="/"
                  class="${pageId === 0 ? 'cur' : ''}">首页</a></li>
           ${session.uid
-            ? '<li><a href="http://ugc.circling.cc">上传作品</a></li><li class="post">画圈</li>'
+            ? `<li>
+                 <a href="/upload"
+                    class="${pageId === 12 ? 'cur' : ''}">上传作品</a>
+               </li>
+               <li class="post">画圈</li>`
             : ''}
           <li>
           ${session.uid

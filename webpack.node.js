@@ -40,6 +40,7 @@ module.exports = {
     // dupload: './app/view/d/upload.jsx',
     // dguide: './app/view/d/guide.jsx',
     dpost: './app/view/d/post.jsx',
+    dupload: './app/view/d/upload.jsx',
     cindex: './app/view/cms/index.jsx',
     // dcircle: './app/view/d/circle.jsx',
     // duser: './app/view/d/user.jsx',
@@ -61,6 +62,8 @@ module.exports = {
     jsgm_prize: './app/view/jsgm/prize.jsx',
     jsgm_join: './app/view/jsgm/join.jsx',
     jsgm_single: './app/view/jsgm/single.jsx',
+    sczl_home: './app/view/sczl/home.jsx',
+    sczl_upload: './app/view/sczl/upload.jsx',
   },
   output: {
     path: __dirname + '/app/view',

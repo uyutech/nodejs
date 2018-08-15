@@ -725,6 +725,44 @@ class Service extends egg.Service {
     });
     return res;
   }
+
+  async sczlOriginWorks() {
+    const { app, service } = this;
+    let cacheKey = 'sczlOriginWorks';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.activityWorks.findAll({
+        attributes: [
+          ['works_id', 'worksId'],
+          ['origin_url', 'originUrl'],
+          ['accompany_url', 'accompanyUrl']
+        ],
+        where: {
+          activity_id: 2,
+        },
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let idList = res.map((item) => {
+      return item.worksId;
+    });
+    let [works, collection] = await Promise.all([
+      service.works.infoListPlusFull(idList),
+      service.works.collectionListFull(idList, undefined, true)
+    ]);
+    works.forEach((item, i) => {
+      if(item) {
+        item.collection = collection[i];
+        item.originUrl = res[i].originUrl;
+        item.accompanyUrl = res[i].accompanyUrl;
+      }
+    });
+    return works;
+  }
 }
 
 module.exports = Service;

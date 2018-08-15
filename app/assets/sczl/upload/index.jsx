@@ -1,5 +1,5 @@
 /**
- * Created by army8735 on 2017/10/15.
+ * Created by army8735 on 2018/8/15.
  */
 
 'use strict';
@@ -9,5 +9,5 @@ import './index.less';
 import Upload from './Upload.jsx';
 
 let upload = migi.preExist(
-  <Upload worksTypeList={ $CONFIG.worksTypeList }/>
+  <Upload originWorks={ $CONFIG.originWorks }/>
 );
