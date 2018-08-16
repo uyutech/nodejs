@@ -4,8 +4,9 @@
 
 'use strict';
 
-import $net from "../../d/common/net";
-import $util from "../../d/common/util";
+import SparkMd5 from 'spark-md5';
+import $net from '../../d/common/net';
+import $util from '../../d/common/util';
 
 class Upload extends migi.Component {
   constructor(...data) {
@@ -196,17 +197,15 @@ class Upload extends migi.Component {
     if(self.uploading) {
       return;
     }
-    $net.postJSON('upload', {
+    $net.postJSON('join', {
       originId: self.originId,
       audioUrl: self.audioUrl,
       describe: self.describe,
       imgUrl: self.imgUrl,
     }, function(res) {
       if(res.success) {
-        alert('恭喜你上传成功啦！\n' +
-          '你可以继续上传其他参赛作品~\n' +
-          '但请勿重复提交同以作品~如需修改，请联系@异世谣 官博。')
-        location.href = '/ysjxy/fc/' + res.data.id;
+        alert('#新起点，新奇点##2018 西安曲漫#\n我参与了丝绸之路古风歌曲翻唱活动\n@水墨映像CINK');
+        location.href = '/sczl/works/' + res.data.id;
       }
       else {
         alert(res.message || $util.ERROR_MESSAGE);

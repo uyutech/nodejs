@@ -763,6 +763,102 @@ class Service extends egg.Service {
     });
     return works;
   }
+
+  async sczlUpload(uid, offset, limit, sort) {
+    let [data, count] = await Promise.all([
+      this.sczlUploadData(uid, offset, limit, sort),
+      this.sczlUploadCount()
+    ]);
+    return {
+      data,
+      count,
+    };
+  }
+
+  async sczlUploadData(uid, offset, limit, sort) {
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 1;
+    if(offset < 0 || limit < 1) {
+      return;
+    }
+    const { app, service } = this;
+    let cacheKey = 'sczlUploadData_' + offset + '_' + limit + '_' + sort;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      let order = sort === 0 ? [
+        ['create_time', 'DESC']
+      ] : [
+        ['popular', 'DESC'],
+        ['create_time', 'DESC']
+      ];
+      res = await app.model.activityUpload.findAll({
+        attributes: [
+          'id',
+          ['works_id', 'worksId'],
+          ['user_id', 'userId']
+        ],
+        where: {
+          activity_id: 2,
+        },
+        order,
+        offset,
+        limit,
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let uploadIdList = res.map((item) => {
+      return item.id;
+    });
+    let worksIdList = res.map((item) => {
+      return item.worksId;
+    });
+    let userIdList = res.map((item) => {
+      return item.userId;
+    });
+    let [voteCountList, worksList, collectionList, userList] = await Promise.all([
+      this.voteCountList(uploadIdList, 1),
+      service.works.infoListPlusCount(worksIdList),
+      service.works.collectionListFull(worksIdList),
+      service.user.infoList(userIdList)
+    ]);
+    res.forEach((item, i) => {
+      item.voteCount = voteCountList[i];
+      item.works = worksList[i];
+      item.user = userList[i];
+      item.collection = collectionList[i];
+    });
+    return res;
+  }
+
+  async sczlUploadCount() {
+    const { app } = this;
+    let cacheKey = 'sczlUploadCount';
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      return JSON.parse(res);
+    }
+    res = await app.model.activityUpload.findOne({
+      attributes: [
+        [Sequelize.fn('COUNT', '*'), 'num']
+      ],
+      where: {
+        activity_id: 2,
+      },
+      raw: true,
+    });
+    if(res) {
+      res = res.num || 0;
+    }
+    else {
+      res = 0;
+    }
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    return res;
+  }
 }
 
 module.exports = Service;

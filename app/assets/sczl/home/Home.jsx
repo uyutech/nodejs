@@ -4,26 +4,40 @@
 
 'use strict';
 
-import $util from "../../d/common/util";
+import $net from '../../d/common/net';
+import $util from '../../d/common/util';
+import Page from '../../d/component/page/Page.jsx';
 
 class Home extends migi.Component {
   constructor(...data) {
     super(...data);
     this.index = 0;
+    this.sort = 0;
+    this.worksList = this.props.worksList.data;
+    this.count = this.props.worksList.count;
   }
   @bind index
-  clickTab(e, vd, tvd) {
+  @bind sort
+  @bind worksList
+  @bind count
+  clickIndex(e, vd, tvd) {
     if(this.index === tvd.props.rel) {
       return;
     }
     this.index = tvd.props.rel;
+  }
+  clickSort(e, vd, tvd) {
+    if(this.sort === tvd.props.rel) {
+      return;
+    }
+    this.sort = tvd.props.rel;
   }
   render() {
     let originWorks = this.props.originWorks;
     return <div class="home">
       <div class="c">
         <ul class="tab"
-            onClick={ { li: this.clickTab } }>
+            onClick={ { li: this.clickIndex } }>
           <li class={ this.index === 0 ? ' cur' : '' }
               rel={ 0 }>活动介绍</li>
           <li class={ this.index === 1 ? ' cur' : '' }
@@ -77,6 +91,54 @@ class Home extends migi.Component {
           <a href="/sczl/upload" class="upload" target="_blank">我要参赛</a>
         </div>
         <div class={ this.index === 1 ? '' : 'fn-hide' }>
+          <ul class="sort fn-clear"
+              onClick={ { li: this.clickSort } }>
+            <li class={ this.sort === 0 ? 'cur' : '' }
+                rel={ 0 }>最新</li>
+            <li class={ this.sort === 1 ? 'cur' : '' }
+                rel={ 1 }>最热</li>
+          </ul>
+          <ul class="fc-list fn-clear"
+              onClick={ { '.vote': this.clickVote } }>
+            {
+              this.worksList.map((item) => {
+                let pic = item.user.headUrl;
+                item.collection.forEach((item) => {
+                  if(item.kind === 3) {
+                    pic = item.url;
+                  }
+                });
+                return <li>
+                  <a class="pic"
+                     href={ '/works/' + item.works.id }
+                     target="_blank">
+                    <img src={ $util.img(pic, 480, 480, 80) }/>
+                    <span>No.{ item.id }</span>
+                  </a>
+                  <div class="txt">
+                    <a class="ti"
+                       href={ '/ysjxy/fc/' + item.id }
+                       target="_blank">{ item.works.title }</a>
+                    <p class="er">参赛者：<span>{ item.user.nickname }</span></p>
+                    <p class="desc">{ item.works.describe }</p>
+                    <p class="count"><strong>{ item.voteCount }</strong>票</p>
+                    <div class="btn">
+                      <a class="share"
+                         href={ 'http://service.weibo.com/share/share.php?url='
+                         + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
+                         + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#新起点，新奇点##2018 西安曲漫# 我参与了丝绸之路古风歌曲翻唱活动 @水墨映像CINK')
+                         + '&searchPic=false&style=number' }
+                         target="_blank">分享</a>
+                    </div>
+                  </div>
+                </li>;
+              })
+            }
+          </ul>
+          <Page index={ 1 }
+                total={ Math.ceil(this.count / 10) }
+                ref="page"
+                on-page={ this.page }/>
         </div>
       </div>
       <div class="bot">

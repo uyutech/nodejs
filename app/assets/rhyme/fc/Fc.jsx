@@ -284,7 +284,7 @@ class Upload extends migi.Component {
       if(res.success) {
         alert('恭喜你上传成功啦！\n' +
           '你可以继续上传其他参赛作品~\n' +
-          '但请勿重复提交同以作品~如需修改，请联系@异世谣 官博。')
+          '但请勿重复提交同以作品~如需修改，请联系@异世谣 官博。');
         location.href = '/ysjxy/fc/' + res.data.id;
       }
       else {

@@ -491,13 +491,13 @@ class Controller extends egg.Controller {
         );
       }
       createList = await Promise.all(query);
-      await app.model.authorCommentRelation.create({
-        author_id: authorId,
-        comment_id: createList[1].id,
-      }, {
-        transaction,
-        raw: true,
-      });
+      // await app.model.authorCommentRelation.create({
+      //   author_id: authorId,
+      //   comment_id: createList[1].id,
+      // }, {
+      //   transaction,
+      //   raw: true,
+      // });
       await transaction.commit();
       let fc = await app.model.activityUpload.create({
         activity_id: 1,

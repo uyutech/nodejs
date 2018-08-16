@@ -10,9 +10,11 @@ export default function(data) {
   migi.resetUid();
 
   let originWorks = data.originWorks;
+  let worksList = data.worksList;
 
   let home = migi.preRender(
-    <Home originWorks={ originWorks }/>
+    <Home originWorks={ originWorks }
+          worksList={ worksList }/>
   );
 
   return `<!DOCTYPE html>
@@ -27,6 +29,7 @@ ${home}
 <script>
   ${data.helper.$CONFIG}
   $CONFIG.originWorks = ${data.helper.stringify(originWorks)};
+  $CONFIG.worksList = ${data.helper.stringify(worksList)};
 </script>
 <script src="${data.helper.getAssetUrl('/sczl_common.js')}" defer="defer"></script>
 <script src="${data.helper.getAssetUrl('/sczl_home.js')}" defer="defer"></script>
