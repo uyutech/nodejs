@@ -14,30 +14,14 @@ class Controller extends egg.Controller {
     let worksTypeIdList = worksTypeList.map((item) => {
       return item.id;
     });
-    let relWorkTypeList = await service.worksType.workTypeList(worksTypeIdList);
-    let workTypeIdList = [];
-    let workTypeIdHash = {};
-    relWorkTypeList.forEach((list) => {
-      list.forEach((item) => {
-        if(item.upload > 0 && !workTypeIdHash[item.workType]) {
-          workTypeIdHash[item.workType] = true;
-          workTypeIdList.push(item.workType);
-        }
-      });
-    });
-    let workTypeList = await service.workType.infoList(workTypeIdList);
-    let workTypeHash = {};
-    workTypeList.forEach((item) => {
-      workTypeHash[item.id] = item;
-    });
-    relWorkTypeList.forEach((list, i) => {
-      worksTypeList[i].status = undefined;
-      let workTypeList = list.map((item) => {
-        return workTypeHash[item.workType];
-      });
-      worksTypeList[i].workTypeList = workTypeList.filter((item) => {
-        return item;
-      });
+    let [workTypeList, professionList] = await Promise.all([
+      service.worksType.workTypeList(worksTypeIdList),
+      service.worksType.professionList(worksTypeIdList)
+    ]);
+    worksTypeList.forEach((item, i) => {
+      item.status = undefined;
+      item.workTypeList = workTypeList[i];
+      item.professionList = professionList[i];
     });
     await ctx.render('dupload', {
       uid,

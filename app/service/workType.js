@@ -208,7 +208,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || [];
         cache[i] = temp;
-        app.redis.setex('workTypeProfession_' + id, app.config.redis.longTime, JSON.stringify(temp));
+        app.redis.setex('workTypeProfession_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     let professionIdHash = {};
@@ -228,12 +228,13 @@ class Service extends egg.Service {
     });
     return cache.map((item) => {
       let list = [];
-      item.forEach((rel, i) => {
+      item.forEach((rel) => {
         let profession = professionHash[rel.professionId];
         if(profession) {
-          profession.show = rel.show;
-          profession.required = rel.required;
-          list.push(profession);
+          let data = Object.assign({}, profession);
+          data.show = rel.show;
+          data.required = rel.required;
+          list.push(data);
         }
       });
       return list;

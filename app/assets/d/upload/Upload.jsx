@@ -12,6 +12,8 @@ class Upload extends migi.Component {
     let self = this;
     self.worksTypeList = self.props.worksTypeList;
     self.worksType = 1;
+    self.professionList = self.worksTypeList[0].professionList;
+    self.workTypeList = self.worksTypeList[0].workTypeList;
     self.on(migi.Event.DOM, function() {
     });
   }
@@ -20,6 +22,8 @@ class Upload extends migi.Component {
   @bind worksTypeList
   @bind worksName
   @bind worksDesc
+  @bind professionList
+  @bind workTypeList
   change(e) {
     let file = e.target.files[0];
     let size = file.size;
@@ -41,6 +45,12 @@ class Upload extends migi.Component {
   }
   next() {
     this.worksType = this.curWorksType;
+    for(let i = 0; i < this.worksTypeList.length; i++) {
+      if(this.worksTypeList[i].id === this.worksType) {
+        this.professionList = this.worksTypeList[i].professionList;
+        break;
+      }
+    }
   }
   render() {
     return <div class="upload">
@@ -75,6 +85,22 @@ class Upload extends migi.Component {
         <div class="poster">
           <input type="file" ref="file"/>
         </div>
+        {
+          (this.professionList || []).map((item) => {
+            return <div class="line">
+              <label class={ item.required ? 'required' : '' }>{ item.name }</label>
+              <input type="text" value={ item.value }
+                     placeholder={ '请输入' + item.name }/>
+            </div>;
+          })
+        }
+        <ul class="add-more">
+          {
+            (this.worksTypeList || []).map((item) => {
+              return <li>{ item.name }</li>;
+            })
+          }
+        </ul>
       </div>
     </div>;
   }
