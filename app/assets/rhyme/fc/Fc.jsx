@@ -194,7 +194,7 @@ class Upload extends migi.Component {
     let file = e.target.files[0];
     let size = file.size;
     if(size && size > 1024 * 1024 * 200) {
-      alert('文件不能超过2t00M！');
+      alert('文件不能超过200M！');
       return;
     }
     self.isUploadingVideo = true;

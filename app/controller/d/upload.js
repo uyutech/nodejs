@@ -18,10 +18,35 @@ class Controller extends egg.Controller {
       service.worksType.workTypeList(worksTypeIdList),
       service.worksType.professionList(worksTypeIdList)
     ]);
+    let workTypeIdList = [];
+    let workTypeIdHash = {};
+    workTypeList.forEach((list) => {
+      list.forEach((item) => {
+        if(!workTypeIdHash[item.id]) {
+          workTypeIdHash[item.id] = true;
+          workTypeIdList.push(item.id);
+        }
+      });
+    });
+    let workTypeProfessionList = await service.workType.professionList(workTypeIdList);
+    let workTypeProfessionHash = {};
+    workTypeProfessionList.forEach((list, i) => {
+      list = list.filter((item) => {
+        return item.show;
+      });
+      workTypeProfessionHash[workTypeIdList[i]] = list;
+    });
+    workTypeList.forEach((list) => {
+      list.forEach((item) => {
+        item.professionList = workTypeProfessionHash[item.id];
+      });
+    });
     worksTypeList.forEach((item, i) => {
       item.status = undefined;
       item.workTypeList = workTypeList[i];
-      item.professionList = professionList[i];
+      item.professionList = professionList[i].filter((item) => {
+        return item.show;
+      });
     });
     await ctx.render('dupload', {
       uid,

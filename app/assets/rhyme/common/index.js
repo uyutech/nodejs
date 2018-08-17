@@ -2,7 +2,8 @@
  * Created by army on 2017/7/9.n
  */
 
-import 'migi-es6-shim';
+import 'es5-shim';
+import 'es6-shim';
 import 'migi';
 import $ from './jquery-3.2.1';
 import util from './util';

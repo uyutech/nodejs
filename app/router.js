@@ -88,6 +88,8 @@ module.exports = app => {
 
   app.post('/api/my/allIdentities', app.middlewares.needLoginJson(), 'api.my.allIdentities');
 
+  app.post('/api/upload', app.middlewares.needLoginJson(), 'api.upload.index');
+
   app.get('/api/count/index', 'api.count.index');
 
   app.get('/cms/index', 'cms.index');

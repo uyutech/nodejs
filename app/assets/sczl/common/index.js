@@ -4,7 +4,8 @@
 
 'use strict';
 
-import 'migi-es6-shim';
+import 'es5-shim';
+import 'es6-shim';
 import 'migi';
 import $ from '../../d/common/jquery-3.2.1';
 import cookie from '../../d/common/cookie';

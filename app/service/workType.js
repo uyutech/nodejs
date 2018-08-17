@@ -26,7 +26,8 @@ class Service extends egg.Service {
     res = await app.model.workType.findOne({
       attributes: [
         'id',
-        'name'
+        'name',
+        'kind'
       ],
       where: {
         id,
@@ -77,7 +78,8 @@ class Service extends egg.Service {
       let res = await app.model.workType.findAll({
         attributes: [
           'id',
-          'name'
+          'name',
+          'kind'
         ],
         where: {
           id: noCacheIdList,

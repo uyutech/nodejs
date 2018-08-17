@@ -79,8 +79,14 @@
       border:1px dashed #EEE;
       border-radius:0.05rem;
       overflow:hidden;
-      &:before{
-        content:'点击上传作品封面';
+      img{
+        position:absolute;
+        left:0;
+        top:50%;
+        max-width:100%;
+        max-height:100%;
+        object-fit:contain;
+        transform:translateY(-50%);
       }
       input{
         position:absolute;
@@ -92,14 +98,15 @@
       }
     }
     .add-more{
-      margin:0.3rem 0;
+      margin:0.2rem 0 0;
       padding:0.2rem;
       border:1px solid #EEE;
-      border-radius:0.05rem;
-      &:before{
-        content:'继续添加：';
+      border-bottom:none;
+      dt{
+        display:inline-block;
+        margin-right:0.1rem;
       }
-      li{
+      dd{
         display:inline-block;
         margin-right:0.1rem;
         padding:0 0.1rem;
@@ -113,6 +120,132 @@
           border-color:#409EFF;
         }
       }
+    }
+    .sub-type{
+      background:#f5f7fa;
+      border:1px solid #EEE;
+      border-top-style:dotted;
+      border-bottom-style:dotted;
+      li{
+        position:relative;
+        display:inline-block;
+        padding:0 0.05rem 0 0.15rem;
+        height:0.3rem;
+        line-height:0.3rem;
+        background:#FFF;
+        text-align:center;
+        border-right:1px solid #EEE;
+        &.cur{
+          color:#409EFF;
+          &:after{
+            position:absolute;
+            left:0;
+            bottom:-1px;
+            width:100%;
+            height:1px;
+            background:#FFF;
+            content:' ';
+          }
+        }
+        span{
+          vertical-align:middle;
+        }
+        b{
+          display:inline-block;
+          margin-left:0.02rem;
+          width:0.2rem;
+          height:0.2rem;
+          background:url(close.png) no-repeat center;
+          background-size:0.12rem auto;
+          vertical-align:middle;
+          cursor:pointer;
+          opacity:0.3;
+          border-radius:100%;
+        }
+        &:hover{
+          b{
+            opacity:1;
+            &:hover{
+              background-color:#F0F0F0;
+            }
+          }
+        }
+      }
+    }
+    .work-list{
+      margin-bottom:0.05rem;
+      padding:0.2rem;
+      border:1px solid #EEE;
+      border-top:none;
+      .up{
+        position:relative;
+        margin-left:0.9rem;
+      }
+      .btn{
+        position:relative;
+        width:1rem;
+        height:0.3rem;
+        line-height:0.3rem;
+        text-align:center;
+        color:#FFF;
+        background:#409EFF;
+        border-radius:0.05rem;
+        border:none;
+        font-size:0.14rem;
+        cursor:pointer;
+        overflow:hidden;
+        &.disabled{
+          background:#999;
+          color:#CCC;
+          cursor:wait;
+        }
+        &:hover{
+          background:#60AEFF;
+          &.disabled{
+            background:#999;
+            color:#CCC;
+            cursor:wait;
+          }
+        }
+        input{
+          position:absolute;
+          left:0;
+          top:0;
+          width:100%;
+          height:100%;
+          opacity:0;
+          cursor:pointer;
+          &:disabled{
+            cursor:wait;
+          }
+        }
+      }
+      .progress{
+        position:absolute;
+        left:1.2rem;
+        top:0.12rem;
+        width:3rem;
+        height:0.05rem;
+        border:1px solid #EEE;
+        border-radius:0.02rem;
+        .num{
+          display:block;
+          font-size:0.12rem;
+          transform:translate(3.1rem, -0.06rem);
+        }
+        .percent{
+          position:absolute;
+          left:0;
+          top:0;
+          width:3rem;
+          height:0.05rem;
+          border-radius:0.02rem;
+          background:#90CEFF;
+        }
+      }
+    }
+    .next{
+      margin:0.1rem auto 0.2rem 4rem;
     }
   }
 }

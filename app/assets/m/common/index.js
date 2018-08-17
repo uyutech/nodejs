@@ -3,7 +3,8 @@
  * For my goddess.
  */
 
-import 'migi-es6-shim';
+import 'es5-shim';
+import 'es6-shim';
 import 'migi';
 import $ from 'anima-yocto-ajax';
 import env from './production';

@@ -19,6 +19,11 @@ module.exports = app => {
       allowNull: false,
       defaultValue: '',
     },
+    kind: {
+      type: Sequelize.TINYINT.UNSIGNED,
+      allowNull: false,
+      comment: '1视频，2音频，3图片，4文字',
+    },
   }, {
     indexes: [
     ],
