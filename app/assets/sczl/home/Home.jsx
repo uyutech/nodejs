@@ -32,6 +32,31 @@ class Home extends migi.Component {
     }
     this.sort = tvd.props.rel;
   }
+  clickVote(e, vd) {
+    let el = vd.element;
+    if(el.classList.contains('loading')) {
+      return;
+    }
+    if(el.classList.contains('voted')) {
+      return;
+    }
+    let id = vd.props.rel;
+    $net.postJSON('/sczl/vote', { id, type: 1, }, function(res) {
+      if(res.success) {
+        vd.parent.parent.find('.count strong').element.textContent = res.data.count;
+      }
+      else if(res.code === 1000) {
+        location.href = '/oauth/weibo?goto=' + encodeURIComponent(location.href);
+      }
+      else {
+        alert(res.message || $util.ERROR_MESSAGE);
+      }
+      el.classList.remove('loading');
+    }, function(res) {
+      alert(res.message || $util.ERROR_MESSAGE);
+      el.classList.remove('loading');
+    });
+  }
   render() {
     let originWorks = this.props.originWorks;
     return <div class="home">
@@ -110,7 +135,7 @@ class Home extends migi.Component {
                 });
                 return <li>
                   <a class="pic"
-                     href={ '/works/' + item.works.id }
+                     href={ '/sczl/single/' + item.id }
                      target="_blank">
                     <img src={ $util.img(pic, 480, 480, 80) }/>
                     <span>No.{ item.id }</span>
@@ -123,6 +148,9 @@ class Home extends migi.Component {
                     <p class="desc">{ item.works.describe }</p>
                     <p class="count"><strong>{ item.voteCount }</strong>票</p>
                     <div class="btn">
+                      <span class="vote"
+                            onClick={ this.clickVote }
+                            rel={ item.id }>投票</span>
                       <a class="share"
                          href={ 'http://service.weibo.com/share/share.php?url='
                          + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)

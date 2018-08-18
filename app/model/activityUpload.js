@@ -35,6 +35,11 @@ module.exports = app => {
       defaultValue: false,
       comment: '是否人气奖',
     },
+    dry: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      comment: '',
+    },
     prize: {
       type: Sequelize.TINYINT.UNSIGNED,
       allowNull: false,

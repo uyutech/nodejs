@@ -64,6 +64,7 @@ module.exports = {
     jsgm_single: './app/view/jsgm/single.jsx',
     sczl_home: './app/view/sczl/home.jsx',
     sczl_upload: './app/view/sczl/upload.jsx',
+    sczl_single: './app/view/sczl/single.jsx',
   },
   output: {
     path: __dirname + '/app/view',

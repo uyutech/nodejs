@@ -65,9 +65,6 @@ class FcSingle extends migi.Component {
             <p class="desc">{ single.works.describe }</p>
             <p class="count"><strong>{ single.voteCount }</strong>票</p>
             <div class="btn">
-              <span class="vote"
-                    onClick={ this.clickVote }
-                    rel={ single.id }>投票</span>
               <a class="share"
                  href={ 'http://service.weibo.com/share/share.php?url='
                  + encodeURIComponent('https://circling.cc/ysjxy/fc/' + single.id)

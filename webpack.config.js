@@ -68,6 +68,7 @@ module.exports = {
     sczl_common: './app/assets/sczl/common/index.js',
     sczl_home: './app/assets/sczl/home/index.jsx',
     sczl_upload: './app/assets/sczl/upload/index.jsx',
+    sczl_single: './app/assets/sczl/single/index.jsx',
   },
   output: {
     path: __dirname + '/app/public',

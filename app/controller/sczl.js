@@ -31,15 +31,53 @@ class Controller extends egg.Controller {
     });
   }
 
+  async single() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let id = ctx.params.id;
+    let [item] = await Promise.all([
+      service.activity.sczlItem(id, uid)
+    ]);
+    await ctx.render('sczl_single', {
+      item,
+    });
+  }
+
+  async vote() {
+    const { ctx, service, app } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let id = parseInt(body.id);
+    if(!id) {
+      return;
+    }
+    let res = await service.activity.vote(id, 1, uid);
+    if(res.success) {
+      ctx.body = ctx.helper.okJSON(res.data);
+      let count = res.data.count;
+      app.model.activityUpload.update({
+        popular: count,
+      }, {
+        where: {
+          id,
+        },
+      });
+    }
+    else {
+      ctx.body = ctx.helper.errorJSON(res.message);
+    }
+  }
+
   async join() {
     const { app, ctx, service } = this;
     let uid = ctx.session.uid;
     let body = ctx.request.body;
     let originId = parseInt(body.originId);
     let audioUrl = body.audioUrl;
+    let dry = body.dry;
     let imgUrl = body.imgUrl;
     let describe = body.describe || '';
-    if(!originId || !audioUrl) {
+    if(!originId || !audioUrl || !dry) {
       return;
     }
     let originWorks = await service.works.info(originId);
@@ -323,19 +361,13 @@ class Controller extends egg.Controller {
         );
       }
       createList = await Promise.all(query);
-      // await app.model.authorCommentRelation.create({
-      //   author_id: authorId,
-      //   comment_id: createList[createList.length - 1].id,
-      // }, {
-      //   transaction,
-      //   raw: true,
-      // });
       await transaction.commit();
       let res = await app.model.activityUpload.create({
         activity_id: 2,
         origin_id: originId,
         works_id: id,
         user_id: uid,
+        dry,
       }, {
         raw: true,
       });

@@ -859,6 +859,42 @@ class Service extends egg.Service {
     app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
+
+  async sczlItem(id, uid) {
+    const { app, service } = this;
+    let cacheKey = 'sczlItem_' + id;
+    let res = await app.redis.get(cacheKey);
+    if(res) {
+      res = JSON.parse(res);
+    }
+    else {
+      res = await app.model.activityUpload.findOne({
+        attributes: [
+          ['works_id', 'worksId'],
+          ['user_id', 'userId']
+        ],
+        where: {
+          id,
+        },
+        raw: true,
+      });
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
+    }
+    let worksId = res.worksId;
+    let userId = res.userId;
+    let [voteCount, works, collection, user] = await Promise.all([
+      this.voteCount(id, 1),
+      service.works.infoPlusCount(worksId),
+      service.works.collectionFull(worksId),
+      service.user.info(userId)
+    ]);
+    res.id = id;
+    res.voteCount = voteCount;
+    res.works = works;
+    res.user = user;
+    res.collection = collection;
+    return res;
+  }
 }
 
 module.exports = Service;

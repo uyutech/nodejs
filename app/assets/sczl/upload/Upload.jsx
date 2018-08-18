@@ -17,6 +17,9 @@ class Upload extends migi.Component {
   @bind audioUrl
   @bind audioProgress
   @bind isUploadingImg
+  @bind isUploadingAudio2
+  @bind audioUrl2
+  @bind audioProgress2
   @bind imgUrl
   @bind imgProgress
   @bind describe
@@ -27,6 +30,11 @@ class Upload extends migi.Component {
   }
   clickAudio(e) {
     if(this.isUploadingAudio) {
+      e.preventDefault();
+    }
+  }
+  clickAudio2(e) {
+    if(this.isUploadingAudio2) {
       e.preventDefault();
     }
   }
@@ -82,6 +90,70 @@ class Upload extends migi.Component {
           };
           xhr.upload.onprogress = function(e) {
             self.audioProgress = e.loaded / e.total;
+          };
+          xhr.send(form);
+        }
+        else {
+          alert(res.message || $util.ERROR_MESSAGE);
+        }
+      }, function(res) {
+        alert(res.message || $util.ERROR_MESSAGE);
+      });
+    };
+    fileReader.readAsArrayBuffer(file);
+  }
+  changeAudio2(e) {
+    let self = this;
+    if(self.isUploadingAudio2) {
+      e.preventDefault();
+      return;
+    }
+    let file = e.target.files[0];
+    let size = file.size;
+    if(size && size > 1024 * 1024 * 20) {
+      alert('文件不能超过20M！');
+      return;
+    }
+    self.isUploadingAudio2 = true;
+    self.audioProgress2 = 0;
+    let fileReader = new FileReader();
+    fileReader.onload = function() {
+      let spark = new SparkMd5.ArrayBuffer();
+      spark.append(fileReader.result);
+      let md5 = spark.end();
+      let name = md5 + '.mp3';
+      $net.postJSON('/h5/my/stsAudio', { name }, function(res) {
+        if(res.success) {
+          let data = res.data;
+          if(data.exist) {
+            self.isUploadingAudio2 = false;
+            self.audioUrl2 = '//zhuanquan.net.cn/audio/' + name;
+            self.audioProgress2 = 1;
+            return;
+          }
+          let key = data.prefix + name;
+          let policy = data.policy;
+          let signature = data.signature;
+          let host = data.host;
+          let accessKeyId = data.accessKeyId;
+          let form = new FormData();
+          form.append('key', key);
+          form.append('OSSAccessKeyId', accessKeyId);
+          form.append('success_action_status', 200);
+          form.append('policy', policy);
+          form.append('signature', signature);
+          form.append('file', file);
+          let xhr = new XMLHttpRequest();
+          xhr.open('post', host, true);
+          xhr.onload = function() {
+            if(xhr.status === 200) {
+              self.isUploadingAudio2 = false;
+              self.audioUrl2 = '//zhuanquan.net.cn/audio/' + name;
+              self.audioProgress2 = 1;
+            }
+          };
+          xhr.upload.onprogress = function(e) {
+            self.audioProgress2 = e.loaded / e.total;
           };
           xhr.send(form);
         }
@@ -194,18 +266,23 @@ class Upload extends migi.Component {
       alert('请先上传翻唱歌曲');
       return;
     }
+    if(!self.audioUrl2) {
+      alert('请先上传干音');
+      return;
+    }
     if(self.uploading) {
       return;
     }
     $net.postJSON('join', {
       originId: self.originId,
       audioUrl: self.audioUrl,
+      dry: self.audioUrl2,
       describe: self.describe,
       imgUrl: self.imgUrl,
     }, function(res) {
       if(res.success) {
         alert('#新起点，新奇点##2018 西安曲漫#\n我参与了丝绸之路古风歌曲翻唱活动\n@水墨映像CINK');
-        location.href = '/sczl/works/' + res.data.id;
+        location.href = '/sczl/single/' + res.data.id;
       }
       else {
         alert(res.message || $util.ERROR_MESSAGE);
@@ -250,6 +327,17 @@ class Upload extends migi.Component {
           <span style={ 'width:' + ((this.audioProgress || 0) * 100) + '%' }/>
         </div>
         <p>必需，请上传不超过20M的成品MP3音频文件。</p>
+        <div class="button">
+          <span>上传干音音频文件</span>
+          <input type="file"
+                 accept="audio/mpeg"
+                 onClick={ this.clickAudio2 }
+                 onChange={ this.changeAudio2 }/>
+        </div>
+        <div class="progress">
+          <span style={ 'width:' + ((this.audioProgress2 || 0) * 100) + '%' }/>
+        </div>
+        <p>必需，请上传不超过20M的成品MP3音频文件。干音只用于比赛评审。</p>
       </div>
       <div class="img">
         <div class="button">

@@ -68,8 +68,12 @@ module.exports = app => {
   app.get('/m/sczl', 'sczl.index');
   app.get('/d/sczl/upload', 'sczl.upload');
   app.get('/m/sczl/upload', 'sczl.upload');
+  app.get('/d/sczl/single/:id', 'sczl.single');
+  app.get('/m/sczl/single/:id', 'sczl.single');
   app.post('/d/sczl/join', app.middlewares.needLoginJson(), 'sczl.join');
   app.post('/m/sczl/join', app.middlewares.needLoginJson(), 'sczl.join');
+  app.post('/d/sczl/vote', 'sczl.vote');
+  app.post('/m/sczl/vote', 'sczl.vote');
 
   app.post('/api/passport/login', 'api.passport.login');
   app.post('/api/passport/loginOut', 'api.passport.loginOut');
