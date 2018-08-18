@@ -487,12 +487,14 @@ class Service extends egg.Service {
     let typeList = await service.workType.infoList(typeIdList);
     let typeHash = {};
     typeList.forEach((item) => {
-      typeHash[item.id] = item;
+      if(item) {
+        typeHash[item.id] = item;
+      }
     });
     cache.forEach((item) => {
       if(item) {
         item.kind = 2;
-        item.typeName = typeHash[item.type].name;
+        item.typeName = (typeHash[item.type] || {}).name;
       }
     });
     return cache;

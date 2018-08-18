@@ -4,111 +4,24 @@
 
 'use strict';
 
-module.exports = app => {
-  class Controller extends app.Controller {
-    * follow(ctx) {
-      let uid = ctx.session.uid;
-      let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.postServiceJSON2('api/author/SaveAuthorToUser', {
-        uid,
-        Author: authorID,
-      });
-      ctx.body = res.data;
+const egg = require('egg');
+
+const LIMIT = 10;
+
+class Controller extends egg.Controller {
+  async suggest() {
+    const { ctx, service } = this;
+    let uid = ctx.session.uid;
+    let body = ctx.request.body;
+    let name = (body.name || '').trim();
+    let offset = parseInt(body.offset) || 0;
+    if(!name) {
+      return ctx.body = ctx.helper.errorJSON('作者名不能为空');
     }
-    * unFollow(ctx) {
-      let uid = ctx.session.uid;
-      let authorID = ctx.request.body.authorID;
-      let res = yield ctx.helper.postServiceJSON2('api/author/RemoveAuthorToUser', {
-        uid,
-        Author: authorID,
-      });
-      ctx.body = res.data;
-    }
-    * commentList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetToAuthorMessage_List', {
-        uid,
-        AuthorID: body.authorID,
-        Skip: body.skip,
-        Take: body.take,
-        SortType: body.sortType,
-        MyComment: body.myComment,
-        CurrentCount: body.currentCount,
-      });
-      ctx.body = res.data;
-    }
-    * addComment(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let content = (body.content || '').trim();
-      if(content.length < 3 || content.length > 2048) {
-        return ctx.body = {
-          success: false,
-        };
-      }
-      ctx.logger.info('authorID %s parentID %s rootID %s', body.authorID, body.rootID, body.parentID);
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddAuthorComment', {
-        uid,
-        ParentID: body.parentID,
-        RootID: body.rootID,
-        SendContent: content,
-        AuthorID: body.authorID,
-      });
-      ctx.body = res.data;
-    }
-    * likeComment(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/AddCommentLike', {
-        uid,
-        CommentID: body.commentID,
-      });
-      ctx.body = res.data;
-    }
-    * delComment(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      ctx.logger.info('commentID %s', body.commentID);
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/DeleteCommentByID', {
-        uid,
-        CommentID: body.commentID,
-      });
-      ctx.body = res.data;
-    }
-    * subCommentList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/Users_Comment/GetTocomment_T_List', {
-        uid,
-        RootID: body.rootID,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
-    * maList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_WorkItems', {
-        uid,
-        AuthorID: body.authorID,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
-    * picList(ctx) {
-      let uid = ctx.session.uid;
-      let body = ctx.request.body;
-      let res = yield ctx.helper.postServiceJSON2('api/find/Hot_PicWorkItems', {
-        uid,
-        AuthorID: body.authorID,
-        Skip: body.skip,
-        Take: body.take,
-      });
-      ctx.body = res.data;
-    }
+    let res = await service.author.listByName(name, offset, LIMIT);
+    res.limit = LIMIT;
+    ctx.body = ctx.helper.okJSON(res);
   }
-  return Controller;
-};
+}
+
+module.exports = Controller;

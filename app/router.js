@@ -90,6 +90,8 @@ module.exports = app => {
   app.post('/api/work/addViews', 'api.work.addViews');
   app.post('/api/post/commentList', 'api.post.commentList');
 
+  app.post('/api/author/suggest', app.middlewares.needLoginJson(), 'api.author.suggest');
+
   app.post('/api/my/allIdentities', app.middlewares.needLoginJson(), 'api.my.allIdentities');
 
   app.post('/api/upload', app.middlewares.needLoginJson(), 'api.upload.index');

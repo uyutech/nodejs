@@ -14,8 +14,7 @@ module.exports = app => {
     },
     work_id: {
       type: Sequelize.BIGINT.UNSIGNED,
-      unique: true,
-      allowNull: false,
+      default: 0,
     },
     title: {
       type: Sequelize.STRING(128),

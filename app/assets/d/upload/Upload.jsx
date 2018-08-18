@@ -8,23 +8,27 @@ import SparkMd5 from 'spark-md5';
 import $net from '../../d/common/net';
 import $util from '../../d/common/util';
 
+let timeout;
+let ajax;
+let mouseenter;
+
 class Upload extends migi.Component {
   constructor(...data) {
     super(...data);
     let self = this;
     self.worksTypeList = self.props.worksTypeList;
-    self.worksType = 1;
-    self.professionList = self.worksTypeList[0].professionList;
     self.enablePoster = true;
-    self.workTypeList = self.worksTypeList[0].workTypeList;
-    let temp = [];
-    self.workTypeList.forEach((item) => {
-      if(item.upload === 0) {
-        temp.push(Object.assign({}, item));
-      }
-    });
-    self.workList = temp;
-    self.workListIndex = 0;
+    // self.worksType = 1;
+    // self.professionList = self.worksTypeList[0].professionList;
+    // self.workTypeList = self.worksTypeList[0].workTypeList;
+    // let temp = [];
+    // self.workTypeList.forEach((item) => {
+    //   if(item.upload === 0) {
+    //     temp.push(Object.assign({}, item));
+    //   }
+    // });
+    // self.workList = temp;
+    // self.workListIndex = 0;
     self.on(migi.Event.DOM, function() {
     });
   }
@@ -40,6 +44,10 @@ class Upload extends migi.Component {
   @bind workList
   @bind workListIndex
   @bind enable
+  @bind suggest
+  @bind suggestList
+  @bind suggestWork
+  @bind suggestListWork
   change(e) {
     let file = e.target.files[0];
     let size = file.size;
@@ -60,12 +68,62 @@ class Upload extends migi.Component {
     this.curWorksType = tvd.props.rel;
   }
   inputProfession(e, vd, tvd) {
+    let self = this;
     let index = tvd.props.rel;
-    let profession = this.professionList[index];
-    profession.value = e.target.value;
+    let value = e.target.value.trim();
+    let profession = self.professionList[index];
+    profession.author = undefined;
+    profession.value = value;
+    self.suggest = value ? index : -1;
     if(profession.required) {
-      this.checkEnable();
+      self.checkEnable();
     }
+    if(timeout) {
+      clearTimeout(timeout);
+    }
+    if(ajax) {
+      ajax.abort();
+    }
+    timeout = setTimeout(function() {
+      ajax = $net.postJSON('/api/author/suggest', { name: value }, function(res) {
+        if(res.success) {
+          let data = res.data;
+          self.suggestList = data.data;
+        }
+      });
+    }, 200);
+  }
+  focusIn(e, vd, tvd) {
+    let self = this;
+    let index = tvd.props.rel;
+    let profession = self.professionList[index];
+    if(profession.value) {
+      self.suggest = index;
+    }
+  }
+  focusOut() {
+    if(mouseenter) {
+      return;
+    }
+    let self = this;
+    self.suggest = -1;
+  }
+  mouseEnter(e, vd) {
+    mouseenter = true;
+  }
+  mouseLeave(e, vd) {
+    mouseenter = false;
+  }
+  clickAuthor(e, vd, tvd) {
+    let self = this;
+    let index = tvd.props.index;
+    let id = tvd.props.rel;
+    let value = tvd.props.title;
+    let profession = self.professionList[index];
+    profession.author = id;
+    profession.value = value;
+    self.professionList.splice(index, 1, profession);
+    self.suggest = -1;
   }
   next() {
     this.worksType = this.curWorksType;
@@ -78,14 +136,83 @@ class Upload extends migi.Component {
     }
     this.checkEnable();
   }
-  inputWorkProfession(e, vd, tvd) {
+  addWork(e, vd, tvd) {
+    let id = tvd.props.rel;
+    for(let i = 0; i < this.workTypeList.length; i++) {
+      let item = this.workTypeList[i];
+      if(item.id === id) {
+        this.workList.push(Object.assign({}, item));
+        this.checkEnable();
+        break;
+      }
+    }
+  }
+  delWork(e, vd, tvd) {
     let index = tvd.props.rel;
-    let work = this.workList[this.workListIndex];
-    let profession = work.professionList[index];
-    profession.value = e.target.value;
-    if(profession.required) {
+    this.workList.splice(index, 1);
+    this.checkEnable();
+  }
+  clickWork(e, vd, tvd) {
+    let index = tvd.props.rel;
+    if(this.workListIndex !== index) {
+      this.workListIndex = index;
       this.checkEnable();
     }
+  }
+  inputWorkProfession(e, vd, tvd) {
+    let self = this;
+    let index = tvd.props.rel;
+    let value = e.target.value.trim();
+    let work = self.workList[self.workListIndex];
+    let profession = work.professionList[index];
+    profession.author = undefined;
+    profession.value = e.target.value;
+    self.suggestWork = value ? index : -1;
+    if(profession.required) {
+      self.checkEnable();
+    }
+    if(timeout) {
+      clearTimeout(timeout);
+    }
+    if(ajax) {
+      ajax.abort();
+    }
+    timeout = setTimeout(function() {
+      ajax = $net.postJSON('/api/author/suggest', { name: value }, function(res) {
+        if(res.success) {
+          let data = res.data;
+          self.suggestListWork = data.data;
+        }
+      });
+    }, 200);
+  }
+  focusInWork(e, vd, tvd) {
+    let self = this;
+    let work = self.workList[self.workListIndex];
+    let index = tvd.props.rel;
+    let profession = work.professionList[index];
+    if(profession.value) {
+      self.suggestWork = index;
+    }
+  }
+  focusOutWork() {
+    if(mouseenter) {
+      return;
+    }
+    let self = this;
+    self.suggestWork = -1;
+  }
+  clickAuthorWork(e, vd, tvd) {
+    let self = this;
+    let index = tvd.props.index;
+    let id = tvd.props.rel;
+    let value = tvd.props.title;
+    let work = self.workList[self.workListIndex];
+    let profession = work.professionList[index];
+    profession.author = id;
+    profession.value = value;
+    self.workList.splice(self.workListIndex, 1, work);
+    self.suggestWork = -1;
   }
   posterFile(e) {
     let self = this;
@@ -229,7 +356,7 @@ class Upload extends migi.Component {
             url += 'audio/';
           }
           else if(kind === 3) {
-            url = '//zhuanquan.net.cn/pic/';
+            url = '//zhuanquan.xyz/pic/';
           }
           url += name;
           if(data.exist) {
@@ -304,7 +431,7 @@ class Upload extends migi.Component {
     }
     for(let i = 0; i < self.workList.length; i++) {
       let work = self.workList[i];
-      for(let j = 0; i < work.professionList.length; i++) {
+      for(let j = 0; j < work.professionList.length; j++) {
         let item = work.professionList[j];
         if(item.required && (!item.value || !item.value.trim())) {
           self.enable = false;
@@ -330,23 +457,26 @@ class Upload extends migi.Component {
     let self = this;
     self.enable = false;
     let professionList = self.professionList.filter((item) => {
-      return item.value && item.value.trim();
+      return item.author || (item.value && item.value.trim());
     }).map((item) => {
       return {
         id: item.id,
-        value: item.value,
+        author: item.author,
+        value: item.author ? undefined : item.value,
       };
     });
     let workList = self.workList.map((item) => {
       return {
         kind: item.kind,
         value: item.value,
+        type: item.id,
         professionList: item.professionList.filter((item) => {
-          return item.value && item.value.trim();
+          return item.author || (item.value && item.value.trim());
         }).map((item) => {
           return {
             id: item.id,
-            value: item.value,
+            author: item.author,
+            value: item.author ? undefined : item.value,
           };
         })
       };
@@ -360,14 +490,18 @@ class Upload extends migi.Component {
       workList,
     }, function(res) {
       if(res.success) {
-        console.log(res);
+        let data = res.data;
+        // alert('上传成功，点击跳转作品页面。');
+        // location.href = '/works/' + data.id;
+        self.enable = true;
       }
       else {
         alert(res.message || $util.ERROR_MESSAGE);
+        self.enable = true;
       }
     }, function(res) {
       alert(res.message || $util.ERROR_MESSAGE);
-      self.uploading = false;
+      self.enable = true;
     });
   }
   render() {
@@ -410,6 +544,10 @@ class Upload extends migi.Component {
                  disabled={ !this.enablePoster }
                  onChange={ this.posterFile }/>
         </div>
+        <div onFocusin={ { input: this.focusIn } }
+             onFocusout={ { input: this.focusOut } }
+             onInput={ { input: this.inputProfession } }
+             onClick={ { '.author': this.clickAuthor } }>
         {
           (this.professionList || []).map((item, i) => {
             return <div class="line">
@@ -417,91 +555,121 @@ class Upload extends migi.Component {
               <input type="text"
                      value={ item.value }
                      placeholder={ '请输入' + item.name }
-                     rel={ i }
-                     onInput={ this.inputProfession }/>
+                     rel={ i }/>
+              <ul class={ 'suggest' + (this.suggest === i ? '' : ' fn-hide') }
+                  onMouseEnter={ this.mouseEnter }
+                  onMouseLeave={ this.mouseLeave }>
+              {
+                (this.suggestList || []).map((item) => {
+                  return <li class="author"
+                             rel={ item.id }
+                             title={ item.name }
+                             index={ i }>{ item.name }</li>;
+                })
+              }
+              </ul>
             </div>;
           })
         }
-        <dl class="add-more">
+        </div>
+        <dl class="add-more"
+            onClick={ { dd: this.addWork } }>
           <dt>添加子类型：</dt>
           {
             (this.workTypeList || []).map((item) => {
-              return <dd>{ item.name }</dd>;
+              return <dd rel={ item.id }>{ item.name }</dd>;
             })
           }
         </dl>
-        <ul class="sub-type">
-          {
-            (this.workList || []).map((item, i) => {
-              return <li class={ this.workListIndex === i ? 'cur' : '' }>
-                <span>{ item.name }</span>
-                <b rel={ i }/>
-              </li>;
-            })
-          }
+        <ul class="sub-type"
+            onClick={ { b: this.delWork, 'span': this.clickWork } }>
+        {
+          (this.workList || []).map((item, i) => {
+            return <li class={ this.workListIndex === i ? 'cur' : '' }>
+              <span rel={ i }>{ item.name }</span>
+              <b rel={ i }/>
+            </li>;
+          })
+        }
         </ul>
-        <ul class="work-list">
-          {
-            (this.workList || []).map((item, i) => {
-              return <li class={ this.workListIndex === i ? '' : 'fn-hide' }>
-                {
-                  (item.professionList || []).map((item2, j) => {
-                    return <div class="line">
-                      <label class={ item2.required ? 'required' : '' }>{ item2.name }</label>
-                      <input type="text"
-                             value={ item2.value }
-                             placeholder={ '请输入' + item2.name }
-                             rel={ j }
-                             onInput={ this.inputWorkProfession }/>
-                    </div>;
-                  })
-                }
-                {
-                  item.kind === 1 || item.kind === 2
-                    ? <div class="up">
-                        <div class={ 'btn' + (item.disabled ? ' disabled' : '') }>
-                          <span>{ item.kind === 1 ? '上传视频' : '上传音频' }</span>
-                          <input type="file"
-                                 rel={ i }
-                                 accept={ item.kind === 1 ? 'video/mp4' : 'audio/mpeg' }
-                                 onChange={ this.file }
-                                 disabled={ item.disabled }/>
-                        </div>
-                        <div class="progress">
-                          <span class="percent"
-                                style={ 'width:' + ((item.progress || 0) * 100) + '%' }/>
-                          <span class="num">{ (item.progress || 0).toFixed(2) * 100 + '%' }</span>
-                        </div>
+        <ul class="work-list"
+            onFocusin={ { 'input.text': this.focusInWork } }
+            onFocusout={ { 'input.text': this.focusOutWork } }
+            onInput={ { 'input.text': this.inputWorkProfession } }
+            onClick={ { '.author': this.clickAuthorWork } }>
+        {
+          (this.workList || []).map((item, i) => {
+            return <li class={ this.workListIndex === i ? '' : 'fn-hide' }>
+              {
+                (item.professionList || []).map((item2, j) => {
+                  return <div class="line">
+                    <label class={ item2.required ? 'required' : '' }>{ item2.name }</label>
+                    <input type="text"
+                           class="text"
+                           value={ item2.value }
+                           placeholder={ '请输入' + item2.name }
+                           rel={ j }/>
+                    <ul class={ 'suggest' + (this.suggestWork === j ? '' : ' fn-hide') }
+                        onMouseEnter={ this.mouseEnter }
+                        onMouseLeave={ this.mouseLeave }>
+                      {
+                        (this.suggestListWork || []).map((item) => {
+                          return <li class="author"
+                                     rel={ item.id }
+                                     title={ item.name }
+                                     index={ i }>{ item.name }</li>;
+                        })
+                      }
+                    </ul>
+                  </div>;
+                })
+              }
+              {
+                item.kind === 1 || item.kind === 2
+                  ? <div class="up">
+                      <div class={ 'btn' + (item.disabled ? ' disabled' : '') }>
+                        <span>{ item.kind === 1 ? '上传视频' : '上传音频' }</span>
+                        <input type="file"
+                               rel={ i }
+                               accept={ item.kind === 1 ? 'video/mp4' : 'audio/mpeg' }
+                               onChange={ this.file }
+                               disabled={ item.disabled }/>
                       </div>
-                    : ''
-                }
-                {
-                  item.kind === 3
-                    ? <div class="up">
-                        <div class={ 'btn' + (item.disabled ? ' disabled' : '') }>
-                          <span>上传图片</span>
-                          <input type="file"
-                                 rel={ i }
-                                 accept="image/*"
-                                 onChange={ this.file }
-                                 disabled={ item.disabled }/>
-                        </div>
-                        <div class="progress">
-                          <span class="percent"
-                                style={ 'width:' + ((item.progress || 0) * 100) + '%' }/>
-                          <span class="num">{ (item.progress || 0).toFixed(2) * 100 + '%' }</span>
-                        </div>
+                      <div class="progress">
+                        <span class="percent"
+                              style={ 'width:' + ((item.progress || 0) * 100) + '%' }/>
+                        <span class="num">{ (item.progress || 0).toFixed(2) * 100 + '%' }</span>
                       </div>
-                    : ''
-                }
-                {
-                  item.kind === 4
-                    ? <textarea placeholder="请输入内容"/>
-                    : ''
-                }
-              </li>;
-            })
-          }
+                    </div>
+                  : ''
+              }
+              {
+                item.kind === 3
+                  ? <div class="up">
+                      <div class={ 'btn' + (item.disabled ? ' disabled' : '') }>
+                        <span>上传图片</span>
+                        <input type="file"
+                               rel={ i }
+                               accept="image/*"
+                               onChange={ this.file }
+                               disabled={ item.disabled }/>
+                      </div>
+                      <div class="progress">
+                        <span class="percent"
+                              style={ 'width:' + ((item.progress || 0) * 100) + '%' }/>
+                        <span class="num">{ (item.progress || 0).toFixed(2) * 100 + '%' }</span>
+                      </div>
+                    </div>
+                  : ''
+              }
+              {
+                item.kind === 4
+                  ? <textarea placeholder="请输入内容"/>
+                  : ''
+              }
+            </li>;
+          })
+        }
         </ul>
         <button class="next"
                 disabled={ !this.enable }
