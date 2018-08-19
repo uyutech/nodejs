@@ -281,7 +281,7 @@ class Upload extends migi.Component {
       imgUrl: self.imgUrl,
     }, function(res) {
       if(res.success) {
-        alert('#新起点，新奇点##2018 西安曲漫#\n我参与了丝绸之路古风歌曲翻唱活动\n@水墨映像CINK');
+        alert('#新起点，新奇点##2018 西安曲漫#\n我参与了丝绸之路古风歌曲翻唱活动\n@水墨映像CINK\n确认后点击分享发布微博才算完成参赛哦~');
         location.href = '/sczl/single/' + res.data.id;
       }
       else {

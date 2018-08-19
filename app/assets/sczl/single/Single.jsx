@@ -64,8 +64,9 @@ class Single extends migi.Component {
                 rel={ item.id }>投票</span>
           <a class="share"
              href={ 'http://service.weibo.com/share/share.php?url='
-             + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
-             + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#新起点，新奇点##2018 西安曲漫# 我参与了丝绸之路古风歌曲翻唱活动 @水墨映像CINK')
+             + encodeURIComponent('https://circling.cc/sczl/single/' + item.id)
+             + '&type=button&language=zh_cn&appkey=2345825162&title='
+             + encodeURIComponent(`#新起点，新奇点##2018 西安曲漫# 我参与了丝绸之路古风歌曲翻唱活动 @水墨映像CINK 投票地址：https://circling.cc/sczl/single/${item.id} 参赛地址：https://circling.cc/sczl`)
              + '&searchPic=false&style=number' }
              target="_blank">分享</a>
         </div>

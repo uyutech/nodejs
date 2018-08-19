@@ -64,7 +64,7 @@ class Home extends migi.Component {
         <ul class="tab"
             onClick={ { li: this.clickIndex } }>
           <li class={ this.index === 0 ? ' cur' : '' }
-              rel={ 0 }>活动介绍</li>
+              rel={ 0 }>大赛介绍</li>
           <li class={ this.index === 1 ? ' cur' : '' }
               rel={ 1 }>作品展示</li>
         </ul>
@@ -74,7 +74,7 @@ class Home extends migi.Component {
           <p>活动以“传唱古风，弘扬丝绸之路文化”为主题，以线上、线下活动相结合的形式，让观众感受到丝绸之路文化的丰富多彩，以及优秀歌曲的审美体验。</p>
           <p>与此同时，也希望能够借此契机发现优秀的本地歌手人才，予以各种歌曲制作补贴和推广渠道，培养出优秀的西安本地古风歌手，表现优秀者更有机会参与各种线下演出，商业合作项目。</p>
           <h3>参赛方式</h3>
-          <p>作品征集期间（9月1日至9月31日），登录活动官网→ 选择点击“我要参赛” → 上传作品并填写相关参赛信息→发布微博同时@水墨映像 CINK，带上#新起点，新奇点##2018 西安曲漫#的话题→将伴奏和干音发送至邮箱 17664681@qq.com→参赛成功！</p>
+          <p>参赛方式的文本修改为：作品征集期间（9月1日至9月31日），登录活动官网→ 选择点击“我要参赛” → 上传作品并填写相关参赛信息→发布微博同时@水墨映像 CINK，带上#新起点，新奇点##2018 西安曲漫#的话题→参赛成功！</p>
           <h3>奖品设置</h3>
           <p>由评委组筛选出一、二、三等奖、最佳人气奖各一名。</p>
           <p>一等奖 ：1500元歌曲定制</p>
@@ -87,6 +87,17 @@ class Home extends migi.Component {
           <p>♦ 参赛者可根据自身需求对伴奏进行适当的升降调处理。</p>
           <p>♦ 参赛者需为参与翻唱的歌手本人。</p>
           <p>♦ 为避免不必要的误会或纠纷，请参赛选手保留一份参赛作品的未处理干声。</p>
+          <h3>参赛须知</h3>
+          <p>♦ 参赛作品需为指定歌曲的翻唱作品，翻唱指定作品以外的歌曲则视为无效作品。</p>
+          <p>♦ 参赛者可提交多份作品，次数不限，但不多次获奖。</p>
+          <p>♦ 为保证尽量多的参赛者得到奖励，各奖项获奖者者不重复获奖，如遇“最佳人气奖”得主与一二三等奖得主重合，则“最佳人气奖”得主顺延。</p>
+          <p>♦ 参赛作品需要音频完整，音质清晰，提供干音。</p>
+          <p>♦ 参赛作品由参赛者本人演唱；严禁抄袭、盗用、剽窃他人作品；不能侵犯他人的知识产权。若有相关行为，经核实后直接取消参赛资格。</p>
+          <p>♦ 若发现机器刷票等行为，经核实后票数直接清零，情节严重者取消参赛资格。</p>
+          <p>♦ 作品提交后，则视为作者授权转将作品用于官方及平台宣传展示。</p>
+          <p>♦ 奖品按照获奖作品为单位发放于上传作品者。如作品为团队合作，请自行协商奖品的分配。</p>
+          <p>♦ 本活动系统由转圈App提供，上传参赛作品默认上传到转圈数据库。</p>
+          <p>♦ 本活动最终解释权归”丝绸之路”国际艺术节主办方及承办方所有。</p>
           <ul class="origin fn-clear">
             {
               originWorks.map((item) => {
@@ -153,8 +164,9 @@ class Home extends migi.Component {
                             rel={ item.id }>投票</span>
                       <a class="share"
                          href={ 'http://service.weibo.com/share/share.php?url='
-                         + encodeURIComponent('https://circling.cc/ysjxy/fc/' + item.id)
-                         + '&type=button&language=zh_cn&appkey=2345825162&title=' + encodeURIComponent('#新起点，新奇点##2018 西安曲漫# 我参与了丝绸之路古风歌曲翻唱活动 @水墨映像CINK')
+                         + encodeURIComponent('https://circling.cc/sczl/single/' + item.id)
+                         + '&type=button&language=zh_cn&appkey=2345825162&title='
+                         + encodeURIComponent(`#新起点，新奇点##2018 西安曲漫# 我参与了丝绸之路古风歌曲翻唱活动 @水墨映像CINK 投票地址：https://circling.cc/sczl/single/${item.id} 参赛地址：https://circling.cc/sczl`)
                          + '&searchPic=false&style=number' }
                          target="_blank">分享</a>
                     </div>
