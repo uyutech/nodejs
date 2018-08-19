@@ -41,6 +41,8 @@ class Upload extends migi.Component {
   @bind poster
   @bind enablePoster
   @bind workTypeList
+  @bind canShowAll
+  @bind showAll
   @bind workList
   @bind workListIndex
   @bind enable
@@ -93,6 +95,9 @@ class Upload extends migi.Component {
       });
     }, 200);
   }
+  clickShowAll() {
+    this.showAll = !this.showAll;
+  }
   focusIn(e, vd, tvd) {
     let self = this;
     let index = tvd.props.rel;
@@ -138,14 +143,24 @@ class Upload extends migi.Component {
     for(let i = 0; i < self.worksTypeList.length; i++) {
       if(self.worksTypeList[i].id === self.worksType) {
         self.professionList = self.worksTypeList[i].professionList;
+        self.canShowAll = false;
+        self.professionList.forEach((item) => {
+          if(!item.show) {
+            self.canShowAll = true;
+          }
+        });
         self.workTypeList = self.worksTypeList[i].workTypeList;
         let temp = [];
         self.workTypeList.forEach((item) => {
           if(item.upload === 0) {
             let o = Object.assign({}, item);
             o.professionList = [];
+            o.canShowAll = false;
             (item.professionList || []).forEach((item, i) => {
               o.professionList[i] = Object.assign({}, item);
+              if(!item.show) {
+                o.canShowAll = true;
+              }
             });
             temp.push(o);
           }
@@ -235,6 +250,12 @@ class Upload extends migi.Component {
         }
       });
     }, 200);
+  }
+  clickShowAllWork(e, vd, tvd) {
+    let self = this;
+    let work = self.workList[self.workListIndex];
+    work.showAll = !work.showAll;
+    self.workList.splice(self.workListIndex, 1, work);
   }
   focusInWork(e, vd, tvd) {
     let self = this;
@@ -673,7 +694,7 @@ class Upload extends migi.Component {
              onClick={ { '.author': this.clickAuthor, '.add-one': this.addOne, '.del-one': this.delOne } }>
         {
           (this.professionList || []).map((item, i) => {
-            return <div class="line">
+            return <div class={ 'line' + ((item.show || this.showAll) ? '' : ' fn-hide') }>
               <label class={ item.required ? 'required' : '' }>{ item.name }</label>
               <input type="text"
                      value={ item.value }
@@ -702,6 +723,8 @@ class Upload extends migi.Component {
           })
         }
         </div>
+        <button class={ 'show-all' + (this.canShowAll ? '' : ' fn-hide') }
+                onClick={ this.clickShowAll }>{ this.showAll ? '隐藏其它作者类型' : '显示其它作者类型' }</button>
         <ul class="sub-type"
             onClick={ { b: this.delWork, 'span': this.clickWork } }>
           {
@@ -717,13 +740,16 @@ class Upload extends migi.Component {
             onFocusin={ { 'input.text': this.focusInWork } }
             onFocusout={ { 'input.text': this.focusOutWork } }
             onInput={ { 'input.text': this.inputWorkProfession } }
-            onClick={ { '.author': this.clickAuthorWork, '.add-one': this.addOneWork, '.del-one': this.delOneWork } }>
+            onClick={ { '.author': this.clickAuthorWork,
+              '.add-one': this.addOneWork,
+              '.del-one': this.delOneWork,
+              '.show-all': this.clickShowAllWork } }>
         {
           (this.workList || []).map((item, i) => {
             return <li class={ this.workListIndex === i ? '' : 'fn-hide' }>
               {
                 (item.professionList || []).map((item2, j) => {
-                  return <div class="line">
+                  return <div class={ 'line' + ((item2.show || item.showAll) ? '' : ' fn-hide') }>
                     <label class={ item2.required ? 'required' : '' }>{ item2.name }</label>
                     <input type="text"
                            class="text"
@@ -752,6 +778,7 @@ class Upload extends migi.Component {
                   </div>;
                 })
               }
+              <button class={ 'show-all' + (item.canShowAll ? '' : ' fn-hide') }>{ item.showAll ? '隐藏其它作者类型' : '显示其它作者类型' }</button>
               {
                 item.kind === 1 || item.kind === 2
                   ? <div class="up">

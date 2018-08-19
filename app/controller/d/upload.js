@@ -31,9 +31,6 @@ class Controller extends egg.Controller {
     let workTypeProfessionList = await service.workType.professionList(workTypeIdList);
     let workTypeProfessionHash = {};
     workTypeProfessionList.forEach((list, i) => {
-      list = list.filter((item) => {
-        return item.show;
-      });
       workTypeProfessionHash[workTypeIdList[i]] = list;
     });
     workTypeList.forEach((list) => {
@@ -46,9 +43,7 @@ class Controller extends egg.Controller {
       item.workTypeList = workTypeList[i].filter((item) => {
         return item.upload < 2;
       });
-      item.professionList = professionList[i].filter((item) => {
-        return item.show;
-      });
+      item.professionList = professionList[i];
     });
     await ctx.render('dupload', {
       uid,

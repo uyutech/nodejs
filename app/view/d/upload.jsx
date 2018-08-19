@@ -7,6 +7,8 @@
 import Upload from '../../assets/d/upload/Upload.jsx';
 
 export default function(data) {
+  migi.resetUid();
+
   let worksTypeList = data.worksTypeList;
 
   let upload = migi.preRender(
