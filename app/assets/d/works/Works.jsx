@@ -71,16 +71,16 @@ class Works extends migi.Component {
       <div class="main">
         <ul class="type fn-clear"
             ref="type"
-            onClick={ { li: self.clickType } }>
+            onClick={ { li: this.clickType } }>
           {
-            self.videoList.length
-              ? <li class={ 'video' + (self.kind === 1 ? ' cur' : '') }
+            this.videoList.length
+              ? <li class={ 'video' + (this.kind === 1 ? ' cur' : '') }
                     rel={ 1 }>视频</li>
               : ''
           }
           {
-            self.audioList.length
-              ? <li class={ 'audio' + (self.kind === 2 ? ' cur' : '') }
+            this.audioList.length
+              ? <li class={ 'audio' + (this.kind === 2 ? ' cur' : '') }
                     rel={ 2 }>音频</li>
               : ''
           }

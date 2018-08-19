@@ -478,7 +478,7 @@ class Service extends egg.Service {
         limit,
         raw: true
       });
-      app.redis.setex(cacheKey, app.config.redis.longTime, JSON.stringify(res));
+      app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     }
     let idList = res.map((item) => {
       return item.circleId;
@@ -520,7 +520,7 @@ class Service extends egg.Service {
     else {
       res = 0;
     }
-    app.redis.setex(cacheKey, app.config.redis.longTime, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 

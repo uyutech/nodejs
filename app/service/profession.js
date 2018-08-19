@@ -33,7 +33,7 @@ class Service extends egg.Service {
       },
       raw: true,
     });
-    app.redis.setex(cacheKey, app.config.redis.longTime, JSON.stringify(res));
+    app.redis.setex(cacheKey, app.config.redis.time, JSON.stringify(res));
     return res;
   }
 
@@ -94,7 +94,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || [];
         cache[i] = temp;
-        app.redis.setex('profession_' + id, app.config.redis.longTime, JSON.stringify(temp));
+        app.redis.setex('profession_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     return cache;
@@ -162,7 +162,7 @@ class Service extends egg.Service {
         let id = idList[i];
         let temp = hash[id] || [];
         cache[i] = temp;
-        app.redis.setex('professionSkill_' + id, app.config.redis.longTime, JSON.stringify(temp));
+        app.redis.setex('professionSkill_' + id, app.config.redis.time, JSON.stringify(temp));
       });
     }
     let skillIdList = [];
