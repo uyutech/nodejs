@@ -66,8 +66,8 @@ module.exports = app => {
 
   app.get('/d/sczl', 'sczl.index');
   app.get('/m/sczl', 'sczl.index');
-  app.get('/d/sczl/upload', 'sczl.upload');
-  app.get('/m/sczl/upload', 'sczl.upload');
+  app.get('/d/sczl/upload', app.middlewares.needLoginJson(), 'sczl.upload');
+  app.get('/m/sczl/upload', app.middlewares.needLoginJson(), 'sczl.upload');
   app.get('/d/sczl/single/:id', 'sczl.single');
   app.get('/m/sczl/single/:id', 'sczl.single');
   app.post('/d/sczl/join', app.middlewares.needLoginJson(), 'sczl.join');

@@ -316,12 +316,18 @@ class Controller extends egg.Controller {
           })
         );
         query.push(
-          app.model.worksAuthorRelation.create({
+          app.model.worksAuthorRelation.upsert({
             works_id: worksId,
             author_id: item.author,
             profession_id: item.id,
             type: 2,
           }, {
+            where: {
+              works_id: worksId,
+              author_id: item.author,
+              profession_id: item.id,
+              type: 2,
+            },
             transaction,
             raw: true,
           })

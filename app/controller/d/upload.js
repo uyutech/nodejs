@@ -43,7 +43,9 @@ class Controller extends egg.Controller {
     });
     worksTypeList.forEach((item, i) => {
       item.status = undefined;
-      item.workTypeList = workTypeList[i];
+      item.workTypeList = workTypeList[i].filter((item) => {
+        return item.upload < 2;
+      });
       item.professionList = professionList[i].filter((item) => {
         return item.show;
       });

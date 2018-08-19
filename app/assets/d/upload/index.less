@@ -32,7 +32,7 @@
     &:disabled{
       background:#999;
       color:#CCC;
-      cursor:wait;
+      cursor:default;
     }
   }
   .con{
@@ -130,34 +130,9 @@
         opacity:0;
       }
     }
-    .add-more{
-      margin:0.2rem 0 0;
-      padding:0.2rem;
-      border:1px solid #EEE;
-      border-bottom:none;
-      dt{
-        display:inline-block;
-        margin-right:0.1rem;
-      }
-      dd{
-        display:inline-block;
-        margin-right:0.1rem;
-        padding:0 0.1rem;
-        line-height:0.25rem;
-        border:1px solid #EEE;
-        border-radius:0.05rem;
-        font-size:0.12rem;
-        cursor:pointer;
-        &:hover{
-          color:#409EFF;
-          border-color:#409EFF;
-        }
-      }
-    }
     .sub-type{
       background:#f5f7fa;
       border:1px solid #EEE;
-      border-top-style:dotted;
       border-bottom-style:dotted;
       li{
         position:relative;
@@ -206,11 +181,20 @@
         }
       }
     }
+    .add-one,.del-one{
+      margin-left:0.1rem;
+      font-size:0.12rem;
+      cursor:pointer;
+      color:#CCC;
+      &:hover{
+        color:#60AEFF;
+      }
+    }
     .work-list{
-      margin-bottom:0.05rem;
       padding:0.2rem;
       border:1px solid #EEE;
       border-top:none;
+      border-bottom-style:dotted;
       .up{
         position:relative;
         margin-left:0.9rem;
@@ -231,14 +215,14 @@
         &.disabled{
           background:#999;
           color:#CCC;
-          cursor:wait;
+          cursor:default;
         }
         &:hover{
           background:#60AEFF;
           &.disabled{
             background:#999;
             color:#CCC;
-            cursor:wait;
+            cursor:default;
           }
         }
         input{
@@ -250,7 +234,7 @@
           opacity:0;
           cursor:pointer;
           &:disabled{
-            cursor:wait;
+            cursor:default;
           }
         }
       }
@@ -275,6 +259,29 @@
           height:0.05rem;
           border-radius:0.02rem;
           background:#90CEFF;
+        }
+      }
+    }
+    .add-more{
+      padding:0.2rem;
+      border:1px solid #EEE;
+      border-top:none;
+      dt{
+        display:inline-block;
+        margin-right:0.1rem;
+      }
+      dd{
+        display:inline-block;
+        margin-right:0.1rem;
+        padding:0 0.1rem;
+        line-height:0.25rem;
+        border:1px solid #EEE;
+        border-radius:0.05rem;
+        font-size:0.12rem;
+        cursor:pointer;
+        &:hover{
+          color:#409EFF;
+          border-color:#409EFF;
         }
       }
     }

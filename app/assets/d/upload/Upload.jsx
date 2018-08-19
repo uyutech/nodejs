@@ -18,6 +18,8 @@ class Upload extends migi.Component {
     let self = this;
     self.worksTypeList = self.props.worksTypeList;
     self.enablePoster = true;
+    self.on(migi.Event.DOM, function() {
+    });
     // self.worksType = 1;
     // self.professionList = self.worksTypeList[0].professionList;
     // self.workTypeList = self.worksTypeList[0].workTypeList;
@@ -29,8 +31,6 @@ class Upload extends migi.Component {
     // });
     // self.workList = temp;
     // self.workListIndex = 0;
-    self.on(migi.Event.DOM, function() {
-    });
   }
   @bind curWorksType
   @bind worksType
@@ -101,12 +101,18 @@ class Upload extends migi.Component {
       self.suggest = index;
     }
   }
-  focusOut() {
+  focusOut(e, vd, tvd) {
     if(mouseenter) {
       return;
     }
     let self = this;
     self.suggest = -1;
+    let index = tvd.props.index;
+    let profession = self.professionList[index];
+    if(self.suggest && self.suggest[0]) {
+      profession.author = self.suggest[0].id;
+      profession.value = self.suggest[0].name;
+    }
   }
   mouseEnter(e, vd) {
     mouseenter = true;
@@ -124,24 +130,45 @@ class Upload extends migi.Component {
     profession.value = value;
     self.professionList.splice(index, 1, profession);
     self.suggest = -1;
+    mouseenter = false;
   }
   next() {
-    this.worksType = this.curWorksType;
-    for(let i = 0; i < this.worksTypeList.length; i++) {
-      if(this.worksTypeList[i].id === this.worksType) {
-        this.professionList = this.worksTypeList[i].professionList;
-        this.workTypeList = this.worksTypeList[i].workTypeList;
+    let self = this;
+    self.worksType = self.curWorksType;
+    for(let i = 0; i < self.worksTypeList.length; i++) {
+      if(self.worksTypeList[i].id === self.worksType) {
+        self.professionList = self.worksTypeList[i].professionList;
+        self.workTypeList = self.worksTypeList[i].workTypeList;
+        let temp = [];
+        self.workTypeList.forEach((item) => {
+          if(item.upload === 0) {
+            let o = Object.assign({}, item);
+            o.professionList = [];
+            (item.professionList || []).forEach((item, i) => {
+              o.professionList[i] = Object.assign({}, item);
+            });
+            temp.push(o);
+          }
+        });
+        self.workList = temp;
+        self.workListIndex = 0;
         break;
       }
     }
-    this.checkEnable();
+    self.checkEnable();
   }
   addWork(e, vd, tvd) {
     let id = tvd.props.rel;
     for(let i = 0; i < this.workTypeList.length; i++) {
       let item = this.workTypeList[i];
       if(item.id === id) {
-        this.workList.push(Object.assign({}, item));
+        let o = Object.assign({}, item);
+        o.professionList = [];
+        (item.professionList || []).forEach((item, i) => {
+          o.professionList[i] = Object.assign({}, item);
+        });
+        this.workList.push(o);
+        this.workListIndex = this.workList.length - 1;
         this.checkEnable();
         break;
       }
@@ -151,6 +178,9 @@ class Upload extends migi.Component {
     let index = tvd.props.rel;
     this.workList.splice(index, 1);
     this.checkEnable();
+    if(this.workListIndex > this.workList.length - 1) {
+      this.workListIndex = this.workList.length - 1;
+    }
   }
   clickWork(e, vd, tvd) {
     let index = tvd.props.rel;
@@ -158,6 +188,26 @@ class Upload extends migi.Component {
       this.workListIndex = index;
       this.checkEnable();
     }
+  }
+  addOne(e, vd, tvd) {
+    let self = this;
+    let index = tvd.props.rel;
+    let profession = self.professionList[index];
+    let clone = Object.assign({}, profession);
+    clone.author = clone.value = undefined;
+    clone.clone = true;
+    for(let i = index + 1; i < self.professionList.length; i++) {
+      let item = self.professionList[i];
+      if(!item.clone) {
+        self.professionList.splice(i, 0, clone);
+        break;
+      }
+    }
+  }
+  delOne(e, vd, tvd) {
+    let self = this;
+    let index = tvd.props.rel;
+    self.professionList.splice(index, 1);
   }
   inputWorkProfession(e, vd, tvd) {
     let self = this;
@@ -201,6 +251,13 @@ class Upload extends migi.Component {
     }
     let self = this;
     self.suggestWork = -1;
+    let work = self.workList[self.workListIndex];
+    let index = tvd.props.index;
+    let profession = work.professionList[index];
+    if(self.suggest && self.suggest[0]) {
+      profession.author = self.suggest[0].id;
+      profession.value = self.suggest[0].name;
+    }
   }
   clickAuthorWork(e, vd, tvd) {
     let self = this;
@@ -213,6 +270,30 @@ class Upload extends migi.Component {
     profession.value = value;
     self.workList.splice(self.workListIndex, 1, work);
     self.suggestWork = -1;
+  }
+  addOneWork(e, vd, tvd) {
+    let self = this;
+    let index = tvd.props.rel;
+    let work = self.workList[self.workListIndex];
+    let profession = work.professionList[index];
+    let clone = Object.assign({}, profession);
+    clone.author = clone.value = undefined;
+    clone.clone = true;
+    for(let i = index + 1; i < work.professionList.length; i++) {
+      let item = work.professionList[i];
+      if(!item.clone) {
+        work.professionList.splice(i, 0, clone);
+        break;
+      }
+    }
+    self.workList.splice(self.workListIndex, 1, work);
+  }
+  delOneWork(e, vd, tvd) {
+    let self = this;
+    let index = tvd.props.rel;
+    let work = self.workList[self.workListIndex];
+    work.professionList.splice(index, 1);
+    self.workList.splice(self.workListIndex, 1, work);
   }
   posterFile(e) {
     let self = this;
@@ -326,7 +407,9 @@ class Upload extends migi.Component {
       spark.append(fileReader.result);
       let md5 = spark.end();
       let name;
-      if(kind === 1) {}
+      if(kind === 1) {
+        name = md5+ '.mp4';
+      }
       else if(kind === 2) {
         name = md5 + '.mp3';
       }
@@ -455,32 +538,71 @@ class Upload extends migi.Component {
   }
   submit() {
     let self = this;
-    self.enable = false;
+    if(!self.poster) {
+      alert('请先上传作品封面');
+      return;
+    }
+    let error = '';
+    let hash = {};
     let professionList = self.professionList.filter((item) => {
       return item.author || (item.value && item.value.trim());
     }).map((item) => {
+      if(item.author) {
+        if(hash[item.author]) {
+          error = item.name + '重复：' + item.value;
+        }
+        hash[item.author] = true;
+      }
+      else {
+        if(hash[item.value]) {
+          error = item.name + '重复：' + item.value;
+        }
+        hash[item.value] = true;
+      }
       return {
         id: item.id,
         author: item.author,
         value: item.author ? undefined : item.value,
       };
     });
+    if(error) {
+      alert(error);
+      return;
+    }
     let workList = self.workList.map((item) => {
+      let hash = {};
       return {
         kind: item.kind,
         value: item.value,
         type: item.id,
-        professionList: item.professionList.filter((item) => {
-          return item.author || (item.value && item.value.trim());
-        }).map((item) => {
+        professionList: item.professionList.filter((item2) => {
+          return item2.author || (item2.value && item2.value.trim());
+        }).map((item2) => {
+          if(item2.author) {
+            if(hash[item2.author]) {
+              error = item.name + '文件的' + item2.name + '重复：' + item2.value;
+            }
+            hash[item2.author] = true;
+          }
+          else {
+            if(hash[item2.value]) {
+              error = item.name + '文件的' + item2.name + '重复：' + item2.value;
+            }
+            hash[item2.value] = true;
+          }
           return {
-            id: item.id,
-            author: item.author,
-            value: item.author ? undefined : item.value,
+            id: item2.id,
+            author: item2.author,
+            value: item2.author ? undefined : item2.value,
           };
         })
       };
     });
+    if(error) {
+      alert(error);
+      return;
+    }
+    self.enable = false;
     $net.postJSON('/api/upload', {
       worksType: self.worksType,
       worksName: self.worksName,
@@ -491,8 +613,8 @@ class Upload extends migi.Component {
     }, function(res) {
       if(res.success) {
         let data = res.data;
-        // alert('上传成功，点击跳转作品页面。');
-        // location.href = '/works/' + data.id;
+        alert('上传成功，点击跳转作品页面。');
+        location.href = '/works/' + data.id;
         self.enable = true;
       }
       else {
@@ -507,7 +629,7 @@ class Upload extends migi.Component {
   render() {
     return <div class="upload">
       <div class={ (this.worksType ? 'fn-hide' : '')  }>
-        <h3>请选择大作品类型</h3>
+        <h3>请选择作品类型</h3>
         <ul class="works-type"
             onClick={ { label: this.clickWorksType } }>
           {
@@ -530,7 +652,7 @@ class Upload extends migi.Component {
           <label class="required">作品名</label>
           <input type="text"
                  value={ this.worksName }
-                 placeholder="请输入作品名"
+                 placeholder="请输入作品名，必填"
                  onInput={ this.checkEnable }/>
         </div>
         <div class="line">
@@ -541,21 +663,29 @@ class Upload extends migi.Component {
           { this.poster ? '' : '点击上传作品封面' }
           <img src={ this.poster || '//zhuanquan.xin/img/blank.png' }/>
           <input type="file"
+                 accept="image/*"
                  disabled={ !this.enablePoster }
                  onChange={ this.posterFile }/>
         </div>
         <div onFocusin={ { input: this.focusIn } }
              onFocusout={ { input: this.focusOut } }
              onInput={ { input: this.inputProfession } }
-             onClick={ { '.author': this.clickAuthor } }>
+             onClick={ { '.author': this.clickAuthor, '.add-one': this.addOne, '.del-one': this.delOne } }>
         {
           (this.professionList || []).map((item, i) => {
             return <div class="line">
               <label class={ item.required ? 'required' : '' }>{ item.name }</label>
               <input type="text"
                      value={ item.value }
-                     placeholder={ '请输入' + item.name }
+                     placeholder={ '请输入作者名，' + (item.required ? '必填' : '可选') }
                      rel={ i }/>
+              {
+                item.clone
+                  ? <span class="del-one"
+                          rel={ i }>删除</span>
+                  : <span class="add-one"
+                          rel={ i }>再加一个</span>
+              }
               <ul class={ 'suggest' + (this.suggest === i ? '' : ' fn-hide') }
                   onMouseEnter={ this.mouseEnter }
                   onMouseLeave={ this.mouseLeave }>
@@ -572,31 +702,22 @@ class Upload extends migi.Component {
           })
         }
         </div>
-        <dl class="add-more"
-            onClick={ { dd: this.addWork } }>
-          <dt>添加子类型：</dt>
-          {
-            (this.workTypeList || []).map((item) => {
-              return <dd rel={ item.id }>{ item.name }</dd>;
-            })
-          }
-        </dl>
         <ul class="sub-type"
             onClick={ { b: this.delWork, 'span': this.clickWork } }>
-        {
-          (this.workList || []).map((item, i) => {
-            return <li class={ this.workListIndex === i ? 'cur' : '' }>
-              <span rel={ i }>{ item.name }</span>
-              <b rel={ i }/>
-            </li>;
-          })
-        }
+          {
+            (this.workList || []).map((item, i) => {
+              return <li class={ this.workListIndex === i ? 'cur' : '' }>
+                <span rel={ i }>{ item.name }</span>
+                <b rel={ i }/>
+              </li>;
+            })
+          }
         </ul>
         <ul class="work-list"
             onFocusin={ { 'input.text': this.focusInWork } }
             onFocusout={ { 'input.text': this.focusOutWork } }
             onInput={ { 'input.text': this.inputWorkProfession } }
-            onClick={ { '.author': this.clickAuthorWork } }>
+            onClick={ { '.author': this.clickAuthorWork, '.add-one': this.addOneWork, '.del-one': this.delOneWork } }>
         {
           (this.workList || []).map((item, i) => {
             return <li class={ this.workListIndex === i ? '' : 'fn-hide' }>
@@ -607,8 +728,15 @@ class Upload extends migi.Component {
                     <input type="text"
                            class="text"
                            value={ item2.value }
-                           placeholder={ '请输入' + item2.name }
+                           placeholder={ '请输入作者名，' + (item2.required ? '必填' : '可选') }
                            rel={ j }/>
+                    {
+                      item2.clone
+                        ? <span class="del-one"
+                                rel={ j }>删除</span>
+                        : <span class="add-one"
+                                rel={ j }>再加一个</span>
+                    }
                     <ul class={ 'suggest' + (this.suggestWork === j ? '' : ' fn-hide') }
                         onMouseEnter={ this.mouseEnter }
                         onMouseLeave={ this.mouseLeave }>
@@ -617,7 +745,7 @@ class Upload extends migi.Component {
                           return <li class="author"
                                      rel={ item.id }
                                      title={ item.name }
-                                     index={ i }>{ item.name }</li>;
+                                     index={ j }>{ item.name }</li>;
                         })
                       }
                     </ul>
@@ -671,6 +799,15 @@ class Upload extends migi.Component {
           })
         }
         </ul>
+        <dl class="add-more"
+            onClick={ { dd: this.addWork } }>
+          <dt>继续添加其它文件：</dt>
+          {
+            (this.workTypeList || []).map((item) => {
+              return <dd rel={ item.id }>{ item.name }</dd>;
+            })
+          }
+        </dl>
         <button class="next"
                 disabled={ !this.enable }
                 onClick={ this.submit }>提交</button>
