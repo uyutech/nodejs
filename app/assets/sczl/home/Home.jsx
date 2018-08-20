@@ -57,6 +57,9 @@ class Home extends migi.Component {
       el.classList.remove('loading');
     });
   }
+  closeQr() {
+    this.ref.qr.element.classList.add('fn-hide');
+  }
   render() {
     let originWorks = this.props.originWorks;
     return <div class="home">
@@ -187,6 +190,11 @@ class Home extends migi.Component {
         <p>执行单位：西安西部文化产业博览会有限公司</p>
         <p>协办单位：<img class="i1" src="//zhuanquan.xin/img/556656772227caf61a83d42fdfa0c944.png"/></p>
         <p>技术支持：<img class="i2" src="//zhuanquan.xin/img/4bf6a518b9f3ce5efedb1a9c20d546c8.png"/></p>
+      </div>
+      <div class="qr" ref="qr">
+        <img src="//zhuanquan.xin/img/205481d2a8cdc3479c6d50856cf639a7.png"/>
+        <a href="https://circling.cc/post/494119" target="_blank"/>
+        <span onClick={ this.closeQr }/>
       </div>
     </div>;
   }

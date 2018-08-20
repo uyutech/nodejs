@@ -794,14 +794,14 @@ class Service extends egg.Service {
         ['popular', 'DESC'],
         ['create_time', 'DESC']
       ];
-      res = await app.model.activityUpload.findAll({
+      res = await app.model.activitySczl.findAll({
         attributes: [
           'id',
           ['works_id', 'worksId'],
           ['user_id', 'userId']
         ],
         where: {
-          activity_id: 2,
+          is_delete: false,
         },
         order,
         offset,
@@ -841,12 +841,12 @@ class Service extends egg.Service {
     if(res) {
       return JSON.parse(res);
     }
-    res = await app.model.activityUpload.findOne({
+    res = await app.model.activitySczl.findOne({
       attributes: [
         [Sequelize.fn('COUNT', '*'), 'num']
       ],
       where: {
-        activity_id: 2,
+        is_delete: false,
       },
       raw: true,
     });
@@ -868,7 +868,7 @@ class Service extends egg.Service {
       res = JSON.parse(res);
     }
     else {
-      res = await app.model.activityUpload.findOne({
+      res = await app.model.activitySczl.findOne({
         attributes: [
           ['works_id', 'worksId'],
           ['user_id', 'userId']

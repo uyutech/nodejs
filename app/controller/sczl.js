@@ -362,7 +362,7 @@ class Controller extends egg.Controller {
       }
       createList = await Promise.all(query);
       await transaction.commit();
-      let res = await app.model.activityUpload.create({
+      let res = await app.model.activitySczl.create({
         activity_id: 2,
         origin_id: originId,
         works_id: id,
