@@ -17,11 +17,11 @@ class Controller extends egg.Controller {
     let poster = body.poster;
     let professionList = body.professionList;
     let workList = body.workList;
+    professionList = professionList || [];
     if(!worksType || !worksName || !professionList || !workList) {
       return;
     }
-    if(!Array.isArray(professionList) || !professionList.length
-      || !Array.isArray(workList) || !workList.length) {
+    if(!Array.isArray(professionList) || !Array.isArray(workList) || !workList.length) {
       return;
     }
     let createAuthor = [];
@@ -52,7 +52,7 @@ class Controller extends egg.Controller {
         }
       }
     }
-    if(createAuthor.length) {
+    if(createAuthor.length) {ctx.logger.info(3);
       let last = await app.model.author.findOne({
         attributes: [
           'id'
@@ -101,7 +101,7 @@ class Controller extends egg.Controller {
         await transaction.rollback();
         return ctx.body = ctx.helper.errorJSON(e.toString());
       }
-    }
+    }ctx.logger.info(4);
     let last = await Promise.all([
       app.model.works.findOne({
         attributes: [
@@ -150,7 +150,7 @@ class Controller extends egg.Controller {
       })
     ]);
     let query = [];
-    let now = new Date();
+    let now = new Date();ctx.logger.info(5);
     let transaction = await app.sequelizeCircling.transaction();
     let worksId = last[0].id;
     let videoId = last[1].id;

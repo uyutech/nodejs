@@ -677,8 +677,8 @@ class Upload extends migi.Component {
                  onInput={ this.checkEnable }/>
         </div>
         <div class="line">
-          <label>作品简介</label>
-          <textarea placeholder="请输入作品简介">{ this.worksDesc }</textarea>
+          <label>文案/歌词</label>
+          <textarea placeholder="请输入文案/歌词">{ this.worksDesc }</textarea>
         </div>
         <div class="poster">
           { this.poster ? '' : '点击上传作品封面' }

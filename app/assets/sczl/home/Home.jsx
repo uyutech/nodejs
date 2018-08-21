@@ -127,7 +127,6 @@ class Home extends migi.Component {
               })
             }
           </ul>
-          <a href="/sczl/upload" class="upload" target="_blank">我要参赛</a>
         </div>
         <div class={ this.index === 1 ? '' : 'fn-hide' }>
           <ul class="sort fn-clear"
